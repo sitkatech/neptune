@@ -1,15 +1,8 @@
-﻿using LtInfo.Common.DbSpatial;
-using Neptune.Web.Common;
+﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Entity;
-using System.Linq;
 using System.Web.Mvc;
-using Neptune.Web.Areas.Trash.Controllers;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -49,22 +42,22 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
             var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
 
-            var sumPLUAcresWhereOVTAIsA = TrashGeneratingUnitHelper.PriorityOVTAScoreAAcreage(trashGeneratingUnits, jurisdiction);
+            var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.PriorityOVTAScoreAAcreage(jurisdiction);
 
-            var sumPLUAcrexsWhereOVTAIsB = TrashGeneratingUnitHelper.PriorityOVTAScoreBAcreage(trashGeneratingUnits, jurisdiction);
+            var sumPLUAcrexsWhereOVTAIsB = trashGeneratingUnits.PriorityOVTAScoreBAcreage(jurisdiction);
 
-            var sumPLUAcrexsWhereOVTAIsC = TrashGeneratingUnitHelper.PriorityOVTAScoreCAcreage(trashGeneratingUnits, jurisdiction);
+            var sumPLUAcrexsWhereOVTAIsC = trashGeneratingUnits.PriorityOVTAScoreCAcreage(jurisdiction);
 
-            var sumPLUAcrexsWhereOVTAIsD = TrashGeneratingUnitHelper.PriorityOVTAScoreDAcreage(trashGeneratingUnits, jurisdiction);
+            var sumPLUAcrexsWhereOVTAIsD = trashGeneratingUnits.PriorityOVTAScoreDAcreage(jurisdiction);
 
 
-            var sumALUAcresWhereOVTAIsA = TrashGeneratingUnitHelper.AlternateOVTAScoreAAcreage(trashGeneratingUnits, jurisdiction);
+            var sumALUAcresWhereOVTAIsA = trashGeneratingUnits.AlternateOVTAScoreAAcreage(jurisdiction);
 
-            var sumALUAcresWhereOVTAIsB = TrashGeneratingUnitHelper.AlternateOVTAScoreBAcreage(trashGeneratingUnits, jurisdiction);
+            var sumALUAcresWhereOVTAIsB = trashGeneratingUnits.AlternateOVTAScoreBAcreage(jurisdiction);
 
-            var sumALUAcresWhereOVTAIsC = TrashGeneratingUnitHelper.AlternateOVTAScoreCAcreage(trashGeneratingUnits, jurisdiction);
+            var sumALUAcresWhereOVTAIsC = trashGeneratingUnits.AlternateOVTAScoreCAcreage(jurisdiction);
 
-            var sumALUAcresWhereOVTAIsD = TrashGeneratingUnitHelper.AlternateOVTAScoreDAcreage(trashGeneratingUnits, jurisdiction);
+            var sumALUAcresWhereOVTAIsD = trashGeneratingUnits.AlternateOVTAScoreDAcreage(jurisdiction);
 
             return Json(new OVTAResultsSimple
             {
@@ -88,12 +81,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
             var ovtas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments;
 
-            var viaFullCapture = TrashGeneratingUnitHelper.LoadBasedFullCapture(trashGeneratingUnits, jurisdiction);
+            var viaFullCapture = trashGeneratingUnits.LoadBasedFullCapture(jurisdiction);
 
-            var viaPartialCapture = TrashGeneratingUnitHelper.LoadBasedPartialCapture(trashGeneratingUnits, jurisdiction);
-            var viaOVTAs = TrashGeneratingUnitHelper.LoadBasedOVTAProgressScores(ovtas, jurisdiction);
+            var viaPartialCapture = trashGeneratingUnits.LoadBasedPartialCapture(jurisdiction);
+            var viaOVTAs = ovtas.LoadBasedOVTAProgressScores(jurisdiction);
             var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;
-            var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(trashGeneratingUnits, jurisdiction);
+            var targetLoadReduction = trashGeneratingUnits.TargetLoadReduction(jurisdiction);
 
 
 
@@ -108,75 +101,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-    }
-
-    public static class AreaCalculationsHelper
-    {
-        private const int decimalPlacesToDisplay = 0;
-
-        public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
-        {
-            return Math.Round(trashGeneratingUnits
-                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), decimalPlacesToDisplay); // will never be null
-        }
-
-        public static double GetAreaLoadBased(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits)
-        {
-            var loadOfTrashGeneratingUnitsWithNoBaselineAssessmentScore = trashGeneratingUnits.ToList()
-                .Where(x => x.OnlandVisualTrashAssessmentArea == null || x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore == null).Select(
-                    x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres *
-                         (double)x.LandUseBlock.TrashGenerationRate).Sum().GetValueOrDefault();
-
-            var loadOfTrashGeneratingUnitsWithBaselineAssessmentScore = trashGeneratingUnits.Where(x =>
-                    x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID != null).ToList()
-                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres * (double)
-                   (x.LandUseBlock.TrashGenerationRate >= x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate ? x.LandUseBlock.TrashGenerationRate : x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate)).Sum().GetValueOrDefault();
-
-            return Math.Round(loadOfTrashGeneratingUnitsWithBaselineAssessmentScore + loadOfTrashGeneratingUnitsWithNoBaselineAssessmentScore, decimalPlacesToDisplay); // will never be null
-        }
-
-        public static double GetAreaPartialCaptureLoadBased(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
-        {
-            var loadOfTrashGeneratingUnitsWithNoBaselineAssessmentScore = trashGeneratingUnits.ToList().Where(x => x.OnlandVisualTrashAssessmentArea == null || x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore == null)
-                .Select(x =>
-                    (double)x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres *
-                    (double)OnlandVisualTrashAssessmentScore.A.TrashGenerationRate).Sum();
-
-            var loadOfTrashGeneratingUnitsWithBaselineAssessmentScore = trashGeneratingUnits.Where(x => x.OnlandVisualTrashAssessmentArea != null &&
-                    x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null).ToList().Select(x =>
-                    x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres *
-                    (double)(OnlandVisualTrashAssessmentScore.A.TrashGenerationRate >=
-                              (1 - x.TreatmentBMP.TrashCaptureEffectiveness.Value / 100) *
-                              x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
-                                  .TrashGenerationRate
-                        ? OnlandVisualTrashAssessmentScore.A.TrashGenerationRate
-                        : (1 - x.TreatmentBMP.TrashCaptureEffectiveness.Value / 100) *
-                          x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
-                              .TrashGenerationRate))
-                .Sum().GetValueOrDefault();
-
-            return Math.Round(
-                loadOfTrashGeneratingUnitsWithNoBaselineAssessmentScore +
-                loadOfTrashGeneratingUnitsWithBaselineAssessmentScore, decimalPlacesToDisplay);
-        }
-
-        public static double GetAreaBaselineScoreLoadBased(this IEnumerable<OnlandVisualTrashAssessmentArea> ovtaas)
-        {
-
-            return Math.Round(ovtaas.ToList()
-                .Select(x =>
-                    x.OnlandVisualTrashAssessmentAreaGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres *
-                    (double)x.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate).Sum().GetValueOrDefault(), decimalPlacesToDisplay);
-        }
-
-        public static double GetAreaProgressScoreLoadBased(this IEnumerable<OnlandVisualTrashAssessmentArea> ovtaas)
-        {
-
-            return Math.Round(ovtaas.ToList()
-                .Select(x =>
-                    x.OnlandVisualTrashAssessmentAreaGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres *
-                    (double)x.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate).Sum().GetValueOrDefault(), decimalPlacesToDisplay);
-        }
     }
 }
 
