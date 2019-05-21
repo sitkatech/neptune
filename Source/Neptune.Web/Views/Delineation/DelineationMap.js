@@ -455,7 +455,6 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
     // had better be only one feature
-    debugger;
     var persistableFeatureJson;
     if (this.editableFeatureGroup.persist) {
         persistableFeatureJson = this.editableFeatureGroup.toGeoJSON();

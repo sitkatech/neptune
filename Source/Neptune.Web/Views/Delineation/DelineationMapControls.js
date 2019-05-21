@@ -40,11 +40,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
                 this.thin();
             }.bind(this));
 
-        L.DomEvent.on(this.getTrackedElement("undoDelineationVertexThinningButton"),
-            "click",
-            function (e) {
-                this.unthin();
-            }.bind(this));
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
@@ -137,7 +132,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     launchDrawCatchmentMode: function (drawModeOptions) {
         // okay to persist state because this control mode is ephemeral: see below for where it dies
         this.drawModeOptions = drawModeOptions;
-
+        this.enableThinButton();
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
     },
@@ -149,7 +144,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
-
         window.delineationMap.exitDrawCatchmentMode(save);
     },
 
@@ -184,23 +178,26 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationButton").removeAttribute("disabled");
     },
 
-    flipFromThinToUndo: function () {
-        this.getTrackedElement("delineationVertexThinningButton").classList.add("hiddenControlElement");
-        this.getTrackedElement("undoDelineationVertexThinningButton").classList.remove("hiddenControlElement");
+    enableThinButton: function () {
+        if (!this.getTrackedElement("delineationVertexThinningButton")) {
+            return; //misplaced call
+        }
+        this.getTrackedElement("delineationVertexThinningButton").removeAttribute("disabled");
     },
 
-    flipFromUndoToThin: function () {
-        this.getTrackedElement("delineationVertexThinningButton").classList.remove("hiddenControlElement");
-        this.getTrackedElement("undoDelineationVertexThinningButton").classList.add("hiddenControlElement");
+    disableThinButton: function () {
+        if (!this.getTrackedElement("delineationVertexThinningButton")) {
+            return; //misplaced call
+        }
+        this.getTrackedElement("delineationVertexThinningButton").disabled = "disabled";
     },
 
     thin: function () {
-        this.flipFromThinToUndo();
+        this.disableThinButton();
         window.delineationMap.thinDelineationVertices(this.drawModeOptions);
     },
 
     unthin: function () {
-        this.flipFromUndoToThin();
         window.delineationMap.unthinDelineationVertices();
     },
 
