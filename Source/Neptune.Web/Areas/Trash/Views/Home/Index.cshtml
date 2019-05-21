@@ -1,4 +1,7 @@
-﻿@using Neptune.Web.Models
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -40,20 +43,20 @@
             list-style-type: none;
         }
 
-        #tcLegend img {
-            max-height: 50px;
-            margin-right: 5px;
-        }
+            #tcLegend img {
+                max-height: 50px;
+                margin-right: 5px;
+            }
 
-        #ovtaAreaLegend img {
-            max-height: 25px;
-            margin-right: 5px;
-            border: 1px solid #ddd;
-        }
+            #ovtaAreaLegend img {
+                max-height: 25px;
+                margin-right: 5px;
+                border: 1px solid #ddd;
+            }
 
-        #ovtaAreaLegend li {
-            padding-bottom: 10px;
-        }
+            #ovtaAreaLegend li {
+                padding-bottom: 10px;
+            }
 
 
         .bootstrap-select {
@@ -69,12 +72,12 @@
 
 
 @*@section RightOfPageTitle
-{
-    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
     {
-        <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
-    }
-}*@
+        @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+        {
+            <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
+        }
+    }*@
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
@@ -297,7 +300,6 @@
 <style>
     .areaBasedCalculationControlTable {
         margin-bottom: 0;
-        width: 475px;
     }
 
     .font25 {
@@ -327,7 +329,7 @@
 </style>
 
 <template id="areaBasedCalculationControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl" style="width:80%">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -405,9 +407,17 @@
         font-weight: bold;
         border: none !important;
     }
+
+    .inline-display a:hover{
+        display: inline;
+    }
+
+    .inline-display a{
+        display: inline;
+    }
 </style>
 <template id="OVTABasedResultsControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl" style="width:100%">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -432,21 +442,13 @@
             <table class="table areaBasedCalculationControlTable">
                 <thead>
                     <tr>
-                        <td class="ovtaResults font15" style="width: 55%">
-                            <strong>Score</strong>
+                        <td class="ovtaResults font15 inline-display">
+                                @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Score {0}", BootstrapHtmlHelpers.MakeGlyphIcon("helpicon glyphicon glyphicon-question-sign")), ViewDataTyped.ScoreDescriptionsUrl, "Score Definitions", 600, null, "Close", new List<string> { }, null, null)
                         </td>
-                        <td class="ovtaResults text-center font15" style="width: 8.75%">
-                            <strong>A</strong>
-                        </td>
-                        <td class="ovtaResults text-center font15" style="width: 8.75%">
-                            <strong>B</strong>
-                        </td>
-                        <td class="ovtaResults text-center font15" style="width: 8.75%">
-                            <strong>C</strong>
-                        </td>
-                        <td class="ovtaResults text-center font15" style="width: 8.75%">
-                            <strong>D</strong>
-                        </td>
+                        <td class="ovtaResults text-center font15" style="width: 8.75%">A</td>
+                        <td class="ovtaResults text-center font15" style="width: 8.75%">B</td>
+                        <td class="ovtaResults text-center font15" style="width: 8.75%">C</td>
+                        <td class="ovtaResults text-center font15" style="width: 8.75%">D</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -508,14 +510,11 @@
 
     .loadBasedCalculationControlTable {
         margin-bottom: 0;
-        width: 475px;
-        /*border-collapse: separate;
-        border-spacing: 10px;*/
     }
 
-    .loadBasedCalculationControlTable tfoot tr th {
-        padding-top: 10px;
-    }
+        .loadBasedCalculationControlTable tfoot tr th {
+            padding-top: 10px;
+        }
 
     .loadBased-lightblue {
         color: RGB(132, 151, 176);
@@ -536,9 +535,14 @@
     .font22 {
         font-size: 22.5px;
     }
+
+    .text-normal label{
+        font-weight: normal;
+    }
+    
 </style>
 <template id="LoadBasedResultsControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedResultsControl" style="max-height: 210px;">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedResultsControl" style="max-height: 210px; width:75%">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -562,35 +566,35 @@
             <hr />
             <table class="table loadBasedCalculationControlTable">
                 <tfoot>
-                <tr>
-                    <td class="text-center" colspan="4">
-                        <p class="font15"><strong>Load Reduction Achieved</strong>, gallons per year</p>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="text-center" colspan="4">
+                            <p class="font15"><strong>Load Reduction Achieved</strong>, gallons per year</p>
+                        </td>
+                    </tr>
                 </tfoot>
                 <tbody>
-                <tr>
-                    <td class="loadBasedResultsColumn text-center">
-                        <div id="viaFullTrashCapture" class="font20 loadBased-lightblue bold">0</div>
-                        <p>Via Full Capture</p>
-                    </td>
-                    <td class="loadBasedResultsColumn text-center">
-                        <div id="viaPartialTrashCapture" class="font20 loadBased-lightblue bold">0</div>
-                        <p>Via Partial Capture</p>
-                    </td>
-                    <td class="loadBasedResultsColumn text-center">
-                        <div id="viaOVTAScore" class="font20 loadBased-lightblue bold">0</div>
-                        <p>Via OVTA Score</p>
-                    </td>
-                    <td class="loadBasedResultsColumn text-center">
-                        <div id="totalAchieved" class="font22 loadBased-blue bold">0</div>
-                        <p>Total Achieved</p>
-                    </td>
-                    <td class="loadBasedResultsColumn text-center" style="border-left: 1px solid rgb(204, 204, 204);">
-                        <div id="targetLoadReduction" class="font25 loadBased-red bold">0</div>
-                        <p><strong>Target Load Reduction</strong>, gallons per year</p>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="loadBasedResultsColumn text-center" style="width: 18%">
+                            <div id="viaFullTrashCapture" class="font20 loadBased-lightblue bold" >0</div>
+                            <p class="text-normal greyLabel" style="margin-top: 8px; font-weight: normal">@Html.LabelWithSugarFor(FieldDefinition.ViaFullCapture)</p>
+                        </td>
+                        <td class="loadBasedResultsColumn text-center" style="width: 21%">
+                            <div id="viaPartialTrashCapture" class="font20 loadBased-lightblue bold">0</div>
+                            <p class="text-normal greyLabel" style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.ViaPartialCapture)</p>
+                        </td>
+                        <td class="loadBasedResultsColumn text-center" style="width: 21%">
+                            <div id="viaOVTAScore" class="font20 loadBased-lightblue bold">0</div>
+                            <p class="text-normal greyLabel" style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.ViaOVTAScore)</p>
+                        </td>
+                        <td class="loadBasedResultsColumn text-center">
+                            <div id="totalAchieved grey" class="font22 loadBased-blue bold">0</div>
+                            <p class="text-normal greyLabel" style="margin-top: 4px;">@Html.LabelWithSugarFor(FieldDefinition.TotalAchieved)</p>
+                        </td>
+                        <td class="loadBasedResultsColumn text-center" style="border-left: 1px solid rgb(204, 204, 204);">
+                            <div id="targetLoadReduction" class="font25 loadBased-red bold">0</div>
+                            <p>@Html.LabelWithSugarFor(FieldDefinition.TargetLoadReduction) gallons per year</p>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
