@@ -298,8 +298,6 @@
 
 
 <style>
-
-
     @@media (min-width: 768px) {
         .TGUColumn .table-of {
             padding-top: 10%;
@@ -332,8 +330,6 @@
         font-weight: bold;
         border-top: none !important;
         border-bottom: none !important;
-        padding-bottom: 0px;
-        padding-top: 0px;
     }
 
     table td + td {
@@ -342,7 +338,7 @@
 </style>
 
 <template id="areaBasedCalculationControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl" style="max-width: 475px;">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -364,40 +360,16 @@
                 </div>
             }
             <hr />
-            @*<div class="row">
-                    <div class="col-sm-3 text-center">
-                        <div id="fullTrashCapture" class="font25" style="color: rgb(76, 146, 76)">0</div>
-                        <p class="greyLabel">acres</p>
-                        <br />
-                        <strong>Full Trash Capture</strong>
-                    </div>
-                    <div class="col-sm-3 text-center"">
-                        <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">0</div>
-                        <p class="greyLabel">acres via OVTA "A"</p>
-                        <br />
-                        <strong>Equivalent Area</strong>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
-                        <p class="greyLabel">acres captured</p>
-
-                        <div id="totalPLUAcres" class="font25">0</div>
-                        <p class="greyLabel">total PLU acres</p>
-                        <br/>
-                        <strong>Total Full Capture Equivalent</strong>
-                    </div>
-
-                </div>*@
             <table class="table  table-responsive table-condensed areaBasedCalculationControlTable">
                 <tfoot>
                     <tr>
-                        <td class="TGUColumn text-center">
+                        <td class="TGUColumn text-center" style="width: 20%">
                             <strong>Full Trash Capture</strong>
                         </td>
-                        <td class="TGUColumn text-center" style="border-left: none">
+                        <td class="TGUColumn text-center" style="border-left: none; width:20%">
                             <strong>Equivalent Area</strong>
                         </td>
-                        <td class="TGUColumn text-center" style="border-left: none">
+                        <td class="TGUColumn text-center" style="border-left: none; width:60%">
                             <strong>Total Full Capture Equivalent</strong>
                         </td>
                     </tr>
@@ -417,7 +389,7 @@
                                 <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
                                 <p class="greyLabel">acres captured</p>
                             </div>
-                            <div class="col-sm-1 col-xs-12 table-of" style="">
+                            <div class="col-sm-1 col-xs-12 table-of">
                                 <strong> of </strong>
                             </div>
                             <div class="col-sm-5 col-xs-12" style="">
