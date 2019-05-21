@@ -102,7 +102,10 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTypeConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
-            modelBuilder.Configurations.Add(new vTrashGeneratingUnitForLoadCalculationConfiguration());
+            modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedFullCaptureConfiguration());
+            modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedPartialCaptureConfiguration());
+            modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTargetReductionConfiguration());
+            modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTrashAssessmentConfiguration());
         }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
         public virtual DbSet<County> Counties { get; set; }
@@ -172,7 +175,10 @@ namespace Neptune.Web.Models
         public virtual DbSet<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; set; }
-        public virtual DbSet<vTrashGeneratingUnitForLoadCalculation> vTrashGeneratingUnitForLoadCalculations { get; set; }
+        public virtual DbSet<vTrashGeneratingUnitLoadBasedFullCapture> vTrashGeneratingUnitLoadBasedFullCaptures { get; set; }
+        public virtual DbSet<vTrashGeneratingUnitLoadBasedPartialCapture> vTrashGeneratingUnitLoadBasedPartialCaptures { get; set; }
+        public virtual DbSet<vTrashGeneratingUnitLoadBasedTargetReduction> vTrashGeneratingUnitLoadBasedTargetReductions { get; set; }
+        public virtual DbSet<vTrashGeneratingUnitLoadBasedTrashAssessment> vTrashGeneratingUnitLoadBasedTrashAssessments { get; set; }
 
         public object LoadType(Type type, int primaryKey)
         {
