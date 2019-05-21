@@ -25,10 +25,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadBasedFullCapture(int primaryKey, int trashGeneratingUnitID, double? area, decimal? baselineLoadingRate) : this()
+        public vTrashGeneratingUnitLoadBasedFullCapture(int primaryKey, int trashGeneratingUnitID, int stormwaterJurisdictionID, double area, decimal baselineLoadingRate) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.Area = area;
             this.BaselineLoadingRate = baselineLoadingRate;
         }
@@ -40,6 +41,7 @@ namespace Neptune.Web.Models
         {
             this.PrimaryKey = vTrashGeneratingUnitLoadBasedFullCapture.PrimaryKey;
             this.TrashGeneratingUnitID = vTrashGeneratingUnitLoadBasedFullCapture.TrashGeneratingUnitID;
+            this.StormwaterJurisdictionID = vTrashGeneratingUnitLoadBasedFullCapture.StormwaterJurisdictionID;
             this.Area = vTrashGeneratingUnitLoadBasedFullCapture.Area;
             this.BaselineLoadingRate = vTrashGeneratingUnitLoadBasedFullCapture.BaselineLoadingRate;
             CallAfterConstructor(vTrashGeneratingUnitLoadBasedFullCapture);
@@ -49,7 +51,8 @@ namespace Neptune.Web.Models
 
         public int PrimaryKey { get; set; }
         public int TrashGeneratingUnitID { get; set; }
-        public double? Area { get; set; }
-        public decimal? BaselineLoadingRate { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
+        public double Area { get; set; }
+        public decimal BaselineLoadingRate { get; set; }
     }
 }

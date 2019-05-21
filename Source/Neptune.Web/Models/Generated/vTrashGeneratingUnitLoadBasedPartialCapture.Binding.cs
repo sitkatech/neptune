@@ -25,13 +25,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadBasedPartialCapture(int primaryKey, int trashGeneratingUnitID, double? area, decimal? baselineLoadingRate, decimal? trashCaptureEffectiveness) : this()
+        public vTrashGeneratingUnitLoadBasedPartialCapture(int primaryKey, int trashGeneratingUnitID, int stormwaterJurisdictionID, double area, decimal? baselineLoadingRate, decimal? actualLoadingAfterTrashCapture) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.Area = area;
             this.BaselineLoadingRate = baselineLoadingRate;
-            this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
+            this.ActualLoadingAfterTrashCapture = actualLoadingAfterTrashCapture;
         }
 
         /// <summary>
@@ -41,9 +42,10 @@ namespace Neptune.Web.Models
         {
             this.PrimaryKey = vTrashGeneratingUnitLoadBasedPartialCapture.PrimaryKey;
             this.TrashGeneratingUnitID = vTrashGeneratingUnitLoadBasedPartialCapture.TrashGeneratingUnitID;
+            this.StormwaterJurisdictionID = vTrashGeneratingUnitLoadBasedPartialCapture.StormwaterJurisdictionID;
             this.Area = vTrashGeneratingUnitLoadBasedPartialCapture.Area;
             this.BaselineLoadingRate = vTrashGeneratingUnitLoadBasedPartialCapture.BaselineLoadingRate;
-            this.TrashCaptureEffectiveness = vTrashGeneratingUnitLoadBasedPartialCapture.TrashCaptureEffectiveness;
+            this.ActualLoadingAfterTrashCapture = vTrashGeneratingUnitLoadBasedPartialCapture.ActualLoadingAfterTrashCapture;
             CallAfterConstructor(vTrashGeneratingUnitLoadBasedPartialCapture);
         }
 
@@ -51,8 +53,9 @@ namespace Neptune.Web.Models
 
         public int PrimaryKey { get; set; }
         public int TrashGeneratingUnitID { get; set; }
-        public double? Area { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
+        public double Area { get; set; }
         public decimal? BaselineLoadingRate { get; set; }
-        public decimal? TrashCaptureEffectiveness { get; set; }
+        public decimal? ActualLoadingAfterTrashCapture { get; set; }
     }
 }

@@ -25,10 +25,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadBasedTrashAssessment(int primaryKey, int trashGeneratingUnitID, double? area, decimal? progressLoadingRate, decimal? baselineLoadingRate) : this()
+        public vTrashGeneratingUnitLoadBasedTrashAssessment(int primaryKey, int trashGeneratingUnitID, int stormwaterJurisdictionID, double area, decimal progressLoadingRate, decimal baselineLoadingRate) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.Area = area;
             this.ProgressLoadingRate = progressLoadingRate;
             this.BaselineLoadingRate = baselineLoadingRate;
@@ -41,6 +42,7 @@ namespace Neptune.Web.Models
         {
             this.PrimaryKey = vTrashGeneratingUnitLoadBasedTrashAssessment.PrimaryKey;
             this.TrashGeneratingUnitID = vTrashGeneratingUnitLoadBasedTrashAssessment.TrashGeneratingUnitID;
+            this.StormwaterJurisdictionID = vTrashGeneratingUnitLoadBasedTrashAssessment.StormwaterJurisdictionID;
             this.Area = vTrashGeneratingUnitLoadBasedTrashAssessment.Area;
             this.ProgressLoadingRate = vTrashGeneratingUnitLoadBasedTrashAssessment.ProgressLoadingRate;
             this.BaselineLoadingRate = vTrashGeneratingUnitLoadBasedTrashAssessment.BaselineLoadingRate;
@@ -51,8 +53,9 @@ namespace Neptune.Web.Models
 
         public int PrimaryKey { get; set; }
         public int TrashGeneratingUnitID { get; set; }
-        public double? Area { get; set; }
-        public decimal? ProgressLoadingRate { get; set; }
-        public decimal? BaselineLoadingRate { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
+        public double Area { get; set; }
+        public decimal ProgressLoadingRate { get; set; }
+        public decimal BaselineLoadingRate { get; set; }
     }
 }

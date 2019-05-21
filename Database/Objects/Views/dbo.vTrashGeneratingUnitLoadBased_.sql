@@ -20,12 +20,13 @@ as
 Select
 	TrashGeneratingUnitID as PrimaryKey,
 	TrashGeneratingUnitID,
-	TrashGeneratingUnitGeometry.STArea() * 2471054 as Area,
-	Case
+	tgu.StormwaterJurisdictionID,
+	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
+	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
 		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
-	end as BaselineLoadingRate
+	end, 0) as BaselineLoadingRate
 From
 	dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.LandUseBlockID = lub.LandUseBlockID
@@ -45,6 +46,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 1
 	and tgu.LandUseBlockID is not null
+	and lub.PriorityLandUseTypeID <> 7
 GO
 
 /*
@@ -54,18 +56,35 @@ Also fairly straightforward, as above, but with a trash capture effectiveness to
 Create view dbo.vTrashGeneratingUnitLoadBasedPartialCapture
 as
 Select
+	PrimaryKey,
+	TrashGeneratingUnitID,
+	StormwaterJurisdictionID,
+	Area,
+	cast (BaselineLoadingRate as decimal) as BaselineLoadingRate,
+	Case
+		when ActualLoadingAfterTrashCapture < 2.5 then 2.5
+		else ActualLoadingAfterTrashCapture
+	end as ActualLoadingAfterTrashCapture
+from
+(Select
 	TrashGeneratingUnitID as PrimaryKey,
 	TrashGeneratingUnitID,
-	TrashGeneratingUnitGeometry.STArea() * 2471054 as Area,
-	Case
+	tgu.StormwaterJurisdictionID,
+	IsNull(TrashGeneratingUnitGeometry.STArea(),0) as Area,
+	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
 		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
-	end as BaselineLoadingRate,
-	Case 
+	end,0) as BaselineLoadingRate,
+	IsNull(Case
+		when score.TrashGenerationRate is null then lub.TrashGenerationRate
+		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
+		else score.TrashGenerationRate
+	end,0) * (1 - 
+	IsNull(Case 
 		when tbmp.TrashCaptureEffectiveness is null then 0.0
 		else cast(tbmp.TrashCaptureEffectiveness as decimal)/100
-	end as TrashCaptureEffectiveness
+	end,0)) as ActualLoadingAfterTrashCapture
 From
 	dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.LandUseBlockID = lub.LandUseBlockID
@@ -85,6 +104,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 2
 	and tgu.LandUseBlockID is not null
+	and lub.PriorityLandUseTypeID <> 7) sub
 GO
 
 /*
@@ -97,17 +117,18 @@ as
 Select
 	TrashGeneratingUnitID as PrimaryKey,
 	TrashGeneratingUnitID,
-	TrashGeneratingUnitGeometry.STArea() * 2471054 as Area,
-	Case
+	tgu.StormwaterJurisdictionID,
+	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
+	IsNull(Case
 		when pscore.TrashGenerationRate is null then lub.TrashGenerationRate
 		when lub.TrashGenerationRate < pscore.TrashGenerationRate then lub.TrashGenerationRate
 		else pscore.TrashGenerationRate
-	end as ProgressLoadingRate,
-	Case
+	end,0) as ProgressLoadingRate,
+	IsNull(Case
 		when bscore.TrashGenerationRate is null then lub.TrashGenerationRate
 		when lub.TrashGenerationRate < bscore.TrashGenerationRate then lub.TrashGenerationRate
 		else bscore.TrashGenerationRate
-	end as BaselineLoadingRate
+	end,0) as BaselineLoadingRate
 From
 	dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.LandUseBlockID = lub.LandUseBlockID
@@ -142,6 +163,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tgu.LandUseBlockID is not null
 	and area.OnlandVisualTrashAssessmentBaselineScoreID is not null
+	and lub.PriorityLandUseTypeID <> 7
 GO
 
 /*
@@ -154,11 +176,12 @@ Select
 	TrashGeneratingUnitID as PrimaryKey,
 	TrashGeneratingUnitID,
 	tgu.StormwaterJurisdictionID,
-	Case
+	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
+	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
 		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
-	end as BaselineLoadingRate
+	end,0) as BaselineLoadingRate
 
 From dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.LandUseBlockID = lub.LandUseBlockID

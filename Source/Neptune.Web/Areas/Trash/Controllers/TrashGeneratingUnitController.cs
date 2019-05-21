@@ -81,10 +81,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
             var ovtas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments;
 
-            var viaFullCapture = trashGeneratingUnits.LoadBasedFullCapture(jurisdiction);
-
-            var viaPartialCapture = trashGeneratingUnits.LoadBasedPartialCapture(jurisdiction);
-            var viaOVTAs = ovtas.LoadBasedOVTAProgressScores(jurisdiction);
+            var viaFullCapture = TrashGeneratingUnitHelper.LoadBasedFullCapture(jurisdiction);
+            var viaPartialCapture = TrashGeneratingUnitHelper.LoadBasedPartialCapture(jurisdiction);
+            var viaOVTAs = TrashGeneratingUnitHelper.LoadBasedOVTAProgressScores(jurisdiction);
             var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;
             var targetLoadReduction = trashGeneratingUnits.TargetLoadReduction(jurisdiction);
 
