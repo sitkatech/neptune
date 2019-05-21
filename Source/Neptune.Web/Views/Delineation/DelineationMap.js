@@ -785,8 +785,10 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
         });
 
     this.map.on("click",
-        function(e) {
-            self.selectBMPByDelineation(e.latlng);
+        function (e) {
+            if (!window.freeze) {
+                self.selectBMPByDelineation(e.latlng);
+            }
         });
 
 };
