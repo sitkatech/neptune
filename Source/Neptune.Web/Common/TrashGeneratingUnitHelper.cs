@@ -13,35 +13,51 @@ namespace Neptune.Web.Common
     {
         private const decimal FullTrashCaptureLoading = 2.5m;
 
-        public static bool UpdateTrashGeneratingUnits(this Delineation delineation)
+        // In contrast to the original implementation of these methods, the caller is now responsible for all SaveChangeses
+        public static void UpdateTrashGeneratingUnits(this Delineation delineation, Person currentPerson)
         {
-            return true;
-            // TODO: neutered under 367. Will bring back once job scheduling is in place
+            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
+            {
+                AdjustedDelineationID = delineation.DelineationID
+            };
+            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
         }
-        public static bool UpdateTrashGeneratingUnitsAfterDelete(this Delineation delineation)
+        public static void UpdateTrashGeneratingUnitsAfterDelete(this Delineation delineation, Person currentPerson)
         {
-
-            return true;
-            // TODO: neutered under 367. Will bring back once job scheduling is in place
-        }
-        public static bool UpdateTrashGeneratingUnitsAfterDelete(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
-        {
-            return true;
-            // TODO: neutered under 367. Will bring back once job scheduling is in place
-        }
-
-
-
-        public static bool UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations)
-        {
-            return true;
-            // TODO: neutered under 367. Will bring back once job scheduling is in place
+            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
+            {
+                DeletedGeometry = delineation.DelineationGeometry
+            };
+            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
         }
 
-        public static bool UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        public static void UpdateTrashGeneratingUnitsAfterDelete(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
         {
-            return true;
-            // TODO: neutered under 367. Will bring back once job scheduling is in place
+            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
+            {
+                DeletedGeometry = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry
+            };
+            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
+        }
+
+        public static void UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations, Person currentPerson)
+        {
+            var trashGeneratingUnitAdjustments = delineations.Select(delineation => new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
+            {
+                DeletedGeometry = delineation.DelineationGeometry
+            });
+
+
+            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.AddRange(trashGeneratingUnitAdjustments);
+        }
+
+        public static void UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
+        {
+            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
+            {
+                AdjustedOnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID
+            };
+            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
         }
 
         public static double LoadBasedFullCapture(StormwaterJurisdiction jurisdiction)
