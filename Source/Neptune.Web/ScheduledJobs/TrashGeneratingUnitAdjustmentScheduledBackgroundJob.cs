@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using MoreLinq;
 using Neptune.Web.Common;
@@ -22,6 +23,9 @@ namespace Neptune.Web.ScheduledJobs
             TrashGeneratingUnitAdjustmentImpl();
         }
 
+        public const string DelineationObjectType = "Delineation";
+        public const string OnlandVisualTrashAssessmentAreaObjectType = "OnlandVisualTrashAssessmentArea";
+
         protected virtual void TrashGeneratingUnitAdjustmentImpl()
         {
             Logger.Info($"Processing '{JobName}'");
@@ -41,24 +45,53 @@ namespace Neptune.Web.ScheduledJobs
 
             if (trashGeneratingUnitAdjustment.AdjustedDelineation != null)
             {
-                // TODO: execute the stored proc for the adjustment
+                var objectIDs =
+                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { trashGeneratingUnitAdjustment.AdjustedDelineation.DelineationID }));
+                var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
 
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+
+                return;
             }
             else if (trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentArea != null)
             {
-                // TODO: execute the stored proc for the adjustment
+                var objectIDs = new SqlParameter("@ObjectIDs",
+                    FormatIDString(new List<int>
+                    {
+                            trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentArea
+                                .OnlandVisualTrashAssessmentAreaID
+                    }));
+                var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
 
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+
+                return;
             }
             else if (trashGeneratingUnitAdjustment.DeletedGeometry != null)
             {
-                // TODO: execute the stored proc for the adjustment
-            }
+                var wellKnownText = trashGeneratingUnitAdjustment.DeletedGeometry.ToString();
+                wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture));
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
 
+                var geometryWKT = new SqlParameter("@GeometryWKT", wellKnownText);
+
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit @GeometryWKT", geometryWKT);
+
+                return;
+            }
 
             trashGeneratingUnitAdjustment.IsProcessed = true;
             trashGeneratingUnitAdjustment.ProcessedDate =
                 DateTime.Now;
             DbContext.SaveChanges();
+        }
+
+        public static string FormatIDString(IEnumerable<int> idList)
+        {
+            return String.Join(",", idList);
         }
     }
 }
