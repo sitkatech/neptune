@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
 
         public int SaveChangesWithNoAuditing()
         {
-
+            ChangeTracker.DetectChanges();
             return base.SaveChanges();
         }
 

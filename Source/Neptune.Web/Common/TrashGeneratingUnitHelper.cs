@@ -44,7 +44,7 @@ namespace Neptune.Web.Common
         {
             var trashGeneratingUnitAdjustments = delineations.Select(delineation => new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
             {
-                DeletedGeometry = delineation.DelineationGeometry
+                AdjustedDelineationID = delineation.DelineationID
             });
 
 
