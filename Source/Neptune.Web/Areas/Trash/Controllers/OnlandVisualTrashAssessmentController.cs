@@ -380,17 +380,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Load();
             viewModel.UpdateModel(onlandVisualTrashAssessment, HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Local);
 
-            var tguUpdateSuccess =
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
-            if (!tguUpdateSuccess)
-            {
-                SetInfoForDisplay(
-                    "The OVTA was successfully finalized, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-            }
-            else
-            {
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
+            
                 SetMessageForDisplay("The OVTA was successfully finalized");
-            }
+            
 
             if (viewModel.Finalize.GetValueOrDefault())
             {
@@ -469,17 +462,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 }
             }
 
-            var tguUpdateSuccess =
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
-            if (!tguUpdateSuccess)
-            {
-                SetInfoForDisplay(
-                    "The OVTA was successfully returned to the \"In Progress\" status, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-            }
-            else
-            {
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
+            
                 SetMessageForDisplay("The OVTA was successfully returned to the \"In Progress\" status");
-            }
+            
 
             return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                 x.RecordObservations(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)));

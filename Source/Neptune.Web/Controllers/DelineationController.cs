@@ -109,6 +109,8 @@ namespace Neptune.Web.Controllers
 
             if (treatmentBMPDelineation != null)
             {
+                // do this here so that the delineation geometry hasn't been deleted yet
+                treatmentBMPDelineation.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
                 if (geom != null)
                 {
                     treatmentBMPDelineation.DelineationGeometry = geom;
@@ -122,7 +124,6 @@ namespace Neptune.Web.Controllers
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
                     HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
 
-                    var tguUpdateSuccess = treatmentBMPDelineation.UpdateTrashGeneratingUnitsAfterDelete();
                 }
             }
             else
@@ -166,17 +167,10 @@ namespace Neptune.Web.Controllers
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
 
 
-            var tguUpdateSuccess =
-                delineation.UpdateTrashGeneratingUnits();
-            if (!tguUpdateSuccess)
-            {
-                SetInfoForDisplay(
-                    "The Delineation status was successfully changed, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-            }
-            else
-            {
-                SetMessageForDisplay("The Delineation status was successfully changed.");
-            }
+
+            delineation.UpdateTrashGeneratingUnits(CurrentPerson);
+            SetMessageForDisplay("The Delineation status was successfully changed.");
+
 
             return Json(new {success = true});
         }
@@ -204,20 +198,12 @@ namespace Neptune.Web.Controllers
             treatmentBMP.DelineationID = null;
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
+            delineation.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-
-            var tguUpdateSuccess = delineation.UpdateTrashGeneratingUnitsAfterDelete();
-            if (!tguUpdateSuccess)
-            {
-                SetInfoForDisplay(
-                    "The Delination was successfully deleted, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-            }
-            else
-            {
-                SetMessageForDisplay("The Delineation was successfully deleted.");
-            }
+            SetMessageForDisplay("The Delineation was successfully deleted.");
 
             return Json(new {success = true});
         }
@@ -244,19 +230,12 @@ namespace Neptune.Web.Controllers
 
             delineation.TreatmentBMP.DelineationID = null;
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            delineation.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+            SetMessageForDisplay("The Delination was successfully deleted.");
 
-            var tguUpdateSuccess = delineation.UpdateTrashGeneratingUnitsAfterDelete();
-            if (!tguUpdateSuccess)
-            {
-                SetInfoForDisplay(
-                    "The Delination was successfully deleted, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-            }
-            else
-            {
-                SetMessageForDisplay("The Delination was successfully deleted.");
-            }
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));

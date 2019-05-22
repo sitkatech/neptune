@@ -86,17 +86,9 @@ namespace Neptune.Web.Controllers
 
             var numberOfVerifiedBMPDelineations = bmpDelineations.Count;
 
-            var tguUpdateSuccess = bmpDelineations.UpdateTrashGeneratingUnits();
-
-            if (tguUpdateSuccess)
-            {
-                SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
-            }
-            else
-            {
-                SetInfoForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-            }
-
+            bmpDelineations.UpdateTrashGeneratingUnits(CurrentPerson);
+            SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
+            
             return new ModalDialogFormJsonResult();
         }
 

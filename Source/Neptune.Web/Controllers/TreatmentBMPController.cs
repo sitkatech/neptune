@@ -131,6 +131,7 @@ namespace Neptune.Web.Controllers
 
             var inventoryIsVerified = false;
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified, viewModel.TrashCaptureStatusTypeID.GetValueOrDefault(), viewModel.SizingBasisTypeID.GetValueOrDefault());
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
@@ -164,7 +165,7 @@ namespace Neptune.Web.Controllers
             var editLocationViewData = new Views.Shared.Location.EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, "treatmentBMPLocation");
             var treatmentBMPStormwaterJurisdictionIDs = treatmentBMP != null
                 ? new List<int> { treatmentBMP.StormwaterJurisdictionID }
-                : stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList(); // todo: UI needs to adapt to stormwater jurisdiction selected
+                : stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
                 .Where(x => treatmentBMPStormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
 
@@ -208,15 +209,7 @@ namespace Neptune.Web.Controllers
 
             if (refreshTGUs)
             {
-                var tguUpdateSuccess = treatmentBMP.Delineation.UpdateTrashGeneratingUnits();
-                if (tguUpdateSuccess)
-                {
-                    SetMessageForDisplay("Treatment BMP successfully saved.");
-                }
-                else
-                {
-                    SetInfoForDisplay("The Treatment BMP was successfully edited, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
-                }
+                treatmentBMP.Delineation.UpdateTrashGeneratingUnits(CurrentPerson);
             }
 
             SetMessageForDisplay("Treatment BMP successfully saved.");
@@ -356,7 +349,7 @@ namespace Neptune.Web.Controllers
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
-                var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint, bmp.LocationPoint.YCoordinate.Value, bmp.LocationPoint.XCoordinate.Value, bmp.TreatmentBMPID);
+                var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint, bmp.LocationPoint.YCoordinate.GetValueOrDefault(), bmp.LocationPoint.XCoordinate.GetValueOrDefault(), bmp.TreatmentBMPID); // X/YCoordinate will never be null
                 var listItem = new ListItem(bmp.TreatmentBMPName, JsonConvert.SerializeObject(treatmentBMPMapSummaryData));
                 return listItem;
             }).ToList();
@@ -547,11 +540,7 @@ namespace Neptune.Web.Controllers
             var uploadCSV = viewModel.UploadCSV;
             var bmpType = viewModel.BMPType;
 
-            var errorList = new List<string>();
-            var customAttributes = new List<CustomAttribute>();
-            var customAttributeValues = new List<CustomAttributeValue>();
-
-            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType, out errorList, out customAttributes, out customAttributeValues);
+            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType, out var errorList, out var customAttributes, out var customAttributeValues);
 
             if (errorList.Count != 0)
             {
