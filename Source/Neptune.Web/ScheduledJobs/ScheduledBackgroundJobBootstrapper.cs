@@ -65,9 +65,10 @@ namespace Neptune.Web.ScheduledJobs
             AddRecurringJob(TrashGeneratingUnitRefreshScheduledBackgroundJob.JobName,
                 () => ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitRefreshScheduledBackgroundJob(),
                 MakeDailyUtcCronJobStringFromLocalTime(1, 23), recurringJobIds);
-            AddRecurringJob(TrashGeneratingUnitAdjustmentScheduledBackgroundJob.JobName,
+
+            AddMinutelyRecurringJob(TrashGeneratingUnitAdjustmentScheduledBackgroundJob.JobName,
                 () => ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(),
-                MakeDailyUtcCronJobStringFromLocalTime(1, 23), recurringJobIds);
+                 recurringJobIds);
             
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);
@@ -77,6 +78,13 @@ namespace Neptune.Web.ScheduledJobs
             string cronExpression, List<string> recurringJobIds)
         {
             RecurringJob.AddOrUpdate(jobName, methodCallExpression, cronExpression);
+            recurringJobIds.Add(jobName);
+        }
+
+        private static void AddMinutelyRecurringJob(string jobName, Expression<Action> methodCallExpression,
+            List<string> recurringJobIds)
+        {
+            RecurringJob.AddOrUpdate(jobName, methodCallExpression, Hangfire.Cron.Minutely);
             recurringJobIds.Add(jobName);
         }
 
