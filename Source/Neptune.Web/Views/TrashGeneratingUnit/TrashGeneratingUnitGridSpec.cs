@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DhtmlWrappers;
@@ -27,6 +28,37 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
             Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Loading Rate", x =>
+            {
+                if (x.LandUseBlock == null || x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID)
+                {
+                    return "N/A";
+                }
+
+                if (x.TreatmentBMP?.TrashCaptureStatusTypeID == TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)
+                {
+                    return "2.5";
+                }
+
+                var landUseBlockTrashGenerationRate = x.LandUseBlock.TrashGenerationRate;
+                var assessmentScoreTrashGenerationRate =
+                    x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore?.TrashGenerationRate;
+
+                var preCaptureLoadingRate = assessmentScoreTrashGenerationRate != null
+                    ? Math.Min(assessmentScoreTrashGenerationRate.Value, landUseBlockTrashGenerationRate)
+                    : landUseBlockTrashGenerationRate;
+
+                var treatmentBMPTrashCaptureEffectiveness = x.TreatmentBMP?.TrashCaptureEffectiveness;
+                if (x.TreatmentBMP?.TrashCaptureStatusTypeID !=
+                    TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID &&
+                    treatmentBMPTrashCaptureEffectiveness != null)
+                {
+                    var postCaptureLoadingRate = (1.0 - (treatmentBMPTrashCaptureEffectiveness.Value / 100.0));
+                    return Math.Max(2.5, postCaptureLoadingRate).ToString(CultureInfo.InvariantCulture);
+                }
+
+                return preCaptureLoadingRate.ToString(CultureInfo.InvariantCulture);
+            }, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Last Updated", x => x.LastUpdateDate, 120,DhtmlxGridColumnFormatType.DateTime);
         }
 

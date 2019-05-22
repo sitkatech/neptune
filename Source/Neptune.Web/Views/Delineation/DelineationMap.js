@@ -162,6 +162,7 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 
     this.hookupDeselectOnClick();
     this.hookupSelectTreatmentBMPOnClick();
+    window.freeze = false;
 };
 
 /* "Draw Catchment Mode"
