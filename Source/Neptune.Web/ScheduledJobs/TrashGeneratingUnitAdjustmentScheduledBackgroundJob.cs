@@ -52,7 +52,6 @@ namespace Neptune.Web.ScheduledJobs
                 HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
-                return;
             }
             else if (trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentArea != null)
             {
@@ -67,7 +66,6 @@ namespace Neptune.Web.ScheduledJobs
                 HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
-                return;
             }
             else if (trashGeneratingUnitAdjustment.DeletedGeometry != null)
             {
@@ -80,7 +78,6 @@ namespace Neptune.Web.ScheduledJobs
                 HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit @GeometryWKT", geometryWKT);
 
-                return;
             }
 
             trashGeneratingUnitAdjustment.IsProcessed = true;
