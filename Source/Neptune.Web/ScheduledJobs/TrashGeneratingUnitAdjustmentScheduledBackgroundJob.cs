@@ -83,7 +83,7 @@ namespace Neptune.Web.ScheduledJobs
             trashGeneratingUnitAdjustment.IsProcessed = true;
             trashGeneratingUnitAdjustment.ProcessedDate =
                 DateTime.Now;
-            DbContext.SaveChanges();
+            DbContext.SaveChangesWithNoAuditing();
         }
 
         public static string FormatIDString(IEnumerable<int> idList)
