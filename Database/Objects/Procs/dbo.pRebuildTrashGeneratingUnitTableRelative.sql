@@ -17,6 +17,10 @@ Select @SpliceSeed = dbo.fGetTGUInputGeometry(@ObjectIDs, @ObjectType);
 
 Select @SpliceBase = geometry::UnionAggregate(TrashGeneratingUnitGeometry) from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceSeed) = 1
 
+-- if for some reason no TGUs were found there, don't die
+if @SpliceBase is null
+	Select @SpliceBase = @SpliceSeed;
+
 Delete from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceBase) = 1
 
 /*-1. Restrict the input layers */
