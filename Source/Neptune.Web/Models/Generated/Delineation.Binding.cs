@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Delineation()
         {
+            this.TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedDelineation = new HashSet<TrashGeneratingUnitAdjustment>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -79,13 +80,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return (TreatmentBMP != null);
+            return TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedDelineation.Any() || (TreatmentBMP != null);
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -110,6 +111,11 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
+            foreach(var x in TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedDelineation.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in TreatmentBMPs.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -126,6 +132,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 
+        public virtual ICollection<TrashGeneratingUnitAdjustment> TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedDelineation { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         [NotMapped]
         public TreatmentBMP TreatmentBMP { get { return TreatmentBMPs.SingleOrDefault(); } set { TreatmentBMPs = new List<TreatmentBMP>{value};} }

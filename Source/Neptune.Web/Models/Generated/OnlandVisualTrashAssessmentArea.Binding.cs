@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
         {
             this.OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
             this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
+            this.TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedOnlandVisualTrashAssessmentArea = new HashSet<TrashGeneratingUnitAdjustment>();
         }
 
         /// <summary>
@@ -84,13 +85,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return OnlandVisualTrashAssessments.Any() || TrashGeneratingUnits.Any();
+            return OnlandVisualTrashAssessments.Any() || TrashGeneratingUnits.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedOnlandVisualTrashAssessmentArea.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessmentArea).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(TrashGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessmentArea).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnitAdjustment).Name};
 
 
         /// <summary>
@@ -124,6 +125,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
+
+            foreach(var x in TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedOnlandVisualTrashAssessmentArea.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -140,6 +146,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
+        public virtual ICollection<TrashGeneratingUnitAdjustment> TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedOnlandVisualTrashAssessmentArea { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentBaselineScore { get { return OnlandVisualTrashAssessmentBaselineScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentBaselineScoreID.Value] : null; } }
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentProgressScore { get { return OnlandVisualTrashAssessmentProgressScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentProgressScoreID.Value] : null; } }
