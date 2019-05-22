@@ -123,8 +123,11 @@ namespace Neptune.Web.Common
             var vTrashGeneratingUnitLoadBasedFullCaptures = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedFullCaptures.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
 
-            return vTrashGeneratingUnitLoadBasedFullCaptures.Sum(x =>
-                x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) * DbSpatialHelper.SqlGeometryAreaToAcres);
+            return vTrashGeneratingUnitLoadBasedFullCaptures.Any()
+                ? vTrashGeneratingUnitLoadBasedFullCaptures.Sum(x =>
+                    x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
+                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                : 0;
         }
 
         public static double LoadBasedPartialCapture(StormwaterJurisdiction jurisdiction)
@@ -132,9 +135,11 @@ namespace Neptune.Web.Common
             var vTrashGeneratingUnitLoadBasedPartialCaptures = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedPartialCaptures.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
 
-            return vTrashGeneratingUnitLoadBasedPartialCaptures.Sum(x =>
-                x.Area * (double) (x.BaselineLoadingRate - x.ActualLoadingAfterTrashCapture) *
-                DbSpatialHelper.SqlGeometryAreaToAcres);
+            return vTrashGeneratingUnitLoadBasedPartialCaptures.Any()
+                ? vTrashGeneratingUnitLoadBasedPartialCaptures.Sum(x =>
+                    x.Area * (double) (x.BaselineLoadingRate - x.ActualLoadingAfterTrashCapture) *
+                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                : 0;
         }
 
         public static double LoadBasedOVTAProgressScores(StormwaterJurisdiction jurisdiction)
@@ -142,9 +147,11 @@ namespace Neptune.Web.Common
             var vTrashGeneratingUnitLoadBasedTrashAssessments = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedTrashAssessments.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
 
-            return vTrashGeneratingUnitLoadBasedTrashAssessments.Sum(x =>
-                x.Area * (double) (x.BaselineLoadingRate - x.ProgressLoadingRate) *
-                DbSpatialHelper.SqlGeometryAreaToAcres);
+            return vTrashGeneratingUnitLoadBasedTrashAssessments.Any()
+                ? vTrashGeneratingUnitLoadBasedTrashAssessments.Sum(x =>
+                    x.Area * (double) (x.BaselineLoadingRate - x.ProgressLoadingRate) *
+                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                : 0;
         }
 
         public static double TargetLoadReduction(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
@@ -154,9 +161,11 @@ namespace Neptune.Web.Common
                 HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedTargetReductions.Where(x =>
                     x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
 
-            return vTrashGeneratingUnitLoadBasedTargetReductions.Sum(x =>
-                x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
-                DbSpatialHelper.SqlGeometryAreaToAcres);
+            return vTrashGeneratingUnitLoadBasedTargetReductions.Any()
+                ? vTrashGeneratingUnitLoadBasedTargetReductions.Sum(x =>
+                    x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
+                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                : 0;
         }
 
 

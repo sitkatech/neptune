@@ -23,8 +23,8 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            HttpRequestStorage.DatabaseEntities.Database.CommandTimeout = 36000;
-            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand("execute dbo.pRebuildTrashGeneratingUnitTable");
+            DbContext.Database.CommandTimeout = 36000;
+            DbContext.Database.ExecuteSqlCommand("execute dbo.pRebuildTrashGeneratingUnitTable");
         }
     }
 }
