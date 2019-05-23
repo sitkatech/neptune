@@ -50,6 +50,7 @@ namespace Neptune.Web.ScheduledJobs
                     new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { trashGeneratingUnitAdjustment.GetAdjustedDelineation(DbContext).DelineationID }));
                 var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
 
+                Logger.Info($"Command Timeout: {DbContext.Database.CommandTimeout}");
                 DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
@@ -64,6 +65,7 @@ namespace Neptune.Web.ScheduledJobs
                     }));
                 var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
 
+                Logger.Info($"Command Timeout: {DbContext.Database.CommandTimeout}");
                 DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
@@ -76,6 +78,7 @@ namespace Neptune.Web.ScheduledJobs
 
                 var geometryWKT = new SqlParameter("@GeometryWKT", wellKnownText);
 
+                Logger.Info($"Command Timeout: {DbContext.Database.CommandTimeout}");
                 DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit @GeometryWKT", geometryWKT);
 
