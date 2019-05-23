@@ -164,6 +164,8 @@ From
 Where tgu.LandUseBlockID is not null
 	and area.OnlandVisualTrashAssessmentBaselineScoreID is not null
 	and lub.PriorityLandUseTypeID <> 7
+	and pscore.TrashGenerationRate is not null
+	and bscore.TrashGenerationRate is not null
 GO
 
 /*
