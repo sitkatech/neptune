@@ -11,10 +11,13 @@
     <link href="@Url.Content("~/Views/Delineation/DelineationMap.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/bootstrap-toggle/bootstrap-toggle.min.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js")" type="text/javascript"></script>
-
+    
     <script src="@Url.Content("~/Content/proj4js/proj4.js")" type="text/javascript"></script>
+
     @*todo: use a custom build that only has the stuff we need*@
     <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" />
 
     <script type="text/javascript" src="@Url.Content("~/Content/spinjs/spin.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/leaflet/leaflet.spin/leaflet.spin.min.js")"></script>
@@ -51,6 +54,6 @@
 </script>
 
 <script>
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
     })
 </script>
