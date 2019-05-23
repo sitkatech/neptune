@@ -25,8 +25,6 @@ namespace Neptune.Web.Models
             Property(x => x.ProcessedDate).HasColumnName(@"ProcessedDate").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
-            HasOptional(a => a.AdjustedDelineation).WithMany(b => b.TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedDelineation).HasForeignKey(c => c.AdjustedDelineationID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnitAdjustment_Delineation_AdjustedDelineationID_DelineationID
-            HasOptional(a => a.AdjustedOnlandVisualTrashAssessmentArea).WithMany(b => b.TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedOnlandVisualTrashAssessmentArea).HasForeignKey(c => c.AdjustedOnlandVisualTrashAssessmentAreaID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnitAdjustment_OnlandVisualTrashAssessmentArea_AdjustedOnlandVisualTrashAssessmentAreaID_OnlandVisualTrashAsse
             HasRequired(a => a.AdjustedByPerson).WithMany(b => b.TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson).HasForeignKey(c => c.AdjustedByPersonID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnitAdjustment_Person_AdjustedByPersonID_PersonID
         }
     }

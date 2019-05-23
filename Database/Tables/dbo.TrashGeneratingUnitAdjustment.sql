@@ -18,16 +18,6 @@ CREATE TABLE [dbo].[TrashGeneratingUnitAdjustment](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[TrashGeneratingUnitAdjustment]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnitAdjustment_Delineation_AdjustedDelineationID_DelineationID] FOREIGN KEY([AdjustedDelineationID])
-REFERENCES [dbo].[Delineation] ([DelineationID])
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnitAdjustment] CHECK CONSTRAINT [FK_TrashGeneratingUnitAdjustment_Delineation_AdjustedDelineationID_DelineationID]
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnitAdjustment]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnitAdjustment_OnlandVisualTrashAssessmentArea_AdjustedOnlandVisualTrashAssessmentAreaID_OnlandVisualTrashAsse] FOREIGN KEY([AdjustedOnlandVisualTrashAssessmentAreaID])
-REFERENCES [dbo].[OnlandVisualTrashAssessmentArea] ([OnlandVisualTrashAssessmentAreaID])
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnitAdjustment] CHECK CONSTRAINT [FK_TrashGeneratingUnitAdjustment_OnlandVisualTrashAssessmentArea_AdjustedOnlandVisualTrashAssessmentAreaID_OnlandVisualTrashAsse]
-GO
 ALTER TABLE [dbo].[TrashGeneratingUnitAdjustment]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnitAdjustment_Person_AdjustedByPersonID_PersonID] FOREIGN KEY([AdjustedByPersonID])
 REFERENCES [dbo].[Person] ([PersonID])
 GO

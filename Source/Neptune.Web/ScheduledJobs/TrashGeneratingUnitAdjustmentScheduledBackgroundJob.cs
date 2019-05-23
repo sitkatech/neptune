@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using MoreLinq;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -43,27 +44,27 @@ namespace Neptune.Web.ScheduledJobs
 
             var trashGeneratingUnitAdjustment = trashGeneratingUnitAdjustments.MinBy(x => x.AdjustmentDate);
 
-            if (trashGeneratingUnitAdjustment.AdjustedDelineation != null)
+            if (trashGeneratingUnitAdjustment.AdjustedDelineationID != null)
             {
                 var objectIDs =
-                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { trashGeneratingUnitAdjustment.AdjustedDelineation.DelineationID }));
+                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { trashGeneratingUnitAdjustment.GetAdjustedDelineation(DbContext).DelineationID }));
                 var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
 
-                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
             }
-            else if (trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentArea != null)
+            else if (trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentAreaID != null)
             {
                 var objectIDs = new SqlParameter("@ObjectIDs",
                     FormatIDString(new List<int>
                     {
-                            trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentArea
+                            trashGeneratingUnitAdjustment.GetAdjustedOnlandVisualTrashAssessmentArea(DbContext)
                                 .OnlandVisualTrashAssessmentAreaID
                     }));
                 var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
 
-                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
             }
@@ -75,7 +76,7 @@ namespace Neptune.Web.ScheduledJobs
 
                 var geometryWKT = new SqlParameter("@GeometryWKT", wellKnownText);
 
-                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit @GeometryWKT", geometryWKT);
 
             }

@@ -121,8 +121,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TrashGeneratingUnitAdjustmentID; } set { TrashGeneratingUnitAdjustmentID = value; } }
 
-        public virtual Delineation AdjustedDelineation { get; set; }
-        public virtual OnlandVisualTrashAssessmentArea AdjustedOnlandVisualTrashAssessmentArea { get; set; }
         public virtual Person AdjustedByPerson { get; set; }
 
         public static class FieldLengths
