@@ -49,3 +49,8 @@ label.group {
   padding-top: 9px;
   font-size: 12px;
 }
+/* slidey stuff */
+div#vertexControlSlider {
+  margin-left: 10px;
+  width: 90%;
+}

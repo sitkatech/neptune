@@ -18,12 +18,10 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     networkCatchmentPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
 
-
     var networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
             { pane: "networkCatchmentPane" }, true);
-
 
     var parcelsLegendUrl = geoserverUrl +
         "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AParcels&style=parcel_alt&scale=5000&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
@@ -38,8 +36,6 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
 
-
-
     L.control.watermark({ position: 'bottomleft' }).addTo(this.map);
     this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
     this.selectedAssetControl.addTo(this.map);
@@ -51,8 +47,9 @@ NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.
 
 /* Constants */
 
-var TOLERANCE_CENTRALIZED = 0.0001;
-var TOLERANCE_DISTRIBUTED = 0.000015;
+var TOLERANCE_CENTRALIZED    = 0.0001;
+var TOLERANCE_DISTRIBUTED    = 0.000015;
+var TOLERANCE_STEP_INCREMENT = 0.000001;
 
 var DELINEATION_DISTRIBUTED = "Distributed";
 var DELINEATION_CENTRALIZED = "Centralized";

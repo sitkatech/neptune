@@ -130,20 +130,26 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
 
         if (!this.slider) {
-            this.slider = new Slider('#vertexSlider', {
+            this.slider = new Slider('#vertexControl', {
                 formatter: function (value) {
                     return 'Current value: ' + value;
                 },
                 tooltip: "hide",
-                ticks: [0, 20],
+                ticks: [TOLERANCE_DISTRIBUTED, TOLERANCE_CENTRALIZED],
                 ticks_positions: [0, 100],
-                ticks_labels: ["Less", "More"]
+                ticks_labels: ["More", "Less"],
+                min: TOLERANCE_DISTRIBUTED,
+                max: TOLERANCE_CENTRALIZED,
+                step: TOLERANCE_STEP_INCREMENT,
+                value: TOLERANCE_DISTRIBUTED,
             });
             this.slider.on("slideStop",
                 function(sliderValue) {
                     console.log(sliderValue);
                 });
         }
+
+
     },
 
     exitDrawCatchmentMode: function (save) {
