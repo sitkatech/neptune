@@ -46,8 +46,6 @@ namespace Neptune.Web.Common
             {
                 AdjustedDelineationID = delineation.DelineationID
             });
-
-
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.AddRange(trashGeneratingUnitAdjustments);
         }
 
