@@ -22,7 +22,7 @@ namespace Neptune.Web.Models
 
         public bool HasPermissionByPerson(Person person, IList<IRole> rolesToCheck)
         {
-            return person != null && rolesToCheck.Any(x => x.RoleID == GetPersonRoleToUseFunc().Invoke(person).RoleID);
+            return person != null && (rolesToCheck?.Any(x => x.RoleID == GetPersonRoleToUseFunc().Invoke(person).RoleID) ?? false);
         }
 
     }
