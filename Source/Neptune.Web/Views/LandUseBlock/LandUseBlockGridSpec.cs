@@ -14,8 +14,8 @@ namespace Neptune.Web.Views.LandUseBlock
         {
 
             Add("Trash Generating Unit ID", x => x.LandUseBlockID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-            Add("Land Use Type", x => x.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Land Use Type", x => x.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
+            Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
             Add("Area", x => ((x.LandUseBlockGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
             Add("TGU Area", x =>
                     (x.TrashGeneratingUnits.Sum(y => y.TrashGeneratingUnitGeometry.Area ?? 0) *
