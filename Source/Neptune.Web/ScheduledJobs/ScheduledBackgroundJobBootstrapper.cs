@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using Hangfire;
+using Hangfire.Client;
+using Hangfire.Common;
+using Hangfire.Server;
 using Hangfire.SqlServer;
 using Hangfire.Storage;
 using Owin;
@@ -67,11 +71,17 @@ namespace Neptune.Web.ScheduledJobs
                 MakeDailyUtcCronJobStringFromLocalTime(1, 23), recurringJobIds);
 
             AddMinutelyRecurringJob(TrashGeneratingUnitAdjustmentScheduledBackgroundJob.JobName,
-                () => ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(),
+                () => RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(),
                  recurringJobIds);
             
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);
+        }
+
+        [DisableMultipleQueuedItemsFilter]
+        public static void RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob()
+        {
+            ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob();
         }
 
         private static void AddRecurringJob(string jobName, Expression<Action> methodCallExpression,
@@ -81,10 +91,16 @@ namespace Neptune.Web.ScheduledJobs
             recurringJobIds.Add(jobName);
         }
 
+        /// <summary>
+        /// Adds a recurring job that will run every 5 minutes
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="methodCallExpression"></param>
+        /// <param name="recurringJobIds"></param>
         private static void AddMinutelyRecurringJob(string jobName, Expression<Action> methodCallExpression,
             List<string> recurringJobIds)
         {
-            RecurringJob.AddOrUpdate(jobName, methodCallExpression, Hangfire.Cron.Minutely);
+            RecurringJob.AddOrUpdate(jobName, methodCallExpression, "*/5 * * * *");
             recurringJobIds.Add(jobName);
         }
 
@@ -141,4 +157,95 @@ namespace Neptune.Web.ScheduledJobs
             return utcCronTime;
         }
     }
+    public class DisableMultipleQueuedItemsFilter : JobFilterAttribute, IClientFilter, IServerFilter
+    {
+        private static readonly TimeSpan LockTimeout = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan FingerprintTimeout = TimeSpan.FromHours(1);
+
+        public void OnCreating(CreatingContext filterContext)
+        {
+            if (!AddFingerprintIfNotExists(filterContext.Connection, filterContext.Job))
+            {
+                filterContext.Canceled = true;
+            }
+        }
+
+        public void OnPerformed(PerformedContext filterContext)
+        {
+            RemoveFingerprint(filterContext.Connection, filterContext.BackgroundJob);
+        }
+
+        private static bool AddFingerprintIfNotExists(IStorageConnection connection, Job job)
+        {
+            using (connection.AcquireDistributedLock(GetFingerprintLockKey(job), LockTimeout))
+            {
+                var fingerprint = connection.GetAllEntriesFromHash(GetFingerprintKey(job));
+
+                DateTimeOffset timestamp;
+
+                if (fingerprint != null &&
+                    fingerprint.ContainsKey("Timestamp") &&
+                    DateTimeOffset.TryParse(fingerprint["Timestamp"], null, DateTimeStyles.RoundtripKind, out timestamp) &&
+                    DateTimeOffset.UtcNow <= timestamp.Add(FingerprintTimeout))
+                {
+                    // Actual fingerprint found, returning.
+                    return false;
+                }
+
+                // Fingerprint does not exist, it is invalid (no `Timestamp` key),
+                // or it is not actual (timeout expired).
+                connection.SetRangeInHash(GetFingerprintKey(job), new Dictionary<string, string>
+            {
+                { "Timestamp", DateTimeOffset.UtcNow.ToString("o") }
+            });
+
+                return true;
+            }
+        }
+
+        private static void RemoveFingerprint(IStorageConnection connection, BackgroundJob job)
+        {
+            using (connection.AcquireDistributedLock(GetFingerprintLockKey(job.Job), LockTimeout))
+            using (var transaction = connection.CreateWriteTransaction())
+            {
+                transaction.RemoveHash(GetFingerprintKey(job.Job));
+                transaction.Commit();
+            }
+        }
+
+        private static string GetFingerprintLockKey(Job job)
+        {
+            return $"{GetFingerprintKey(job)}:lock";
+        }
+
+        private static string GetFingerprintKey(Job job)
+        {
+            return $"fingerprint:{GetFingerprint(job)}";
+        }
+
+        private static string GetFingerprint(Job job)
+        {
+            string parameters = string.Empty;
+            if (job.Args != null)
+            {
+                parameters = string.Join(".", job.Args);
+            }
+            if (job.Type == null || job.Method == null)
+            {
+                return string.Empty;
+            }
+            var fingerprint = $"{job.Type.FullName}.{job.Method.Name}.{parameters}";
+
+            return fingerprint;
+        }
+
+        void IClientFilter.OnCreated(CreatedContext filterContext)
+        {
+        }
+
+        void IServerFilter.OnPerforming(PerformingContext filterContext)
+        {
+        }
+    }
 }
+
