@@ -46,21 +46,36 @@ namespace Neptune.Web.ScheduledJobs
 
             if (trashGeneratingUnitAdjustment.AdjustedDelineationID != null)
             {
+                var adjustedDelineation = trashGeneratingUnitAdjustment.GetAdjustedDelineation(DbContext);
+
+                if (adjustedDelineation == null)
+                {
+                    Logger.Info($"Delineation {trashGeneratingUnitAdjustment.AdjustedDelineationID} already deleted");
+                    return;
+                }
+
                 var objectIDs =
-                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { trashGeneratingUnitAdjustment.GetAdjustedDelineation(DbContext).DelineationID }));
+                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { adjustedDelineation.DelineationID }));
                 var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
 
-                Logger.Info($"Command Timeout: {DbContext.Database.CommandTimeout}");
                 DbContext.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
 
             }
             else if (trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentAreaID != null)
             {
+                var adjustedOnlandVisualTrashAssessmentArea = trashGeneratingUnitAdjustment.GetAdjustedOnlandVisualTrashAssessmentArea(DbContext);
+
+                if (adjustedOnlandVisualTrashAssessmentArea == null)
+                {
+                    Logger.Info($"Assessment Area {trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentAreaID} already deleted");
+                    return;
+                }
+
                 var objectIDs = new SqlParameter("@ObjectIDs",
                     FormatIDString(new List<int>
                     {
-                            trashGeneratingUnitAdjustment.GetAdjustedOnlandVisualTrashAssessmentArea(DbContext)
+                            adjustedOnlandVisualTrashAssessmentArea
                                 .OnlandVisualTrashAssessmentAreaID
                     }));
                 var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
