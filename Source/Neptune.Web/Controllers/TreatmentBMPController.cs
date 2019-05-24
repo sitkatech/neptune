@@ -310,7 +310,12 @@ namespace Neptune.Web.Controllers
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold(treatmentBMP.TreatmentBMPBenchmarkAndThresholds);
             }
 
+            var treatmentBMPDelineation = treatmentBMP.Delineation;
+            treatmentBMPDelineation?.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            treatmentBMPDelineation?.Delete(HttpRequestStorage.DatabaseEntities);
+
             return new ModalDialogFormJsonResult();
         }
 
