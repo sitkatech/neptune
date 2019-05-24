@@ -252,68 +252,27 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
         this.delineationFeatureSavedForReset = this.selectedBMPDelineationLayer.getLayers()[0].feature;
     }
 
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
 
-    if (drawModeOptions.delineationStrategy === STRATEGY_MANUAL) {
-        // manual revision; create an editable feature verbatim from the selected delineation
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-            this.map.removeLayer(this.selectedBMPDelineationLayer);
-
-            L.geoJSON(this.selectedBMPDelineationLayer.getLayers()[0].feature,
-                {
-                    onEachFeature: function (feature, layer) {
-                        if (layer.getLayers) {
-                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                        } else {
-                            editableFeatureGroup.addLayer(layer);
-                        }
+        L.geoJSON(this.selectedBMPDelineationLayer.getLayers()[0].feature,
+            {
+                onEachFeature: function (feature, layer) {
+                    if (layer.getLayers) {
+                        layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+                    } else {
+                        editableFeatureGroup.addLayer(layer);
                     }
-                });
-        }
-        this.map.addLayer(editableFeatureGroup);
-        editableFeatureGroup.persist = true;
-    } else if (drawModeOptions.delineationStrategy === STRATEGY_AUTODEM) {
-        // auto-delineated; downsample the polygon and create an editable feature
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-            this.map.removeLayer(this.selectedBMPDelineationLayer);
-
-
-            delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-            downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, drawModeOptions.tolerance);
-            L.geoJSON(downsampledDelineationFeature,
-                {
-                    onEachFeature: function (feature, layer) {
-                        if (layer.getLayers) {
-                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                        } else {
-                            editableFeatureGroup.addLayer(layer);
-                        }
-                    }
-                });
-        }
-        this.map.addLayer(editableFeatureGroup);
-        editableFeatureGroup.persist = true;
-    } else if (drawModeOptions.delineationStrategy === STRATEGY_NETWORK_TRACE) {
-        // subbasin trace; create the editable feature group but don't add it to the map unless the user clicks the edit button
-
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-            delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-            downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, drawModeOptions.tolerance);
-            L.geoJSON(downsampledDelineationFeature,
-                {
-                    onEachFeature: function (feature, layer) {
-                        if (layer.getLayers) {
-                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                        } else {
-                            editableFeatureGroup.addLayer(layer);
-                        }
-                    }
-                });
-        }
+                }
+            });
+    }
+    this.map.addLayer(editableFeatureGroup);
+    editableFeatureGroup.persist = true;
+    if (drawModeOptions.delineationStrategy === STRATEGY_NETWORK_TRACE) {
+        
         jQuery(".leaflet-draw-edit-edit").on("click",
             function (e) {
                 if (!editableFeatureGroup.persist) {
-                    self.map.removeLayer(self.selectedBMPDelineationLayer);
-                    self.map.addLayer(editableFeatureGroup);
                     editableFeatureGroup.persist = true;
                 }
             });
@@ -385,9 +344,9 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         // returns a promise but there's no need to actually do anything with it
         this.persistDrawnCatchment();
     }
-    this.retrieveAndShowBMPDelineation(this.getSelectedBMPFeature());
 
     this.tearDownDrawControl();
+    this.retrieveAndShowBMPDelineation(this.getSelectedBMPFeature());
 
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();

@@ -94,8 +94,13 @@ namespace Neptune.Web.ScheduledJobs
             else if (trashGeneratingUnitAdjustment.DeletedGeometry != null)
             {
                 var wellKnownText = trashGeneratingUnitAdjustment.DeletedGeometry.ToString();
+
+                var startindex = wellKnownText.Contains("MULTIPOLYGON")
+                    ? wellKnownText.IndexOf("MULTIPOLYGON", StringComparison.Ordinal)
+                    : wellKnownText.IndexOf("POLYGON", StringComparison.Ordinal);
+
                 wellKnownText =
-                    wellKnownText.Substring(wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture));
+                    wellKnownText.Substring(startindex);
 
                 var geometryWKT = new SqlParameter("@GeometryWKT", wellKnownText);
 

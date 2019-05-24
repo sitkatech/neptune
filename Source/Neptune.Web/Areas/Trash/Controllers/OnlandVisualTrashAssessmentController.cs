@@ -381,8 +381,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             viewModel.UpdateModel(onlandVisualTrashAssessment, HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Local);
 
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
-            
-                SetMessageForDisplay("The OVTA was successfully finalized");
+            SetMessageForDisplay("The OVTA was successfully finalized");
             
 
             if (viewModel.Finalize.GetValueOrDefault())
@@ -542,7 +541,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessmentArea
                     .CalculateScoreFromBackingData(false)?.OnlandVisualTrashAssessmentScoreID;
 
-
                 if (isProgressAssessment)
                 {
                     onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
@@ -550,6 +548,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
                             ?.OnlandVisualTrashAssessmentScoreID;
                 }
             }
+
+            onlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
 
             SetMessageForDisplay("Successfully deleted the assessment.");
             return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(c => c.Index()));
