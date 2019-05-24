@@ -46,28 +46,49 @@ namespace Neptune.Web.ScheduledJobs
 
             if (trashGeneratingUnitAdjustment.AdjustedDelineationID != null)
             {
-                var objectIDs =
-                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { trashGeneratingUnitAdjustment.GetAdjustedDelineation(DbContext).DelineationID }));
-                var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
+                var adjustedDelineation = trashGeneratingUnitAdjustment.GetAdjustedDelineation(DbContext);
 
-                Logger.Info($"Command Timeout: {DbContext.Database.CommandTimeout}");
-                DbContext.Database.ExecuteSqlCommand(
-                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+                if (adjustedDelineation != null)
+                {
 
+                    var objectIDs =
+                        new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { adjustedDelineation.DelineationID }));
+                    var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
+
+                    DbContext.Database.ExecuteSqlCommand(
+                        "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+
+                }
+                else
+                {
+                    Logger.Info($"Delineation {trashGeneratingUnitAdjustment.AdjustedDelineationID} already deleted");
+                }
             }
             else if (trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentAreaID != null)
             {
-                var objectIDs = new SqlParameter("@ObjectIDs",
-                    FormatIDString(new List<int>
-                    {
-                            trashGeneratingUnitAdjustment.GetAdjustedOnlandVisualTrashAssessmentArea(DbContext)
-                                .OnlandVisualTrashAssessmentAreaID
-                    }));
-                var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
+                var adjustedOnlandVisualTrashAssessmentArea = trashGeneratingUnitAdjustment.GetAdjustedOnlandVisualTrashAssessmentArea(DbContext);
 
-                Logger.Info($"Command Timeout: {DbContext.Database.CommandTimeout}");
-                DbContext.Database.ExecuteSqlCommand(
-                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+                if (adjustedOnlandVisualTrashAssessmentArea == null)
+                {
+
+                    var objectIDs = new SqlParameter("@ObjectIDs",
+                        FormatIDString(new List<int>
+                        {
+                            adjustedOnlandVisualTrashAssessmentArea
+                                .OnlandVisualTrashAssessmentAreaID
+                        }));
+                    var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
+
+                    DbContext.Database.ExecuteSqlCommand(
+                        "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+
+                }
+                else
+                {
+
+                    Logger.Info(
+                        $"Assessment Area {trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentAreaID} already deleted");
+                }
 
             }
             else if (trashGeneratingUnitAdjustment.DeletedGeometry != null)
