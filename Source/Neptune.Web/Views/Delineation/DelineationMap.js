@@ -197,105 +197,117 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function (drawMod
 NeptuneMaps.DelineationMap.prototype.unthinDelineationVertices = function () {
     console.log("here");
     this.editableFeatureGroup.clearLayers();
-    this.editableFeatureGroup.addLayer(L.geoJson(this.unthinnedDelineationFeature));
+    this.editableFeatureGroup.addLayer(L.geoJson(this.delineationFeatureSavedForReset));
     this.unthinnedDelineation = null;
 }
 
-NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function (drawModeOptions) {
+NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function(drawModeOptions, tolerance) {
     var self = this;
 
     var editableFeatureGroup = this.editableFeatureGroup;
 
-    this.unthinnedDelineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
+    this.delineationFeatureSavedForReset = this.selectedBMPDelineationLayer.getLayers()[0].feature;
     this.editableFeatureGroup.clearLayers();
 
-
-    var delineationType = drawModeOptions.delineationType;
-    var delineationStrategy = drawModeOptions.delineationStrategy;
-
-    if (delineationStrategy === STRATEGY_AUTODEM) {
-        // auto-delineated; downsample the polygon and create an editable feature
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-            this.map.removeLayer(this.selectedBMPDelineationLayer);
-
-            var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-            var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_DISTRIBUTED);
-            L.geoJSON(downsampledDelineationFeature,
-                {
-                    onEachFeature: function (feature, layer) {
-                        if (layer.getLayers) {
-                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                        } else {
-                            editableFeatureGroup.addLayer(layer);
-                        }
-                    }
-                });
-        }
-        this.map.addLayer(editableFeatureGroup);
-        editableFeatureGroup.persist = true;
-    } else if (delineationStrategy === STRATEGY_NETWORK_TRACE) {
-        // subbasin trace; create the editable feature group but don't add it to the map unless the user clicks the edit button
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-            this.map.removeLayer(this.selectedBMPDelineationLayer);
-
-            var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-            var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_CENTRALIZED);
-            L.geoJSON(downsampledDelineationFeature,
-                {
-                    onEachFeature: function (feature, layer) {
-                        if (layer.getLayers) {
-                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                        } else {
-                            editableFeatureGroup.addLayer(layer);
-                        }
-                    }
-                });
-        }
-        this.map.addLayer(editableFeatureGroup);
-        editableFeatureGroup.persist = true;
-    } else if (delineationStrategy === STRATEGY_MANUAL) {
-        if (delineationType === DELINEATION_DISTRIBUTED) {
-            if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-                this.map.removeLayer(this.selectedBMPDelineationLayer);
-
-                var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-                var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_DISTRIBUTED);
-                L.geoJSON(downsampledDelineationFeature,
-                    {
-                        onEachFeature: function (feature, layer) {
-                            if (layer.getLayers) {
-                                layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                            } else {
-                                editableFeatureGroup.addLayer(layer);
-                            }
-                        }
-                    });
+    var downsampledDelineationFeature = downsampleGeoJsonFeature(this.delineationFeatureSavedForReset, tolerance);
+    L.geoJSON(downsampledDelineationFeature,
+        {
+            onEachFeature: function(feature, layer) {
+                if (layer.getLayers) {
+                    layer.getLayers().forEach(function(l) { editableFeatureGroup.addLayer(l); });
+                } else {
+                    editableFeatureGroup.addLayer(layer);
+                }
             }
-            this.map.addLayer(editableFeatureGroup);
-            editableFeatureGroup.persist = true;
-        } else if (delineationType === DELINEATION_CENTRALIZED) {
-            if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-                this.map.removeLayer(this.selectedBMPDelineationLayer);
+        });
 
-                var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-                var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_CENTRALIZED);
-                L.geoJSON(downsampledDelineationFeature,
-                    {
-                        onEachFeature: function (feature, layer) {
-                            if (layer.getLayers) {
-                                layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-                            } else {
-                                editableFeatureGroup.addLayer(layer);
-                            }
-                        }
-                    });
-            }
-            this.map.addLayer(editableFeatureGroup);
-            editableFeatureGroup.persist = true;
-        }
 
-    }
-}
+    //var delineationType = drawModeOptions.delineationType;
+    //var delineationStrategy = drawModeOptions.delineationStrategy;
+
+    //if (delineationStrategy === STRATEGY_AUTODEM) {
+    //    // auto-delineated; downsample the polygon and create an editable feature
+    //    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+    //        this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+    //        var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
+    //        var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_DISTRIBUTED);
+    //        L.geoJSON(downsampledDelineationFeature,
+    //            {
+    //                onEachFeature: function (feature, layer) {
+    //                    if (layer.getLayers) {
+    //                        layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+    //                    } else {
+    //                        editableFeatureGroup.addLayer(layer);
+    //                    }
+    //                }
+    //            });
+    //    }
+    //    this.map.addLayer(editableFeatureGroup);
+    //    editableFeatureGroup.persist = true;
+    //} else if (delineationStrategy === STRATEGY_NETWORK_TRACE) {
+    //    // subbasin trace; create the editable feature group but don't add it to the map unless the user clicks the edit button
+    //    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+    //        this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+    //        var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
+    //        var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_CENTRALIZED);
+    //        L.geoJSON(downsampledDelineationFeature,
+    //            {
+    //                onEachFeature: function (feature, layer) {
+    //                    if (layer.getLayers) {
+    //                        layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+    //                    } else {
+    //                        editableFeatureGroup.addLayer(layer);
+    //                    }
+    //                }
+    //            });
+    //    }
+    //    this.map.addLayer(editableFeatureGroup);
+    //    editableFeatureGroup.persist = true;
+    //} else if (delineationStrategy === STRATEGY_MANUAL) {
+    //    if (delineationType === DELINEATION_DISTRIBUTED) {
+    //        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+    //            this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+    //            var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
+    //            var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_DISTRIBUTED);
+    //            L.geoJSON(downsampledDelineationFeature,
+    //                {
+    //                    onEachFeature: function (feature, layer) {
+    //                        if (layer.getLayers) {
+    //                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+    //                        } else {
+    //                            editableFeatureGroup.addLayer(layer);
+    //                        }
+    //                    }
+    //                });
+    //        }
+    //        this.map.addLayer(editableFeatureGroup);
+    //        editableFeatureGroup.persist = true;
+    //    } else if (delineationType === DELINEATION_CENTRALIZED) {
+    //        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+    //            this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+    //            var delineationFeature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
+    //            var downsampledDelineationFeature = downsampleGeoJsonFeature(delineationFeature, TOLERANCE_CENTRALIZED);
+    //            L.geoJSON(downsampledDelineationFeature,
+    //                {
+    //                    onEachFeature: function (feature, layer) {
+    //                        if (layer.getLayers) {
+    //                            layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+    //                        } else {
+    //                            editableFeatureGroup.addLayer(layer);
+    //                        }
+    //                    }
+    //                });
+    //        }
+    //        this.map.addLayer(editableFeatureGroup);
+    //        editableFeatureGroup.persist = true;
+    //    }
+
+    //}
+};
 
 NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOptions) {
     
