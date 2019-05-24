@@ -131,11 +131,17 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     launchDrawCatchmentMode: function (drawModeOptions) {
         // okay to persist state because this control mode is ephemeral: see below for where it dies
         this.drawModeOptions = drawModeOptions;
-        
+
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
 
-        this.thinButtonHandler = function() {
+        if (drawModeOptions.delineationStrategy === STRATEGY_MANUAL && drawModeOptions.newDelineation) {
+            this.getTrackedElement("delineationVertexThinningButton").style.display = "none";
+        } else {
+            this.getTrackedElement("delineationVertexThinningButton").style.display = "initial";
+        }
+
+        this.thinButtonHandler = function () {
             this.enableThinning();
         };
 
@@ -154,12 +160,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
                 value: TOLERANCE_DISTRIBUTED,
             });
             this.slider.on("slideStop",
-                function(sliderValue) {
-                    this.tolerance = sliderValue;
-                }).bind(this);
+                function (sliderValue) {
+                    this.thin( sliderValue);
+                }.bind(this));
         }
-
-
     },
 
     exitDrawCatchmentMode: function (save) {
@@ -205,11 +209,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
     thin: function (tolerance) {
         window.delineationMap.thinDelineationVertices(this.drawModeOptions, tolerance);
+    },
 
-        this.getTrackedElement("vertexControlContainer").style.dispaly = "none";
+    acceptThinning: function () {
+        this.getTrackedElement("vertexControlContainer").style.display = "none";
         this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Reset";
 
-        this.thinButtonHandler = function() {
+        this.thinButtonHandler = function () {
             this.unthin();
         };
     },
@@ -218,17 +224,19 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         window.delineationMap.unthinDelineationVertices();
 
         this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Thin";
-        this.thinButtonHandler = function() {
+        this.thinButtonHandler = function () {
             this.enableThinning();
         };
     },
 
-    enableThinning: function() {
-        this.getTrackedElement("vertexControlContainer").style.dispaly = "initial";
+    enableThinning: function () {
+        this.getTrackedElement("vertexControlContainer").style.display = "initial";
         this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Accept";
 
-        this.thinButtonHandler = function() {
-            this.thin(this.tolerance);
+        this.slider.resize();
+
+        this.thinButtonHandler = function () {
+            this.acceptThinning();
         };
     },
 
@@ -350,7 +358,6 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             }
         }
     },
-    
 
     enableDelineationButton() {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
