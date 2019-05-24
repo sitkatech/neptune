@@ -33,7 +33,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             function (e) {
                 this.exitDrawCatchmentMode(true);
             }.bind(this));
-
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
@@ -129,6 +128,22 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
+
+        if (!this.slider) {
+            this.slider = new Slider('#vertexSlider', {
+                formatter: function (value) {
+                    return 'Current value: ' + value;
+                },
+                tooltip: "hide",
+                ticks: [0, 20],
+                ticks_positions: [0, 100],
+                ticks_labels: ["Less", "More"]
+            });
+            this.slider.on("slideStop",
+                function(sliderValue) {
+                    console.log(sliderValue);
+                });
+        }
     },
 
     exitDrawCatchmentMode: function (save) {
