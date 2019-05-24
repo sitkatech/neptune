@@ -34,12 +34,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
                 this.exitDrawCatchmentMode(true);
             }.bind(this));
 
-        L.DomEvent.on(this.getTrackedElement("delineationVertexThinningButton"),
-            "click",
-            function(e) {
-                this.thin();
-            }.bind(this));
-
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
@@ -50,7 +44,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         var href =
             "/TreatmentBMP/Detail/" + treatmentBMPFeature.properties.TreatmentBMPID;
         detailLink.href = href;
-        detailLink.innerHTML = treatmentBMPFeature.properties.Name;// + "<span class='glyphicon glyphicon-new-window></span>";
+        detailLink.innerHTML = treatmentBMPFeature.properties.Name;
 
         var newWindowIcon = L.DomUtil.create("span", "glyphicon glyphicon-new-window");
         detailLink.append(newWindowIcon);
@@ -132,7 +126,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     launchDrawCatchmentMode: function (drawModeOptions) {
         // okay to persist state because this control mode is ephemeral: see below for where it dies
         this.drawModeOptions = drawModeOptions;
-        this.enableThinButton();
+        
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
     },
@@ -178,22 +172,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationButton").removeAttribute("disabled");
     },
 
-    enableThinButton: function () {
-        if (!this.getTrackedElement("delineationVertexThinningButton")) {
-            return; //misplaced call
-        }
-        this.getTrackedElement("delineationVertexThinningButton").removeAttribute("disabled");
-    },
-
-    disableThinButton: function () {
-        if (!this.getTrackedElement("delineationVertexThinningButton")) {
-            return; //misplaced call
-        }
-        this.getTrackedElement("delineationVertexThinningButton").disabled = "disabled";
-    },
-
     thin: function () {
-        this.disableThinButton();
         window.delineationMap.thinDelineationVertices(this.drawModeOptions);
     },
 
