@@ -105,6 +105,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewDeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
             }
 
+            // foreign key make good
+            foreach (var trashGeneratingUnit in onlandVisualTrashAssessmentArea.TrashGeneratingUnits)
+            {
+                trashGeneratingUnit.OnlandVisualTrashAssessmentAreaID = null;
+            }
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             onlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             onlandVisualTrashAssessmentArea.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
