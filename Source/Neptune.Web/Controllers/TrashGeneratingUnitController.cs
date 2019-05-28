@@ -56,8 +56,8 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new TrashGeneratingUnitGridSpec();
 
-            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.OrderByDescending(x=>x.LastUpdateDate).Include(x => x.TreatmentBMP)
-                .Include(x => x.OnlandVisualTrashAssessmentArea).Include(x => x.LandUseBlock)
+            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.OrderByDescending(x=>x.LastUpdateDate)
+                .Include(x => x.LandUseBlock)
                 .Include(x => x.StormwaterJurisdiction.Organization).ToList();
         }
     }
