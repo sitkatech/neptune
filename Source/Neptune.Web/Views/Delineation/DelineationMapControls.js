@@ -135,6 +135,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
 
+
+        this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Thin";
         if (drawModeOptions.delineationStrategy === STRATEGY_MANUAL && drawModeOptions.newDelineation) {
             this.getTrackedElement("delineationVertexThinningButton").style.display = "none";
         } else {
@@ -164,6 +166,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
                     this.thin( sliderValue);
                 }.bind(this));
         }
+
+        this.slider.setValue(TOLERANCE_DISTRIBUTED);
     },
 
     exitDrawCatchmentMode: function (save) {
