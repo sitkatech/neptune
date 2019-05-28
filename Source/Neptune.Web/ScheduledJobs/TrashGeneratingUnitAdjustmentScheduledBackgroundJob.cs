@@ -67,7 +67,7 @@ namespace Neptune.Web.ScheduledJobs
             {
                 var adjustedOnlandVisualTrashAssessmentArea = trashGeneratingUnitAdjustment.GetAdjustedOnlandVisualTrashAssessmentArea(DbContext);
 
-                if (adjustedOnlandVisualTrashAssessmentArea == null)
+                if (adjustedOnlandVisualTrashAssessmentArea != null)
                 {
 
                     var objectIDs = new SqlParameter("@ObjectIDs",
