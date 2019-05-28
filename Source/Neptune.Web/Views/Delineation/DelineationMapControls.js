@@ -136,7 +136,9 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
 
 
+        this.getTrackedElement("vertexControlContainer").style.display = "none";
         this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Thin";
+
         if (drawModeOptions.delineationStrategy === STRATEGY_MANUAL && drawModeOptions.newDelineation) {
             this.getTrackedElement("delineationVertexThinningButton").style.display = "none";
         } else {

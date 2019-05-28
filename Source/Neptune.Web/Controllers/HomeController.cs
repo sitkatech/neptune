@@ -21,10 +21,12 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Linq;
 using System.Web.Mvc;
+using Hangfire;
 using LtInfo.Common;
 using Neptune.Web.Security;
 using Neptune.Web.Models;
 using Neptune.Web.Common;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Home;
@@ -158,6 +160,14 @@ namespace Neptune.Web.Controllers
 
             var viewData = new TrainingViewData(CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
             return RazorView<Training, TrainingViewData>(viewData);
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TestQueue()
+        {
+
+            return Content("You done it.");
         }
 
 

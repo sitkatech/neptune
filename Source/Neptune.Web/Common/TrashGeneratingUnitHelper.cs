@@ -3,9 +3,11 @@ using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using Hangfire;
 using LtInfo.Common.DbSpatial;
 using MoreLinq;
 using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Common
 {
@@ -21,6 +23,9 @@ namespace Neptune.Web.Common
                 AdjustedDelineationID = delineation.DelineationID
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
+
+            BackgroundJob.Enqueue(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
         }
         public static void UpdateTrashGeneratingUnitsAfterDelete(this Delineation delineation, Person currentPerson)
         {
@@ -29,6 +34,9 @@ namespace Neptune.Web.Common
                 DeletedGeometry = delineation.DelineationGeometry
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
+
+            BackgroundJob.Enqueue(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
         }
 
         public static void UpdateTrashGeneratingUnitsAfterDelete(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
@@ -38,6 +46,9 @@ namespace Neptune.Web.Common
                 DeletedGeometry = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
+
+            BackgroundJob.Enqueue(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
         }
 
         public static void UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations, Person currentPerson)
@@ -47,6 +58,9 @@ namespace Neptune.Web.Common
                 AdjustedDelineationID = delineation.DelineationID
             });
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.AddRange(trashGeneratingUnitAdjustments);
+
+            BackgroundJob.Enqueue(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
         }
 
         public static void UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
@@ -56,6 +70,9 @@ namespace Neptune.Web.Common
                 AdjustedOnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
+
+            BackgroundJob.Enqueue(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
         }
 
         public static double LoadBasedFullCapture(StormwaterJurisdiction jurisdiction)

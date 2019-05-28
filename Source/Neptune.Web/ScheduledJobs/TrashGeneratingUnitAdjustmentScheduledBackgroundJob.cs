@@ -33,7 +33,6 @@ namespace Neptune.Web.ScheduledJobs
 
             DbContext.Database.CommandTimeout = 36000;
 
-            // TODO: Pull the least recent adjustment off the stack
             var trashGeneratingUnitAdjustments =
                 DbContext.TrashGeneratingUnitAdjustments.Where(x => !x.IsProcessed);
 
