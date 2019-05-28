@@ -1,4 +1,5 @@
-﻿using Neptune.Web.Common;
+﻿using System.Linq;
+using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -13,15 +14,15 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult AcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID).ToList();
 
-            var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage(jurisdiction);
+            var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
 
-            var equivalentArea = trashGeneratingUnits.EquivalentAreaAcreage(jurisdiction);
+            var equivalentArea = trashGeneratingUnits.EquivalentAreaAcreage();
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
-            var totalPLUAcres = trashGeneratingUnits.TotalPLUAcreage(jurisdiction);
+            var totalPLUAcres = trashGeneratingUnits.TotalPLUAcreage();
 
             var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
 
@@ -40,24 +41,24 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult OVTABasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID).ToList();
 
-            var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.PriorityOVTAScoreAAcreage(jurisdiction);
+            var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.PriorityOVTAScoreAAcreage();
 
-            var sumPLUAcrexsWhereOVTAIsB = trashGeneratingUnits.PriorityOVTAScoreBAcreage(jurisdiction);
+            var sumPLUAcrexsWhereOVTAIsB = trashGeneratingUnits.PriorityOVTAScoreBAcreage();
 
-            var sumPLUAcrexsWhereOVTAIsC = trashGeneratingUnits.PriorityOVTAScoreCAcreage(jurisdiction);
+            var sumPLUAcrexsWhereOVTAIsC = trashGeneratingUnits.PriorityOVTAScoreCAcreage();
 
-            var sumPLUAcrexsWhereOVTAIsD = trashGeneratingUnits.PriorityOVTAScoreDAcreage(jurisdiction);
+            var sumPLUAcrexsWhereOVTAIsD = trashGeneratingUnits.PriorityOVTAScoreDAcreage();
 
 
-            var sumALUAcresWhereOVTAIsA = trashGeneratingUnits.AlternateOVTAScoreAAcreage(jurisdiction);
+            var sumALUAcresWhereOVTAIsA = trashGeneratingUnits.AlternateOVTAScoreAAcreage();
 
-            var sumALUAcresWhereOVTAIsB = trashGeneratingUnits.AlternateOVTAScoreBAcreage(jurisdiction);
+            var sumALUAcresWhereOVTAIsB = trashGeneratingUnits.AlternateOVTAScoreBAcreage();
 
-            var sumALUAcresWhereOVTAIsC = trashGeneratingUnits.AlternateOVTAScoreCAcreage(jurisdiction);
+            var sumALUAcresWhereOVTAIsC = trashGeneratingUnits.AlternateOVTAScoreCAcreage();
 
-            var sumALUAcresWhereOVTAIsD = trashGeneratingUnits.AlternateOVTAScoreDAcreage(jurisdiction);
+            var sumALUAcresWhereOVTAIsD = trashGeneratingUnits.AlternateOVTAScoreDAcreage();
 
             return Json(new OVTAResultsSimple
             {
@@ -85,9 +86,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var viaPartialCapture = TrashGeneratingUnitHelper.LoadBasedPartialCapture(jurisdiction);
             var viaOVTAs = TrashGeneratingUnitHelper.LoadBasedOVTAProgressScores(jurisdiction);
             var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;
-            var targetLoadReduction = trashGeneratingUnits.TargetLoadReduction(jurisdiction);
-
-
+            var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(jurisdiction);
 
             return Json(new LoadResultsSimple
             {

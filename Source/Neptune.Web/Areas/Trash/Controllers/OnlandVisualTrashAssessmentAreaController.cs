@@ -104,14 +104,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewDeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
             }
-
-            // foreign key make good
-            foreach (var trashGeneratingUnit in onlandVisualTrashAssessmentArea.TrashGeneratingUnits)
-            {
-                trashGeneratingUnit.OnlandVisualTrashAssessmentAreaID = null;
-            }
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
+            
             onlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             onlandVisualTrashAssessmentArea.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -125,20 +118,21 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             var onlandVisualTrashAssessmentAreaCount =
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count;
-            var confirmMessage = "";
-            ConfirmDialogFormViewData viewData;
+            string confirmMessage;
+            bool canProceed;
 
             if (onlandVisualTrashAssessmentAreaCount != 0)
             {
                 confirmMessage = $"The Assessment Area {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName} has {onlandVisualTrashAssessmentAreaCount} Assessment(s). You must first delete all associated Assessments before you can delete the Assessment Area.";
-                viewData = new ConfirmDialogFormViewData(confirmMessage, false);
+                canProceed = false;
             }
             else
             {
                 confirmMessage = $"Are you sure you want to delete the assessment area {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}?";
-                viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+                canProceed = true;
             }
-            
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, canProceed);
+
 
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

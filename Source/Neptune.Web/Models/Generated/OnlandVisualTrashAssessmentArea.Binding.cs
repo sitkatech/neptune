@@ -25,7 +25,6 @@ namespace Neptune.Web.Models
         protected OnlandVisualTrashAssessmentArea()
         {
             this.OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
-            this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
         }
 
         /// <summary>
@@ -84,13 +83,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return OnlandVisualTrashAssessments.Any() || TrashGeneratingUnits.Any();
+            return OnlandVisualTrashAssessments.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessmentArea).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(TrashGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessmentArea).Name, typeof(OnlandVisualTrashAssessment).Name};
 
 
         /// <summary>
@@ -119,11 +118,6 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
-
-            foreach(var x in TrashGeneratingUnits.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
         }
 
         [Key]
@@ -139,7 +133,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentAreaID; } set { OnlandVisualTrashAssessmentAreaID = value; } }
 
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
-        public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentBaselineScore { get { return OnlandVisualTrashAssessmentBaselineScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentBaselineScoreID.Value] : null; } }
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentProgressScore { get { return OnlandVisualTrashAssessmentProgressScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentProgressScoreID.Value] : null; } }

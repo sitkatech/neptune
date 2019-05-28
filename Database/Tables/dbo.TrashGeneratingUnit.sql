@@ -22,17 +22,7 @@ REFERENCES [dbo].[LandUseBlock] ([LandUseBlockID])
 GO
 ALTER TABLE [dbo].[TrashGeneratingUnit] CHECK CONSTRAINT [FK_TrashGeneratingUnit_LandUseBlock_LandUseBlockID]
 GO
-ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] FOREIGN KEY([OnlandVisualTrashAssessmentAreaID])
-REFERENCES [dbo].[OnlandVisualTrashAssessmentArea] ([OnlandVisualTrashAssessmentAreaID])
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnit] CHECK CONSTRAINT [FK_TrashGeneratingUnit_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID]
-GO
 ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[TrashGeneratingUnit] CHECK CONSTRAINT [FK_TrashGeneratingUnit_StormwaterJurisdiction_StormwaterJurisdictionID]
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
-REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnit] CHECK CONSTRAINT [FK_TrashGeneratingUnit_TreatmentBMP_TreatmentBMPID]

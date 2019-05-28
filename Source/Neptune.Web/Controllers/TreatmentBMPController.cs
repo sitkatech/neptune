@@ -310,13 +310,6 @@ namespace Neptune.Web.Controllers
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold(treatmentBMP.TreatmentBMPBenchmarkAndThresholds);
             }
 
-            // foreign key make good
-            foreach (var trashGeneratingUnit in treatmentBMP.TrashGeneratingUnits)
-            {
-                trashGeneratingUnit.TreatmentBMPID = null;
-            }
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
             var treatmentBMPDelineation = treatmentBMP.Delineation;
             treatmentBMPDelineation?.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);

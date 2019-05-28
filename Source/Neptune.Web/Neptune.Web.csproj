@@ -294,6 +294,7 @@
     <Compile Include="Models\Generated\TrashCaptureStatusType.Binding.cs" />
     <Compile Include="Models\Generated\TrashCaptureStatusTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TrashGeneratingUnit.Binding.cs" />
+    <Compile Include="Models\TrashGeneratingUnit.cs" />
     <Compile Include="Models\Generated\TrashGeneratingUnit.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TrashGeneratingUnitAdjustment.Binding.cs" />
     <Compile Include="Models\Generated\TrashGeneratingUnitAdjustment.DatabaseContextExtensions.cs" />

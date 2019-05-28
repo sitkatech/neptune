@@ -116,8 +116,7 @@ namespace Neptune.Web.Common
                 : 0;
         }
 
-        public static double TargetLoadReduction(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
-            StormwaterJurisdiction jurisdiction)
+        public static double TargetLoadReduction(StormwaterJurisdiction jurisdiction)
         {
             var vTrashGeneratingUnitLoadBasedTargetReductions =
                 HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedTargetReductions.Where(x =>
@@ -131,20 +130,16 @@ namespace Neptune.Web.Common
         }
 
 
-        public static double TotalPLUAcreage(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
-            StormwaterJurisdiction jurisdiction)
+        public static double TotalPLUAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
         }
 
-        public static double EquivalentAreaAcreage(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
-            StormwaterJurisdiction jurisdiction)
+        public static double EquivalentAreaAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID ==
                 OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
@@ -154,11 +149,9 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double FullTrashCaptureAcreage(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
-            StormwaterJurisdiction jurisdiction)
+        public static double FullTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID ==
                 TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
                 // This is how to check "PLU == true"
@@ -169,10 +162,9 @@ namespace Neptune.Web.Common
 
         // OVTA-based calculations
 
-        public static double AlternateOVTAScoreDAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreDAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID ==
                 OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
@@ -181,10 +173,9 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double AlternateOVTAScoreBAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreBAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -192,10 +183,9 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double PriorityOVTAScoreDAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreDAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -203,10 +193,9 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double PriorityOVTAScoreBAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreBAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -214,10 +203,9 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double AlternateOVTAScoreCAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreCAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -225,20 +213,18 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double AlternateOVTAScoreAAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreAAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
         }
 
-        public static double PriorityOVTAScoreCAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreCAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -246,10 +232,9 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double PriorityOVTAScoreAAcreage(this IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreAAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&

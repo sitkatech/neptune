@@ -73,7 +73,7 @@ namespace Neptune.Web.Areas.Trash.Views
 
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<Web.Controllers.TrashGeneratingUnitController>(c => c.Index()), currentPerson, "Trash Generating Units", "Group3"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(c => c.Index()), currentPerson, "LandUseBlocks", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(c => c.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
             return manageMenu;
         }

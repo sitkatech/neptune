@@ -28,7 +28,6 @@ namespace Neptune.Web.Models
             this.FieldVisits = new HashSet<FieldVisit>();
             this.FundingEvents = new HashSet<FundingEvent>();
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
-            this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
@@ -119,13 +118,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || TrashGeneratingUnits.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
+            return CustomAttributes.Any() || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(TrashGeneratingUnit).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
 
 
         /// <summary>
@@ -166,11 +165,6 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in MaintenanceRecords.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in TrashGeneratingUnits.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -232,7 +226,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
-        public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
