@@ -46,7 +46,6 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 1
 	and tgu.LandUseBlockID is not null
-	and lub.PriorityLandUseTypeID <> 7
 GO
 
 /*
@@ -104,7 +103,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 2
 	and tgu.LandUseBlockID is not null
-	and lub.PriorityLandUseTypeID <> 7) sub
+	) sub
 GO
 
 /*
@@ -163,7 +162,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tgu.LandUseBlockID is not null
 	and area.OnlandVisualTrashAssessmentBaselineScoreID is not null
-	and lub.PriorityLandUseTypeID <> 7
+	
 	and pscore.TrashGenerationRate is not null
 	and bscore.TrashGenerationRate is not null
 GO
@@ -201,6 +200,7 @@ From dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 	left join dbo.Organization o
 		on o.OrganizationID = sj.OrganizationID
-Where lub.LandUseBlockID is not null
+Where
+	lub.LandUseBlockID is not null
 	and lub.PriorityLandUseTypeID <> 7
 GO
