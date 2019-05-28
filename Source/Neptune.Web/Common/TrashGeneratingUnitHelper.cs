@@ -24,8 +24,9 @@ namespace Neptune.Web.Common
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
 
-            BackgroundJob.Enqueue(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            BackgroundJob.Schedule(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(1));
         }
         public static void UpdateTrashGeneratingUnitsAfterDelete(this Delineation delineation, Person currentPerson)
         {
@@ -35,8 +36,9 @@ namespace Neptune.Web.Common
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
 
-            BackgroundJob.Enqueue(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            BackgroundJob.Schedule(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(1));
         }
 
         public static void UpdateTrashGeneratingUnitsAfterDelete(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
@@ -47,8 +49,9 @@ namespace Neptune.Web.Common
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
 
-            BackgroundJob.Enqueue(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            BackgroundJob.Schedule(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(1));
         }
 
         public static void UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations, Person currentPerson)
@@ -59,8 +62,9 @@ namespace Neptune.Web.Common
             });
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.AddRange(trashGeneratingUnitAdjustments);
 
-            BackgroundJob.Enqueue(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            BackgroundJob.Schedule(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(1));
         }
 
         public static void UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
@@ -71,8 +75,9 @@ namespace Neptune.Web.Common
             };
             HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
 
-            BackgroundJob.Enqueue(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob());
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            BackgroundJob.Schedule(() =>
+                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(1));
         }
 
         public static double LoadBasedFullCapture(StormwaterJurisdiction jurisdiction)
