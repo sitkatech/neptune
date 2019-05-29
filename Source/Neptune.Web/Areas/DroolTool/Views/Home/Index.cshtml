@@ -10,11 +10,12 @@
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <script>
 
-        window.mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.StormwaterMapInitJson).ToString(Formatting.None));
+        window.mapInitJson =
+            @Html.Raw(JObject.FromObject(ViewDataTyped.StormwaterMapInitJson).ToString(Formatting.None));
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
 
     <style>
 
@@ -24,6 +25,12 @@
             border: 0;
             width: 100%;
         }
+
+        .neptune-leaflet-control {
+            background: white;
+            padding: 7px;
+        }
+
     </style>
 }
 
@@ -51,6 +58,14 @@
             
             map.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
                 "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", hide);
+
+            (new L.Control.NeighborhoodControl({position: "topleft"})).addTo(map.map);
         });
+
+        L.Control.NeighborhoodControl = L.Control.extend({
+            onAdd: function (map) {
+                return L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control");
+            },
+        })
     </script>
 }
