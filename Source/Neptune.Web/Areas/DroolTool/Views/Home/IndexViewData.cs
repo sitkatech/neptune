@@ -1,4 +1,5 @@
-﻿using Neptune.Web.Models;
+﻿using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.DroolTool.Views.Home
 {
@@ -9,9 +10,11 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             EntityName = "Urban Drool Tool";
             PageTitle = "Welcome";
 
+            GeoserverUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
             StormwaterMapInitJson = new StormwaterMapInitJson("droolToolMap");
         }
 
         public StormwaterMapInitJson StormwaterMapInitJson { get; }
+        public string GeoserverUrl { get; }
     }
 }
