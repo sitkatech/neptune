@@ -4,10 +4,14 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
 {
     public class IndexViewData : DroolToolModuleViewData
     {
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage, true)
         {
             EntityName = "Urban Drool Tool";
             PageTitle = "Welcome";
+
+            StormwaterMapInitJson = new StormwaterMapInitJson("droolToolMap");
         }
+
+        public StormwaterMapInitJson StormwaterMapInitJson { get; }
     }
 }

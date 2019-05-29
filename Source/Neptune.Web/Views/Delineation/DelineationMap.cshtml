@@ -38,7 +38,7 @@
 @{ DelineationMapTemplates.RenderPartialView(Html);}
 <script>
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-    var config = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationMapConfig).ToString(Formatting.None))
+    var config = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationMapConfig).ToString(Formatting.None));
 
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
 

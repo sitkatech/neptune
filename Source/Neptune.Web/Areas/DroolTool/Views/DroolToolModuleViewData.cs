@@ -10,8 +10,11 @@ namespace Neptune.Web.Areas.DroolTool.Views
 {
     public class DroolToolModuleViewData : NeptuneViewData
     {
-        public DroolToolModuleViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.DroolTool)
+        public bool IsHomePage { get; }
+
+        public DroolToolModuleViewData(Person currentPerson, NeptunePage neptunePage, bool isHomePage) : base(currentPerson, neptunePage, NeptuneArea.DroolTool)
         {
+            IsHomePage = isHomePage;
             MakeDroolToolModuleMenu();
         }
 

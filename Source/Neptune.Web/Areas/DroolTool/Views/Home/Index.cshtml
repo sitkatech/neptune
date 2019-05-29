@@ -1,12 +1,41 @@
 ﻿@using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.DroolTool.Views.Home.Index
-
-
 
 @section JavascriptAndStylesContent
 {
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")"></script>
+    <script>
+        
+        window.mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.StormwaterMapInitJson).ToString(Formatting.None));
+
+        initResizeHandler(window.mapInitJson);
+    </script>
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
+
+    <style>
+
+        .container-fluid.droolToolContent {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            width: 100%;
+        }
+    </style>
 }
 
-
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+@section DroolToolMap
+{
+    <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
+    
+    
+
+    <script>
+        jQuery(function () {
+            var map = new NeptuneMaps.Map(window.mapInitJson, "Terrain", {});
+        });
+    </script>
+}
