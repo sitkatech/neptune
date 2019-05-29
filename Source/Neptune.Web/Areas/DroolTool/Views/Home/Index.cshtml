@@ -18,7 +18,6 @@
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
 
     <style>
-
         .container-fluid.droolToolContent {
             margin: 0;
             padding: 0;
@@ -26,20 +25,19 @@
             width: 100%;
         }
 
-        .neptune-leaflet-control {
-            background: white;
-            padding: 7px;
+        .neighborhood-control {
+            /* todo: width should really be dynamish*/
+            max-width: 410px;
         }
 
     </style>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
 @section DroolToolMap
 {
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
-
-
 
     <script>
         jQuery(function () {
@@ -63,9 +61,16 @@
         });
 
         L.Control.NeighborhoodControl = L.Control.extend({
-            onAdd: function (map) {
-                return L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control");
-            },
-        })
+            onAdd: function(map) {
+                var el = L.DomUtil.create("div",
+                    "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-control");
+
+                var h = L.DomUtil.create("p");
+
+                h.innerHTML = "Select a neighborhood or search by address to see neighborhood details (coming soon)";
+                el.append(h);
+                return el;
+            }
+        });
     </script>
 }
