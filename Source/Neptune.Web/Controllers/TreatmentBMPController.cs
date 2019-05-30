@@ -305,16 +305,15 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteTreatmentBMP(treatmentBMP, viewModel);
             }
-            if (treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Any())
-            {
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold(treatmentBMP.TreatmentBMPBenchmarkAndThresholds);
-            }
 
             var treatmentBMPDelineation = treatmentBMP.Delineation;
-            treatmentBMPDelineation?.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
+            treatmentBMPDelineation?.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
+
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+            
             treatmentBMPDelineation?.Delete(HttpRequestStorage.DatabaseEntities);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             return new ModalDialogFormJsonResult();
         }

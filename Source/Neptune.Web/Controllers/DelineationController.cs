@@ -110,7 +110,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPDelineation != null)
             {
                 // do this here so that the delineation geometry hasn't been deleted yet
-                treatmentBMPDelineation.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
+                treatmentBMPDelineation.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
                 if (geom != null)
                 {
                     treatmentBMPDelineation.DelineationGeometry = geom;
@@ -198,7 +198,7 @@ namespace Neptune.Web.Controllers
             treatmentBMP.DelineationID = null;
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            delineation.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
+            delineation.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -231,7 +231,7 @@ namespace Neptune.Web.Controllers
             delineation.TreatmentBMP.DelineationID = null;
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            delineation.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
+            delineation.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay("The Delination was successfully deleted.");
