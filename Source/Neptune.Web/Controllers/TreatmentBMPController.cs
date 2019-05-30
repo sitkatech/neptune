@@ -306,6 +306,7 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteTreatmentBMP(treatmentBMP, viewModel);
             }
 
+            var treatmentBMPTreatmentBMPName = treatmentBMP.TreatmentBMPName;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
             treatmentBMPDelineation?.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
 
@@ -315,7 +316,7 @@ namespace Neptune.Web.Controllers
             treatmentBMPDelineation?.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay("Successfully deleted the Treatment BMP");
+            SetMessageForDisplay($"Successfully deleted the Treatment BMP {treatmentBMPTreatmentBMPName}");
             return new ModalDialogFormJsonResult();
         }
 
