@@ -28,25 +28,34 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
             Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
             Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
-            Add("Loading Rate", x =>
+            Add("Baseline Loading Rate", x => {
+                if (x.LandUseBlock == null)
+                {
+                    return "N/A";
+                }
+                
+                return (x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate : x.LandUseBlock.TrashGenerationRate).ToString(CultureInfo.InvariantCulture);
+            }, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+
+            Add("Current Loading Rate", x =>
             {
-                if (x.LandUseBlock == null || x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID)
+                if (x.LandUseBlock == null)
                 {
                     return "N/A";
                 }
 
+                // fully-captured automatically means that current loading rate is 2.5
                 if (x.TreatmentBMP?.TrashCaptureStatusTypeID == TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)
                 {
                     return "2.5";
                 }
 
-                var landUseBlockTrashGenerationRate = x.LandUseBlock.TrashGenerationRate;
-                var assessmentScoreTrashGenerationRate =
-                    x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore?.TrashGenerationRate;
-
+                var baselineGenerationRate = x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate :  x.LandUseBlock.TrashGenerationRate;
+                var assessmentScoreTrashGenerationRate = x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentProgressScore?.TrashGenerationRate;
+                
                 var preCaptureLoadingRate = assessmentScoreTrashGenerationRate != null
-                    ? Math.Min(assessmentScoreTrashGenerationRate.Value, landUseBlockTrashGenerationRate)
-                    : landUseBlockTrashGenerationRate;
+                    ? Math.Min(assessmentScoreTrashGenerationRate.Value, baselineGenerationRate.Value)
+                    : baselineGenerationRate.Value;
 
                 var treatmentBMPTrashCaptureEffectiveness = x.TreatmentBMP?.TrashCaptureEffectiveness;
                 if (x.TreatmentBMP?.TrashCaptureStatusTypeID !=

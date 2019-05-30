@@ -152,7 +152,17 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             var onlandVisualTrashAssessments = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Where(x =>
                 x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
                     .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment).ToList();
-            return onlandVisualTrashAssessments.Any() ? onlandVisualTrashAssessments.MaxBy(x => x.CompletedDate).OnlandVisualTrashAssessmentScore : null;
+
+            if (!onlandVisualTrashAssessments.Any())
+            {
+                return null;
+            }
+
+            var average = onlandVisualTrashAssessments.OrderByDescending(x=>x.CompletedDate).Take(3).Average(x=>x.OnlandVisualTrashAssessmentScore.NumericValue);
+
+            var onlandVisualTrashAssessmentScore = OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == Math.Round(average));
+            
+            return onlandVisualTrashAssessmentScore;
         }
     }
 }
