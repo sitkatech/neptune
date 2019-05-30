@@ -36,7 +36,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public string AssessmentAreaName { get; set; }
 
         [DisplayName("Assessment Area Description")]
-        [Required]
         public string AssessmentAreaDescription { get; set;}
 
         [Required]
