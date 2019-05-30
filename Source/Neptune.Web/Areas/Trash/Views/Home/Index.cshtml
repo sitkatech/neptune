@@ -43,20 +43,20 @@
             list-style-type: none;
         }
 
-        #tcLegend img {
-            max-height: 50px;
-            margin-right: 5px;
-        }
+            #tcLegend img {
+                max-height: 50px;
+                margin-right: 5px;
+            }
 
-        #ovtaAreaLegend img {
-            max-height: 25px;
-            margin-right: 5px;
-            border: 1px solid #ddd;
-        }
+            #ovtaAreaLegend img {
+                max-height: 25px;
+                margin-right: 5px;
+                border: 1px solid #ddd;
+            }
 
-        #ovtaAreaLegend li {
-            padding-bottom: 10px;
-        }
+            #ovtaAreaLegend li {
+                padding-bottom: 10px;
+            }
 
 
         .bootstrap-select {
@@ -66,6 +66,106 @@
         .leaflet-control-layers-list {
             width: 195px !important;
             padding: 5px;
+        }
+
+        @@media (min-width: 768px) {
+            .TGUColumn .table-of {
+                padding-top: 10%;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .TGUColumn .table-of {
+                padding-top: 3%;
+            }
+        }
+
+        .areaBasedCalculationControlTable {
+            margin-bottom: 0;
+        }
+
+        .font25 {
+            font-size: 25px;
+        }
+
+        .font15 {
+            font-size: 15px;
+        }
+
+        .greyLabel {
+            margin-bottom: 0;
+            color: rgb(116, 116, 114);
+        }
+
+        .TGUColumn {
+            font-weight: bold;
+            border-top: none !important;
+            border-bottom: none !important;
+        }
+
+        table td + td {
+            border-left: 1px solid rgb(204, 204, 204);
+        }
+
+        .ovtaResults {
+            font-weight: bold;
+            border: none !important;
+        }
+
+        .inline-display a:hover {
+            display: inline;
+        }
+
+        .inline-display a {
+            display: inline;
+        }
+
+        .loadBasedResultsColumn {
+            border: none;
+            border-top: none !important;
+            border-bottom: none !important;
+        }
+
+        loadBasedResultsColumn p {
+            margin-top: 8px;
+        }
+
+        .loadBasedCalculationControlTable {
+            margin-bottom: 0;
+        }
+
+            .loadBasedCalculationControlTable tfoot tr th {
+                padding-top: 10px;
+            }
+
+        .loadBased-lightblue {
+            color: RGB(132, 151, 176);
+        }
+
+        .loadBased-red {
+            color: RGB(255, 0, 0);
+        }
+
+        .loadBased-blue {
+            color: RGB(31, 78, 121);
+        }
+
+        .font20 {
+            font-size: 20px;
+        }
+
+        .font22 {
+            font-size: 22.5px;
+        }
+
+        .text-normal label {
+            font-weight: normal;
+        }
+
+        .gpy {
+            font-size: 9pt;
+            font-style: italic;
+            margin-bottom: 0;
         }
     </style>
 }
@@ -287,47 +387,6 @@
     </div>
 </div>
 
-
-<style>
-    @@media (min-width: 768px) {
-        .TGUColumn .table-of {
-            padding-top: 10%;
-        }
-    }   
-
-    @@media (max-width: 768px) {
-         .TGUColumn .table-of {
-             padding-top: 3%;
-         }
-     }
-    .areaBasedCalculationControlTable {
-        margin-bottom: 0;
-    }
-
-    .font25 {
-        font-size: 25px;
-    }
-
-    .font15 {
-        font-size: 15px;
-    }
-
-    .greyLabel {
-        margin-bottom: 0;
-        color: rgb(116, 116, 114);
-    }
-
-    .TGUColumn {
-        font-weight: bold;
-        border-top: none !important;
-        border-bottom: none !important;
-    }
-
-    table td + td {
-        border-left: 1px solid rgb(204, 204, 204);
-    }
-</style>
-
 <template id="areaBasedCalculationControlTemplate">
     <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl" style="max-width: 475px;">
         <div class="form-horizontal">
@@ -399,21 +458,6 @@
     @Html.DropDownList("jurisdictionDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
 </div>
 
-
-<style>
-    .ovtaResults {
-        font-weight: bold;
-        border: none !important;
-    }
-
-    .inline-display a:hover {
-        display: inline;
-    }
-
-    .inline-display a {
-        display: inline;
-    }
-</style>
 <template id="OVTABasedResultsControlTemplate">
     <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl">
         <div class="form-horizontal">
@@ -494,47 +538,6 @@
     @Html.DropDownList("jurisdictionOVTAResultsDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
 </div>
 
-
-
-<style>
-    .loadBasedResultsColumn {
-        border: none;
-        border-top: none !important;
-        border-bottom: none !important;
-    }
-
-    .loadBasedCalculationControlTable {
-        margin-bottom: 0;
-    }
-
-    .loadBasedCalculationControlTable tfoot tr th {
-        padding-top: 10px;
-    }
-
-    .loadBased-lightblue {
-        color: RGB(132, 151, 176);
-    }
-
-    .loadBased-red {
-        color: RGB(255, 0, 0);
-    }
-
-    .loadBased-blue {
-        color: RGB(31, 78, 121);
-    }
-
-    .font20 {
-        font-size: 20px;
-    }
-
-    .font22 {
-        font-size: 22.5px;
-    }
-
-    .text-normal label {
-        font-weight: normal;
-    }
-</style>
 <template id="LoadBasedResultsControlTemplate">
     <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedResultsControl" style="max-height: 210px; max-width: 475px">
         <div class="form-horizontal">
@@ -561,8 +564,8 @@
             <table class="table table-responsive table-condensed loadBasedCalculationControlTable">
                 <tfoot>
                     <tr>
-                        <td class="text-center" colspan="4">
-                            <p class="font15"><strong>Load Reduction Achieved</strong>, gallons per year</p>
+                        <td class="text-right" colspan="5">
+                            <p class="gpy">gallons per year</p>
                         </td>
                     </tr>
                 </tfoot>
@@ -570,23 +573,23 @@
                     <tr>
                         <td class="loadBasedResultsColumn text-center" style="width: 18%">
                             <div id="viaFullTrashCapture" class="font20 loadBased-lightblue bold">0</div>
-                            <p class="text-normal greyLabel" style="margin-top: 8px; font-weight: normal">@Html.LabelWithSugarFor(FieldDefinition.ViaFullCapture)</p>
+                            <p class="text-normal greyLabel" style="font-weight: normal">@Html.LabelWithSugarFor(FieldDefinition.ViaFullCapture)</p>
                         </td>
                         <td class="loadBasedResultsColumn text-center" style="width: 21%">
                             <div id="viaPartialTrashCapture" class="font20 loadBased-lightblue bold">0</div>
-                            <p class="text-normal greyLabel" style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.ViaPartialCapture)</p>
+                            <p class="text-normal greyLabel" >@Html.LabelWithSugarFor(FieldDefinition.ViaPartialCapture)</p>
                         </td>
                         <td class="loadBasedResultsColumn text-center" style="width: 21%">
                             <div id="viaOVTAScore" class="font20 loadBased-lightblue bold">0</div>
-                            <p class="text-normal greyLabel" style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.ViaOVTAScore)</p>
+                            <p class="text-normal greyLabel" >@Html.LabelWithSugarFor(FieldDefinition.ViaOVTAScore)</p>
                         </td>
                         <td class="loadBasedResultsColumn text-center">
-                            <div id="totalAchieved" class="font22 loadBased-blue bold">0</div>
-                            <p class="text-normal greyLabel" style="margin-top: 4px;">@Html.LabelWithSugarFor(FieldDefinition.TotalAchieved)</p>
+                            <div id="totalAchieved" class="font20 loadBased-blue bold">0</div>
+                            <p class="text-normal greyLabel" >@Html.LabelWithSugarFor(FieldDefinition.TotalAchieved)</p>
                         </td>
                         <td class="loadBasedResultsColumn text-center" style="border-left: 1px solid rgb(204, 204, 204);">
-                            <div id="targetLoadReduction" class="font25 loadBased-red bold">0</div>
-                            <p>@Html.LabelWithSugarFor(FieldDefinition.TargetLoadReduction) gallons per year</p>
+                            <div id="targetLoadReduction" class="font20 loadBased-red bold">0</div>
+                            <p>@Html.LabelWithSugarFor(FieldDefinition.TargetLoadReduction)</p>
                         </td>
                     </tr>
                 </tbody>
