@@ -315,6 +315,7 @@ namespace Neptune.Web.Controllers
             treatmentBMPDelineation?.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
+            SetMessageForDisplay("Successfully deleted the Treatment BMP");
             return new ModalDialogFormJsonResult();
         }
 
