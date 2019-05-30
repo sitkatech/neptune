@@ -4,7 +4,7 @@
 
     &#selectedAssetControl {
         width: 240px;
-        padding-top:0px;
+        padding-top: 0px;
     }
 
     &#beginDelineationControl {
@@ -40,9 +40,9 @@ label.group {
     transform: translate(50%, 50%);
 }
 
-.leaflet-control-layers-list{
-    width:175px;
-    padding:5px;
+.leaflet-control-layers-list {
+    width: 175px;
+    padding: 5px;
 }
 
 .leaflet-bar a#selectedBMPDetailLink {
@@ -50,7 +50,6 @@ label.group {
     height: auto !important;
     display: inline !important;
     line-height: 18px !important;
-
     color: rgb(51, 122, 183) !important;
 
     &:hover {
@@ -70,6 +69,22 @@ label.group {
 
 /* slidey stuff */
 div#vertexControlSlider {
-    margin-left:10px;
-    width:90%;
+    margin-left: 10px;
+    width: 90%;
+}
+
+div#vertexControlSlider {
+    .slider-handle {
+        background-color: rgb(119, 207, 220);
+        background-image: none;
+    }
+
+    .slider-tick.round.in-selection {
+        background-color: #0099ab;
+        background-image: none;
+    }
+
+    .slider-selection.tick-slider-selection {
+        background-image: linear-gradient(to left, rgb(119, 207, 220) 0px, rgb(00, 153, 171) 100%)
+    }
 }

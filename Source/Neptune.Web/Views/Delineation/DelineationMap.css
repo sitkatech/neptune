@@ -54,3 +54,14 @@ div#vertexControlSlider {
   margin-left: 10px;
   width: 90%;
 }
+div#vertexControlSlider .slider-handle {
+  background-color: #77cfdc;
+  background-image: none;
+}
+div#vertexControlSlider .slider-tick.round.in-selection {
+  background-color: #0099ab;
+  background-image: none;
+}
+div#vertexControlSlider .slider-selection.tick-slider-selection {
+  background-image: linear-gradient(to left, #77cfdc 0px, #0099ab 100%);
+}
