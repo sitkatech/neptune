@@ -36,6 +36,8 @@ From
 		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
+	left join dbo.Delineation d
+		on tbmp.DelineationID = d.DelineationID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -46,6 +48,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 1
 	and tgu.LandUseBlockID is not null
+	and d.IsVerified = 1
 GO
 
 /*
@@ -93,6 +96,8 @@ From
 		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
+	left join dbo.Delineation d
+		on tbmp.DelineationID = d.DelineationID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -103,6 +108,7 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 2
 	and tgu.LandUseBlockID is not null
+	and d.IsVerified = 1
 	) sub
 GO
 
@@ -152,6 +158,8 @@ From
 		on ovta.OnlandVisualTrashAssessmentScoreID = pscore.OnlandVisualTrashAssessmentScoreID
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
+	left join dbo.Delineation d
+		on tbmp.DelineationID = d.DelineationID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
