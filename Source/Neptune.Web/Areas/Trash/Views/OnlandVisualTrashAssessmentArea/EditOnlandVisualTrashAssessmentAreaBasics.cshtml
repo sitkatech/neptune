@@ -24,6 +24,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.ValidationSummary()
 <div class="form-horizontal">
     <div class="form-group">
         <div class="col-sm-4 col-xs-12 control-label">
@@ -43,5 +44,6 @@
             @Html.ValidationMessageFor(m => m.AssessmentAreaDescription)
         </div>
     </div>
+    @Html.HiddenFor(x=>x.AssessmentAreaID) @Html.HiddenFor(x=>x.StormwaterJurisdictionID)
 </div>
 }
