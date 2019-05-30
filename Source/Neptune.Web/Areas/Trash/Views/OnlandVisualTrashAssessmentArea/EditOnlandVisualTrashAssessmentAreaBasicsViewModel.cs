@@ -32,9 +32,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
     public class EditOnlandVisualTrashAssessmentAreaBasicsViewModel : FormViewModel, IValidatableObject
     { 
         [DisplayName("Assessment Area Name")]
+        [Required]
         public string AssessmentAreaName { get; set; }
 
         [DisplayName("Assessment Area Description")]
+        [Required]
         public string AssessmentAreaDescription { get; set;}
 
         [Required]
