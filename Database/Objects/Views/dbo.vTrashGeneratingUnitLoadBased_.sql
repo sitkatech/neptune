@@ -24,7 +24,6 @@ Select
 	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
 	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
-		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
 	end, 0) as BaselineLoadingRate
 From
@@ -75,12 +74,10 @@ from
 	IsNull(TrashGeneratingUnitGeometry.STArea(),0) as Area,
 	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
-		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
 	end,0) as BaselineLoadingRate,
 	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
-		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
 	end,0) * (1 - 
 	IsNull(Case 
@@ -126,12 +123,10 @@ Select
 	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
 	IsNull(Case
 		when pscore.TrashGenerationRate is null then lub.TrashGenerationRate
-		when lub.TrashGenerationRate < pscore.TrashGenerationRate then lub.TrashGenerationRate
 		else pscore.TrashGenerationRate
 	end,0) as ProgressLoadingRate,
 	IsNull(Case
 		when bscore.TrashGenerationRate is null then lub.TrashGenerationRate
-		when lub.TrashGenerationRate < bscore.TrashGenerationRate then lub.TrashGenerationRate
 		else bscore.TrashGenerationRate
 	end,0) as BaselineLoadingRate
 From
@@ -188,7 +183,6 @@ Select
 	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
 	IsNull(Case
 		when score.TrashGenerationRate is null then lub.TrashGenerationRate
-		when lub.TrashGenerationRate < score.TrashGenerationRate then lub.TrashGenerationRate
 		else score.TrashGenerationRate
 	end,0) as BaselineLoadingRate
 
