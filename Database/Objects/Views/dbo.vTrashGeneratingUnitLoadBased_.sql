@@ -132,18 +132,7 @@ Select
 From
 	dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.LandUseBlockID = lub.LandUseBlockID
-	left join 
-		(
-		Select
-			ovta.OnlandVisualTrashAssessmentID,
-			ovta.OnlandVisualTrashAssessmentAreaID,
-			ovta.OnlandVisualTrashAssessmentScoreID,
-			ovta.CompletedDate,
-			rownumber = Row_Number() over (partition by ovta.OnlandVisualTrashAssessmentAreaID order by ovta.CompletedDate desc)
-		from dbo.OnlandVisualTrashAssessment ovta
-		where CompletedDate is not null
-			and IsProgressAssessment = 1
-		) ovta
+	left join dbo.vOnlandVisualTrashAssessmentAreaProgress ovta
 		on tgu.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID
 	left join OnlandVisualTrashAssessmentArea area
 		on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
@@ -165,7 +154,6 @@ From
 		on o.OrganizationID = sj.OrganizationID
 Where tgu.LandUseBlockID is not null
 	and area.OnlandVisualTrashAssessmentBaselineScoreID is not null
-	
 	and pscore.TrashGenerationRate is not null
 	and bscore.TrashGenerationRate is not null
 GO
