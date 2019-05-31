@@ -12,6 +12,7 @@
 
         window.mapInitJson =
             @Html.Raw(JObject.FromObject(ViewDataTyped.StormwaterMapInitJson).ToString(Formatting.None));
+        window.mapConfig = @Html.Raw(JObject.FromObject(ViewDataTyped.DroolToolMapConfig).ToString(Formatting.None));
 
         initResizeHandler(window.mapInitJson);
     </script>
@@ -41,36 +42,7 @@
 
     <script>
         jQuery(function () {
-            var map = new NeptuneMaps.GeoServerMap(window.mapInitJson, "Terrain", "@ViewDataTyped.GeoserverUrl", {});
-
-            var neighborhoodPane = map.map.createPane("neighborhoodPane");
-            neighborhoodPane.style.zIndex = 10000;
-            map.map.getPane("markerPane").style.zIndex = 10001;
-
-            var hide = false;
-            var neighborhoodLayer =
-                map.addWmsLayer("OCStormwater:NetworkCatchments",
-                    "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Neighborhoods</span>",
-                    { pane: "neighborhoodPane", styles:"neighborhood" }, hide);
-
-            
-            map.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-                "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", hide);
-
-            (new L.Control.NeighborhoodControl({position: "topleft"})).addTo(map.map);
-        });
-
-        L.Control.NeighborhoodControl = L.Control.extend({
-            onAdd: function(map) {
-                var el = L.DomUtil.create("div",
-                    "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-control");
-
-                var h = L.DomUtil.create("p");
-
-                h.innerHTML = "Select a neighborhood or search by address to see neighborhood details (coming soon)";
-                el.append(h);
-                return el;
-            }
+            var map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Terrain", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
         });
     </script>
 }

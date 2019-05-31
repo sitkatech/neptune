@@ -74,6 +74,7 @@ namespace Neptune.Web.Common
             SitkaConfiguration.GetRequiredAppSetting("CanonicalHostNameDroolTool");
 
         public static List<string> CanonicalHostNames => new List<string>(SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName"));
+        public static readonly string NominatimApiKey = SitkaConfiguration.GetRequiredAppSetting("NominatimAPIKey");
 
         public static string GetCanonicalHost(string hostName, bool useApproximateMatch)
         {

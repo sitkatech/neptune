@@ -52,6 +52,7 @@
     <add key="MapServiceLayerNameNetworkCatchment" value="${map-service-layer-name-networkcatchment}"/>
     <add key="aspnet:MaxJsonDeserializerMembers" value="150000" />
     <add key="AutoDelineateServiceUrl" value="${auto-delineate-service-url}"/>
+    <add key="NominatimAPIKey" value="${nominatim-key}"/>
   </appSettings>
   <system.net>
     <mailSettings>
