@@ -24,14 +24,18 @@ L.Control.NeighborhoodControl = L.Control.extend({
         h.innerHTML = "Select a neighborhood or search by address to see neighborhood details (coming soon)";
         el.append(h);
 
+        el.append(L.DomUtil.create("input", "form-control nominatimInput"));
+
         var button = L.DomUtil.create("button", "btn-sm btn btn-neptune");
         button.innerHTML = "Test Nominatim";
 
         console.log(this.options);
         var self = this;
-        L.DomEvent.on(button, "click", function() {
+        L.DomEvent.on(button, "click", function () {
+            var q = jQuery(".nominatimInput").val();
+
             jQuery.ajax({
-                url: self.makeNominatimRequestUrl(),
+                url: self.makeNominatimRequestUrl(q),
                 jsonp: false,
                 method: 'GET'
             }).then(function(response) {
@@ -45,12 +49,10 @@ L.Control.NeighborhoodControl = L.Control.extend({
         return el;
     },
 
-    makeNominatimRequestUrl: function() {
+    makeNominatimRequestUrl: function(q) {
         var base = "https://open.mapquestapi.com/nominatim/v1/search.php?key=";
-        var testTODO =
-            "&format=json&q=windsor+[castle]&addressdetails=1&limit=3&viewbox=-1.99%2C52.02%2C0.78%2C50.94&exclude_place_ids=41697";
 
-        return base + "mSMCuGwTHIiqgLeT7ODwVM1udF9RaL2H" + testTODO;
+        return base + "mSMCuGwTHIiqgLeT7ODwVM1udF9RaL2H" + "&format=json&q=" + q;
     }
 });
 
