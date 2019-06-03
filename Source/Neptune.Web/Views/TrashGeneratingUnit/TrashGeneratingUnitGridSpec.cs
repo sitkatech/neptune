@@ -28,48 +28,60 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
             Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
             Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
-            Add("Baseline Loading Rate", x => {
-                if (x.LandUseBlock == null)
-                {
-                    return "N/A";
-                }
-                
-                return (x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate : x.LandUseBlock.TrashGenerationRate).ToString(CultureInfo.InvariantCulture);
-            }, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-
-            Add("Current Loading Rate", x =>
+            Add("Baseline Loading Rate", x =>
             {
                 if (x.LandUseBlock == null)
                 {
                     return "N/A";
                 }
 
-                // fully-captured automatically means that current loading rate is 2.5
-                if (x.TreatmentBMP?.TrashCaptureStatusTypeID == TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)
-                {
-                    return "2.5";
-                }
-
-                var baselineGenerationRate = x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate :  x.LandUseBlock.TrashGenerationRate;
-                var assessmentScoreTrashGenerationRate = x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentProgressScore?.TrashGenerationRate;
-                
-                var preCaptureLoadingRate = assessmentScoreTrashGenerationRate != null
-                    ? Math.Min(assessmentScoreTrashGenerationRate.Value, baselineGenerationRate.Value)
-                    : baselineGenerationRate.Value;
-
-                var treatmentBMPTrashCaptureEffectiveness = x.TreatmentBMP?.TrashCaptureEffectiveness;
-                if (x.TreatmentBMP?.TrashCaptureStatusTypeID !=
-                    TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID &&
-                    treatmentBMPTrashCaptureEffectiveness != null)
-                {
-                    var postCaptureLoadingRate = (1.0 - (treatmentBMPTrashCaptureEffectiveness.Value / 100.0));
-                    return Math.Max(2.5, postCaptureLoadingRate).ToString(CultureInfo.InvariantCulture);
-                }
-
-                return preCaptureLoadingRate.ToString(CultureInfo.InvariantCulture);
+                return (x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate : x.LandUseBlock.TrashGenerationRate).ToString(CultureInfo.InvariantCulture);
             }, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Last Updated", x => x.LastUpdateDate, 120,DhtmlxGridColumnFormatType.DateTime);
+
+            Add("Current Loading Rate", x => CurrentLoadingRate(x), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Trash Capture Status",
+                x => x.TreatmentBMP?.TrashCaptureStatusType?.TrashCaptureStatusTypeDisplayName ?? "Not Provided", 150,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Trash Capture Effectiveness",
+                            x => x.TreatmentBMP?.TrashCaptureEffectiveness?.ToString(CultureInfo.InvariantCulture) ?? "Not Provided", 150,
+                            DhtmlxGridColumnFilterType.Numeric);
+
+            Add("Last Updated", x => x.LastUpdateDate, 120, DhtmlxGridColumnFormatType.DateTime);
         }
 
+        public static string CurrentLoadingRate(Models.TrashGeneratingUnit x)
+        {
+            if (x.LandUseBlock == null)
+            {
+                return "N/A";
+            }
+
+            // fully-captured automatically means that current loading rate is 2.5
+            if (x.TreatmentBMP?.TrashCaptureStatusTypeID == TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)
+            {
+                return "2.5";
+            }
+
+            var baselineGenerationRate = x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null
+                ? x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate
+                : x.LandUseBlock.TrashGenerationRate;
+            var assessmentScoreTrashGenerationRate = x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentProgressScore
+                ?.TrashGenerationRate;
+
+            var preCaptureLoadingRate = assessmentScoreTrashGenerationRate != null
+                ? Math.Min(assessmentScoreTrashGenerationRate.Value, baselineGenerationRate.Value)
+                : baselineGenerationRate.Value;
+
+            var treatmentBMPTrashCaptureEffectiveness = x.TreatmentBMP?.TrashCaptureEffectiveness;
+            if (x.TreatmentBMP?.TrashCaptureStatusTypeID ==
+                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID &&
+                treatmentBMPTrashCaptureEffectiveness != null)
+            {
+                var postCaptureLoadingRate = (1.0 - (treatmentBMPTrashCaptureEffectiveness.Value / 100.0)) * (double)preCaptureLoadingRate;
+                return Math.Max(2.5, postCaptureLoadingRate).ToString(CultureInfo.InvariantCulture);
+            }
+
+            return preCaptureLoadingRate.ToString(CultureInfo.InvariantCulture);
+        }
     }
 }
