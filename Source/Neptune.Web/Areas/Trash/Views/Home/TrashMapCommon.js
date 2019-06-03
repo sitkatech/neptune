@@ -323,3 +323,11 @@ window.stopClickPropagation = function (parentElement) {
             window.freeze = false;
         });
 };
+
+function sigFigs(number) {
+    if (number < 1000) {
+        return number;
+    } else {
+        return Math.round(number / 1000);
+    }
+}

@@ -68,14 +68,14 @@ function populateTGUValuesOVTABased(resultsCalculationsUrl) {
         url: resultsCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        jQuery("#PLUIsA").text(Math.round(response.PLUSumAcresWhereOVTAIsA).toLocaleString());
-        jQuery("#PLUIsB").text(Math.round(response.PLUSumAcresWhereOVTAIsB).toLocaleString());
-        jQuery("#PLUIsC").text(Math.round(response.PLUSumAcresWhereOVTAIsC).toLocaleString());
-        jQuery("#PLUIsD").text(Math.round(response.PLUSumAcresWhereOVTAIsD).toLocaleString());
-        jQuery("#ALUIsA").text(Math.round(response.ALUSumAcresWhereOVTAIsA).toLocaleString());
-        jQuery("#ALUIsB").text(Math.round(response.ALUSumAcresWhereOVTAIsB).toLocaleString());
-        jQuery("#ALUIsC").text(Math.round(response.ALUSumAcresWhereOVTAIsC).toLocaleString());
-        jQuery("#ALUIsD").text(Math.round(response.ALUSumAcresWhereOVTAIsD).toLocaleString());
+        jQuery("#PLUIsA").text(sigFigs(response.PLUSumAcresWhereOVTAIsA).toLocaleString());
+        jQuery("#PLUIsB").text(sigFigs(response.PLUSumAcresWhereOVTAIsB).toLocaleString());
+        jQuery("#PLUIsC").text(sigFigs(response.PLUSumAcresWhereOVTAIsC).toLocaleString());
+        jQuery("#PLUIsD").text(sigFigs(response.PLUSumAcresWhereOVTAIsD).toLocaleString());
+        jQuery("#ALUIsA").text(sigFigs(response.ALUSumAcresWhereOVTAIsA).toLocaleString());
+        jQuery("#ALUIsB").text(sigFigs(response.ALUSumAcresWhereOVTAIsB).toLocaleString());
+        jQuery("#ALUIsC").text(sigFigs(response.ALUSumAcresWhereOVTAIsC).toLocaleString());
+        jQuery("#ALUIsD").text(sigFigs(response.ALUSumAcresWhereOVTAIsD).toLocaleString());
     });
 }
 

@@ -68,11 +68,11 @@ function populateTGUValuesLoadBased(resultsCalculationsUrl) {
         url: resultsCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        jQuery("#viaFullTrashCapture").text(Math.round(response.LoadFullCapture).toLocaleString());
-        jQuery("#viaPartialTrashCapture").text(Math.round(response.LoadPartialCapture).toLocaleString());
-        jQuery("#viaOVTAScore").text(Math.round(response.LoadOVTA).toLocaleString());
-        jQuery("#totalAchieved").text(Math.round(response.TotalAchieved).toLocaleString());
-        jQuery("#targetLoadReduction").text(Math.round(response.TargetLoadReduction).toLocaleString());
+        jQuery("#viaFullTrashCapture").text(sigFigs(response.LoadFullCapture).toLocaleString());
+        jQuery("#viaPartialTrashCapture").text(sigFigs(response.LoadPartialCapture).toLocaleString());
+        jQuery("#viaOVTAScore").text(sigFigs(response.LoadOVTA).toLocaleString());
+        jQuery("#totalAchieved").text(sigFigs(response.TotalAchieved).toLocaleString());
+        jQuery("#targetLoadReduction").text(sigFigs(response.TargetLoadReduction).toLocaleString());
     });
 }
 
