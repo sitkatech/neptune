@@ -13,7 +13,7 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             GeoserverUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
             StormwaterMapInitJson = new StormwaterMapInitJson("droolToolMap");
 
-            DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey);
+            DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl);
         }
 
         public StormwaterMapInitJson StormwaterMapInitJson { get; }
@@ -23,11 +23,13 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
 
     public class DroolToolMapConfig
     {
-        public DroolToolMapConfig(string nominatimApiKey)
+        public DroolToolMapConfig(string nominatimApiKey, string geoServerUrl)
         {
             NominatimApiKey = nominatimApiKey;
+            GeoServerUrl = geoServerUrl;
         }
 
         public string NominatimApiKey { get; }
+        public string GeoServerUrl { get; }
     }
 }
