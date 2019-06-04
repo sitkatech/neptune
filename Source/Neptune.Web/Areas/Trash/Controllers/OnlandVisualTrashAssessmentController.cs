@@ -533,6 +533,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
+
             var isProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment;
             onlandVisualTrashAssessment.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -547,9 +548,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
                         onlandVisualTrashAssessmentArea.CalculateProgressScore()
                             ?.OnlandVisualTrashAssessmentScoreID;
                 }
-            }
 
-            onlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
+                onlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
+            }
 
             SetMessageForDisplay("Successfully deleted the assessment.");
             return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(c => c.Index()));
