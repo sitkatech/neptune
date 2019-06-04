@@ -13,13 +13,13 @@ values
 
 go
 
-Create Table dbo.BackboneSegment(
-BackboneSegmentID int not null identity(1,1) constraint PK_BackboneSegment_BackboneSegmentID primary key,
-BackboneSegmentGeometry geometry not null,
-BackboneSegmentAlternateID varchar(10) not null constraint AK_BackboneSegment_BackboneSegmentAlternateID unique,
-DownstreamBackboneSegmentID varchar(10) null,
-CatchIDN int not null,
-NetworkCatchmentID int null constraint FK_BackboneSegment_NetworkCatchment_NetworkCatchmentID foreign key references dbo.NetworkCatchment(NetworkCatchmentID),
-BackboneSegmentTypeID int not null constraint FK_BackboneSegment_BackboneSegmentType_BackboneSegmentTypeID foreign key references dbo.BackboneSegmentType(BackboneSegmentTypeID)
-)
-Go	
+--Create Table dbo.BackboneSegment(
+--BackboneSegmentID int not null identity(1,1) constraint PK_BackboneSegment_BackboneSegmentID primary key,
+--BackboneSegmentGeometry geometry not null,
+--BackboneSegmentAlternateID varchar(10) not null constraint AK_BackboneSegment_BackboneSegmentAlternateID unique,
+--DownstreamBackboneSegmentID varchar(10) null,
+--CatchIDN int not null,
+--NetworkCatchmentID int null constraint FK_BackboneSegment_NetworkCatchment_NetworkCatchmentID foreign key references dbo.NetworkCatchment(NetworkCatchmentID),
+--BackboneSegmentTypeID int not null constraint FK_BackboneSegment_BackboneSegmentType_BackboneSegmentTypeID foreign key references dbo.BackboneSegmentType(BackboneSegmentTypeID)
+--)
+--Go	
