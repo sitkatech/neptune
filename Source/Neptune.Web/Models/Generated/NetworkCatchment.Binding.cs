@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         /// </summary>
         protected NetworkCatchment()
         {
-            this.BackboneSegments = new HashSet<BackboneSegment>();
             this.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<NetworkCatchment>();
         }
 
@@ -70,13 +69,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return BackboneSegments.Any() || NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
+            return NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(NetworkCatchment).Name, typeof(BackboneSegment).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(NetworkCatchment).Name};
 
 
         /// <summary>
@@ -101,11 +100,6 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
-            foreach(var x in BackboneSegments.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
             foreach(var x in NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -122,7 +116,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
 
-        public virtual ICollection<BackboneSegment> BackboneSegments { get; set; }
         public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
         public virtual NetworkCatchment OCSurveyDownstreamCatchment { get; set; }
 

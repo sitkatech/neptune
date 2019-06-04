@@ -35,7 +35,6 @@ namespace Neptune.Web.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations.Add(new AuditLogConfiguration());
-            modelBuilder.Configurations.Add(new BackboneSegmentConfiguration());
             modelBuilder.Configurations.Add(new CountyConfiguration());
             modelBuilder.Configurations.Add(new CustomAttributeConfiguration());
             modelBuilder.Configurations.Add(new CustomAttributeTypeConfiguration());
@@ -111,7 +110,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTrashAssessmentConfiguration());
         }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
-        public virtual DbSet<BackboneSegment> BackboneSegments { get; set; }
         public virtual DbSet<County> Counties { get; set; }
         public virtual DbSet<CustomAttribute> CustomAttributes { get; set; }
         public virtual DbSet<CustomAttributeType> CustomAttributeTypes { get; set; }
@@ -197,9 +195,6 @@ namespace Neptune.Web.Models
 
                 case "AuditLog":
                     return AuditLogs.GetAuditLog(primaryKey);
-
-                case "BackboneSegment":
-                    return BackboneSegments.GetBackboneSegment(primaryKey);
 
                 case "BackboneSegmentType":
                     var backboneSegmentType = BackboneSegmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

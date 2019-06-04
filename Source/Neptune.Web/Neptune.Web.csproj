@@ -52,10 +52,6 @@
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
     <Compile Include="Models\Generated\AuditLogEventTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\AuditLogPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegment.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegment.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\BackboneSegmentConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegmentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\BackboneSegmentType.Binding.cs" />
     <Compile Include="Models\Generated\BackboneSegmentTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\County.Binding.cs" />
