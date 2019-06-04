@@ -95,7 +95,7 @@ L.Control.NeighborhoodControl = L.Control.extend({
     makeNominatimRequestUrl: function (q) {
         var base = "https://open.mapquestapi.com/nominatim/v1/search.php?key=";
 
-        return base + this.options.nominatimApiKey + "&format=json&q=" + q;
+        return base + this.options.nominatimApiKey + "&format=json&q=" + q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
     },
 
     SelectNeighborhood: function (geoJson) {
