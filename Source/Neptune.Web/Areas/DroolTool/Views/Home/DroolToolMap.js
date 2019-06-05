@@ -19,6 +19,41 @@ var NEIGHBORHOOD_NOT_FOUND =
 var NOMINATIM_ERROR =
     "There was an error retrieving the address. The address location service may be unavailable. If the issue persists, please contact support.";
 
+L.Control.NeighborhoodDetailControl = L.Control.extend({
+    onAdd: function (map) {
+        this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control");
+
+        var h4 = L.DomUtil.create("h4");
+        h4.innerHTML = "Selected Neighborhood";
+        this.parentElement.append(h4);
+
+        this.selectedNeighborhoodText = L.DomUtil.create("p");
+
+        this.parentElement.append(this.selectedNeighborhoodText);
+
+        this.hide();
+
+        window.stopClickPropagation(this.parentElement);
+
+        return this.parentElement;
+    },
+
+    hide: function () {
+        this.parentElement.style.display = "none";
+    },
+
+    show: function () {
+        this.parentElement.style.display = "block";
+    },
+
+    selectNeighborhood: function (properties) {
+
+        this.selectedNeighborhoodText.innerHTML =
+            "Selected Neighborhood: " + properties.NetworkCatchmentID;
+        this.show();
+    }
+});
+
 L.Control.NominatimSearchControl = L.Control.extend({
     onAdd: function (map) {
         var input = jQuery("#nominatimSearchInput").get(0);
@@ -26,14 +61,14 @@ L.Control.NominatimSearchControl = L.Control.extend({
 
         this.neptuneMap = this.options.neptuneMap;
         var parentElement = L.DomUtil.create("div",
-            "neighborhood-control");
+            "neighborhood-search-control");
         parentElement.append(jQuery("#nominatimSearchWrapper").get(0));
         jQuery("#nominatimSearchWrapper").css("display", "block");
-        
+
         var self = this;
 
         function search() {
-            var q = jQuery(".nominatimInput").val();
+            var q = jQuery("#nominatimSearchInput").val();
 
             jQuery.ajax({
                 url: self.makeNominatimRequestUrl(q),
@@ -41,9 +76,11 @@ L.Control.NominatimSearchControl = L.Control.extend({
                 method: 'GET'
             }).then(function (response) {
                 if (response.length === 0) {
-                    self.toast(NEIGHBORHOOD_NOT_FOUND);
+                    toast(NEIGHBORHOOD_NOT_FOUND);
+                    return null;
                 }
-                // todo: what do if get more one?
+
+                // NP/JHB June 2019 deliberate decision not to invest in deciding between multiple results
                 var lat = response[0].lat;
                 var lon = response[0].lon;
 
@@ -53,18 +90,15 @@ L.Control.NominatimSearchControl = L.Control.extend({
 
                 L.Util.extend(customParams, self.options.wfsParams);
 
-                return jQuery.ajax({
-                    url: self.options.geoserverUrl + L.Util.getParamString(customParams),
-                    method: 'GET'
-                });
+                return searchGeoserver(self.options.geoserverUrl, customParams);
             }).then(function (responseGeoJson) {
                 if (responseGeoJson.totalFeatures === 0) {
-                    self.toast(NEIGHBORHOOD_NOT_FOUND);
+                    toast(NEIGHBORHOOD_NOT_FOUND);
+                    return null;
                 }
                 self.neptuneMap.SelectNeighborhood(responseGeoJson);
-                self.SelectNeighborhood(responseGeoJson);
-                }).fail(function() {
-                self.toast(NOMINATIM_ERROR);
+            }).fail(function () {
+                toast(NOMINATIM_ERROR);
             });
         }
 
@@ -79,38 +113,28 @@ L.Control.NominatimSearchControl = L.Control.extend({
         });
 
         this.parentElement = parentElement;
-        
+
+        window.stopClickPropagation(this.parentElement);
+
         return parentElement;
     },
 
     makeNominatimRequestUrl: function (q) {
         var base = "https://open.mapquestapi.com/nominatim/v1/search.php?key=";
 
-        return base + this.options.nominatimApiKey + "&format=json&q=" + q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
+        return base +
+            this.options.nominatimApiKey +
+            "&format=json&q=" +
+            q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
     },
-
-    SelectNeighborhood: function (geoJson) {
-        console.log(geoJson);
-        this.selectedNeighborhoodText.innerHTML =
-            "Selected Neighborhood: " + geoJson.features[0].properties.NetworkCatchmentID;
-        this.selectedNeighborhoodText.style.display = "initial";
-    },
-
-    toast: function (toastText) {
-        jQuery.toast({
-            position: "top-center",
-            text: toastText,
-            hideAfter: 10000,
-            stack: 1
-        });
-    }
 });
 
-L.control.neighborhoodSearchControl = function (options) { return new L.Control.NominatimSearchControl(options); };
+L.control.nominatimSearchControl = function (options) { return new L.Control.NominatimSearchControl(options); };
+L.control.neighborhoodDetailControl = function (options) { return new L.Control.NeighborhoodDetailControl(options); };
 
 
-NeptuneMaps.DroolToolMap = function(mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true});
+NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
+    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
 
     var neighborhoodPane = this.map.createPane("neighborhoodPane");
     neighborhoodPane.style.zIndex = 10000;
@@ -129,20 +153,85 @@ NeptuneMaps.DroolToolMap = function(mapInitJson, initialBaseLayerShown, geoServe
 
     this.neighborhoodLayerParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
 
-    this.neighborhoodSearchControl = L.control.neighborhoodSearchControl({
+    this.nominatimSearchControl = L.control.nominatimSearchControl({
         position: "topleft",
         nominatimApiKey: config.NominatimApiKey,
         geoserverUrl: config.GeoServerUrl,
         wfsParams: this.neighborhoodLayerParams,
         neptuneMap: this
     });
-    window.neighborhoodSearchControl = this.neighborhoodSearchControl;
-    this.neighborhoodSearchControl.addTo(this.map);
+
+    
+
+
+    window.nominatimSearchControl = this.nominatimSearchControl;
+    this.nominatimSearchControl.addTo(this.map);
+
+
+
+    this.neighborhoodDetailControl = L.control.neighborhoodDetailControl({ position: "topleft" });
+
+
+    this.neighborhoodDetailControl.addTo(this.map);
+    var self =this;
+    this.map.on("click",
+        function(evt) {
+            if (window.freeze) {
+                return;
+            }
+
+            var customParams = {
+                cql_filter: 'intersects(CatchmentGeometry, POINT(' + evt.latlng.lat + ' ' + evt.latlng.lng + '))'
+            };
+
+            L.Util.extend(customParams, self.neighborhoodLayerParams);
+
+            searchGeoserver(config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
+                if (geoJsonResponse.totalFeatures === 0) {
+                    toast(NEIGHBORHOOD_NOT_FOUND);
+                    return null;
+                }
+                self.SelectNeighborhood(geoJsonResponse);
+            }).fail(function() {
+                toast(NOMINATIM_ERROR);
+            });
+
+        });
 };
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
-NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function(geoJson) {
+NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     this.setSelectedFeature(geoJson);
+    this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
     this.map.fitBounds(this.lastSelected.getBounds());
 }
+
+function searchGeoserver(geoServerUrl, params) {
+    return jQuery.ajax({
+        url: geoServerUrl + L.Util.getParamString(params),
+        method: 'GET'
+    });
+}
+
+function toast(toastText) {
+    jQuery.toast({
+        position: "top-center",
+        text: toastText,
+        hideAfter: 10000,
+        stack: 1
+    });
+}
+
+window.stopClickPropagation = function (parentElement) {
+    L.DomEvent.on(parentElement, "mouseover", function (e) {
+        // todo: still not the best way to handle this event-pausing stuff
+        window.freeze = true;
+    });
+
+    L.DomEvent.on(parentElement,
+        "mouseout",
+        function (e) {
+            window.freeze = false;
+        });
+};
