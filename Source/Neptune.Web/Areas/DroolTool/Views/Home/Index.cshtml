@@ -53,8 +53,14 @@
     <script>
         jQuery(function () {
             var map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Terrain", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
+
+            jQuery(".leaflet-top.leaflet-right")
+                .append(jQuery(".leaflet-control-zoom"));
+            jQuery(".leaflet-top.leaflet-right")
+                .append(jQuery(".leaflet-control-fullscreen"));
         });
     </script>
+
     <div id="hiddenOnLoadControlElements" style="display: none;">
         <div class="row"  id="nominatimSearchWrapper">
             <div class="col-sm-12">
@@ -62,11 +68,6 @@
                     <input type="text" class="form-control" id="nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0; " placeholder="Search by address or landmark">
                     <span class="input-group-btn"><a class="btn btn-sm btn-neptune" id="nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
                 </div>
-            </div>
-            <div class="col-sm-12">
-                <p id="nominatimSearchToast" style="display: none; font-weight: bolder; font-size: 16px;">
-
-                </p>
             </div>
         </div>
     </div>
