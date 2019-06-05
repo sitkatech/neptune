@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("ObservationsMapController", function($scope, angularModelAndViewData) {
+    .controller("ObservationsMapController", function ($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
@@ -12,14 +12,15 @@
 
         $scope.activateClickToAddMode = function () {
             $scope.isClickToAddModeActive = true;
+            $scope.isClickToMoveModeActive = false;
             jQuery('.leaflet-container').css('cursor', 'pointer');
             jQuery('.leaflet-container path').css('cursor', 'crosshair');
         };
 
-        $scope.activateClickToMoveMode = function() {
+        $scope.activateClickToMoveMode = function () {
             $scope.isClickToMoveModeActive = true;
             jQuery('.leaflet-container').css('cursor', 'pointer');
-            jQuery('.leaflet-container path').css('cursor', 'pointer');
+            jQuery('.leaflet-container path').css('cursor', 'crosshair');
         }
 
         function onMapClick(event) {
@@ -33,18 +34,19 @@
         function onMapClickToMove(event) {
             var latlng = event.latlng;
 
+            console.log(event.latlng);
+            console.log($scope.currentSelectedMarkerModel.MapMarker.getLatLng());
+
             $scope.currentSelectedMarkerModel.MapMarker.setLatLng(latlng);
 
             $scope.currentSelectedMarkerModel.MapMarker.feature.geometry.coordinates[0] = latlng.lng;
             $scope.currentSelectedMarkerModel.MapMarker.feature.geometry.coordinates[1] = latlng.lat;
 
-            $scope.currentSelectedMarkerModel.LocationX = latlng.lat;
-            $scope.currentSelectedMarkerModel.LocationY = latlng.lng;
+            $scope.currentSelectedMarkerModel.LocationX = latlng.lng;
+            $scope.currentSelectedMarkerModel.LocationY = latlng.lat;
 
-            var key = Object.keys($scope.lastSelected._layers)[0];
-
-            var layer = $scope.lastSelected._layers[key];
-
+            var lastSelectedKey = Object.keys($scope.lastSelected._layers)[0];
+            var layer = $scope.lastSelected._layers[lastSelectedKey];
             layer.setLatLng(latlng);
 
             $scope.$apply();
@@ -59,7 +61,7 @@
                 $scope.areaGeoJson = L.geoJson(
                     $scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
                     {
-                        style: function(feature) {
+                        style: function (feature) {
                             return {
                                 fillColor: NeptuneMaps.Constants.defaultPolyColor,
                                 fill: true,
@@ -77,17 +79,17 @@
             $scope.observationsLayerGeoJson = $scope.neptuneMap.CreateObservationsLayer(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
-                    onEachFeature: function(feature, layer) {
+                    onEachFeature: function (feature, layer) {
                         var modelID = feature.properties.ObservationID;
-                        var observationModel = _($scope.AngularModel.Observations).find(function(f) {
+                        var observationModel = _($scope.AngularModel.Observations).find(function (f) {
                             return f.OnlandVisualTrashAssessmentObservationID == modelID;
                         });
                         observationModel.MapMarker = layer;
                     }
                 });
-            
+
             $scope.observationsLayerGeoJson.on('click',
-                function(e) {
+                function (e) {
                     $scope.setSelectedMarker(e.layer.feature);
                     $scope.$apply();
                     $scope.isClickToAddModeActive = false;
@@ -96,7 +98,7 @@
                 });
 
             $scope.neptuneMap.map.on("click",
-                function(event) {
+                function (event) {
                     if ($scope.isClickToAddModeActive) {
                         onMapClick(event);
                     }
@@ -112,7 +114,7 @@
             } else if (!$scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection.features.length) {
                 var bounds = L
                     .geoJson(_.find($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features,
-                        function(f) {
+                        function (f) {
                             return f.properties.StormwaterJurisdictionID ==
                                 $scope.AngularViewData.OVTAStormwaterJurisdictionID;
                         })).getBounds();
@@ -126,7 +128,7 @@
             var feature = {
                 "type": "Feature",
                 "properties": {
-                    "ObservationID" : $scope.currentFakeID
+                    "ObservationID": $scope.currentFakeID
                 },
                 "geometry": {
                     "type": "Point",
@@ -137,6 +139,21 @@
             var featurePlaceholder;
 
             var newMarkerLayer = L.geoJson(feature, {
+                onEachFeature: function (feature, layer) {
+                    var observation = {
+                        ObservationDateTime: (new Date()).toISOString(),
+                        LocationX: L.Util.formatNum(latlng.lng),
+                        LocationY: L.Util.formatNum(latlng.lat),
+                        MapMarker: layer,
+                        OnlandVisualTrashAssessmentID: $scope.AngularModel.OVTAID,
+                        OnlandVisualTrashAssessmentObservationID: $scope.currentFakeID
+                    };
+
+                    $scope.AngularModel.Observations.push(observation);
+
+                    $scope.currentSelectedMarkerModel = observation;
+                },
+
                 filter: function (feature, layer) {
                     return true;
                 },
@@ -155,19 +172,6 @@
                 }
             });
 
-            var observation = {
-                ObservationDateTime: (new Date()).toISOString(),
-                LocationX: L.Util.formatNum(latlng.lng),
-                LocationY: L.Util.formatNum(latlng.lat),
-                MapMarker: newMarkerLayer,
-                OnlandVisualTrashAssessmentID: $scope.AngularModel.OVTAID,
-                OnlandVisualTrashAssessmentObservationID: $scope.currentFakeID
-            };
-
-            $scope.AngularModel.Observations.push(observation);
-
-            $scope.currentSelectedMarkerModel = observation;
-
             newMarkerLayer.addTo($scope.observationsLayerGeoJson);
             $scope.setSelectedMarker(featurePlaceholder);
 
@@ -175,18 +179,18 @@
             $scope.currentFakeID--;
         }
 
-        $scope.setSelectedMarker = function (layer) {
+        $scope.setSelectedMarker = function (feature) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
             }
 
-            if (layer.properties["ObservationID"]) {
-                $scope.currentSelectedMarkerModel = _($scope.AngularModel.Observations).find(function(f) {
-                    return f.OnlandVisualTrashAssessmentObservationID == layer.properties["ObservationID"];
+            if (feature.properties["ObservationID"]) {
+                $scope.currentSelectedMarkerModel = _($scope.AngularModel.Observations).find(function (f) {
+                    return f.OnlandVisualTrashAssessmentObservationID == feature.properties["ObservationID"];
                 });
             }
 
-            $scope.lastSelected = L.geoJson(layer,
+            $scope.lastSelected = L.geoJson(feature,
                 {
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
@@ -215,7 +219,7 @@
 
             $scope.lastSelected.addTo($scope.neptuneMap.map);
         };
-        
+
         $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
         };
@@ -278,13 +282,13 @@
                         window.alert(data.Error);
                         return;
                     }
-                    
+
                     $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
                     $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
                     $scope.$apply();
                     jQuery("#photoUpload").fileinput('reset');
                 },
-                error: function(jq, ts, et) {
+                error: function (jq, ts, et) {
                     window.alert(
                         "There was an error uploading the image. Please try again. If the issue persists, please contact Support.");
                 }
@@ -314,7 +318,7 @@
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                success: function(data) {
+                success: function (data) {
                     $scope.currentSelectedMarkerModel.PhotoUrl = null;
                     $scope.currentSelectedMarkerModel.PhotoStagingID = null;
                     $scope.$apply();
@@ -326,7 +330,7 @@
             });
         };
 
-        $scope.currentPhotoUrl = function() {
+        $scope.currentPhotoUrl = function () {
             if ($scope.currentSelectedMarkerModel) {
                 return $scope.currentSelectedMarkerModel.PhotoUrl;
             }
