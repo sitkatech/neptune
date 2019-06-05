@@ -189,12 +189,9 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
             searchGeoserver(config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
                 if (geoJsonResponse.totalFeatures === 0) {
-                    toast(NEIGHBORHOOD_NOT_FOUND);
                     return null;
                 }
                 self.SelectNeighborhood(geoJsonResponse);
-            }).fail(function() {
-                toast(NOMINATIM_ERROR);
             });
 
         });
