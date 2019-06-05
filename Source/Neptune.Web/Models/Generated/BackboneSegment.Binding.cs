@@ -24,33 +24,31 @@ namespace Neptune.Web.Models
         /// </summary>
         protected BackboneSegment()
         {
-
+            this.BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment = new HashSet<BackboneSegment>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public BackboneSegment(int backboneSegmentID, DbGeometry backboneSegmentGeometry, string backboneSegmentAlternateID, string downstreamBackboneSegmentAlternateID, int catchIDN, int? networkCatchmentID, int backboneSegmentTypeID) : this()
+        public BackboneSegment(int backboneSegmentID, DbGeometry backboneSegmentGeometry, int catchIDN, int? networkCatchmentID, int backboneSegmentTypeID, int? downstreamBackboneSegmentID) : this()
         {
             this.BackboneSegmentID = backboneSegmentID;
             this.BackboneSegmentGeometry = backboneSegmentGeometry;
-            this.BackboneSegmentAlternateID = backboneSegmentAlternateID;
-            this.DownstreamBackboneSegmentAlternateID = downstreamBackboneSegmentAlternateID;
             this.CatchIDN = catchIDN;
             this.NetworkCatchmentID = networkCatchmentID;
             this.BackboneSegmentTypeID = backboneSegmentTypeID;
+            this.DownstreamBackboneSegmentID = downstreamBackboneSegmentID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public BackboneSegment(DbGeometry backboneSegmentGeometry, string backboneSegmentAlternateID, int catchIDN, int backboneSegmentTypeID) : this()
+        public BackboneSegment(DbGeometry backboneSegmentGeometry, int catchIDN, int backboneSegmentTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.BackboneSegmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.BackboneSegmentGeometry = backboneSegmentGeometry;
-            this.BackboneSegmentAlternateID = backboneSegmentAlternateID;
             this.CatchIDN = catchIDN;
             this.BackboneSegmentTypeID = backboneSegmentTypeID;
         }
@@ -58,12 +56,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public BackboneSegment(DbGeometry backboneSegmentGeometry, string backboneSegmentAlternateID, int catchIDN, BackboneSegmentType backboneSegmentType) : this()
+        public BackboneSegment(DbGeometry backboneSegmentGeometry, int catchIDN, BackboneSegmentType backboneSegmentType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.BackboneSegmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.BackboneSegmentGeometry = backboneSegmentGeometry;
-            this.BackboneSegmentAlternateID = backboneSegmentAlternateID;
             this.CatchIDN = catchIDN;
             this.BackboneSegmentTypeID = backboneSegmentType.BackboneSegmentTypeID;
         }
@@ -73,7 +70,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static BackboneSegment CreateNewBlank(BackboneSegmentType backboneSegmentType)
         {
-            return new BackboneSegment(default(DbGeometry), default(string), default(int), backboneSegmentType);
+            return new BackboneSegment(default(DbGeometry), default(int), backboneSegmentType);
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment.Any();
         }
 
         /// <summary>
@@ -104,28 +101,39 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
         public int BackboneSegmentID { get; set; }
         public DbGeometry BackboneSegmentGeometry { get; set; }
-        public string BackboneSegmentAlternateID { get; set; }
-        public string DownstreamBackboneSegmentAlternateID { get; set; }
         public int CatchIDN { get; set; }
         public int? NetworkCatchmentID { get; set; }
         public int BackboneSegmentTypeID { get; set; }
+        public int? DownstreamBackboneSegmentID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return BackboneSegmentID; } set { BackboneSegmentID = value; } }
 
+        public virtual ICollection<BackboneSegment> BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment { get; set; }
+        public virtual BackboneSegment DownstreamBackboneSegment { get; set; }
         public virtual NetworkCatchment NetworkCatchment { get; set; }
         public BackboneSegmentType BackboneSegmentType { get { return BackboneSegmentType.AllLookupDictionary[BackboneSegmentTypeID]; } }
 
         public static class FieldLengths
         {
-            public const int BackboneSegmentAlternateID = 10;
-            public const int DownstreamBackboneSegmentAlternateID = 10;
+
         }
     }
 }

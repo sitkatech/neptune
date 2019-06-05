@@ -17,14 +17,14 @@ namespace Neptune.Web.Models
             HasKey(x => x.BackboneSegmentID);
             Property(x => x.BackboneSegmentID).HasColumnName(@"BackboneSegmentID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.BackboneSegmentGeometry).HasColumnName(@"BackboneSegmentGeometry").HasColumnType("geometry").IsRequired();
-            Property(x => x.BackboneSegmentAlternateID).HasColumnName(@"BackboneSegmentAlternateID").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(10);
-            Property(x => x.DownstreamBackboneSegmentAlternateID).HasColumnName(@"DownstreamBackboneSegmentAlternateID").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(10);
             Property(x => x.CatchIDN).HasColumnName(@"CatchIDN").HasColumnType("int").IsRequired();
             Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsOptional();
             Property(x => x.BackboneSegmentTypeID).HasColumnName(@"BackboneSegmentTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.DownstreamBackboneSegmentID).HasColumnName(@"DownstreamBackboneSegmentID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.NetworkCatchment).WithMany(b => b.BackboneSegments).HasForeignKey(c => c.NetworkCatchmentID).WillCascadeOnDelete(false); // FK_BackboneSegment_NetworkCatchment_NetworkCatchmentID
+            HasOptional(a => a.DownstreamBackboneSegment).WithMany(b => b.BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment).HasForeignKey(c => c.DownstreamBackboneSegmentID).WillCascadeOnDelete(false); // FK_BackboneSegment_BackboneSegment_DownstreamBackboneSegmentID_BackboneSegmentID
         }
     }
 }
