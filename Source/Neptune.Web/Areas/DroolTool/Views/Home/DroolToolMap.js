@@ -212,6 +212,11 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
             });
 
         });
+
+    this.showLocationControl = L.control.showLocationControl({
+        position: "topleft"
+    });
+    this.showLocationControl.addTo(this.map);
 };
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
@@ -244,7 +249,7 @@ NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     });
 };
 
-NeptuneMaps.DroolToolMap.prototype.highlightFlow = function (geoJson) {
+NeptuneMaps.DroolToolMap.prototype.highlightFlow = function(geoJson) {
     this.backboneLayer.setStyle({
         color: "#FFFF00",
         weight: 3,
@@ -252,7 +257,7 @@ NeptuneMaps.DroolToolMap.prototype.highlightFlow = function (geoJson) {
     });
 
     this.map.fitBounds(this.backboneLayer.getBounds());
-}
+};
 
 function searchGeoserver(geoServerUrl, params) {
     return jQuery.ajax({

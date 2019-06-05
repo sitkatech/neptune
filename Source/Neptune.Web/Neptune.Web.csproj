@@ -1196,6 +1196,7 @@
     <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.js" />
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.css" />
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.js" />
+    <Content Include="Content\leaflet\leaflet.showlocationcontrol\leaflet.showlocationcontrol.js" />
     <Content Include="Content\leaflet\leaflet.spin\leaflet.spin.min.js" />
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.css" />
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.js" />
