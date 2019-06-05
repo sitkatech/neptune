@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
+using LtInfo.Common.GeoJson;
 
 namespace Neptune.Web.Models
 {
@@ -21,7 +23,7 @@ namespace Neptune.Web.Models
             return idList;
         }
 
-        public static List<BackboneSegment> TraceBackbizzleDownstrizzle(this NetworkCatchment networkCatchment)
+        public static FeatureCollection TraceBackbizzleDownstrizzle(this NetworkCatchment networkCatchment)
         {
             var backbizzleDownstrizzle = new List<BackboneSegment>();
 
@@ -35,7 +37,14 @@ namespace Neptune.Web.Models
                     x.DownstreamBackboneSegment).Distinct().ToList();
             }
 
-            return backbizzleDownstrizzle.Select(x=>x.BackboneSegmentGeometry).Select();
+            var featureCollection = new FeatureCollection();
+            featureCollection.Features.AddRange(backbizzleDownstrizzle.Select(x =>
+            {
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.BackboneSegmentGeometry);
+                return feature;
+            }));
+
+            return featureCollection;
         }
     }
 }

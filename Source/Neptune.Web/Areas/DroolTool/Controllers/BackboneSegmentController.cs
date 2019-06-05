@@ -10,13 +10,13 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
     {
         [HttpGet]
         [DroolToolViewFeature]
-        public JsonResult NameMe(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        public JsonResult DownstreamBackboneFeatureCollection(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
 
-            List<BackboneSegment> traceBackbizzleDownstrizzle = networkCatchment.TraceBackbizzleDownstrizzle();
+            var traceBackbizzleDownstrizzle = networkCatchment.TraceBackbizzleDownstrizzle();
 
-            return Json(new { }, JsonRequestBehavior.AllowGet);
+            return Json(traceBackbizzleDownstrizzle, JsonRequestBehavior.AllowGet);
         }
     }
 }
