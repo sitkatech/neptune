@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using LtInfo.Common.DesignByContract;
 using MoreLinq;
@@ -41,8 +42,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 (x, y) => x.OnlandVisualTrashAssessmentObservationID == y.OnlandVisualTrashAssessmentObservationID,
                 (x, y) =>
                 {
-                    //location can only be changed by deleting and redropping the pin, so we only need to update the note when matched
                     x.Note = y.Note;
+                    x.LocationPoint = y.LocationPoint;
                 });
 
             updatedDict.ForEach(x =>
