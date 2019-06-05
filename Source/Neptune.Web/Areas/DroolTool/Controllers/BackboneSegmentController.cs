@@ -3,6 +3,8 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Areas.DroolTool.Controllers
 {
@@ -10,13 +12,15 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
     {
         [HttpGet]
         [DroolToolViewFeature]
-        public JsonResult DownstreamBackboneFeatureCollection(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        public ContentResult DownstreamBackboneFeatureCollection(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
 
             var traceBackbizzleDownstrizzle = networkCatchment.TraceBackbizzleDownstrizzle();
 
-            return Json(traceBackbizzleDownstrizzle, JsonRequestBehavior.AllowGet);
+            var jobject = JObject.FromObject(traceBackbizzleDownstrizzle).ToString(Formatting.None);
+
+            return Content(jobject);
         }
     }
 }

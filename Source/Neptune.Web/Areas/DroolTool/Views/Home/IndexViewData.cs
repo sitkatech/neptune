@@ -1,4 +1,6 @@
-﻿using Neptune.Web.Common;
+﻿using LtInfo.Common;
+using Neptune.Web.Areas.DroolTool.Controllers;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.DroolTool.Views.Home
@@ -27,9 +29,11 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
         {
             NominatimApiKey = nominatimApiKey;
             GeoServerUrl = geoServerUrl;
+            BackboneTraceUrlTemplace = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.DownstreamBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
         }
 
         public string NominatimApiKey { get; }
         public string GeoServerUrl { get; }
+        public string BackboneTraceUrlTemplace { get; }
     }
 }

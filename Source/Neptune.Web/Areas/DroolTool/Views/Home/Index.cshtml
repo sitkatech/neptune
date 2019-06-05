@@ -52,7 +52,7 @@
 
     <script>
         jQuery(function () {
-            var map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Terrain", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
+            window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Terrain", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
 
             jQuery(".leaflet-top.leaflet-right")
                 .append(jQuery(".leaflet-control-zoom"));

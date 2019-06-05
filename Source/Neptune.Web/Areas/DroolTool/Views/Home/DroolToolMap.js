@@ -135,6 +135,8 @@ L.control.neighborhoodDetailControl = function (options) { return new L.Control.
 
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
+    this.config = config;
+
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
 
     var neighborhoodPane = this.map.createPane("neighborhoodPane");
@@ -209,6 +211,17 @@ function searchGeoserver(geoServerUrl, params) {
     return jQuery.ajax({
         url: geoServerUrl + L.Util.getParamString(params),
         method: 'GET'
+    });
+}
+
+function getBackbone(neighborhoodID, urlTemplate) {
+    var backboneUrl = new Sitka.UrlTemplate(urlTemplate).ParameterReplace(neighborhoodID);
+
+
+    jQuery.ajax({
+        url: backboneUrl
+    }).then(function(response) {
+        console.log(response);
     });
 }
 

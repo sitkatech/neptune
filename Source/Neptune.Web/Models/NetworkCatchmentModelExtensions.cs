@@ -33,14 +33,14 @@ namespace Neptune.Web.Models
             {
                 backbizzleDownstrizzle.AddRange(lookingAt);
 
-                lookingAt = lookingAt.Select(x =>
-                    x.DownstreamBackboneSegment).Distinct().ToList();
+                lookingAt = lookingAt.Where(x=>x.DownstreamBackboneSegment != null).Select(x =>x.DownstreamBackboneSegment).Distinct().ToList();
             }
 
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(backbizzleDownstrizzle.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.BackboneSegmentGeometry);
+                feature.Properties.Add("dummy", "dummy");
                 return feature;
             }));
 
