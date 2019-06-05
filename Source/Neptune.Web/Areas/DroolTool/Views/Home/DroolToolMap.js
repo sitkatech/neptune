@@ -217,13 +217,13 @@ function searchGeoserver(geoServerUrl, params) {
 
 function toast(toastText) {
     jQuery.toast({
-        position: {
-            top: window.totalHeaderHeight
-        },
+        top: window.totalHeaderHeight + 8,
         text: toastText,
         hideAfter: 20000,
         stack: 1,
-        icon: 'error'
+        icon: 'error',
+        bgColor: "#707070",
+        loaderBg: "#77cfdc"
     });
 }
 

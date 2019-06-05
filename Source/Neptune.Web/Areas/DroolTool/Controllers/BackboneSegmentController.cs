@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using Neptune.Web.Areas.DroolTool.Security;
-using Neptune.Web.Areas.DroolTool.Views.Home;
+﻿using Neptune.Web.Areas.DroolTool.Security;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Views.Shared;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace Neptune.Web.Areas.DroolTool.Controllers
 {
