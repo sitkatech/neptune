@@ -14,6 +14,11 @@
         });
 }
 
+var NEIGHBORHOOD_NOT_FOUND =
+    "This neighborhood is not within the Urban Drool Tool reporting area. If you wish to be included in the Urban Drool Tool, please contact your local water district.";
+var NOMINATIM_ERROR =
+    "There was an error retrieving the address. The address location service may be unavailable. If the issue persists, please contact support.";
+
 L.Control.NominatimSearchControl = L.Control.extend({
     onAdd: function (map) {
         var input = jQuery("#nominatimSearchInput").get(0);
@@ -36,7 +41,7 @@ L.Control.NominatimSearchControl = L.Control.extend({
                 method: 'GET'
             }).then(function (response) {
                 if (response.length === 0) {
-                    window.alert("There was an error retrieving the address. Please check that you typed it correctly and try again. If the issue persists, please contact support.")
+                    self.toast(NEIGHBORHOOD_NOT_FOUND);
                 }
                 // todo: what do if get more one?
                 var lat = response[0].lat;
@@ -54,11 +59,12 @@ L.Control.NominatimSearchControl = L.Control.extend({
                 });
             }).then(function (responseGeoJson) {
                 if (responseGeoJson.totalFeatures === 0) {
-                    window.alert(
-                        "This neighborhood is not within the Urban Drool Tool reporting area. If you wish to be included in the Urban Drool Tool, please contact your local water district.");
+                    self.toast(NEIGHBORHOOD_NOT_FOUND);
                 }
                 self.neptuneMap.SelectNeighborhood(responseGeoJson);
                 self.SelectNeighborhood(responseGeoJson);
+                }).fail(function() {
+                self.toast(NOMINATIM_ERROR);
             });
         }
 
@@ -71,6 +77,8 @@ L.Control.NominatimSearchControl = L.Control.extend({
                 search();
             }
         });
+
+        this.parentElement = parentElement;
         
         return parentElement;
     },
@@ -86,10 +94,19 @@ L.Control.NominatimSearchControl = L.Control.extend({
         this.selectedNeighborhoodText.innerHTML =
             "Selected Neighborhood: " + geoJson.features[0].properties.NetworkCatchmentID;
         this.selectedNeighborhoodText.style.display = "initial";
+    },
+
+    toast: function (toastText) {
+        jQuery.toast({
+            position: "top-center",
+            text: toastText,
+            hideAfter: 10000,
+            stack: 1
+        });
     }
 });
 
-L.control.neighborhoodControl = function (options) { return new L.Control.NominatimSearchControl(options); };
+L.control.neighborhoodSearchControl = function (options) { return new L.Control.NominatimSearchControl(options); };
 
 
 NeptuneMaps.DroolToolMap = function(mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
@@ -112,14 +129,15 @@ NeptuneMaps.DroolToolMap = function(mapInitJson, initialBaseLayerShown, geoServe
 
     this.neighborhoodLayerParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
 
-    this.neighborhoodControl = L.control.neighborhoodControl({
+    this.neighborhoodSearchControl = L.control.neighborhoodSearchControl({
         position: "topleft",
         nominatimApiKey: config.NominatimApiKey,
         geoserverUrl: config.GeoServerUrl,
         wfsParams: this.neighborhoodLayerParams,
         neptuneMap: this
     });
-    this.neighborhoodControl.addTo(this.map);
+    window.neighborhoodSearchControl = this.neighborhoodSearchControl;
+    this.neighborhoodSearchControl.addTo(this.map);
 };
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);

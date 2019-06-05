@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -1184,6 +1184,8 @@
     <Content Include="Content\img\SitkaTechnologyGroup\favicon-16x16.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\favicon-32x32.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\favicon-96x96.png" />
+    <Content Include="Content\JQuery\jquery.toast.min.css" />
+    <Content Include="Content\JQuery\jquery.toast.min.js" />
     <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.css" />
     <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.js" />
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.css" />
