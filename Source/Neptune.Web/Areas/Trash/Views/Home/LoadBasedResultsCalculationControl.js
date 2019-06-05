@@ -84,7 +84,7 @@ function zoom(jurisdictionFeatures, selectedJurisdictionID) {
                     Number(selectedJurisdictionID);
             }));
     return geoJson.getBounds();
-};
+}
 
 
 L.control.loadBasedResultsControl = function (opts) {

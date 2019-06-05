@@ -16,7 +16,7 @@
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
     <style>
         .container-fluid.droolToolContent {
@@ -28,17 +28,17 @@
 
         .neighborhood-control {
             /* todo: width should really be dynamish*/
-            max-width: 410px;
+            width: 280px;
+            max-width: 280px;
         }
 
         .selectedNeighborhoodText {
             margin-bottom: 15px;
         }
 
-        .nominatimInput {
+        #nominatimSearchInput {
             margin-top: 15px;
         }
-
     </style>
 }
 
@@ -46,6 +46,7 @@
 
 @section DroolToolMap
 {
+
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
 
     <script>
@@ -53,4 +54,14 @@
             var map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Terrain", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
         });
     </script>
+    <div id="hiddenOnLoadControlElements" style="display: none;">
+        <div class="row"  id="nominatimSearchWrapper">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0; " placeholder="Search by address or landmark">
+                    <span class="input-group-btn"><a class="btn btn-sm btn-neptune" id="nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
+                </div>
+            </div>
+        </div>
+    </div>
 }

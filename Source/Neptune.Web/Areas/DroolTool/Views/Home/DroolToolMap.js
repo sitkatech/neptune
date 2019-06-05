@@ -14,32 +14,17 @@
         });
 }
 
-L.Control.NeighborhoodControl = L.Control.extend({
+L.Control.NominatimSearchControl = L.Control.extend({
     onAdd: function (map) {
+        var input = jQuery("#nominatimSearchInput").get(0);
+        var searchButton = jQuery("#nominatimSearchButton").get(0);
+
         this.neptuneMap = this.options.neptuneMap;
         var parentElement = L.DomUtil.create("div",
-            "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-control");
-
-        var instructionText = L.DomUtil.create("p");
-
-        instructionText.innerHTML = "Select a neighborhood or search by address to see neighborhood details (coming soon)";
-        parentElement.append(instructionText);
-
-        this.selectedNeighborhoodText = L.DomUtil.create("p", "selectedNeighborhoodText");
-
-        this.selectedNeighborhoodText.style.display = "none";
-        parentElement.append(this.selectedNeighborhoodText);
-
-        var input = L.DomUtil.create("input", "form-control nominatimInput");
-        parentElement.append(input);
-
-        parentElement.append(L.DomUtil.create("br"));
-        parentElement.append(L.DomUtil.create("br"));
-
-        var searchButton = L.DomUtil.create("button", "btn-sm btn btn-neptune");
-        searchButton.innerHTML = "Search";
-
-        console.log(this.options);
+            "neighborhood-control");
+        parentElement.append(jQuery("#nominatimSearchWrapper").get(0));
+        jQuery("#nominatimSearchWrapper").css("display", "block");
+        
         var self = this;
 
         function search() {
@@ -69,7 +54,8 @@ L.Control.NeighborhoodControl = L.Control.extend({
                 });
             }).then(function (responseGeoJson) {
                 if (responseGeoJson.totalFeatures === 0) {
-                    window.alert("This neighborhood is not within the Urban Drool Tool reporting area. If you wish to be included in the Urban Drool Tool, please contact your local water district.")
+                    window.alert(
+                        "This neighborhood is not within the Urban Drool Tool reporting area. If you wish to be included in the Urban Drool Tool, please contact your local water district.");
                 }
                 self.neptuneMap.SelectNeighborhood(responseGeoJson);
                 self.SelectNeighborhood(responseGeoJson);
@@ -85,10 +71,7 @@ L.Control.NeighborhoodControl = L.Control.extend({
                 search();
             }
         });
-
-
-        parentElement.append(searchButton);
-
+        
         return parentElement;
     },
 
@@ -106,27 +89,26 @@ L.Control.NeighborhoodControl = L.Control.extend({
     }
 });
 
-L.control.neighborhoodControl = function (options) { return new L.Control.NeighborhoodControl(options); };
+L.control.neighborhoodControl = function (options) { return new L.Control.NominatimSearchControl(options); };
 
 
 NeptuneMaps.DroolToolMap = function(mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, {});
+    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true});
 
     var neighborhoodPane = this.map.createPane("neighborhoodPane");
     neighborhoodPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
 
-    var hide = false;
     this.neighborhoodLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Neighborhoods</span>",
             { pane: "neighborhoodPane", styles: "neighborhood" },
-            hide);
+            true);
 
 
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>",
-        hide);
+        false);
 
     this.neighborhoodLayerParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
 
