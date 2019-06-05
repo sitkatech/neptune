@@ -34,9 +34,6 @@
         function onMapClickToMove(event) {
             var latlng = event.latlng;
 
-            console.log(event.latlng);
-            console.log($scope.currentSelectedMarkerModel.MapMarker.getLatLng());
-
             $scope.currentSelectedMarkerModel.MapMarker.setLatLng(latlng);
 
             $scope.currentSelectedMarkerModel.MapMarker.feature.geometry.coordinates[0] = latlng.lng;
