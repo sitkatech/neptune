@@ -3,18 +3,25 @@
         var button = L.DomUtil.create("button", "btn btn-neptune btn-sm");
         button.innerHTML = "<span class='glyphicon glyphicon-globe'></span> Show My Location";
 
+        var locateOptions = {
+            setView: true,
+            enableHighAccuracy: true
+        };
 
+        L.Util.extend(locateOptions, this.options);
 
         L.DomEvent.on(button,
             "click",
             function () {
-                map.locate({ setView: true, enableHighAccuracy: true });
+                map.locate(
+                    locateOptions);
             });
 
         return button;
     }
 });
 
-L.control.showLocationControl = function (opts) {
-    return new L.Control.ShowLocationControl(opts)
+// options may include any valid options for L.Map.locate. Default options are setView and enableHighAccuracy
+L.control.showLocationControl = function (options) {
+    return new L.Control.ShowLocationControl(options)
 };
