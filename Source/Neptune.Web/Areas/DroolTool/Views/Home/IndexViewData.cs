@@ -29,11 +29,11 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
         {
             NominatimApiKey = nominatimApiKey;
             GeoServerUrl = geoServerUrl;
-            BackboneTraceUrlTemplace = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.DownstreamBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
+            BackboneTraceUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.DownstreamBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
         }
 
         public string NominatimApiKey { get; }
         public string GeoServerUrl { get; }
-        public string BackboneTraceUrlTemplace { get; }
+        public string BackboneTraceUrlTemplate { get; }
     }
 }

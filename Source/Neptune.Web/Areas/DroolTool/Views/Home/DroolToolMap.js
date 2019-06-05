@@ -1,4 +1,4 @@
-﻿var resizeHandler = function(mapInitJson) {
+﻿var resizeHandler = function (mapInitJson) {
     var totalHeaderHeight = (jQuery("header").height() +
         jQuery(".neptuneNavbar").height());
     jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height() -
@@ -9,7 +9,7 @@
 
 function initResizeHandler(mapInitJson) {
     $(window).on("load",
-        function() { resizeHandler(mapInitJson); }
+        function () { resizeHandler(mapInitJson); }
     );
 
     $(window).on("resize",
@@ -23,7 +23,8 @@ var NOMINATIM_ERROR =
 
 L.Control.NeighborhoodDetailControl = L.Control.extend({
     onAdd: function (map) {
-        this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control");
+        this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control");
+        this.neptuneMap = this.options.neptuneMap;
 
         var h4 = L.DomUtil.create("h4");
         h4.innerHTML = "Selected Neighborhood";
@@ -36,6 +37,18 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         this.hide();
 
         window.stopClickPropagation(this.parentElement);
+
+        var highlightFlowButton = L.DomUtil.create("button", "btn btn-neptune btn-sm");
+        highlightFlowButton.innerHTML = "Where does my irrigation runoff go?";
+
+        var self = this;
+        L.DomEvent.on(highlightFlowButton,
+            "click",
+            function () {
+                self.neptuneMap.highlightFlow();
+            });
+
+        this.parentElement.append(highlightFlowButton);
 
         return this.parentElement;
     },
@@ -164,21 +177,23 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
         neptuneMap: this
     });
 
-    
+
 
 
     window.nominatimSearchControl = this.nominatimSearchControl;
     this.nominatimSearchControl.addTo(this.map);
 
 
-
-    this.neighborhoodDetailControl = L.control.neighborhoodDetailControl({ position: "topleft" });
+    this.neighborhoodDetailControl = L.control.neighborhoodDetailControl({
+        position: "topleft",
+        neptuneMap: this
+    });
 
 
     this.neighborhoodDetailControl.addTo(this.map);
-    var self =this;
+    var self = this;
     this.map.on("click",
-        function(evt) {
+        function (evt) {
             if (window.freeze) {
                 return;
             }
@@ -189,7 +204,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
             L.Util.extend(customParams, self.neighborhoodLayerParams);
 
-            searchGeoserver(config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
+            searchGeoserver(config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
                 }
@@ -205,6 +220,38 @@ NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     this.setSelectedFeature(geoJson);
     this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
     this.map.fitBounds(this.lastSelected.getBounds());
+
+    var self = this;
+
+    getBackbone(geoJson.features[0].properties.NetworkCatchmentID, this.config.BackboneTraceUrlTemplate).then(function (response) {
+        var backboneFeatureCollection = JSON.parse(response);
+        if (self.backboneLayer) {
+            self.backboneLayer.remove();
+            self.backboneLayer = null;
+        }
+
+        self.backboneLayer = L.geoJSON(backboneFeatureCollection,
+            {
+                style: function (feature) {
+                    return {
+                        color: "#0000FF",
+                        weight: 3,
+                        stroke: true
+                    };
+                }
+            });
+        self.backboneLayer.addTo(self.map);
+    });
+};
+
+NeptuneMaps.DroolToolMap.prototype.highlightFlow = function (geoJson) {
+    this.backboneLayer.setStyle({
+        color: "#FFFF00",
+        weight: 3,
+        stroke: true
+    });
+
+    this.map.fitBounds(this.backboneLayer.getBounds());
 }
 
 function searchGeoserver(geoServerUrl, params) {
@@ -217,11 +264,8 @@ function searchGeoserver(geoServerUrl, params) {
 function getBackbone(neighborhoodID, urlTemplate) {
     var backboneUrl = new Sitka.UrlTemplate(urlTemplate).ParameterReplace(neighborhoodID);
 
-
-    jQuery.ajax({
+    return jQuery.ajax({
         url: backboneUrl
-    }).then(function(response) {
-        console.log(response);
     });
 }
 
