@@ -217,7 +217,9 @@ function searchGeoserver(geoServerUrl, params) {
 
 function toast(toastText) {
     jQuery.toast({
-        position: { top: window.totalHeaderHeight },
+        position: {
+            top: window.totalHeaderHeight
+        },
         text: toastText,
         hideAfter: 20000,
         stack: 1,

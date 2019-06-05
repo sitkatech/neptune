@@ -102,9 +102,15 @@
     ]
   },
   {
-    "outputFileName": "Content/bootstrap-toggle/bootstrap-toggle.min.min.css",
+    "outputFileName": "Content/JQuery/jquery.toast.min.js",
     "inputFiles": [
-      "Content/bootstrap-toggle/bootstrap-toggle.min.css"
+      "Content/JQuery/jquery.toast.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/JQuery/jquery.toast.min.css",
+    "inputFiles": [
+      "Content/JQuery/jquery.toast.css"
     ]
   }
 ]
