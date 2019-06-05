@@ -1294,6 +1294,7 @@
     <Content Include="Areas\DroolTool\Views\Shared\SiteLayout.cshtml" />
     <Content Include="Areas\DroolTool\Views\web.config" />
     <Content Include="Areas\DroolTool\Views\Home\About.cshtml" />
+    <Compile Include="Areas\DroolTool\Controllers\BackboneSegmentController.cs" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

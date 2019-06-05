@@ -1,17 +1,19 @@
-﻿function initResizeHandler(mapInitJson) {
+﻿var resizeHandler = function(mapInitJson) {
+    var totalHeaderHeight = (jQuery("header").height() +
+        jQuery(".neptuneNavbar").height());
+    jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height() -
+        totalHeaderHeight);
+
+    window.totalHeaderHeight = totalHeaderHeight;
+};
+
+function initResizeHandler(mapInitJson) {
     $(window).on("load",
-        function () {
-            jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height() -
-                jQuery("header").height() -
-                jQuery(".neptuneNavbar").height());
-        });
+        function() { resizeHandler(mapInitJson); }
+    );
 
     $(window).on("resize",
-        function () {
-            jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height() -
-                jQuery("header").height() -
-                jQuery(".neptuneNavbar").height());
-        });
+        function () { resizeHandler(mapInitJson); });
 }
 
 var NEIGHBORHOOD_NOT_FOUND =
@@ -76,7 +78,6 @@ L.Control.NominatimSearchControl = L.Control.extend({
                 method: 'GET'
             }).then(function (response) {
                 if (response.length === 0) {
-                    toast(NEIGHBORHOOD_NOT_FOUND);
                     return null;
                 }
 
@@ -92,9 +93,9 @@ L.Control.NominatimSearchControl = L.Control.extend({
 
                 return searchGeoserver(self.options.geoserverUrl, customParams);
             }).then(function (responseGeoJson) {
-                if (responseGeoJson.totalFeatures === 0) {
+                if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {
                     toast(NEIGHBORHOOD_NOT_FOUND);
-                    return null;
+                    return;
                 }
                 self.neptuneMap.SelectNeighborhood(responseGeoJson);
             }).fail(function () {
@@ -216,10 +217,11 @@ function searchGeoserver(geoServerUrl, params) {
 
 function toast(toastText) {
     jQuery.toast({
-        position: "top-center",
+        position: { top: window.totalHeaderHeight },
         text: toastText,
-        hideAfter: 10000,
-        stack: 1
+        hideAfter: 20000,
+        stack: 1,
+        icon: 'error'
     });
 }
 

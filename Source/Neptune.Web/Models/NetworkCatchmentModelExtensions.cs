@@ -22,5 +22,22 @@ namespace Neptune.Web.Models
 
             return idList;
         }
+
+        public static List<BackboneSegment> TraceBackbizzleDownstrizzle(this NetworkCatchment networkCatchment)
+        {
+            var backbizzleDownstrizzle = new List<BackboneSegment>();
+
+            var lookingAt = networkCatchment.BackboneSegments;
+
+            while (lookingAt.Any())
+            {
+                backbizzleDownstrizzle.AddRange(lookingAt);
+
+                lookingAt = lookingAt.Select(x =>
+                    x.DownstreamBackboneSegment).Distinct().ToList();
+            }
+
+            return backbizzleDownstrizzle.Select(x=>x.BackboneSegmentGeometry).Select();
+        }
     }
 }
