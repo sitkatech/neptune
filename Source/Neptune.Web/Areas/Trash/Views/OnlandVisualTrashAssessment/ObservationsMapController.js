@@ -8,17 +8,47 @@
         $scope.currentFakeID = -1;
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
         $scope.isClickToAddModeActive = false;
+        $scope.isClickToMoveModeActive = false;
 
         $scope.activateClickToAddMode = function () {
             $scope.isClickToAddModeActive = true;
             jQuery('.leaflet-container').css('cursor', 'pointer');
+            jQuery('.leaflet-container path').css('cursor', 'crosshair');
         };
+
+        $scope.activateClickToMoveMode = function() {
+            $scope.isClickToMoveModeActive = true;
+            jQuery('.leaflet-container').css('cursor', 'pointer');
+            jQuery('.leaflet-container path').css('cursor', 'pointer');
+        }
 
         function onMapClick(event) {
             var latlng = event.latlng;
             setPointOnMap(latlng);
             $scope.$apply();
             $scope.isClickToAddModeActive = false;
+            jQuery('.leaflet-container').css('cursor', '');
+        }
+
+        function onMapClickToMove(event) {
+            var latlng = event.latlng;
+
+            $scope.currentSelectedMarkerModel.MapMarker.setLatLng(latlng);
+
+            $scope.currentSelectedMarkerModel.MapMarker.feature.geometry.coordinates[0] = latlng.lng;
+            $scope.currentSelectedMarkerModel.MapMarker.feature.geometry.coordinates[1] = latlng.lat;
+
+            $scope.currentSelectedMarkerModel.LocationX = latlng.lat;
+            $scope.currentSelectedMarkerModel.LocationY = latlng.lng;
+
+            var key = Object.keys($scope.lastSelected._layers)[0];
+
+            var layer = $scope.lastSelected._layers[key];
+
+            layer.setLatLng(latlng);
+
+            $scope.$apply();
+            $scope.isClickToMoveModeActive = false;
             jQuery('.leaflet-container').css('cursor', '');
         }
 
@@ -61,6 +91,7 @@
                     $scope.setSelectedMarker(e.layer.feature);
                     $scope.$apply();
                     $scope.isClickToAddModeActive = false;
+                    $scope.isClickToMoveModeActive = false;
                     jQuery('.leaflet-container').css('cursor', '');
                 });
 
@@ -69,8 +100,12 @@
                     if ($scope.isClickToAddModeActive) {
                         onMapClick(event);
                     }
+                    if ($scope.isClickToMoveModeActive) {
+                        onMapClickToMove(event);
+                    }
                 }
             );
+
             if ($scope.AngularModel.Observations.length > 0) {
                 var zoom = Math.min($scope.neptuneMap.map.getZoom(), 18);
                 $scope.neptuneMap.map.setZoom(zoom);
