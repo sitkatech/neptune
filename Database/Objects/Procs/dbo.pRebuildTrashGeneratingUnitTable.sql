@@ -4,13 +4,12 @@ IF EXISTS ( SELECT  *
                     AND type IN ( N'P', N'PC' ) ) 
 DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTable
 GO
-
 Create Procedure dbo.pRebuildTrashGeneratingUnitTable
 as
-
-Delete from dbo.TrashGeneratingUnit
+print concat('Begin pRebuildTrashGeneratingUnitTable ', convert(varchar, GetDate(), 121) )
 
 /* 0. Preprocess the land use blocks table with "sentinel" rows indicating where there is no priority land use block data. */
+print concat('Begin rebuild adjusted land use blocks ', convert(varchar, GetDate(), 121) )
 DROP TABLE IF EXISTS #LandUseBlocksAdjusted
 
 Select * into #LandUseBlocksAdjusted
@@ -40,12 +39,18 @@ FROM
 ) sq
  LEFT JOIN dbo.StormwaterJurisdiction sj ON sq.StormwaterJurisdictionID = sj.StormwaterJurisdictionID) s
 
+print concat('End rebuild adjusted land use blocks ', convert(varchar, GetDate(), 121) )
+
 /* 1. Produce the Jurisdiction-Delineation-OVTA layer using the BCF algorithm */
+
+print concat('Begin BCF algorithm ', convert(varchar, GetDate(), 121) )
 
 -- StormwaterJurisdiction will serve as our "Background Layer" for the Boundary/Clip phase
 declare @BackgroundLayer geometry;
 select @BackgroundLayer = geometry::UnionAggregate(StormwaterJurisdictionGeometry) from StormwaterJurisdiction;
 --select @BackgroundLayer;
+
+print concat('Begin Boundary ', convert(varchar, GetDate(), 121) )
 
 declare @BufferDelta decimal(11,11) = .000000001;
 
@@ -59,13 +64,21 @@ Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeomet
 Union all
 Select StormwaterJurisdictionGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from StormwaterJurisdiction
 ) q
+print concat('End Boundary ', convert(varchar, GetDate(), 121) )
+
 
 -- Clip
+
+print concat('Begin clip ', convert(varchar, GetDate(), 121) )
 
 Declare @ClipLayer geometry;
 Select @ClipLayer = @BackgroundLayer.STDifference(@BoundaryLayer);
 
+print concat('End clip ', convert(varchar, GetDate(), 121) )
+
 -- Flatten
+
+print concat('Begin flatten multipoly ', convert(varchar, GetDate(), 121) )
 
 DROP TABLE IF EXISTS #TempNumbers
 DROP TABLE IF EXISTS #JurisdictionDelineationOvta
@@ -81,6 +94,10 @@ Select @ClipLayer.STGeometryN(n) as Geom
     into #JurisdictionDelineationOvta
     from #TempNumbers
 
+print concat('End flatten multipoly ', convert(varchar, GetDate(), 121) )
+
+print concat('End BCF algorithm ', convert(varchar, GetDate(), 121) )
+	
 /* 2. Jurisdiction, Delineation, and Assessment Area data are recovered by joining back to those tables */
 
 -- do an alter table #JurisdictionDelineationOVTA to add a JurisdictionID, TreatmentBMPID (which will take the place of DelineationID), and OVTAAID
@@ -90,12 +107,18 @@ JurisdictionID int null,
 TreatmentBMPID int null,
 OnlandVisualTrashAssessmentAreaID int null
 
+print concat('Begin set jurisdiction ', convert(varchar, GetDate(), 121) )
+
 --set the jurisdiction ID
 Update jdo
 set jdo.JurisdictionID = sj.StormwaterJurisdictionID
 from #JurisdictionDelineationOvta jdo join StormwaterJurisdiction sj on jdo.Geom.STIntersects(sj.StormwaterJurisdictionGeometry) = 1
 
+print concat('End set jurisdiction ', convert(varchar, GetDate(), 121) )
+
 -- set the ovta area ID. Requires a sub-query to select the most recent OVTA from the pullback
+
+print concat('Begin set OVTA Area ', convert(varchar, GetDate(), 121) )
 
 Update jdo
 set jdo.OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID
@@ -110,7 +133,12 @@ from #JurisdictionDelineationOvta jdo join (
 where
 	x.rowNumber = 1
 
+print concat('End set OVTA Area ', convert(varchar, GetDate(), 121) )
+
+
 -- set the treatment bmp id. Requires a sub-query to select the most TC-effective BMP from the pullback
+print concat('Begin set Delineation ', convert(varchar, GetDate(), 121) )
+
 update jdo
 set jdo.TreatmentBMPId = x.TreatmentBMPID
 from #JurisdictionDelineationOvta jdo join (
@@ -128,7 +156,18 @@ from #JurisdictionDelineationOvta jdo join (
 ) x on jdo.JdoId = x.JdoId
 where x.rowNumber = 1
 
-/*3. PLU data is integrated by joining out to the LandUseBlock table; result set is inserted directly to TGU table (release script 153) */
+print concat('End set Delineation ', convert(varchar, GetDate(), 121) )
+
+
+/*3. Delete all existing TrashGeneratingUnit */
+
+print concat('Begin delete all TGUs ', convert(varchar, GetDate(), 121) )
+Delete from dbo.TrashGeneratingUnit
+print concat('End delete all TGUs ', convert(varchar, GetDate(), 121) )
+
+/*4. PLU data is integrated by joining out to the LandUseBlock table; result set is inserted directly to TGU table (release script 153) */
+
+print concat('Begin set Land Use Block and reinsert ', convert(varchar, GetDate(), 121) )
 
 Insert into dbo.TrashGeneratingUnit (
 	StormwaterJurisdictionID,
@@ -148,4 +187,8 @@ select
 from
 	#JurisdictionDelineationOvta jdo join #LandUseBlocksAdjusted lub
 		on jdo.Geom.STIntersects(lub.LandUseBlockGeometry) = 1
+
+print concat('End set Land Use Block and reinsert ', convert(varchar, GetDate(), 121) )
+print concat('End pRebuildTrashGeneratingUnitTable ', convert(varchar, GetDate(), 121) )
+
 GO

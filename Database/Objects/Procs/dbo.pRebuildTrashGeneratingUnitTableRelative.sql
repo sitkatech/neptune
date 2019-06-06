@@ -21,7 +21,9 @@ Select @SpliceBase = geometry::UnionAggregate(TrashGeneratingUnitGeometry) from 
 if @SpliceBase is null
 	Select @SpliceBase = @SpliceSeed;
 
-Delete from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceBase) = 1
+Select TrashGeneratingUnitID into #ToDelete
+from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceBase) = 1
+Delete from dbo.TrashGeneratingUnit where TrashGeneratingUnitID in (select * from #ToDelete)
 
 /*-1. Restrict the input layers */
 
