@@ -104,6 +104,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTypeConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
+            modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedFullCaptureConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedPartialCaptureConfiguration());
@@ -180,6 +181,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; set; }
+        public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedFullCapture> vTrashGeneratingUnitLoadBasedFullCaptures { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedPartialCapture> vTrashGeneratingUnitLoadBasedPartialCaptures { get; set; }
