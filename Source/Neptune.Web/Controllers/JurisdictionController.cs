@@ -72,21 +72,6 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<ModeledCatchment> JurisdictionModeledCatchmentGridJsonData(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
-        {
-            JurisdictionModeledCatchmentsGridSpec gridSpec;
-            var modeledCatchments = GetModeledCatchmentsAndGridSpec(out gridSpec, stormwaterJurisdictionPrimaryKey.EntityObject);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<ModeledCatchment>(modeledCatchments, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<ModeledCatchment> GetModeledCatchmentsAndGridSpec(out JurisdictionModeledCatchmentsGridSpec gridSpec, StormwaterJurisdiction stormwaterJurisdiction)
-        {
-            gridSpec = new JurisdictionModeledCatchmentsGridSpec(CurrentPerson);
-            return stormwaterJurisdiction.ModeledCatchments.ToList();
-        }
-
-        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> JurisdictionTreatmentBMPGridJsonData(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;

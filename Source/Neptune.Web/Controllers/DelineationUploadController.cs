@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ModeledCatchmentController.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DelineationController.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -32,131 +32,128 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.DelineationUpload;
 using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
-using Index = Neptune.Web.Views.DelineationUpload.Index;
-using IndexGridSpec = Neptune.Web.Views.DelineationUpload.IndexGridSpec;
-using IndexViewData = Neptune.Web.Views.DelineationUpload.IndexViewData;
 
 namespace Neptune.Web.Controllers
 {
     public class DelineationUploadController : NeptuneBaseController
     {
+        //[NeptuneViewFeature]
+        //public ViewResult Index()
+        //{
+        //    var delineations = HttpRequestStorage.DatabaseEntities.Delineations.ToList();
+        //    var delineationLayerGeoJson = StormwaterMapInitJson.MakeDelineationLayerGeoJson(delineations, false, false);
+        //    var mapInitJson = new SearchMapInitJson("StormwaterDetailMap", delineationLayerGeoJson);
+
+        //    var corralPage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.Delineation);
+        //    var updateDelineationGeometryUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateDelineationGeometry());
+        //    var viewData = new IndexViewData(CurrentPerson, mapInitJson, corralPage, updateDelineationGeometryUrl);
+        //    return RazorView<Index, IndexViewData>(viewData);
+        //}
+
+        //[NeptuneViewFeature]
+        //public GridJsonNetJObjectResult<Delineation> IndexGridJsonData()
+        //{
+        //    IndexGridSpec gridSpec;
+        //    var delineations = GetDelineationsAndGridSpec(out gridSpec, CurrentPerson);
+        //    var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
+        //    return gridJsonNetJObjectResult;
+        //}
+
+        //private List<Delineation> GetDelineationsAndGridSpec(out IndexGridSpec gridSpec, Person currentPerson)
+        //{
+        //    gridSpec = new IndexGridSpec(currentPerson);
+        //    return HttpRequestStorage.DatabaseEntities.Delineations.ToList();
+        //}
+
+        //[NeptuneViewFeature]
+        //public ViewResult Detail(DelineationPrimaryKey delineationPrimaryKey)
+        //{
+        //    var delineation = delineationPrimaryKey.EntityObject;
+        //    var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
+        //    var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", 1, layerGeoJsons, new BoundingBox(delineation.DelineationGeometry));
+
+        //    if (delineation.DelineationGeometry != null)
+        //    {
+        //        mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(new[] {delineation}, false, false));
+        //    }
+
+        //    var viewData = new DetailViewData(CurrentPerson, delineation, mapInitJson);
+        //    return RazorView<Detail, DetailViewData>(viewData);
+        //}
+
+        //[HttpGet]
+        //[DelineationManageFeature]
+        //public ViewResult Edit(DelineationPrimaryKey delineationPrimaryKey)
+        //{
+        //    var delineation = delineationPrimaryKey.EntityObject;
+        //    var viewModel = new EditViewModel(delineation);
+        //    return ViewEdit(viewModel);
+        //}
+
+        //[HttpPost]
+        //[DelineationManageFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult Edit(DelineationPrimaryKey delineationPrimaryKey, EditViewModel viewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ViewEdit(viewModel);
+        //    }
+
+        //    var delineation = delineationPrimaryKey.EntityObject;
+        //    viewModel.UpdateModel(delineation, CurrentPerson);
+        //    return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.Detail(delineation.PrimaryKey)));
+        //}
+
+        //private ViewResult ViewEdit(EditViewModel viewModel)
+        //{
+        //    var delineation = HttpRequestStorage.DatabaseEntities.Delineations.SingleOrDefault(x => x.DelineationID == viewModel.DelineationID);
+        //    var viewData = new EditViewData(CurrentPerson, delineation);
+        //    return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        //}
+
         [NeptuneViewFeature]
-        public ViewResult Index()
+        public PartialViewResult SummaryForMap(DelineationPrimaryKey delineationPrimaryKey)
         {
-            var modeledCatchments = HttpRequestStorage.DatabaseEntities.ModeledCatchments.ToList();
-            var modeledCatchmentLayerGeoJson = StormwaterMapInitJson.MakeModeledCatchmentLayerGeoJson(modeledCatchments, false, false);
-            var mapInitJson = new SearchMapInitJson("StormwaterDetailMap", modeledCatchmentLayerGeoJson);
-
-            var corralPage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ModeledCatchment);
-            var updateModeledCatchmentGeometryUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateModeledCatchmentGeometry());
-            var viewData = new IndexViewData(CurrentPerson, mapInitJson, corralPage, updateModeledCatchmentGeometryUrl);
-            return RazorView<Index, IndexViewData>(viewData);
-        }
-
-        [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<ModeledCatchment> IndexGridJsonData()
-        {
-            IndexGridSpec gridSpec;
-            var modeledCatchments = GetModeledCatchmentsAndGridSpec(out gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<ModeledCatchment>(modeledCatchments, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<ModeledCatchment> GetModeledCatchmentsAndGridSpec(out IndexGridSpec gridSpec, Person currentPerson)
-        {
-            gridSpec = new IndexGridSpec(currentPerson);
-            return HttpRequestStorage.DatabaseEntities.ModeledCatchments.ToList();
-        }
-
-        [NeptuneViewFeature]
-        public ViewResult Detail(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey)
-        {
-            var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
-            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
-            var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", 1, layerGeoJsons, new BoundingBox(modeledCatchment.ModeledCatchmentGeometry));
-
-            if (modeledCatchment.ModeledCatchmentGeometry != null)
-            {
-                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeModeledCatchmentLayerGeoJson(new[] {modeledCatchment}, false, false));
-            }
-
-            var viewData = new DetailViewData(CurrentPerson, modeledCatchment, mapInitJson);
-            return RazorView<Detail, DetailViewData>(viewData);
-        }
-
-        [HttpGet]
-        [ModeledCatchmentManageFeature]
-        public ViewResult Edit(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey)
-        {
-            var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
-            var viewModel = new EditViewModel(modeledCatchment);
-            return ViewEdit(viewModel);
-        }
-
-        [HttpPost]
-        [ModeledCatchmentManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Edit(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey, EditViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ViewEdit(viewModel);
-            }
-
-            var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
-            viewModel.UpdateModel(modeledCatchment, CurrentPerson);
-            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.Detail(modeledCatchment.PrimaryKey)));
-        }
-
-        private ViewResult ViewEdit(EditViewModel viewModel)
-        {
-            var modeledCatchment = HttpRequestStorage.DatabaseEntities.ModeledCatchments.SingleOrDefault(x => x.ModeledCatchmentID == viewModel.ModeledCatchmentID);
-            var viewData = new EditViewData(CurrentPerson, modeledCatchment);
-            return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
-        }
-
-        [NeptuneViewFeature]
-        public PartialViewResult SummaryForMap(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey)
-        {
-            var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
-            var deleteModeledCatchmentUrl = modeledCatchment.GetDeleteUrl(); //todo add this when the route get created
-            var canDeleteCatchment = modeledCatchment.CanDelete(CurrentPerson);
-            var viewData = new SummaryForMapViewData(CurrentPerson, modeledCatchment, deleteModeledCatchmentUrl, canDeleteCatchment);
+            var delineation = delineationPrimaryKey.EntityObject;
+            var deleteDelineationUrl = delineation.GetDeleteUrl(); //todo add this when the route get created
+            var canDeleteCatchment = delineation.CanDelete(CurrentPerson);
+            var viewData = new SummaryForMapViewData(CurrentPerson, delineation, deleteDelineationUrl, canDeleteCatchment);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
-        public JsonResult FindByName(string term)
-        {
-            var searchString = term.Trim();
-            var allModeledCatchmentsMatchingSearchString = HttpRequestStorage.DatabaseEntities.ModeledCatchments.Where(x => x.ModeledCatchmentName.Contains(searchString)).ToList();
+        //[NeptuneViewFeature]
+        //public JsonResult FindByName(string term)
+        //{
+        //    var searchString = term.Trim();
+        //    var allDelineationsMatchingSearchString = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.DelineationName.Contains(searchString)).ToList();
 
-            var listItems = allModeledCatchmentsMatchingSearchString.OrderBy(x => x.ModeledCatchmentName).Take(20).Select(mc =>
-            {
-                var modeledCatchmentMapSummaryData = new SearchMapSummaryData(mc.GetMapSummaryUrl(),
-                    mc.ModeledCatchmentGeometry,
-                    mc.ModeledCatchmentGeometry.Centroid.YCoordinate,
-                    mc.ModeledCatchmentGeometry.Centroid.XCoordinate,
-                    mc.ModeledCatchmentID);
-                var listItem = new ListItem(mc.ModeledCatchmentName, JsonConvert.SerializeObject(modeledCatchmentMapSummaryData));
-                return listItem;
-            }).ToList();
+        //    var listItems = allDelineationsMatchingSearchString.OrderBy(x => x.DelineationName).Take(20).Select(mc =>
+        //    {
+        //        var delineationMapSummaryData = new SearchMapSummaryData(mc.GetMapSummaryUrl(),
+        //            mc.DelineationGeometry,
+        //            mc.DelineationGeometry.Centroid.YCoordinate,
+        //            mc.DelineationGeometry.Centroid.XCoordinate,
+        //            mc.DelineationID);
+        //        var listItem = new ListItem(mc.DelineationName, JsonConvert.SerializeObject(delineationMapSummaryData));
+        //        return listItem;
+        //    }).ToList();
 
-            return Json(listItems, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(listItems, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpGet]
         [JurisdictionManageFeature]
-        public ViewResult UpdateModeledCatchmentGeometry()
+        public ViewResult UpdateDelineationGeometry()
         {
             var viewModel = new UpdateDelineationGeometryViewModel();
-            return ViewUpdateModeledCatchmentGeometry(viewModel);
+            return ViewUpdateDelineationGeometry(viewModel);
         }
 
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult UpdateModeledCatchmentGeometry(UpdateDelineationGeometryViewModel viewModel)
+        public ActionResult UpdateDelineationGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -165,13 +162,13 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.ApproveModeledCatchmentGisUpload()));
+            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.ApproveDelineationGisUpload()));
         }
 
-        private ViewResult ViewUpdateModeledCatchmentGeometry(UpdateDelineationGeometryViewModel viewModel)
+        private ViewResult ViewUpdateDelineationGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
-            var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateModeledCatchmentGeometry());
-            var approveGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.ApproveModeledCatchmentGisUpload());
+            var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateDelineationGeometry());
+            var approveGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.ApproveDelineationGisUpload());
 
             var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, newGisUploadUrl, approveGisUploadUrl);
             return RazorView<UpdateDelineationGeometry, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
@@ -180,94 +177,96 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ApproveModeledCatchmentGisUpload()
+        public ActionResult ApproveDelineationGisUpload()
         {
             var viewModel = new ApproveDelineationGisUploadViewModel(CurrentPerson);
-            return ViewApproveModeledCatchmentGisUpload(viewModel);
+            return ViewApproveDelineationGisUpload(viewModel);
         }
 
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ApproveModeledCatchmentGisUpload(ApproveDelineationGisUploadViewModel viewModel)
+        public ActionResult ApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewUpdateModeledCatchmentGeometry(new UpdateDelineationGeometryViewModel());
+                return ViewUpdateDelineationGeometry(new UpdateDelineationGeometryViewModel());
             }
             viewModel.UpdateModel(CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.Index()));
+            return RedirectToAction(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)));
         }
 
-        private PartialViewResult ViewApproveModeledCatchmentGisUpload(ApproveDelineationGisUploadViewModel viewModel)
+        private PartialViewResult ViewApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
-            var modeledCatchmentGeometryStagings = CurrentPerson.ModeledCatchmentGeometryStagings.ToList();
-            var layerColors = modeledCatchmentGeometryStagings.Select((value, index) => new {index, value})
-                .ToDictionary(x => x.value.ModeledCatchmentGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
+            var delineationGeometryStagings = CurrentPerson.DelineationGeometryStagings.ToList();
+            var layerColors = delineationGeometryStagings.Select((value, index) => new {index, value})
+                .ToDictionary(x => x.value.DelineationGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
             var layers =
-                modeledCatchmentGeometryStagings.Select(
-                    (modeledCatchmentGeometryStaging, i) =>
-                        new LayerGeoJson(modeledCatchmentGeometryStaging.FeatureClassName,
-                            modeledCatchmentGeometryStaging.ToGeoJsonFeatureCollection(),
-                            layerColors[modeledCatchmentGeometryStaging.ModeledCatchmentGeometryStagingID],
+                delineationGeometryStagings.Select(
+                    (delineationGeometryStaging, i) =>
+                        new LayerGeoJson(delineationGeometryStaging.FeatureClassName,
+                            new List<DelineationGeometryStaging>
+                                { delineationGeometryStaging}.ToGeoJsonFeatureCollection(),
+                            layerColors[delineationGeometryStaging.DelineationGeometryStagingID],
                             1,
                             LayerInitialVisibility.Show)).ToList();
             var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
-            var mapInitJson = new StormwaterMapInitJson("modeledCatchmentGeometryPreviewMap", 10, layers, boundingBox) {AllowFullScreen = false};
+            var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) {AllowFullScreen = false};
             var stormwaterJurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
             var uploadGisReportUrlTemplate =
                 new UrlTemplate<int, int, string>(
                     SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
-            var modeledCatchmentIndexUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.Index());
+            var delineationIndexUrl =
+                SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationMap(null));
 
-            var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, modeledCatchmentIndexUrl);
+            var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, delineationIndexUrl);
             return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
         }
 
         [JurisdictionManageFeature]
         public JsonResult UploadGisReport(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey,
-            ModeledCatchmentGeometryStagingPrimaryKey modeledCatchmentGeometryStagingPrimaryKey,
+            DelineationGeometryStagingPrimaryKey delineationGeometryStagingPrimaryKey,
             string selectedProperty)
         {
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-            var modeledCatchmentGeometryStaging = modeledCatchmentGeometryStagingPrimaryKey.EntityObject;
+            var delineationGeometryStaging = delineationGeometryStagingPrimaryKey.EntityObject;
 
-            Check.Assert(modeledCatchmentGeometryStaging.PersonID == CurrentPerson.PersonID, "Modeled Catchment Geometry Staging must belong to the current person");
+            Check.Assert(delineationGeometryStaging.PersonID == CurrentPerson.PersonID, "Modeled Catchment Geometry Staging must belong to the current person");
 
-            return Json(ModeledCatchmentUploadGisReportJsonResult.GetModeledCatchmentUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, modeledCatchmentGeometryStaging, selectedProperty));
+            return Json(DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, delineationGeometryStaging, selectedProperty));
         }
 
         [HttpGet]
-        [ModeledCatchmentDeleteFeature]
-        public PartialViewResult Delete(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey)
+        [DelineationDeleteFeature]
+        public PartialViewResult Delete(DelineationPrimaryKey delineationPrimaryKey)
         {
-            var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
-            var viewModel = new ConfirmDialogFormViewModel(modeledCatchment.ModeledCatchmentID);
-            return ViewDelete(modeledCatchment, viewModel);
+            var delineation = delineationPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(delineation.DelineationID);
+            return ViewDelete(delineation, viewModel);
         }
 
         [HttpPost]
-        [ModeledCatchmentDeleteFeature]
+        [DelineationDeleteFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Delete(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        public ActionResult Delete(DelineationPrimaryKey delineationPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
-            var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
+            var delineation = delineationPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewDelete(modeledCatchment, viewModel);
+                return ViewDelete(delineation, viewModel);
             }
 
-            HttpRequestStorage.DatabaseEntities.ModeledCatchments.DeleteModeledCatchment(modeledCatchment);
-            return new ModalDialogFormJsonResult(SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.Index()));
+            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+            return new ModalDialogFormJsonResult(SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationMap(null)));
         }
 
-        private PartialViewResult ViewDelete(ModeledCatchment modeledCatchment, ConfirmDialogFormViewModel viewModel)
+        private PartialViewResult ViewDelete(Delineation delineation, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = modeledCatchment.CanDelete(CurrentPerson);
+            var canDelete = delineation.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
                 ? "Are you sure you want to delete the Modeled Catchment?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Modeled Catchment", SitkaRoute<DelineationUploadController>.BuildLinkFromExpression(x => x.Detail(modeledCatchment), "here"));
+                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Modeled Catchment", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Index(), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);

@@ -15,5 +15,10 @@ namespace Neptune.Web.Models
             DateLastVerified = DateTime.Now;
             VerifiedByPersonID = currentPerson.PersonID;
         }
+
+        public bool CanDelete(Person currentPerson)
+        {
+            return currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+        }
     }
 }

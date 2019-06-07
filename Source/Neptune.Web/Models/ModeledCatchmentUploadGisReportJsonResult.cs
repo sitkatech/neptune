@@ -5,10 +5,10 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public class ModeledCatchmentUploadGisReportJsonResult
+    public class DelineationUploadGisReportJsonResult
     {
         public int StormwaterJurisdictionID;
-        public int ModeledCatchmentGeometryStagingID;
+        public int DelineationGeometryStagingID;
         public string SelectedProperty;
         public int? NumberOfCatchments;
         public int? NumberOfCatchmentsToBeUpdated;
@@ -16,53 +16,53 @@ namespace Neptune.Web.Models
         public int? NumberOfCatchmentsInActiveBMPRegistration;
         public List<string> Errors;
 
-        public static ModeledCatchmentUploadGisReportJsonResult GetModeledCatchmentUpoadGisReportFromStaging(Person person,
+        public static DelineationUploadGisReportJsonResult GetDelineationUpoadGisReportFromStaging(Person person,
             StormwaterJurisdiction stormwaterJurisdiction,
-            ModeledCatchmentGeometryStaging modeledCatchmentGeometryStaging,
+            DelineationGeometryStaging delineationGeometryStaging,
             string selectedProperty)
         {
-            var existingModeledCatchments = HttpRequestStorage.DatabaseEntities.ModeledCatchments.Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            var existingDelineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
 
-            var geoJsonFeatureCollection = modeledCatchmentGeometryStaging.ToGeoJsonFeatureCollection();
-            var candidateModeledCatchmentNames = geoJsonFeatureCollection.Features.Select(x => x.Properties[selectedProperty].ToString()).Distinct().ToList();
+            var geoJsonFeatureCollection = delineationGeometryStaging.ToGeoJsonFeatureCollection();
+            var candidateDelineationNames = geoJsonFeatureCollection.Features.Select(x => x.Properties[selectedProperty].ToString()).Distinct().ToList();
             var numberOfCatchments = geoJsonFeatureCollection.Features.Count;
-            if (candidateModeledCatchmentNames.Count != numberOfCatchments)
+            if (candidateDelineationNames.Count != numberOfCatchments)
             {
-                return new ModeledCatchmentUploadGisReportJsonResult
+                return new DelineationUploadGisReportJsonResult
                 {
                     StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
-                    ModeledCatchmentGeometryStagingID = modeledCatchmentGeometryStaging.ModeledCatchmentGeometryStagingID,
+                    DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
                     SelectedProperty = selectedProperty,
                     Errors = new List<string> {"The selected property must be valid and un-ambiguous."}
                 };
             }
 
-            var modeledCatchmentUploadGisReport = new ModeledCatchmentUploadGisReportJsonResult
+            var delineationUploadGisReport = new DelineationUploadGisReportJsonResult
             {
                 StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
-                ModeledCatchmentGeometryStagingID = modeledCatchmentGeometryStaging.ModeledCatchmentGeometryStagingID,
+                DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
                 SelectedProperty = selectedProperty,
                 NumberOfCatchments = numberOfCatchments,
                 NumberOfCatchmentsToBeUpdated =
-                    existingModeledCatchments.Count(
+                    existingDelineations.Count(
                         x =>
-                            x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateModeledCatchmentNames.Contains(x.ModeledCatchmentName)),
+                            x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateDelineationNames.Contains(x.DelineationID.ToString())),
                 NumberOfCatchmentsToBeCreated =
-                    candidateModeledCatchmentNames.Count(
-                        x => !existingModeledCatchments.Exists(y => y.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && y.ModeledCatchmentName == x)),
+                    candidateDelineationNames.Count(
+                        x => !existingDelineations.Exists(y => y.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && y.DelineationID.ToString() == x)),
                 NumberOfCatchmentsInActiveBMPRegistration =
-                    existingModeledCatchments.Count(
+                    existingDelineations.Count(
                         x =>
-                            x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateModeledCatchmentNames.Contains(x.ModeledCatchmentName))
+                            x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateDelineationNames.Contains(x.DelineationID.ToString()))
             };
 
             // Assert that the numbers all add up
             Check.Assert(
-                modeledCatchmentUploadGisReport.NumberOfCatchments ==
-                modeledCatchmentUploadGisReport.NumberOfCatchmentsToBeUpdated + modeledCatchmentUploadGisReport.NumberOfCatchmentsToBeCreated +
-                modeledCatchmentUploadGisReport.NumberOfCatchmentsInActiveBMPRegistration,
+                delineationUploadGisReport.NumberOfCatchments ==
+                delineationUploadGisReport.NumberOfCatchmentsToBeUpdated + delineationUploadGisReport.NumberOfCatchmentsToBeCreated +
+                delineationUploadGisReport.NumberOfCatchmentsInActiveBMPRegistration,
                 "Modeled catchment upload GIS report results must sum up to the total number of catchments candidates being considered.");
-            return modeledCatchmentUploadGisReport;
+            return delineationUploadGisReport;
         }
     }
 }

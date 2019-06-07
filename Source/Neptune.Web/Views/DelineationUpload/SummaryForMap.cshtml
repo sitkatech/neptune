@@ -31,17 +31,14 @@ Source code is available upon request via <support@sitkatech.com>.
     <div class="panel-body">
         <div class="row">
             <label class="col-sm-6 control-label text-right">Name</label>
-            <div class="col-sm-6">@ViewDataTyped.ModeledCatchment.ModeledCatchmentName</div>
+            <div class="col-sm-6">@ViewDataTyped.Delineation.DelineationID</div>
         </div>
         <div class="row">
             <label class="col-sm-6 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
-            <div class="col-sm-6">@ViewDataTyped.ModeledCatchment.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
-        </div>
-        <div class="row">
-            <label class="col-sm-6 control-label text-right">Notes</label>
-            <div class="col-sm-6">@ViewDataTyped.ModeledCatchment.Notes</div>
-        </div>        
-        @if (ViewDataTyped.ModeledCatchment.ModeledCatchmentGeometry == null)
+            <div class="col-sm-6">@ViewDataTyped.Delineation.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+        </div>  
+
+        @if (ViewDataTyped.Delineation.DelineationGeometry == null)
         {
             <div class="row">
                 <label class="col-sm-6 control-label text-right">@Html.Label("Area")</label>
@@ -55,12 +52,12 @@ Source code is available upon request via <support@sitkatech.com>.
     <div class="card">
         <ul class="list-group list-group-flush list-unstyled">
             <li>
-                <a class="list-group-item" href="@ViewDataTyped.ModeledCatchment.GetDetailUrl()"><span class="btn cardButton viewButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search")</span>View Details</a>
+                <a class="list-group-item" href="@ViewDataTyped.Delineation.GetDetailUrl()"><span class="btn cardButton viewButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search")</span>View Details</a>
             </li>
             @if (ViewDataTyped.CanDeleteCatchment)
             {
                 <li>
-                    @ModalDialogFormHelper.MakeDeleteLink("<span class=\"btn cardButton viewButton\"><span class=\"glyphicon glyphicon-trash\"></span></span>Delete Catchment", ViewDataTyped.DeleteModeledCatchmentUrl, new List<string> { "list-group-item" }, ViewDataTyped.CanDeleteCatchment)
+                    @ModalDialogFormHelper.MakeDeleteLink("<span class=\"btn cardButton viewButton\"><span class=\"glyphicon glyphicon-trash\"></span></span>Delete Catchment", ViewDataTyped.DeleteDelineationUrl, new List<string> { "list-group-item" }, ViewDataTyped.CanDeleteCatchment)
                 </li>
             }
         </ul>

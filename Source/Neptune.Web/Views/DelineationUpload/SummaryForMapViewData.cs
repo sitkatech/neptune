@@ -25,14 +25,14 @@ namespace Neptune.Web.Views.DelineationUpload
 {
     public class SummaryForMapViewData : NeptuneViewData
     {
-        public readonly Models.ModeledCatchment ModeledCatchment;
-        public readonly string DeleteModeledCatchmentUrl;
+        public readonly Models.Delineation Delineation;
+        public readonly string DeleteDelineationUrl;
         public readonly bool CanDeleteCatchment;
 
-        public SummaryForMapViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment, string deleteModeledCatchmentUrl, bool canDeleteCatchment) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public SummaryForMapViewData(Person currentPerson, Models.Delineation delineation, string deleteDelineationUrl, bool canDeleteCatchment) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            ModeledCatchment = modeledCatchment;
-            DeleteModeledCatchmentUrl = deleteModeledCatchmentUrl;
+            Delineation = delineation;
+            DeleteDelineationUrl = deleteDelineationUrl;
             CanDeleteCatchment = canDeleteCatchment;
         }
     }
