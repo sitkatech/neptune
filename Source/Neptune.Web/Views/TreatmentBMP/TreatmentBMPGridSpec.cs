@@ -27,7 +27,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
-
+using System.Globalization;
 
 
 namespace Neptune.Web.Views.TreatmentBMP
@@ -48,6 +48,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(y => y.Detail(x.PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170);
+            Add("Owner Organization", x => x.OwnerOrganization.GetDisplayNameAsUrl(), 170);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMPType.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Notes", x => x.Notes, 195);
             Add("Last Assessment Date", x => x.GetMostRecentAssessment()?.GetAssessmentDate(), 130);
@@ -66,4 +67,20 @@ namespace Neptune.Web.Views.TreatmentBMP
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }
+
+    public class TreatmentBMPAssessmentSummaryGridSpec : GridSpec<Models.vMostRecentTreatmentBMPAssessment>
+    {
+        public TreatmentBMPAssessmentSummaryGridSpec(Person currentPerson, bool showDelete, bool showEdit)
+        {
+            Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdictionName), 170);
+            Add("Owner Organization", x => UrlTemplate.MakeHrefString(x.GetOwnerOrganizationSummaryUrl(), x.StormwaterJurisdictionName), 170);
+            Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
+            Add("# of Assessments", x => x.NumberOfAssessments.GetValueOrDefault(), 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
+            Add("Last Assessment Date", x => x.LastAssessmentDate, 130, DhtmlxGridColumnFormatType.Date);
+            Add("Last Assessed Score", x => x.AssessmentScore.HasValue ? x.AssessmentScore.Value.ToString(CultureInfo.InvariantCulture) : "N/A", 100, DhtmlxGridColumnFilterType.FormattedNumeric);
+            // todo: failure nopes
+        }
+    }
 }
+

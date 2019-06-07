@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
@@ -95,11 +96,30 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public ViewResult BMPAssessments()
+        public ViewResult TreatmentBMPAssessmentSummary()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPAssessment);
-            var viewData = new TreatmentBMPAssessmentViewData(CurrentPerson, neptunePage);
-            return RazorView<Views.TreatmentBMP.TreatmentBMPAssessment, TreatmentBMPAssessmentViewData>(viewData);
+            var viewData = new TreatmentBMPAssessmentSummaryViewData(CurrentPerson, neptunePage);
+            return RazorView<Views.TreatmentBMP.TreatmentBMPAssessmentSummary, TreatmentBMPAssessmentSummaryViewData>(viewData);
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<vMostRecentTreatmentBMPAssessment> TreatmentBMPAssessmentSummaryGridJsonData()
+        {
+            // ReSharper disable once InconsistentNaming
+            var treatmentBMPs = GetTreatmentBMPAssessmentSummariesAndGridSpec(out var gridSpec, CurrentPerson);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vMostRecentTreatmentBMPAssessment>(treatmentBMPs, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        private List<vMostRecentTreatmentBMPAssessment> GetTreatmentBMPAssessmentSummariesAndGridSpec(out TreatmentBMPAssessmentSummaryGridSpec gridSpec, Person currentPerson)
+        {
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            gridSpec = new TreatmentBMPAssessmentSummaryGridSpec(currentPerson, showDelete, showEdit);
+            var stormwaterJurisdictionIDsCurrentUserCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(y => y.StormwaterJurisdictionID).ToList();
+            return HttpRequestStorage.DatabaseEntities.vMostRecentTreatmentBMPAssessments.Where(x => stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
+           
         }
 
         [TreatmentBMPViewFeature]

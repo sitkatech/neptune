@@ -25,13 +25,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vMostRecentTreatmentBMPAssessment(int primaryKey, int treatmentBMPID, string treatmentBMPName, string stormwaterJurisdictionName, int stormwaterJursidictionID, string ownerOrganizationName, int ownerOrganizationID, int? requiredFieldVisitsPerYear, int? numberOfAssessments, DateTime? lastAssessmentDate, double? assessmentScore) : this()
+        public vMostRecentTreatmentBMPAssessment(int primaryKey, int treatmentBMPID, string treatmentBMPName, string stormwaterJurisdictionName, int stormwaterJurisdictionID, string ownerOrganizationName, int ownerOrganizationID, int? requiredFieldVisitsPerYear, int? numberOfAssessments, DateTime? lastAssessmentDate, double? assessmentScore) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
             this.StormwaterJurisdictionName = stormwaterJurisdictionName;
-            this.StormwaterJursidictionID = stormwaterJursidictionID;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OwnerOrganizationName = ownerOrganizationName;
             this.OwnerOrganizationID = ownerOrganizationID;
             this.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYear;
@@ -49,7 +49,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = vMostRecentTreatmentBMPAssessment.TreatmentBMPID;
             this.TreatmentBMPName = vMostRecentTreatmentBMPAssessment.TreatmentBMPName;
             this.StormwaterJurisdictionName = vMostRecentTreatmentBMPAssessment.StormwaterJurisdictionName;
-            this.StormwaterJursidictionID = vMostRecentTreatmentBMPAssessment.StormwaterJursidictionID;
+            this.StormwaterJurisdictionID = vMostRecentTreatmentBMPAssessment.StormwaterJurisdictionID;
             this.OwnerOrganizationName = vMostRecentTreatmentBMPAssessment.OwnerOrganizationName;
             this.OwnerOrganizationID = vMostRecentTreatmentBMPAssessment.OwnerOrganizationID;
             this.RequiredFieldVisitsPerYear = vMostRecentTreatmentBMPAssessment.RequiredFieldVisitsPerYear;
@@ -65,7 +65,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
         public string TreatmentBMPName { get; set; }
         public string StormwaterJurisdictionName { get; set; }
-        public int StormwaterJursidictionID { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
         public string OwnerOrganizationName { get; set; }
         public int OwnerOrganizationID { get; set; }
         public int? RequiredFieldVisitsPerYear { get; set; }

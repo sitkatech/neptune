@@ -8,7 +8,7 @@ select
 	tb.TreatmentBMPID,
 	TreatmentBMPName,
 	ojur.OrganizationName as StormwaterJurisdictionName,
-	sj.StormwaterJurisdictionID as StormwaterJursidictionID,
+	sj.StormwaterJurisdictionID as StormwaterJurisdictionID,
 	oown.OrganizationName as OwnerOrganizationName,
 	OwnerOrganizationID as OwnerOrganizationID,
 	RequiredFieldVisitsPerYear,

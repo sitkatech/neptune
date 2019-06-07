@@ -41,12 +41,33 @@ namespace Neptune.Web.Models
             if (treatmentBMP == null) { return ""; }
             return DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
         }
+        public static string GetDetailUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
+        {
+            if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
+            return DetailUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment.TreatmentBMPID);
+        }
 
         public static readonly UrlTemplate<int> DetailJurisdictionUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
         public static string GetJurisdictionSummaryUrl(this TreatmentBMP treatmentBMP)
         {
             if (treatmentBMP == null) { return ""; }
             return DetailJurisdictionUrlTemplate.ParameterReplace(treatmentBMP.StormwaterJurisdictionID);
+        }
+
+        public static string GetJurisdictionSummaryUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
+        {
+            if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
+            return DetailJurisdictionUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment.StormwaterJurisdictionID);
+        }
+
+        public static readonly UrlTemplate<int> DetailOrganizationUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+        public static string GetOwnerOrganizationSummaryUrl(
+            this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
+        {
+            if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
+
+            return DetailOrganizationUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment
+                .OwnerOrganizationID);
         }
 
         public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
