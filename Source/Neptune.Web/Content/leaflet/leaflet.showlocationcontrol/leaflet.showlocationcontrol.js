@@ -17,6 +17,12 @@
                     locateOptions);
             });
 
+        if (window.stopClickPropagation) {
+
+
+            window.stopClickPropagation(button);
+        }
+
         return button;
     }
 });

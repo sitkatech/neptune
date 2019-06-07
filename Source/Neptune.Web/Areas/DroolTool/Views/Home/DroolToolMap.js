@@ -50,6 +50,8 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
         this.parentElement.append(highlightFlowButton);
 
+        window.stopClickPropagation(this.parentElement);
+
         return this.parentElement;
     },
 
