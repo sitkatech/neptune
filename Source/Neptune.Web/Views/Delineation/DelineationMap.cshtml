@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.Delineation
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
@@ -11,7 +12,7 @@
     <link href="@Url.Content("~/Views/Delineation/DelineationMap.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/bootstrap-toggle/bootstrap-toggle.min.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js")" type="text/javascript"></script>
-    
+
     <script src="@Url.Content("~/Content/proj4js/proj4.js")" type="text/javascript"></script>
 
     @*todo: use a custom build that only has the stuff we need*@
@@ -27,6 +28,18 @@
     <script type="text/javascript" src="@Url.Content("~/Content/bootstrap-toggle/bootstrap-toggle.min.js")"></script>
 
 }
+
+
+@section RightOfPageTitle
+{
+
+    @*@if (ViewDataTyped.HasAdminPermissions)*@
+    <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadTreatmentBMPDelineationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Bulk Upload Treatment BMP Delineations</a>
+}
+    <button class="btn btn-neptune" onclick="createDownloadConfirmDialog()"><span class="glyphicon glyphicon-map-marker" style="margin-right: 5px;"></span>Export Inventory to GIS</button>
+
+}
+
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
 
 <div class="row">

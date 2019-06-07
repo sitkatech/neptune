@@ -5,7 +5,7 @@ namespace Neptune.Web.Views.Delineation
 {
     public class DelineationMapViewData : NeptuneViewData
     {
-        public DelineationMapViewData(Person currentPerson, Models.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, Models.TreatmentBMP initialTreatmentBMP) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public DelineationMapViewData(Person currentPerson, Models.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, Models.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             MapInitJson = mapInitJson;
             IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;
@@ -15,7 +15,9 @@ namespace Neptune.Web.Views.Delineation
             GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
 
             DelineationMapConfig = new DelineationMapConfig(currentPerson.GetStormwaterJurisdictionCqlFilter());
-            
+            BulkUploadTreatmentBMPDelineationsUrl = bulkUploadTreatmentBMPDelineationsUrl;
+
+
         }
 
         public int? InitialTreatmentBMPID { get; }
@@ -24,5 +26,7 @@ namespace Neptune.Web.Views.Delineation
         public bool IsInitialTreatmentBMPProvided { get; }
         public string GeoServerUrl { get; }
         public DelineationMapConfig DelineationMapConfig { get; set; }
+
+        public string BulkUploadTreatmentBMPDelineationsUrl { get; }
     }
 }

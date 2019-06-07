@@ -58,7 +58,9 @@ namespace Neptune.Web.Controllers
 
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap",
                 CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
-            var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP);
+            var bulkUploadTreatmentBMPDelineationsUrl =
+                SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
+            var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
 
