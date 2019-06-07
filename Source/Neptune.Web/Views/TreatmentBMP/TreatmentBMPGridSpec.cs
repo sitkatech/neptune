@@ -68,17 +68,17 @@ namespace Neptune.Web.Views.TreatmentBMP
         }
     }
 
-    public class TreatmentBMPAssessmentSummaryGridSpec : GridSpec<Models.vMostRecentTreatmentBMPAssessment>
+    public class TreatmentBMPAssessmentSummaryGridSpec : GridSpec<Models.TreatmentBMPAssessmentSummary>
     {
         public TreatmentBMPAssessmentSummaryGridSpec()
         {
-            Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdictionName), 170);
-            Add("Owner Organization", x => UrlTemplate.MakeHrefString(x.GetOwnerOrganizationSummaryUrl(), x.StormwaterJurisdictionName), 170);
-            Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
-            Add("# of Assessments", x => x.NumberOfAssessments.GetValueOrDefault(), 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
-            Add("Last Assessment Date", x => x.LastAssessmentDate, 130, DhtmlxGridColumnFormatType.Date);
-            Add("Last Assessed Score", x => x.AssessmentScore.HasValue ? x.AssessmentScore.Value.ToString(CultureInfo.InvariantCulture) : "N/A", 100, DhtmlxGridColumnFilterType.FormattedNumeric);
+            Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetDetailUrl(), x.AssessmentSummary.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetJurisdictionSummaryUrl(), x.AssessmentSummary.StormwaterJurisdictionName), 170);
+            Add("Owner Organization", x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetOwnerOrganizationSummaryUrl(), x.AssessmentSummary.StormwaterJurisdictionName), 170);
+            Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.AssessmentSummary.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
+            Add("# of Assessments", x => x.AssessmentSummary.NumberOfAssessments.GetValueOrDefault(), 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
+            Add("Last Assessment Date", x => x.AssessmentSummary.LastAssessmentDate, 130, DhtmlxGridColumnFormatType.Date);
+            Add("Last Assessed Score", x => x.AssessmentSummary.AssessmentScore.HasValue ? x.AssessmentSummary.AssessmentScore.Value.ToString(CultureInfo.InvariantCulture) : "N/A", 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             // todo: failure nopes
         }
     }

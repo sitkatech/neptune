@@ -14,6 +14,7 @@ select
 	RequiredFieldVisitsPerYear,
 	NumberOfAssessments,
 	LastAssessmentDate,
+	tbarecent.TreatmentBMPAssessmentID as LastAssessmentID,
 	tbarecent.AssessmentScore
 	--,	tbo.ObservationData
 From
