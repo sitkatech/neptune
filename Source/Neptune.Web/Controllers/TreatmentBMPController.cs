@@ -88,10 +88,18 @@ namespace Neptune.Web.Controllers
                 .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
                 .Include(x => x.MaintenanceRecords)
                 .Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPAssessments)                
+                .Include(x => x.TreatmentBMPAssessments)
                 .Include(x => x.TreatmentBMPAssessments.Select(y => y.FieldVisit))
                 .Include(x => x.WaterQualityManagementPlan)
                 .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+        }
+
+        [NeptuneViewFeature]
+        public ViewResult BMPAssessments()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPAssessment);
+            var viewData = new TreatmentBMPAssessmentViewData(CurrentPerson, neptunePage);
+            return RazorView<Views.TreatmentBMP.TreatmentBMPAssessment, TreatmentBMPAssessmentViewData>(viewData);
         }
 
         [TreatmentBMPViewFeature]
