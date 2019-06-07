@@ -29,6 +29,7 @@ From
 			dbo.TreatmentBMPAssessment tbasub
 			join dbo.FieldVisit fvsub
 				on tbasub.FieldVisitID = fvsub.FieldVisitID
+		where fvsub.FieldVisitStatusID = 2
 	) tbarecent
 		on tb.TreatmentBMPID = tbarecent.TreatmentBMPID 
 	join dbo.StormwaterJurisdiction sj
@@ -43,6 +44,7 @@ From
 		from
 			dbo.TreatmentBMPAssessment tbasub join dbo.FieldVisit fvsub
 				on tbasub.FieldVisitID = fvsub.FieldVisitID
+		where fvsub.FieldVisitStatusID = 2
 		group by tbasub.TreatmentBMPID
 	) tbacount
 		on tb.TreatmentBMPID = tbacount.TreatmentBMPID

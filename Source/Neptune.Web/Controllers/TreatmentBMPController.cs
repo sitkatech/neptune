@@ -141,13 +141,14 @@ namespace Neptune.Web.Controllers
 
             var vMostRecentTreatmentBMPAssessments =
                 HttpRequestStorage.DatabaseEntities.vMostRecentTreatmentBMPAssessments.Where(x =>
-                    stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID));
+                    stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
             var vMostRecentTreatmentBMPAssessmentIDs =
                 vMostRecentTreatmentBMPAssessments.Select(y => y.LastAssessmentID).ToList();
 
             var treatmentBMPObservations = HttpRequestStorage.DatabaseEntities.TreatmentBMPObservations.Where(x =>
                 vMostRecentTreatmentBMPAssessmentIDs
-                    .Contains(x.TreatmentBMPAssessmentID)).ToList();
+                    .Contains(x.TreatmentBMPAssessmentID)).ToList().Where(x=> x.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID && x.GetPassFailObservationData().SingleValueObservations.Any(y=> Convert.ToBoolean(y.ObservationValue) == false));
+
 
             var notes = treatmentBMPObservations.ToList().Select(x =>
             {
@@ -164,15 +165,17 @@ namespace Neptune.Web.Controllers
                 return new
                 {
                     x.TreatmentBMPAssessmentID,
-                    Notes = $"{x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} Failure Notes: {@join}"
+                    Notes =
+                        $"{x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} Failure Notes: {@join}"
                 };
-            }).GroupBy(x => x.TreatmentBMPAssessmentID);
+            });
 
-            var treatmentBMPAssessmentSummaries = notes.Join(vMostRecentTreatmentBMPAssessments, x => x.Key,
-                y => y.LastAssessmentID,
-                (x, y) => new Models.TreatmentBMPAssessmentSummary {AssessmentSummary = y, Notes = string.Join(";", x.Select(z=>z.Notes))});
+            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments.GroupJoin(notes, 
+                x => x.LastAssessmentID,
+                y => y.TreatmentBMPAssessmentID,
+                (x,y) => new Models.TreatmentBMPAssessmentSummary {AssessmentSummary = x, Notes = string.Join(";", y.Select(z=>z.Notes))});
 
-            return treatmentBMPAssessmentSummaries.ToList();
+            return treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
         }
 
         [TreatmentBMPViewFeature]

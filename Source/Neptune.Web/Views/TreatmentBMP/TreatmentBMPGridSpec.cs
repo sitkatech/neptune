@@ -78,8 +78,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.AssessmentSummary.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
             Add("# of Assessments", x => x.AssessmentSummary.NumberOfAssessments.GetValueOrDefault(), 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
             Add("Last Assessment Date", x => x.AssessmentSummary.LastAssessmentDate, 130, DhtmlxGridColumnFormatType.Date);
-            Add("Last Assessed Score", x => x.AssessmentSummary.AssessmentScore.HasValue ? x.AssessmentSummary.AssessmentScore.Value.ToString(CultureInfo.InvariantCulture) : "N/A", 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-            // todo: failure nopes
+            Add("Last Assessed Score", x => x.AssessmentSummary.AssessmentScore.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
+            Add("Failure Notes", x => x.Notes, 200, DhtmlxGridColumnFilterType.Text);
         }
     }
 }
