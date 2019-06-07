@@ -25,7 +25,7 @@ using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
     public class IndexGridSpec : GridSpec<Models.ModeledCatchment>
     {

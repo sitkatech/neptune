@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SummaryForMapViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="EditViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -21,19 +21,19 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
-    public class SummaryForMapViewData : NeptuneViewData
+    public class EditViewData : NeptuneViewData
     {
-        public readonly Models.ModeledCatchment ModeledCatchment;
-        public readonly string DeleteModeledCatchmentUrl;
-        public readonly bool CanDeleteCatchment;
+        public Models.ModeledCatchment ModeledCatchment { get; }
 
-        public SummaryForMapViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment, string deleteModeledCatchmentUrl, bool canDeleteCatchment) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ModeledCatchment = modeledCatchment;
-            DeleteModeledCatchmentUrl = deleteModeledCatchmentUrl;
-            CanDeleteCatchment = canDeleteCatchment;
+            SubEntityName = modeledCatchment.ModeledCatchmentName;
+            SubEntityUrl = modeledCatchment.GetDetailUrl();
+            PageTitle = "Edit Catchment";
         }
     }
 }

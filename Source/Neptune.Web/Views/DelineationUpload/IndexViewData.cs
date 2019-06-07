@@ -23,7 +23,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
     public class IndexViewData : NeptuneViewData
     {
@@ -43,9 +43,9 @@ namespace Neptune.Web.Views.ModeledCatchment
 
             GridSpec = new IndexGridSpec(currentPerson) {ObjectNameSingular = "Catchment", ObjectNamePlural = "Catchments", SaveFiltersInCookie = true};
             GridName = "catchmentsGrid";
-            GridDataUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(j => j.IndexGridJsonData());
+            GridDataUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(j => j.IndexGridJsonData());
 
-            FindCatchmentByNameUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(x => x.FindByName(null));
+            FindCatchmentByNameUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.FindByName(null));
             UpdateModeledCatchmentGeometryUrl = updateModeledCatchmentGeometryUrl;
         }
     }

@@ -13,9 +13,9 @@ using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
-    public class UpdateModeledCatchmentGeometryViewModel : FormViewModel, IValidatableObject
+    public class UpdateDelineationGeometryViewModel : FormViewModel, IValidatableObject
     {
         [Required]
         [DisplayName("Zipped File Geodatabase to Upload")]

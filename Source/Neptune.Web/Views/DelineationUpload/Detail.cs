@@ -18,7 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
     public abstract class Detail : LtInfo.Common.Mvc.TypedWebViewPage<DetailViewData>
     {

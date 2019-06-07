@@ -30,11 +30,11 @@ namespace Neptune.Web.Models
 {
     public static class ModeledCatchmentModelExtensions
     {
-        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
         public static readonly UrlTemplate<int> DetailJurisdictionUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
-        public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
-        public static readonly UrlTemplate<int> MapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
-        public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
+        public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
+        public static readonly UrlTemplate<int> MapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
+        public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
 
         public static string GetDetailUrl(this ModeledCatchment modeledCatchment)
         {

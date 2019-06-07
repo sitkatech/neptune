@@ -9,9 +9,9 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
-    public class ApproveModeledCatchmentGisUploadViewModel : FormViewModel, IValidatableObject
+    public class ApproveDelineationGisUploadViewModel : FormViewModel, IValidatableObject
     {
         [Required]
         public int? StormwaterJurisdictionID { get; set; }
@@ -26,11 +26,11 @@ namespace Neptune.Web.Views.ModeledCatchment
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
-        public ApproveModeledCatchmentGisUploadViewModel()
+        public ApproveDelineationGisUploadViewModel()
         {
         }
 
-        public ApproveModeledCatchmentGisUploadViewModel(Person currentPerson)
+        public ApproveDelineationGisUploadViewModel(Person currentPerson)
         {
             ModeledCatchmentGeometryLayers =
                 currentPerson.ModeledCatchmentGeometryStagings.Select(

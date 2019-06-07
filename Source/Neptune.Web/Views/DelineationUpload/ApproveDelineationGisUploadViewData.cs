@@ -6,9 +6,9 @@ using LtInfo.Common.GeoJson;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
-    public class ApproveModeledCatchmentGisUploadViewData : NeptuneViewData
+    public class ApproveDelineationGisUploadViewData : NeptuneViewData
     {
         public readonly Dictionary<int, string> ModeledCatchmentGeometryFeatureClassNames;
         public readonly MapInitJson MapInitJson;
@@ -19,7 +19,7 @@ namespace Neptune.Web.Views.ModeledCatchment
         public readonly string ModeledCatchmentIndexUrl;
         public readonly Dictionary<int, string> ModeledCatchmentStagingGeoJsons;
 
-        public ApproveModeledCatchmentGisUploadViewData(Person currentPerson,
+        public ApproveDelineationGisUploadViewData(Person currentPerson,
             MapInitJson mapInitJson,
             Dictionary<int, string> layerColors,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,

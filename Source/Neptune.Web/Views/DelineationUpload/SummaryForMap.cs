@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
     public abstract class SummaryForMap : TypedWebPartialViewPage<SummaryForMapViewData>
     {

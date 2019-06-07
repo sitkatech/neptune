@@ -29,16 +29,16 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.ModeledCatchment;
+using Neptune.Web.Views.DelineationUpload;
 using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
-using Index = Neptune.Web.Views.ModeledCatchment.Index;
-using IndexGridSpec = Neptune.Web.Views.ModeledCatchment.IndexGridSpec;
-using IndexViewData = Neptune.Web.Views.ModeledCatchment.IndexViewData;
+using Index = Neptune.Web.Views.DelineationUpload.Index;
+using IndexGridSpec = Neptune.Web.Views.DelineationUpload.IndexGridSpec;
+using IndexViewData = Neptune.Web.Views.DelineationUpload.IndexViewData;
 
 namespace Neptune.Web.Controllers
 {
-    public class ModeledCatchmentController : NeptuneBaseController
+    public class DelineationUploadController : NeptuneBaseController
     {
         [NeptuneViewFeature]
         public ViewResult Index()
@@ -48,7 +48,7 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new SearchMapInitJson("StormwaterDetailMap", modeledCatchmentLayerGeoJson);
 
             var corralPage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ModeledCatchment);
-            var updateModeledCatchmentGeometryUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(c => c.UpdateModeledCatchmentGeometry());
+            var updateModeledCatchmentGeometryUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateModeledCatchmentGeometry());
             var viewData = new IndexViewData(CurrentPerson, mapInitJson, corralPage, updateModeledCatchmentGeometryUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
@@ -105,7 +105,7 @@ namespace Neptune.Web.Controllers
 
             var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
             viewModel.UpdateModel(modeledCatchment, CurrentPerson);
-            return RedirectToAction(new SitkaRoute<ModeledCatchmentController>(c => c.Detail(modeledCatchment.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.Detail(modeledCatchment.PrimaryKey)));
         }
 
         private ViewResult ViewEdit(EditViewModel viewModel)
@@ -149,32 +149,32 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public ViewResult UpdateModeledCatchmentGeometry()
         {
-            var viewModel = new UpdateModeledCatchmentGeometryViewModel();
+            var viewModel = new UpdateDelineationGeometryViewModel();
             return ViewUpdateModeledCatchmentGeometry(viewModel);
         }
 
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult UpdateModeledCatchmentGeometry(UpdateModeledCatchmentGeometryViewModel viewModel)
+        public ActionResult UpdateModeledCatchmentGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                var viewData = new UpdateModeledCatchmentGeometryViewData(CurrentPerson, null, null);
-                return RazorPartialView<UpdateModeledCatchmentGeometryErrors, UpdateModeledCatchmentGeometryViewData, UpdateModeledCatchmentGeometryViewModel>(viewData, viewModel);
+                var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, null, null);
+                return RazorPartialView<UpdateDelineationGeometryErrors, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
             }
             viewModel.UpdateModel(CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<ModeledCatchmentController>(c => c.ApproveModeledCatchmentGisUpload()));
+            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.ApproveModeledCatchmentGisUpload()));
         }
 
-        private ViewResult ViewUpdateModeledCatchmentGeometry(UpdateModeledCatchmentGeometryViewModel viewModel)
+        private ViewResult ViewUpdateModeledCatchmentGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
-            var newGisUploadUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(c => c.UpdateModeledCatchmentGeometry());
-            var approveGisUploadUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(c => c.ApproveModeledCatchmentGisUpload());
+            var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateModeledCatchmentGeometry());
+            var approveGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.ApproveModeledCatchmentGisUpload());
 
-            var viewData = new UpdateModeledCatchmentGeometryViewData(CurrentPerson, newGisUploadUrl, approveGisUploadUrl);
-            return RazorView<UpdateModeledCatchmentGeometry, UpdateModeledCatchmentGeometryViewData, UpdateModeledCatchmentGeometryViewModel>(viewData, viewModel);
+            var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, newGisUploadUrl, approveGisUploadUrl);
+            return RazorView<UpdateDelineationGeometry, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -182,25 +182,25 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ApproveModeledCatchmentGisUpload()
         {
-            var viewModel = new ApproveModeledCatchmentGisUploadViewModel(CurrentPerson);
+            var viewModel = new ApproveDelineationGisUploadViewModel(CurrentPerson);
             return ViewApproveModeledCatchmentGisUpload(viewModel);
         }
 
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ApproveModeledCatchmentGisUpload(ApproveModeledCatchmentGisUploadViewModel viewModel)
+        public ActionResult ApproveModeledCatchmentGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewUpdateModeledCatchmentGeometry(new UpdateModeledCatchmentGeometryViewModel());
+                return ViewUpdateModeledCatchmentGeometry(new UpdateDelineationGeometryViewModel());
             }
             viewModel.UpdateModel(CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<ModeledCatchmentController>(c => c.Index()));
+            return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.Index()));
         }
 
-        private PartialViewResult ViewApproveModeledCatchmentGisUpload(ApproveModeledCatchmentGisUploadViewModel viewModel)
+        private PartialViewResult ViewApproveModeledCatchmentGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
             var modeledCatchmentGeometryStagings = CurrentPerson.ModeledCatchmentGeometryStagings.ToList();
             var layerColors = modeledCatchmentGeometryStagings.Select((value, index) => new {index, value})
@@ -218,11 +218,11 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
             var uploadGisReportUrlTemplate =
                 new UrlTemplate<int, int, string>(
-                    SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
-            var modeledCatchmentIndexUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(c => c.Index());
+                    SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
+            var modeledCatchmentIndexUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.Index());
 
-            var viewData = new ApproveModeledCatchmentGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, modeledCatchmentIndexUrl);
-            return RazorPartialView<ApproveModeledCatchmentGisUpload, ApproveModeledCatchmentGisUploadViewData, ApproveModeledCatchmentGisUploadViewModel>(viewData, viewModel);
+            var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, modeledCatchmentIndexUrl);
+            return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
         }
 
         [JurisdictionManageFeature]
@@ -259,7 +259,7 @@ namespace Neptune.Web.Controllers
             }
 
             HttpRequestStorage.DatabaseEntities.ModeledCatchments.DeleteModeledCatchment(modeledCatchment);
-            return new ModalDialogFormJsonResult(SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(c => c.Index()));
+            return new ModalDialogFormJsonResult(SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.Index()));
         }
 
         private PartialViewResult ViewDelete(ModeledCatchment modeledCatchment, ConfirmDialogFormViewModel viewModel)
@@ -267,7 +267,7 @@ namespace Neptune.Web.Controllers
             var canDelete = modeledCatchment.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
                 ? "Are you sure you want to delete the Modeled Catchment?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Modeled Catchment", SitkaRoute<ModeledCatchmentController>.BuildLinkFromExpression(x => x.Detail(modeledCatchment), "here"));
+                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Modeled Catchment", SitkaRoute<DelineationUploadController>.BuildLinkFromExpression(x => x.Detail(modeledCatchment), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);

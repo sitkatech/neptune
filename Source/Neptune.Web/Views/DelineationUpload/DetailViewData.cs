@@ -23,7 +23,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
     public class DetailViewData : NeptuneViewData
     {
@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.ModeledCatchment
             ModeledCatchment = modeledCatchment;
             PageTitle = modeledCatchment.ModeledCatchmentName;
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
-            EntityUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(x => x.Index());
+            EntityUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.Index());
             MapInitJson = mapInitJson;
             CurrentPersonCanManage = CurrentPerson.IsAssignedToStormwaterJurisdiction(ModeledCatchment.StormwaterJurisdiction);
         }

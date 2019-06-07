@@ -1,13 +1,13 @@
 ﻿using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ModeledCatchment
+namespace Neptune.Web.Views.DelineationUpload
 {
-    public class UpdateModeledCatchmentGeometryViewData : NeptuneViewData
+    public class UpdateDelineationGeometryViewData : NeptuneViewData
     {
         public readonly string NewGisUploadUrl;
         public readonly string ApprovedGisUploadUrl;
 
-        public UpdateModeledCatchmentGeometryViewData(Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public UpdateDelineationGeometryViewData(Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;
