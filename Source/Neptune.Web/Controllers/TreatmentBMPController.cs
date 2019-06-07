@@ -116,7 +116,7 @@ namespace Neptune.Web.Controllers
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            gridSpec = new TreatmentBMPAssessmentSummaryGridSpec(currentPerson, showDelete, showEdit);
+            gridSpec = new TreatmentBMPAssessmentSummaryGridSpec();
             var stormwaterJurisdictionIDsCurrentUserCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(y => y.StormwaterJurisdictionID).ToList();
             return HttpRequestStorage.DatabaseEntities.vMostRecentTreatmentBMPAssessments.Where(x => stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
            

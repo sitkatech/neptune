@@ -70,7 +70,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
     public class TreatmentBMPAssessmentSummaryGridSpec : GridSpec<Models.vMostRecentTreatmentBMPAssessment>
     {
-        public TreatmentBMPAssessmentSummaryGridSpec(Person currentPerson, bool showDelete, bool showEdit)
+        public TreatmentBMPAssessmentSummaryGridSpec()
         {
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdictionName), 170);
