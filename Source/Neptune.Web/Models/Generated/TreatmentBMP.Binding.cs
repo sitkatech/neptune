@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected TreatmentBMP()
         {
             this.CustomAttributes = new HashSet<CustomAttribute>();
+            this.Delineations = new HashSet<Delineation>();
             this.FieldVisits = new HashSet<FieldVisit>();
             this.FundingEvents = new HashSet<FundingEvent>();
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
@@ -38,7 +39,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int? delineationID, int sizingBasisTypeID, int? trashCaptureEffectiveness) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int sizingBasisTypeID, int? trashCaptureEffectiveness) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -59,7 +60,6 @@ namespace Neptune.Web.Models
             this.InventoryVerifiedByPersonID = inventoryVerifiedByPersonID;
             this.InventoryLastChangedDate = inventoryLastChangedDate;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
-            this.DelineationID = delineationID;
             this.SizingBasisTypeID = sizingBasisTypeID;
             this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
         }
@@ -117,13 +117,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
+            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
 
 
         /// <summary>
@@ -149,6 +149,11 @@ namespace Neptune.Web.Models
         {
 
             foreach(var x in CustomAttributes.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in Delineations.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -214,13 +219,15 @@ namespace Neptune.Web.Models
         public int? InventoryVerifiedByPersonID { get; set; }
         public DateTime? InventoryLastChangedDate { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
-        public int? DelineationID { get; set; }
         public int SizingBasisTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
+        public virtual ICollection<Delineation> Delineations { get; set; }
+        [NotMapped]
+        public Delineation Delineation { get { return Delineations.SingleOrDefault(); } set { Delineations = new List<Delineation>{value};} }
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
@@ -236,7 +243,6 @@ namespace Neptune.Web.Models
         public TreatmentBMPLifespanType TreatmentBMPLifespanType { get { return TreatmentBMPLifespanTypeID.HasValue ? TreatmentBMPLifespanType.AllLookupDictionary[TreatmentBMPLifespanTypeID.Value] : null; } }
         public virtual Person InventoryVerifiedByPerson { get; set; }
         public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
-        public virtual Delineation Delineation { get; set; }
         public SizingBasisType SizingBasisType { get { return SizingBasisType.AllLookupDictionary[SizingBasisTypeID]; } }
 
         public static class FieldLengths

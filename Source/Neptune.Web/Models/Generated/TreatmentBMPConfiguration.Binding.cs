@@ -34,7 +34,6 @@ namespace Neptune.Web.Models
             Property(x => x.InventoryVerifiedByPersonID).HasColumnName(@"InventoryVerifiedByPersonID").HasColumnType("int").IsOptional();
             Property(x => x.InventoryLastChangedDate).HasColumnName(@"InventoryLastChangedDate").HasColumnType("datetime").IsOptional();
             Property(x => x.TrashCaptureStatusTypeID).HasColumnName(@"TrashCaptureStatusTypeID").HasColumnType("int").IsRequired();
-            Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.SizingBasisTypeID).HasColumnName(@"SizingBasisTypeID").HasColumnType("int").IsRequired();
             Property(x => x.TrashCaptureEffectiveness).HasColumnName(@"TrashCaptureEffectiveness").HasColumnType("int").IsOptional();
 
@@ -44,7 +43,6 @@ namespace Neptune.Web.Models
             HasRequired(a => a.OwnerOrganization).WithMany(b => b.TreatmentBMPsWhereYouAreTheOwnerOrganization).HasForeignKey(c => c.OwnerOrganizationID).WillCascadeOnDelete(false); // FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID
             HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID
             HasOptional(a => a.InventoryVerifiedByPerson).WithMany(b => b.TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson).HasForeignKey(c => c.InventoryVerifiedByPersonID).WillCascadeOnDelete(false); // FK_TreatmentBMP_Person_InventoryVerifiedByPersonID_PersonID
-            HasOptional(a => a.Delineation).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.DelineationID).WillCascadeOnDelete(false); // FK_TreatmentBMP_Delineation_DelineationID
         }
     }
 }

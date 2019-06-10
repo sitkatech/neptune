@@ -122,8 +122,6 @@ namespace Neptune.Web.Controllers
                 }
                 else
                 {
-                    treatmentBMP.DelineationID = null;
-                    HttpRequestStorage.DatabaseEntities.SaveChanges();
                     HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
 
                 }
@@ -135,15 +133,13 @@ namespace Neptune.Web.Controllers
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false);
+                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-                treatmentBMP.DelineationID = delineation.DelineationID;
             }
 
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-
-            return Json(new {success = true, delineationID = treatmentBMP.DelineationID});
+            return Json(new {success = true, delineationID = treatmentBMP.Delineation.DelineationID});
         }
 
         [HttpGet]
@@ -197,9 +193,6 @@ namespace Neptune.Web.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
-            treatmentBMP.DelineationID = null;
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
             delineation.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
 
@@ -229,10 +222,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteDelineation(delineation, viewModel);
             }
-
-            delineation.TreatmentBMP.DelineationID = null;
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
+            
             delineation.DelineationGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();

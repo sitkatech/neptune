@@ -21,9 +21,11 @@ namespace Neptune.Web.Models
             Property(x => x.IsVerified).HasColumnName(@"IsVerified").HasColumnType("bit").IsRequired();
             Property(x => x.DateLastVerified).HasColumnName(@"DateLastVerified").HasColumnType("datetime").IsOptional();
             Property(x => x.VerifiedByPersonID).HasColumnName(@"VerifiedByPersonID").HasColumnType("int").IsOptional();
+            Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsRequired();
 
             // Foreign keys
             HasOptional(a => a.VerifiedByPerson).WithMany(b => b.DelineationsWhereYouAreTheVerifiedByPerson).HasForeignKey(c => c.VerifiedByPersonID).WillCascadeOnDelete(false); // FK_Delineation_Person_VerifiedByPersonID_PersonID
+            HasRequired(a => a.TreatmentBMP).WithMany(b => b.Delineations).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_Delineation_TreatmentBMP_TreatmentBMPID
         }
     }
 }
