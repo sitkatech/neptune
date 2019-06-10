@@ -45,45 +45,27 @@ namespace Neptune.Web.Views.DelineationUpload
             HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
 
             currentPerson.DelineationGeometryStagings.Clear();
+
             if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
             {
                 var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
-                Debug.Assert(stormwaterJurisdiction != null, "Treatment BMP should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
+                Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
 
-                var delineationsInDatabase = HttpRequestStorage.DatabaseEntities.Delineations.Local;
-                var delineationsToSave = 
-                    WktAndAnnotations.Select(x =>
-                        {
-                            var delineationGeometry = DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId);
-                            var delineationType = DelineationType.Distributed.DelineationTypeID;
-                            //var delineationType = DelineationType.ToType( (DelineationTypeEnum) Enum.Parse(typeof(DelineationTypeEnum), x.Annotation) ).DelineationTypeID;
-                            return new Models.Delineation(
-                                    delineationGeometry,
-                                    delineationType, true);
-                        })
-                        .ToList();
-
-                // We want to remove candidates that are in bmpRegistrations that would forbid editing of catchment geometry
-                var delineationNamesToRemove =
-                    HttpRequestStorage.DatabaseEntities.Delineations.ToList()                       
-                        .Select(x => x.DelineationID);
-
-                delineationsToSave = delineationsToSave.Where(x => !delineationNamesToRemove.Contains(x.DelineationID)).ToList();
-
-
-                var delineationsToMerge = stormwaterJurisdiction.TreatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation).ToList();
-
-                delineationsToMerge.MergeNew(delineationsToSave,
-                    (x, y) => x.DelineationID == y.DelineationID,
-                    delineationsInDatabase);
-
-
-                delineationsToMerge.MergeUpdate(delineationsToSave,
-                    (x, y) => x.DelineationID == y.DelineationID,
-                    (x, y) =>
+                var delineationsToCreate = stormwaterJurisdiction.TreatmentBMPs.ToList().Join(WktAndAnnotations,
+                    x => x.TreatmentBMPName, y => y.Annotation,
+                    (x, y) => new
                     {
-                        x.DelineationGeometry = y.DelineationGeometry;
+                        Delineation = new Models.Delineation(DbGeometry.FromText(y.Wkt, MapInitJson.CoordinateSystemId),
+                            DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID),
+                       x.TreatmentBMPID
                     });
+
+                var delineationsToDelete = HttpRequestStorage.DatabaseEntities.Delineations.Where(x=> delineationsToCreate.Select(y=>y.TreatmentBMPID).Contains(x.TreatmentBMPID));
+
+                HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineationsToDelete.ToList());
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                HttpRequestStorage.DatabaseEntities.Delineations.AddRange(delineationsToCreate.Select(x=>x.Delineation));
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
         }
 
