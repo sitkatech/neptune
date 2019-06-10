@@ -36,9 +36,6 @@
     @*@if (ViewDataTyped.HasAdminPermissions)*@
     <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadTreatmentBMPDelineationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Bulk Upload Treatment BMP Delineations</a>
 }
-    <button class="btn btn-neptune" onclick="createDownloadConfirmDialog()"><span class="glyphicon glyphicon-map-marker" style="margin-right: 5px;"></span>Export Inventory to GIS</button>
-
-}
 
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
 

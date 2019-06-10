@@ -11,7 +11,8 @@ namespace Neptune.Web.Views.DelineationUpload
         {
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;
-            PageTitle = "Update Catchment Geometry";
+            EntityName = Models.FieldDefinition.Delineation.GetFieldDefinitionLabel();
+            PageTitle = "Update Delineation Geometry";
         }
     }
 }

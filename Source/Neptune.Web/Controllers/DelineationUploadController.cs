@@ -115,7 +115,7 @@ namespace Neptune.Web.Controllers
                             LayerInitialVisibility.Show)).ToList();
             var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
             var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) {AllowFullScreen = false};
-            var stormwaterJurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
+            var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit();
             var uploadGisReportUrlTemplate =
                 new UrlTemplate<int, int, string>(
                     SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
