@@ -110,6 +110,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedPartialCaptureConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTargetReductionConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTrashAssessmentConfiguration());
+            modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
         }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
         public virtual DbSet<BackboneSegment> BackboneSegments { get; set; }
@@ -187,6 +188,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<vTrashGeneratingUnitLoadBasedPartialCapture> vTrashGeneratingUnitLoadBasedPartialCaptures { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedTargetReduction> vTrashGeneratingUnitLoadBasedTargetReductions { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedTrashAssessment> vTrashGeneratingUnitLoadBasedTrashAssessments { get; set; }
+        public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
 
         public object LoadType(Type type, int primaryKey)
         {
