@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Diagnostics;
 using System.Linq;
 using LtInfo.Common;
+using LtInfo.Common.GeoJson;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -19,7 +21,7 @@ namespace Neptune.Web.Views.DelineationUpload
         [Required]
         public int? LayerToImportID { get; set; }
 
-        public List<ModeledCatchmentGeometryLayer> ModeledCatchmentGeometryLayers { get; set; }
+        public List<DelineationGeometryLayer> DelineationGeometryLayers { get; set; }
 
         public List<WktAndAnnotation> WktAndAnnotations { get; set; }
 
@@ -32,42 +34,55 @@ namespace Neptune.Web.Views.DelineationUpload
 
         public ApproveDelineationGisUploadViewModel(Person currentPerson)
         {
-            ModeledCatchmentGeometryLayers =
-                currentPerson.ModeledCatchmentGeometryStagings.Select(
-                    x => new ModeledCatchmentGeometryLayer {ModeledCatchmentGeometryStagingID = x.ModeledCatchmentGeometryStagingID, SelectedProperty = x.SelectedProperty}).ToList();
+            DelineationGeometryLayers =
+                currentPerson.DelineationGeometryStagings.Select(
+                    x => new DelineationGeometryLayer {DelineationGeometryStagingID = x.DelineationGeometryStagingID, SelectedProperty = x.SelectedProperty}).ToList();
         }
 
         public void UpdateModel(Person currentPerson)
         {
-            var modeledCatchmentGeometryStagings = currentPerson.ModeledCatchmentGeometryStagings.ToList();
-            HttpRequestStorage.DatabaseEntities.ModeledCatchmentGeometryStagings.DeleteModeledCatchmentGeometryStaging(modeledCatchmentGeometryStagings);
+            var delineationGeometryStagings = currentPerson.DelineationGeometryStagings.ToList();
+            HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
 
-            currentPerson.ModeledCatchmentGeometryStagings.Clear();
-            if (ModeledCatchmentGeometryLayers != null && ModeledCatchmentGeometryLayers.Count > 0)
+            currentPerson.DelineationGeometryStagings.Clear();
+            if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
             {
                 var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
-                Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
+                Debug.Assert(stormwaterJurisdiction != null, "Treatment BMP should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
 
-                var modeledCatchmentsInDatabase = HttpRequestStorage.DatabaseEntities.ModeledCatchments.Local;
-                var modeledCatchmentsToSave =
-                    WktAndAnnotations.Select(x => new Models.ModeledCatchment(x.Annotation, stormwaterJurisdiction.StormwaterJurisdictionID) {ModeledCatchmentGeometry = DbGeometry.FromText(x.Wkt)})
+                var delineationsInDatabase = HttpRequestStorage.DatabaseEntities.Delineations.Local;
+                var delineationsToSave = 
+                    WktAndAnnotations.Select(x =>
+                        {
+                            var delineationGeometry = DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId);
+                            var delineationType = DelineationType.Distributed.DelineationTypeID;
+                            //var delineationType = DelineationType.ToType( (DelineationTypeEnum) Enum.Parse(typeof(DelineationTypeEnum), x.Annotation) ).DelineationTypeID;
+                            return new Models.Delineation(
+                                    delineationGeometry,
+                                    delineationType, true);
+                        })
                         .ToList();
 
                 // We want to remove candidates that are in bmpRegistrations that would forbid editing of catchment geometry
-                var modeledCatchmentNamesToRemove =
-                    HttpRequestStorage.DatabaseEntities.ModeledCatchments.ToList()                       
-                        .Select(x => x.ModeledCatchmentName);
-                modeledCatchmentsToSave = modeledCatchmentsToSave.Where(x => !modeledCatchmentNamesToRemove.Contains(x.ModeledCatchmentName)).ToList();
+                var delineationNamesToRemove =
+                    HttpRequestStorage.DatabaseEntities.Delineations.ToList()                       
+                        .Select(x => x.DelineationID);
 
-                var modeledCatchmentsToMerge = stormwaterJurisdiction.ModeledCatchments.ToList();
-                modeledCatchmentsToMerge.MergeNew(modeledCatchmentsToSave,
-                    (x, y) => x.ModeledCatchmentName == y.ModeledCatchmentName,
-                    modeledCatchmentsInDatabase);
-                modeledCatchmentsToMerge.MergeUpdate(modeledCatchmentsToSave,
-                    (x, y) => x.ModeledCatchmentName == y.ModeledCatchmentName,
+                delineationsToSave = delineationsToSave.Where(x => !delineationNamesToRemove.Contains(x.DelineationID)).ToList();
+
+
+                var delineationsToMerge = stormwaterJurisdiction.TreatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation).ToList();
+
+                delineationsToMerge.MergeNew(delineationsToSave,
+                    (x, y) => x.DelineationID == y.DelineationID,
+                    delineationsInDatabase);
+
+
+                delineationsToMerge.MergeUpdate(delineationsToSave,
+                    (x, y) => x.DelineationID == y.DelineationID,
                     (x, y) =>
                     {
-                        x.ModeledCatchmentGeometry = y.ModeledCatchmentGeometry;
+                        x.DelineationGeometry = y.DelineationGeometry;
                     });
             }
         }
@@ -76,7 +91,7 @@ namespace Neptune.Web.Views.DelineationUpload
         {
             var errors = new List<ValidationResult>();
 
-            if (LayerToImportID == null || !ModeledCatchmentGeometryLayers.Select(x => x.ModeledCatchmentGeometryStagingID).Contains(LayerToImportID.Value))
+            if (LayerToImportID == null || !DelineationGeometryLayers.Select(x => x.DelineationGeometryStagingID).Contains(LayerToImportID.Value))
             {
                 errors.Add(new ValidationResult("Must select one layer to import"));
             }
@@ -85,10 +100,10 @@ namespace Neptune.Web.Views.DelineationUpload
         }
     }
 
-    public class ModeledCatchmentGeometryLayer
+    public class DelineationGeometryLayer
     {
         [Required]
-        public int ModeledCatchmentGeometryStagingID { get; set; }
+        public int DelineationGeometryStagingID { get; set; }
 
         public string SelectedProperty { get; set; }
     }

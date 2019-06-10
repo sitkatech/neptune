@@ -19,10 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.MvcResults;
@@ -31,87 +27,14 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.DelineationUpload;
 using Neptune.Web.Views.Shared;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Neptune.Web.Controllers
 {
     public class DelineationUploadController : NeptuneBaseController
     {
-        //[NeptuneViewFeature]
-        //public ViewResult Index()
-        //{
-        //    var delineations = HttpRequestStorage.DatabaseEntities.Delineations.ToList();
-        //    var delineationLayerGeoJson = StormwaterMapInitJson.MakeDelineationLayerGeoJson(delineations, false, false);
-        //    var mapInitJson = new SearchMapInitJson("StormwaterDetailMap", delineationLayerGeoJson);
-
-        //    var corralPage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.Delineation);
-        //    var updateDelineationGeometryUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateDelineationGeometry());
-        //    var viewData = new IndexViewData(CurrentPerson, mapInitJson, corralPage, updateDelineationGeometryUrl);
-        //    return RazorView<Index, IndexViewData>(viewData);
-        //}
-
-        //[NeptuneViewFeature]
-        //public GridJsonNetJObjectResult<Delineation> IndexGridJsonData()
-        //{
-        //    IndexGridSpec gridSpec;
-        //    var delineations = GetDelineationsAndGridSpec(out gridSpec, CurrentPerson);
-        //    var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
-        //    return gridJsonNetJObjectResult;
-        //}
-
-        //private List<Delineation> GetDelineationsAndGridSpec(out IndexGridSpec gridSpec, Person currentPerson)
-        //{
-        //    gridSpec = new IndexGridSpec(currentPerson);
-        //    return HttpRequestStorage.DatabaseEntities.Delineations.ToList();
-        //}
-
-        //[NeptuneViewFeature]
-        //public ViewResult Detail(DelineationPrimaryKey delineationPrimaryKey)
-        //{
-        //    var delineation = delineationPrimaryKey.EntityObject;
-        //    var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
-        //    var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", 1, layerGeoJsons, new BoundingBox(delineation.DelineationGeometry));
-
-        //    if (delineation.DelineationGeometry != null)
-        //    {
-        //        mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(new[] {delineation}, false, false));
-        //    }
-
-        //    var viewData = new DetailViewData(CurrentPerson, delineation, mapInitJson);
-        //    return RazorView<Detail, DetailViewData>(viewData);
-        //}
-
-        //[HttpGet]
-        //[DelineationManageFeature]
-        //public ViewResult Edit(DelineationPrimaryKey delineationPrimaryKey)
-        //{
-        //    var delineation = delineationPrimaryKey.EntityObject;
-        //    var viewModel = new EditViewModel(delineation);
-        //    return ViewEdit(viewModel);
-        //}
-
-        //[HttpPost]
-        //[DelineationManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult Edit(DelineationPrimaryKey delineationPrimaryKey, EditViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewEdit(viewModel);
-        //    }
-
-        //    var delineation = delineationPrimaryKey.EntityObject;
-        //    viewModel.UpdateModel(delineation, CurrentPerson);
-        //    return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.Detail(delineation.PrimaryKey)));
-        //}
-
-        //private ViewResult ViewEdit(EditViewModel viewModel)
-        //{
-        //    var delineation = HttpRequestStorage.DatabaseEntities.Delineations.SingleOrDefault(x => x.DelineationID == viewModel.DelineationID);
-        //    var viewData = new EditViewData(CurrentPerson, delineation);
-        //    return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
-        //}
-
         [NeptuneViewFeature]
         public PartialViewResult SummaryForMap(DelineationPrimaryKey delineationPrimaryKey)
         {
@@ -121,26 +44,6 @@ namespace Neptune.Web.Controllers
             var viewData = new SummaryForMapViewData(CurrentPerson, delineation, deleteDelineationUrl, canDeleteCatchment);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
-
-        //[NeptuneViewFeature]
-        //public JsonResult FindByName(string term)
-        //{
-        //    var searchString = term.Trim();
-        //    var allDelineationsMatchingSearchString = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.DelineationName.Contains(searchString)).ToList();
-
-        //    var listItems = allDelineationsMatchingSearchString.OrderBy(x => x.DelineationName).Take(20).Select(mc =>
-        //    {
-        //        var delineationMapSummaryData = new SearchMapSummaryData(mc.GetMapSummaryUrl(),
-        //            mc.DelineationGeometry,
-        //            mc.DelineationGeometry.Centroid.YCoordinate,
-        //            mc.DelineationGeometry.Centroid.XCoordinate,
-        //            mc.DelineationID);
-        //        var listItem = new ListItem(mc.DelineationName, JsonConvert.SerializeObject(delineationMapSummaryData));
-        //        return listItem;
-        //    }).ToList();
-
-        //    return Json(listItems, JsonRequestBehavior.AllowGet);
-        //}
 
         [HttpGet]
         [JurisdictionManageFeature]
@@ -206,8 +109,7 @@ namespace Neptune.Web.Controllers
                 delineationGeometryStagings.Select(
                     (delineationGeometryStaging, i) =>
                         new LayerGeoJson(delineationGeometryStaging.FeatureClassName,
-                            new List<DelineationGeometryStaging>
-                                { delineationGeometryStaging}.ToGeoJsonFeatureCollection(),
+                            delineationGeometryStaging.ToGeoJsonFeatureCollection(),
                             layerColors[delineationGeometryStaging.DelineationGeometryStagingID],
                             1,
                             LayerInitialVisibility.Show)).ToList();

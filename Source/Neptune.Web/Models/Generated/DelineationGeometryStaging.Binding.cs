@@ -30,12 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DelineationGeometryStaging(int delineationGeometryStagingID, string delineationGeometryStagingGeometry, int personID, string featureClassName, string selectedProperty, bool shouldImport) : this()
+        public DelineationGeometryStaging(int delineationGeometryStagingID, int personID, string featureClassName, string delineationGeometryStagingGeometry, string selectedProperty, bool shouldImport) : this()
         {
             this.DelineationGeometryStagingID = delineationGeometryStagingID;
-            this.DelineationGeometryStagingGeometry = delineationGeometryStagingGeometry;
             this.PersonID = personID;
             this.FeatureClassName = featureClassName;
+            this.DelineationGeometryStagingGeometry = delineationGeometryStagingGeometry;
             this.SelectedProperty = selectedProperty;
             this.ShouldImport = shouldImport;
         }
@@ -43,29 +43,29 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DelineationGeometryStaging(string delineationGeometryStagingGeometry, int personID, string featureClassName, bool shouldImport) : this()
+        public DelineationGeometryStaging(int personID, string featureClassName, string delineationGeometryStagingGeometry, bool shouldImport) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationGeometryStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.DelineationGeometryStagingGeometry = delineationGeometryStagingGeometry;
             this.PersonID = personID;
             this.FeatureClassName = featureClassName;
+            this.DelineationGeometryStagingGeometry = delineationGeometryStagingGeometry;
             this.ShouldImport = shouldImport;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public DelineationGeometryStaging(string delineationGeometryStagingGeometry, Person person, string featureClassName, bool shouldImport) : this()
+        public DelineationGeometryStaging(Person person, string featureClassName, string delineationGeometryStagingGeometry, bool shouldImport) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationGeometryStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            this.DelineationGeometryStagingGeometry = delineationGeometryStagingGeometry;
             this.PersonID = person.PersonID;
             this.Person = person;
             person.DelineationGeometryStagings.Add(this);
             this.FeatureClassName = featureClassName;
+            this.DelineationGeometryStagingGeometry = delineationGeometryStagingGeometry;
             this.ShouldImport = shouldImport;
         }
 
@@ -74,7 +74,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static DelineationGeometryStaging CreateNewBlank(Person person)
         {
-            return new DelineationGeometryStaging(default(string), person, default(string), default(bool));
+            return new DelineationGeometryStaging(person, default(string), default(string), default(bool));
         }
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace Neptune.Web.Models
 
         [Key]
         public int DelineationGeometryStagingID { get; set; }
-        public string DelineationGeometryStagingGeometry { get; set; }
         public int PersonID { get; set; }
         public string FeatureClassName { get; set; }
+        public string DelineationGeometryStagingGeometry { get; set; }
         public string SelectedProperty { get; set; }
         public bool ShouldImport { get; set; }
         [NotMapped]

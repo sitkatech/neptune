@@ -4,9 +4,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DelineationGeometryStaging](
 	[DelineationGeometryStagingID] [int] IDENTITY(1,1) NOT NULL,
-	[DelineationGeometryStagingGeometry] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[PersonID] [int] NOT NULL,
 	[FeatureClassName] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[DelineationGeometryStagingGeometry] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SelectedProperty] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ShouldImport] [bit] NOT NULL,
  CONSTRAINT [PK_DelineationStagging_DelineationStagingID] PRIMARY KEY CLUSTERED 
