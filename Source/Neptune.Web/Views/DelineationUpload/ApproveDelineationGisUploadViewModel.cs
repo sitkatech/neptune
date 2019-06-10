@@ -58,9 +58,11 @@ namespace Neptune.Web.Views.DelineationUpload
                         Delineation = new Models.Delineation(DbGeometry.FromText(y.Wkt, MapInitJson.CoordinateSystemId),
                             DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID),
                        x.TreatmentBMPID
-                    });
+                    }).ToList();
 
-                var delineationsToDelete = HttpRequestStorage.DatabaseEntities.Delineations.Where(x=> delineationsToCreate.Select(y=>y.TreatmentBMPID).Contains(x.TreatmentBMPID));
+                var treatmentBMPIDsToReplaceDelineation = delineationsToCreate.Select(y => y.TreatmentBMPID);
+
+                var delineationsToDelete = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => treatmentBMPIDsToReplaceDelineation.Contains(x.TreatmentBMPID));
 
                 HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineationsToDelete.ToList());
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
