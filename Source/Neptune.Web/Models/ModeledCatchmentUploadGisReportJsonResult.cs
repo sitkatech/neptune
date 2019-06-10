@@ -10,10 +10,9 @@ namespace Neptune.Web.Models
         public int StormwaterJurisdictionID;
         public int DelineationGeometryStagingID;
         public string SelectedProperty;
-        public int? NumberOfCatchments;
-        public int? NumberOfCatchmentsToBeUpdated;
-        public int? NumberOfCatchmentsToBeCreated;
-        public int? NumberOfCatchmentsInActiveBMPRegistration;
+        public int? NumberOfDelineations;
+        public int? NumberOfDelineationsToBeUpdated;
+        public int? NumberOfDelineationsToBeCreated;
         public List<string> Errors;
 
         public static DelineationUploadGisReportJsonResult GetDelineationUpoadGisReportFromStaging(Person person,
@@ -21,12 +20,12 @@ namespace Neptune.Web.Models
             DelineationGeometryStaging delineationGeometryStaging,
             string selectedProperty)
         {
-            var existingDelineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            var treatmentBMPsWithDelineationInStormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
 
             var geoJsonFeatureCollection = delineationGeometryStaging.ToGeoJsonFeatureCollection();
             var candidateDelineationNames = geoJsonFeatureCollection.Features.Select(x => x.Properties[selectedProperty].ToString()).Distinct().ToList();
-            var numberOfCatchments = geoJsonFeatureCollection.Features.Count;
-            if (candidateDelineationNames.Count != numberOfCatchments)
+            var numberOfDelineations = geoJsonFeatureCollection.Features.Count;
+            if (candidateDelineationNames.Count != numberOfDelineations)
             {
                 return new DelineationUploadGisReportJsonResult
                 {
@@ -37,31 +36,24 @@ namespace Neptune.Web.Models
                 };
             }
 
+            var delineationsToBeUpdated = treatmentBMPsWithDelineationInStormwaterJurisdiction.Where(
+                x =>
+                    x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateDelineationNames.Contains(x.TreatmentBMP.TreatmentBMPName.ToString()));
+
+
+            var numberOfDelineationsToBeUpdated = delineationsToBeUpdated.Count();
             var delineationUploadGisReport = new DelineationUploadGisReportJsonResult
             {
                 StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
                 DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
                 SelectedProperty = selectedProperty,
-                NumberOfCatchments = numberOfCatchments,
-                NumberOfCatchmentsToBeUpdated =
-                    existingDelineations.Count(
-                        x =>
-                            x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateDelineationNames.Contains(x.DelineationID.ToString())),
-                NumberOfCatchmentsToBeCreated =
-                    candidateDelineationNames.Count(
-                        x => !existingDelineations.Exists(y => y.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && y.DelineationID.ToString() == x)),
-                NumberOfCatchmentsInActiveBMPRegistration =
-                    existingDelineations.Count(
-                        x =>
-                            x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID && candidateDelineationNames.Contains(x.DelineationID.ToString()))
+                NumberOfDelineations = numberOfDelineations,
+                NumberOfDelineationsToBeUpdated =
+                    numberOfDelineationsToBeUpdated,
+                NumberOfDelineationsToBeCreated =
+                    numberOfDelineations - numberOfDelineationsToBeUpdated
             };
 
-            // Assert that the numbers all add up
-            Check.Assert(
-                delineationUploadGisReport.NumberOfCatchments ==
-                delineationUploadGisReport.NumberOfCatchmentsToBeUpdated + delineationUploadGisReport.NumberOfCatchmentsToBeCreated +
-                delineationUploadGisReport.NumberOfCatchmentsInActiveBMPRegistration,
-                "Modeled catchment upload GIS report results must sum up to the total number of catchments candidates being considered.");
             return delineationUploadGisReport;
         }
     }

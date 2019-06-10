@@ -134,7 +134,7 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
             var delineationGeometryStaging = delineationGeometryStagingPrimaryKey.EntityObject;
 
-            Check.Assert(delineationGeometryStaging.PersonID == CurrentPerson.PersonID, "Modeled Catchment Geometry Staging must belong to the current person");
+            Check.Assert(delineationGeometryStaging.PersonID == CurrentPerson.PersonID, "Delineation Geometry Staging must belong to the current person");
 
             return Json(DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, delineationGeometryStaging, selectedProperty));
         }
@@ -167,8 +167,8 @@ namespace Neptune.Web.Controllers
         {
             var canDelete = delineation.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
-                ? "Are you sure you want to delete the Modeled Catchment?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Modeled Catchment", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Index(), "here"));
+                ? "Are you sure you want to delete the Delineation?"
+                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Delineation", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Index(), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);

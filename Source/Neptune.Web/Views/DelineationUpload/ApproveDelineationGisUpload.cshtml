@@ -106,7 +106,7 @@
             {
                 map.blockMap();
                 pushWktAndAnnotationsToForm(delineationGeometryStagingID, selectedProperty);
-                debugger;
+                
                 var currentReport = _.find(delineationUploadGisReports,
                 {
                     StormwaterJurisdictionID: Number.parseInt(stormwaterJurisdictionID),
@@ -115,7 +115,7 @@
                     });
 
 
-                debugger;
+                
                 if (Sitka.Methods.isUndefinedNullOrEmpty(currentReport))
                 {
                     var uploadGisReportUrl = uploadGisReportUrlTemplate
@@ -136,7 +136,7 @@
                             handleValidReport(data);
                         },
                         error: function() {
-                            debugger;
+                            
                             var report = {
                                 StormwaterJurisdictionID: stormwaterJurisdictionID,
                                 DelineationGeometryStagingID: delineationGeometryStagingID,
@@ -162,17 +162,18 @@
         }
 
         function handleValidReport(report) {
+            debugger;
             if (Sitka.Methods.isUndefinedNullOrEmpty(report.Errors))
             {
                 submitApproveDelineationGisUploadButton.prop("disabled", false);
                 jQuery("#uploadGisReport")
                     .html(jQuery("#uploadGisReportTemplateHtml")
                         .html()
-                        .replace("{{numberOfCatchments}}", report.NumberOfCatchments)
-                        .replace("{{numberOfCatchmentsToBeUpdated}}", report.NumberOfCatchmentsToBeUpdated)
-                        .replace("{{numberOfCatchmentsToBeCreated}}", report.NumberOfCatchmentsToBeCreated)
-                        .replace("{{numberOfCatchmentsInActiveBMPRegistration}}",
-                            report.NumberOfCatchmentsInActiveBMPRegistration));
+                        .replace("{{numberOfDelineations}}", report.NumberOfDelineations)
+                        .replace("{{numberOfDelineationsToBeUpdated}}", report.NumberOfDelineationsToBeUpdated)
+                        .replace("{{numberOfDelineationsToBeCreated}}", report.NumberOfDelineationsToBeCreated)
+                        .replace("{{numberOfDelineationsInActiveBMPRegistration}}",
+                            report.NumberOfDelineationsInActiveBMPRegistration));
             }
             else {
                 _.forEach(report.Errors, function(err) { console.error(err); });
@@ -212,10 +213,9 @@
 <script type="text/html" id="uploadGisReportTemplateHtml">
     <div style="margin-top: 15px;">
         <ul>
-            <li>Layer contains {{numberOfCatchments}} catchments.</li>
-            <li>{{numberOfCatchmentsToBeUpdated}} catchment names match existing catchments in jurisdiction.</li>
-            <li>{{numberOfCatchmentsToBeCreated}} new catchments will be created.</li>
-            <li>{{numberOfCatchmentsInActiveBMPRegistration}} catchments are included in an approved Registration. These catchments will not be updated.</li>
+            <li>Layer contains {{numberOfDelineations}} delineations.</li>
+            <li>{{numberOfDelineationsToBeUpdated}} delineation names match existing delineations in jurisdiction.</li>
+            <li>{{numberOfDelineationsToBeCreated}} new delineations will be created.</li>
         </ul>
     </div>
 </script>
