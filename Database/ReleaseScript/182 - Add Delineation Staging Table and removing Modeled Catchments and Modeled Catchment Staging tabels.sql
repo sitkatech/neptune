@@ -6,11 +6,10 @@ DelineationGeometryStagingGeometry varchar(max) not null,
 SelectedProperty varchar(255) null,
 ShouldImport bit not null
 )
+GO
 
---go
-
---drop table ModeledCatchment
-
---go
-
---drop table ModeledCatchmentGeometryStaging
+Alter Table dbo.TreatmentBMP
+Drop Constraint FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID
+ALTER TABLE [dbo].[ModeledCatchment] DROP CONSTRAINT [FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID]
+drop table ModeledCatchment
+drop table ModeledCatchmentGeometryStaging

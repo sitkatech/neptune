@@ -42,7 +42,6 @@ namespace Neptune.Web.Models
             // Foreign keys
             HasRequired(a => a.TreatmentBMPType).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID
-            HasOptional(a => a.ModeledCatchment).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.ModeledCatchmentID).WillCascadeOnDelete(false); // FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID
             HasRequired(a => a.OwnerOrganization).WithMany(b => b.TreatmentBMPsWhereYouAreTheOwnerOrganization).HasForeignKey(c => c.OwnerOrganizationID).WillCascadeOnDelete(false); // FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID
             HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID
             HasOptional(a => a.InventoryVerifiedByPerson).WithMany(b => b.TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson).HasForeignKey(c => c.InventoryVerifiedByPersonID).WillCascadeOnDelete(false); // FK_TreatmentBMP_Person_InventoryVerifiedByPersonID_PersonID

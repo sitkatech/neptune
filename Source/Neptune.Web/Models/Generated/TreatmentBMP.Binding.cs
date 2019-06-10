@@ -233,7 +233,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        public virtual ModeledCatchment ModeledCatchment { get; set; }
         public virtual Organization OwnerOrganization { get; set; }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public TreatmentBMPLifespanType TreatmentBMPLifespanType { get { return TreatmentBMPLifespanTypeID.HasValue ? TreatmentBMPLifespanType.AllLookupDictionary[TreatmentBMPLifespanTypeID.Value] : null; } }

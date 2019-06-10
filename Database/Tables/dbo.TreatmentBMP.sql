@@ -55,11 +55,6 @@ REFERENCES [dbo].[Delineation] ([DelineationID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Delineation_DelineationID]
 GO
-ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID] FOREIGN KEY([ModeledCatchmentID])
-REFERENCES [dbo].[ModeledCatchment] ([ModeledCatchmentID])
-GO
-ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID]
-GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID] FOREIGN KEY([OwnerOrganizationID])
 REFERENCES [dbo].[Organization] ([OrganizationID])
 GO
