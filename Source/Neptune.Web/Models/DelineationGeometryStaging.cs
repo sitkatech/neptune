@@ -13,7 +13,7 @@ namespace Neptune.Web.Models
 {
     public partial class DelineationGeometryStaging : IAuditableEntity
     {
-        public static List<DelineationGeometryStaging> CreateModeledCatchmentGeometryStagingListFromGdb(FileInfo gdbFile, Person currentPerson)
+        public static List<DelineationGeometryStaging> CreateDelineationGeometryStagingListFromGdb(FileInfo gdbFile, Person currentPerson)
         {
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
                 Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
@@ -32,12 +32,12 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString()
         {
-            return $"Modeled catchment geometry staging {ModeledCatchmentGeometryStagingID}";
+            return $"Modeled catchment geometry staging {DelineationGeometryStagingID}";
         }
 
         public FeatureCollection ToGeoJsonFeatureCollection()
         {
-            return JsonTools.DeserializeObject<FeatureCollection>(GeoJson);
+            return JsonTools.DeserializeObject<FeatureCollection>(DelineationGeometryStagingGeometry);
         }
 
         public static bool IsUsableFeatureCollectionGeoJson(FeatureCollection featureCollection)

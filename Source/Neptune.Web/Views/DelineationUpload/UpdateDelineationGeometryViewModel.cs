@@ -66,7 +66,7 @@ namespace Neptune.Web.Views.DelineationUpload
                                 SitkaLogger.Instance.LogDetailedErrorMessage(e);
                                 return null;
                             }
-                        }).Where(x => x.Value != null && ModeledCatchmentGeometryStaging.IsUsableFeatureCollectionGeoJson(x.Value));
+                        }).Where(x => x.Value != null && DelineationGeometryStaging.IsUsableFeatureCollectionGeoJson(x.Value));
 
                     if (!featureClasses.Any())
                     {
@@ -85,9 +85,9 @@ namespace Neptune.Web.Views.DelineationUpload
                 var gdbFile = disposableTempFile.FileInfo;
                 FileResourceData.SaveAs(gdbFile.FullName);
 
-                HttpRequestStorage.DatabaseEntities.ModeledCatchmentGeometryStagings.DeleteModeledCatchmentGeometryStaging(currentPerson.ModeledCatchmentGeometryStagings);
-                currentPerson.ModeledCatchmentGeometryStagings.Clear();
-                ModeledCatchmentGeometryStaging.CreateModeledCatchmentGeometryStagingListFromGdb(gdbFile, currentPerson);
+                HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(currentPerson.DelineationGeometryStagings);
+                currentPerson.DelineationGeometryStagings.Clear();
+                DelineationGeometryStaging.CreateDelineationGeometryStagingListFromGdb(gdbFile, currentPerson);
             }
         }
     }
