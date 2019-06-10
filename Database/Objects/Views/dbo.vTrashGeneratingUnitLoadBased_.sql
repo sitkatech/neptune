@@ -36,7 +36,7 @@ From
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.Delineation d
-		on tbmp.DelineationID = d.DelineationID
+		on tbmp.TreatmentBMPID = d.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -94,7 +94,7 @@ From
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.Delineation d
-		on tbmp.DelineationID = d.DelineationID
+		on tbmp.TreatmentBMPID = d.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -143,7 +143,7 @@ From
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.Delineation d
-		on tbmp.DelineationID = d.DelineationID
+		on tbmp.TreatmentBMPID = d.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut

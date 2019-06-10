@@ -22,7 +22,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[InventoryVerifiedByPersonID] [int] NULL,
 	[InventoryLastChangedDate] [datetime] NULL,
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
-	[DelineationID] [int] NULL,
 	[SizingBasisTypeID] [int] NOT NULL,
 	[TrashCaptureEffectiveness] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
@@ -41,18 +40,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [AK_TreatmentBMP_DelineationID] ON [dbo].[TreatmentBMP]
-(
-	[DelineationID] ASC
-)
-WHERE ([DelineationID] IS NOT NULL)
-WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Delineation_DelineationID] FOREIGN KEY([DelineationID])
-REFERENCES [dbo].[Delineation] ([DelineationID])
-GO
-ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Delineation_DelineationID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID] FOREIGN KEY([OwnerOrganizationID])
 REFERENCES [dbo].[Organization] ([OrganizationID])
