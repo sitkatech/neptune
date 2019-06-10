@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
             Property(x => x.DelineationGeometryStagingID).HasColumnName(@"DelineationGeometryStagingID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.PersonID).HasColumnName(@"PersonID").HasColumnType("int").IsRequired();
             Property(x => x.FeatureClassName).HasColumnName(@"FeatureClassName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(255);
-            Property(x => x.DelineationGeometryStagingGeometry).HasColumnName(@"DelineationGeometryStagingGeometry").HasColumnType("varchar").IsRequired();
+            Property(x => x.DelineationGeometryStagingGeoJson).HasColumnName(@"DelineationGeometryStagingGeoJson").HasColumnType("varchar").IsRequired();
             Property(x => x.SelectedProperty).HasColumnName(@"SelectedProperty").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(255);
             Property(x => x.ShouldImport).HasColumnName(@"ShouldImport").HasColumnType("bit").IsRequired();
 

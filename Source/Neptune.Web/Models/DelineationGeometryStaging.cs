@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
 
         public FeatureCollection ToGeoJsonFeatureCollection()
         {
-            return JsonTools.DeserializeObject<FeatureCollection>(DelineationGeometryStagingGeometry);
+            return JsonTools.DeserializeObject<FeatureCollection>(DelineationGeometryStagingGeoJson);
         }
 
         public static bool IsUsableFeatureCollectionGeoJson(FeatureCollection featureCollection)

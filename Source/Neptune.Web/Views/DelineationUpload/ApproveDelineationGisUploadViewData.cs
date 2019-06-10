@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.DelineationUpload
                 x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));
             UploadGisReportUrlTemplate = uploadGisReportUrlTemplateTemplate;
             DelineationIndexUrl = delineationIndexUrl;
-            DelineationStagingGeoJsons = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.DelineationGeometryStagingGeometry);
+            DelineationStagingGeoJsons = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.DelineationGeometryStagingGeoJson);
         }
     }
 }

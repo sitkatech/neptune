@@ -6,10 +6,10 @@ CREATE TABLE [dbo].[DelineationGeometryStaging](
 	[DelineationGeometryStagingID] [int] IDENTITY(1,1) NOT NULL,
 	[PersonID] [int] NOT NULL,
 	[FeatureClassName] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[DelineationGeometryStagingGeometry] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[DelineationGeometryStagingGeoJson] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SelectedProperty] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ShouldImport] [bit] NOT NULL,
- CONSTRAINT [PK_DelineationStagging_DelineationStagingID] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_DelineationStaging_DelineationStagingID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationGeometryStagingID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]

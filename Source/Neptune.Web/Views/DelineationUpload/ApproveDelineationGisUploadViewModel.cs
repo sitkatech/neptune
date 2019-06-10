@@ -43,8 +43,7 @@ namespace Neptune.Web.Views.DelineationUpload
         {
             var delineationGeometryStagings = currentPerson.DelineationGeometryStagings.ToList();
             HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
-
-            currentPerson.DelineationGeometryStagings.Clear();
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
             {
@@ -66,6 +65,7 @@ namespace Neptune.Web.Views.DelineationUpload
 
                 HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineationsToDelete.ToList());
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
+
                 HttpRequestStorage.DatabaseEntities.Delineations.AddRange(delineationsToCreate.Select(x=>x.Delineation));
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }

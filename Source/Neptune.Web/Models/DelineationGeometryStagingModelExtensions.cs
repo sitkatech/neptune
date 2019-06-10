@@ -17,9 +17,9 @@ namespace Neptune.Web.Models
         public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<DelineationGeometryStaging> delineationGeometryStagings)
         {
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
-            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometryStagingGeometry != null).Select(x =>
+            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometryStagingGeoJson != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(DbGeometry.FromText(x.DelineationGeometryStagingGeometry));
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(DbGeometry.FromText(x.DelineationGeometryStagingGeoJson));
                 feature.Properties.Add("DelineationGeometryStagingID", x.DelineationGeometryStagingID);
                 feature.Properties.Add("Name", x.DelineationGeometryStagingID);
                 feature.Properties.Add("FeatureWeight", 1);
@@ -34,9 +34,9 @@ namespace Neptune.Web.Models
         public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<DelineationGeometryStaging> delineationGeometryStagings)
         {
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
-            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometryStagingGeometry != null).Select(x =>
+            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometryStagingGeoJson != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(DbGeometry.FromText(x.DelineationGeometryStagingGeometry));
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(DbGeometry.FromText(x.DelineationGeometryStagingGeoJson));
                 feature.Properties.Add("DelineationGeometryStagingID", x.DelineationGeometryStagingID);
                 feature.Properties.Add("Name", x.DelineationGeometryStagingID);
                 feature.Properties.Add("FeatureWeight", 1);
