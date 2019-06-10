@@ -19,7 +19,6 @@ namespace Neptune.Web.Models
     public abstract partial class StormwaterBreadCrumbEntity : IHavePrimaryKey
     {
         public static readonly StormwaterBreadCrumbEntityTreatmentBMP TreatmentBMP = StormwaterBreadCrumbEntityTreatmentBMP.Instance;
-        public static readonly StormwaterBreadCrumbEntityModeledCatchment ModeledCatchment = StormwaterBreadCrumbEntityModeledCatchment.Instance;
         public static readonly StormwaterBreadCrumbEntityJurisdiction Jurisdiction = StormwaterBreadCrumbEntityJurisdiction.Instance;
         public static readonly StormwaterBreadCrumbEntityUsers Users = StormwaterBreadCrumbEntityUsers.Instance;
         public static readonly StormwaterBreadCrumbEntityAssessments Assessments = StormwaterBreadCrumbEntityAssessments.Instance;
@@ -37,7 +36,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static StormwaterBreadCrumbEntity()
         {
-            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, ModeledCatchment, Jurisdiction, Users, Assessments, FieldVisits, FieldRecords, WaterQualityManagementPlan, Parcel, OnlandVisualTrashAssessment };
+            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, Jurisdiction, Users, Assessments, FieldVisits, FieldRecords, WaterQualityManagementPlan, Parcel, OnlandVisualTrashAssessment };
             AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntity>(All.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
         }
 
@@ -119,8 +118,6 @@ namespace Neptune.Web.Models
                     return FieldVisits;
                 case StormwaterBreadCrumbEntityEnum.Jurisdiction:
                     return Jurisdiction;
-                case StormwaterBreadCrumbEntityEnum.ModeledCatchment:
-                    return ModeledCatchment;
                 case StormwaterBreadCrumbEntityEnum.OnlandVisualTrashAssessment:
                     return OnlandVisualTrashAssessment;
                 case StormwaterBreadCrumbEntityEnum.Parcel:
@@ -140,7 +137,6 @@ namespace Neptune.Web.Models
     public enum StormwaterBreadCrumbEntityEnum
     {
         TreatmentBMP = 1,
-        ModeledCatchment = 2,
         Jurisdiction = 3,
         Users = 4,
         Assessments = 5,
@@ -155,12 +151,6 @@ namespace Neptune.Web.Models
     {
         private StormwaterBreadCrumbEntityTreatmentBMP(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
         public static readonly StormwaterBreadCrumbEntityTreatmentBMP Instance = new StormwaterBreadCrumbEntityTreatmentBMP(1, @"TreatmentBMP", @"Treatment BMP", @"glyphicon-leaf", @"treatmentBMPColor");
-    }
-
-    public partial class StormwaterBreadCrumbEntityModeledCatchment : StormwaterBreadCrumbEntity
-    {
-        private StormwaterBreadCrumbEntityModeledCatchment(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
-        public static readonly StormwaterBreadCrumbEntityModeledCatchment Instance = new StormwaterBreadCrumbEntityModeledCatchment(2, @"ModeledCatchment", @"Modeled Catchment", @"glyphicon-tint", @"modeledCatchmentColor");
     }
 
     public partial class StormwaterBreadCrumbEntityJurisdiction : StormwaterBreadCrumbEntity

@@ -10,7 +10,6 @@ values
 (5, 'HomeAdditionalInfo', 'Home Page Additional Info', 2),
 (6, 'TreatmentBMP', 'Treatment BMP', 2),
 (7, 'TreatmentBMPType', 'Treatment BMP Type', 2),
-(8, 'ModeledCatchment', 'Modeled Catchment', 2),
 (9, 'Jurisdiction', 'Jurisdiction', 2),
 (10, 'Assessment', 'Assessment', 2),
 (11, 'ManageObservationTypesList', 'Manage Observation Types List', 2),

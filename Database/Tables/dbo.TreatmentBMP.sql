@@ -8,7 +8,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[LocationPoint] [geometry] NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
-	[ModeledCatchmentID] [int] NULL,
 	[Notes] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[SystemOfRecordID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[YearBuilt] [int] NULL,

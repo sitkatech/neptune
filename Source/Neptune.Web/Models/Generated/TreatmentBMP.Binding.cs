@@ -38,14 +38,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int? delineationID, int sizingBasisTypeID, int? trashCaptureEffectiveness) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int? delineationID, int sizingBasisTypeID, int? trashCaptureEffectiveness) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.LocationPoint = locationPoint;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
-            this.ModeledCatchmentID = modeledCatchmentID;
             this.Notes = notes;
             this.SystemOfRecordID = systemOfRecordID;
             this.YearBuilt = yearBuilt;
@@ -201,7 +200,6 @@ namespace Neptune.Web.Models
         public int TreatmentBMPTypeID { get; set; }
         public DbGeometry LocationPoint { get; set; }
         public int StormwaterJurisdictionID { get; set; }
-        public int? ModeledCatchmentID { get; set; }
         public string Notes { get; set; }
         public string SystemOfRecordID { get; set; }
         public int? YearBuilt { get; set; }

@@ -20,7 +20,6 @@ namespace Neptune.Web.Models
             Property(x => x.TreatmentBMPTypeID).HasColumnName(@"TreatmentBMPTypeID").HasColumnType("int").IsRequired();
             Property(x => x.LocationPoint).HasColumnName(@"LocationPoint").HasColumnType("geometry").IsOptional();
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
-            Property(x => x.ModeledCatchmentID).HasColumnName(@"ModeledCatchmentID").HasColumnType("int").IsOptional();
             Property(x => x.Notes).HasColumnName(@"Notes").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
             Property(x => x.SystemOfRecordID).HasColumnName(@"SystemOfRecordID").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.YearBuilt).HasColumnName(@"YearBuilt").HasColumnType("int").IsOptional();
