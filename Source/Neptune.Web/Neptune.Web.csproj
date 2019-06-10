@@ -46,6 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\DelineationGeometryStaging.cs" />
+    <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -351,6 +353,8 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypeConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\vMostRecentTreatmentBMPAssessment.Binding.cs" />
+    <Compile Include="Models\Generated\vMostRecentTreatmentBMPAssessmentConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vOnlandVisualTrashAssessmentAreaProgress.Binding.cs" />
     <Compile Include="Models\Generated\vOnlandVisualTrashAssessmentAreaProgressConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedFullCapture.Binding.cs" />
@@ -361,6 +365,8 @@
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedTargetReductionConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedTrashAssessment.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedTrashAssessmentConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vTrashGeneratingUnitLoadStatistic.Binding.cs" />
+    <Compile Include="Models\Generated\vTrashGeneratingUnitLoadStatisticConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlan.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlan.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanConfiguration.Binding.cs" />
@@ -421,8 +427,9 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
-    <Compile Include="Models\DelineationGeometryStaging.cs" />
-    <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
+    <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
+    <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cs" />
+    <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummaryViewData.cs" />
     <Compile Include="Models\TrashGeneratingUnit.cs" />
     <Compile Include="Common\AreaCalculationsHelper.cs" />
     <Compile Include="Controllers\LandUseBlockController.cs" />
@@ -1771,6 +1778,7 @@
     <Content Include="Views\Shared\ProjectControls\BulkRowBMPDelineation.cshtml" />
     <Content Include="Views\TrashGeneratingUnit\Index.cshtml" />
     <Content Include="Views\LandUseBlock\Index.cshtml" />
+    <Content Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cshtml" />
     <Content Include="Views\DelineationUpload\ApproveDelineationGisUpload.cshtml" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewModel.cs" />
     <Reference Include="Antlr3.Runtime">

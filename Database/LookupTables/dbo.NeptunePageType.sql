@@ -41,4 +41,5 @@ values
 (37, 'DelineationMap', 'Delineation Map', 2),
 (38, 'BulkUploadRequest', 'Bulk Upload Request', 2),
 (39, 'DroolToolHomePage', 'Drool Tool Home Page', 2),
-(40, 'DroolToolAboutPage', 'Drool Tool About Page', 2)
+(40, 'DroolToolAboutPage', 'Drool Tool About Page', 2),
+(41, 'TreatmentBMPAssessment', 'Treatment BMP Assessment', 2)

@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString()
         {
-            return $"Modeled catchment geometry staging {DelineationGeometryStagingID}";
+            return $"Delineation geometry staging {DelineationGeometryStagingID}";
         }
 
         public FeatureCollection ToGeoJsonFeatureCollection()
