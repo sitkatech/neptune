@@ -1,15 +1,13 @@
-﻿using System;
+﻿
+using LtInfo.Common.Models;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Diagnostics;
 using System.Linq;
-using LtInfo.Common;
-using LtInfo.Common.GeoJson;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.DelineationUpload
 {

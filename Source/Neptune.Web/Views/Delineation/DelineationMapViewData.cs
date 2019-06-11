@@ -10,7 +10,7 @@ namespace Neptune.Web.Views.Delineation
             MapInitJson = mapInitJson;
             IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;
             InitialTreatmentBMPID = initialTreatmentBMP?.TreatmentBMPID;
-            EntityName = "Delineation";
+            EntityName = Models.FieldDefinition.Delineation.FieldDefinitionDisplayName;
             PageTitle = "Delineation Map";
             GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
 
