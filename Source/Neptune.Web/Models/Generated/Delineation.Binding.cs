@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID) : this()
+        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID, DateTime dateLastModified) : this()
         {
             this.DelineationID = delineationID;
             this.DelineationGeometry = delineationGeometry;
@@ -39,12 +39,13 @@ namespace Neptune.Web.Models
             this.DateLastVerified = dateLastVerified;
             this.VerifiedByPersonID = verifiedByPersonID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.DateLastModified = dateLastModified;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, int treatmentBMPID) : this()
+        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, int treatmentBMPID, DateTime dateLastModified) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -53,12 +54,13 @@ namespace Neptune.Web.Models
             this.DelineationTypeID = delineationTypeID;
             this.IsVerified = isVerified;
             this.TreatmentBMPID = treatmentBMPID;
+            this.DateLastModified = dateLastModified;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified, TreatmentBMP treatmentBMP) : this()
+        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified, TreatmentBMP treatmentBMP, DateTime dateLastModified) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -67,6 +69,7 @@ namespace Neptune.Web.Models
             this.IsVerified = isVerified;
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
+            this.DateLastModified = dateLastModified;
         }
 
         /// <summary>
@@ -74,7 +77,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static Delineation CreateNewBlank(DelineationType delineationType, TreatmentBMP treatmentBMP)
         {
-            return new Delineation(default(DbGeometry), delineationType, default(bool), treatmentBMP);
+            return new Delineation(default(DbGeometry), delineationType, default(bool), treatmentBMP, default(DateTime));
         }
 
         /// <summary>
@@ -128,6 +131,7 @@ namespace Neptune.Web.Models
         public DateTime? DateLastVerified { get; set; }
         public int? VerifiedByPersonID { get; set; }
         public int TreatmentBMPID { get; set; }
+        public DateTime DateLastModified { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 

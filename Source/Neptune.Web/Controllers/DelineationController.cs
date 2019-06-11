@@ -133,7 +133,7 @@ namespace Neptune.Web.Controllers
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID);
+                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
             }
 

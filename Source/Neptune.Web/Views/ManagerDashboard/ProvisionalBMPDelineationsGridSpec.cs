@@ -54,6 +54,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Area", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 75,
                 DhtmlxGridColumnFilterType.Text);
+            Add("Date of Last Delineation Modification", x => x.TreatmentBMP.Delineation?.DateLastModified, 120,
+                DhtmlxGridColumnFormatType.Date);
             Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
                 DhtmlxGridColumnFormatType.Date);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),

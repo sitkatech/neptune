@@ -1,5 +1,6 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.Delineation
 {
@@ -16,8 +17,7 @@ namespace Neptune.Web.Views.Delineation
 
             DelineationMapConfig = new DelineationMapConfig(currentPerson.GetStormwaterJurisdictionCqlFilter());
             BulkUploadTreatmentBMPDelineationsUrl = bulkUploadTreatmentBMPDelineationsUrl;
-
-
+            HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
         }
 
         public int? InitialTreatmentBMPID { get; }
@@ -28,5 +28,7 @@ namespace Neptune.Web.Views.Delineation
         public DelineationMapConfig DelineationMapConfig { get; set; }
 
         public string BulkUploadTreatmentBMPDelineationsUrl { get; }
+
+        public bool HasManagePermission { get; }
     }
 }

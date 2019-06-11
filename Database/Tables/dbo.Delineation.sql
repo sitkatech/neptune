@@ -10,6 +10,7 @@ CREATE TABLE [dbo].[Delineation](
 	[DateLastVerified] [datetime] NULL,
 	[VerifiedByPersonID] [int] NULL,
 	[TreatmentBMPID] [int] NOT NULL,
+	[DateLastModified] [datetime] NOT NULL,
  CONSTRAINT [PK_Delineation_DelineationID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationID] ASC
