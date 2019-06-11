@@ -1,6 +1,7 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.LandUseBlock
@@ -10,6 +11,7 @@ namespace Neptune.Web.Views.LandUseBlock
         public LandUseBlockGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
+        public bool HasManagePermission;
 
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage ) : base (currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
@@ -19,6 +21,7 @@ namespace Neptune.Web.Views.LandUseBlock
             GridSpec = new LandUseBlockGridSpec() { ObjectNameSingular = "Land Use Block", ObjectNamePlural = "Land Use Blocks", SaveFiltersInCookie = true };
             GridName = "landUseBlockGrid";
             GridDataUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(j => j.LandUseBlockGridJsonData());
+            HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }

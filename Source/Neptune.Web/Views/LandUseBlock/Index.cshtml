@@ -34,8 +34,16 @@
     }
 </style>
 
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.HasManagePermission)
+    {
+        <a class="btn btn-neptune" href="#">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Bulk Upload Land Use Blocks</a>
+    }
+}
+
 <div class="row">
-    <div class="col-xs-12 col-sm-12">    
+    <div class="col-xs-12 col-sm-12 mt-2">
         @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
         <div class="panel panelNeptune mt-2">
             <div class="panel-heading panelTitle">

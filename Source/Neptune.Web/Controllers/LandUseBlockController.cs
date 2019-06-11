@@ -35,7 +35,7 @@ namespace Neptune.Web.Controllers
     public class LandUseBlockController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LandUseBlock);
@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public GridJsonNetJObjectResult<LandUseBlock> LandUseBlockGridJsonData()
         {
             var treatmentBMPs = GetLandUseBlocksAndGridSpec(out var gridSpec);
@@ -55,7 +55,9 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new LandUseBlockGridSpec();
 
-            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => x.StormwaterJurisdictionID == CurrentPerson.OrganizationID).ToList();
+            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x=>x.StormwaterJurisdictionID).ToList();
+
+            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
         }
     }
 }
