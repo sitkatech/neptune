@@ -9,6 +9,8 @@ Create Procedure dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit
 	@GeometryWKT varchar(max)
 as
 
+return
+
 /*-2. Identify the TGUs that are made dirty by an update to the given Delineation. Save the geom of their unions and delete them */
 Declare @SpliceSeed Geometry;
 Declare @SpliceBase Geometry;
