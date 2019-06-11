@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.DelineationUpload
         {
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;
-            EntityName = Models.FieldDefinition.Delineation.GetFieldDefinitionLabel();
+            EntityName = Models.FieldDefinition.Delineation.FieldDefinitionDisplayName;
             PageTitle = "Update Delineation Geometry";
         }
     }
