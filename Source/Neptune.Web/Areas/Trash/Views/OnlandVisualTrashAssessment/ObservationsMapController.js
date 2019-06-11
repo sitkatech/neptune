@@ -191,7 +191,11 @@
         function showUserLocationOnMap(latlng) {
 
             if ($scope.userLocationLayer) {
-                $scope.neptuneMap.map.removeLayer($scope.userLocationLayer);
+                //$scope.neptuneMap.layerControl.removeLayer($scope.userLocationLayer);
+                //$scope.neptuneMap.map.removeLayer($scope.userLocationLayer);
+
+                $scope.userLocationLayer.setLatLng(latlng);
+                return;
             }
 
             var feature = {
@@ -221,12 +225,13 @@
                 }
             });
 
+            $scope.neptuneMap.layerControl.addOverlay($scope.userLocationLayer,
+                "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+919191@2x.png' height='30px' /> Current Location</span>");
             $scope.userLocationLayer.addTo($scope.neptuneMap.map);
-
-            if ($scope.lastSelected) {
-                $scope.neptuneMap.map.removeLayer($scope.lastSelected);
-                $scope.lastSelected.addTo($scope.neptuneMap.map);
-            }
+            //if ($scope.lastSelected) {
+            //    $scope.neptuneMap.map.removeLayer($scope.lastSelected);
+            //    $scope.lastSelected.addTo($scope.neptuneMap.map);
+            //}
         }
 
         $scope.setSelectedMarker = function (feature) {
@@ -365,7 +370,6 @@
                 formData.append("ID", $scope.currentSelectedMarkerModel.PhotoID);
                 formData.append("IsStagedPhoto", false);
             } else {
-                console.error("You're asking me to delete a photo but I can't find a photo.");
                 return;
             }
 
