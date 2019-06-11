@@ -13,13 +13,19 @@
         $scope.activateClickToAddMode = function () {
             $scope.isClickToAddModeActive = true;
             $scope.isClickToMoveModeActive = false;
-            jQuery('.leaflet-container').css('cursor', 'pointer');
+            if ($scope.neptuneMap.map.hasLayer($scope.neptuneMap.transectLineLayer)) {
+                jQuery('.leaflet-container').css('cursor', 'pointer');
+
+            } else {
+                jQuery('.leaflet-container').css('cursor', 'crosshair');
+            }
+
             jQuery('.leaflet-container path').css('cursor', 'crosshair');
         };
 
         $scope.activateClickToMoveMode = function () {
             $scope.isClickToMoveModeActive = true;
-            jQuery('.leaflet-container').css('cursor', 'pointer');
+            jQuery('.leaflet-container').css('cursor', 'crosshair');
             jQuery('.leaflet-container path').css('cursor', 'crosshair');
         }
 
@@ -29,6 +35,7 @@
             $scope.$apply();
             $scope.isClickToAddModeActive = false;
             jQuery('.leaflet-container').css('cursor', '');
+            jQuery('.leaflet-container path').css('cursor', 'pointer');
         }
 
         function onMapClickToMove(event) {
