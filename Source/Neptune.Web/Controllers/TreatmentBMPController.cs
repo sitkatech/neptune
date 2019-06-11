@@ -145,7 +145,7 @@ namespace Neptune.Web.Controllers
             var vMostRecentTreatmentBMPAssessmentIDs =
                 vMostRecentTreatmentBMPAssessments.Select(y => y.LastAssessmentID).ToList();
 
-            var treatmentBMPObservations = HttpRequestStorage.DatabaseEntities.TreatmentBMPObservations.Where(x =>
+            var treatmentBMPObservations = HttpRequestStorage.DatabaseEntities.TreatmentBMPObservations.OrderBy(x=>x.TreatmentBMPAssessment.TreatmentBMPID).ThenBy(x=>x.TreatmentBMPTypeAssessmentObservationType.SortOrder).Where(x =>
                 vMostRecentTreatmentBMPAssessmentIDs
                     .Contains(x.TreatmentBMPAssessmentID)).ToList().Where(x=> x.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID && x.GetPassFailObservationData().SingleValueObservations.Any(y=> Convert.ToBoolean(y.ObservationValue) == false));
 
@@ -170,10 +170,10 @@ namespace Neptune.Web.Controllers
                 };
             });
 
-            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments.GroupJoin(notes, 
+            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
                 x => x.LastAssessmentID,
                 y => y.TreatmentBMPAssessmentID,
-                (x,y) => new Models.TreatmentBMPAssessmentSummary {AssessmentSummary = x, Notes = string.Join(";", y.Select(z=>z.Notes))});
+                (x,y) => new TreatmentBMPAssessmentSummary {AssessmentSummary = x, Notes = string.Join("; ", y.Select(z=>z.Notes).OrderBy(z=>z))});
 
             return treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
         }

@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vMostRecentTreatmentBMPAssessment(int primaryKey, int treatmentBMPID, string treatmentBMPName, string stormwaterJurisdictionName, int stormwaterJurisdictionID, string ownerOrganizationName, int ownerOrganizationID, int? requiredFieldVisitsPerYear, int? numberOfAssessments, DateTime? lastAssessmentDate, int lastAssessmentID, double? assessmentScore) : this()
+        public vMostRecentTreatmentBMPAssessment(int primaryKey, int treatmentBMPID, string treatmentBMPName, string stormwaterJurisdictionName, int stormwaterJurisdictionID, string ownerOrganizationName, int ownerOrganizationID, int? requiredFieldVisitsPerYear, int? numberOfAssessments, DateTime? lastAssessmentDate, int lastAssessmentID, double? assessmentScore, string fieldVisitType) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPID = treatmentBMPID;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.LastAssessmentDate = lastAssessmentDate;
             this.LastAssessmentID = lastAssessmentID;
             this.AssessmentScore = assessmentScore;
+            this.FieldVisitType = fieldVisitType;
         }
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace Neptune.Web.Models
             this.LastAssessmentDate = vMostRecentTreatmentBMPAssessment.LastAssessmentDate;
             this.LastAssessmentID = vMostRecentTreatmentBMPAssessment.LastAssessmentID;
             this.AssessmentScore = vMostRecentTreatmentBMPAssessment.AssessmentScore;
+            this.FieldVisitType = vMostRecentTreatmentBMPAssessment.FieldVisitType;
             CallAfterConstructor(vMostRecentTreatmentBMPAssessment);
         }
 
@@ -75,5 +77,6 @@ namespace Neptune.Web.Models
         public DateTime? LastAssessmentDate { get; set; }
         public int LastAssessmentID { get; set; }
         public double? AssessmentScore { get; set; }
+        public string FieldVisitType { get; set; }
     }
 }

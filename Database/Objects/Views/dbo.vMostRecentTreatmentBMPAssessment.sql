@@ -15,7 +15,8 @@ select
 	NumberOfAssessments,
 	LastAssessmentDate,
 	tbarecent.TreatmentBMPAssessmentID as LastAssessmentID,
-	tbarecent.AssessmentScore
+	tbarecent.AssessmentScore,
+	tbarecent.FieldVisitTypeDisplayName as FieldVisitType
 	--,	tbo.ObservationData
 From
 	dbo.TreatmentBMP tb
@@ -24,11 +25,14 @@ From
 			tbasub.TreatmentBMPID,
 			AssessmentScore,
 			TreatmentBMPAssessmentID,
+			fvt.FieldVisitTypeDisplayName,
 			ROW_NUMBER() over (partition by tbasub.TreatmentBMPID order by fvsub.VisitDate desc)  as TbaRecentRowNumber
 		from
 			dbo.TreatmentBMPAssessment tbasub
 			join dbo.FieldVisit fvsub
 				on tbasub.FieldVisitID = fvsub.FieldVisitID
+			join dbo.FieldVisitType fvt
+				on fvsub.FieldVisitTypeID = fvt.FieldVisitTypeID
 		where fvsub.FieldVisitStatusID = 2
 	) tbarecent
 		on tb.TreatmentBMPID = tbarecent.TreatmentBMPID 
