@@ -9,9 +9,14 @@ CREATE TABLE [dbo].[Delineation](
 	[IsVerified] [bit] NOT NULL,
 	[DateLastVerified] [datetime] NULL,
 	[VerifiedByPersonID] [int] NULL,
+	[TreatmentBMPID] [int] NOT NULL,
  CONSTRAINT [PK_Delineation_DelineationID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_Delineation_TreatmentBMPID] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
@@ -25,6 +30,11 @@ ALTER TABLE [dbo].[Delineation]  WITH CHECK ADD  CONSTRAINT [FK_Delineation_Pers
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[Delineation] CHECK CONSTRAINT [FK_Delineation_Person_VerifiedByPersonID_PersonID]
+GO
+ALTER TABLE [dbo].[Delineation]  WITH CHECK ADD  CONSTRAINT [FK_Delineation_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[Delineation] CHECK CONSTRAINT [FK_Delineation_TreatmentBMP_TreatmentBMPID]
 GO
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON

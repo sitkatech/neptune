@@ -10,7 +10,6 @@ values
 (5, 'HomeAdditionalInfo', 'Home Page Additional Info', 2),
 (6, 'TreatmentBMP', 'Treatment BMP', 2),
 (7, 'TreatmentBMPType', 'Treatment BMP Type', 2),
-(8, 'ModeledCatchment', 'Modeled Catchment', 2),
 (9, 'Jurisdiction', 'Jurisdiction', 2),
 (10, 'Assessment', 'Assessment', 2),
 (11, 'ManageObservationTypesList', 'Manage Observation Types List', 2),
@@ -42,4 +41,5 @@ values
 (37, 'DelineationMap', 'Delineation Map', 2),
 (38, 'BulkUploadRequest', 'Bulk Upload Request', 2),
 (39, 'DroolToolHomePage', 'Drool Tool Home Page', 2),
-(40, 'DroolToolAboutPage', 'Drool Tool About Page', 2)
+(40, 'DroolToolAboutPage', 'Drool Tool About Page', 2),
+(41, 'TreatmentBMPAssessment', 'Treatment BMP Assessment', 2)

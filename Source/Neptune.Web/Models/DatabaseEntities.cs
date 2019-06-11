@@ -18,6 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
@@ -99,6 +101,11 @@ namespace Neptune.Web.Models
                     "Entity Validation Failed - errors follow:\n" +
                     sb, ex
                 ); // Add the original exception as the innerException
+            }
+            catch (Exception e)
+            {
+
+                throw e;
             }
 
             foreach (var entry in addedEntries)

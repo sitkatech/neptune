@@ -74,11 +74,11 @@ namespace Neptune.Web.Models
             return treatmentBMPLayerGeoJson;
         }
 
-        public static LayerGeoJson MakeModeledCatchmentLayerGeoJson(IEnumerable<ModeledCatchment> modeledCatchments, bool isGeneric, bool enablePopups)
+        public static LayerGeoJson MakeDelineationLayerGeoJson(IEnumerable<Delineation> delineation, bool isGeneric, bool enablePopups)
         {
-            var featureCollection = isGeneric ? modeledCatchments.ToGeoJsonFeatureCollectionGeneric() : modeledCatchments.ToGeoJsonFeatureCollection();
+            var featureCollection = isGeneric ? delineation.ToGeoJsonFeatureCollectionGeneric() : delineation.ToGeoJsonFeatureCollection();
 
-            var catchmentLayerGeoJson = new LayerGeoJson("Modeled Catchments", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
+            var catchmentLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
             return catchmentLayerGeoJson;
         }
 

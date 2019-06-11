@@ -24,13 +24,13 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Delineation()
         {
-            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID) : this()
+        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID) : this()
         {
             this.DelineationID = delineationID;
             this.DelineationGeometry = delineationGeometry;
@@ -38,12 +38,13 @@ namespace Neptune.Web.Models
             this.IsVerified = isVerified;
             this.DateLastVerified = dateLastVerified;
             this.VerifiedByPersonID = verifiedByPersonID;
+            this.TreatmentBMPID = treatmentBMPID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified) : this()
+        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, int treatmentBMPID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -51,26 +52,29 @@ namespace Neptune.Web.Models
             this.DelineationGeometry = delineationGeometry;
             this.DelineationTypeID = delineationTypeID;
             this.IsVerified = isVerified;
+            this.TreatmentBMPID = treatmentBMPID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified) : this()
+        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified, TreatmentBMP treatmentBMP) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.DelineationGeometry = delineationGeometry;
             this.DelineationTypeID = delineationType.DelineationTypeID;
             this.IsVerified = isVerified;
+            this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
+            this.TreatmentBMP = treatmentBMP;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static Delineation CreateNewBlank(DelineationType delineationType)
+        public static Delineation CreateNewBlank(DelineationType delineationType, TreatmentBMP treatmentBMP)
         {
-            return new Delineation(default(DbGeometry), delineationType, default(bool));
+            return new Delineation(default(DbGeometry), delineationType, default(bool), treatmentBMP);
         }
 
         /// <summary>
@@ -79,13 +83,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return (TreatmentBMP != null);
+            return false;
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name};
 
 
         /// <summary>
@@ -101,19 +105,8 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(dbContext);
+            
             Delete(dbContext);
-        }
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
-            foreach(var x in TreatmentBMPs.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
         }
 
         [Key]
@@ -123,14 +116,13 @@ namespace Neptune.Web.Models
         public bool IsVerified { get; set; }
         public DateTime? DateLastVerified { get; set; }
         public int? VerifiedByPersonID { get; set; }
+        public int TreatmentBMPID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 
-        public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
-        [NotMapped]
-        public TreatmentBMP TreatmentBMP { get { return TreatmentBMPs.SingleOrDefault(); } set { TreatmentBMPs = new List<TreatmentBMP>{value};} }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
         public virtual Person VerifiedByPerson { get; set; }
+        public virtual TreatmentBMP TreatmentBMP { get; set; }
 
         public static class FieldLengths
         {

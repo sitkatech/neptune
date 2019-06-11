@@ -25,7 +25,7 @@ VALUES
 (21, N'TreatmentBMPDesignDepth', N'Treatment BMP Design Depth', '', 1),
 (22, N'ReceivesSystemCommunications', N'Receives System Communications', '', 1),
 (23, N'Jurisdiction', N'Jurisdiction', '', 1),
-(24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
+(24, N'Delineation', N'Delineation', '', 1),
 (25, N'TreatmentBMP', N'Treatment BMP', '', 1),
 (26, N'TreatmentBMPAssessmentObservationType', N'Observation Name', '', 1),
 (27, N'ObservationCollectionMethod', N'Collection Method', '', 1),

@@ -40,7 +40,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTreatmentBMPDesignDepth TreatmentBMPDesignDepth = FieldDefinitionTreatmentBMPDesignDepth.Instance;
         public static readonly FieldDefinitionReceivesSystemCommunications ReceivesSystemCommunications = FieldDefinitionReceivesSystemCommunications.Instance;
         public static readonly FieldDefinitionJurisdiction Jurisdiction = FieldDefinitionJurisdiction.Instance;
-        public static readonly FieldDefinitionModeledCatchment ModeledCatchment = FieldDefinitionModeledCatchment.Instance;
+        public static readonly FieldDefinitionDelineation Delineation = FieldDefinitionDelineation.Instance;
         public static readonly FieldDefinitionTreatmentBMP TreatmentBMP = FieldDefinitionTreatmentBMP.Instance;
         public static readonly FieldDefinitionTreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType = FieldDefinitionTreatmentBMPAssessmentObservationType.Instance;
         public static readonly FieldDefinitionObservationCollectionMethod ObservationCollectionMethod = FieldDefinitionObservationCollectionMethod.Instance;
@@ -95,7 +95,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -203,6 +203,8 @@ namespace Neptune.Web.Models
                     return DefaultBenchmarkValue;
                 case FieldDefinitionEnum.DefaultThresholdValue:
                     return DefaultThresholdValue;
+                case FieldDefinitionEnum.Delineation:
+                    return Delineation;
                 case FieldDefinitionEnum.DelineationType:
                     return DelineationType;
                 case FieldDefinitionEnum.ExternalLinks:
@@ -239,8 +241,6 @@ namespace Neptune.Web.Models
                     return MinimumNumberOfObservations;
                 case FieldDefinitionEnum.MinimumValueOfEachObservation:
                     return MinimumValueOfEachObservation;
-                case FieldDefinitionEnum.ModeledCatchment:
-                    return ModeledCatchment;
                 case FieldDefinitionEnum.ObservationCollectionMethod:
                     return ObservationCollectionMethod;
                 case FieldDefinitionEnum.ObservationScore:
@@ -341,7 +341,7 @@ namespace Neptune.Web.Models
         TreatmentBMPDesignDepth = 21,
         ReceivesSystemCommunications = 22,
         Jurisdiction = 23,
-        ModeledCatchment = 24,
+        Delineation = 24,
         TreatmentBMP = 25,
         TreatmentBMPAssessmentObservationType = 26,
         ObservationCollectionMethod = 27,
@@ -521,10 +521,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionJurisdiction Instance = new FieldDefinitionJurisdiction(23, @"Jurisdiction", @"Jurisdiction", @"", true);
     }
 
-    public partial class FieldDefinitionModeledCatchment : FieldDefinition
+    public partial class FieldDefinitionDelineation : FieldDefinition
     {
-        private FieldDefinitionModeledCatchment(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionModeledCatchment Instance = new FieldDefinitionModeledCatchment(24, @"ModeledCatchment", @"Modeled Catchment", @"", true);
+        private FieldDefinitionDelineation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDelineation Instance = new FieldDefinitionDelineation(24, @"Delineation", @"Delineation", @"", true);
     }
 
     public partial class FieldDefinitionTreatmentBMP : FieldDefinition

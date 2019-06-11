@@ -41,6 +41,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new CustomAttributeTypeConfiguration());
             modelBuilder.Configurations.Add(new CustomAttributeValueConfiguration());
             modelBuilder.Configurations.Add(new DelineationConfiguration());
+            modelBuilder.Configurations.Add(new DelineationGeometryStagingConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataImageConfiguration());
             modelBuilder.Configurations.Add(new FieldVisitConfiguration());
@@ -53,8 +54,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
-            modelBuilder.Configurations.Add(new ModeledCatchmentConfiguration());
-            modelBuilder.Configurations.Add(new ModeledCatchmentGeometryStagingConfiguration());
             modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
@@ -104,11 +103,13 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTypeConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
+            modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedFullCaptureConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedPartialCaptureConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTargetReductionConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadBasedTrashAssessmentConfiguration());
+            modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
         }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
         public virtual DbSet<BackboneSegment> BackboneSegments { get; set; }
@@ -116,6 +117,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<CustomAttribute> CustomAttributes { get; set; }
         public virtual DbSet<CustomAttributeType> CustomAttributeTypes { get; set; }
         public virtual DbSet<CustomAttributeValue> CustomAttributeValues { get; set; }
+        public virtual DbSet<DelineationGeometryStaging> DelineationGeometryStagings { get; set; }
         public virtual DbSet<Delineation> Delineations { get; set; }
         public virtual DbSet<FieldDefinitionDataImage> FieldDefinitionDataImages { get; set; }
         public virtual DbSet<FieldDefinitionData> FieldDefinitionDatas { get; set; }
@@ -129,8 +131,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
-        public virtual DbSet<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get; set; }
-        public virtual DbSet<ModeledCatchment> ModeledCatchments { get; set; }
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
@@ -180,11 +180,13 @@ namespace Neptune.Web.Models
         public virtual DbSet<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; set; }
+        public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedFullCapture> vTrashGeneratingUnitLoadBasedFullCaptures { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedPartialCapture> vTrashGeneratingUnitLoadBasedPartialCaptures { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedTargetReduction> vTrashGeneratingUnitLoadBasedTargetReductions { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadBasedTrashAssessment> vTrashGeneratingUnitLoadBasedTrashAssessments { get; set; }
+        public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
 
         public object LoadType(Type type, int primaryKey)
         {
@@ -227,6 +229,9 @@ namespace Neptune.Web.Models
 
                 case "CustomAttributeValue":
                     return CustomAttributeValues.GetCustomAttributeValue(primaryKey);
+
+                case "DelineationGeometryStaging":
+                    return DelineationGeometryStagings.GetDelineationGeometryStaging(primaryKey);
 
                 case "Delineation":
                     return Delineations.GetDelineation(primaryKey);
@@ -326,12 +331,6 @@ namespace Neptune.Web.Models
                     var measurementUnitType = MeasurementUnitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(measurementUnitType, "MeasurementUnitType", primaryKey);
                     return measurementUnitType;
-
-                case "ModeledCatchmentGeometryStaging":
-                    return ModeledCatchmentGeometryStagings.GetModeledCatchmentGeometryStaging(primaryKey);
-
-                case "ModeledCatchment":
-                    return ModeledCatchments.GetModeledCatchment(primaryKey);
 
                 case "NeptuneArea":
                     var neptuneArea = NeptuneArea.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
