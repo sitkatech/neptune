@@ -7,6 +7,6 @@ namespace Neptune.Web.Models
         public OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea =>
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
                 .Find(OnlandVisualTrashAssessmentAreaID);
-        public TreatmentBMP TreatmentBMP => HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Find(TreatmentBMPID);
+        public TreatmentBMP TreatmentBMP => HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Find(Delineation.TreatmentBMPID);
     }
 }
