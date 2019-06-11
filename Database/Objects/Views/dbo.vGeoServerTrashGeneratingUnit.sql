@@ -20,8 +20,10 @@ select
 from dbo.TrashGeneratingUnit tgu
 	left join dbo.vOnlandVisualTrashAssessmentAreaDated ovtaad
 		on tgu.OnlandVisualTrashAssessmentAreaID = ovtaad.OnlandVisualTrashAssessmentAreaID
+	left join dbo.Delineation d
+		on tgu.DelineationID = d.DelineationID
 	left join dbo.TreatmentBMP tbmp
-		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
+		on d.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.LandUseBlock lub

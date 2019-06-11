@@ -5,17 +5,22 @@ GO
 CREATE TABLE [dbo].[TrashGeneratingUnit](
 	[TrashGeneratingUnitID] [int] IDENTITY(1,1) NOT NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
-	[TreatmentBMPID] [int] NULL,
 	[OnlandVisualTrashAssessmentAreaID] [int] NULL,
 	[LandUseBlockID] [int] NULL,
 	[TrashGeneratingUnitGeometry] [geometry] NOT NULL,
 	[LastUpdateDate] [datetime] NULL,
+	[DelineationID] [int] NULL,
  CONSTRAINT [PK_TrashGeneratingUnit_TrashGeneratingUnitID] PRIMARY KEY CLUSTERED 
 (
 	[TrashGeneratingUnitID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_Delineation_DelineationID] FOREIGN KEY([DelineationID])
+REFERENCES [dbo].[Delineation] ([DelineationID])
+GO
+ALTER TABLE [dbo].[TrashGeneratingUnit] CHECK CONSTRAINT [FK_TrashGeneratingUnit_Delineation_DelineationID]
 GO
 ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_LandUseBlock_LandUseBlockID] FOREIGN KEY([LandUseBlockID])
 REFERENCES [dbo].[LandUseBlock] ([LandUseBlockID])

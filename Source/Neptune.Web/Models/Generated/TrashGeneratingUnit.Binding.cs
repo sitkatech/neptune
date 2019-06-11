@@ -30,15 +30,15 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TrashGeneratingUnit(int trashGeneratingUnitID, int stormwaterJurisdictionID, int? treatmentBMPID, int? onlandVisualTrashAssessmentAreaID, int? landUseBlockID, DbGeometry trashGeneratingUnitGeometry, DateTime? lastUpdateDate) : this()
+        public TrashGeneratingUnit(int trashGeneratingUnitID, int stormwaterJurisdictionID, int? onlandVisualTrashAssessmentAreaID, int? landUseBlockID, DbGeometry trashGeneratingUnitGeometry, DateTime? lastUpdateDate, int? delineationID) : this()
         {
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
-            this.TreatmentBMPID = treatmentBMPID;
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.LandUseBlockID = landUseBlockID;
             this.TrashGeneratingUnitGeometry = trashGeneratingUnitGeometry;
             this.LastUpdateDate = lastUpdateDate;
+            this.DelineationID = delineationID;
         }
 
         /// <summary>
@@ -109,16 +109,17 @@ namespace Neptune.Web.Models
         [Key]
         public int TrashGeneratingUnitID { get; set; }
         public int StormwaterJurisdictionID { get; set; }
-        public int? TreatmentBMPID { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         public int? LandUseBlockID { get; set; }
         public DbGeometry TrashGeneratingUnitGeometry { get; set; }
         public DateTime? LastUpdateDate { get; set; }
+        public int? DelineationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TrashGeneratingUnitID; } set { TrashGeneratingUnitID = value; } }
 
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public virtual LandUseBlock LandUseBlock { get; set; }
+        public virtual Delineation Delineation { get; set; }
 
         public static class FieldLengths
         {

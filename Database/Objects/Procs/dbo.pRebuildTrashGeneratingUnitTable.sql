@@ -104,7 +104,7 @@ print concat('End BCF algorithm ', convert(varchar, GetDate(), 121) )
 Alter Table #JurisdictionDelineationOvta
 Add JdoID int not null identity (1,1), 
 JurisdictionID int null,
-TreatmentBMPID int null,
+DelineationID int null,
 OnlandVisualTrashAssessmentAreaID int null
 
 print concat('Begin set jurisdiction ', convert(varchar, GetDate(), 121) )
@@ -140,14 +140,14 @@ print concat('End set OVTA Area ', convert(varchar, GetDate(), 121) )
 print concat('Begin set Delineation ', convert(varchar, GetDate(), 121) )
 
 update jdo
-set jdo.TreatmentBMPId = x.TreatmentBMPID
+set jdo.DelineationID = x.DelineationID
 from #JurisdictionDelineationOvta jdo join (
 	select
-		t.TreatmentBMPID, d.DelineationGeometry, tcs.TrashCaptureStatusTypePriority, jdo.JdoID,
+		t.TreatmentBMPID, d.DelineationID, d.DelineationGeometry, tcs.TrashCaptureStatusTypePriority, jdo.JdoID,
 		rowNumber = ROW_NUMBER() over (partition by jdo.JdoID order by tcs.TrashCaptureStatusTypePriority asc, t.TrashCaptureEffectiveness desc)
 	from
 		Delineation d inner join TreatmentBMP t
-			on d.DelineationID = t.DelineationID
+			on d.TreatmentBMPID = t.TreatmentBMPID
 		join TrashCaptureStatusType tcs
 			on t.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
 		join #JurisdictionDelineationOvta jdo
@@ -171,7 +171,7 @@ print concat('Begin set Land Use Block and reinsert ', convert(varchar, GetDate(
 
 Insert into dbo.TrashGeneratingUnit (
 	StormwaterJurisdictionID,
-	TreatmentBMPID,
+	DelineationID,
 	OnlandVisualTrashAssessmentAreaID,
 	LandUseBlockID,
 	TrashGeneratingUnitGeometry,
@@ -179,7 +179,7 @@ Insert into dbo.TrashGeneratingUnit (
 )
 select
 	jdo.JurisdictionID,
-	jdo.TreatmentBMPID,
+	jdo.DelineationID,
 	jdo.OnlandVisualTrashAssessmentAreaID,
 	lub.LandUseBlockID,
 	jdo.Geom.STIntersection(lub.LandUseBlockGeometry),

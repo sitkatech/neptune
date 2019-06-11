@@ -28,7 +28,7 @@ From (
 	Select
 		TrashGeneratingUnitID as PrimaryKey,
 		TrashGeneratingUnitID,
-		tgu.TreatmentBMPID,
+		tbmp.TreatmentBMPID,
 		tgu.TrashGeneratingUnitGeometry as TrashGeneratingUnitGeometry,
 		tgu.StormwaterJurisdictionID,
 		IsNull(
@@ -61,10 +61,10 @@ From (
 			on tgu.OnlandVisualTrashAssessmentAreaID = areaProgress.OnlandVisualTrashAssessmentAreaID
 		left join dbo.OnlandVisualTrashAssessmentScore scoreProgress
 			on areaProgress.OnlandVisualTrashAssessmentScoreID = scoreProgress.OnlandVisualTrashAssessmentScoreID
-		left join dbo.TreatmentBMP tbmp
-			on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 		left join dbo.Delineation d
-			on tbmp.TreatmentBMPID = d.TreatmentBMPID
+			on tgu.DelineationID = d.DelineationID
+		left join dbo.TreatmentBMP tbmp
+			on d.TreatmentBMPID = tbmp.TreatmentBMPID
 		left join dbo.TrashCaptureStatusType tcs
 			on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 		left join dbo.PriorityLandUseType plut

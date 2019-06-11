@@ -33,10 +33,10 @@ From
 		on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
 	left join OnlandVisualTrashAssessmentScore score
 		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
-	left join dbo.TreatmentBMP tbmp
-		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.Delineation d
-		on tbmp.TreatmentBMPID = d.TreatmentBMPID
+		on tgu.DelineationID = d.DelineationID
+	left join dbo.TreatmentBMP tbmp
+		on d.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -91,10 +91,10 @@ From
 		on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
 	left join OnlandVisualTrashAssessmentScore score
 		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
-	left join dbo.TreatmentBMP tbmp
-		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.Delineation d
-		on tbmp.TreatmentBMPID = d.TreatmentBMPID
+		on tgu.DelineationID = d.DelineationID
+	left join dbo.TreatmentBMP tbmp
+		on d.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -140,10 +140,10 @@ From
 		on area.OnlandVisualTrashAssessmentBaselineScoreID = bscore.OnlandVisualTrashAssessmentScoreID
 	left join OnlandVisualTrashAssessmentScore pscore
 		on ovta.OnlandVisualTrashAssessmentScoreID = pscore.OnlandVisualTrashAssessmentScoreID
-	left join dbo.TreatmentBMP tbmp
-		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.Delineation d
-		on tbmp.TreatmentBMPID = d.TreatmentBMPID
+		on tgu.DelineationID = d.DelineationID
+	left join dbo.TreatmentBMP tbmp
+		on d.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
@@ -180,8 +180,10 @@ From dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 		on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
 	left join OnlandVisualTrashAssessmentScore score
 		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
+	left join dbo.Delineation d
+		on tgu.DelineationID = d.DelineationID
 	left join dbo.TreatmentBMP tbmp
-		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
+		on d.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.PriorityLandUseType plut
