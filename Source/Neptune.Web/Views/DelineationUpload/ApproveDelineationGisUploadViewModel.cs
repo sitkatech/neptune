@@ -1,4 +1,5 @@
 ﻿
+using System;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -8,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 
 namespace Neptune.Web.Views.DelineationUpload
 {
@@ -57,7 +59,7 @@ namespace Neptune.Web.Views.DelineationUpload
                 var delineationsToCreate = stormwaterJurisdiction.TreatmentBMPs.ToList().Join(WktAndAnnotations,
                     x => x.TreatmentBMPName, y => y.Annotation,
                     (x, y) => new Models.Delineation(DbGeometry.FromText(y.Wkt, MapInitJson.CoordinateSystemId),
-                            DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID)
+                            DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID, DateTime.Now)
                      ).ToList();
 
                 delineationsToMergeInto.Merge(delineationsToCreate,
@@ -74,6 +76,17 @@ namespace Neptune.Web.Views.DelineationUpload
             if (LayerToImportID == null || !DelineationGeometryLayers.Select(x => x.DelineationGeometryStagingID).Contains(LayerToImportID.Value))
             {
                 errors.Add(new ValidationResult("Must select one layer to import"));
+            }
+
+            var treatmentBMPNamesToUpload = WktAndAnnotations.Select(x => x.Annotation).ToList();
+            var delineationGeometryToUpload = WktAndAnnotations.Select(x => x.Wkt).ToList();
+
+            var treatmentBMPNames = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => treatmentBMPNamesToUpload.Contains(x.TreatmentBMPName)).Select(x => x.TreatmentBMPName).ToList();
+            var treatmentBMPNameDifference = treatmentBMPNamesToUpload.Except(treatmentBMPNames).ToList();
+
+            if (treatmentBMPNameDifference.Any())
+            {
+                errors.Add(new ValidationResult(treatmentBMPNameDifference.Count() + " records in the upload did not match BMP Names stored in database"));
             }
 
             return errors;
