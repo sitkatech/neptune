@@ -38,7 +38,8 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(CurrentPerson);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LandUseBlock);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -54,7 +55,7 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new LandUseBlockGridSpec();
 
-            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).ToList();
+            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => x.StormwaterJurisdictionID == CurrentPerson.OrganizationID).ToList();
         }
     }
 }

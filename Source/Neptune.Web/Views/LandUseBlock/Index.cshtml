@@ -28,9 +28,16 @@
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 
+<style>
+    .mt-2 {
+        margin-top: 10px;
+    }
+</style>
+
 <div class="row">
-    <div class="col-xs-12 col-sm-12">
-        <div class="panel panelNeptune">
+    <div class="col-xs-12 col-sm-12">    
+        @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
+        <div class="panel panelNeptune mt-2">
             <div class="panel-heading panelTitle">
                 Land Use Block Table
             </div>
