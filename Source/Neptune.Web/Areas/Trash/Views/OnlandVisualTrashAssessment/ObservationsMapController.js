@@ -129,6 +129,11 @@
         $scope.initializeMap();
 
         function setPointOnMap(latlng) {
+
+            if ($scope.userLocationLayer) {
+                $scope.neptuneMap.map.removeLayer($scope.userLocationLayer);
+            }
+
             var feature = {
                 "type": "Feature",
                 "properties": {
@@ -181,6 +186,47 @@
 
             $scope.neptuneMap.map.panTo(latlng);
             $scope.currentFakeID--;
+        }
+
+        function showUserLocationOnMap(latlng) {
+
+            if ($scope.userLocationLayer) {
+                $scope.neptuneMap.map.removeLayer($scope.userLocationLayer);
+            }
+
+            var feature = {
+                "type": "Feature",
+                "properties": {
+                    "IsUserLocation": true
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [latlng.lng, latlng.lat]
+                }
+            };
+
+            $scope.userLocationLayer = L.geoJson(feature, {
+                pointToLayer: function (feature, latlng) {
+
+                    return L.marker(latlng,
+                        {
+                            zIndexOffset: -300,
+
+                            icon: L.MakiMarkers.icon({
+                                icon: "marker",
+                                color: "#919191",
+                                size: "m"
+                            })
+                        });
+                }
+            });
+
+            $scope.userLocationLayer.addTo($scope.neptuneMap.map);
+
+            if ($scope.lastSelected) {
+                $scope.neptuneMap.map.removeLayer($scope.lastSelected);
+                $scope.lastSelected.addTo($scope.neptuneMap.map);
+            }
         }
 
         $scope.setSelectedMarker = function (feature) {
@@ -241,17 +287,24 @@
         };
 
         $scope.addObservationAtCurrentLocation = function () {
-            $scope.neptuneMap.map.locate({ setView: true, enableHighAccuracy: true });
+            $scope.dropPinOnLocate = true;
+            $scope.neptuneMap.map.locate({ setView: false, enableHighAccuracy: true });
         };
 
-        $scope.neptuneMap.map.on("locationfound", function (event) {
-            var latlng = event.latlng;
-            setPointOnMap(latlng);
-            $scope.$apply();
-            $scope.isClickToAddModeActive = false;
-            jQuery('.leaflet-container').css('cursor', '');
-        });
+        $scope.neptuneMap.map.locate({ setView: false, enableHighAccuracy: true, watch:true });
 
+        $scope.neptuneMap.map.on("locationfound", function (event) {
+            if ($scope.dropPinOnLocate) {
+                var latlng = event.latlng;
+                setPointOnMap(latlng);
+                $scope.$apply();
+                $scope.isClickToAddModeActive = false;
+                $scope.dropPinOnLocate = false;
+                jQuery('.leaflet-container').css('cursor', '');
+            }
+
+            showUserLocationOnMap(event.latlng);
+        });
 
         // photo handling
         $scope.photoFileTypeError = false;
