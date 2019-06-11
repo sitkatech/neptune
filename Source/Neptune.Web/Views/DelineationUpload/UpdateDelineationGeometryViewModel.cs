@@ -52,6 +52,18 @@ namespace Neptune.Web.Views.DelineationUpload
 
                 if (featureClassNames != null)
                 {
+                    if (featureClassNames.Count == 0)
+                    {
+                        errors.Add(new ValidationResult("The file geodatabase contained no feature class. Please upload a file geodatabase containing exactly one feature class."));
+                        return errors;
+                    }
+
+                    if (featureClassNames.Count != 1)
+                    {
+                        errors.Add(new ValidationResult("The file geodatabase contained more than one feature class. Please upload a file geodatabase containing exactly one feature class."));
+                        return errors;
+                    }
+
                     var featureClasses = featureClassNames.ToDictionary(x => x,
                         x =>
                         {

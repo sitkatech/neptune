@@ -50,24 +50,22 @@ namespace Neptune.Web.Views.DelineationUpload
                 var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
                 Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
 
+                var treatmentBMPNames = WktAndAnnotations.Select(x=>x.Annotation).ToList();
+
+                var delineationsToMergeInto =
+                    stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).Select(x=>x.Delineation).ToList();
+
+
                 var delineationsToCreate = stormwaterJurisdiction.TreatmentBMPs.ToList().Join(WktAndAnnotations,
                     x => x.TreatmentBMPName, y => y.Annotation,
-                    (x, y) => new
-                    {
-                        Delineation = new Models.Delineation(DbGeometry.FromText(y.Wkt, MapInitJson.CoordinateSystemId),
-                            DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID),
-                       x.TreatmentBMPID
-                    }).ToList();
+                    (x, y) => new Models.Delineation(DbGeometry.FromText(y.Wkt, MapInitJson.CoordinateSystemId),
+                            DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID)
+                     ).ToList();
 
-                var treatmentBMPIDsToReplaceDelineation = delineationsToCreate.Select(y => y.TreatmentBMPID);
-
-                var delineationsToDelete = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => treatmentBMPIDsToReplaceDelineation.Contains(x.TreatmentBMPID));
-
-                HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineationsToDelete.ToList());
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-                HttpRequestStorage.DatabaseEntities.Delineations.AddRange(delineationsToCreate.Select(x=>x.Delineation));
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                delineationsToMergeInto.Merge(delineationsToCreate,
+                    HttpRequestStorage.DatabaseEntities.Delineations.Local,
+                    (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
+                    (x, y) => x.DelineationGeometry = y.DelineationGeometry);
             }
         }
 
