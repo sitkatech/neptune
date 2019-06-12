@@ -26,23 +26,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
 using Neptune.Web.Common;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public class EditOnlandVisualTrashAssessmentAreaLocationViewModel : FormViewModel, IValidatableObject
+    public class EditOnlandVisualTrashAssessmentAreaLocationViewModel : FormViewModel
     { 
-        [DisplayName("Assessment Area Name")]
-        [Required]
-        public string AssessmentAreaName { get; set; }
-
-        [DisplayName("Assessment Area Description")]
-        public string AssessmentAreaDescription { get; set;}
-
-        [Required]
-        public int? AssessmentAreaID { get; set; }
 
         [Required]
         public int? StormwaterJurisdictionID { get; set; }
+
+        public List<WktAndAnnotation> WktAndAnnotations { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -53,25 +47,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
         public EditOnlandVisualTrashAssessmentAreaLocationViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            AssessmentAreaName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName;
-            AssessmentAreaDescription = onlandVisualTrashAssessmentArea.AssessmentAreaDescription;
-            AssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-            StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID;
+            
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName = AssessmentAreaName;
-            onlandVisualTrashAssessmentArea.AssessmentAreaDescription = AssessmentAreaDescription;
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Any(x => x.OnlandVisualTrashAssessmentAreaID != AssessmentAreaID && x.StormwaterJurisdictionID == StormwaterJurisdictionID && x.OnlandVisualTrashAssessmentAreaName == AssessmentAreaName))
-            {
-                yield return new SitkaValidationResult<EditOnlandVisualTrashAssessmentAreaLocationViewModel, string>(
-                    "The Assessment Area Name is already in use in this jurisdiction. Choose another name.", x=>x.AssessmentAreaName);
-            }
+           
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             Check.Assert(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete, "No details are available for this assessment because it has not been completed.");
 
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
+            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.GetAssessmentAreaLayerGeoJson(false);
 
             var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
 
@@ -235,7 +235,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
+            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.GetAssessmentAreaLayerGeoJson(false);
 
             var transectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
 
@@ -329,7 +329,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewRefineAssessmentArea(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RefineAssessmentAreaViewModel viewModel)
         {
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, true);
+            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.GetAssessmentAreaLayerGeoJson(true);
             var transectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
             var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
 
@@ -352,7 +352,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             FinalizeOVTAViewModel viewModel)
         {
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
+            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.GetAssessmentAreaLayerGeoJson(false);
 
             var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
 
@@ -574,45 +574,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
         // helpers
 
         // assumes that we are not looking for the parcels-via-transect area
-        private static LayerGeoJson GetAssessmentAreaLayerGeoJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment, bool reduce)
-        {
-            FeatureCollection geoJsonFeatureCollection;
-            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
-            {
-                geoJsonFeatureCollection =
-                    new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea }
-                        .ToGeoJsonFeatureCollection();
-            }
-            else if (onlandVisualTrashAssessment.DraftGeometry != null)
-            {
-                var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
-                geoJsonFeatureCollection = new FeatureCollection();
-
-                // Leaflet.Draw does not support multipolgyon editing because its dev team decided it wasn't necessary.
-                // Unless https://github.com/Leaflet/Leaflet.draw/issues/268 is resolved, we have to break into separate polys.
-                // On an unrelated note, DbGeometry.ElementAt is 1-indexed instead of 0-indexed, which is terrible.
-                for (var i = 1; i <= draftGeometry.ElementCount.GetValueOrDefault(); i++)
-                {
-                    var dbGeometry = draftGeometry.ElementAt(i);
-                    if (reduce)
-                    {
-                        // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
-                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
-                    }
-                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
-                    geoJsonFeatureCollection.Features.Add(feature);
-                }
-            }
-            else
-            {
-                geoJsonFeatureCollection = new FeatureCollection();
-            }
-
-            var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
-                "#ffff00", .5m,
-                LayerInitialVisibility.Show);
-            return assessmentAreaLayerGeoJson;
-        }
 
         private ActionResult RedirectToAppropriateStep(OnlandVisualTrashAssessmentViewModel viewModel,
             OVTASection ovtaSection, OnlandVisualTrashAssessment ovta)

@@ -21,20 +21,27 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
     public class EditOnlandVisualTrashAssessmentAreaLocationViewData : TrashModuleViewData
     {
-        public EditOnlandVisualTrashAssessmentAreaLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea) : base(currentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.EditOVTAArea))
+        public EditOnlandVisualTrashAssessmentAreaLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea, RefineAssessmentAreaMapInitJson mapInitJson) : base(currentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.EditOVTAArea))
         {
+            MapInitJson = mapInitJson;
             EntityName = "OVTA Areas";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
-
             SubEntityName = ovtaArea.OnlandVisualTrashAssessmentAreaName;
             SubEntityUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.Detail(ovtaArea));
-
             PageTitle = "Edit Location";
+
+            MapFormID = "editAssessmentAreaMapForm";
+            GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
         }
+
+        public string MapFormID { get; }
+        public string GeoServerUrl{ get; }
+        public RefineAssessmentAreaMapInitJson MapInitJson { get; }
     }
 }

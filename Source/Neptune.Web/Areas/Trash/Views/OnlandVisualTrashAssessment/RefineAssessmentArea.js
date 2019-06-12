@@ -28,7 +28,10 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         assessmentAreaMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", geoServerUrl);
         assessmentAreaMap.map.setMaxZoom(24);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
-        assessmentAreaMap.CreateObservationsLayer(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection);
+
+        if (mapInitJson.TransectLineLayerGeoJson) {
+            assessmentAreaMap.CreateTransectLineLayer(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection);
+        }
 
         var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection,
             {

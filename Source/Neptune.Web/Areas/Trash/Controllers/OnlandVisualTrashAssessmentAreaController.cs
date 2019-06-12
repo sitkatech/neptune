@@ -84,7 +84,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
         {
-            var viewData = new EditOnlandVisualTrashAssessmentAreaLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea);
+            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessmentArea.GetAssessmentAreaLayerGeoJson();
+            var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
+            var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", null, assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
+
+            var viewData = new EditOnlandVisualTrashAssessmentAreaLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea, refineAssessmentAreaMapInitJson);
             return RazorView<EditOnlandVisualTrashAssessmentAreaLocation, EditOnlandVisualTrashAssessmentAreaLocationViewData, EditOnlandVisualTrashAssessmentAreaLocationViewModel>(viewData, viewModel);
         }
 

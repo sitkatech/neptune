@@ -48,7 +48,6 @@ else
          </div>
      }
 
-
     <script type="text/javascript">
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         var editableFeatureJsonObject =
@@ -62,7 +61,5 @@ else
 
         var geoServerUrl = "@ViewDataTyped.GeoServerUrl";
         buildMapOnDocumentReady(mapInitJson, editableFeatureJsonObject, saveButtonID,geoServerUrl);
-
-
     </script>
 }

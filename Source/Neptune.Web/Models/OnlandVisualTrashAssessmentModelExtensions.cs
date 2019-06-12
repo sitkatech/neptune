@@ -67,15 +67,15 @@ namespace Neptune.Web.Models
             var userCanEdit = new OnlandVisualTrashAssessmentEditStausFeature()
                 .HasPermission(currentPerson, onlandVisualTrashAssessment)
                 .HasPermission;
-            if (!userCanEdit) return new HtmlString(string.Empty);
+            if (!userCanEdit) return new HtmlString(Empty);
 
             var modalDialogForm = new ModalDialogForm(GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
                 ModalDialogFormHelper.DefaultDialogWidth, "Return to Edit");
 
             return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
                    OnlandVisualTrashAssessmentStatus.Complete
-                ? @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
-                    string.Format("Return to Edit On-land Visual Trash Assessment for {0}", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName),
+                ? ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
+                    Format("Return to Edit On-land Visual Trash Assessment for {0}", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName),
                     500, "Continue", "Cancel", new List<string> { "gridButton" },
                     null, null) : DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(GetEditUrl(onlandVisualTrashAssessment));
         }
@@ -186,6 +186,46 @@ namespace Neptune.Web.Models
             }
 
             return transsectLineLayerGeoJson;
+        }
+
+        public static LayerGeoJson GetAssessmentAreaLayerGeoJson(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, bool reduce)
+        {
+            FeatureCollection geoJsonFeatureCollection;
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
+            {
+                geoJsonFeatureCollection =
+                    new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea }
+                        .ToGeoJsonFeatureCollection();
+            }
+            else if (onlandVisualTrashAssessment.DraftGeometry != null)
+            {
+                var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
+                geoJsonFeatureCollection = new FeatureCollection();
+
+                // Leaflet.Draw does not support multipolgyon editing because its dev team decided it wasn't necessary.
+                // Unless https://github.com/Leaflet/Leaflet.draw/issues/268 is resolved, we have to break into separate polys.
+                // On an unrelated note, DbGeometry.ElementAt is 1-indexed instead of 0-indexed, which is terrible.
+                for (var i = 1; i <= draftGeometry.ElementCount.GetValueOrDefault(); i++)
+                {
+                    var dbGeometry = draftGeometry.ElementAt(i);
+                    if (reduce)
+                    {
+                        // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
+                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
+                    }
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
+                    geoJsonFeatureCollection.Features.Add(feature);
+                }
+            }
+            else
+            {
+                geoJsonFeatureCollection = new FeatureCollection();
+            }
+
+            var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
+                "#ffff00", .5m,
+                LayerInitialVisibility.Show);
+            return assessmentAreaLayerGeoJson;
         }
     }
 }
