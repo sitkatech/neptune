@@ -29,10 +29,6 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         assessmentAreaMap.map.setMaxZoom(24);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
 
-        if (mapInitJson.TransectLineLayerGeoJson) {
-            assessmentAreaMap.CreateTransectLineLayer(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection);
-        }
-
         var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection,
             {
                 onEachFeature: function (feature, layer) {
