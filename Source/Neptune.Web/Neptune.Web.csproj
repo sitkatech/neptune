@@ -1461,7 +1461,6 @@
     <None Include="Service References\KeystoneDataService\KeystoneData2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\DelineationUpload\ApproveDelineationGisUploadController.js" />
     <Content Include="Views\Delineation\DelineationMap.AutoDelineate.js" />
     <Content Include="Views\Delineation\DelineationMap.css">
       <DependentUpon>DelineationMap.less</DependentUpon>

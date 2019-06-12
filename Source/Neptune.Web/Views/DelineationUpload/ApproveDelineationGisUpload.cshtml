@@ -9,9 +9,7 @@
     .redWarning {
         color: red;
     }
-    .black {
-        color: black;
-    }
+
 </style>
 
 <div class="formPage" style="padding: 0; margin-top: -10px;">
@@ -181,13 +179,15 @@
                         .replace("{{numberOfDelineationsToBeCreated}}", report.NumberOfDelineationsToBeCreated)
                         .replace("{{numberOfDelineationNotMatchingTreatmentBMP}}", report.NumberOfDelineationNotMatchingTreatmentBMP));
 
-                if (report.NumberOfDelineationNotMatchingTreatmentBMP > 0) {
+
+
+                if (report.NumberOfDelineationNotMatchingTreatmentBMP > 0 || report.NumberOfDelineations === 0) {
                     jQuery("#numberOfDelineationNotMatchingTreatmentBMP").addClass("redWarning");
-                    // todo: anything else that needs to be done in this case
-                } else {
-                    submitApproveDelineationGisUploadButton.prop("disabled", false);
                 }
 
+                if (report.NumberOfDelineationNotMatchingTreatmentBMP === 0 || report.NumberOfDelineations !== 0) {
+                    submitApproveDelineationGisUploadButton.prop("disabled", false);
+                }
             }
             else {
                 _.forEach(report.Errors, function(err) { console.error(err); });
