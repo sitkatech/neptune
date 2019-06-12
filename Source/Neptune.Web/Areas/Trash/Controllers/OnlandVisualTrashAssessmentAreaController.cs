@@ -27,7 +27,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
                     .ToGeoJsonFeatureCollection();
 
-            
+
             var observationsLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectBackingAssessment()?.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
 
@@ -41,8 +41,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var newUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.NewAssessment(onlandVisualTrashAssessmentArea));
             var editDetailsUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditOnlandVisualTrashAssessmentAreaBasics(onlandVisualTrashAssessmentArea));
+            var editLocationUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditOnlandVisualTrashAssessmentAreaLocation(onlandVisualTrashAssessmentArea));
             var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
-                onlandVisualTrashAssessmentArea, mapInitJson, newUrl , editDetailsUrl);
+                onlandVisualTrashAssessmentArea, mapInitJson, newUrl, editDetailsUrl, editLocationUrl);
 
             return RazorView<Views.OnlandVisualTrashAssessmentArea.Detail, Views.OnlandVisualTrashAssessmentArea.DetailViewData>(viewData);
         }
@@ -80,6 +82,39 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
         }
 
+        private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
+        {
+            var viewData = new EditOnlandVisualTrashAssessmentAreaLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea);
+            return RazorView<EditOnlandVisualTrashAssessmentAreaLocation, EditOnlandVisualTrashAssessmentAreaLocationViewData, EditOnlandVisualTrashAssessmentAreaLocationViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ViewResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+            var viewModel = new EditOnlandVisualTrashAssessmentAreaLocationViewModel(onlandVisualTrashAssessmentArea);
+            return ViewEditLocation(onlandVisualTrashAssessmentArea, viewModel);
+        }
+
+        [HttpPost]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditLocation(onlandVisualTrashAssessmentArea, viewModel);
+            }
+
+            viewModel.UpdateModel(onlandVisualTrashAssessmentArea);
+            SetMessageForDisplay("Successfully updated OVTA Area details");
+
+            return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
+        }
+
 
         [HttpGet]
         [OnlandVisualTrashAssessmentAreaDeleteFeature]
@@ -104,7 +139,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewDeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
             }
-            
+
             onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             onlandVisualTrashAssessmentArea.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();

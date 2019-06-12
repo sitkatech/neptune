@@ -71,10 +71,13 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Location
+                <span class="pull-right">
+                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditLocationUrl, string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.UserHasAssessmentAreaManagePermission)
+                </span>
             </div>
             <div class="panel-body">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px;"></div>
-                <p class="systemText" style="margin-top: 10px; margin-bottom: 0px;">The transect line from the original assessment of this area is shown, if available, along with the observations from that assessment.</p>
+                <p class="systemText" style="margin-top: 10px; margin-bottom: 0;">The transect line from the original assessment of this area is shown, if available, along with the observations from that assessment.</p>
             </div>
         </div>
     </div>
@@ -160,8 +163,5 @@
             summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
         }
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
-
-
     });
-
 </script>
