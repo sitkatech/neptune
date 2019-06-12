@@ -39,7 +39,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LandUseBlock);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            var landUseBlockBulkUploadURL =
+                SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(x => x.UpdateLandUseBlockGeometry());
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, landUseBlockBulkUploadURL);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
