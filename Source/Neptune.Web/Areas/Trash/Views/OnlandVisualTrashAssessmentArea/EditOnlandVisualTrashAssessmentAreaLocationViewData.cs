@@ -19,20 +19,24 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using Neptune.Web.Models;
-using Neptune.Web.Views;
+using Neptune.Web.Common;
+using Neptune.Web.Areas.Trash.Controllers;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
     public class EditOnlandVisualTrashAssessmentAreaLocationViewData : TrashModuleViewData
     {
-        public string AssessmentAreaName { get; }
-        public string AssessmentAreaDescription { get; }
 
 
         public EditOnlandVisualTrashAssessmentAreaLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea) : base(currentPerson)
         {
-            AssessmentAreaName = ovtaArea.OnlandVisualTrashAssessmentAreaName;
-            AssessmentAreaDescription = ovtaArea.AssessmentAreaDescription;
+            EntityName = "OVTA Areas";
+            EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
+
+            SubEntityName = ovtaArea.OnlandVisualTrashAssessmentAreaName;
+            SubEntityUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.Detail(ovtaArea));
+
+            PageTitle = "Edit Location";
         }
     }
 }

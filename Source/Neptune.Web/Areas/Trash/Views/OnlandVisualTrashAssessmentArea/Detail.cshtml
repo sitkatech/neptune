@@ -71,9 +71,13 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Location
+                
+            @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
+            {
                 <span class="pull-right">
-                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditLocationUrl, string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.UserHasAssessmentAreaManagePermission)
+                    <a href="@ViewDataTyped.EditLocationUrl"><span class="glyphicon glyphicon-edit"></span></a>
                 </span>
+            }
             </div>
             <div class="panel-body">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px;"></div>
