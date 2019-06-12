@@ -26,9 +26,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
     public class EditOnlandVisualTrashAssessmentAreaLocationViewData : TrashModuleViewData
     {
-
-
-        public EditOnlandVisualTrashAssessmentAreaLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea) : base(currentPerson)
+        public EditOnlandVisualTrashAssessmentAreaLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea) : base(currentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.EditOVTAArea))
         {
             EntityName = "OVTA Areas";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
