@@ -1,5 +1,6 @@
 ﻿using Neptune.Web.Common;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Neptune.Web.Models
@@ -12,6 +13,7 @@ namespace Neptune.Web.Models
         public int? NumberOfDelineations;
         public int? NumberOfDelineationsToBeUpdated;
         public int? NumberOfDelineationsToBeCreated;
+        public int NumberOfDelineationNotMatchingTreatmentBMP;
         public List<string> Errors;
 
         public static DelineationUploadGisReportJsonResult GetDelineationUpoadGisReportFromStaging(Person person,
@@ -20,10 +22,14 @@ namespace Neptune.Web.Models
             string selectedProperty)
         {
             var treatmentBMPsWithDelineationInStormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            var treatmentBMPNames = treatmentBMPsWithDelineationInStormwaterJurisdiction.Select(x => x.TreatmentBMP.TreatmentBMPName).ToList();
 
             var geoJsonFeatureCollection = delineationGeometryStaging.ToGeoJsonFeatureCollection();
             var candidateDelineationNames = geoJsonFeatureCollection.Features.Select(x => x.Properties[selectedProperty].ToString()).Distinct().ToList();
             var numberOfDelineations = geoJsonFeatureCollection.Features.Count;
+            var treatmentBMPNamesDifference = candidateDelineationNames.Except(treatmentBMPNames);
+            var numberOfDelineationsNotMatchingTreatmentBMPNames = treatmentBMPNamesDifference.Count();
+
             if (candidateDelineationNames.Count != numberOfDelineations)
             {
                 return new DelineationUploadGisReportJsonResult
@@ -50,7 +56,8 @@ namespace Neptune.Web.Models
                 NumberOfDelineationsToBeUpdated =
                     numberOfDelineationsToBeUpdated,
                 NumberOfDelineationsToBeCreated =
-                    numberOfDelineations - numberOfDelineationsToBeUpdated
+                    numberOfDelineations - numberOfDelineationsToBeUpdated,
+                NumberOfDelineationNotMatchingTreatmentBMP = numberOfDelineationsNotMatchingTreatmentBMPNames
             };
 
             return delineationUploadGisReport;

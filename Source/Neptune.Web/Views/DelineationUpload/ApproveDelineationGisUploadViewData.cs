@@ -10,21 +10,22 @@ namespace Neptune.Web.Views.DelineationUpload
 {
     public class ApproveDelineationGisUploadViewData : NeptuneViewData
     {
-        public readonly Dictionary<int, string> DelineationGeometryFeatureClassNames;
-        public readonly MapInitJson MapInitJson;
-        public readonly Dictionary<int, string> LayerColors;
-        public readonly IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems;
-        public readonly Dictionary<int, IEnumerable<SelectListItem>> DelineationGeometryLayerSelectProperties;
-        public readonly string UploadGisReportUrlTemplate;
-        public readonly string DelineationIndexUrl;
-        public readonly Dictionary<int, string> DelineationStagingGeoJsons;
+        public Dictionary<int, string> DelineationGeometryFeatureClassNames { get; }
+        public MapInitJson MapInitJson { get; }
+        public Dictionary<int, string> LayerColors { get; }
+        public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
+        public Dictionary<int, IEnumerable<SelectListItem>> DelineationGeometryLayerSelectProperties { get; }
+        public string UploadGisReportUrlTemplate { get; }
+        public string DelineationIndexUrl { get; }
+        public Dictionary<int, string> DelineationStagingGeoJsons { get; }
+        public ViewDataForAngularClass ViewDataForAngular { get; set; }
 
         public ApproveDelineationGisUploadViewData(Person currentPerson,
             MapInitJson mapInitJson,
             Dictionary<int, string> layerColors,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
-            string uploadGisReportUrlTemplateTemplate,
-            string delineationIndexUrl)
+            string uploadGisReportUrlTemplate,
+            string delienationIndexUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             DelineationGeometryFeatureClassNames = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.FeatureClassName);
@@ -35,9 +36,14 @@ namespace Neptune.Web.Views.DelineationUpload
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
             DelineationGeometryLayerSelectProperties = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID,
                 x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));
-            UploadGisReportUrlTemplate = uploadGisReportUrlTemplateTemplate;
-            DelineationIndexUrl = delineationIndexUrl;
+            UploadGisReportUrlTemplate = uploadGisReportUrlTemplate;
+            DelineationIndexUrl = delienationIndexUrl;
             DelineationStagingGeoJsons = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.DelineationGeometryStagingGeoJson);
+        }
+
+        public class ViewDataForAngularClass
+        {
+            
         }
     }
 }

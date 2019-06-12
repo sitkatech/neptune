@@ -79,7 +79,6 @@ namespace Neptune.Web.Views.DelineationUpload
             }
 
             var treatmentBMPNamesToUpload = WktAndAnnotations.Select(x => x.Annotation).ToList();
-            var delineationGeometryToUpload = WktAndAnnotations.Select(x => x.Wkt).ToList();
 
             var treatmentBMPNames = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => treatmentBMPNamesToUpload.Contains(x.TreatmentBMPName)).Select(x => x.TreatmentBMPName).ToList();
             var treatmentBMPNameDifference = treatmentBMPNamesToUpload.Except(treatmentBMPNames).ToList();
