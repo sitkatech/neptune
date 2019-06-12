@@ -97,7 +97,8 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)));
+            SetMessageForDisplay("Delineations were successfully uploaded");
+            return RedirectToAction(new SitkaRoute<ManagerDashboardController>(c => c.Index()));
         }
 
         private PartialViewResult ViewApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
