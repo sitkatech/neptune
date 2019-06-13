@@ -93,9 +93,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        // todo: swap out the features after go-live appropriate
-        //[OnlandVisualTrashAssessmentAreaViewFeature]
-        [SitkaAdminFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ViewResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
@@ -105,9 +103,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        // todo: swap out the features after go-live appropriate
-        //[OnlandVisualTrashAssessmentAreaViewFeature]
-        [SitkaAdminFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
         {
