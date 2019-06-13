@@ -3,6 +3,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Views;
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Controllers;
 using HomeController = Neptune.Web.Areas.DroolTool.Controllers.HomeController;
 

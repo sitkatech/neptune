@@ -20,9 +20,8 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
-@inherits Neptune.Web.Views.TrashGeneratingUnit.Index
+@inherits Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit.Index
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -32,7 +31,7 @@
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                TGU Table
+                Trash Generating Units Table
             </div>
             <div class="panel-body">
                 @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:600px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)

@@ -4,6 +4,8 @@ using Neptune.Web.Models;
 using Neptune.Web.Views;
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Areas.Trash.Controllers;
+using HomeController = Neptune.Web.Controllers.HomeController;
 
 namespace Neptune.Web.Areas.Modeling.Views
 {
