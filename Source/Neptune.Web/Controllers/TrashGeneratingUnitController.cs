@@ -36,14 +36,14 @@ namespace Neptune.Web.Controllers
     public class TrashGeneratingUnitController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionManageFeature]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [NeptuneAdminFeature]
+        [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<TrashGeneratingUnit> TrashGeneratingUnitGridJsonData()
         {
             // ReSharper disable once InconsistentNaming
@@ -56,7 +56,9 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new TrashGeneratingUnitGridSpec();
 
-            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.OrderByDescending(x=>x.LastUpdateDate)
+            var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x=>x.StormwaterJurisdictionID).ToList();
+
+            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x=>stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x=>x.LastUpdateDate)
                 .Include(x => x.LandUseBlock)
                 .Include(x => x.StormwaterJurisdiction.Organization).ToList();
         }
