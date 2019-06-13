@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[LandUseBlockGeomteryStaging]
+//  Source Table: [dbo].[LandUseBlockGeometryStaging]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[LandUseBlockGeomteryStaging] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[LandUseBlockGeomteryStaging]")]
-    public partial class LandUseBlockGeomteryStaging : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[LandUseBlockGeometryStaging] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[LandUseBlockGeometryStaging]")]
+    public partial class LandUseBlockGeometryStaging : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected LandUseBlockGeomteryStaging()
+        protected LandUseBlockGeometryStaging()
         {
 
         }
@@ -30,12 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlockGeomteryStaging(int landUseBlockStagingID, int personID, string featureClassName, string landUseBlockStagingGeoJson, string selectedProperty, bool shouldImport) : this()
+        public LandUseBlockGeometryStaging(int landUseBlockGeometryStagingID, int personID, string featureClassName, string landUseBlockGeometryStagingGeoJson, string selectedProperty, bool shouldImport) : this()
         {
-            this.LandUseBlockStagingID = landUseBlockStagingID;
+            this.LandUseBlockGeometryStagingID = landUseBlockGeometryStagingID;
             this.PersonID = personID;
             this.FeatureClassName = featureClassName;
-            this.LandUseBlockStagingGeoJson = landUseBlockStagingGeoJson;
+            this.LandUseBlockGeometryStagingGeoJson = landUseBlockGeometryStagingGeoJson;
             this.SelectedProperty = selectedProperty;
             this.ShouldImport = shouldImport;
         }
@@ -43,38 +43,38 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlockGeomteryStaging(int personID, string featureClassName, string landUseBlockStagingGeoJson, bool shouldImport) : this()
+        public LandUseBlockGeometryStaging(int personID, string featureClassName, string landUseBlockGeometryStagingGeoJson, bool shouldImport) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.LandUseBlockStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.LandUseBlockGeometryStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.PersonID = personID;
             this.FeatureClassName = featureClassName;
-            this.LandUseBlockStagingGeoJson = landUseBlockStagingGeoJson;
+            this.LandUseBlockGeometryStagingGeoJson = landUseBlockGeometryStagingGeoJson;
             this.ShouldImport = shouldImport;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public LandUseBlockGeomteryStaging(Person person, string featureClassName, string landUseBlockStagingGeoJson, bool shouldImport) : this()
+        public LandUseBlockGeometryStaging(Person person, string featureClassName, string landUseBlockGeometryStagingGeoJson, bool shouldImport) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.LandUseBlockStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.LandUseBlockGeometryStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.PersonID = person.PersonID;
             this.Person = person;
-            person.LandUseBlockGeomteryStagings.Add(this);
+            person.LandUseBlockGeometryStagings.Add(this);
             this.FeatureClassName = featureClassName;
-            this.LandUseBlockStagingGeoJson = landUseBlockStagingGeoJson;
+            this.LandUseBlockGeometryStagingGeoJson = landUseBlockGeometryStagingGeoJson;
             this.ShouldImport = shouldImport;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static LandUseBlockGeomteryStaging CreateNewBlank(Person person)
+        public static LandUseBlockGeometryStaging CreateNewBlank(Person person)
         {
-            return new LandUseBlockGeomteryStaging(person, default(string), default(string), default(bool));
+            return new LandUseBlockGeometryStaging(person, default(string), default(string), default(bool));
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LandUseBlockGeomteryStaging).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LandUseBlockGeometryStaging).Name};
 
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.LandUseBlockGeomteryStagings.Remove(this);
+            dbContext.LandUseBlockGeometryStagings.Remove(this);
         }
         
         /// <summary>
@@ -110,14 +110,14 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int LandUseBlockStagingID { get; set; }
+        public int LandUseBlockGeometryStagingID { get; set; }
         public int PersonID { get; set; }
         public string FeatureClassName { get; set; }
-        public string LandUseBlockStagingGeoJson { get; set; }
+        public string LandUseBlockGeometryStagingGeoJson { get; set; }
         public string SelectedProperty { get; set; }
         public bool ShouldImport { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return LandUseBlockStagingID; } set { LandUseBlockStagingID = value; } }
+        public int PrimaryKey { get { return LandUseBlockGeometryStagingID; } set { LandUseBlockGeometryStagingID = value; } }
 
         public virtual Person Person { get; set; }
 

@@ -29,7 +29,7 @@ namespace Neptune.Web.Models
             this.DelineationGeometryStagings = new HashSet<DelineationGeometryStaging>();
             this.FieldVisitsWhereYouAreThePerformedByPerson = new HashSet<FieldVisit>();
             this.FileResourcesWhereYouAreTheCreatePerson = new HashSet<FileResource>();
-            this.LandUseBlockGeomteryStagings = new HashSet<LandUseBlockGeomteryStaging>();
+            this.LandUseBlockGeometryStagings = new HashSet<LandUseBlockGeometryStaging>();
             this.Notifications = new HashSet<Notification>();
             this.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson = new HashSet<OnlandVisualTrashAssessment>();
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
@@ -117,13 +117,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || DelineationsWhereYouAreTheVerifiedByPerson.Any() || DelineationGeometryStagings.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || LandUseBlockGeomteryStagings.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
+            return AuditLogs.Any() || DelineationsWhereYouAreTheVerifiedByPerson.Any() || DelineationGeometryStagings.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || LandUseBlockGeometryStagings.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationGeometryStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockGeomteryStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationGeometryStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockGeometryStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in LandUseBlockGeomteryStagings.ToList())
+            foreach(var x in LandUseBlockGeometryStagings.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -243,7 +243,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<DelineationGeometryStaging> DelineationGeometryStagings { get; set; }
         public virtual ICollection<FieldVisit> FieldVisitsWhereYouAreThePerformedByPerson { get; set; }
         public virtual ICollection<FileResource> FileResourcesWhereYouAreTheCreatePerson { get; set; }
-        public virtual ICollection<LandUseBlockGeomteryStaging> LandUseBlockGeomteryStagings { get; set; }
+        public virtual ICollection<LandUseBlockGeometryStaging> LandUseBlockGeometryStagings { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }

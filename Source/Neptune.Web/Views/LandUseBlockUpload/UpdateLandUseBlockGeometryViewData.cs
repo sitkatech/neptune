@@ -4,15 +4,15 @@ namespace Neptune.Web.Views.LandUseBlockUpload
 {
     public class UpdateLandUseBlockGeometryViewData : NeptuneViewData
     {
-        public readonly string NewGisUploadUrl;
-        public readonly string ApprovedGisUploadUrl;
+        public string NewGisUploadUrl { get; }
+        public string ApprovedGisUploadUrl { get; }
 
         public UpdateLandUseBlockGeometryViewData(Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;
-            EntityName = Models.FieldDefinition.Delineation.FieldDefinitionDisplayName;
-            PageTitle = "Update Delineation Geometry";
+            EntityName = "Land Use Block";
+            PageTitle = "Update Land Use Block Geometry";
         }
     }
 }

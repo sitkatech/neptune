@@ -25,15 +25,13 @@ namespace Neptune.Web.Views.LandUseBlockUpload
 {
     public class SummaryForMapViewData : NeptuneViewData
     {
-        public readonly Models.Delineation Delineation;
-        public readonly string DeleteDelineationUrl;
-        public readonly bool CanDeleteCatchment;
+        public readonly Models.LandUseBlock LandUseBlock;
+        //public readonly string DeleteLandUseBlockUrl;
+        //public readonly bool CanDeleteCatchment;
 
-        public SummaryForMapViewData(Person currentPerson, Models.Delineation delineation, string deleteDelineationUrl, bool canDeleteCatchment) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public SummaryForMapViewData(Person currentPerson, Models.LandUseBlock landUseBlock) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            Delineation = delineation;
-            DeleteDelineationUrl = deleteDelineationUrl;
-            CanDeleteCatchment = canDeleteCatchment;
+            LandUseBlock = landUseBlock;
         }
     }
 }

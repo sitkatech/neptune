@@ -39,9 +39,9 @@ namespace Neptune.Web.Controllers
         public PartialViewResult SummaryForMap(LandUseBlockPrimaryKey landUseBlockPrimaryKey)
         {
             var landUseBlock = landUseBlockPrimaryKey.EntityObject;
-            var deleteLandUseBlockUrl = landUseBlock.GetDeleteUrl(); //todo add this when the route get created
-            var canDeleteCatchment = landUseBlock.CanDelete(CurrentPerson);
-            var viewData = new SummaryForMapViewData(CurrentPerson, landUseBlock, deleteLandUseBlockUrl, canDeleteCatchment);
+            //var deleteLandUseBlockUrl = landUseBlock.GetDeleteUrl(); //todo add this when the route get created
+            //var canDeleteCatchment = landUseBlock.CanDelete(CurrentPerson);
+            var viewData = new SummaryForMapViewData(CurrentPerson, landUseBlock);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
@@ -97,7 +97,7 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.LandUseBlockMap(null)));
+            return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
         }
 
         private PartialViewResult ViewApproveLandUseBlockGisUpload(ApproveLandUseBlockGisUploadViewModel viewModel)
@@ -120,7 +120,7 @@ namespace Neptune.Web.Controllers
                 new UrlTemplate<int, int, string>(
                     SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
             var landUseBlockIndexUrl =
-                SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(c => c.LandUseBlockMap(null));
+                SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(c => c.Index());
 
             var viewData = new ApproveLandUseBlockGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, landUseBlockIndexUrl);
             return RazorPartialView<ApproveLandUseBlockGisUpload, ApproveLandUseBlockGisUploadViewData, ApproveLandUseBlockGisUploadViewModel>(viewData, viewModel);
@@ -137,41 +137,6 @@ namespace Neptune.Web.Controllers
             Check.Assert(landUseBlockGeometryStaging.PersonID == CurrentPerson.PersonID, "LandUseBlock Geometry Staging must belong to the current person");
 
             return Json(LandUseBlockUploadGisReportJsonResult.GetLandUseBlockUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, landUseBlockGeometryStaging, selectedProperty));
-        }
-
-        [HttpGet]
-
-        public PartialViewResult Delete(LandUseBlockPrimaryKey landUseBlockPrimaryKey)
-        {
-            var landUseBlock = landUseBlockPrimaryKey.EntityObject;
-            var viewModel = new ConfirmDialogFormViewModel(landUseBlock.LandUseBlockID);
-            return ViewDelete(landUseBlock, viewModel);
-        }
-
-        [HttpPost]
-
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Delete(LandUseBlockPrimaryKey landUseBlockPrimaryKey, ConfirmDialogFormViewModel viewModel)
-        {
-            var landUseBlock = landUseBlockPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewDelete(landUseBlock, viewModel);
-            }
-
-            HttpRequestStorage.DatabaseEntities.LandUseBlocks.DeleteLandUseBlock(landUseBlock);
-            return new ModalDialogFormJsonResult(SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(c => c.LandUseBlockMap(null)));
-        }
-
-        private PartialViewResult ViewDelete(LandUseBlock landUseBlock, ConfirmDialogFormViewModel viewModel)
-        {
-            var canDelete = landUseBlock.CanDelete(CurrentPerson);
-            var confirmMessage = canDelete
-                ? "Are you sure you want to delete the LandUseBlock?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("LandUseBlock", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Index(), "here"));
-
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
-            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
     }
 }

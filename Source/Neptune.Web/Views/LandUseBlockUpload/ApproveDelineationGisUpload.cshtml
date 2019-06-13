@@ -17,7 +17,7 @@
             <thead>
             <tr>
                 <th></th>
-                @if (Model.DelineationGeometryLayers.Count > 1)
+                @if (Model.LandUseBlockGeometryLayers.Count > 1)
                 {
                     <th>Import?</th>
                 }
@@ -26,28 +26,28 @@
             </tr>
             </thead>
             <tbody>
-            @if (Model.DelineationGeometryLayers != null)
+            @if (Model.LandUseBlockGeometryLayers != null)
             {
-                for (var i = 0; i < Model.DelineationGeometryLayers.Count; i++)
+                for (var i = 0; i < Model.LandUseBlockGeometryLayers.Count; i++)
                 {
                     <tr>
                         <td>
-                            <div style="height: 20px; width: 20px; background-color: @ViewDataTyped.LayerColors[Model.DelineationGeometryLayers[i].DelineationGeometryStagingID];"></div>
-                            @Html.HiddenFor(x => x.DelineationGeometryLayers[i].DelineationGeometryStagingID)
-                            @if (Model.DelineationGeometryLayers.Count == 1)
+                            <div style="height: 20px; width: 20px; background-color: @ViewDataTyped.LayerColors[Model.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID];"></div>
+                            @Html.HiddenFor(x => x.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID)
+                            @if (Model.LandUseBlockGeometryLayers.Count == 1)
                             {
-                                <input type="hidden" value="@Model.DelineationGeometryLayers[i].DelineationGeometryStagingID" name="@Html.NameFor(x => x.LayerToImportID)"/>
+                                <input type="hidden" value="@Model.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID" name="@Html.NameFor(x => x.LayerToImportID)"/>
                             }
                         </td>
-                        @if (Model.DelineationGeometryLayers.Count > 1)
+                        @if (Model.LandUseBlockGeometryLayers.Count > 1)
                         {
                             <td class="text-center">
-                                <input type="radio" value="@Model.DelineationGeometryLayers[i].DelineationGeometryStagingID" name="@Html.NameFor(x => x.LayerToImportID)"/>
+                                <input type="radio" value="@Model.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID" name="@Html.NameFor(x => x.LayerToImportID)"/>
                             </td>
                         }
-                        <td>@ViewDataTyped.DelineationGeometryFeatureClassNames[Model.DelineationGeometryLayers[i].DelineationGeometryStagingID]</td>
+                        <td>@ViewDataTyped.LandUseBlockGeometryFeatureClassNames[Model.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID]</td>
                         <td>
-                            @Html.DropDownListFor(x => x.DelineationGeometryLayers[i].SelectedProperty, ViewDataTyped.DelineationGeometryLayerSelectProperties[Model.DelineationGeometryLayers[i].DelineationGeometryStagingID], new Dictionary<string, object> {{"style", "width:auto;"}, {"class", "form-control selectedProperty"}, {"data-delineationGeometryStagingID", Model.DelineationGeometryLayers[i].DelineationGeometryStagingID.ToString()}})
+                            @Html.DropDownListFor(x => x.LandUseBlockGeometryLayers[i].SelectedProperty, ViewDataTyped.LandUseBlockGeometryLayerSelectProperties[Model.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID], new Dictionary<string, object> {{"style", "width:auto;"}, {"class", "form-control selectedProperty"}, {"data-landUseBlockGeometryStagingID", Model.LandUseBlockGeometryLayers[i].LandUseBlockGeometryStagingID.ToString()}})
                         </td>
                     </tr>
                 }
@@ -62,8 +62,8 @@
         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 400px;"></div>
         <div id="uploadGisReport"></div>
         <div class="text-right" style="margin-top: 15px;">
-            <button id="submitApproveDelineationGisUpload" type="submit" class="btn btn-neptune" disabled="disabled">Accept</button>
-            <a href="@ViewDataTyped.DelineationIndexUrl" class="btn btn-neptune">Cancel</a>
+            <button id="submitApproveLandUseBlockGisUpload" type="submit" class="btn btn-neptune" disabled="disabled">Accept</button>
+            <a href="@ViewDataTyped.LandUseBlockIndexUrl" class="btn btn-neptune">Cancel</a>
         </div>
     </div>
 </div>
@@ -75,42 +75,42 @@
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None)),
             map = new NeptuneMaps.Map(mapInitJson),
 
-            delineationStagingGeoJsons =
-                @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationStagingGeoJsons).ToString(Formatting.None)),
+            landUseBlockStagingGeoJsons =
+                @Html.Raw(JObject.FromObject(ViewDataTyped.LandUseBlockStagingGeoJsons).ToString(Formatting.None)),
 
-            submitApproveDelineationGisUploadButton = jQuery("#submitApproveDelineationGisUpload"),
+            submitApproveLandUseBlockGisUploadButton = jQuery("#submitApproveLandUseBlockGisUpload"),
 
-            delineationUploadGisReports = [],
+            landUseBlockUploadGisReports = [],
 
             uploadGisReportUrlTemplateString = @Html.Raw(ViewDataTyped.UploadGisReportUrlTemplate.ToJS()),
             uploadGisReportUrlTemplate = new Sitka.UrlTemplate(uploadGisReportUrlTemplateString);
 
         jQuery("#uploadGisReport").html("");
-        jQuery("[name=@Html.NameFor(x => x.StormwaterJurisdictionID)],[name=@Html.NameFor(x => x.LayerToImportID)],[data-delineationGeometryStagingID]")
-            .on("change", updateDelineationUploadPreview);
+        jQuery("[name=@Html.NameFor(x => x.StormwaterJurisdictionID)],[name=@Html.NameFor(x => x.LayerToImportID)],[data-landUseBlockGeometryStagingID]")
+            .on("change", updateLandUseBlockUploadPreview);
 
-        function updateDelineationUploadPreview()
+        function updateLandUseBlockUploadPreview()
         {
             var stormwaterJurisdictionID = jQuery("#@Html.IdFor(x => x.StormwaterJurisdictionID)").val(),
-                delineationGeometryStagingID =
+                landUseBlockGeometryStagingID =
                     jQuery("[type=radio][name=@Html.NameFor(x => x.LayerToImportID)]:checked,[type=hidden][name=@Html.NameFor(x => x.LayerToImportID)]").val(),
-                selectedProperty = jQuery(".selectedProperty[data-delineationGeometryStagingID=" +
-                        delineationGeometryStagingID +
+                selectedProperty = jQuery(".selectedProperty[data-landUseBlockGeometryStagingID=" +
+                        landUseBlockGeometryStagingID +
                         "]")
                     .val();
-            submitApproveDelineationGisUploadButton.prop("disabled", true);
+            submitApproveLandUseBlockGisUploadButton.prop("disabled", true);
 
             if (!(Sitka.Methods.isUndefinedNullOrEmpty(stormwaterJurisdictionID) ||
-                Sitka.Methods.isUndefinedNullOrEmpty(delineationGeometryStagingID) ||
+                Sitka.Methods.isUndefinedNullOrEmpty(landUseBlockGeometryStagingID) ||
                 Sitka.Methods.isUndefinedNullOrEmpty(selectedProperty)))
             {
                 map.blockMap();
-                pushWktAndAnnotationsToForm(delineationGeometryStagingID, selectedProperty);
+                pushWktAndAnnotationsToForm(landUseBlockGeometryStagingID, selectedProperty);
                 
-                var currentReport = _.find(delineationUploadGisReports,
+                var currentReport = _.find(landUseBlockUploadGisReports,
                 {
                     StormwaterJurisdictionID: Number.parseInt(stormwaterJurisdictionID),
-                    DelineationGeometryStagingID: Number.parseInt(delineationGeometryStagingID),
+                    LandUseBlockGeometryStagingID: Number.parseInt(landUseBlockGeometryStagingID),
                     SelectedProperty: selectedProperty
                     });
 
@@ -120,30 +120,30 @@
                 {
                     var uploadGisReportUrl = uploadGisReportUrlTemplate
                         .ParameterReplace(stormwaterJurisdictionID,
-                            delineationGeometryStagingID,
+                            landUseBlockGeometryStagingID,
                             selectedProperty);
                     jQuery.ajax(uploadGisReportUrl,
                     {
                         method: "POST",
                         data: {
                             StormwaterJurisdictionID: stormwaterJurisdictionID,
-                            DelineationGeometryStagingID: delineationGeometryStagingID,
+                            LandUseBlockGeometryStagingID: landUseBlockGeometryStagingID,
                             SelectedProperty: selectedProperty
                         },
                         success: function(data)
                         {
-                            delineationUploadGisReports.push(data);
+                            landUseBlockUploadGisReports.push(data);
                             handleValidReport(data);
                         },
                         error: function() {
                             
                             var report = {
                                 StormwaterJurisdictionID: stormwaterJurisdictionID,
-                                DelineationGeometryStagingID: delineationGeometryStagingID,
+                                LandUseBlockGeometryStagingID: landUseBlockGeometryStagingID,
                                 SelectedProperty: selectedProperty,
                                 Errors: ["There was a problem fetching the report for this GIS upload."]
                             };
-                            delineationUploadGisReports.push(report);
+                            landUseBlockUploadGisReports.push(report);
                             handleValidReport(report);
                         },
                         complete: function() { map.unblockMap(); }
@@ -165,15 +165,15 @@
             debugger;
             if (Sitka.Methods.isUndefinedNullOrEmpty(report.Errors))
             {
-                submitApproveDelineationGisUploadButton.prop("disabled", false);
+                submitApproveLandUseBlockGisUploadButton.prop("disabled", false);
                 jQuery("#uploadGisReport")
                     .html(jQuery("#uploadGisReportTemplateHtml")
                         .html()
-                        .replace("{{numberOfDelineations}}", report.NumberOfDelineations)
-                        .replace("{{numberOfDelineationsToBeUpdated}}", report.NumberOfDelineationsToBeUpdated)
-                        .replace("{{numberOfDelineationsToBeCreated}}", report.NumberOfDelineationsToBeCreated)
-                        .replace("{{numberOfDelineationsInActiveBMPRegistration}}",
-                            report.NumberOfDelineationsInActiveBMPRegistration));
+                        .replace("{{numberOfLandUseBlocks}}", report.NumberOfLandUseBlocks)
+                        .replace("{{numberOfLandUseBlocksToBeUpdated}}", report.NumberOfLandUseBlocksToBeUpdated)
+                        .replace("{{numberOfLandUseBlocksToBeCreated}}", report.NumberOfLandUseBlocksToBeCreated)
+                        .replace("{{numberOfLandUseBlocksInActiveBMPRegistration}}",
+                            report.NumberOfLandUseBlocksInActiveBMPRegistration));
             }
             else {
                 _.forEach(report.Errors, function(err) { console.error(err); });
@@ -181,12 +181,12 @@
             }
         }
 
-        function pushWktAndAnnotationsToForm(delineationGeometryStagingID, selectedProperty)
+        function pushWktAndAnnotationsToForm(landUseBlockGeometryStagingID, selectedProperty)
         {
             var approveGisUploadForm = jQuery("#approveGisUploadForm");
             jQuery(".wktAndAnnotation").remove();
-            var geoJson = JSON.parse(delineationStagingGeoJsons[Number
-                .parseInt(delineationGeometryStagingID)]);
+            var geoJson = JSON.parse(landUseBlockStagingGeoJsons[Number
+                .parseInt(landUseBlockGeometryStagingID)]);
             _.forEach(geoJson.features,
                 function(feature, i)
                 {
@@ -213,9 +213,9 @@
 <script type="text/html" id="uploadGisReportTemplateHtml">
     <div style="margin-top: 15px;">
         <ul>
-            <li>Layer contains {{numberOfDelineations}} delineations.</li>
-            <li>{{numberOfDelineationsToBeUpdated}} delineation names match existing delineations in jurisdiction.</li>
-            <li>{{numberOfDelineationsToBeCreated}} new delineations will be created.</li>
+            <li>Layer contains {{numberOfLandUseBlocks}} landUseBlocks.</li>
+            <li>{{numberOfLandUseBlocksToBeUpdated}} landUseBlock names match existing landUseBlocks in jurisdiction.</li>
+            <li>{{numberOfLandUseBlocksToBeCreated}} new landUseBlocks will be created.</li>
         </ul>
     </div>
 </script>

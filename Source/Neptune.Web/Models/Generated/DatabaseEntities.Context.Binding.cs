@@ -51,7 +51,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new FundingSourceConfiguration());
             modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
-            modelBuilder.Configurations.Add(new LandUseBlockGeomteryStagingConfiguration());
+            modelBuilder.Configurations.Add(new LandUseBlockGeometryStagingConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
@@ -128,7 +128,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<FundingEvent> FundingEvents { get; set; }
         public virtual DbSet<FundingSource> FundingSources { get; set; }
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
-        public virtual DbSet<LandUseBlockGeomteryStaging> LandUseBlockGeomteryStagings { get; set; }
+        public virtual DbSet<LandUseBlockGeometryStaging> LandUseBlockGeometryStagings { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
@@ -312,8 +312,8 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(hydromodificationApplies, "HydromodificationApplies", primaryKey);
                     return hydromodificationApplies;
 
-                case "LandUseBlockGeomteryStaging":
-                    return LandUseBlockGeomteryStagings.GetLandUseBlockGeomteryStaging(primaryKey);
+                case "LandUseBlockGeometryStaging":
+                    return LandUseBlockGeometryStagings.GetLandUseBlockGeometryStaging(primaryKey);
 
                 case "LandUseBlock":
                     return LandUseBlocks.GetLandUseBlock(primaryKey);

@@ -10,34 +10,34 @@ namespace Neptune.Web.Views.LandUseBlockUpload
 {
     public class ApproveLandUseBlockGisUploadViewData : NeptuneViewData
     {
-        public readonly Dictionary<int, string> DelineationGeometryFeatureClassNames;
+        public readonly Dictionary<int, string> LandUseBlockGeometryFeatureClassNames;
         public readonly MapInitJson MapInitJson;
         public readonly Dictionary<int, string> LayerColors;
         public readonly IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems;
-        public readonly Dictionary<int, IEnumerable<SelectListItem>> DelineationGeometryLayerSelectProperties;
+        public readonly Dictionary<int, IEnumerable<SelectListItem>> LandUseBlockGeometryLayerSelectProperties;
         public readonly string UploadGisReportUrlTemplate;
-        public readonly string DelineationIndexUrl;
-        public readonly Dictionary<int, string> DelineationStagingGeoJsons;
+        public readonly string LandUseBlockIndexUrl;
+        public readonly Dictionary<int, string> LandUseBlockStagingGeoJsons;
 
         public ApproveLandUseBlockGisUploadViewData(Person currentPerson,
             MapInitJson mapInitJson,
             Dictionary<int, string> layerColors,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             string uploadGisReportUrlTemplateTemplate,
-            string delineationIndexUrl)
+            string landUseBlockIndexUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            DelineationGeometryFeatureClassNames = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.FeatureClassName);
+            LandUseBlockGeometryFeatureClassNames = currentPerson.LandUseBlockGeometryStagings.ToDictionary(x => x.LandUseBlockGeometryStagingID, x => x.FeatureClassName);
             MapInitJson = mapInitJson;
             LayerColors = layerColors;
             StormwaterJurisdictionSelectListItems =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
-            DelineationGeometryLayerSelectProperties = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID,
+            LandUseBlockGeometryLayerSelectProperties = currentPerson.LandUseBlockGeometryStagings.ToDictionary(x => x.LandUseBlockGeometryStagingID,
                 x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));
             UploadGisReportUrlTemplate = uploadGisReportUrlTemplateTemplate;
-            DelineationIndexUrl = delineationIndexUrl;
-            DelineationStagingGeoJsons = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.DelineationGeometryStagingGeoJson);
+            LandUseBlockIndexUrl = landUseBlockIndexUrl;
+            LandUseBlockStagingGeoJsons = currentPerson.LandUseBlockGeometryStagings.ToDictionary(x => x.LandUseBlockGeometryStagingID, x => x.LandUseBlockGeometryStagingGeoJson);
         }
     }
 }
