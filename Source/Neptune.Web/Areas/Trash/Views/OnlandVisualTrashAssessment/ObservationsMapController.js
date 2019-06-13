@@ -130,8 +130,8 @@
 
         function setPointOnMap(latlng) {
 
-            if ($scope.userLocationLayer) {
-                $scope.neptuneMap.map.removeLayer($scope.userLocationLayer);
+            if ($scope.lastSelected) {
+                $scope.neptuneMap.map.removeLayer($scope.lastSelected);
             }
 
             var feature = {
