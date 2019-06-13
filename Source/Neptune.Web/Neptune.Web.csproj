@@ -436,8 +436,6 @@
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\LandUseBlockModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
-    <Compile Include="Views\LandUseBlockUpload\SummaryForMap.cs" />
-    <Compile Include="Views\LandUseBlockUpload\SummaryForMapViewData.cs" />
     <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cs" />
     <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
     <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
@@ -1795,7 +1793,6 @@
     <Content Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cshtml" />
     <Content Include="Views\DelineationUpload\ApproveDelineationGisUpload.cshtml" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewModel.cs" />
-    <Content Include="Views\LandUseBlockUpload\SummaryForMap.cshtml" />
     <Content Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cshtml" />
     <Content Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cshtml" />
     <Reference Include="Antlr3.Runtime">
