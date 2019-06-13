@@ -436,6 +436,7 @@
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\LandUseBlockModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
+    <Compile Include="ScheduledJobs\LandUseBlockUploadBackgroundJob.cs" />
     <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cs" />
     <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
     <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
