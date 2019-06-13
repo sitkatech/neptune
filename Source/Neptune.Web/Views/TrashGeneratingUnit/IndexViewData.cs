@@ -13,7 +13,7 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
         {
             EntityName = "Trash Generating Unit";
             PageTitle = "Index";
-            GridSpec = new TrashGeneratingUnitGridSpec() { ObjectNameSingular = "Absolute Unit", ObjectNamePlural = "Absolute Units", SaveFiltersInCookie = true };
+            GridSpec = new TrashGeneratingUnitGridSpec { ObjectNameSingular = "Trash Generating Unit", ObjectNamePlural = "Trash Generating Units", SaveFiltersInCookie = true };
             GridName = "absoluteUnitsGrid";
             GridDataUrl = SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(j => j.TrashGeneratingUnitGridJsonData());
         }
