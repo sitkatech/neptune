@@ -19,32 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
-using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.LandUseBlockUpload;
-using Neptune.Web.Views.Shared;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace Neptune.Web.Controllers
 {
     public class LandUseBlockUploadController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
-        public PartialViewResult SummaryForMap(LandUseBlockPrimaryKey landUseBlockPrimaryKey)
-        {
-            var landUseBlock = landUseBlockPrimaryKey.EntityObject;
-            //var deleteLandUseBlockUrl = landUseBlock.GetDeleteUrl(); //todo add this when the route get created
-            //var canDeleteCatchment = landUseBlock.CanDelete(CurrentPerson);
-            var viewData = new SummaryForMapViewData(CurrentPerson, landUseBlock);
-            return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
-        }
-
         [HttpGet]
         [JurisdictionManageFeature]
         public ViewResult UpdateLandUseBlockGeometry()
@@ -60,71 +45,22 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, null, null);
+                var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, null);
                 return RazorPartialView<UpdateLandUseBlockGeometryErrors, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
-            }
-            viewModel.UpdateModel(CurrentPerson);
-
-            return RedirectToAction(new SitkaRoute<LandUseBlockUploadController>(c => c.ApproveLandUseBlockGisUpload()));
-        }
-
-        private ViewResult ViewUpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
-        {
-            var newGisUploadUrl = SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(c => c.UpdateLandUseBlockGeometry());
-            var approveGisUploadUrl = SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(c => c.ApproveLandUseBlockGisUpload());
-
-            var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, newGisUploadUrl, approveGisUploadUrl);
-            return RazorView<UpdateLandUseBlockGeometry, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
-        }
-
-        [HttpGet]
-        [JurisdictionManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ApproveLandUseBlockGisUpload()
-        {
-            var viewModel = new ApproveLandUseBlockGisUploadViewModel(CurrentPerson);
-            return ViewApproveLandUseBlockGisUpload(viewModel);
-        }
-
-        [HttpPost]
-        [JurisdictionManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ApproveLandUseBlockGisUpload(ApproveLandUseBlockGisUploadViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ViewUpdateLandUseBlockGeometry(new UpdateLandUseBlockGeometryViewModel());
             }
             viewModel.UpdateModel(CurrentPerson);
 
             return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
         }
 
-        private PartialViewResult ViewApproveLandUseBlockGisUpload(ApproveLandUseBlockGisUploadViewModel viewModel)
+        private ViewResult ViewUpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
         {
-            var landUseBlockGeometryStagings = CurrentPerson.LandUseBlockGeometryStagings.ToList();
-            var layerColors = landUseBlockGeometryStagings.Select((value, index) => new {index, value})
-                .ToDictionary(x => x.value.LandUseBlockGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
-            var layers =
-                landUseBlockGeometryStagings.Select(
-                    (landUseBlockGeometryStaging, i) =>
-                        new LayerGeoJson(landUseBlockGeometryStaging.FeatureClassName,
-                            landUseBlockGeometryStaging.ToGeoJsonFeatureCollection(),
-                            layerColors[landUseBlockGeometryStaging.LandUseBlockGeometryStagingID],
-                            1,
-                            LayerInitialVisibility.Show)).ToList();
-            var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
-            var mapInitJson = new StormwaterMapInitJson("landUseBlockGeometryPreviewMap", 10, layers, boundingBox) {AllowFullScreen = false};
-            var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit();
-            var uploadGisReportUrlTemplate =
-                new UrlTemplate<int, int, string>(
-                    SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
-            var landUseBlockIndexUrl =
-                SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(c => c.Index());
+            var newGisUploadUrl = SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(c => c.UpdateLandUseBlockGeometry());
 
-            var viewData = new ApproveLandUseBlockGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, landUseBlockIndexUrl);
-            return RazorPartialView<ApproveLandUseBlockGisUpload, ApproveLandUseBlockGisUploadViewData, ApproveLandUseBlockGisUploadViewModel>(viewData, viewModel);
+            var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, newGisUploadUrl);
+            return RazorView<UpdateLandUseBlockGeometry, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
+
 
         [JurisdictionManageFeature]
         public JsonResult UploadGisReport(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey,
