@@ -192,7 +192,7 @@
 
             // not necessary to recreate this layer if exists, just update
             if ($scope.userLocationLayer) {
-                $scope.userLocationLayer.setLatLng(latlng);
+                $scope.userLocationMarker.setLatLng(latlng);
                 return;
             }
 
@@ -210,7 +210,7 @@
             $scope.userLocationLayer = L.geoJson(feature, {
                 pointToLayer: function (feature, latlng) {
 
-                    return L.marker(latlng,
+                    $scope.userLocationMarker = L.marker(latlng,
                         {
                             zIndexOffset: -300,
 
@@ -220,6 +220,8 @@
                                 size: "m"
                             })
                         });
+
+                    return $scope.userLocationMarker;
                 }
             });
 
