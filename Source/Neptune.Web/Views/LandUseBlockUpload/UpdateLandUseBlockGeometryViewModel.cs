@@ -24,6 +24,10 @@ namespace Neptune.Web.Views.LandUseBlockUpload
         [SitkaFileExtensions("zip")]
         public HttpPostedFileBase FileResourceData { get; set; }
 
+        [Required]
+        [DisplayName("Stormwater Jurisdiction")]
+        public int StormwaterJurisdictionID { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
