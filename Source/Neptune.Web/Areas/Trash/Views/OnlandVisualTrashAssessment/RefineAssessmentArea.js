@@ -63,6 +63,10 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
             function (e) {
                 updateFeatureCollectionJson();
             });
+        assessmentAreaMap.map.on('draw:editstop',
+            function (e) {
+                updateFeatureCollectionJson();
+            });
 
         assessmentAreaMap.map.on('draw:editvertex',
             function (e) {
@@ -96,15 +100,18 @@ NeptuneMaps.Map.prototype.getTextAreaId = function (featureId) { return "textare
 
 
 var createUpdateFeatureCollectionJsonFunctionAsClosure = function(nameForWkt, nameForAnnotation, mapFormID) {
-    return function () {
+    return function() {
         var geoJson = assessmentAreaMap.editableFeatureGroup.toGeoJSON();
+        detectKinksAndReject(geoJson);
         var mapForm = jQuery("#" + mapFormID);
         mapForm.html("");
         var hiddens = [];
         for (var i = 0; i < geoJson.features.length; ++i) {
             var currentWktName = "name=\"" + nameForWkt + "\"".replace("0", i);
-            var currentWktAnnotation = "name=\"" + nameForAnnotation + "\"".replace("0",
-                i);
+            var currentWktAnnotation = "name=\"" +
+                nameForAnnotation +
+                "\"".replace("0",
+                    i);
             hiddens.push("<input type=\"hidden\" " +
                 currentWktName +
                 " value=\"" +
@@ -117,9 +124,30 @@ var createUpdateFeatureCollectionJsonFunctionAsClosure = function(nameForWkt, na
                 "\" />");
         }
         mapForm.html(hiddens.join("\r\n"));
-    }
-}
+    };
+};
 
-function resetZoom() {
+var resetZoom = function() {
     assessmentAreaMap.map.fitBounds(assessmentAreaMap.editableFeatureGroup.getBounds());
-}
+};
+
+var detectKinksAndReject = function(geoJson) {
+    if (!geoJson.features) {
+        return;
+    }
+
+    var len = geoJson.features.length;
+    for (var i = 0; i < len; i++) {
+        var geom = turf.getGeom(geoJson.features[i]);
+        var kinksFeatureCollection = turf.kinks(geom);
+        if (kinksFeatureCollection.features && kinksFeatureCollection.features.length > 0) {
+            jQuery("button[type='submit']").attr("disabled", true);
+            jQuery("#kinkDanger").css("display", "inline");
+            return;
+        }
+    }
+
+    // if they make it out here, their geometry is vanilla
+    jQuery("button[type='submit']").removeAttr("disabled");
+    jQuery("#kinkDanger").css("display", "none");
+};
