@@ -78,6 +78,12 @@ namespace Neptune.Web.ScheduledJobs
             ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob();
         }
 
+        public static void RunLandUseBlockUploadBackgroundJob()
+        {
+            ScheduledBackgroundJobLaunchHelper.RunLandUseBlockUploadBackgroundJob();
+
+        }
+
         private static void AddRecurringJob(string jobName, Expression<Action> methodCallExpression,
             string cronExpression, List<string> recurringJobIds)
         {

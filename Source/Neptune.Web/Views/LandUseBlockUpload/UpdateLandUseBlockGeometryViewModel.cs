@@ -6,12 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using GeoJSON.Net.Feature;
+using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Views.LandUseBlockUpload
 {
@@ -99,7 +101,13 @@ namespace Neptune.Web.Views.LandUseBlockUpload
 
                 HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.DeleteLandUseBlockGeometryStaging(currentPerson.LandUseBlockGeometryStagings);
                 currentPerson.LandUseBlockGeometryStagings.Clear();
-                LandUseBlockGeometryStaging.CreateLandUseBlockGeometryStagingListFromGdb(gdbFile, currentPerson);
+                var landUseBlockGeometryStagings = LandUseBlockGeometryStaging.CreateLandUseBlockGeometryStagingListFromGdb(gdbFile, currentPerson);
+
+                HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.AddRange(landUseBlockGeometryStagings);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                BackgroundJob.Schedule(() =>
+                    ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(), TimeSpan.FromSeconds(30));
             }
         }
     }

@@ -50,6 +50,8 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(CurrentPerson);
 
+            SetMessageForDisplay("The Land USe Blocks were successfully updated and will be added to the system after processing.");
+
             return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
         }
 
