@@ -29,9 +29,6 @@
                 </li>
                 <li>Version 10.1+ file geodatabases are supported</li>
             </ul>
-            <p>
-                After you upload your file, you will be able to preview and verify the uploaded data on a map. Once you accept the uploaded data, new delineations will be added and any existing delineation locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded delineations will be marked as provisional.
-            </p>
             <form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
                 <div>
                     @Html.EditorFor(x => x.FileResourceData)
@@ -43,6 +40,9 @@
             </form>
         </div>
         <div class="col-md-8">
+            <p id="approvalInstructionsText">
+                After you upload your file, you will be able to preview and verify the uploaded data on a map. Once you accept the uploaded data, new delineations will be added and any existing delineation locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded delineations will be marked as provisional.
+            </p>
             <form id="approveGisUploadForm" method="post" action="@ViewDataTyped.ApprovedGisUploadUrl">
                 <div id="gisUploadResults"></div>
             </form>
@@ -67,6 +67,7 @@
                     "beforeSubmit": function () { $gisUploadResults.html(jQuery("#progressBarHtml").html()); },
                     "success": function (result, textStatus, jqXhr) {
                         jQuery(".progress").hide();
+                        jQuery("#approvalInstructionsText").hide();
                         SitkaAjax.handleLoginRedirect(result,
                             textStatus,
                             jqXhr,
@@ -86,6 +87,7 @@
             }
         });
     });
+
     // ]]>
 </script>
 <script id="progressBarHtml" type="text/html">

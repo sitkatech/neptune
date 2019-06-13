@@ -5,7 +5,14 @@
 
 @Html.ValidationSummary()
 
-<div class="formPage">
+<style>
+    .redWarning {
+        color: red;
+    }
+
+</style>
+
+<div class="formPage" style="padding: 0; margin-top: -10px;">
     <div>
         <label class="col-md-2" for="@Html.IdFor(x => x.StormwaterJurisdictionID)">
             Jurisdiction
@@ -108,10 +115,10 @@
                 pushWktAndAnnotationsToForm(delineationGeometryStagingID, selectedProperty);
                 
                 var currentReport = _.find(delineationUploadGisReports,
-                {
-                    StormwaterJurisdictionID: Number.parseInt(stormwaterJurisdictionID),
-                    DelineationGeometryStagingID: Number.parseInt(delineationGeometryStagingID),
-                    SelectedProperty: selectedProperty
+                    {
+                        StormwaterJurisdictionID: Number.parseInt(stormwaterJurisdictionID),
+                        DelineationGeometryStagingID: Number.parseInt(delineationGeometryStagingID),
+                        SelectedProperty: selectedProperty
                     });
 
 
@@ -123,31 +130,31 @@
                             delineationGeometryStagingID,
                             selectedProperty);
                     jQuery.ajax(uploadGisReportUrl,
-                    {
-                        method: "POST",
-                        data: {
-                            StormwaterJurisdictionID: stormwaterJurisdictionID,
-                            DelineationGeometryStagingID: delineationGeometryStagingID,
-                            SelectedProperty: selectedProperty
-                        },
-                        success: function(data)
                         {
-                            delineationUploadGisReports.push(data);
-                            handleValidReport(data);
-                        },
-                        error: function() {
-                            
-                            var report = {
+                            method: "POST",
+                            data: {
                                 StormwaterJurisdictionID: stormwaterJurisdictionID,
                                 DelineationGeometryStagingID: delineationGeometryStagingID,
-                                SelectedProperty: selectedProperty,
-                                Errors: ["There was a problem fetching the report for this GIS upload."]
-                            };
-                            delineationUploadGisReports.push(report);
-                            handleValidReport(report);
-                        },
-                        complete: function() { map.unblockMap(); }
-                    });
+                                SelectedProperty: selectedProperty
+                            },
+                            success: function(data)
+                            {
+                                delineationUploadGisReports.push(data);
+                                handleValidReport(data);
+                            },
+                            error: function() {
+                            
+                                var report = {
+                                    StormwaterJurisdictionID: stormwaterJurisdictionID,
+                                    DelineationGeometryStagingID: delineationGeometryStagingID,
+                                    SelectedProperty: selectedProperty,
+                                    Errors: ["There was a problem fetching the report for this GIS upload."]
+                                };
+                                delineationUploadGisReports.push(report);
+                                handleValidReport(report);
+                            },
+                            complete: function() { map.unblockMap(); }
+                        });
                 }
                 else
                 {
@@ -162,18 +169,25 @@
         }
 
         function handleValidReport(report) {
-            debugger;
             if (Sitka.Methods.isUndefinedNullOrEmpty(report.Errors))
             {
-                submitApproveDelineationGisUploadButton.prop("disabled", false);
                 jQuery("#uploadGisReport")
                     .html(jQuery("#uploadGisReportTemplateHtml")
                         .html()
                         .replace("{{numberOfDelineations}}", report.NumberOfDelineations)
                         .replace("{{numberOfDelineationsToBeUpdated}}", report.NumberOfDelineationsToBeUpdated)
                         .replace("{{numberOfDelineationsToBeCreated}}", report.NumberOfDelineationsToBeCreated)
-                        .replace("{{numberOfDelineationsInActiveBMPRegistration}}",
-                            report.NumberOfDelineationsInActiveBMPRegistration));
+                        .replace("{{numberOfDelineationNotMatchingTreatmentBMP}}", report.NumberOfDelineationNotMatchingTreatmentBMP));
+
+
+
+                if (report.NumberOfDelineationNotMatchingTreatmentBMP > 0 || report.NumberOfDelineations === 0) {
+                    jQuery("#numberOfDelineationNotMatchingTreatmentBMP").addClass("redWarning");
+                }
+
+                if (report.NumberOfDelineationNotMatchingTreatmentBMP === 0 || report.NumberOfDelineations !== 0) {
+                    submitApproveDelineationGisUploadButton.prop("disabled", false);
+                }
             }
             else {
                 _.forEach(report.Errors, function(err) { console.error(err); });
@@ -210,12 +224,13 @@
         </div>
     </div>
 </script>
-<script type="text/html" id="uploadGisReportTemplateHtml">
-    <div style="margin-top: 15px;">
+<script type="text/html" id="uploadGisReportTemplateHtml" style="display: none;">
+    <div style="margin-top: 15px;" ng-app="NeptuneApp" ng-controller="ApproveDelineationGisUploadController">
         <ul>
-            <li>Layer contains {{numberOfDelineations}} delineations.</li>
-            <li>{{numberOfDelineationsToBeUpdated}} delineation names match existing delineations in jurisdiction.</li>
-            <li>{{numberOfDelineationsToBeCreated}} new delineations will be created.</li>
+            <li>The Feature Class contains {{numberOfDelineations}} delineations</li>
+            <li>{{numberOfDelineationsToBeUpdated}} Treatment BMPs with with existing delineations will be replaced by new delineations from this Feature Class</li>
+            <li>{{numberOfDelineationsToBeCreated}} Treatment BMPs that do not currently have delineations will receive new delineations from this Feature Class</li>
+            <li id="numberOfDelineationNotMatchingTreatmentBMP">{{numberOfDelineationNotMatchingTreatmentBMP}} Delineations were found that do not match a Treatment BMP Name in the selected Jurisdiction</li>
         </ul>
     </div>
 </script>
