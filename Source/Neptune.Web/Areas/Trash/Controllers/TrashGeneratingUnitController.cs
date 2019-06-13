@@ -1,14 +1,46 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System.Web.Mvc;
+using LtInfo.Common.MvcResults;
+using Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class TrashGeneratingUnitController : NeptuneBaseController
     {
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ViewResult Index()
+        {
+            var viewData = new IndexViewData(CurrentPerson);
+            return RazorView<Index, IndexViewData>(viewData);
+        }
+
+        [JurisdictionManageFeature]
+        public GridJsonNetJObjectResult<TrashGeneratingUnit> TrashGeneratingUnitGridJsonData()
+        {
+            // ReSharper disable once InconsistentNaming
+            var treatmentBMPs = GetTrashGeneratingUnitsAndGridSpec(out var gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TrashGeneratingUnit>(treatmentBMPs, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        private List<TrashGeneratingUnit> GetTrashGeneratingUnitsAndGridSpec(out TrashGeneratingUnitGridSpec gridSpec)
+        {
+            gridSpec = new TrashGeneratingUnitGridSpec();
+
+            var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID).ToList();
+
+            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x => x.LastUpdateDate)
+                .Include(x => x.LandUseBlock)
+                .Include(x => x.StormwaterJurisdiction.Organization).ToList();
+        }
+
         [HttpGet]
         [JurisdictionEditFeature]
         public JsonResult AcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)

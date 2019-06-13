@@ -7,7 +7,7 @@ using LtInfo.Common.Views;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TrashGeneratingUnit
+namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
 {
     public class TrashGeneratingUnitGridSpec : GridSpec<Models.TrashGeneratingUnit>
     {
