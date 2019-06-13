@@ -58,6 +58,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeDroolToolHomePage DroolToolHomePage = NeptunePageTypeDroolToolHomePage.Instance;
         public static readonly NeptunePageTypeDroolToolAboutPage DroolToolAboutPage = NeptunePageTypeDroolToolAboutPage.Instance;
         public static readonly NeptunePageTypeTreatmentBMPAssessment TreatmentBMPAssessment = NeptunePageTypeTreatmentBMPAssessment.Instance;
+        public static readonly NeptunePageTypeEditOVTAArea EditOVTAArea = NeptunePageTypeEditOVTAArea.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -67,7 +68,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -151,6 +152,8 @@ namespace Neptune.Web.Models
                     return DroolToolAboutPage;
                 case NeptunePageTypeEnum.DroolToolHomePage:
                     return DroolToolHomePage;
+                case NeptunePageTypeEnum.EditOVTAArea:
+                    return EditOVTAArea;
                 case NeptunePageTypeEnum.FieldRecords:
                     return FieldRecords;
                 case NeptunePageTypeEnum.FindABMP:
@@ -266,7 +269,8 @@ namespace Neptune.Web.Models
         BulkUploadRequest = 38,
         DroolToolHomePage = 39,
         DroolToolAboutPage = 40,
-        TreatmentBMPAssessment = 41
+        TreatmentBMPAssessment = 41,
+        EditOVTAArea = 42
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -507,5 +511,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeTreatmentBMPAssessment(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeTreatmentBMPAssessment Instance = new NeptunePageTypeTreatmentBMPAssessment(41, @"TreatmentBMPAssessment", @"Treatment BMP Assessment", 2);
+    }
+
+    public partial class NeptunePageTypeEditOVTAArea : NeptunePageType
+    {
+        private NeptunePageTypeEditOVTAArea(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeEditOVTAArea Instance = new NeptunePageTypeEditOVTAArea(42, @"EditOVTAArea", @"Edit OVTA Area", 2);
     }
 }

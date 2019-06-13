@@ -17,6 +17,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public HtmlString ProgressScoreHtmlString { get; }
         public string NewUrl { get; }
         public string EditDetailsUrl { get; }
+        public string EditLocationUrl { get; }
         public OnlandVisualTrashAssessmentIndexGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
@@ -24,12 +25,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public OVTAAreaMapInitJson MapInitJson { get; }
         public string GeoServerUrl { get; }
 
-        public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OVTAAreaMapInitJson mapInitJson, string newUrl, string editDetailsUrl) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OVTAAreaMapInitJson mapInitJson, string newUrl, string editDetailsUrl, string editLocationUrl) : base(currentPerson)
         {
-            EntityName = "Trash Module";
-            EntityUrl = NeptuneArea.Trash.GetHomeUrl();
-            SubEntityName = "OVTA Areas";
-            SubEntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
+            EntityName = "OVTA Areas";
+            EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName;
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
             MapInitJson = mapInitJson;
@@ -46,6 +45,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
                 : "<p class='systemText'>No completed assessments</p>");
             NewUrl = newUrl;
             EditDetailsUrl = editDetailsUrl;
+            EditLocationUrl = editLocationUrl;
+
 
             UserHasAssessmentAreaManagePermission = new OnlandVisualTrashAssessmentAreaViewFeature().HasPermission(currentPerson, OnlandVisualTrashAssessmentArea).HasPermission;
 
