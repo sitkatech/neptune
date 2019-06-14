@@ -7,9 +7,8 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 }
 @Html.ValidationSummary()
-@using (Html.BeginForm())
-{
 
+<form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
     <div class="formPage">
         <div class="row">
             <div class="col-md-12">
@@ -32,7 +31,6 @@
                 <p>
                     After you upload your file, you will be able to preview and verify the uploaded data on a map. Once you accept the uploaded data, new landUseBlocks will be added and any existing landUseBlock locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded landUseBlocks will be marked as provisional.
                 </p>
-                <form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
                     <div>
                         @Html.EditorFor(x => x.FileResourceData)
                         @Html.ValidationMessageFor(x => x.FileResourceData)
@@ -40,7 +38,6 @@
                             Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
                         </span>
                     </div>
-                </form>
             </div>
         </div>
         <div class="row">
@@ -49,8 +46,7 @@
             </div>
         </div>
     </div>
-
-}
+</form>
 @*<script type="text/javascript">
             // <![CDATA[
             jQuery(function () {

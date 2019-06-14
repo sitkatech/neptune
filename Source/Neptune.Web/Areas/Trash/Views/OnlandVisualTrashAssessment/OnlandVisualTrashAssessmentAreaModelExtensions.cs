@@ -164,5 +164,16 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             
             return onlandVisualTrashAssessmentScore;
         }
+
+        public static LayerGeoJson GetAssessmentAreaLayerGeoJson(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            var geoJsonFeatureCollection = new List<Models.OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
+                .ToGeoJsonFeatureCollection();
+
+            var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
+                "#ffff00", .5m,
+                LayerInitialVisibility.Show);
+            return assessmentAreaLayerGeoJson;
+        }
     }
 }

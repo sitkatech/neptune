@@ -17,7 +17,7 @@ namespace Neptune.Web.Models
         {
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
                 Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
-                NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
+                NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds*10);
 
             var geoJsons =
                 OgrInfoCommandLineRunner.GetFeatureClassNamesFromFileGdb(new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable), gdbFile, Ogr2OgrCommandLineRunner.DefaultTimeOut)

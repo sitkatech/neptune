@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -147,6 +147,10 @@
     <Compile Include="Models\Generated\LandUseBlockGeometryStagingConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockGeometryStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStaging.Binding.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStaging.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStagingConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\MaintenanceRecord.Binding.cs" />
     <Compile Include="Models\Generated\MaintenanceRecord.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\MaintenanceRecordConfiguration.Binding.cs" />
@@ -429,6 +433,9 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocation.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocationViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocationViewModel.cs" />
     <Compile Include="Models\LandUseBlockUploadGisReportJsonResult.cs" />
     <Compile Include="Models\LandUseBlockGeometryStaging.cs" />
     <Compile Include="Controllers\LandUseBlockUploadController.cs" />
@@ -469,10 +476,10 @@
     <Compile Include="ScheduledJobs\TrashGeneratingUnitRefreshScheduledBackgroundJob.cs" />
     <Compile Include="Views\LandUseBlock\Index.cs" />
     <Compile Include="Views\LandUseBlock\IndexViewData.cs" />
-    <Compile Include="Views\TrashGeneratingUnit\Index.cs" />
-    <Compile Include="Views\TrashGeneratingUnit\IndexViewData.cs" />
+    <Compile Include="Areas\Trash\Views\TrashGeneratingUnit\Index.cs" />
+    <Compile Include="Areas\Trash\Views\TrashGeneratingUnit\IndexViewData.cs" />
     <Compile Include="Views\LandUseBlock\LandUseBlockGridSpec.cs" />
-    <Compile Include="Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />
+    <Compile Include="Areas\Trash\Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />
     <Compile Include="Models\OVTAResultsSimple.cs" />
     <Compile Include="Areas\Trash\Controllers\TrashGeneratingUnitController.cs" />
     <Compile Include="Models\AreaBasedAcreCalculationsSimple.cs" />
@@ -979,6 +986,7 @@
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\TrashMapCommon.js" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
@@ -1305,6 +1313,7 @@
     <Content Include="Areas\DroolTool\Views\web.config" />
     <Content Include="Areas\DroolTool\Views\Home\About.cshtml" />
     <Compile Include="Areas\DroolTool\Controllers\BackboneSegmentController.cs" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocation.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1789,7 +1798,7 @@
     <Content Include="Views\Help\BulkUploadRequest.cshtml" />
     <Content Include="Views\TreatmentBMP\UploadTreatmentBMPs.cshtml" />
     <Content Include="Views\Shared\ProjectControls\BulkRowBMPDelineation.cshtml" />
-    <Content Include="Views\TrashGeneratingUnit\Index.cshtml" />
+    <Content Include="Areas\Trash\Views\TrashGeneratingUnit\Index.cshtml" />
     <Content Include="Views\LandUseBlock\Index.cshtml" />
     <Content Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cshtml" />
     <Content Include="Views\DelineationUpload\ApproveDelineationGisUpload.cshtml" />

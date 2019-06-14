@@ -5,7 +5,6 @@ GO
 CREATE TABLE [dbo].[LandUseBlockGeometryStaging](
 	[LandUseBlockGeometryStagingID] [int] IDENTITY(1,1) NOT NULL,
 	[PersonID] [int] NOT NULL,
-	[StormwaterJurisdictionID] [int] NOT NULL,
 	[FeatureClassName] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[LandUseBlockGeometryStagingGeoJson] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SelectedProperty] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -21,8 +20,3 @@ ALTER TABLE [dbo].[LandUseBlockGeometryStaging]  WITH CHECK ADD  CONSTRAINT [FK_
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[LandUseBlockGeometryStaging] CHECK CONSTRAINT [FK_LandUseBlockGeometryStaging_Person_PersonID]
-GO
-ALTER TABLE [dbo].[LandUseBlockGeometryStaging]  WITH CHECK ADD  CONSTRAINT [FK_LandUseBlockGeometryStaging_StormwaterJurisdiction_StormwaterJurosdictionID] FOREIGN KEY([StormwaterJurisdictionID])
-REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
-GO
-ALTER TABLE [dbo].[LandUseBlockGeometryStaging] CHECK CONSTRAINT [FK_LandUseBlockGeometryStaging_StormwaterJurisdiction_StormwaterJurosdictionID]

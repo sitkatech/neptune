@@ -24,10 +24,6 @@ namespace Neptune.Web.Views.LandUseBlockUpload
         [SitkaFileExtensions("zip")]
         public HttpPostedFileBase FileResourceData { get; set; }
 
-        [Required]
-        [DisplayName("Stormwater Jurisdiction")]
-        public int StormwaterJurisdictionID { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
@@ -41,7 +37,7 @@ namespace Neptune.Web.Views.LandUseBlockUpload
 
                 var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
                     Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
-                    NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
+                    NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds*10);
 
                 List<string> featureClassNames = null;
                 try

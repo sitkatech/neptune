@@ -1,0 +1,11 @@
+CREATE TABLE dbo.LandUseBlockStaging(
+	LandUseBlockStagingID int IDENTITY(1,1) NOT NULL CONSTRAINT PK_LandUseBlockStaging_LandUseBlockStagingID PRIMARY KEY,
+	PriorityLandUseType varchar(255) NULL, 
+	LandUseDescription varchar(500) NULL,
+	LandUseBlockStagingGeoJson varchar(max) NOT NULL,
+	TrashGenerationRate decimal(4, 1) NOT NULL,
+	LandUseForTGR varchar(80) NULL,
+	MedianHouseholdIncome numeric(18, 0) NOT NULL,
+	StormwaterJurisdiction varchar(255) NOT NULL,
+	PermitType varchar(255)
+)
