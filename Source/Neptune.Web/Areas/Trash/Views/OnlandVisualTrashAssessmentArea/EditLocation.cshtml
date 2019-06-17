@@ -50,7 +50,7 @@
             <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom</button>
         </div>
         <div class="col-xs-6 text-right">
-            <button type="button" class="btn btn-neptune" onclick="pickParcels()">Pick Parcels</button>
+            <button type="button" id="pickParcelsButton" class="btn btn-neptune" onclick="pickParcels()">Pick Parcels</button>
         </div>
     </div>
 
@@ -90,8 +90,14 @@
         assessmentAreaMap.map.fitBounds(assessmentAreaMap.editableFeatureGroup.getBounds());
     };
 
-    var pickParcels = function() {
-        assessmentAreaMap.getParcelsAndPick();
+    var pickParcels = function () {
+        if (!assessmentAreaMap.parcelPickerModeActive) {
+            assessmentAreaMap.getParcelsAndPick();
+            jQuery("#pickParcelsButton").html("Accept and Refine");
+        } else {
+            assessmentAreaMap.acceptParcelsAndRefine();
+            //jQuery("#pickParcelsButton").html("Pick Parcels");
+        }
     };
 
     HookupCheckIfFormIsDirtyNoDisable(undefined);

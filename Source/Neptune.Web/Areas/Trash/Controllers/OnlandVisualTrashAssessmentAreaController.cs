@@ -119,6 +119,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
         }
 
+        [HttpGet]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        public JsonResult ParcelsViaTransect(
+            OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+
+
+            return Json(new {ParcelIDs = HttpRequestStorage.DatabaseEntities.Parcels.Where(x=>x.ParcelGeometry.Intersects(onlandVisualTrashAssessmentArea.TransectLine)).Select(x=>x.ParcelID).ToList()}, JsonRequestBehavior.AllowGet);
+        }
+
 
         [HttpGet]
         [OnlandVisualTrashAssessmentAreaDeleteFeature]
