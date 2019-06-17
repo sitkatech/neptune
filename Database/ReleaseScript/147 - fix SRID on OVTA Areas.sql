@@ -1,3 +1,0 @@
-Update OnlandVisualTrashAssessmentArea
-Set OnlandVisualTrashAssessmentAreaGeometry.STSrid = 4326
-where OnlandVisualTrashAssessmentAreaGeometry.STSrid != 4326
