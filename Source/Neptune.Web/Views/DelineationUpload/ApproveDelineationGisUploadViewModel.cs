@@ -81,16 +81,6 @@ namespace Neptune.Web.Views.DelineationUpload
                 errors.Add(new ValidationResult("Must select one layer to import"));
             }
 
-            var treatmentBMPNamesToUpload = WktAndAnnotations.Select(x => x.Annotation).ToList();
-
-            var treatmentBMPNames = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => treatmentBMPNamesToUpload.Contains(x.TreatmentBMPName)).Select(x => x.TreatmentBMPName).ToList();
-            var treatmentBMPNameDifference = treatmentBMPNamesToUpload.Except(treatmentBMPNames).ToList();
-
-            if (treatmentBMPNameDifference.Any())
-            {
-                errors.Add(new ValidationResult(treatmentBMPNameDifference.Count() + " records in the upload did not match BMP Names stored in database"));
-            }
-
             return errors;
         }
     }
