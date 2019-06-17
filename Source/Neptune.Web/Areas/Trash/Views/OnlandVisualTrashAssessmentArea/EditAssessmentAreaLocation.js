@@ -21,26 +21,31 @@
 };
 
 
-NeptuneMaps.AssessmentAreaMap = function(mapInitJson, initialBaseLayerShown, geoServerUrl) {
+NeptuneMaps.AssessmentAreaMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, originalAssessmentAreaGeoJson, assessmentAreaID) {
     NeptuneMaps.TrashAssessmentMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, {});
+    this.originalAssessmentAreaGeoJson = originalAssessmentAreaGeoJson;
+    this.assessmentAreaID = assessmentAreaID;
     this.map.setMaxZoom(24);
     this.setUpDraw();
     var self = this;
     this.map.on("click",
         function (event) {
             if (self.parcelPickerModeActive) {
-                self.mmmmmparcel(event);
-            } else {
-                window.alert("Ohhh,m you're tryin!")
+                self.onClickPickParcel(event);
             }
+        });
+
+    jQuery("#saveButton").on("click",
+        function() {
+
+            self.updateFeatureCollectionJson();
         });
 };
 
 NeptuneMaps.AssessmentAreaMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.TrashAssessmentMap.prototype);
 
-NeptuneMaps.AssessmentAreaMap.prototype.mmmmmparcel = function(event) {
-    var parcelMapSericeLayerName = "OCStormwater:Parcels",
-        mapServiceUrl = this.geoserverUrlOWS;
+NeptuneMaps.AssessmentAreaMap.prototype.onClickPickParcel = function (event) {
+    var parcelMapSericeLayerName = "OCStormwater:Parcels";
 
     var latlng = event.latlng;
     var latlngWrapped = latlng.wrap();
@@ -54,7 +59,7 @@ NeptuneMaps.AssessmentAreaMap.prototype.mmmmmparcel = function(event) {
 
     var self = this;
     jQuery.ajax({
-        url: mapServiceUrl + L.Util.getParamString(wfsParametersExtended),
+        url: this.geoserverUrlOWS + L.Util.getParamString(wfsParametersExtended),
 
     }).then(function (response) {
         if (response.features.length === 0)
@@ -80,17 +85,20 @@ NeptuneMaps.AssessmentAreaMap.prototype.mmmmmparcel = function(event) {
 
 NeptuneMaps.AssessmentAreaMap.prototype.getTextAreaId = function (featureId) { return "textareaFor" + featureId; };
 
-NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function() {
+NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function (geoJson) {
+    if (!geoJson) {
+        geoJson = this.originalAssessmentAreaGeoJson.GeoJsonFeatureCollection;
+    }
     this.editableFeatureGroup = new L.FeatureGroup();
     var self = this;
 
     this.parcelPickerModeActive = false;
     var editableFeatureGroup = this.editableFeatureGroup;
-    var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection,
+    var layerGroup = L.geoJson(geoJson,
         {
-            onEachFeature: function(feature, layer) {
+            onEachFeature: function (feature, layer) {
                 if (layer.getLayers) {
-                    layer.getLayers().forEach(function(l) {
+                    layer.getLayers().forEach(function (l) {
                         editableFeatureGroup.addLayer(l);
                     });
                 } else {
@@ -109,7 +117,7 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function() {
 
 
     this.map.on('draw:created',
-        function(e) {
+        function (e) {
             var layer = e.layer;
             editableFeatureGroup.addLayer(layer);
             var leafletId = layer._leaflet_id;
@@ -120,21 +128,21 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function() {
             self.updateFeatureCollectionJson();
         });
     this.map.on('draw:edited',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
     this.map.on('draw:editstop',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
 
     this.map.on('draw:editvertex',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
 
     this.map.on('draw:deleted',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
 
@@ -152,8 +160,37 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function() {
     this.map.setZoom(zoom);
 };
 
-NeptuneMaps.AssessmentAreaMap.prototype.acceptParcelsAndRefine = function() {
-    window.alert("Oh, you're tryin!");
+NeptuneMaps.AssessmentAreaMap.prototype.acceptParcelsAndRefine = function () {
+
+    if (this.ParcelIDs === null) {
+        this.ParcelIDs = [];
+    }
+
+    if (this.selectedParcelLayer) {
+        this.layerControl.removeLayer(this.selectedParcelLayer);
+        this.map.removeLayer(this.selectedParcelLayer);
+    }
+
+    var wfsParametersExtended = {
+        typeName: "OCStormwater:Parcels",
+        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")",
+    };
+
+    wfsParametersExtended = L.Util.extend(wfsParametersExtended, this.wfsParams);
+
+    var self = this;
+    jQuery.ajax({
+        // todo:
+        url: "https://localhost-trash.ocstormwatertools.org/Parcel/Union/",
+        data: { ParcelIDs: this.ParcelIDs },
+        type: "POST"
+
+    }).then(function (response) {
+        var geoJson = JSON.parse(response);
+        self.setUpDraw(geoJson);
+        self.updateFeatureCollectionJson();
+    });
+
 };
 
 NeptuneMaps.AssessmentAreaMap.prototype.getParcelsAndPick = function () {
@@ -171,15 +208,15 @@ NeptuneMaps.AssessmentAreaMap.prototype.getParcelsAndPick = function () {
 
     var self = this;
     jQuery.ajax({
-        // todo lol
-        url: "https://localhost-trash.ocstormwatertools.org/OnlandVisualTrashAssessmentArea/ParcelsViaTransect/344"//this.ParcelsUrl
-    }).then(function(response) {
+        // todo
+        url: "https://localhost-trash.ocstormwatertools.org/OnlandVisualTrashAssessmentArea/ParcelsViaTransect/" + self.assessmentAreaID //this.ParcelsUrl
+    }).then(function (response) {
         self.ParcelIDs = response.ParcelIDs;
         self.updateSelectedParcelLayer();
     });
 };
 
-NeptuneMaps.AssessmentAreaMap.prototype.updateSelectedParcelLayer = function() {
+NeptuneMaps.AssessmentAreaMap.prototype.updateSelectedParcelLayer = function () {
     if (this.ParcelIDs === null) {
         this.ParcelIDs = [];
     }
@@ -203,39 +240,54 @@ NeptuneMaps.AssessmentAreaMap.prototype.updateSelectedParcelLayer = function() {
     this.map.addLayer(this.selectedParcelLayer);
 };
 
-NeptuneMaps.AssessmentAreaMap.prototype.createUpdateFeatureCollectionJsonFunctionAsClosure = function(nameForWkt, nameForAnnotation, mapFormID) {
-    this.updateFeatureCollectionJson = function() {
-        var geoJson = this.editableFeatureGroup.toGeoJSON();
-        detectKinksAndReject(geoJson);
+NeptuneMaps.AssessmentAreaMap.prototype.createUpdateFeatureCollectionJsonFunctionAsClosure = function (nameForWkt, nameForAnnotation, mapFormID) {
+    this.updateFeatureCollectionJson = function () {
+        var hiddens = [];
         var mapForm = jQuery("#" + mapFormID);
         mapForm.html("");
-        var hiddens = [];
-        for (var i = 0; i < geoJson.features.length; ++i) {
-            var currentWktName = "name=\"" + nameForWkt + "\"";
-            currentWktName = currentWktName.replace("0", i);
 
-            var currentWktAnnotation = "name=\"" +
-                nameForAnnotation +
-                "\"";
-            currentWktAnnotation = currentWktAnnotation.replace("0",
-                i);
+        if (this.editableFeatureGroup) {
+            var geoJson = this.editableFeatureGroup.toGeoJSON();
+            detectKinksAndReject(geoJson);
+            for (var i = 0; i < geoJson.features.length; ++i) {
+                var currentWktName = "name=\"" + nameForWkt + "\"";
+                currentWktName = currentWktName.replace("0", i);
 
-            hiddens.push("<input type=\"hidden\" " +
-                currentWktName +
-                " value=\"" +
-                Terraformer.WKT.convert(geoJson.features[i].geometry) +
-                "\" />");
-            hiddens.push("<input type=\"hidden\" " +
-                currentWktAnnotation +
-                " value=\"" +
-                Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) +
-                "\" />");
+                var currentWktAnnotation = "name=\"" +
+                    nameForAnnotation +
+                    "\"";
+                currentWktAnnotation = currentWktAnnotation.replace("0",
+                    i);
+
+                hiddens.push("<input type=\"hidden\" " +
+                    currentWktName +
+                    " value=\"" +
+                    Terraformer.WKT.convert(geoJson.features[i].geometry) +
+                    "\" />");
+                hiddens.push("<input type=\"hidden\" " +
+                    currentWktAnnotation +
+                    " value=\"" +
+                    Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) +
+                    "\" />");
+            }
         }
+
+        if (this.ParcelIDs) {
+
+            for (var i = 0; i < this.ParcelIDs.length; i++) {
+                hiddens.push("<input type='hidden' name='ParcelIDs[" + i + "]' value='" + this.ParcelIDs[i] + "' />");
+            }
+        }
+
+        hiddens.push("<input type='hidden' name='IsParcelPicker' value='" + this.parcelPickerModeActive + "' />");
+
         mapForm.html(hiddens.join("\r\n"));
+
+
     }.bind(this);
 };
 
-var detectKinksAndReject = function(geoJson) {
+var detectKinksAndReject = function (geoJson) {
     if (!geoJson.features) {
         return;
     }

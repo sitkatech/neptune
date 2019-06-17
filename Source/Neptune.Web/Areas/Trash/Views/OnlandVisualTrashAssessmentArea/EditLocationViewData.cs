@@ -38,10 +38,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
             MapFormID = "editAssessmentAreaMapForm";
             GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
+            OnlandVisualTrashAssessmentAreaID = ovtaArea.OnlandVisualTrashAssessmentAreaID;
         }
 
         public string MapFormID { get; }
         public string GeoServerUrl{ get; }
         public RefineAssessmentAreaMapInitJson MapInitJson { get; }
+        public int OnlandVisualTrashAssessmentAreaID { get; }
     }
 }

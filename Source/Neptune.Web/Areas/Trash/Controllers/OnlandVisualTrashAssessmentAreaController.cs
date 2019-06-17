@@ -8,10 +8,12 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DesignByContract;
 
 namespace Neptune.Web.Areas.Trash.Controllers
@@ -114,9 +116,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             viewModel.UpdateModel(onlandVisualTrashAssessmentArea);
-            SetMessageForDisplay("Successfully updated OVTA Area details");
 
-            return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
+            SetMessageForDisplay("Successfully updated OVTA Area location");
+
+            return Redirect(
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x =>
+                    x.Detail(onlandVisualTrashAssessmentAreaPrimaryKey)));
         }
 
         [HttpGet]
