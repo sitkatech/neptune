@@ -95,9 +95,13 @@ namespace Neptune.Web.Controllers
             {
                 return ViewUpdateDelineationGeometry(new UpdateDelineationGeometryViewModel());
             }
-            viewModel.UpdateModel(CurrentPerson);
 
-            SetMessageForDisplay("Delineations were successfully uploaded");
+            var successfulUploadCount = viewModel.UpdateModel(CurrentPerson);
+
+
+            var organizationDisplayName = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Single(x => x.StormwaterJurisdictionID==  viewModel.StormwaterJurisdictionID).GetOrganizationDisplayName();
+
+            SetMessageForDisplay($"{successfulUploadCount} Delineations were successfully uploaded for Jurisdiction {organizationDisplayName}");
             return RedirectToAction(new SitkaRoute<ManagerDashboardController>(c => c.Index()));
         }
 
