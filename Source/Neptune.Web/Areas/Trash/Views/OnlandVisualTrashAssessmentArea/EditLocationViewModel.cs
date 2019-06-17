@@ -30,7 +30,7 @@ using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public class EditOnlandVisualTrashAssessmentAreaLocationViewModel : FormViewModel
+    public class EditLocationViewModel : FormViewModel
     { 
 
         [Required]
@@ -41,11 +41,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public EditOnlandVisualTrashAssessmentAreaLocationViewModel()
+        public EditLocationViewModel()
         {
         }
 
-        public EditOnlandVisualTrashAssessmentAreaLocationViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        public EditLocationViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             
         }

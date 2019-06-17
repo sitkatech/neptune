@@ -42,7 +42,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var editDetailsUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditBasics(onlandVisualTrashAssessmentArea));
             var editLocationUrl =
-                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditOnlandVisualTrashAssessmentAreaLocation(onlandVisualTrashAssessmentArea));
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditLocation(onlandVisualTrashAssessmentArea));
             var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
                 onlandVisualTrashAssessmentArea, mapInitJson, newUrl, editDetailsUrl, editLocationUrl);
 
@@ -82,30 +82,30 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
         }
 
-        private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
+        private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditLocationViewModel viewModel)
         {
             var assessmentAreaLayerGeoJson = onlandVisualTrashAssessmentArea.GetAssessmentAreaLayerGeoJson();
             var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
             var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", null, assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
 
-            var viewData = new EditOnlandVisualTrashAssessmentAreaLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea, refineAssessmentAreaMapInitJson);
-            return RazorView<EditOnlandVisualTrashAssessmentAreaLocation, EditOnlandVisualTrashAssessmentAreaLocationViewData, EditOnlandVisualTrashAssessmentAreaLocationViewModel>(viewData, viewModel);
+            var viewData = new EditLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea, refineAssessmentAreaMapInitJson);
+            return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ViewResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        public ViewResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
-            var viewModel = new EditOnlandVisualTrashAssessmentAreaLocationViewModel(onlandVisualTrashAssessmentArea);
+            var viewModel = new EditLocationViewModel(onlandVisualTrashAssessmentArea);
             return ViewEditLocation(onlandVisualTrashAssessmentArea, viewModel);
         }
 
         [HttpPost]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
+        public ActionResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditLocationViewModel viewModel)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
             if (!ModelState.IsValid)

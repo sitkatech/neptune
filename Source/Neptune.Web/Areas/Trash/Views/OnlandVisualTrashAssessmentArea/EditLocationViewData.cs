@@ -25,9 +25,9 @@ using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public class EditOnlandVisualTrashAssessmentAreaLocationViewData : TrashModuleViewData
+    public class EditLocationViewData : TrashModuleViewData
     {
-        public EditOnlandVisualTrashAssessmentAreaLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea, RefineAssessmentAreaMapInitJson mapInitJson) : base(currentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.EditOVTAArea))
+        public EditLocationViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea, RefineAssessmentAreaMapInitJson mapInitJson) : base(currentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.EditOVTAArea))
         {
             MapInitJson = mapInitJson;
             EntityName = "OVTA Areas";

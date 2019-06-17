@@ -425,9 +425,9 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocation.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocationViewData.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocationViewModel.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewModel.cs" />
     <Compile Include="Models\DelineationGeometryStaging.cs" />
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
@@ -1296,7 +1296,7 @@
     <Content Include="Areas\DroolTool\Views\web.config" />
     <Content Include="Areas\DroolTool\Views\Home\About.cshtml" />
     <Compile Include="Areas\DroolTool\Controllers\BackboneSegmentController.cs" />
-    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaLocation.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

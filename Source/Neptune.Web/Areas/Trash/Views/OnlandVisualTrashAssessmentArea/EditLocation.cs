@@ -24,7 +24,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public abstract class EditOnlandVisualTrashAssessmentAreaLocation : TypedWebViewPage<EditOnlandVisualTrashAssessmentAreaLocationViewData, EditOnlandVisualTrashAssessmentAreaLocationViewModel>
+    public abstract class EditLocation : TypedWebViewPage<EditLocationViewData, EditLocationViewModel>
     {
     }
 }
