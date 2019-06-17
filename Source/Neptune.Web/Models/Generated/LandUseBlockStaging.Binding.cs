@@ -30,12 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlockStaging(int landUseBlockStagingID, string priorityLandUseType, string landUseDescription, DbGeometry landUseBlockStagingGeoJson, decimal trashGenerationRate, string landUseForTGR, decimal medianHouseholdIncome, string stormwaterJurisdiction, string permitType) : this()
+        public LandUseBlockStaging(int landUseBlockStagingID, string priorityLandUseType, string landUseDescription, DbGeometry landUseBlockStagingGeometry, decimal trashGenerationRate, string landUseForTGR, decimal medianHouseholdIncome, string stormwaterJurisdiction, string permitType) : this()
         {
             this.LandUseBlockStagingID = landUseBlockStagingID;
             this.PriorityLandUseType = priorityLandUseType;
             this.LandUseDescription = landUseDescription;
-            this.LandUseBlockStagingGeoJson = landUseBlockStagingGeoJson;
+            this.LandUseBlockStagingGeometry = landUseBlockStagingGeometry;
             this.TrashGenerationRate = trashGenerationRate;
             this.LandUseForTGR = landUseForTGR;
             this.MedianHouseholdIncome = medianHouseholdIncome;
@@ -46,12 +46,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlockStaging(DbGeometry landUseBlockStagingGeoJson, decimal trashGenerationRate, decimal medianHouseholdIncome, string stormwaterJurisdiction) : this()
+        public LandUseBlockStaging(DbGeometry landUseBlockStagingGeometry, decimal trashGenerationRate, decimal medianHouseholdIncome, string stormwaterJurisdiction) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.LandUseBlockStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.LandUseBlockStagingGeoJson = landUseBlockStagingGeoJson;
+            this.LandUseBlockStagingGeometry = landUseBlockStagingGeometry;
             this.TrashGenerationRate = trashGenerationRate;
             this.MedianHouseholdIncome = medianHouseholdIncome;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
@@ -102,7 +102,7 @@ namespace Neptune.Web.Models
         public int LandUseBlockStagingID { get; set; }
         public string PriorityLandUseType { get; set; }
         public string LandUseDescription { get; set; }
-        public DbGeometry LandUseBlockStagingGeoJson { get; set; }
+        public DbGeometry LandUseBlockStagingGeometry { get; set; }
         public decimal TrashGenerationRate { get; set; }
         public string LandUseForTGR { get; set; }
         public decimal MedianHouseholdIncome { get; set; }

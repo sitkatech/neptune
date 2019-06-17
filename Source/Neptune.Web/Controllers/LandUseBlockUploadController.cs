@@ -33,15 +33,15 @@ namespace Neptune.Web.Controllers
 {
     public class LandUseBlockUploadController : NeptuneBaseController
     {
-        //[SitkaAdminFeature]
-        //public RedirectResult TriggerHangfireJob()
-        //{
+        [SitkaAdminFeature]
+        public RedirectResult TriggerHangfireJob()
+        {
 
-        //    BackgroundJob.Schedule(() =>
-        //        ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(), TimeSpan.FromSeconds(30));
+            BackgroundJob.Schedule(() =>
+                ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(), TimeSpan.FromSeconds(30));
 
-        //    return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
-        //}
+            return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
+        }
 
         [HttpGet]
         [JurisdictionManageFeature]
@@ -64,6 +64,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(CurrentPerson);
 
             SetMessageForDisplay("The Land Use Blocks were successfully updated and will be added to the system after processing.");
+            TriggerHangfireJob();
 
             return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
         }

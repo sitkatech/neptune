@@ -99,6 +99,7 @@ namespace Neptune.Web.Views.LandUseBlockUpload
                 var gdbFile = disposableTempFile.FileInfo;
                 FileResourceData.SaveAs(gdbFile.FullName);
 
+
                 HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.DeleteLandUseBlockGeometryStaging(currentPerson.LandUseBlockGeometryStagings);
                 currentPerson.LandUseBlockGeometryStagings.Clear();
                 var landUseBlockGeometryStagings = LandUseBlockGeometryStaging.CreateLandUseBlockGeometryStagingListFromGdb(gdbFile, currentPerson);
