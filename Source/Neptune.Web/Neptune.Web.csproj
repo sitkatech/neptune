@@ -969,6 +969,7 @@
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\TrashMapCommon.js" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditAssessmentAreaLocation.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />

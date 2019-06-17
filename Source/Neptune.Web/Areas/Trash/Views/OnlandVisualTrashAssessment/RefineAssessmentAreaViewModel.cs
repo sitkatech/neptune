@@ -1,5 +1,6 @@
 ﻿using Neptune.Web.Views.Shared;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class RefineAssessmentAreaViewModel : OnlandVisualTrashAssessmentViewModel, IValidatableObject 
     {
+        [Required]
+        [DisplayName("Assessment Area Geometry")]
         public List<WktAndAnnotation> WktAndAnnotations { get; set; }
 
         // needed by the ModelBinder

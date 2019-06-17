@@ -3,7 +3,7 @@
         position: 'topleft',
         draw: {
             polyline: false,
-            polygon: false,
+            polygon: true,
             circle: false, // Turns off this drawing tool
             rectangle: false,
             marker: false
@@ -14,7 +14,7 @@
                 maintainColor: true,
                 opacity: 0.3
             },
-            remove: false
+            remove: true
         }
     };
     return options;
@@ -46,10 +46,12 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         drawControl = new L.Control.Draw(drawOptions);
         assessmentAreaMap.map.addControl(drawControl);
         assessmentAreaMap.map.addLayer(assessmentAreaMap.editableFeatureGroup);
-        assessmentAreaMap.layerControl.addOverlay(assessmentAreaMap.editableFeatureGroup, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
+        assessmentAreaMap.layerControl.addOverlay(assessmentAreaMap.editableFeatureGroup,
+            "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
 
         assessmentAreaMap.map.on('draw:created',
             function (e) {
+                debugger;
                 var layer = e.layer;
                 assessmentAreaMap.editableFeatureGroup.addLayer(layer);
                 var leafletId = layer._leaflet_id;
@@ -71,11 +73,6 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         assessmentAreaMap.map.on('draw:editvertex',
             function (e) {
                 updateFeatureCollectionJson();
-            })
-
-        assessmentAreaMap.map.on('draw:deleted',
-            function (e) {
-                updateFeatureCollectionJson();
             });
 
         updateFeatureCollectionJson();
@@ -93,25 +90,67 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         HookupCheckIfFormIsDirtyNoDisable(undefined);
         var zoom = Math.min(assessmentAreaMap.map.getZoom(), 18);
         assessmentAreaMap.map.setZoom(zoom);
+
+        // leaflet.draw doesn't use a sane event scheme. It was necessary to completely rebuild deleting to make our form pattern work.
+        // cloning and replacing the node kills all event handlers
+        var el = jQuery(".leaflet-draw-edit-remove").get(0);
+        var clone = el.cloneNode(true);
+        el.parentNode.replaceChild(clone, el);
+
+        assessmentAreaMap.tooltip =
+            jQuery.parseHTML(
+                '<ul class="leaflet-draw-actions leaflet-draw-actions-bottom" style="top: 31px; display: none;"><li class=""><a class="" href="#" title="Save changes.">Click a polygon to delete it.</a></li></ul>')
+            [0];
+
+        clone.parentNode.parentNode.append(assessmentAreaMap.tooltip);
+
+        // then our own event handler lets us implement deletes in a way that makes literally any sense
+        assessmentAreaMap.deleting = false;
+        L.DomEvent.on(clone,
+            "click",
+            function () {
+                assessmentAreaMap.deleting = true;
+                assessmentAreaMap.tooltip.style.display = "block";
+            });
+        assessmentAreaMap.editableFeatureGroup.on("click",
+            function (event) {
+                if (!assessmentAreaMap.deleting) {
+                    return;
+                }
+                assessmentAreaMap.editableFeatureGroup.removeLayer(event.layer);
+                updateFeatureCollectionJson();
+            });
+
+        // and we also have to make sure we leave our new-and-improved delete mode if draw or create starts
+        jQuery(".leaflet-draw-edit-edit, .leaflet-draw-draw-polygon").on("click",
+            function () {
+                assessmentAreaMap.tooltip.style.display = "none";
+                assessmentAreaMap.deleting = false;
+            });
+
     });
-}
+};
 
 NeptuneMaps.Map.prototype.getTextAreaId = function (featureId) { return "textareaFor" + featureId; };
 
 
-var createUpdateFeatureCollectionJsonFunctionAsClosure = function(nameForWkt, nameForAnnotation, mapFormID) {
-    return function() {
+var createUpdateFeatureCollectionJsonFunctionAsClosure = function (nameForWkt, nameForAnnotation, mapFormID) {
+    return function () {
         var geoJson = assessmentAreaMap.editableFeatureGroup.toGeoJSON();
         detectKinksAndReject(geoJson);
         var mapForm = jQuery("#" + mapFormID);
         mapForm.html("");
         var hiddens = [];
         for (var i = 0; i < geoJson.features.length; ++i) {
-            var currentWktName = "name=\"" + nameForWkt + "\"".replace("0", i);
+            var currentWktName = "name=\"" + nameForWkt + "\"";
+            currentWktName = currentWktName.replace("0", i);
+
             var currentWktAnnotation = "name=\"" +
                 nameForAnnotation +
-                "\"".replace("0",
-                    i);
+                "\"";
+            currentWktAnnotation = currentWktAnnotation.replace("0",
+                i);
+
             hiddens.push("<input type=\"hidden\" " +
                 currentWktName +
                 " value=\"" +
@@ -122,16 +161,21 @@ var createUpdateFeatureCollectionJsonFunctionAsClosure = function(nameForWkt, na
                 " value=\"" +
                 Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) +
                 "\" />");
+
         }
         mapForm.html(hiddens.join("\r\n"));
+        if (assessmentAreaMap.tooltip) {
+            assessmentAreaMap.tooltip.style.display = "none";
+        }
+        assessmentAreaMap.deleting = false;
     };
 };
 
-var resetZoom = function() {
+var resetZoom = function () {
     assessmentAreaMap.map.fitBounds(assessmentAreaMap.editableFeatureGroup.getBounds());
 };
 
-var detectKinksAndReject = function(geoJson) {
+var detectKinksAndReject = function (geoJson) {
     if (!geoJson.features) {
         return;
     }

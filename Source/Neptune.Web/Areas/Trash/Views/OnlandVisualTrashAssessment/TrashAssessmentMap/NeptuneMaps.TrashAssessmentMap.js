@@ -53,12 +53,12 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateTransectLineLayer = function(geoJ
     L.Util.extend(layerOptions, options);
 
     this.transectLineLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
-    this.transectLineLayer.addTo(this.map);
 
     if (this.options.showTransectOnLegend) {
         this.layerControl.addOverlay(this.transectLineLayer,
             "<span><img src='/Content/img/legendImages/transectLine.png' height='12px' /> Transect</span>");
     }
+    this.transectLineLayer.addTo(this.map);
 
     return this.transectLineLayer;
 };
