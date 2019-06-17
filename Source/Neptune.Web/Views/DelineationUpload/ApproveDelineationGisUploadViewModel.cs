@@ -39,11 +39,13 @@ namespace Neptune.Web.Views.DelineationUpload
                     x => new DelineationGeometryLayer {DelineationGeometryStagingID = x.DelineationGeometryStagingID, SelectedProperty = x.SelectedProperty}).ToList();
         }
 
-        public void UpdateModel(Person currentPerson)
+        public int? UpdateModel(Person currentPerson)
         {
             var delineationGeometryStagings = currentPerson.DelineationGeometryStagings.ToList();
             HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            var successfulUpdateCount = 0;
 
             if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
             {
@@ -52,21 +54,22 @@ namespace Neptune.Web.Views.DelineationUpload
 
                 var treatmentBMPNames = WktAndAnnotations.Select(x=>x.Annotation).ToList();
 
-                var delineationsToMergeInto =
-                    stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).Select(x=>x.Delineation).ToList();
+                var treatmentBMPsToUpdate = stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
 
+                foreach (var treatmentBMP in treatmentBMPsToUpdate)
+                {
+                    var wktAndAnnotation = WktAndAnnotations.SingleOrDefault(z => treatmentBMP.TreatmentBMPName == z.Annotation);
 
-                var delineationsToCreate = stormwaterJurisdiction.TreatmentBMPs.ToList().Join(WktAndAnnotations,
-                    x => x.TreatmentBMPName, y => y.Annotation,
-                    (x, y) => new Models.Delineation(DbGeometry.FromText(y.Wkt, MapInitJson.CoordinateSystemId),
-                            DelineationType.Distributed.DelineationTypeID, true, x.TreatmentBMPID, DateTime.Now)
-                     ).ToList();
+                    treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
 
-                delineationsToMergeInto.Merge(delineationsToCreate,
-                    HttpRequestStorage.DatabaseEntities.Delineations.Local,
-                    (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
-                    (x, y) => x.DelineationGeometry = y.DelineationGeometry);
+                    treatmentBMP.Delineation = new Models.Delineation(
+                        DbGeometry.FromText(wktAndAnnotation.Wkt, MapInitJson.CoordinateSystemId),
+                        DelineationType.Distributed.DelineationTypeID, true, treatmentBMP.TreatmentBMPID, DateTime.Now);
+                }
+                successfulUpdateCount = treatmentBMPsToUpdate.Count;
             }
+
+            return successfulUpdateCount;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -76,16 +79,6 @@ namespace Neptune.Web.Views.DelineationUpload
             if (LayerToImportID == null || !DelineationGeometryLayers.Select(x => x.DelineationGeometryStagingID).Contains(LayerToImportID.Value))
             {
                 errors.Add(new ValidationResult("Must select one layer to import"));
-            }
-
-            var treatmentBMPNamesToUpload = WktAndAnnotations.Select(x => x.Annotation).ToList();
-
-            var treatmentBMPNames = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => treatmentBMPNamesToUpload.Contains(x.TreatmentBMPName)).Select(x => x.TreatmentBMPName).ToList();
-            var treatmentBMPNameDifference = treatmentBMPNamesToUpload.Except(treatmentBMPNames).ToList();
-
-            if (treatmentBMPNameDifference.Any())
-            {
-                errors.Add(new ValidationResult(treatmentBMPNameDifference.Count() + " records in the upload did not match BMP Names stored in database"));
             }
 
             return errors;
