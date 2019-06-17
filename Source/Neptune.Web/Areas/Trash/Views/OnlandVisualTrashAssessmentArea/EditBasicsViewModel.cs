@@ -29,7 +29,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public class EditOnlandVisualTrashAssessmentAreaBasicsViewModel : FormViewModel, IValidatableObject
+    public class EditBasicsViewModel : FormViewModel, IValidatableObject
     { 
         [DisplayName("Assessment Area Name")]
         [Required]
@@ -47,11 +47,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public EditOnlandVisualTrashAssessmentAreaBasicsViewModel()
+        public EditBasicsViewModel()
         {
         }
 
-        public EditOnlandVisualTrashAssessmentAreaBasicsViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        public EditBasicsViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             AssessmentAreaName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName;
             AssessmentAreaDescription = onlandVisualTrashAssessmentArea.AssessmentAreaDescription;
@@ -69,7 +69,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         {
             if (HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Any(x => x.OnlandVisualTrashAssessmentAreaID != AssessmentAreaID && x.StormwaterJurisdictionID == StormwaterJurisdictionID && x.OnlandVisualTrashAssessmentAreaName == AssessmentAreaName))
             {
-                yield return new SitkaValidationResult<EditOnlandVisualTrashAssessmentAreaBasicsViewModel, string>(
+                yield return new SitkaValidationResult<EditBasicsViewModel, string>(
                     "The Assessment Area Name is already in use in this jurisdiction. Choose another name.", x=>x.AssessmentAreaName);
             }
         }

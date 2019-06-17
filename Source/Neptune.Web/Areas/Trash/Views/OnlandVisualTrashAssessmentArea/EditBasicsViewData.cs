@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditVitalSignBasics.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="EditVitalSignBasicsViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,13 +18,21 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-
-using LtInfo.Common.Mvc;
+using Neptune.Web.Models;
+using Neptune.Web.Views;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public abstract class EditOnlandVisualTrashAssessmentAreaBasics : TypedWebPartialViewPage<EditOnlandVisualTrashAssessmentAreaBasicsViewData, EditOnlandVisualTrashAssessmentAreaBasicsViewModel>
+    public class EditBasicsViewData : TrashModuleViewData
     {
+        public string AssessmentAreaName { get; }
+        public string AssessmentAreaDescription { get; }
+
+
+        public EditBasicsViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea ovtaArea) : base(currentPerson)
+        {
+            AssessmentAreaName = ovtaArea.OnlandVisualTrashAssessmentAreaName;
+            AssessmentAreaDescription = ovtaArea.AssessmentAreaDescription;
+        }
     }
 }

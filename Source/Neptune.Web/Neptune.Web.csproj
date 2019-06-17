@@ -470,9 +470,9 @@
     <Compile Include="Models\Delineations.DatabaseContextExtensions.cs" />
     <Compile Include="Common\NeptuneGeometryUtilities.cs" />
     <Compile Include="Common\TreatmentBMPCsvParserHelper.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasics.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasicsViewData.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasicsViewModel.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditBasics.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditBasicsViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditBasicsViewModel.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\DetailViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentAreaIndexGridSpec.cs" />
@@ -1287,7 +1287,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ScoreDescriptions.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\TrashAssessmentSummaryMap.cshtml" />
-    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasics.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditBasics.cshtml" />
     <Compile Include="Common\TrashGeneratingUnitHelper.cs" />
     <Content Include="Areas\DroolTool\Views\_ViewStart.cshtml" />
     <Content Include="Areas\DroolTool\Views\Home\Index.cshtml" />
