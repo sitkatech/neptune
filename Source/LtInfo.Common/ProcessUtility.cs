@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using log4net;
@@ -111,17 +112,17 @@ namespace LtInfo.Common
         private class ProcessStreamReader
         {
             private readonly object _outputLock = new object();
-            private string _diagnosticOutput = string.Empty;
-            private string _standardOut = string.Empty;
+            private StringBuilder _diagnosticOutput = new StringBuilder();
+            private StringBuilder _standardOut = new StringBuilder();
 
             public void ReceiveStdOut(object sender, DataReceivedEventArgs e)
             {
                 lock (_outputLock)
                 {
-                    _diagnosticOutput += string.Format("{0}\r\n", string.Format("[stdout] {0}", e.Data));
+                    _diagnosticOutput.Append(string.Format("{0}\r\n", string.Format("[stdout] {0}", e.Data)));
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        _standardOut += string.Format("{0}\r\n", e.Data);
+                        _standardOut.Append(string.Format("{0}\r\n", e.Data));
                     }
                 }
             }
@@ -131,7 +132,7 @@ namespace LtInfo.Common
                 var message = string.Format("[stderr] {0}", e.Data);
                 lock (_outputLock)
                 {
-                    _diagnosticOutput += string.Format("{0}\r\n", message);
+                    _diagnosticOutput.Append(string.Format("{0}\r\n", message));
                 }
             }
 
@@ -142,7 +143,7 @@ namespace LtInfo.Common
                 {
                     lock (_outputLock)
                     {
-                        return _diagnosticOutput;
+                        return _diagnosticOutput.ToString();
                     }
                 }
             }
@@ -153,7 +154,7 @@ namespace LtInfo.Common
                 {
                     lock (_outputLock)
                     {
-                        return _standardOut;
+                        return _standardOut.ToString();
                     }
                 }
             }
