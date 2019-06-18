@@ -45,6 +45,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
             ParcelUnionUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.Union());
             ParcelsViaTransectUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.ParcelsViaTransect(UrlTemplate.Parameter1Int))).UrlTemplateString;
+            DetailUrl = ovtaArea.GetDetailUrl();
         }
 
         public string ParcelsViaTransectUrlTemplate { get; set; }
@@ -54,5 +55,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public RefineAssessmentAreaMapInitJson MapInitJson { get; }
         public int OnlandVisualTrashAssessmentAreaID { get; }
         public string ParcelUnionUrl { get; }
+        public string DetailUrl { get; }
     }
 }
