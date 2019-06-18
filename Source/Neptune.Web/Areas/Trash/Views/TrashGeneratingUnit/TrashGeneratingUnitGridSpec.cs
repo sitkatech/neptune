@@ -24,11 +24,7 @@ namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
 
                 return x.LandUseBlock?.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use";
             }, 140, DhtmlxGridColumnFilterType.Text);
-            Add("Median Household Income (Residential)", x => x.LandUseBlock.MedianHouseholdIncomeResidential, 200);
-            Add("Median Household Income (Retail)", x => x.LandUseBlock.MedianHouseholdIncomeRetail, 200);
-            Add("Permit Class", x => x.LandUseBlock.PermitType.PermitTypeDisplayName, 200);
-            Add("Land Use For TGR", x => x.LandUseBlock.LandUseForTGR, 200);
-            Add("Land Use Default TGR", x => x.LandUseBlock.TrashGenerationRate, 200);
+            
             Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrlNoPermissionCheck() ?? new HtmlString(""), 255, DhtmlxGridColumnFilterType.Html);
             Add("Governing OVTA Area Baseline Score", x => x.OnlandVisualTrashAssessmentArea?.GetBaselineScoreAsHtmlString() ?? new HtmlString(""), 255, DhtmlxGridColumnFilterType.Html);
             Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
@@ -51,7 +47,11 @@ namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
             Add("Trash Capture Effectiveness",
                             x => x.TreatmentBMP?.TrashCaptureEffectiveness?.ToString(CultureInfo.InvariantCulture) ?? "Not Provided", 150,
                             DhtmlxGridColumnFilterType.Numeric);
-
+            Add("Median Household Income (Residential)", x => x.LandUseBlock?.MedianHouseholdIncomeResidential, 200);
+            Add("Median Household Income (Retail)", x => x.LandUseBlock?.MedianHouseholdIncomeRetail, 200);
+            Add("Permit Class", x => x.LandUseBlock?.PermitType.PermitTypeDisplayName, 200);
+            Add("Land Use For TGR", x => x.LandUseBlock?.LandUseForTGR, 200);
+            Add("Land Use Default TGR", x => x.LandUseBlock?.TrashGenerationRate, 200);
             Add("Last Updated", x => x.LastUpdateDate, 120, DhtmlxGridColumnFormatType.DateTime);
         }
 
