@@ -49,6 +49,28 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     // initialize reference layers
     $scope.neptuneMap.vectorLayerGroups[0].addTo($scope.neptuneMap.map);
 
+    if (options.showTrashGeneratingUnitLoads) {
+        var currentLoadLegendUrl = $scope.AngularViewData.GeoServerUrl +
+            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnitLoads&style=current_load&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+        var currentLoadLegendlabel =
+            "<span>Current Loading </br><img src='" + currentLoadLegendUrl + "'/></span>";
+
+        var a = $scope.neptuneMap.addWmsLayer(
+            "OCStormwater:TrashGeneratingUnitLoads", currentLoadLegendlabel, { styles: "current_load", });
+
+        var deltaLoadLegendUrl = $scope.AngularViewData.GeoServerUrl +
+            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnitLoads&style=delta_load&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+        var deltaLoadLegendlabel =
+            "<span>Net Change in Loading </br><img src='" + deltaLoadLegendUrl + "'/></span>";
+
+        var b = $scope.neptuneMap.addWmsLayer(
+            "OCStormwater:TrashGeneratingUnitLoads", deltaLoadLegendlabel, { styles: "delta_load", });
+
+        $scope.neptuneMap.map.removeLayer(b);
+
+        console.log(a);
+    }
+
     if (options.showTrashGeneratingUnits) {
         var trashGeneratingUnitsLegendUrl = $scope.AngularViewData.GeoServerUrl +
             "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnits&style=tgu_style&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";

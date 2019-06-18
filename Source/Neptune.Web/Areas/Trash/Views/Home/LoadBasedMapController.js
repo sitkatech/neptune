@@ -13,7 +13,8 @@
             angularModelAndViewData.AngularViewData.LoadBasedMapInitJson,
             loadResultsControl,
             {
-                showTrashGeneratingUnits: true,
+                showTrashGeneratingUnits: false,
+                showTrashGeneratingUnitLoads: true,
                 disallowedTrashCaptureStatusTypeIDs: [3, 4],
                 tabSelector: "#loadResultsTab",
                 resultsSelector: "#loadResults"
