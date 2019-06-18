@@ -24,7 +24,10 @@ namespace Neptune.Web.Models
             Property(x => x.MedianHouseholdIncome).HasColumnName(@"MedianHouseholdIncome").HasColumnType("decimal").IsRequired();
             Property(x => x.StormwaterJurisdiction).HasColumnName(@"StormwaterJurisdiction").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(255);
             Property(x => x.PermitType).HasColumnName(@"PermitType").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(255);
+            Property(x => x.UploadedByPersonID).HasColumnName(@"UploadedByPersonID").HasColumnType("int").IsRequired();
 
+            // Foreign keys
+            HasRequired(a => a.UploadedByPerson).WithMany(b => b.LandUseBlockStagingsWhereYouAreTheUploadedByPerson).HasForeignKey(c => c.UploadedByPersonID).WillCascadeOnDelete(false); // FK_LandUseBlockStaging_Person_UploadedByPersonID_PersonID
         }
     }
 }

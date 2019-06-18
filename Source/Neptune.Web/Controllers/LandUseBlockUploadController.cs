@@ -47,7 +47,7 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public ViewResult UpdateLandUseBlockGeometry()
         {
-            var viewModel = new UpdateLandUseBlockGeometryViewModel();
+            var viewModel = new UpdateLandUseBlockGeometryViewModel {PersonID = CurrentPerson.PersonID};
             return ViewUpdateLandUseBlockGeometry(viewModel);
         }
 
@@ -61,10 +61,10 @@ namespace Neptune.Web.Controllers
                 var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, null);
                 return RazorPartialView<UpdateLandUseBlockGeometryErrors, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
             }
+
             viewModel.UpdateModel(CurrentPerson);
 
             SetMessageForDisplay("The Land Use Blocks were successfully updated and will be added to the system after processing.");
-            TriggerHangfireJob();
 
             return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
         }
@@ -86,7 +86,7 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
             var landUseBlockGeometryStaging = landUseBlockGeometryStagingPrimaryKey.EntityObject;
 
-            Check.Assert(landUseBlockGeometryStaging.PersonID == CurrentPerson.PersonID, "LandUseBlock Geometry Staging must belong to the current person");
+            Check.Assert(landUseBlockGeometryStaging.PersonID == CurrentPerson.PersonID, "Land Use Block Geometry Staging must belong to the current person");
 
             return Json(LandUseBlockUploadGisReportJsonResult.GetLandUseBlockUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, landUseBlockGeometryStaging, selectedProperty));
         }

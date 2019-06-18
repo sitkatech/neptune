@@ -180,8 +180,8 @@ namespace LtInfo.Common.GdalOgr
             const string ogr2OgrColumnListSeparator = ",";
             Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),
                 $"Found column names with separator character \"{ogr2OgrColumnListSeparator}\", can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
-            Check.Require(filteredColumnNameList.All(x => !Regex.IsMatch(x, @"\s")),
-                $"Found column names with whitespace in them, can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
+            //Check.Require(filteredColumnNameList.All(x => !Regex.IsMatch(x, @"(^\s*\w+\s*$)|(^\s*\w+\s+as\s+\w+\s*$)")),
+            //    $"Found column names with whitespace in them, can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
 
             var selectStatement =
                 $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName}";

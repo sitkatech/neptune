@@ -12,8 +12,15 @@ CREATE TABLE [dbo].[LandUseBlockStaging](
 	[MedianHouseholdIncome] [numeric](18, 0) NOT NULL,
 	[StormwaterJurisdiction] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[PermitType] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[UploadedByPersonID] [int] NOT NULL,
  CONSTRAINT [PK_LandUseBlockStaging_LandUseBlockStagingID] PRIMARY KEY CLUSTERED 
 (
 	[LandUseBlockStagingID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+ALTER TABLE [dbo].[LandUseBlockStaging]  WITH CHECK ADD  CONSTRAINT [FK_LandUseBlockStaging_Person_UploadedByPersonID_PersonID] FOREIGN KEY([UploadedByPersonID])
+REFERENCES [dbo].[Person] ([PersonID])
+GO
+ALTER TABLE [dbo].[LandUseBlockStaging] CHECK CONSTRAINT [FK_LandUseBlockStaging_Person_UploadedByPersonID_PersonID]

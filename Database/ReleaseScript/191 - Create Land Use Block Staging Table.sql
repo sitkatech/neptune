@@ -7,5 +7,6 @@ CREATE TABLE dbo.LandUseBlockStaging(
 	LandUseForTGR varchar(80) NULL,
 	MedianHouseholdIncome numeric(18, 0) NOT NULL,
 	StormwaterJurisdiction varchar(255) NOT NULL,
-	PermitType varchar(255)
+	PermitType varchar(255),
+	UploadedByPersonID int Not Null Constraint FK_LandUseBlockStaging_Person_UploadedByPersonID_PersonID Foreign Key References dbo.Person (PersonID) 
 )

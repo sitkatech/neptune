@@ -31,13 +31,13 @@
                 <p>
                     After you upload your file, you will be able to preview and verify the uploaded data on a map. Once you accept the uploaded data, new landUseBlocks will be added and any existing landUseBlock locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded landUseBlocks will be marked as provisional.
                 </p>
-                    <div>
-                        @Html.EditorFor(x => x.FileResourceData)
-                        @Html.ValidationMessageFor(x => x.FileResourceData)
-                        <span class="smallExplanationText">
-                            Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
-                        </span>
-                    </div>
+                <div>
+                    @Html.EditorFor(x => x.FileResourceData)
+                    @Html.ValidationMessageFor(x => x.FileResourceData)
+                    <span class="smallExplanationText">
+                        Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -46,6 +46,7 @@
             </div>
         </div>
     </div>
+    @Html.HiddenFor(m=>m.PersonID)
 </form>
 @*<script type="text/javascript">
             // <![CDATA[

@@ -21,21 +21,22 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            var landUseBlockGeometryStaging = HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.FirstOrDefault();
-            if (landUseBlockGeometryStaging == null)
-            {
-                return;
-            }
+            //var landUseBlockGeometryStaging = HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.FirstOrDefault();
+            //if (landUseBlockGeometryStaging == null)
+            //{
+            //    return;
+            //}
 
-            var person = landUseBlockGeometryStaging.Person;
+            //var person = landUseBlockGeometryStaging.Person;
 
-            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId, NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds*10);
-            ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(
-                landUseBlockGeometryStaging.LandUseBlockGeometryStagingGeoJson,
-                NeptuneWebConfiguration.DatabaseConnectionString, "LandUseBlockStaging", "Select PLU_Cat as PriorityLandUseType, LU_Descr as LandUseDescription, TGR as TrashGenerationRate, LU_for_TGR as LandUseForTGR, MHI as MedianHouseHoldIncome, Jurisdic as StormwaterJurisdiction, Permit as PermitType", false);
+            //var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId, NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds*10);
+            //ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(
+            //    landUseBlockGeometryStaging.LandUseBlockGeometryStagingGeoJson,
+            //    NeptuneWebConfiguration.DatabaseConnectionString, "LandUseBlockStaging", "Select PLU_Cat as PriorityLandUseType, LU_Descr as LandUseDescription, TGR as TrashGenerationRate, LU_for_TGR as LandUseForTGR, MHI as MedianHouseHoldIncome, Jurisdic as StormwaterJurisdiction, Permit as PermitType", false);
 
             var landUseBlockStagings = HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.ToList();
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
+            var person = landUseBlockStagings[0].UploadedByPerson;
 
 
             var count = 0;
@@ -133,14 +134,14 @@ namespace Neptune.Web.ScheduledJobs
             {
                 message =
                     $"Unfortunately your upload of {count} Land Use Blocks was unable to loaded into the Land Use Block table, a report of the errors is provided below: ";
-                //sendMessage(person, message, errorList);
+                //sendEmailNotification(person, message, errorList);
             }
             else
             {
                 HttpRequestStorage.DatabaseEntities.LandUseBlocks.AddRange(landUseBlocksToUpload);
                 HttpRequestStorage.DatabaseEntities.SaveChanges(person);
                 message = $"Congratulations, {count} Land Use Blocks were successfully uploaded into the Land Use Block table.";
-                //sendMessage(person, message, errorList);
+                //sendEmailNotification(person, message, errorList);
             }
 
             HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
