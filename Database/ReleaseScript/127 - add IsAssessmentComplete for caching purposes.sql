@@ -1,2 +1,0 @@
-Alter Table dbo.TreatmentBMPAssessment
-Add IsAssessmentComplete bit null

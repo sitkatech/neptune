@@ -1,2 +1,0 @@
-alter table dbo.TreatmentBMPAssessment
-Add AssessmentScore float null

@@ -71,13 +71,13 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Location
-                @*TODO uncomment after go-live appropriate*@
-                @*@if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
-                {
-                    <span class="pull-right">
-                        <a href="@ViewDataTyped.EditLocationUrl"><span class="glyphicon glyphicon-edit"></span></a>
-                    </span>
-                }*@
+                
+            @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
+            {
+                <span class="pull-right">
+                    <a href="@ViewDataTyped.EditLocationUrl"><span class="glyphicon glyphicon-edit"></span></a>
+                </span>
+            }
             </div>
             <div class="panel-body">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px;"></div>

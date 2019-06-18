@@ -40,35 +40,35 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson, observationsLayerGeoJson);
             var newUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.NewAssessment(onlandVisualTrashAssessmentArea));
             var editDetailsUrl =
-                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditOnlandVisualTrashAssessmentAreaBasics(onlandVisualTrashAssessmentArea));
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditBasics(onlandVisualTrashAssessmentArea));
             var editLocationUrl =
-                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditOnlandVisualTrashAssessmentAreaLocation(onlandVisualTrashAssessmentArea));
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditLocation(onlandVisualTrashAssessmentArea));
             var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
                 onlandVisualTrashAssessmentArea, mapInitJson, newUrl, editDetailsUrl, editLocationUrl);
 
             return RazorView<Views.OnlandVisualTrashAssessmentArea.Detail, Views.OnlandVisualTrashAssessmentArea.DetailViewData>(viewData);
         }
 
-        private PartialViewResult ViewEditBasics(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditOnlandVisualTrashAssessmentAreaBasicsViewModel viewModel)
+        private PartialViewResult ViewEditBasics(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditBasicsViewModel viewModel)
         {
-            var viewData = new EditOnlandVisualTrashAssessmentAreaBasicsViewData(CurrentPerson, onlandVisualTrashAssessmentArea);
-            return RazorPartialView<EditOnlandVisualTrashAssessmentAreaBasics, EditOnlandVisualTrashAssessmentAreaBasicsViewData, EditOnlandVisualTrashAssessmentAreaBasicsViewModel>(viewData, viewModel);
+            var viewData = new EditBasicsViewData(CurrentPerson, onlandVisualTrashAssessmentArea);
+            return RazorPartialView<EditBasics, EditBasicsViewData, EditBasicsViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public PartialViewResult EditOnlandVisualTrashAssessmentAreaBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        public PartialViewResult EditBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
-            var viewModel = new EditOnlandVisualTrashAssessmentAreaBasicsViewModel(onlandVisualTrashAssessmentArea);
+            var viewModel = new EditBasicsViewModel(onlandVisualTrashAssessmentArea);
             return ViewEditBasics(onlandVisualTrashAssessmentArea, viewModel);
         }
 
         [HttpPost]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditOnlandVisualTrashAssessmentAreaBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditOnlandVisualTrashAssessmentAreaBasicsViewModel viewModel)
+        public ActionResult EditBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditBasicsViewModel viewModel)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -82,34 +82,30 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
         }
 
-        private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
+        private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditLocationViewModel viewModel)
         {
             var assessmentAreaLayerGeoJson = onlandVisualTrashAssessmentArea.GetAssessmentAreaLayerGeoJson();
             var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
             var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", null, assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
 
-            var viewData = new EditOnlandVisualTrashAssessmentAreaLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea, refineAssessmentAreaMapInitJson);
-            return RazorView<EditOnlandVisualTrashAssessmentAreaLocation, EditOnlandVisualTrashAssessmentAreaLocationViewData, EditOnlandVisualTrashAssessmentAreaLocationViewModel>(viewData, viewModel);
+            var viewData = new EditLocationViewData(CurrentPerson, onlandVisualTrashAssessmentArea, refineAssessmentAreaMapInitJson);
+            return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
-        // todo: swap out the features after go-live appropriate
-        //[OnlandVisualTrashAssessmentAreaViewFeature]
-        [SitkaAdminFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ViewResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        public ViewResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
-            var viewModel = new EditOnlandVisualTrashAssessmentAreaLocationViewModel(onlandVisualTrashAssessmentArea);
+            var viewModel = new EditLocationViewModel(onlandVisualTrashAssessmentArea);
             return ViewEditLocation(onlandVisualTrashAssessmentArea, viewModel);
         }
 
         [HttpPost]
-        // todo: swap out the features after go-live appropriate
-        //[OnlandVisualTrashAssessmentAreaViewFeature]
-        [SitkaAdminFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditOnlandVisualTrashAssessmentAreaLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditOnlandVisualTrashAssessmentAreaLocationViewModel viewModel)
+        public ActionResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditLocationViewModel viewModel)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
