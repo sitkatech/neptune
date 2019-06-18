@@ -28,7 +28,7 @@ namespace Neptune.Web.Models
 {
     public partial class Organization : IAuditableEntity
     {
-        public const string OrganizationUnknown = "(Unknown or Unspecified Organization)";
+        public const string OrganizationUnknown = "Unknown or Unspecified Organization";
 
         public static bool IsOrganizationNameUnique(IEnumerable<Organization> organizations, string organizationName, int currentOrganizationID)
         {

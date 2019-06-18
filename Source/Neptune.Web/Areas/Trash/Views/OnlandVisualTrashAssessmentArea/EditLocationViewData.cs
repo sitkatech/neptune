@@ -24,7 +24,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
-using Neptune.Web.Controllers;
 using ParcelController = Neptune.Web.Areas.Trash.Controllers.ParcelController;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
