@@ -51,7 +51,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new FundingSourceConfiguration());
             modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
-            modelBuilder.Configurations.Add(new LandUseBlockGeometryStagingConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockStagingConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
@@ -129,7 +128,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<FundingEvent> FundingEvents { get; set; }
         public virtual DbSet<FundingSource> FundingSources { get; set; }
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
-        public virtual DbSet<LandUseBlockGeometryStaging> LandUseBlockGeometryStagings { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
@@ -313,9 +311,6 @@ namespace Neptune.Web.Models
                     var hydromodificationApplies = HydromodificationApplies.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(hydromodificationApplies, "HydromodificationApplies", primaryKey);
                     return hydromodificationApplies;
-
-                case "LandUseBlockGeometryStaging":
-                    return LandUseBlockGeometryStagings.GetLandUseBlockGeometryStaging(primaryKey);
 
                 case "LandUseBlock":
                     return LandUseBlocks.GetLandUseBlock(primaryKey);

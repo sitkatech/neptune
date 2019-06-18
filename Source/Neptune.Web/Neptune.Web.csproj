@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -142,10 +142,6 @@
     <Compile Include="Models\Generated\LandUseBlock.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlock.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\LandUseBlockConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\LandUseBlockGeometryStaging.Binding.cs" />
-    <Compile Include="Models\Generated\LandUseBlockGeometryStaging.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\LandUseBlockGeometryStagingConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\LandUseBlockGeometryStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockStaging.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockStaging.DatabaseContextExtensions.cs" />
