@@ -79,8 +79,14 @@
 
     var assessmentAreaMap;
 
+    var assessmentAreaMapOptions = {
+        AssessmentAreaID: @ViewDataTyped.OnlandVisualTrashAssessmentAreaID,
+        ParcelUnionUrl: "@ViewDataTyped.ParcelUnionUrl",
+        ParcelsViaTransectUrlTemplate: "@ViewDataTyped.ParcelsViaTransectUrlTemplate"
+    }
+
     jQuery(document).ready(function () {
-        assessmentAreaMap = new NeptuneMaps.AssessmentAreaMap(mapInitJson, "Terrain", geoServerUrl, editableFeatureJsonObject, @ViewDataTyped.OnlandVisualTrashAssessmentAreaID);
+        assessmentAreaMap = new NeptuneMaps.AssessmentAreaMap(mapInitJson, "Terrain", geoServerUrl, editableFeatureJsonObject, assessmentAreaMapOptions);
         assessmentAreaMap.createUpdateFeatureCollectionJsonFunctionAsClosure(
             "@Html.NameFor(m=>m.WktAndAnnotations[0].Wkt)",
             "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",

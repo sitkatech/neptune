@@ -21,10 +21,13 @@
 };
 
 
-NeptuneMaps.AssessmentAreaMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, originalAssessmentAreaGeoJson, assessmentAreaID) {
+NeptuneMaps.AssessmentAreaMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, originalAssessmentAreaGeoJson, options) {
     NeptuneMaps.TrashAssessmentMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, {});
+    L.Util.extend(this.options, options);
+
     this.originalAssessmentAreaGeoJson = originalAssessmentAreaGeoJson;
-    this.assessmentAreaID = assessmentAreaID;
+    this.assessmentAreaID = options.AssessmentAreaID;
+    
     this.map.setMaxZoom(24);
     this.setUpDraw();
     var self = this;
@@ -173,15 +176,14 @@ NeptuneMaps.AssessmentAreaMap.prototype.acceptParcelsAndRefine = function () {
 
     var wfsParametersExtended = {
         typeName: "OCStormwater:Parcels",
-        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")",
+        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")"
     };
 
     wfsParametersExtended = L.Util.extend(wfsParametersExtended, this.wfsParams);
 
     var self = this;
     jQuery.ajax({
-        // todo:
-        url: "https://localhost-trash.ocstormwatertools.org/Parcel/Union/",
+        url: self.options.ParcelUnionUrl,
         data: { ParcelIDs: this.ParcelIDs },
         type: "POST"
 
@@ -206,10 +208,11 @@ NeptuneMaps.AssessmentAreaMap.prototype.getParcelsAndPick = function () {
     this.map.off("draw:editvertex");
     this.map.off("draw:deleted");
 
+    var url = new Sitka.UrlTemplate(this.options.ParcelsViaTransectUrlTemplate).ParameterReplace(this.assessmentAreaID);
+
     var self = this;
     jQuery.ajax({
-        // todo
-        url: "https://localhost-trash.ocstormwatertools.org/OnlandVisualTrashAssessmentArea/ParcelsViaTransect/" + self.assessmentAreaID //this.ParcelsUrl
+        url: url
     }).then(function (response) {
         self.ParcelIDs = response.ParcelIDs;
         self.updateSelectedParcelLayer();
