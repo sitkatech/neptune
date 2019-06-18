@@ -75,12 +75,10 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetDetailUrl(), x.AssessmentSummary.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetJurisdictionSummaryUrl(), x.AssessmentSummary.StormwaterJurisdictionName), 170);
             Add("Owner Organization", x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetOwnerOrganizationSummaryUrl(), x.AssessmentSummary.StormwaterJurisdictionName), 170);
-            Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.AssessmentSummary.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
-            Add("# of Assessments", x => x.AssessmentSummary.NumberOfAssessments.GetValueOrDefault(), 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
             Add("Last Assessment Date", x => x.AssessmentSummary.LastAssessmentDate, 130, DhtmlxGridColumnFormatType.Date);
             Add("Last Assessed Score", x => x.AssessmentSummary.AssessmentScore.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("Last Assessment Type", x => x.AssessmentSummary.FieldVisitType, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Failure Notes", x => x.Notes, 200, DhtmlxGridColumnFilterType.Text);
+            Add("Failure Notes", x => x.Notes, 800, DhtmlxGridColumnFilterType.Text);
         }
     }
 }
