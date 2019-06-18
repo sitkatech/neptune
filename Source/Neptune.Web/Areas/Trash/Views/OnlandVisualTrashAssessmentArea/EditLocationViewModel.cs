@@ -23,20 +23,23 @@ using System.Collections.Generic;
 using LtInfo.Common.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
-    public class EditLocationViewModel : FormViewModel
-    { 
-
-        [Required]
-        public int? StormwaterJurisdictionID { get; set; }
-
+    public class EditLocationViewModel : FormViewModel, IValidatableObject
+    {
         public List<WktAndAnnotation> WktAndAnnotations { get; set; }
+
+        public bool? IsParcelPicker { get; set; }
+
+        public List<int> ParcelIDs { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -47,12 +50,51 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
         public EditLocationViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            
+
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-           
+            if (IsParcelPicker.GetValueOrDefault())
+            {
+                var unionListGeometries = HttpRequestStorage.DatabaseEntities.Parcels.Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList().UnionListGeometries();
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = unionListGeometries.FixSrid();
+            }
+            else
+            {
+                var dbGeometrys = WktAndAnnotations.Select(x =>
+                    DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId).ToSqlGeometry().MakeValid()
+                        .ToDbGeometry());
+                var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
+
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = unionListGeometries.FixSrid();
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+            }
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (IsParcelPicker.GetValueOrDefault())
+            {
+
+                if (ParcelIDs == null)
+                {
+                    yield return new ValidationResult("Assessment Area Geometry is required.");
+                }
+            }
+            else
+            {
+                if (WktAndAnnotations == null)
+                {
+                    yield return new ValidationResult("Assessment Area Geometry is required.");
+                }
+                else if (WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId))
+                    .Any(x => !x.IsValid))
+                {
+                    yield return new ValidationResult(
+                        "The Assessment Area contained invalid (self-intersecting) shapes. Please try again.");
+                }
+            }
         }
     }
 }

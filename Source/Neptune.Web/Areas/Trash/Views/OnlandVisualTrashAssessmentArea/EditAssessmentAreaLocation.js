@@ -21,20 +21,87 @@
 };
 
 
-NeptuneMaps.AssessmentAreaMap = function(mapInitJson, initialBaseLayerShown, geoServerUrl) {
+NeptuneMaps.AssessmentAreaMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, originalAssessmentAreaGeoJson, options) {
     NeptuneMaps.TrashAssessmentMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, {});
+    L.Util.extend(this.options, options);
+
+    this.originalAssessmentAreaGeoJson = originalAssessmentAreaGeoJson;
+    this.assessmentAreaID = options.AssessmentAreaID;
+    
     this.map.setMaxZoom(24);
+    this.setUpDraw();
+    var self = this;
+    this.map.on("click",
+        function (event) {
+            if (self.parcelPickerModeActive) {
+                self.onClickPickParcel(event);
+            }
+        });
+
+    jQuery("#saveButton").on("click",
+        function() {
+
+            self.updateFeatureCollectionJson();
+        });
+};
+
+NeptuneMaps.AssessmentAreaMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.TrashAssessmentMap.prototype);
+
+NeptuneMaps.AssessmentAreaMap.prototype.onClickPickParcel = function (event) {
+    var parcelMapSericeLayerName = "OCStormwater:Parcels";
+
+    var latlng = event.latlng;
+    var latlngWrapped = latlng.wrap();
+
+    var wfsParametersExtended = {
+        typeName: parcelMapSericeLayerName,
+        cql_filter: "intersects(ParcelGeometry, POINT(" + latlngWrapped.lat + " " + latlngWrapped.lng + "))"
+    };
+
+    wfsParametersExtended = L.Util.extend(wfsParametersExtended, this.wfsParams);
+
+    var self = this;
+    jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(wfsParametersExtended),
+
+    }).then(function (response) {
+        if (response.features.length === 0)
+            return;
+
+        var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
+
+        var parcelId = mergedProperties.ParcelID;
+
+        if (_.includes(self.ParcelIDs, parcelId)) {
+            _.pull(self.ParcelIDs, parcelId);
+        } else {
+            self.ParcelIDs.push(parcelId);
+        }
+
+        self.updateSelectedParcelLayer();
+
+    }).fail(
+        function () {
+            console.error("There was an error selecting the " + $scope.AngularViewData.ParcelFieldDefinitionLabel + " from list");
+        });
+}
+
+NeptuneMaps.AssessmentAreaMap.prototype.getTextAreaId = function (featureId) { return "textareaFor" + featureId; };
+
+NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function (geoJson) {
+    if (!geoJson) {
+        geoJson = this.originalAssessmentAreaGeoJson.GeoJsonFeatureCollection;
+    }
     this.editableFeatureGroup = new L.FeatureGroup();
-    var editableFeatureGroup = this.editableFeatureGroup;
     var self = this;
 
     this.parcelPickerModeActive = false;
-
-    var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection,
+    var editableFeatureGroup = this.editableFeatureGroup;
+    var layerGroup = L.geoJson(geoJson,
         {
-            onEachFeature: function(feature, layer) {
+            onEachFeature: function (feature, layer) {
                 if (layer.getLayers) {
-                    layer.getLayers().forEach(function(l) {
+                    layer.getLayers().forEach(function (l) {
                         editableFeatureGroup.addLayer(l);
                     });
                 } else {
@@ -53,7 +120,7 @@ NeptuneMaps.AssessmentAreaMap = function(mapInitJson, initialBaseLayerShown, geo
 
 
     this.map.on('draw:created',
-        function(e) {
+        function (e) {
             var layer = e.layer;
             editableFeatureGroup.addLayer(layer);
             var leafletId = layer._leaflet_id;
@@ -64,21 +131,21 @@ NeptuneMaps.AssessmentAreaMap = function(mapInitJson, initialBaseLayerShown, geo
             self.updateFeatureCollectionJson();
         });
     this.map.on('draw:edited',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
     this.map.on('draw:editstop',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
 
     this.map.on('draw:editvertex',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
 
     this.map.on('draw:deleted',
-        function(e) {
+        function (e) {
             self.updateFeatureCollectionJson();
         });
 
@@ -91,97 +158,139 @@ NeptuneMaps.AssessmentAreaMap = function(mapInitJson, initialBaseLayerShown, geo
     if (!Sitka.Methods.isUndefinedNullOrEmpty(modalTitle)) {
         modalTitle.html("Edit ??? - Detail");
     }
+
     var zoom = Math.min(this.map.getZoom(), 18);
     this.map.setZoom(zoom);
 };
 
-NeptuneMaps.AssessmentAreaMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.TrashAssessmentMap.prototype);
+NeptuneMaps.AssessmentAreaMap.prototype.acceptParcelsAndRefine = function () {
 
-NeptuneMaps.AssessmentAreaMap.prototype.getTextAreaId = function (featureId) { return "textareaFor" + featureId; };
-
-NeptuneMaps.AssessmentAreaMap.prototype.getParcelsAndPick = function() {
-    
-}
-
-NeptuneMaps.AssessmentAreaMap.prototype.updateSelectedParcelLayer = function() {
-
-    if (this.ParcelIDs == null) {
+    if (this.ParcelIDs === null) {
         this.ParcelIDs = [];
     }
 
     if (this.selectedParcelLayer) {
         this.layerControl.removeLayer(this.selectedParcelLayer);
-    this.map.removeLayer(this.selectedParcelLayer);
+        this.map.removeLayer(this.selectedParcelLayer);
     }
 
-    // FIXME: Using L.Util.extend here will overwrite the neptuneMap.wmsParams object with the result of the extend, which may not be ideal
-    var wmsParameters = L.Util.extend(this.wmsParams, {
-        layers: this.ParcelMapServiceLayerName,
-        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")",
-        styles: "parcel_yellow"
+    var wfsParametersExtended = {
+        typeName: "OCStormwater:Parcels",
+        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")"
+    };
+
+    wfsParametersExtended = L.Util.extend(wfsParametersExtended, this.wfsParams);
+
+    var self = this;
+    jQuery.ajax({
+        url: self.options.ParcelUnionUrl,
+        data: { ParcelIDs: this.ParcelIDs },
+        type: "POST"
+
+    }).then(function (response) {
+        var geoJson = JSON.parse(response);
+        self.setUpDraw(geoJson);
+        self.updateFeatureCollectionJson();
     });
 
-    this.selectedParcelLayer = L.tileLayer.wms(this.GeoServerUrl, wmsParameters);
-    this.layerControl.addOverlay(this.selectedParcelLayer, "<span><img src='/Content/img/legendImages/selectedGeometry.png' height='12px' style='margin-bottom:3px;'/> Selected Parcels</span>");
-    this.map.addLayer(this.selectedParcelLayer);
+};
 
-    // Update map extent to selected parcels
-    if (_.any(this.ParcelIDs)) {
-        var wfsParameters = L.Util.extend(this.wfsParams,
-            {
-                typeName: this.ParcelMapServiceLayerName,
-                cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")"
-            });
-        SitkaAjax.ajax({
-            url: this.GeoServerUrl + L.Util.getParamString(wfsParameters),
-            dataType: "json",
-            jsonpCallback: "getJson"
-        },
-            function (response) {
-                if (response.features.length === 0)
-                    return;
+NeptuneMaps.AssessmentAreaMap.prototype.getParcelsAndPick = function () {
+    this.drawControl.remove();
+    this.map.removeLayer(this.editableFeatureGroup);
+    this.drawControl = null;
+    this.editableFeatureGroup = null;
+    this.parcelPickerModeActive = true;
 
-                $scope.$apply();
-            },
-            function () {
-                console.error("There was an error setting map extent to the selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel + "s");
-            });
+    this.map.off("draw:created");
+    this.map.off("draw:edited");
+    this.map.off("draw:editstop");
+    this.map.off("draw:editvertex");
+    this.map.off("draw:deleted");
+
+    var url = new Sitka.UrlTemplate(this.options.ParcelsViaTransectUrlTemplate).ParameterReplace(this.assessmentAreaID);
+
+    var self = this;
+    jQuery.ajax({
+        url: url
+    }).then(function (response) {
+        self.ParcelIDs = response.ParcelIDs;
+        self.updateSelectedParcelLayer();
+    });
+};
+
+NeptuneMaps.AssessmentAreaMap.prototype.updateSelectedParcelLayer = function () {
+    if (this.ParcelIDs === null) {
+        this.ParcelIDs = [];
     }
-}
 
-NeptuneMaps.AssessmentAreaMap.prototype.createUpdateFeatureCollectionJsonFunctionAsClosure = function(nameForWkt, nameForAnnotation, mapFormID) {
-    this.updateFeatureCollectionJson = function() {
-        var geoJson = this.editableFeatureGroup.toGeoJSON();
-        detectKinksAndReject(geoJson);
+    if (this.selectedParcelLayer) {
+        this.layerControl.removeLayer(this.selectedParcelLayer);
+        this.map.removeLayer(this.selectedParcelLayer);
+    }
+
+    var wmsParametersExtended = {
+        layers: "OCStormwater:Parcels",
+        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")",
+        styles: "parcel_yellow"
+    };
+
+    L.Util.extend(wmsParametersExtended, this.wmsParams);
+
+    this.selectedParcelLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParametersExtended);
+    this.layerControl.addOverlay(this.selectedParcelLayer,
+        "<span><img src='/Content/img/legendImages/selectedGeometry.png' height='12px' style='margin-bottom:3px;'/> Selected Parcels</span>");
+    this.map.addLayer(this.selectedParcelLayer);
+};
+
+NeptuneMaps.AssessmentAreaMap.prototype.createUpdateFeatureCollectionJsonFunctionAsClosure = function (nameForWkt, nameForAnnotation, mapFormID) {
+    this.updateFeatureCollectionJson = function () {
+        var hiddens = [];
         var mapForm = jQuery("#" + mapFormID);
         mapForm.html("");
-        var hiddens = [];
-        for (var i = 0; i < geoJson.features.length; ++i) {
-            var currentWktName = "name=\"" + nameForWkt + "\"";
-            currentWktName = currentWktName.replace("0", i);
 
-            var currentWktAnnotation = "name=\"" +
-                nameForAnnotation +
-                "\"";
-            currentWktAnnotation = currentWktAnnotation.replace("0",
-                i);
+        if (this.editableFeatureGroup) {
+            var geoJson = this.editableFeatureGroup.toGeoJSON();
+            detectKinksAndReject(geoJson);
+            for (var i = 0; i < geoJson.features.length; ++i) {
+                var currentWktName = "name=\"" + nameForWkt + "\"";
+                currentWktName = currentWktName.replace("0", i);
 
-            hiddens.push("<input type=\"hidden\" " +
-                currentWktName +
-                " value=\"" +
-                Terraformer.WKT.convert(geoJson.features[i].geometry) +
-                "\" />");
-            hiddens.push("<input type=\"hidden\" " +
-                currentWktAnnotation +
-                " value=\"" +
-                Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) +
-                "\" />");
+                var currentWktAnnotation = "name=\"" +
+                    nameForAnnotation +
+                    "\"";
+                currentWktAnnotation = currentWktAnnotation.replace("0",
+                    i);
+
+                hiddens.push("<input type=\"hidden\" " +
+                    currentWktName +
+                    " value=\"" +
+                    Terraformer.WKT.convert(geoJson.features[i].geometry) +
+                    "\" />");
+                hiddens.push("<input type=\"hidden\" " +
+                    currentWktAnnotation +
+                    " value=\"" +
+                    Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) +
+                    "\" />");
+            }
         }
+
+        if (this.ParcelIDs) {
+
+            for (var i = 0; i < this.ParcelIDs.length; i++) {
+                hiddens.push("<input type='hidden' name='ParcelIDs[" + i + "]' value='" + this.ParcelIDs[i] + "' />");
+            }
+        }
+
+        hiddens.push("<input type='hidden' name='IsParcelPicker' value='" + this.parcelPickerModeActive + "' />");
+
         mapForm.html(hiddens.join("\r\n"));
+
+
     }.bind(this);
 };
 
-var detectKinksAndReject = function(geoJson) {
+var detectKinksAndReject = function (geoJson) {
     if (!geoJson.features) {
         return;
     }

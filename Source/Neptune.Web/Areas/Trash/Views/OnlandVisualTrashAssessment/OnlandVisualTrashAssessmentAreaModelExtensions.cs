@@ -48,7 +48,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(areas.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.OnlandVisualTrashAssessmentAreaGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.OnlandVisualTrashAssessmentAreaGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry());
                 feature.Properties.Add("OnlandVisualTrashAssessmentAreaID", x.OnlandVisualTrashAssessmentAreaID);
                 feature.Properties.Add("OnlandVisualTrashAssessmentAreaName", x.OnlandVisualTrashAssessmentAreaName);
                 feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdictionID);

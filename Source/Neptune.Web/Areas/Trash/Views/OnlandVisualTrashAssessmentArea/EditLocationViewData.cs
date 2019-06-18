@@ -18,10 +18,14 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using LtInfo.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
+using Neptune.Web.Controllers;
+using ParcelController = Neptune.Web.Areas.Trash.Controllers.ParcelController;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
@@ -38,10 +42,18 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
             MapFormID = "editAssessmentAreaMapForm";
             GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
+            OnlandVisualTrashAssessmentAreaID = ovtaArea.OnlandVisualTrashAssessmentAreaID;
+
+            ParcelUnionUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.Union());
+            ParcelsViaTransectUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.ParcelsViaTransect(UrlTemplate.Parameter1Int))).UrlTemplateString;
         }
+
+        public string ParcelsViaTransectUrlTemplate { get; set; }
 
         public string MapFormID { get; }
         public string GeoServerUrl{ get; }
         public RefineAssessmentAreaMapInitJson MapInitJson { get; }
+        public int OnlandVisualTrashAssessmentAreaID { get; }
+        public string ParcelUnionUrl { get; }
     }
 }
