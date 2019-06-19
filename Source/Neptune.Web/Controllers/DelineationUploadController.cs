@@ -27,7 +27,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.DelineationUpload;
 using Neptune.Web.Views.Shared;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -39,7 +38,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult SummaryForMap(DelineationPrimaryKey delineationPrimaryKey)
         {
             var delineation = delineationPrimaryKey.EntityObject;
-            var deleteDelineationUrl = delineation.GetDeleteUrl(); //todo add this when the route get created
+            var deleteDelineationUrl = delineation.GetDeleteUrl();
             var canDeleteCatchment = delineation.CanDelete(CurrentPerson);
             var viewData = new SummaryForMapViewData(CurrentPerson, delineation, deleteDelineationUrl, canDeleteCatchment);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
@@ -63,6 +62,7 @@ namespace Neptune.Web.Controllers
                 var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, null, null);
                 return RazorPartialView<UpdateDelineationGeometryErrors, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
             }
+
             viewModel.UpdateModel(CurrentPerson);
 
             return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.ApproveDelineationGisUpload()));
@@ -97,18 +97,16 @@ namespace Neptune.Web.Controllers
             }
 
             var successfulUploadCount = viewModel.UpdateModel(CurrentPerson);
-
-
-            var organizationDisplayName = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Single(x => x.StormwaterJurisdictionID==  viewModel.StormwaterJurisdictionID).GetOrganizationDisplayName();
-
+            var organizationDisplayName = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).GetOrganizationDisplayName();
             SetMessageForDisplay($"{successfulUploadCount} Delineations were successfully uploaded for Jurisdiction {organizationDisplayName}");
+
             return RedirectToAction(new SitkaRoute<ManagerDashboardController>(c => c.Index()));
         }
 
         private PartialViewResult ViewApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
             var delineationGeometryStagings = CurrentPerson.DelineationGeometryStagings.ToList();
-            var layerColors = delineationGeometryStagings.Select((value, index) => new {index, value})
+            var layerColors = delineationGeometryStagings.Select((value, index) => new { index, value })
                 .ToDictionary(x => x.value.DelineationGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
             var layers =
                 delineationGeometryStagings.Select(
@@ -119,7 +117,7 @@ namespace Neptune.Web.Controllers
                             1,
                             LayerInitialVisibility.Show)).ToList();
             var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
-            var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) {AllowFullScreen = false};
+            var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) { AllowFullScreen = false };
             var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit();
             var uploadGisReportUrlTemplate =
                 new UrlTemplate<int, int, string>(
