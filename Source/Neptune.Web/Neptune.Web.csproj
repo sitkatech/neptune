@@ -82,10 +82,6 @@
     <Compile Include="Models\Generated\Delineation.Binding.cs" />
     <Compile Include="Models\Generated\Delineation.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\DelineationConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\DelineationGeometryStaging.Binding.cs" />
-    <Compile Include="Models\Generated\DelineationGeometryStaging.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\DelineationGeometryStagingConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\DelineationGeometryStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DelineationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DelineationStaging.Binding.cs" />
     <Compile Include="Models\Generated\DelineationStaging.DatabaseContextExtensions.cs" />

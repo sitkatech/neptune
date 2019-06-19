@@ -5,20 +5,10 @@ GO
 CREATE TABLE [dbo].[DelineationStaging](
 	[DelineationStagingID] [int] IDENTITY(1,1) NOT NULL,
 	[DelineationStagingGeometry] [geometry] NOT NULL,
-	[IsVerified] [bit] NOT NULL,
-	[DateLastVerified] [datetime] NULL,
 	[UploadedByPersonID] [int] NULL,
-	[TreatmentBMPName] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[DateLastModified] [datetime] NOT NULL,
-	[StormwaterJurisdictionID] [int] NOT NULL,
  CONSTRAINT [PK_DelineationStaging_DelineationStagingID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationStagingID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID] UNIQUE NONCLUSTERED 
-(
-	[TreatmentBMPName] ASC,
-	[StormwaterJurisdictionID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
@@ -27,8 +17,3 @@ ALTER TABLE [dbo].[DelineationStaging]  WITH CHECK ADD  CONSTRAINT [FK_Delineati
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[DelineationStaging] CHECK CONSTRAINT [FK_DelineationStaging_Person_UploadedByPersonID_PersonID]
-GO
-ALTER TABLE [dbo].[DelineationStaging]  WITH CHECK ADD  CONSTRAINT [FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
-REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
-GO
-ALTER TABLE [dbo].[DelineationStaging] CHECK CONSTRAINT [FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID]

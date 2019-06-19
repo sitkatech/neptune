@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Web;
-using GeoJSON.Net.Feature;
-using LtInfo.Common;
+﻿using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Web;
 
 namespace Neptune.Web.Views.DelineationUpload
 {
@@ -21,6 +19,8 @@ namespace Neptune.Web.Views.DelineationUpload
         [DisplayName("Zipped File Geodatabase to Upload")]
         [SitkaFileExtensions("zip")]
         public HttpPostedFileBase FileResourceData { get; set; }
+
+        public string TreatmentBMPNameField { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -51,6 +51,16 @@ namespace Neptune.Web.Views.DelineationUpload
                     {
                         errors.Add(new ValidationResult(
                             "The file geodatabase contained more than one feature class. Please upload a file geodatabase containing exactly one feature class."));
+                        return errors;
+                    }
+
+                    var featureClassName = featureClassNames[0];
+                    if (!OgrInfoCommandLineRunner.ConfirmAttributeExistsOnFeatureClass(
+                        new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
+                        gdbFile,
+                        Ogr2OgrCommandLineRunner.DefaultTimeOut, featureClassName, TreatmentBMPNameField))
+                    {
+                        errors.Add(new ValidationResult($"The feature class in the file geodatabase does not have an attribute named {TreatmentBMPNameField}. Please double-check the attribute name you entered and try again."));
                         return errors;
                     }
                 }
@@ -84,16 +94,13 @@ namespace Neptune.Web.Views.DelineationUpload
                     var featureClassNames = OgrInfoCommandLineRunner.GetFeatureClassNamesFromFileGdb(new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
                         gdbFile,
                         Ogr2OgrCommandLineRunner.DefaultTimeOut);
-
-                    // todo: need to have the stormwater jurisdiction and the Treatment BMP Name field here
-                    // scratch that, we actually don't. the only path to live for these guys is posting ApproveDGU, where we will know the SWJ ID and the Treatment BMP Name Fieldo
-
                     if (featureClassNames != null)
                     {
                         var columns = new List<string>
                             {
-                                
-                                $"{currentPerson.PersonID} as UploadedByPersonID"
+                                // only need the person (and the geom, obvs) since we'll get the StormwaterJurisdiction later
+                                $"{currentPerson.PersonID} as UploadedByPersonID",
+                                $"{TreatmentBMPNameField} as TreatmentBMPName"
                             };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "DelineationStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString);

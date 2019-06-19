@@ -37,6 +37,15 @@ namespace LtInfo.Common.GdalOgr
             var featureClassesFromFileGdb = processUtilityResult.StdOut.Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries).ToList();
             return featureClassesFromFileGdb.Select(x => x.Split(' ').Skip(1).First()).ToList();
         }
+        public static bool ConfirmAttributeExistsOnFeatureClass(FileInfo ogrInfoFileInfo, FileInfo gdbFileInfo, double totalMilliseconds, string featureClassName, string attributeName)
+        {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var gdalDataDirectory = new DirectoryInfo(Path.Combine(ogrInfoFileInfo.DirectoryName, "gdal-data"));
+            var commandLineArguments = BuildOgrInfoCommandLineArgumentsToConfirmAttributeExistsOnFeatureClass(gdbFileInfo, gdalDataDirectory, featureClassName);
+            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(ogrInfoFileInfo.DirectoryName, ogrInfoFileInfo.FullName, commandLineArguments, true, Convert.ToInt32(totalMilliseconds));
+
+            return processUtilityResult.StdOut.Contains($"{attributeName}:");
+        }
 
         public static Tuple<double, double, double, double> GetExtentFromGeoJson(FileInfo ogrInfoFileInfo, string geoJson, double totalMilliseconds)
         {
@@ -70,6 +79,22 @@ namespace LtInfo.Common.GdalOgr
                 "-so",
                 "-q",
                 inputGdbFile.FullName
+            };
+
+            return commandLineArguments;
+        }
+
+        public static List<string> BuildOgrInfoCommandLineArgumentsToConfirmAttributeExistsOnFeatureClass(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string featureClassName)
+        {
+            var commandLineArguments =  new List<string>
+            {
+                "--config",
+                "GDAL_DATA",
+                gdalDataDirectoryInfo.FullName,
+                "-ro",
+                "-so",
+                inputGdbFile.FullName,
+                featureClassName
             };
 
             return commandLineArguments;

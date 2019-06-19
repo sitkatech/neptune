@@ -1,6 +1,5 @@
 ﻿using Neptune.Web.Common;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Neptune.Web.Models
@@ -8,7 +7,6 @@ namespace Neptune.Web.Models
     public class DelineationUploadGisReportJsonResult
     {
         public int StormwaterJurisdictionID;
-        public int DelineationGeometryStagingID;
         public string SelectedProperty;
         public int? NumberOfDelineations;
         public int? NumberOfDelineationsToBeUpdated;
@@ -40,7 +38,7 @@ namespace Neptune.Web.Models
                 return new DelineationUploadGisReportJsonResult
                 {
                     StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
-                    DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
+                    //DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
                     SelectedProperty = selectedProperty,
                     Errors = new List<string> {"The selected property must be valid and un-ambiguous."}
                 };
@@ -55,7 +53,7 @@ namespace Neptune.Web.Models
             var delineationUploadGisReport = new DelineationUploadGisReportJsonResult
             {
                 StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
-                DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
+                //DelineationGeometryStagingID = delineationGeometryStaging.DelineationGeometryStagingID,
                 SelectedProperty = selectedProperty,
                 NumberOfDelineations = numberOfDelineations,
                 NumberOfDelineationsToBeUpdated =

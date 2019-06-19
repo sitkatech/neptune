@@ -34,42 +34,43 @@ namespace Neptune.Web.Views.DelineationUpload
 
         public ApproveDelineationGisUploadViewModel(Person currentPerson)
         {
-            DelineationGeometryLayers =
-                currentPerson.DelineationGeometryStagings.Select(
-                    x => new DelineationGeometryLayer {DelineationGeometryStagingID = x.DelineationGeometryStagingID, SelectedProperty = x.SelectedProperty}).ToList();
+            //DelineationGeometryLayers =
+            //    currentPerson.DelineationGeometryStagings.Select(
+            //        x => new DelineationGeometryLayer {DelineationGeometryStagingID = x.DelineationGeometryStagingID, SelectedProperty = x.SelectedProperty}).ToList();
         }
 
         public int? UpdateModel(Person currentPerson)
         {
-            var delineationGeometryStagings = currentPerson.DelineationGeometryStagings.ToList();
-            HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            //var delineationGeometryStagings = currentPerson.DelineationGeometryStagings.ToList();
+            //HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
+            //HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            var successfulUpdateCount = 0;
+            //var successfulUpdateCount = 0;
 
-            if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
-            {
-                var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
-                Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
+            //if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
+            //{
+            //    var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
+            //    Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
 
-                var treatmentBMPNames = WktAndAnnotations.Select(x=>x.Annotation).ToList();
+            //    var treatmentBMPNames = WktAndAnnotations.Select(x=>x.Annotation).ToList();
 
-                var treatmentBMPsToUpdate = stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
+            //    var treatmentBMPsToUpdate = stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
 
-                foreach (var treatmentBMP in treatmentBMPsToUpdate)
-                {
-                    var wktAndAnnotation = WktAndAnnotations.SingleOrDefault(z => treatmentBMP.TreatmentBMPName == z.Annotation);
+            //    foreach (var treatmentBMP in treatmentBMPsToUpdate)
+            //    {
+            //        var wktAndAnnotation = WktAndAnnotations.SingleOrDefault(z => treatmentBMP.TreatmentBMPName == z.Annotation);
 
-                    treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
+            //        treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
 
-                    treatmentBMP.Delineation = new Models.Delineation(
-                        DbGeometry.FromText(wktAndAnnotation.Wkt, MapInitJson.CoordinateSystemId),
-                        DelineationType.Distributed.DelineationTypeID, true, treatmentBMP.TreatmentBMPID, DateTime.Now);
-                }
-                successfulUpdateCount = treatmentBMPsToUpdate.Count;
-            }
+            //        treatmentBMP.Delineation = new Models.Delineation(
+            //            DbGeometry.FromText(wktAndAnnotation.Wkt, MapInitJson.CoordinateSystemId),
+            //            DelineationType.Distributed.DelineationTypeID, true, treatmentBMP.TreatmentBMPID, DateTime.Now);
+            //    }
+            //    successfulUpdateCount = treatmentBMPsToUpdate.Count;
+            //}
 
-            return successfulUpdateCount;
+
+            return -83; //return successfulUpdateCount;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

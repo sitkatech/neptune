@@ -28,17 +28,17 @@ namespace Neptune.Web.Views.DelineationUpload
             string delienationIndexUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            DelineationGeometryFeatureClassNames = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.FeatureClassName);
-            MapInitJson = mapInitJson;
-            LayerColors = layerColors;
-            StormwaterJurisdictionSelectListItems =
-                stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
-                    .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
-            DelineationGeometryLayerSelectProperties = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID,
-                x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));
-            UploadGisReportUrlTemplate = uploadGisReportUrlTemplate;
-            DelineationIndexUrl = delienationIndexUrl;
-            DelineationStagingGeoJsons = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.DelineationGeometryStagingGeoJson);
+            //DelineationGeometryFeatureClassNames = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.FeatureClassName);
+            //MapInitJson = mapInitJson;
+            //LayerColors = layerColors;
+            //StormwaterJurisdictionSelectListItems =
+            //    stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
+            //        .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
+            //DelineationGeometryLayerSelectProperties = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID,
+            //    x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));
+            //UploadGisReportUrlTemplate = uploadGisReportUrlTemplate;
+            //DelineationIndexUrl = delienationIndexUrl;
+            //DelineationStagingGeoJsons = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.DelineationGeometryStagingGeoJson);
         }
 
         public class ViewDataForAngularClass

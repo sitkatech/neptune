@@ -30,55 +30,31 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DelineationStaging(int delineationStagingID, DbGeometry delineationStagingGeometry, bool isVerified, DateTime? dateLastVerified, int? uploadedByPersonID, string treatmentBMPName, DateTime dateLastModified, int stormwaterJurisdictionID) : this()
+        public DelineationStaging(int delineationStagingID, DbGeometry delineationStagingGeometry, int? uploadedByPersonID) : this()
         {
             this.DelineationStagingID = delineationStagingID;
             this.DelineationStagingGeometry = delineationStagingGeometry;
-            this.IsVerified = isVerified;
-            this.DateLastVerified = dateLastVerified;
             this.UploadedByPersonID = uploadedByPersonID;
-            this.TreatmentBMPName = treatmentBMPName;
-            this.DateLastModified = dateLastModified;
-            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DelineationStaging(DbGeometry delineationStagingGeometry, bool isVerified, string treatmentBMPName, DateTime dateLastModified, int stormwaterJurisdictionID) : this()
+        public DelineationStaging(DbGeometry delineationStagingGeometry) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.DelineationStagingGeometry = delineationStagingGeometry;
-            this.IsVerified = isVerified;
-            this.TreatmentBMPName = treatmentBMPName;
-            this.DateLastModified = dateLastModified;
-            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
         }
 
-        /// <summary>
-        /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
-        /// </summary>
-        public DelineationStaging(DbGeometry delineationStagingGeometry, bool isVerified, string treatmentBMPName, DateTime dateLastModified, StormwaterJurisdiction stormwaterJurisdiction) : this()
-        {
-            // Mark this as a new object by setting primary key with special value
-            this.DelineationStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            this.DelineationStagingGeometry = delineationStagingGeometry;
-            this.IsVerified = isVerified;
-            this.TreatmentBMPName = treatmentBMPName;
-            this.DateLastModified = dateLastModified;
-            this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
-            this.StormwaterJurisdiction = stormwaterJurisdiction;
-            stormwaterJurisdiction.DelineationStagings.Add(this);
-        }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static DelineationStaging CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction)
+        public static DelineationStaging CreateNewBlank()
         {
-            return new DelineationStaging(default(DbGeometry), default(bool), default(string), default(DateTime), stormwaterJurisdiction);
+            return new DelineationStaging(default(DbGeometry));
         }
 
         /// <summary>
@@ -116,21 +92,15 @@ namespace Neptune.Web.Models
         [Key]
         public int DelineationStagingID { get; set; }
         public DbGeometry DelineationStagingGeometry { get; set; }
-        public bool IsVerified { get; set; }
-        public DateTime? DateLastVerified { get; set; }
         public int? UploadedByPersonID { get; set; }
-        public string TreatmentBMPName { get; set; }
-        public DateTime DateLastModified { get; set; }
-        public int StormwaterJurisdictionID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationStagingID; } set { DelineationStagingID = value; } }
 
         public virtual Person UploadedByPerson { get; set; }
-        public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
 
         public static class FieldLengths
         {
-            public const int TreatmentBMPName = 200;
+
         }
     }
 }

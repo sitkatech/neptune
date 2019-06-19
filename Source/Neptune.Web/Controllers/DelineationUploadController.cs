@@ -19,14 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.DelineationUpload;
 using Neptune.Web.Views.Shared;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -105,41 +104,45 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
-            var delineationGeometryStagings = CurrentPerson.DelineationGeometryStagings.ToList();
-            var layerColors = delineationGeometryStagings.Select((value, index) => new { index, value })
-                .ToDictionary(x => x.value.DelineationGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
-            var layers =
-                delineationGeometryStagings.Select(
-                    (delineationGeometryStaging, i) =>
-                        new LayerGeoJson(delineationGeometryStaging.FeatureClassName,
-                            delineationGeometryStaging.ToGeoJsonFeatureCollection(),
-                            layerColors[delineationGeometryStaging.DelineationGeometryStagingID],
-                            1,
-                            LayerInitialVisibility.Show)).ToList();
-            var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
-            var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) { AllowFullScreen = false };
-            var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit();
-            var uploadGisReportUrlTemplate =
-                new UrlTemplate<int, int, string>(
-                    SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
-            var delineationIndexUrl =
-                SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationMap(null));
+            //var delineationGeometryStagings = CurrentPerson.DelineationGeometryStagings.ToList();
+            //var layerColors = delineationGeometryStagings.Select((value, index) => new { index, value })
+            //    .ToDictionary(x => x.value.DelineationGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
+            //var layers =
+            //    delineationGeometryStagings.Select(
+            //        (delineationGeometryStaging, i) =>
+            //            new LayerGeoJson(delineationGeometryStaging.FeatureClassName,
+            //                delineationGeometryStaging.ToGeoJsonFeatureCollection(),
+            //                layerColors[delineationGeometryStaging.DelineationGeometryStagingID],
+            //                1,
+            //                LayerInitialVisibility.Show)).ToList();
+            //var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
+            //var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) { AllowFullScreen = false };
+            //var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit();
+            //var uploadGisReportUrlTemplate =
+            //    new UrlTemplate<int, int, string>(
+            //        SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
+            //var delineationIndexUrl =
+            //    SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationMap(null));
 
-            var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, delineationIndexUrl);
-            return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
+            //var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, delineationIndexUrl);
+            //return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
+
+            throw new NotImplementedException();
         }
 
         [JurisdictionManageFeature]
         public JsonResult UploadGisReport(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey,
-            DelineationGeometryStagingPrimaryKey delineationGeometryStagingPrimaryKey,
+            //DelineationGeometryStagingPrimaryKey delineationGeometryStagingPrimaryKey
             string selectedProperty)
         {
-            var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-            var delineationGeometryStaging = delineationGeometryStagingPrimaryKey.EntityObject;
+            //var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
+            //var delineationGeometryStaging = delineationGeometryStagingPrimaryKey.EntityObject;
 
-            Check.Assert(delineationGeometryStaging.PersonID == CurrentPerson.PersonID, "Delineation Geometry Staging must belong to the current person");
+            //Check.Assert(delineationGeometryStaging.PersonID == CurrentPerson.PersonID, "Delineation Geometry Staging must belong to the current person");
 
-            return Json(DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, delineationGeometryStaging, selectedProperty));
+            //return Json(DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, delineationGeometryStaging, selectedProperty));
+            throw new NotImplementedException();
+
         }
 
         [HttpGet]
