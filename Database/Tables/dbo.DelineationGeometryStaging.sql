@@ -9,7 +9,7 @@ CREATE TABLE [dbo].[DelineationGeometryStaging](
 	[DelineationGeometryStagingGeoJson] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SelectedProperty] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ShouldImport] [bit] NOT NULL,
- CONSTRAINT [PK_DelineationStaging_DelineationStagingID] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_DelineationGeometryStaging_DelineationGeometryStagingID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationGeometryStagingID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
