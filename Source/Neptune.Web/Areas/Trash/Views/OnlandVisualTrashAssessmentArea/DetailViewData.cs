@@ -22,6 +22,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public string GridName { get; }
         public string GridDataUrl { get; }
         public bool UserHasAssessmentAreaManagePermission { get; }
+        public bool UserHasEditLocationPermission { get; }
         public OVTAAreaMapInitJson MapInitJson { get; }
         public string GeoServerUrl { get; }
 
@@ -49,8 +50,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
 
             UserHasAssessmentAreaManagePermission = new OnlandVisualTrashAssessmentAreaViewFeature().HasPermission(currentPerson, OnlandVisualTrashAssessmentArea).HasPermission;
+            UserHasEditLocationPermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+
 
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false)
             {
