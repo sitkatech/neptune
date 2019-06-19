@@ -34,9 +34,10 @@ namespace LtInfo.Common.GdalOgr
             var commandLineArguments = BuildOgrInfoCommandLineArgumentsToListFeatureClasses(gdbFileInfo, gdalDataDirectory);
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(ogrInfoFileInfo.DirectoryName, ogrInfoFileInfo.FullName, commandLineArguments, true, Convert.ToInt32(totalMilliseconds));
 
-            var featureClassesFromFileGdb = processUtilityResult.StdOut.Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var featureClassesFromFileGdb = processUtilityResult.StdOut.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
             return featureClassesFromFileGdb.Select(x => x.Split(' ').Skip(1).First()).ToList();
         }
+
         public static bool ConfirmAttributeExistsOnFeatureClass(FileInfo ogrInfoFileInfo, FileInfo gdbFileInfo, double totalMilliseconds, string featureClassName, string attributeName)
         {
             // ReSharper disable once AssignNullToNotNullAttribute
