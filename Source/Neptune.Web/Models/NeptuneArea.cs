@@ -132,7 +132,7 @@ namespace Neptune.Web.Models
         }
         protected override Func<Person, IRole> GetPersonRoleToUseFunc()
         {
-            return x => x.DroolToolRole ?? DroolToolRole.Unassigned;
+            return x => x.DroolToolRole;
         }
     }
 }

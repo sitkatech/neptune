@@ -148,7 +148,7 @@ namespace Neptune.Web
                     true,
                     unknownOrganization.OrganizationID,
                     false,
-                    keystoneUserClaims.LoginName) {DroolToolRoleID = DroolToolRole.Unassigned.DroolToolRoleID};
+                    keystoneUserClaims.LoginName);
                 HttpRequestStorage.DatabaseEntities.People.Add(person);
                 sendNewUserNotification = true;
             }
