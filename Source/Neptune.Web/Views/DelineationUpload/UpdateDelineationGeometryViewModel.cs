@@ -20,6 +20,8 @@ namespace Neptune.Web.Views.DelineationUpload
         [SitkaFileExtensions("zip")]
         public HttpPostedFileBase FileResourceData { get; set; }
 
+        [Required]
+        [DisplayName("Treatment BMP Name Field")]
         public string TreatmentBMPNameField { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
