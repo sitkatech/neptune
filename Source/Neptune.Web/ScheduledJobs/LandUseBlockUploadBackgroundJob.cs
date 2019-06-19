@@ -21,19 +21,6 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            //var landUseBlockGeometryStaging = HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.FirstOrDefault();
-            //if (landUseBlockGeometryStaging == null)
-            //{
-            //    return;
-            //}
-
-            //var person = landUseBlockGeometryStaging.Person;
-
-            //var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId, NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds*10);
-            //ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(
-            //    landUseBlockGeometryStaging.LandUseBlockGeometryStagingGeoJson,
-            //    NeptuneWebConfiguration.DatabaseConnectionString, "LandUseBlockStaging", "Select PLU_Cat as PriorityLandUseType, LU_Descr as LandUseDescription, TGR as TrashGenerationRate, LU_for_TGR as LandUseForTGR, MHI as MedianHouseHoldIncome, Jurisdic as StormwaterJurisdiction, Permit as PermitType", false);
-
             var landUseBlockStagings = HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.ToList();
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
             var person = landUseBlockStagings[0].UploadedByPerson;
@@ -129,19 +116,10 @@ namespace Neptune.Web.ScheduledJobs
                 count++;
             }
 
-            var message = "";
-            if (errorList.Any())
-            {
-                message =
-                    $"Unfortunately your upload of {count} Land Use Blocks was unable to loaded into the Land Use Block table, a report of the errors is provided below: ";
-                //sendEmailNotification(person, message, errorList);
-            }
-            else
+            if (!errorList.Any())
             {
                 HttpRequestStorage.DatabaseEntities.LandUseBlocks.AddRange(landUseBlocksToUpload);
                 HttpRequestStorage.DatabaseEntities.SaveChanges(person);
-                message = $"Congratulations, {count} Land Use Blocks were successfully uploaded into the Land Use Block table.";
-                //sendEmailNotification(person, message, errorList);
             }
 
             HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
