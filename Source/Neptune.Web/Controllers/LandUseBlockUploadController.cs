@@ -20,9 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.LandUseBlockUpload;
 using System.Web.Mvc;
@@ -75,20 +73,6 @@ namespace Neptune.Web.Controllers
 
             var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, newGisUploadUrl);
             return RazorView<UpdateLandUseBlockGeometry, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
-        }
-
-
-        [JurisdictionManageFeature]
-        public JsonResult UploadGisReport(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey,
-            LandUseBlockGeometryStagingPrimaryKey landUseBlockGeometryStagingPrimaryKey,
-            string selectedProperty)
-        {
-            var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-            var landUseBlockGeometryStaging = landUseBlockGeometryStagingPrimaryKey.EntityObject;
-
-            Check.Assert(landUseBlockGeometryStaging.PersonID == CurrentPerson.PersonID, "Land Use Block Geometry Staging must belong to the current person");
-
-            return Json(LandUseBlockUploadGisReportJsonResult.GetLandUseBlockUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, landUseBlockGeometryStaging, selectedProperty));
         }
     }
 }

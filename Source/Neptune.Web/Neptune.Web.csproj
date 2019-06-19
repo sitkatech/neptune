@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -432,8 +432,6 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewModel.cs" />
-    <Compile Include="Models\LandUseBlockUploadGisReportJsonResult.cs" />
-    <Compile Include="Models\LandUseBlockGeometryStaging.cs" />
     <Compile Include="Controllers\LandUseBlockUploadController.cs" />
     <Compile Include="Models\DelineationGeometryStaging.cs" />
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
