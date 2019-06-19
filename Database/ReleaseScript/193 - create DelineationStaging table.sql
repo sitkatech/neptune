@@ -30,3 +30,5 @@ REFERENCES dbo.StormwaterJurisdiction (StormwaterJurisdictionID)
 GO
 
 
+ insert into dbo.geometry_columns (f_table_catalog, f_table_schema, f_table_name, f_geometry_column, coord_dimension, srid, geometry_type)
+  values ('Neptune', 'dbo', 'DelineationStaging', 'DelineationStagingGeometry', 2, 4326, 'POLYGON')

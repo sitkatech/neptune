@@ -52,7 +52,8 @@ namespace Neptune.Web.Models
             "FundingEventFundingSource",
             "OnlandVisualTrashAssessmentObservationPhoto",
             "OnlandVisualTrashAssessmentPreliminarySourceIdentificationType",
-            "OnlandVisualTrashAssessmentObservationPhotoStaging"
+            "OnlandVisualTrashAssessmentObservationPhotoStaging",
+            "DelineationStaging"
         };
 
         public string GetAuditDescriptionDisplay()

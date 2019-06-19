@@ -85,7 +85,6 @@ namespace Neptune.Web.Views.LandUseBlockUpload
                     {
                         errors.Add(new ValidationResult($"There was a problem processing the Feature Class \"{featureClassNames[0]}\". Feature Classes must contain Polygon and/or Multi-Polygon features."));
                         SitkaLogger.Instance.LogDetailedErrorMessage(e);
-                        return null;
                     }
                 }
             }

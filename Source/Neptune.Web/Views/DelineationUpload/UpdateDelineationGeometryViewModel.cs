@@ -65,18 +65,49 @@ namespace Neptune.Web.Views.DelineationUpload
             return errors;
         }
 
-        public void UpdateModel(Person currentPerson)
+        public bool UpdateModel(Person currentPerson)
         {
+            HttpRequestStorage.DatabaseEntities.DelineationStagings.DeleteDelineationStaging(currentPerson.DelineationStagingsWhereYouAreTheUploadedByPerson);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             using (var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip"))
             {
                 var gdbFile = disposableTempFile.FileInfo;
                 FileResourceData.SaveAs(gdbFile.FullName);
 
-                HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(
-                    currentPerson.DelineationGeometryStagings);
-                currentPerson.DelineationGeometryStagings.Clear();
-                DelineationGeometryStaging.CreateDelineationGeometryStagingListFromGdb(gdbFile, currentPerson);
+                var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
+                    Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
+                    NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds * 10);
+
+                try
+                {
+                    var featureClassNames = OgrInfoCommandLineRunner.GetFeatureClassNamesFromFileGdb(new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
+                        gdbFile,
+                        Ogr2OgrCommandLineRunner.DefaultTimeOut);
+
+                    // todo: need to have the stormwater jurisdiction and the Treatment BMP Name field here
+                    // scratch that, we actually don't. the only path to live for these guys is posting ApproveDGU, where we will know the SWJ ID and the Treatment BMP Name Fieldo
+
+                    if (featureClassNames != null)
+                    {
+                        var columns = new List<string>
+                            {
+                                
+                                $"{currentPerson.PersonID} as UploadedByPersonID"
+                            };
+                        ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "DelineationStaging", columns,
+                            NeptuneWebConfiguration.DatabaseConnectionString);
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    SitkaLogger.Instance.LogDetailedErrorMessage(e);
+                    return false;
+                }
             }
+
+            return true;
         }
     }
 }
