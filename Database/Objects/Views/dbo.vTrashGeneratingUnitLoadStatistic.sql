@@ -78,3 +78,12 @@ From (
 ) subq
 
 GO
+
+Drop View If Exists dbo.vGeoServerTrashGeneratingUnitLoad
+GO
+
+Create View dbo.vGeoServerTrashGeneratingUnitLoad
+as
+Select
+	*
+from dbo.vTrashGeneratingUnitLoadStatistic
