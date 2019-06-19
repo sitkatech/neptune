@@ -79,23 +79,6 @@ namespace LtInfo.Common.GdalOgr
             return processUtilityResult.StdOut;
         }
 
-        public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string selectStatement, bool explodeCollections)
-        {
-            var databaseConnectionString = $"MSSQL:{connectionString}";
-            using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
-            {
-                File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
-                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToMsSql(geoJsonFile.FileInfo,
-                    destinationTableName,
-                    _gdalDataPath,
-                    databaseConnectionString,
-                    _coordinateSystemId,
-                    selectStatement,
-                    explodeCollections);
-                ExecuteOgr2OgrCommand(commandLineArguments);
-            }
-        }
-
         public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string sourceColumnName, string destinationColumnName, string extraColumns)
         {
             var databaseConnectionString = $"MSSQL:{connectionString}";
@@ -180,8 +163,6 @@ namespace LtInfo.Common.GdalOgr
             const string ogr2OgrColumnListSeparator = ",";
             Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),
                 $"Found column names with separator character \"{ogr2OgrColumnListSeparator}\", can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
-            //Check.Require(filteredColumnNameList.All(x => !Regex.IsMatch(x, @"(^\s*\w+\s*$)|(^\s*\w+\s+as\s+\w+\s*$)")),
-            //    $"Found column names with whitespace in them, can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
 
             var selectStatement =
                 $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName}";
@@ -255,37 +236,6 @@ namespace LtInfo.Common.GdalOgr
                 "-nln",
                 destinationTableName
             };
-
-            return commandLineArguments;
-        }
-
-        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string destinationTableName, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, int coordinateSystemId, string selectStatement, bool explodeCollections)
-        {
-            //c:\SVN\sitkatech\trunk\Corral\Build>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f MSSQLSpatial "MSSQL:server=localhost;database=tempdb;trusted_connection=yes" "C:\temp\geojson.json" -nln "TestTable"
-
-            var commandLineArguments = new List<string>
-            {
-                "-append",
-                "-sql",
-                $"{selectStatement} FROM {OgrGeoJsonTableName}",
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
-                "-t_srs",
-                GetMapProjection(coordinateSystemId),
-                "-f",
-                "MSSQLSpatial",
-                databaseConnectionString,
-                sourceGeoJsonFile.FullName,
-                "-nln",
-                destinationTableName,
-                "-dim",
-                "2"
-            };
-            if (explodeCollections)
-            {
-                commandLineArguments.Add("-explodecollections");
-            }
 
             return commandLineArguments;
         }

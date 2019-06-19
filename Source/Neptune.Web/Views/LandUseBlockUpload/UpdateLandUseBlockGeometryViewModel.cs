@@ -87,32 +87,6 @@ namespace Neptune.Web.Views.LandUseBlockUpload
                         SitkaLogger.Instance.LogDetailedErrorMessage(e);
                         return null;
                     }
-
-                    //var featureClasses = featureClassNames.ToDictionary(x => x,
-                    //    x =>
-                    //    {
-                    //        try
-                    //        {
-                    //            var columns = new List<string>
-                    //            {
-                    //                "PLU_Cat as PriorityLandUseType", "LU_Descr as LandUseDescription",
-                    //                "TGR as TrashGenerationRate", "LU_for_TGR as LandUseForTGR",
-                    //                "MHI as MedianHouseHoldIncome", "Jurisdic as StormwaterJurisdiction",
-                    //                "Permit as PermitType"
-                    //            };
-                    //            ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, x, "LandUseBlockStaging", columns, NeptuneWebConfiguration.DatabaseConnectionString);
-                    //        }
-                    //        catch (Exception e)
-                    //        {
-                    //            errors.Add(new ValidationResult($"There was a problem processing the Feature Class \"{x}\"."));
-                    //            SitkaLogger.Instance.LogDetailedErrorMessage(e);
-                    //        }
-                    //    }).Where(x => x.Value != null && LandUseBlockGeometryStaging.IsUsableFeatureCollectionGeoJson(x.Value));
-
-                    //if (!featureClasses.Any())
-                    //{
-                    //    errors.Add(new ValidationResult("There are no usable Feature Classes in the uploaded file. Feature Classes must contain Polygon and/or Multi-Polygon features."));
-                    //}
                 }
             }
 
@@ -123,23 +97,6 @@ namespace Neptune.Web.Views.LandUseBlockUpload
         {
             BackgroundJob.Schedule(() =>
                 ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(), TimeSpan.FromSeconds(30));
-
-
-            //using (var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip"))
-            //{
-            //    //var gdbFile = disposableTempFile.FileInfo;
-            //    //FileResourceData.SaveAs(gdbFile.FullName);
-
-
-            //    //HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.DeleteLandUseBlockGeometryStaging(currentPerson.LandUseBlockGeometryStagings);
-            //currentPerson.LandUseBlockGeometryStagings.Clear();
-            //var landUseBlockGeometryStagings = LandUseBlockGeometryStaging.CreateLandUseBlockGeometryStagingListFromGdb(gdbFile, currentPerson);
-
-            //    //HttpRequestStorage.DatabaseEntities.LandUseBlockGeometryStagings.AddRange(landUseBlockGeometryStagings);
-            //    //HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-
-            //}
         }
     }
 }
