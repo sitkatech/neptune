@@ -47,6 +47,20 @@ NeptuneMaps.AssessmentAreaMap = function (mapInitJson, initialBaseLayerShown, ge
 
 NeptuneMaps.AssessmentAreaMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.TrashAssessmentMap.prototype);
 
+NeptuneMaps.AssessmentAreaMap.prototype.prepFeatureGroupAndDrawControl = function () {
+    /* this is not the best way to prevent drawing multiple polygons, but the other options are:
+     * 1. fork Leaflet.Draw and add the functionality or
+     * 2.maintain two versions of the draw control that track the same feature group but with different options
+     * and the answer to both of those is "no"
+     */
+    var editableFeatureGroup = this.editableFeatureGroup;
+    if (editableFeatureGroup.getLayers().length > 0) {
+        killPolygonDraw();
+    } else {
+        unKillPolygonDraw();
+    }
+};
+
 NeptuneMaps.AssessmentAreaMap.prototype.onClickPickParcel = function (event) {
     var parcelMapSericeLayerName = "OCStormwater:Parcels";
 
@@ -118,6 +132,7 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function (geoJson) {
     this.layerControl.addOverlay(this.editableFeatureGroup,
         "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
 
+    this.prepFeatureGroupAndDrawControl();
 
     this.map.on('draw:created',
         function (e) {
@@ -129,6 +144,7 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function (geoJson) {
             editableFeatureGroup._layers[leafletId].feature.type = "Feature";
             var feature = editableFeatureGroup._layers[leafletId].feature;
             self.updateFeatureCollectionJson();
+            self.prepFeatureGroupAndDrawControl();
         });
     this.map.on('draw:edited',
         function (e) {
@@ -147,6 +163,7 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function (geoJson) {
     this.map.on('draw:deleted',
         function (e) {
             self.updateFeatureCollectionJson();
+            self.prepFeatureGroupAndDrawControl();
         });
 
     var saveButton = jQuery("#" + saveButtonID);
@@ -161,6 +178,50 @@ NeptuneMaps.AssessmentAreaMap.prototype.setUpDraw = function (geoJson) {
 
     var zoom = Math.min(this.map.getZoom(), 18);
     this.map.setZoom(zoom);
+
+    this.setUpBetterDeleteControl();
+};
+
+NeptuneMaps.AssessmentAreaMap.prototype.setUpBetterDeleteControl = function() {
+    // leaflet.draw doesn't use a sane event scheme. It was necessary to completely rebuild deleting to make our form pattern work.
+    // cloning and replacing the node kills all event handlers
+    var el = jQuery(".leaflet-draw-edit-remove").get(0);
+    var clone = el.cloneNode(true);
+    el.parentNode.replaceChild(clone, el);
+
+    var assessmentAreaMap = this;
+
+    assessmentAreaMap.tooltip =
+        jQuery.parseHTML(
+            '<ul class="leaflet-draw-actions leaflet-draw-actions-bottom" style="top: 31px; display: none;"><li class=""><a class="" href="#" title="Save changes.">Click a polygon to delete it.</a></li></ul>')
+        [0];
+
+    clone.parentNode.parentNode.append(assessmentAreaMap.tooltip);
+
+    // then our own event handler lets us implement deletes in a way that makes literally any sense
+    assessmentAreaMap.deleting = false;
+    L.DomEvent.on(clone,
+        "click",
+        function() {
+            assessmentAreaMap.deleting = true;
+            assessmentAreaMap.tooltip.style.display = "block";
+        });
+    assessmentAreaMap.editableFeatureGroup.on("click",
+        function(event) {
+            if (!assessmentAreaMap.deleting) {
+                return;
+            }
+            assessmentAreaMap.editableFeatureGroup.removeLayer(event.layer);
+            assessmentAreaMap.updateFeatureCollectionJson();
+            assessmentAreaMap.prepFeatureGroupAndDrawControl();
+        });
+
+    // and we also have to make sure we leave our new-and-improved delete mode if draw or create starts
+    jQuery(".leaflet-draw-edit-edit, .leaflet-draw-draw-polygon").on("click",
+        function() {
+            assessmentAreaMap.tooltip.style.display = "none";
+            assessmentAreaMap.deleting = false;
+        });
 };
 
 NeptuneMaps.AssessmentAreaMap.prototype.acceptParcelsAndRefine = function () {
@@ -286,6 +347,10 @@ NeptuneMaps.AssessmentAreaMap.prototype.createUpdateFeatureCollectionJsonFunctio
 
         mapForm.html(hiddens.join("\r\n"));
 
+        if (this.tooltip) {
+            this.tooltip.style.display = "none";
+        }
+        this.deleting = false;
 
     }.bind(this);
 };
@@ -309,4 +374,14 @@ var detectKinksAndReject = function (geoJson) {
     // if they make it out here, their geometry is vanilla
     jQuery("button[type='submit']").removeAttr("disabled");
     jQuery("#kinkDanger").css("display", "none");
+};
+
+
+
+var killPolygonDraw = function () {
+    jQuery(".leaflet-draw-toolbar-top").hide();
+};
+
+var unKillPolygonDraw = function () {
+    jQuery(".leaflet-draw-toolbar-top").show();
 };
