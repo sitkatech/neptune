@@ -33,7 +33,7 @@ namespace LtInfo.Common.GdalOgr
     public class Ogr2OgrCommandLineRunner
     {
         public const int DefaultCoordinateSystemId = 4326;
-        public const int DefaultTimeOut = 110000;
+        public const int DefaultTimeOut = 210000;
         public const string OgrGeoJsonTableName = "OGRGeoJSON";
 
         private readonly FileInfo _ogr2OgrExecutable;
@@ -130,7 +130,7 @@ namespace LtInfo.Common.GdalOgr
                 var fullProcessAndArguments =
                     $"{ProcessUtility.EncodeArgumentForCommandLine(_ogr2OgrExecutable.FullName)} {argumentsAsString}";
                 var errorMessage =
-                    $"Process \"{_ogr2OgrExecutable.Name}\" returned with exit code {processUtilityResult}, expected exit code 0.\r\n\r\nStdErr and StdOut:\r\n{processUtilityResult.StdOutAndStdErr}\r\n\r\nProcess Command Line:\r\n{fullProcessAndArguments}\r\n\r\nProcess Working Directory: {_ogr2OgrExecutable.DirectoryName}";
+                    $"Process \"{_ogr2OgrExecutable.Name}\" returned with exit code {processUtilityResult.ReturnCode}, expected exit code 0.\r\n\r\nStdErr and StdOut:\r\n{processUtilityResult.StdOutAndStdErr}\r\n\r\nProcess Command Line:\r\n{fullProcessAndArguments}\r\n\r\nProcess Working Directory: {_ogr2OgrExecutable.DirectoryName}";
                 throw new Ogr2OgrCommandLineException(errorMessage);
             }
             return processUtilityResult;
@@ -146,7 +146,7 @@ namespace LtInfo.Common.GdalOgr
                 var fullProcessAndArguments =
                     $"{ProcessUtility.EncodeArgumentForCommandLine(_ogr2OgrExecutable.FullName)} {argumentsAsString}";
                 var errorMessage =
-                    $"Process \"{_ogr2OgrExecutable.Name}\" returned with exit code {processUtilityResult}, expected exit code 0.\r\n\r\nStdErr and StdOut:\r\n{processUtilityResult.StdOutAndStdErr}\r\n\r\nProcess Command Line:\r\n{fullProcessAndArguments}\r\n\r\nProcess Working Directory: {_ogr2OgrExecutable.DirectoryName}";
+                    $"Process \"{_ogr2OgrExecutable.Name}\" returned with exit code {processUtilityResult.ReturnCode}, expected exit code 0.\r\n\r\nStdErr and StdOut:\r\n{processUtilityResult.StdOutAndStdErr}\r\n\r\nProcess Command Line:\r\n{fullProcessAndArguments}\r\n\r\nProcess Working Directory: {_ogr2OgrExecutable.DirectoryName}";
                 throw new Ogr2OgrCommandLineException(errorMessage);
             }
             return processUtilityResult;
@@ -163,8 +163,6 @@ namespace LtInfo.Common.GdalOgr
             const string ogr2OgrColumnListSeparator = ",";
             Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),
                 $"Found column names with separator character \"{ogr2OgrColumnListSeparator}\", can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
-            Check.Require(filteredColumnNameList.All(x => !Regex.IsMatch(x, @"\s")),
-                $"Found column names with whitespace in them, can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
 
             var selectStatement =
                 $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName}";

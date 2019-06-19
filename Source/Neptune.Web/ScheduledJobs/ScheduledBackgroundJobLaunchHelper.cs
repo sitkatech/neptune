@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -17,6 +16,12 @@ namespace Neptune.Web.ScheduledJobs
         {
             var trashGeneratingUnitAdjustmentScheduledBackgroundJob = new TrashGeneratingUnitAdjustmentScheduledBackgroundJob();
             trashGeneratingUnitAdjustmentScheduledBackgroundJob.RunJob();
+        }
+
+        public static void RunLandUseBlockUploadBackgroundJob()
+        {
+            var landUseBlockUploadBackgroundJob = new LandUseBlockUploadBackgroundJob();
+            landUseBlockUploadBackgroundJob.RunJob();
         }
     }
 }

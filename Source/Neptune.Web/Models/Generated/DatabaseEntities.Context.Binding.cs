@@ -51,6 +51,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new FundingSourceConfiguration());
             modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
+            modelBuilder.Configurations.Add(new LandUseBlockStagingConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
@@ -128,6 +129,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<FundingSource> FundingSources { get; set; }
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
+        public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
@@ -312,6 +314,9 @@ namespace Neptune.Web.Models
 
                 case "LandUseBlock":
                     return LandUseBlocks.GetLandUseBlock(primaryKey);
+
+                case "LandUseBlockStaging":
+                    return LandUseBlockStagings.GetLandUseBlockStaging(primaryKey);
 
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);

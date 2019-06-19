@@ -170,7 +170,7 @@ namespace Neptune.Web.Models
     public partial class PriorityLandUseTypePublicTransportationStations : PriorityLandUseType
     {
         private PriorityLandUseTypePublicTransportationStations(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
-        public static readonly PriorityLandUseTypePublicTransportationStations Instance = new PriorityLandUseTypePublicTransportationStations(6, @"Public Transportation Stations", @"PublicTransportationStations", @"#fcd6b6");
+        public static readonly PriorityLandUseTypePublicTransportationStations Instance = new PriorityLandUseTypePublicTransportationStations(6, @"Public Transportation Stations", @"Public Transportation Stations", @"#fcd6b6");
     }
 
     public partial class PriorityLandUseTypeALU : PriorityLandUseType

@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         [Required]
         [SitkaFileExtensions("csv")]
         [DisplayName("CSV File to Import")]
-        public  HttpPostedFileBase UploadCSV { get; set; }
+        public HttpPostedFileBase UploadCSV { get; set; }
 
         [Required]
         [DisplayName("BMP Type")]

@@ -70,4 +70,5 @@ VALUES
 (66, N'ViaPartialCapture', N'Via Partial Capture', N'', 1),
 (67, N'ViaOVTAScore', N'Via OVTA Score', N'', 1),
 (68, N'TotalAchieved', N'Total Achieved', N'', 1),
-(69, N'TargetLoadReduction', N'Target Load Reduction', N'', 1)
+(69, N'TargetLoadReduction', N'Target Load Reduction', N'', 1),
+(70, N'LoadingRate', N'Loading Rate', N'', 1)

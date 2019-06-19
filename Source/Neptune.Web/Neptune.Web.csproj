@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -143,6 +143,10 @@
     <Compile Include="Models\Generated\LandUseBlock.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\LandUseBlockConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStaging.Binding.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStaging.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStagingConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\LandUseBlockStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\MaintenanceRecord.Binding.cs" />
     <Compile Include="Models\Generated\MaintenanceRecord.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\MaintenanceRecordConfiguration.Binding.cs" />
@@ -428,9 +432,15 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewModel.cs" />
+    <Compile Include="Controllers\LandUseBlockUploadController.cs" />
     <Compile Include="Models\DelineationGeometryStaging.cs" />
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
+    <Compile Include="ScheduledJobs\LandUseBlockUploadBackgroundJob.cs" />
+    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cs" />
+    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
+    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
+    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummaryViewData.cs" />
     <Compile Include="Models\TrashGeneratingUnit.cs" />
@@ -1787,6 +1797,8 @@
     <Content Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cshtml" />
     <Content Include="Views\DelineationUpload\ApproveDelineationGisUpload.cshtml" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewModel.cs" />
+    <Content Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cshtml" />
+    <Content Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
