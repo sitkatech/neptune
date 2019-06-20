@@ -1,96 +1,41 @@
-﻿
-using System;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
-using Neptune.Web.Views.Shared;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Data.Entity.Spatial;
 using System.Diagnostics;
+using LtInfo.Common.Models;
+using Neptune.Web.Models;
 using System.Linq;
-using Microsoft.Ajax.Utilities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.DelineationUpload
 {
-    public class ApproveDelineationGisUploadViewModel : FormViewModel, IValidatableObject
+    public class ApproveDelineationGisUploadViewModel : FormViewModel
     {
-        [Required]
-        public int? StormwaterJurisdictionID { get; set; }
+        public int? UpdateModel(Person currentPerson, out string stormwaterJurisdictionName)
 
-        [Required]
-        public int? LayerToImportID { get; set; }
-
-        public List<DelineationGeometryLayer> DelineationGeometryLayers { get; set; }
-
-        public List<WktAndAnnotation> WktAndAnnotations { get; set; }
-
-        /// <summary>
-        /// Needed by ModelBinder
-        /// </summary>
-        public ApproveDelineationGisUploadViewModel()
         {
-        }
+            var delineationStagings = currentPerson.DelineationStagingsWhereYouAreTheUploadedByPerson.ToList();
 
-        public ApproveDelineationGisUploadViewModel(Person currentPerson)
-        {
-            //DelineationGeometryLayers =
-            //    currentPerson.DelineationGeometryStagings.Select(
-            //        x => new DelineationGeometryLayer {DelineationGeometryStagingID = x.DelineationGeometryStagingID, SelectedProperty = x.SelectedProperty}).ToList();
-        }
+            // Will  break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
+            var stormwaterJurisdiction = delineationStagings.Select(x => x.StormwaterJurisdiction).Distinct().Single();
 
-        public int? UpdateModel(Person currentPerson)
-        {
-            //var delineationGeometryStagings = currentPerson.DelineationGeometryStagings.ToList();
-            //HttpRequestStorage.DatabaseEntities.DelineationGeometryStagings.DeleteDelineationGeometryStaging(delineationGeometryStagings);
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
+            stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
 
-            //var successfulUpdateCount = 0;
+            // todo: this looks a little backwards. See if you can write it the other way around?
+            var treatmentBMPNames = delineationStagings.Select(x => x.TreatmentBMPName).ToList();
+            var treatmentBMPsToUpdate = stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
 
-            //if (DelineationGeometryLayers != null && DelineationGeometryLayers.Count > 0)
-            //{
-            //    var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
-            //    Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
-
-            //    var treatmentBMPNames = WktAndAnnotations.Select(x=>x.Annotation).ToList();
-
-            //    var treatmentBMPsToUpdate = stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
-
-            //    foreach (var treatmentBMP in treatmentBMPsToUpdate)
-            //    {
-            //        var wktAndAnnotation = WktAndAnnotations.SingleOrDefault(z => treatmentBMP.TreatmentBMPName == z.Annotation);
-
-            //        treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
-
-            //        treatmentBMP.Delineation = new Models.Delineation(
-            //            DbGeometry.FromText(wktAndAnnotation.Wkt, MapInitJson.CoordinateSystemId),
-            //            DelineationType.Distributed.DelineationTypeID, true, treatmentBMP.TreatmentBMPID, DateTime.Now);
-            //    }
-            //    successfulUpdateCount = treatmentBMPsToUpdate.Count;
-            //}
-
-
-            return -83; //return successfulUpdateCount;
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = new List<ValidationResult>();
-
-            if (LayerToImportID == null || !DelineationGeometryLayers.Select(x => x.DelineationGeometryStagingID).Contains(LayerToImportID.Value))
+            foreach (var treatmentBMP in treatmentBMPsToUpdate)
             {
-                errors.Add(new ValidationResult("Must select one layer to import"));
+                var wktAndAnnotation = delineationStagings.Single(z => treatmentBMP.TreatmentBMPName == z.TreatmentBMPName);
+
+                treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
+
+                treatmentBMP.Delineation = new Models.Delineation(
+                    wktAndAnnotation.DelineationStagingGeometry,
+                    DelineationType.Distributed.DelineationTypeID, true, treatmentBMP.TreatmentBMPID, DateTime.Now) {VerifiedByPersonID = currentPerson.PersonID, DateLastVerified = DateTime.Now};
             }
 
-            return errors;
+            return treatmentBMPsToUpdate.Count;
         }
-    }
-
-    public class DelineationGeometryLayer
-    {
-        [Required]
-        public int DelineationGeometryStagingID { get; set; }
-
-        public string SelectedProperty { get; set; }
     }
 }

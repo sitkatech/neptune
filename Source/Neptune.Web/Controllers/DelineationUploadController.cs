@@ -80,7 +80,7 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ApproveDelineationGisUpload()
         {
-            var viewModel = new ApproveDelineationGisUploadViewModel(CurrentPerson);
+            var viewModel = new ApproveDelineationGisUploadViewModel();
             return ViewApproveDelineationGisUpload(viewModel);
         }
 
@@ -94,9 +94,14 @@ namespace Neptune.Web.Controllers
                 return ViewUpdateDelineationGeometry(new UpdateDelineationGeometryViewModel());
             }
 
-            var successfulUploadCount = viewModel.UpdateModel(CurrentPerson);
-            var organizationDisplayName = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).GetOrganizationDisplayName();
-            SetMessageForDisplay($"{successfulUploadCount} Delineations were successfully uploaded for Jurisdiction {organizationDisplayName}");
+            var successfulUploadCount = viewModel.UpdateModel(CurrentPerson, out var stormwaterJurisdictionName);
+
+            SetMessageForDisplay($"{successfulUploadCount} Delineations were successfully uploaded for Jurisdiction {stormwaterJurisdictionName}");
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            HttpRequestStorage.DatabaseEntities.DelineationStagings.DeleteDelineationStaging(CurrentPerson.DelineationStagingsWhereYouAreTheUploadedByPerson);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             return RedirectToAction(new SitkaRoute<ManagerDashboardController>(c => c.Index()));
         }
