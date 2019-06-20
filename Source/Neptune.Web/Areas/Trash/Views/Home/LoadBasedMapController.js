@@ -7,9 +7,10 @@
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        //var loadCurrentOrNetChangeControl = L.control.loadBasedCurrentOrNetChangeControl({
-        //    position: 'topright',
-        //});
+        var loadCurrentOrNetChangeControl = L.control.loadBasedCurrentOrNetChangeControl({
+            position: 'topright',
+            loadBasedCurrentOrNetChangeGeoserverUrl: angularModelAndViewData.AngularViewData.GeoServerUrl
+    });
 
         NeptuneMaps.initTrashMapController($scope,
             angularModelAndViewData,
@@ -24,11 +25,14 @@
                 tabSelector: "#loadResultsTab",
                 resultsSelector: "#loadResults"
             });
+
         ////////////////////////////////////
         ///////////////////////////////////\\
         ///////////////////////////////////
-        //loadCurrentOrNetChangeControl.addEventListener("click", changeLayer, false);
-        //loadCurrentOrNetChangeControl.addTo($scope.neptuneMap.map);
+        loadCurrentOrNetChangeControl.addTo($scope.neptuneMap.map);
+        loadCurrentOrNetChangeControl.addEventListener("click", loadCurrentOrNetChangeControl.changeLayerImg, false);
+        jQuery("#command").innerHTML().append(loadCurrentOrNetChangeControl.changeLayerImg(event));
+        //loadCurrentOrNetChangeControl.addWMSLayer($scope.neptuneMap);
         ///////////////////////////////////
         ////////////////////////////////////
         ///////////////////////////////////

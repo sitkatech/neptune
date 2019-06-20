@@ -36,7 +36,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string ScoreDescriptionsUrl { get; }
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
-        public bool CurrentOrNetChangeLoading { get; }
+        public bool CurrentOrNetChangeLoadingBool { get; }
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
