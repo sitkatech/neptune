@@ -24,3 +24,8 @@ ALTER TABLE [dbo].[DelineationStaging]  WITH CHECK ADD  CONSTRAINT [FK_Delineati
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[DelineationStaging] CHECK CONSTRAINT [FK_DelineationStaging_Person_UploadedByPersonID_PersonID]
+GO
+ALTER TABLE [dbo].[DelineationStaging]  WITH CHECK ADD  CONSTRAINT [FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
+REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
+GO
+ALTER TABLE [dbo].[DelineationStaging] CHECK CONSTRAINT [FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID]

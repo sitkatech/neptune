@@ -7,13 +7,17 @@ CREATE TABLE dbo.DelineationStaging(
 	UploadedByPersonID int not NULL,
 	TreatmentBMPName varchar(200) not null,
 	StormwaterJurisdictionID int not null
- CONSTRAINT PK_DelineationStaging_DelineationStagingID PRIMARY KEY CLUSTERED 
-(
-	DelineationStagingID 
-), Constraint AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID unique
-(
-	TreatmentBMPName, StormwaterJurisdictionID
-)
+		Constraint
+			FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID
+			Foreign Key References dbo.StormwaterJurisdiction(StormwaterJurisdictionID)
+	CONSTRAINT
+		PK_DelineationStaging_DelineationStagingID PRIMARY KEY CLUSTERED (
+			DelineationStagingID 
+	),
+	Constraint
+		AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID unique (
+			TreatmentBMPName, StormwaterJurisdictionID
+	)
 )
 GO
 

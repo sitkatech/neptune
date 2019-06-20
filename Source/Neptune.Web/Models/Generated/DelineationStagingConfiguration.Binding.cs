@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
 
             // Foreign keys
             HasRequired(a => a.UploadedByPerson).WithMany(b => b.DelineationStagingsWhereYouAreTheUploadedByPerson).HasForeignKey(c => c.UploadedByPersonID).WillCascadeOnDelete(false); // FK_DelineationStaging_Person_UploadedByPersonID_PersonID
+            HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.DelineationStagings).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID
         }
     }
 }

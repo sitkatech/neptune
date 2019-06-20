@@ -56,7 +56,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public DelineationStaging(DbGeometry delineationStagingGeometry, Person uploadedByPerson, string treatmentBMPName, int stormwaterJurisdictionID) : this()
+        public DelineationStaging(DbGeometry delineationStagingGeometry, Person uploadedByPerson, string treatmentBMPName, StormwaterJurisdiction stormwaterJurisdiction) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -65,15 +65,17 @@ namespace Neptune.Web.Models
             this.UploadedByPerson = uploadedByPerson;
             uploadedByPerson.DelineationStagingsWhereYouAreTheUploadedByPerson.Add(this);
             this.TreatmentBMPName = treatmentBMPName;
-            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
+            this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
+            this.StormwaterJurisdiction = stormwaterJurisdiction;
+            stormwaterJurisdiction.DelineationStagings.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static DelineationStaging CreateNewBlank(Person uploadedByPerson)
+        public static DelineationStaging CreateNewBlank(Person uploadedByPerson, StormwaterJurisdiction stormwaterJurisdiction)
         {
-            return new DelineationStaging(default(DbGeometry), uploadedByPerson, default(string), default(int));
+            return new DelineationStaging(default(DbGeometry), uploadedByPerson, default(string), stormwaterJurisdiction);
         }
 
         /// <summary>
@@ -118,6 +120,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return DelineationStagingID; } set { DelineationStagingID = value; } }
 
         public virtual Person UploadedByPerson { get; set; }
+        public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
 
         public static class FieldLengths
         {

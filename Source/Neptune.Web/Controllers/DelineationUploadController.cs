@@ -25,7 +25,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.DelineationUpload;
 using Neptune.Web.Views.Shared;
-using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -104,44 +103,12 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
-            //var delineationGeometryStagings = CurrentPerson.DelineationGeometryStagings.ToList();
-            //var layerColors = delineationGeometryStagings.Select((value, index) => new { index, value })
-            //    .ToDictionary(x => x.value.DelineationGeometryStagingID, x => NeptuneHelpers.DefaultColorRange[x.index]);
-            //var layers =
-            //    delineationGeometryStagings.Select(
-            //        (delineationGeometryStaging, i) =>
-            //            new LayerGeoJson(delineationGeometryStaging.FeatureClassName,
-            //                delineationGeometryStaging.ToGeoJsonFeatureCollection(),
-            //                layerColors[delineationGeometryStaging.DelineationGeometryStagingID],
-            //                1,
-            //                LayerInitialVisibility.Show)).ToList();
-            //var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
-            //var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) { AllowFullScreen = false };
-            
-            //var uploadGisReportUrlTemplate =
-            //    new UrlTemplate<int, int, string>(
-            //        SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;
-            //var delineationIndexUrl =
-            //    SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationMap(null));
+            var delineationStagings = CurrentPerson.DelineationStagingsWhereYouAreTheUploadedByPerson.ToList();
 
-            //var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, mapInitJson, layerColors, stormwaterJurisdictions, uploadGisReportUrlTemplate, delineationIndexUrl);
-            //return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
+            var delineationUpoadGisReportFromStaging = DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, delineationStagings);
 
-            throw new NotImplementedException();
-        }
-
-        [JurisdictionManageFeature]
-        public JsonResult UploadGisReport(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey,
-            //DelineationGeometryStagingPrimaryKey delineationGeometryStagingPrimaryKey
-            string selectedProperty)
-        {
-            //var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-            //var delineationGeometryStaging = delineationGeometryStagingPrimaryKey.EntityObject;
-
-            //Check.Assert(delineationGeometryStaging.PersonID == CurrentPerson.PersonID, "Delineation Geometry Staging must belong to the current person");
-
-            //return Json(DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, stormwaterJurisdiction, delineationGeometryStaging, selectedProperty));
-            throw new NotImplementedException();
+            var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, delineationUpoadGisReportFromStaging);
+            return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
 
         }
 

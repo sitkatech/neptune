@@ -1,5 +1,4 @@
-﻿@using LtInfo.Common
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.DelineationUpload.ApproveDelineationGisUpload
 
@@ -14,62 +13,53 @@
 
 <div class="formPage" style="padding: 0; margin-top: -10px;">
     <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th></th>
-                @if (Model.DelineationGeometryLayers.Count > 1)
-                {
-                    <th>Import?</th>
-                }
-                <th>Feature Class</th>
-                <th>BMP Name Field</th>
-            </tr>
-            </thead>
-            <tbody>
-            @if (Model.DelineationGeometryLayers != null)
+        <div id="uploadGisReport">
+            
+            @if (ViewDataTyped.DelineationUpoadGisReportFromStaging.Errors.Count == 0)
             {
-                for (var i = 0; i < Model.DelineationGeometryLayers.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <div style="height: 20px; width: 20px; background-color: @ViewDataTyped.LayerColors[Model.DelineationGeometryLayers[i].DelineationGeometryStagingID];"></div>
-                            @Html.HiddenFor(x => x.DelineationGeometryLayers[i].DelineationGeometryStagingID)
-                            @if (Model.DelineationGeometryLayers.Count == 1)
-                            {
-                                <input type="hidden" value="@Model.DelineationGeometryLayers[i].DelineationGeometryStagingID" name="@Html.NameFor(x => x.LayerToImportID)"/>
-                            }
-                        </td>
-                        @if (Model.DelineationGeometryLayers.Count > 1)
-                        {
-                            <td class="text-center">
-                                <input type="radio" value="@Model.DelineationGeometryLayers[i].DelineationGeometryStagingID" name="@Html.NameFor(x => x.LayerToImportID)"/>
-                            </td>
-                        }
-                        <td>@ViewDataTyped.DelineationGeometryFeatureClassNames[Model.DelineationGeometryLayers[i].DelineationGeometryStagingID]</td>
-                        <td>
-                            @Html.DropDownListFor(x => x.DelineationGeometryLayers[i].SelectedProperty, ViewDataTyped.DelineationGeometryLayerSelectProperties[Model.DelineationGeometryLayers[i].DelineationGeometryStagingID], new Dictionary<string, object> {{"style", "width:auto;"}, {"class", "form-control selectedProperty"}, {"data-delineationGeometryStagingID", Model.DelineationGeometryLayers[i].DelineationGeometryStagingID.ToString()}})
-                        </td>
-                    </tr>
-                }
+                <div>
+                    <ul>
+                        <li>The Feature Class contains @ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineations delineations</li>
+                        <li>@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationsToBeUpdated Treatment BMPs with with existing delineations will be replaced by new delineations from this Feature Class</li>
+                        <li>@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationsToBeCreated Treatment BMPs that do not currently have delineations will receive new delineations from this Feature Class</li>
+                        <li id="numberOfDelineationNotMatchingTreatmentBMP">@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationNotMatchingTreatmentBMP Delineations were found that do not match a Treatment BMP Name in the selected Jurisdiction</li>
+                    </ul>
+                </div>
             }
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <p>
-            To zoom, hold <strong>Shift</strong> and drag rectangle.
-        </p>
-        <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 400px;"></div>
-        <div id="uploadGisReport"></div>
+            else
+            {
+                <div>
+                    <ul>
+                        @foreach (var error in ViewDataTyped.DelineationUpoadGisReportFromStaging.Errors)
+                        {
+                            <li class="text-danger">@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
         <div class="text-right" style="margin-top: 15px;">
             <button id="submitApproveDelineationGisUpload" type="submit" class="btn btn-neptune" disabled="disabled">Accept</button>
-            <a href="@ViewDataTyped.DelineationIndexUrl" class="btn btn-neptune">Cancel</a>
+            <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-neptune">Cancel</a>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" language="javascript">
+<script>
+    
+    var report = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationUpoadGisReportFromStaging).ToString(Formatting.None));
+
+    if (report.NumberOfDelineationNotMatchingTreatmentBMP > 0 || report.NumberOfDelineations === 0) {
+        jQuery("#numberOfDelineationNotMatchingTreatmentBMP").addClass("redWarning");
+    }
+    if (report.NumberOfDelineationNotMatchingTreatmentBMP !== 0 || report.NumberOfDelineations === 0) {
+        submitApproveDelineationGisUploadButton.prop("disabled", true);
+    } else {
+        submitApproveDelineationGisUploadButton.prop("disabled", false);
+    }
+</script>
+
+@*<script type="text/javascript" language="javascript">
     // <![CDATA[
     jQuery(function()
     {
@@ -175,14 +165,7 @@
 
 
 
-                if (report.NumberOfDelineationNotMatchingTreatmentBMP > 0 || report.NumberOfDelineations === 0) {
-                    jQuery("#numberOfDelineationNotMatchingTreatmentBMP").addClass("redWarning");
-                }
-                if (report.NumberOfDelineationNotMatchingTreatmentBMP !== 0 || report.NumberOfDelineations === 0) {
-                    submitApproveDelineationGisUploadButton.prop("disabled", true);
-                } else {
-                    submitApproveDelineationGisUploadButton.prop("disabled", false);
-                }
+                
             }
             else {
                 _.forEach(report.Errors, function(err) { console.error(err); });
@@ -209,27 +192,20 @@
         }
     });
     // ]]>
-</script>
+</script>*@
 
-<script type="text/html" id="uploadGisReportWarning">
+@*<script type="text/html" id="uploadGisReportWarning">
     <div style="margin-top: 15px;">
         <div class="alert alert-warning" role="alert">
             There are problems with the selections for the layer you wish to import. Make sure that the <strong>Property</strong> selected is
             unambiguous (every feature has the selected property, and there are no duplicate values for features that have the selected property).
         </div>
     </div>
-</script>
-<script type="text/html" id="uploadGisReportTemplateHtml" style="display: none;">
-    <div style="margin-top: 15px;" ng-app="NeptuneApp" ng-controller="ApproveDelineationGisUploadController">
-        <ul>
-            <li>The Feature Class contains {{numberOfDelineations}} delineations</li>
-            <li>{{numberOfDelineationsToBeUpdated}} Treatment BMPs with with existing delineations will be replaced by new delineations from this Feature Class</li>
-            <li>{{numberOfDelineationsToBeCreated}} Treatment BMPs that do not currently have delineations will receive new delineations from this Feature Class</li>
-            <li id="numberOfDelineationNotMatchingTreatmentBMP">{{numberOfDelineationNotMatchingTreatmentBMP}} Delineations were found that do not match a Treatment BMP Name in the selected Jurisdiction</li>
-        </ul>
-    </div>
-</script>
-<script type="text/html" id="wktAndAnnotationsTemplateHtml">
+</script>*@
+@*<script type="text/html" id="uploadGisReportTemplateHtml" style="display: none;">*@
+    
+@*</script>*@
+@*<script type="text/html" id="wktAndAnnotationsTemplateHtml">
     <input type="hidden" name="WktAndAnnotations[{{index}}].Wkt" value="{{wkt}}" class="wktAndAnnotation"/>
     <input type="hidden" name="WktAndAnnotations[{{index}}].Annotation" value="{{annotation}}" class="wktAndAnnotation"/>
-</script>
+</script>*@
