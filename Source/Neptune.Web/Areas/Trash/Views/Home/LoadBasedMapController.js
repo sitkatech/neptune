@@ -7,11 +7,16 @@
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
+        //var loadCurrentOrNetChangeControl = L.control.loadBasedCurrentOrNetChangeControl({
+        //    position: 'topright',
+        //});
+
         NeptuneMaps.initTrashMapController($scope,
             angularModelAndViewData,
             trashMapService,
             angularModelAndViewData.AngularViewData.LoadBasedMapInitJson,
             loadResultsControl,
+            //loadCurrentOrNetChangeControl,
             {
                 showTrashGeneratingUnits: false,
                 showTrashGeneratingUnitLoads: true,
@@ -19,7 +24,14 @@
                 tabSelector: "#loadResultsTab",
                 resultsSelector: "#loadResults"
             });
-
+        ////////////////////////////////////
+        ///////////////////////////////////\\
+        ///////////////////////////////////
+        //loadCurrentOrNetChangeControl.addEventListener("click", changeLayer, false);
+        //loadCurrentOrNetChangeControl.addTo($scope.neptuneMap.map);
+        ///////////////////////////////////
+        ////////////////////////////////////
+        ///////////////////////////////////
 
         $scope.applyJurisdictionMask();
 
@@ -61,7 +73,6 @@
         }
 
         function createPopupContent(properties) {
-            console.log(properties);
 
             var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
             var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);

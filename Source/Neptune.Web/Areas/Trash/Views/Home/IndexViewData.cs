@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using GeoJSON.Net.Feature;
+﻿using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Areas.Trash.Controllers;
@@ -10,8 +6,11 @@ using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Views;
 using Neptune.Web.Views.Shared;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Web.Mvc;
 using HomeController = Neptune.Web.Areas.Trash.Controllers.HomeController;
 using TrashGeneratingUnitController = Neptune.Web.Areas.Trash.Controllers.TrashGeneratingUnitController;
 using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
@@ -37,6 +36,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string ScoreDescriptionsUrl { get; }
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
+        public bool CurrentOrNetChangeLoading { get; }
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
@@ -131,6 +131,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
                 LoadBasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x => x.LoadBasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
+                //LoadBasedCurrentOrNetChangeTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x => x.LoadBasedCurrentOrNetChange(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
                 // Templates for links in detail pop-up
                 OrganizationUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
