@@ -58,7 +58,7 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, null, null);
+                var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, null, null, CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit());
                 return RazorPartialView<UpdateDelineationGeometryErrors, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
             }
 
@@ -72,7 +72,7 @@ namespace Neptune.Web.Controllers
             var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UpdateDelineationGeometry());
             var approveGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.ApproveDelineationGisUpload());
 
-            var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, newGisUploadUrl, approveGisUploadUrl);
+            var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, newGisUploadUrl, approveGisUploadUrl, CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit());
             return RazorView<UpdateDelineationGeometry, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
         }
 
@@ -117,7 +117,7 @@ namespace Neptune.Web.Controllers
             //                LayerInitialVisibility.Show)).ToList();
             //var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
             //var mapInitJson = new StormwaterMapInitJson("delineationGeometryPreviewMap", 10, layers, boundingBox) { AllowFullScreen = false };
-            //var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit();
+            
             //var uploadGisReportUrlTemplate =
             //    new UrlTemplate<int, int, string>(
             //        SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(c => c.UploadGisReport(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3String))).UrlTemplateString;

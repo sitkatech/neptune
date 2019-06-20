@@ -5,10 +5,14 @@ CREATE TABLE dbo.DelineationStaging(
 	DelineationStagingID int IDENTITY(1,1) NOT NULL,
 	DelineationStagingGeometry geometry NOT NULL,
 	UploadedByPersonID int not NULL,
-	TreatmentBMPName varchar(200) not null
+	TreatmentBMPName varchar(200) not null,
+	StormwaterJurisdictionID int not null
  CONSTRAINT PK_DelineationStaging_DelineationStagingID PRIMARY KEY CLUSTERED 
 (
 	DelineationStagingID 
+), Constraint AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID unique
+(
+	TreatmentBMPName, StormwaterJurisdictionID
 )
 )
 GO

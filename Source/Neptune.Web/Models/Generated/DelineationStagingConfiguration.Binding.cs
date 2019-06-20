@@ -17,10 +17,12 @@ namespace Neptune.Web.Models
             HasKey(x => x.DelineationStagingID);
             Property(x => x.DelineationStagingID).HasColumnName(@"DelineationStagingID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.DelineationStagingGeometry).HasColumnName(@"DelineationStagingGeometry").HasColumnType("geometry").IsRequired();
-            Property(x => x.UploadedByPersonID).HasColumnName(@"UploadedByPersonID").HasColumnType("int").IsOptional();
+            Property(x => x.UploadedByPersonID).HasColumnName(@"UploadedByPersonID").HasColumnType("int").IsRequired();
+            Property(x => x.TreatmentBMPName).HasColumnName(@"TreatmentBMPName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(200);
+            Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
 
             // Foreign keys
-            HasOptional(a => a.UploadedByPerson).WithMany(b => b.DelineationStagingsWhereYouAreTheUploadedByPerson).HasForeignKey(c => c.UploadedByPersonID).WillCascadeOnDelete(false); // FK_DelineationStaging_Person_UploadedByPersonID_PersonID
+            HasRequired(a => a.UploadedByPerson).WithMany(b => b.DelineationStagingsWhereYouAreTheUploadedByPerson).HasForeignKey(c => c.UploadedByPersonID).WillCascadeOnDelete(false); // FK_DelineationStaging_Person_UploadedByPersonID_PersonID
         }
     }
 }

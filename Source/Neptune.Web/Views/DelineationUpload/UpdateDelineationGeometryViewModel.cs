@@ -24,6 +24,10 @@ namespace Neptune.Web.Views.DelineationUpload
         [DisplayName("Treatment BMP Name Field")]
         public string TreatmentBMPNameField { get; set; }
 
+        [Required]
+        [DisplayName("Stormwater Jurisdiction")]
+        public int? StormwaterJurisdictionID { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
@@ -100,9 +104,10 @@ namespace Neptune.Web.Views.DelineationUpload
                     {
                         var columns = new List<string>
                             {
-                                // only need the person (and the geom, obvs) since we'll get the StormwaterJurisdiction later
+                                
                                 $"{currentPerson.PersonID} as UploadedByPersonID",
-                                $"{TreatmentBMPNameField} as TreatmentBMPName"
+                                $"{TreatmentBMPNameField} as TreatmentBMPName",
+                                $"{StormwaterJurisdictionID} as StormwaterJurisdictionID"
                             };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "DelineationStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString);

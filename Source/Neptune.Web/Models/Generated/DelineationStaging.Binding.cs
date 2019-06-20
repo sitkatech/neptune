@@ -30,31 +30,50 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DelineationStaging(int delineationStagingID, DbGeometry delineationStagingGeometry, int? uploadedByPersonID) : this()
+        public DelineationStaging(int delineationStagingID, DbGeometry delineationStagingGeometry, int uploadedByPersonID, string treatmentBMPName, int stormwaterJurisdictionID) : this()
         {
             this.DelineationStagingID = delineationStagingID;
             this.DelineationStagingGeometry = delineationStagingGeometry;
             this.UploadedByPersonID = uploadedByPersonID;
+            this.TreatmentBMPName = treatmentBMPName;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DelineationStaging(DbGeometry delineationStagingGeometry) : this()
+        public DelineationStaging(DbGeometry delineationStagingGeometry, int uploadedByPersonID, string treatmentBMPName, int stormwaterJurisdictionID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.DelineationStagingGeometry = delineationStagingGeometry;
+            this.UploadedByPersonID = uploadedByPersonID;
+            this.TreatmentBMPName = treatmentBMPName;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
+        /// </summary>
+        public DelineationStaging(DbGeometry delineationStagingGeometry, Person uploadedByPerson, string treatmentBMPName, int stormwaterJurisdictionID) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.DelineationStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.DelineationStagingGeometry = delineationStagingGeometry;
+            this.UploadedByPersonID = uploadedByPerson.PersonID;
+            this.UploadedByPerson = uploadedByPerson;
+            uploadedByPerson.DelineationStagingsWhereYouAreTheUploadedByPerson.Add(this);
+            this.TreatmentBMPName = treatmentBMPName;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
+        }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static DelineationStaging CreateNewBlank()
+        public static DelineationStaging CreateNewBlank(Person uploadedByPerson)
         {
-            return new DelineationStaging(default(DbGeometry));
+            return new DelineationStaging(default(DbGeometry), uploadedByPerson, default(string), default(int));
         }
 
         /// <summary>
@@ -92,7 +111,9 @@ namespace Neptune.Web.Models
         [Key]
         public int DelineationStagingID { get; set; }
         public DbGeometry DelineationStagingGeometry { get; set; }
-        public int? UploadedByPersonID { get; set; }
+        public int UploadedByPersonID { get; set; }
+        public string TreatmentBMPName { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationStagingID; } set { DelineationStagingID = value; } }
 
@@ -100,7 +121,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-
+            public const int TreatmentBMPName = 200;
         }
     }
 }

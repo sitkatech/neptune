@@ -31,9 +31,7 @@ namespace Neptune.Web.Views.DelineationUpload
             //DelineationGeometryFeatureClassNames = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID, x => x.FeatureClassName);
             //MapInitJson = mapInitJson;
             //LayerColors = layerColors;
-            //StormwaterJurisdictionSelectListItems =
-            //    stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
-            //        .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
+            
             //DelineationGeometryLayerSelectProperties = currentPerson.DelineationGeometryStagings.ToDictionary(x => x.DelineationGeometryStagingID,
             //    x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));
             //UploadGisReportUrlTemplate = uploadGisReportUrlTemplate;
