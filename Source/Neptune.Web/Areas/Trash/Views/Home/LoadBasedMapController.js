@@ -7,17 +7,11 @@
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        var loadCurrentOrNetChangeControl = L.control.loadBasedCurrentOrNetChangeControl({
-            position: 'topright',
-            loadBasedCurrentOrNetChangeGeoserverUrl: angularModelAndViewData.AngularViewData.GeoServerUrl
-    });
-
         NeptuneMaps.initTrashMapController($scope,
             angularModelAndViewData,
             trashMapService,
             angularModelAndViewData.AngularViewData.LoadBasedMapInitJson,
             loadResultsControl,
-            //loadCurrentOrNetChangeControl,
             {
                 showTrashGeneratingUnits: false,
                 showTrashGeneratingUnitLoads: true,
@@ -26,19 +20,19 @@
                 resultsSelector: "#loadResults"
             });
 
-        ////////////////////////////////////
-        ///////////////////////////////////\\
-        ///////////////////////////////////
+        var loadCurrentOrNetChangeControl = L.control.loadBasedCurrentOrNetChangeControl({
+            position: 'topright',
+            loadBasedCurrentOrNetChangeGeoserverUrl: angularModelAndViewData.AngularViewData.GeoServerUrl
+        });
+
         loadCurrentOrNetChangeControl.addTo($scope.neptuneMap.map);
-        loadCurrentOrNetChangeControl.addEventListener("click", loadCurrentOrNetChangeControl.changeLayerImg, false);
-        jQuery("#command").innerHTML().append(loadCurrentOrNetChangeControl.changeLayerImg(event));
-        //loadCurrentOrNetChangeControl.addWMSLayer($scope.neptuneMap);
-        ///////////////////////////////////
-        ////////////////////////////////////
-        ///////////////////////////////////
+        loadCurrentOrNetChangeControl.toggleLoad($scope.neptuneMap);
+        loadCurrentOrNetChangeControl.setShownLayerLegendImg($scope.neptuneMap.currentLoadLegendUrl);
+        
+        jQuery("#loadResults .leaflet-top.leaflet-right")
+            .append(jQuery("#loadResults .leaflet-control-layers"));
 
         $scope.applyJurisdictionMask();
-
 
         $scope.neptuneMap.map.on("click",
             function (event) {

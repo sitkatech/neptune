@@ -614,26 +614,6 @@
     </div>
 </template>
 
-<div class="hiddenRadioContainer" style="display: none;">
-    <div class="col-sm-4 col-xs-12 control-label">
-    </div>
-    <div class="col-sm-8 col-xs-12" id="CurrentOrNetChangeLoading">
-        <div class="radio-inline">
-            <label>
-                @Html.RadioButtonFor(m => ViewDataTyped.CurrentOrNetChangeLoading, false)
-                Current Loading
-            </label>
-        </div>
-        <div class="radio-inline">
-            <label>
-                @Html.RadioButtonFor(m => ViewDataTyped.CurrentOrNetChangeLoading, true)
-                Net Change in Loading
-            </label>
-            @Html.ValidationMessageFor(m => ViewDataTyped.CurrentOrNetChangeLoading)
-        </div>
-    </div>
-</div>
-
 
 <script>
     jQuery(document).ready(function () {
