@@ -46,7 +46,7 @@
 </div>
 
 <script>
-    
+    var submitApproveDelineationGisUploadButton = jQuery("#submitApproveDelineationGisUpload");
     var report = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationUpoadGisReportFromStaging).ToString(Formatting.None));
 
     if (report.NumberOfDelineationNotMatchingTreatmentBMP > 0 || report.NumberOfDelineations === 0) {
@@ -69,7 +69,7 @@
             delineationStagingGeoJsons =
                 @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationStagingGeoJsons).ToString(Formatting.None)),
 
-            submitApproveDelineationGisUploadButton = jQuery("#submitApproveDelineationGisUpload"),
+            ,
 
             delineationUploadGisReports = [],
 
