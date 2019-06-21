@@ -974,6 +974,7 @@
     <Content Include="Areas\DroolTool\Views\Home\DroolToolMap.js" />
     <Content Include="Areas\DroolTool\Views\Home\NeighborhoodComponent.html" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedResultsCalculationControl.js" />
+    <Content Include="Areas\Trash\Views\Home\LoadBasedCurrentOrNetChangeControl.js" />
     <Content Include="Areas\Trash\Views\Home\OVTABasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />

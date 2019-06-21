@@ -78,6 +78,7 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerContr
     if (params) { L.Util.extend(wmsParams, params); }
 
     var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
+    
     this.addLayerToLayerControl(wmsLayer, layerControlLabelHtml, hide);
 
     return wmsLayer;

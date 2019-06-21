@@ -16,6 +16,7 @@
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedCalculationControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedResultsCalculationControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedResultsCalculationControl.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedCurrentOrNetChangeControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedMapController.js")"></script>
     <script type="text/javascript">
@@ -601,6 +602,17 @@
 <div class="hiddenDropdownContainer" style="display: none;">
     @Html.DropDownList("jurisdictionLoadResultsDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
 </div>
+
+
+<template id="LoadBasedCurrentOrNetChangeTemplate">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedCurrentOrNetChangeControl">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div id="CurrentOrNetChangeLoadingRadioContainer"></div>
+            </div>
+        </div>
+    </div>
+</template>
 
 
 <script>

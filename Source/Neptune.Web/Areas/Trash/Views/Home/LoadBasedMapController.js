@@ -20,9 +20,19 @@
                 resultsSelector: "#loadResults"
             });
 
+        var loadCurrentOrNetChangeControl = L.control.loadBasedCurrentOrNetChangeControl({
+            position: 'topright',
+            loadBasedCurrentOrNetChangeGeoserverUrl: angularModelAndViewData.AngularViewData.GeoServerUrl
+        });
+
+        loadCurrentOrNetChangeControl.addTo($scope.neptuneMap.map);
+        loadCurrentOrNetChangeControl.toggleLoad($scope.neptuneMap);
+        loadCurrentOrNetChangeControl.setShownLayerLegendImg($scope.neptuneMap.currentLoadLegendUrl);
+        
+        jQuery("#loadResults .leaflet-top.leaflet-right")
+            .append(jQuery("#loadResults .leaflet-control-layers"));
 
         $scope.applyJurisdictionMask();
-
 
         $scope.neptuneMap.map.on("click",
             function (event) {
@@ -61,7 +71,6 @@
         }
 
         function createPopupContent(properties) {
-            console.log(properties);
 
             var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
             var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);
