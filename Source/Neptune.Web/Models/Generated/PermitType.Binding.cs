@@ -21,6 +21,9 @@ namespace Neptune.Web.Models
         public static readonly PermitTypePhaseIMS4 PhaseIMS4 = PermitTypePhaseIMS4.Instance;
         public static readonly PermitTypePhaseIIMS4 PhaseIIMS4 = PermitTypePhaseIIMS4.Instance;
         public static readonly PermitTypeIGP IGP = PermitTypeIGP.Instance;
+        public static readonly PermitTypeIndividualPermit IndividualPermit = PermitTypeIndividualPermit.Instance;
+        public static readonly PermitTypeCalTransMS4 CalTransMS4 = PermitTypeCalTransMS4.Instance;
+        public static readonly PermitTypeOther Other = PermitTypeOther.Instance;
 
         public static readonly List<PermitType> All;
         public static readonly ReadOnlyDictionary<int, PermitType> AllLookupDictionary;
@@ -30,7 +33,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static PermitType()
         {
-            All = new List<PermitType> { PhaseIMS4, PhaseIIMS4, IGP };
+            All = new List<PermitType> { PhaseIMS4, PhaseIIMS4, IGP, IndividualPermit, CalTransMS4, Other };
             AllLookupDictionary = new ReadOnlyDictionary<int, PermitType>(All.ToDictionary(x => x.PermitTypeID));
         }
 
@@ -100,8 +103,14 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
+                case PermitTypeEnum.CalTransMS4:
+                    return CalTransMS4;
                 case PermitTypeEnum.IGP:
                     return IGP;
+                case PermitTypeEnum.IndividualPermit:
+                    return IndividualPermit;
+                case PermitTypeEnum.Other:
+                    return Other;
                 case PermitTypeEnum.PhaseIIMS4:
                     return PhaseIIMS4;
                 case PermitTypeEnum.PhaseIMS4:
@@ -116,7 +125,10 @@ namespace Neptune.Web.Models
     {
         PhaseIMS4 = 1,
         PhaseIIMS4 = 2,
-        IGP = 3
+        IGP = 3,
+        IndividualPermit = 4,
+        CalTransMS4 = 5,
+        Other = 6
     }
 
     public partial class PermitTypePhaseIMS4 : PermitType
@@ -135,5 +147,23 @@ namespace Neptune.Web.Models
     {
         private PermitTypeIGP(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
         public static readonly PermitTypeIGP Instance = new PermitTypeIGP(3, @"IGP", @"IGP");
+    }
+
+    public partial class PermitTypeIndividualPermit : PermitType
+    {
+        private PermitTypeIndividualPermit(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
+        public static readonly PermitTypeIndividualPermit Instance = new PermitTypeIndividualPermit(4, @"IndividualPermit", @"Individual Permit");
+    }
+
+    public partial class PermitTypeCalTransMS4 : PermitType
+    {
+        private PermitTypeCalTransMS4(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
+        public static readonly PermitTypeCalTransMS4 Instance = new PermitTypeCalTransMS4(5, @"CalTransMS4", @"CalTrans MS4");
+    }
+
+    public partial class PermitTypeOther : PermitType
+    {
+        private PermitTypeOther(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
+        public static readonly PermitTypeOther Instance = new PermitTypeOther(6, @"Other", @"Other");
     }
 }

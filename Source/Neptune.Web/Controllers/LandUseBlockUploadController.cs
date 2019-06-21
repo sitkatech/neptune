@@ -56,8 +56,7 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewData = new UpdateLandUseBlockGeometryViewData(CurrentPerson, null);
-                return RazorPartialView<UpdateLandUseBlockGeometryErrors, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
+                return ViewUpdateLandUseBlockGeometry(viewModel);
             }
 
             viewModel.UpdateModel(CurrentPerson);
