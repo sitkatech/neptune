@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -874,8 +874,6 @@
     <Compile Include="Views\Map\JurisdictionsMapInitJson.cs" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUpload.cs" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewData.cs" />
-    <Compile Include="Views\DelineationUpload\SummaryForMap.cs" />
-    <Compile Include="Views\DelineationUpload\SummaryForMapViewData.cs" />
     <Compile Include="Views\DelineationUpload\UpdateDelineationGeometry.cs" />
     <Compile Include="Views\DelineationUpload\UpdateDelineationGeometryErrors.cs" />
     <Compile Include="Views\DelineationUpload\UpdateDelineationGeometryViewData.cs" />
@@ -1703,7 +1701,6 @@
     <Content Include="Views\Shared\TreatmentBMPTypeLegend.cshtml" />
     <Content Include="Views\Jurisdiction\Detail.cshtml" />
     <Content Include="Views\Jurisdiction\Index.cshtml" />
-    <Content Include="Views\DelineationUpload\SummaryForMap.cshtml" />
     <Content Include="Views\DelineationUpload\UpdateDelineationGeometry.cshtml" />
     <Content Include="Views\DelineationUpload\UpdateDelineationGeometryErrors.cshtml" />
     <Content Include="Views\Assessment\Index.cshtml" />

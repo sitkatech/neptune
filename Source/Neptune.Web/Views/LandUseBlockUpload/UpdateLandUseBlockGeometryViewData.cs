@@ -1,4 +1,6 @@
-﻿using Neptune.Web.Models;
+﻿using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.LandUseBlockUpload
 {
@@ -11,6 +13,7 @@ namespace Neptune.Web.Views.LandUseBlockUpload
         {
             NewGisUploadUrl = newGisUploadUrl;
             EntityName = "Land Use Block";
+            EntityUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = "Update Land Use Block Geometry";
         }
     }

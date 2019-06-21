@@ -32,16 +32,6 @@ namespace Neptune.Web.Controllers
 {
     public class DelineationUploadController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
-        public PartialViewResult SummaryForMap(DelineationPrimaryKey delineationPrimaryKey)
-        {
-            var delineation = delineationPrimaryKey.EntityObject;
-            var deleteDelineationUrl = delineation.GetDeleteUrl();
-            var canDeleteCatchment = delineation.CanDelete(CurrentPerson);
-            var viewData = new SummaryForMapViewData(CurrentPerson, delineation, deleteDelineationUrl, canDeleteCatchment);
-            return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
-        }
-
         [HttpGet]
         [JurisdictionManageFeature]
         public ViewResult UpdateDelineationGeometry()
