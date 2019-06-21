@@ -19,27 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using Neptune.Web.Common;
 using Neptune.Web.Security;
 using Neptune.Web.Views.LandUseBlockUpload;
 using System.Web.Mvc;
-using Hangfire;
-using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Controllers
 {
     public class LandUseBlockUploadController : NeptuneBaseController
     {
-        [SitkaAdminFeature]
-        public RedirectResult TriggerHangfireJob()
-        {
-
-            BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(), TimeSpan.FromSeconds(30));
-
-            return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
-        }
 
         [HttpGet]
         [JurisdictionManageFeature]

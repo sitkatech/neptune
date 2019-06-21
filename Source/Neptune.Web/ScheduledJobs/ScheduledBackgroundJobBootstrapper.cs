@@ -77,9 +77,9 @@ namespace Neptune.Web.ScheduledJobs
             ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob();
         }
 
-        public static void RunLandUseBlockUploadBackgroundJob()
+        public static void RunLandUseBlockUploadBackgroundJob(int personID)
         {
-            ScheduledBackgroundJobLaunchHelper.RunLandUseBlockUploadBackgroundJob();
+            ScheduledBackgroundJobLaunchHelper.RunLandUseBlockUploadBackgroundJob(personID);
 
         }
 

@@ -18,9 +18,9 @@ namespace Neptune.Web.ScheduledJobs
             trashGeneratingUnitAdjustmentScheduledBackgroundJob.RunJob();
         }
 
-        public static void RunLandUseBlockUploadBackgroundJob()
+        public static void RunLandUseBlockUploadBackgroundJob(int personID)
         {
-            var landUseBlockUploadBackgroundJob = new LandUseBlockUploadBackgroundJob();
+            var landUseBlockUploadBackgroundJob = new LandUseBlockUploadBackgroundJob(personID);
             landUseBlockUploadBackgroundJob.RunJob();
         }
     }

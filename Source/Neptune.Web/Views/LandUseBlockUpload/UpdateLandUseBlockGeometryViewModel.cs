@@ -29,6 +29,11 @@ namespace Neptune.Web.Views.LandUseBlockUpload
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var currentPerson = HttpRequestStorage.DatabaseEntities.People.Find(PersonID);
+
+            HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(currentPerson
+                .LandUseBlockStagingsWhereYouAreTheUploadedByPerson);
+
             var errors = new List<ValidationResult>();
 
             FileResource.ValidateFileSize(FileResourceData, errors, GeneralUtility.NameOf(() => FileResourceData));
@@ -95,7 +100,7 @@ namespace Neptune.Web.Views.LandUseBlockUpload
         public void UpdateModel(Person currentPerson)
         {
             BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(), TimeSpan.FromSeconds(30));
+                ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(currentPerson.PersonID), TimeSpan.FromSeconds(30));
         }
     }
 }
