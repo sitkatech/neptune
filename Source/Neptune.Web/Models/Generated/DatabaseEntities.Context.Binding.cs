@@ -41,7 +41,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new CustomAttributeTypeConfiguration());
             modelBuilder.Configurations.Add(new CustomAttributeValueConfiguration());
             modelBuilder.Configurations.Add(new DelineationConfiguration());
-            modelBuilder.Configurations.Add(new DelineationGeometryStagingConfiguration());
+            modelBuilder.Configurations.Add(new DelineationStagingConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataImageConfiguration());
             modelBuilder.Configurations.Add(new FieldVisitConfiguration());
@@ -118,8 +118,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<CustomAttribute> CustomAttributes { get; set; }
         public virtual DbSet<CustomAttributeType> CustomAttributeTypes { get; set; }
         public virtual DbSet<CustomAttributeValue> CustomAttributeValues { get; set; }
-        public virtual DbSet<DelineationGeometryStaging> DelineationGeometryStagings { get; set; }
         public virtual DbSet<Delineation> Delineations { get; set; }
+        public virtual DbSet<DelineationStaging> DelineationStagings { get; set; }
         public virtual DbSet<FieldDefinitionDataImage> FieldDefinitionDataImages { get; set; }
         public virtual DbSet<FieldDefinitionData> FieldDefinitionDatas { get; set; }
         public virtual DbSet<FieldVisit> FieldVisits { get; set; }
@@ -232,11 +232,11 @@ namespace Neptune.Web.Models
                 case "CustomAttributeValue":
                     return CustomAttributeValues.GetCustomAttributeValue(primaryKey);
 
-                case "DelineationGeometryStaging":
-                    return DelineationGeometryStagings.GetDelineationGeometryStaging(primaryKey);
-
                 case "Delineation":
                     return Delineations.GetDelineation(primaryKey);
+
+                case "DelineationStaging":
+                    return DelineationStagings.GetDelineationStaging(primaryKey);
 
                 case "DelineationType":
                     var delineationType = DelineationType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

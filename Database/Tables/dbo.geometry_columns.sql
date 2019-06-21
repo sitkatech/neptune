@@ -12,6 +12,8 @@ CREATE TABLE [dbo].[geometry_columns](
 	[geometry_type] [varchar](30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_geometry_columns_f_table_catalog_f_table_schema_f_table_name_f_geometry_column] PRIMARY KEY CLUSTERED 
 (
-	[f_table_catalog] ASC
+	[f_table_catalog] ASC,
+	[f_table_schema] ASC,
+	[f_table_name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Web;
-using LtInfo.Common;
+﻿using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Models
 {
@@ -14,8 +13,7 @@ namespace Neptune.Web.Models
     {
         public static string GetDelineationAreaString(this Delineation delineation)
         {
-            //todo: move the sqm - ac conversion factor to a const
-            return (delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-";
+            return (delineation?.DelineationGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres)?.ToString("0.00") ?? "-";
         }
 
         public static readonly UrlTemplate<int> DeleteUrlTemplate =
