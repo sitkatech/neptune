@@ -19,10 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.DelineationUpload;
+using Neptune.Web.Views.Shared;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -41,9 +43,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        //        [JurisdictionManageFeature]
-
-        [SitkaAdminFeature]
+        [JurisdictionManageFeature]
         public ViewResult UpdateDelineationGeometry()
         {
             var viewModel = new UpdateDelineationGeometryViewModel();
@@ -51,9 +51,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        //        [JurisdictionManageFeature]
-
-        [SitkaAdminFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult UpdateDelineationGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
@@ -78,9 +76,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        //        [JurisdictionManageFeature]
-
-        [SitkaAdminFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ApproveDelineationGisUpload()
         {
@@ -89,9 +85,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        //        [JurisdictionManageFeature]
-
-        [SitkaAdminFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
@@ -121,6 +115,41 @@ namespace Neptune.Web.Controllers
             var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, delineationUpoadGisReportFromStaging);
             return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
 
+        }
+
+        [HttpGet]
+        [DelineationDeleteFeature]
+        public PartialViewResult Delete(DelineationPrimaryKey delineationPrimaryKey)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(delineation.DelineationID);
+            return ViewDelete(delineation, viewModel);
+        }
+
+        [HttpPost]
+        [DelineationDeleteFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Delete(DelineationPrimaryKey delineationPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDelete(delineation, viewModel);
+            }
+
+            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+            return new ModalDialogFormJsonResult(SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationMap(null)));
+        }
+
+        private PartialViewResult ViewDelete(Delineation delineation, ConfirmDialogFormViewModel viewModel)
+        {
+            var canDelete = delineation.CanDelete(CurrentPerson);
+            var confirmMessage = canDelete
+                ? "Are you sure you want to delete the Delineation?"
+                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Delineation", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Index(), "here"));
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
     }
 }

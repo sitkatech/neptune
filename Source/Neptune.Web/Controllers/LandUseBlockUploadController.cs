@@ -42,8 +42,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        //[JurisdictionManageFeature]
-        [SitkaAdminFeature]
+        [JurisdictionManageFeature]
         public ViewResult UpdateLandUseBlockGeometry()
         {
             var viewModel = new UpdateLandUseBlockGeometryViewModel {PersonID = CurrentPerson.PersonID};
@@ -51,8 +50,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        //[JurisdictionManageFeature]
-        [SitkaAdminFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult UpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
         {

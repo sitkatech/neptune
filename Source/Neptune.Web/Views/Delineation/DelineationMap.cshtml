@@ -32,10 +32,10 @@
 
 @section RightOfPageTitle
 {
-    @*@if (ViewDataTyped.HasManagePermission)
+    @if (ViewDataTyped.HasManagePermission)
     {
         <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadTreatmentBMPDelineationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Bulk Upload Treatment BMP Delineations</a>
-    }*@
+    }
 }
 
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
