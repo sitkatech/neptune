@@ -36,6 +36,8 @@ namespace LtInfo.Common.GdalOgr
         public const int DefaultTimeOut = 210000;
         public const string OgrGeoJsonTableName = "OGRGeoJSON";
 
+        public const string GEOMETRY_TYPE_POLYGON = "POLYGON";
+
         private readonly FileInfo _ogr2OgrExecutable;
         private readonly int _coordinateSystemId;
         private readonly double _totalMilliseconds;
@@ -57,14 +59,16 @@ namespace LtInfo.Common.GdalOgr
         /// <summary>
         /// Import GDB to SQL using GDAL Ogr2Ogr command line tool
         /// </summary>
-        public void ImportFileGdbToMsSql(FileInfo inputGdbFile, string sourceLayerName, string destinationTableName, List<string> columnNameList, string connectionString)
+        public void ImportFileGdbToMsSql(FileInfo inputGdbFile, string sourceLayerName, string destinationTableName,
+            List<string> columnNameList, string connectionString, bool enforceGeometryType,
+            string geometryTypeToEnforce)
         {
             Check.Require(inputGdbFile.FullName.ToLower().EndsWith(".gdb.zip"),
                 $"Input filename for GDB input must end with .gdb.zip. Filename passed is {inputGdbFile.FullName}");
             Check.RequireFileExists(inputGdbFile, "Can't find input File GDB for import with ogr2ogr");
 
             var databaseConnectionString = $"MSSQL:{connectionString}";
-            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId);
+            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce);
             ExecuteOgr2OgrCommand(commandLineArguments);
         }
 
@@ -156,7 +160,7 @@ namespace LtInfo.Common.GdalOgr
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -progress -append --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs "EPSG:4326" -f MSSQLSpatial "MSSQL:server=(local);database=Scratch;trusted_connection=yes" "C:\temp\GdalScratch\Sub_Actions_20131219.gdb" "Sub_Actions_Polygon_20131219" -nln MyTable</example>
         /// </summary>
-        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId)
+        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce)
         {
             var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
             var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
@@ -181,10 +185,12 @@ namespace LtInfo.Common.GdalOgr
                 databaseConnectionString,
                 inputGdbFile.FullName,
                 "-nln",
-                targetTableName
+                targetTableName,
+                enforceGeometryType ? "-nlt" : null,
+                enforceGeometryType ? geometryTypeToEnforce : null
             };
-
-            return commandLineArguments;
+            
+            return commandLineArguments.Where(x=> x != null).ToList();
         }
 
         /// <summary>
