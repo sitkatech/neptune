@@ -149,8 +149,13 @@ namespace Neptune.Web.ScheduledJobs
 
             if (!errorList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.LandUseBlocks.AddRange(landUseBlocksToUpload);
-                HttpRequestStorage.DatabaseEntities.SaveChanges(person);
+                var stormwaterJurisdictionIDsToClear = landUseBlocksToUpload.Select(x=>x.StormwaterJurisdictionID).Distinct();
+                var landUseBlockIDsToDelete = DbContext.LandUseBlocks.Where(x=>stormwaterJurisdictionIDsToClear.Contains( x.StormwaterJurisdictionID)).Select(x=>x.StormwaterJurisdictionID).ToList();
+                DbContext.LandUseBlocks.DeleteLandUseBlock(landUseBlockIDsToDelete);
+                DbContext.SaveChanges();
+
+                DbContext.LandUseBlocks.AddRange(landUseBlocksToUpload);
+                DbContext.SaveChanges(person);
             }
             else
             {
@@ -167,7 +172,7 @@ namespace Neptune.Web.ScheduledJobs
                 SitkaSmtpClient.Send(mailMessage);
             }
 
-            HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
+            DbContext.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
         }
 
         public static MailAddress DoNotReplyMailAddress()
