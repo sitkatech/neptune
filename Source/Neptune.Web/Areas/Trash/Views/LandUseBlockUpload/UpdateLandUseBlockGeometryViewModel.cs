@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Web;
-using DocumentFormat.OpenXml.Spreadsheet;
-using GeoJSON.Net.Feature;
-using Hangfire;
+﻿using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
@@ -15,8 +6,15 @@ using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Web;
 
-namespace Neptune.Web.Views.LandUseBlockUpload
+namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
 {
     public class UpdateLandUseBlockGeometryViewModel : FormViewModel, IValidatableObject
     {

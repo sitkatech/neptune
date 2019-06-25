@@ -432,15 +432,15 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocationViewModel.cs" />
-    <Compile Include="Controllers\LandUseBlockUploadController.cs" />
+    <Compile Include="Areas\Trash\Controllers\LandUseBlockUploadController.cs" />
     <Compile Include="Models\DelineationGeometryStaging.cs" />
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
     <Compile Include="ScheduledJobs\LandUseBlockUploadBackgroundJob.cs" />
-    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cs" />
-    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
-    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
-    <Compile Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewModel.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummaryViewData.cs" />
     <Compile Include="Models\TrashGeneratingUnit.cs" />
@@ -1795,8 +1795,8 @@
     <Content Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cshtml" />
     <Content Include="Views\DelineationUpload\ApproveDelineationGisUpload.cshtml" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewModel.cs" />
-    <Content Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cshtml" />
-    <Content Include="Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cshtml" />
+    <Content Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cshtml" />
+    <Content Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

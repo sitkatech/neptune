@@ -1,8 +1,9 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views;
 
-namespace Neptune.Web.Views.LandUseBlockUpload
+namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
 {
     public class UpdateLandUseBlockGeometryViewData : NeptuneViewData
     {

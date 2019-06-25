@@ -21,10 +21,11 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Web.Common;
 using Neptune.Web.Security;
-using Neptune.Web.Views.LandUseBlockUpload;
+using Neptune.Web.Areas.Trash.Views.LandUseBlockUpload;
 using System.Web.Mvc;
+using Neptune.Web.Controllers;
 
-namespace Neptune.Web.Controllers
+namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class LandUseBlockUploadController : NeptuneBaseController
     {
