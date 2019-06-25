@@ -5,12 +5,12 @@ using Neptune.Web.Views;
 
 namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
 {
-    public class UpdateLandUseBlockGeometryViewData : NeptuneViewData
+    public class UpdateLandUseBlockGeometryViewData : TrashModuleViewData
     {
         public string NewGisUploadUrl { get; }
         
 
-        public UpdateLandUseBlockGeometryViewData(Person currentPerson, string newGisUploadUrl) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public UpdateLandUseBlockGeometryViewData(Person currentPerson, string newGisUploadUrl) : base(currentPerson)
         {
             NewGisUploadUrl = newGisUploadUrl;
             EntityName = "Land Use Block";
