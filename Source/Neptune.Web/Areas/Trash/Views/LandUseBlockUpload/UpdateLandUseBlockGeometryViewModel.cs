@@ -31,6 +31,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
 
             HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(currentPerson
                 .LandUseBlockStagingsWhereYouAreTheUploadedByPerson);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             var errors = new List<ValidationResult>();
 

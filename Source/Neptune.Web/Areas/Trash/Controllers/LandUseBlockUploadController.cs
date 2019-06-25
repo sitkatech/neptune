@@ -34,7 +34,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [JurisdictionManageFeature]
         public ViewResult UpdateLandUseBlockGeometry()
         {
-            var viewModel = new UpdateLandUseBlockGeometryViewModel {PersonID = CurrentPerson.PersonID};
+            var viewModel = new UpdateLandUseBlockGeometryViewModel { PersonID = CurrentPerson.PersonID };
             return ViewUpdateLandUseBlockGeometry(viewModel);
         }
 
@@ -50,9 +50,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             viewModel.UpdateModel(CurrentPerson);
 
-            SetMessageForDisplay("The Land Use Blocks were successfully updated and will be added to the system after processing.");
+            SetMessageForDisplay("The Land Use Blocks were successfully added to the staging area. The staged Land Use Blocks will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
 
-            return RedirectToAction(new SitkaRoute<LandUseBlockController>(c => c.Index()));
+            return Redirect(SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(c => c.Index()));
         }
 
         private ViewResult ViewUpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)

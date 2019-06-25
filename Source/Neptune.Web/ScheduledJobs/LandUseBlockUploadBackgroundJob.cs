@@ -123,7 +123,7 @@ namespace Neptune.Web.ScheduledJobs
 
                     if (clippedGeometry.IsEmpty)
                     {
-                        errorList.Add($"The Clipped Land Use Block Geometry at row {count} is null. Please make sure Land Use Block is in the '{stormwaterJurisdiction}' stormwater jurisdiction");
+                        errorList.Add($"The Land Use Block Geometry at row {count} is not in the assigned Stormwater Jurisdiction. Please make sure Land Use Block is in {stormwaterJurisdiction.Organization.OrganizationName}.");
                     }
 
                 }
@@ -149,21 +149,60 @@ namespace Neptune.Web.ScheduledJobs
 
             if (!errorList.Any())
             {
-                var stormwaterJurisdictionIDsToClear = landUseBlocksToUpload.Select(x=>x.StormwaterJurisdictionID).Distinct();
-                var landUseBlockIDsToDelete = DbContext.LandUseBlocks.Where(x=>stormwaterJurisdictionIDsToClear.Contains( x.StormwaterJurisdictionID)).Select(x=>x.StormwaterJurisdictionID).ToList();
-                DbContext.LandUseBlocks.DeleteLandUseBlock(landUseBlockIDsToDelete);
-                DbContext.SaveChanges();
+                var stormwaterJurisdictionIDsToClear = landUseBlocksToUpload.Select(x => x.StormwaterJurisdictionID).Distinct();
+                var stormwaterJurisdictionToClears = stormwaterJurisdictions.Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID)).ToList();
+
+                //foreach (var stormwaterJurisdictionToClear in stormwaterJurisdictionToClears)
+                //{
+                //    var landUseBlocksToClear = stormwaterJurisdictionToClear.LandUseBlocks;
+                //    var trashGeneratingUnitsToUpdateLandUseBlockID = landUseBlocksToClear.SelectMany(x=>x.TrashGeneratingUnits);
+
+                //    foreach (var trashGeneratingUnit in trashGeneratingUnitsToUpdateLandUseBlockID)
+                //    {
+                //        trashGeneratingUnit.LandUseBlockID = null;
+                //    }
+                //    DbContext.SaveChanges(person);
+
+                //    DbContext.LandUseBlocks.DeleteLandUseBlock(landUseBlocksToClear);
+                //    DbContext.SaveChanges(person);
+
+                //}
+
+                // NP 6/25 SUPER gross to fire plain sql at the db, but trying to use the ORM as above results in exceeding any reasonable timeout
+                var landUseBlockIDsToClear = stormwaterJurisdictionToClears.SelectMany(x=>x.LandUseBlocks).Select(x=>x.LandUseBlockID);
+                var landUseBlockIDsToClearCommaSeparatedString = string.Join(",", landUseBlockIDsToClear);
+                
+                var nullOutTGULandUseBlockIDs =
+                    $"UPDATE dbo.TrashGeneratingUnit SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
+                var deleteLandUseBlocks = $"DELETE FROM dbo.LandUseBlock WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
+
+                DbContext.Database.CommandTimeout = 960;
+                DbContext.Database.ExecuteSqlCommand(nullOutTGULandUseBlockIDs);
+                DbContext.Database.ExecuteSqlCommand(deleteLandUseBlocks);
 
                 DbContext.LandUseBlocks.AddRange(landUseBlocksToUpload);
                 DbContext.SaveChanges(person);
-            }
-            else
-            {
-                var body = "Your last Land Use Block upload had errors. Please review the following report, correct the errors, and try again: \n" +  string.Join("\n", errorList);
+
+                var body =
+                    "Your Land Use Block Upload has been processed. The updated Land Use Blocks are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
 
                 var mailMessage = new MailMessage
                 {
                     Subject = "Land Use Block Upload Results",
+                    Body = body,
+                    From = DoNotReplyMailAddress()
+                };
+
+                mailMessage.To.Add(person.Email);
+                SitkaSmtpClient.Send(mailMessage);
+            }
+            else
+            {
+                var body = "Your Land Use Block upload had errors. Please review the following report, correct the errors, and try again: \n" +  string.Join("\n", errorList);
+
+                var mailMessage = new MailMessage
+                {
+                    Subject = "Land Use Block Upload Error",
                     Body = body,
                     From = DoNotReplyMailAddress()
                 };
