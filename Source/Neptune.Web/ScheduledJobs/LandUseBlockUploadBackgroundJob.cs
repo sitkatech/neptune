@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using System.Net.Mail;
+using LtInfo.Common.Email;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -152,10 +154,25 @@ namespace Neptune.Web.ScheduledJobs
             }
             else
             {
-                //email notification would be nice since right now the errors just disappear.
+                var body = "Your last Land Use Block upload had errors. Please review the following report, correct the errors, and try again: \n" +  string.Join("\n", errorList);
+
+                var mailMessage = new MailMessage
+                {
+                    Subject = "Land Use Block Upload Results",
+                    Body = body,
+                    From = DoNotReplyMailAddress()
+                };
+
+                mailMessage.To.Add(person.Email);
+                SitkaSmtpClient.Send(mailMessage);
             }
 
             HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
+        }
+
+        public static MailAddress DoNotReplyMailAddress()
+        {
+            return new MailAddress(NeptuneWebConfiguration.DoNotReplyEmail, "Orange County Stormwater Tools");
         }
     }
 }
