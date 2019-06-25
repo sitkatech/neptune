@@ -172,6 +172,15 @@ namespace Neptune.Web.Models
 
             return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
         }
+        public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanEditWithContext(this Person person, DatabaseEntities dbContext)
+        {
+            if (person.Role == Role.SitkaAdmin || person.Role == Role.Admin)
+            {
+                return dbContext.StormwaterJurisdictions;
+            }
+
+            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
+        }
 
         public static BoundingBox GetBoundingBox(this Person person)
         {

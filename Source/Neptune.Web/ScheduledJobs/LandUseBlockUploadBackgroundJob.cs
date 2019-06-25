@@ -1,5 +1,6 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
@@ -26,12 +27,20 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            var landUseBlockStagings = HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.Where(x => x.UploadedByPersonID == PersonID).ToList();
+            var person = DbContext.People.Find(PersonID);
 
+            if (person == null)
+            {
+                throw new InvalidOperationException("PersonID must be valid!");
+            }
 
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
-            var person = landUseBlockStagings[0].UploadedByPerson;
+            var landUseBlockStagings = person.LandUseBlockStagingsWhereYouAreTheUploadedByPerson;
+            var stormwaterJurisdictions = DbContext.StormwaterJurisdictions.ToList();
+            var stormwaterJurisdictionsPersonCanEdit = person.GetStormwaterJurisdictionsPersonCanEditWithContext(DbContext).ToList();
 
+            var allowedStormwaterJurisdictionNames = string.Join(", ", stormwaterJurisdictions.Select(x => x.Organization.OrganizationName).ToList());
+            var allowedPermitTypeNames = string.Join(", ", PermitType.All.Select(x => x.PermitTypeDisplayName).ToList());
+            var allowedPriorityLandUseTypeNames = string.Join(", ", PriorityLandUseType.All.Select(x => x.PriorityLandUseTypeDisplayName).ToList());
 
             var count = 0;
             var errorList = new List<string>();
@@ -45,7 +54,8 @@ namespace Neptune.Web.ScheduledJobs
                 var landUseBlockPLUType = landUseBlockStaging.PriorityLandUseType;
                 if (!PriorityLandUseType.All.Select(x => x.PriorityLandUseTypeDisplayName).Contains(landUseBlockPLUType))
                 {
-                    errorList.Add($"The Priority Land Use Type '{landUseBlockPLUType}' at row {count} was not found. Acceptable values are {string.Join(", ", PriorityLandUseType.All.Select(x => x.PriorityLandUseTypeDisplayName).ToList())}");
+                    
+                    errorList.Add($"The Priority Land Use Type '{landUseBlockPLUType}' at row {count} was not found. Acceptable values are {allowedPriorityLandUseTypeNames}");
                 }
                 else
                 {
@@ -82,13 +92,21 @@ namespace Neptune.Web.ScheduledJobs
                 }
                 if (!stormwaterJurisdictions.Select(x => x.Organization.OrganizationName).Contains(stormwaterJurisdictionName))
                 {
-                    errorList.Add($"The Stormwater Jurisdiction '{stormwaterJurisdictionName}' at row {count} was not found. Acceptable values are {string.Join(", ", stormwaterJurisdictions.Select(x => x.Organization.OrganizationName).ToList())}");
+                    
+                    errorList.Add($"The Stormwater Jurisdiction '{stormwaterJurisdictionName}' at row {count} was not found. Acceptable values are {allowedStormwaterJurisdictionNames}");
                 }
                 else
                 {
-                    landUseBlock.StormwaterJurisdictionID = stormwaterJurisdictions
-                        .Single(x => x.Organization.OrganizationName == landUseBlockStaging.StormwaterJurisdiction)
-                        .StormwaterJurisdictionID;
+                    var stormwaterJurisdiction = stormwaterJurisdictions
+                        .Single(x => x.Organization.OrganizationName == landUseBlockStaging.StormwaterJurisdiction);
+                    if (stormwaterJurisdictionsPersonCanEdit.Select(x=>x.StormwaterJurisdictionID).Contains(stormwaterJurisdiction.StormwaterJurisdictionID))
+                    {
+                        landUseBlock.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
+                    }
+                    else
+                    {
+                        errorList.Add($"You do not have permission to edit Stormwater Jurisdiction {stormwaterJurisdiction.Organization.OrganizationName}. Please remove all features with this Stormwater Jurisdiction from the upload and try again.");
+                    }
                 }
 
                 if (landUseBlockStaging.LandUseBlockStagingGeometry == null)
@@ -113,9 +131,10 @@ namespace Neptune.Web.ScheduledJobs
                 {
                     errorList.Add($"The Permit Type at row {count} is null, empty or whitespace. A value must be provided");
                 }
+
                 if (!PermitType.All.Select(x => x.PermitTypeDisplayName).Contains(landUseBlockStaging.PermitType))
                 {
-                    errorList.Add($"The Permit Type '{permitType}' at row {count} was not found. Acceptable values are {string.Join(", ", PermitType.All.Select(x => x.PermitTypeDisplayName).ToList())}");
+                    errorList.Add($"The Permit Type '{permitType}' at row {count} was not found. Acceptable values are {allowedPermitTypeNames}");
                 }
                 else
                 {
@@ -133,7 +152,7 @@ namespace Neptune.Web.ScheduledJobs
             }
             else
             {
-                //email notification would be nice
+                //email notification would be nice since right now the errors just disappear.
             }
 
             HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
