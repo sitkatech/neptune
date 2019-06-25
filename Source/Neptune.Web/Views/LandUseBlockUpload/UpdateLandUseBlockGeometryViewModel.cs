@@ -78,13 +78,32 @@ namespace Neptune.Web.Views.LandUseBlockUpload
                     {
                         var columns = new List<string>
                         {
-                            "PLU_Cat as PriorityLandUseType", "LU_Descr as LandUseDescription",
-                            "TGR as TrashGenerationRate", "LU_for_TGR as LandUseForTGR",
-                            "MHI as MedianHouseHoldIncome", "Jurisdic as StormwaterJurisdiction",
-                            "Permit as PermitType", $"{PersonID} as UploadedByPersonID"
+                            "PLU_Cat as PriorityLandUseType",
+                            "LU_Descr as LandUseDescription",
+                            "TGR as TrashGenerationRate",
+                            "LU_for_TGR as LandUseForTGR",
+                            "MHI as MedianHouseHoldIncome",
+                            "Jurisdic as StormwaterJurisdiction",
+                            "Permit as PermitType",
+                            $"{PersonID} as UploadedByPersonID"
                         };
-                        ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "LandUseBlockStaging", columns,
-                            NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
+                        ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
+                            "LandUseBlockStaging", columns,
+                            NeptuneWebConfiguration.DatabaseConnectionString, true,
+                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
+                    }
+                    catch (Ogr2OgrCommandLineException e)
+                    {
+                        if (e.Message.Contains("column does not allow nulls",
+                            StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            errors.Add(new ValidationResult("The upload contained features with null values. All fields are required."));
+                        }
+                        else
+                        {
+                            errors.Add(new ValidationResult($"There was a problem processing the Feature Class \"{featureClassNames[0]}\". Please check that the file is not corrupt and try again."));
+                            SitkaLogger.Instance.LogDetailedErrorMessage(e);
+                        }
                     }
                     catch (Exception e)
                     {

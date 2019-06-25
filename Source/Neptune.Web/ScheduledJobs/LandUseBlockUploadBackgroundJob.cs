@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Neptune.Web.Common;
+using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using LtInfo.Common.GdalOgr;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -12,7 +10,7 @@ namespace Neptune.Web.ScheduledJobs
     {
         public int PersonID { get; }
 
-        public LandUseBlockUploadBackgroundJob(int personID) : base()
+        public LandUseBlockUploadBackgroundJob(int personID)
         {
             PersonID = personID;
         }
@@ -24,11 +22,11 @@ namespace Neptune.Web.ScheduledJobs
             NeptuneEnvironmentType.Qa
         };
 
-        
+
 
         protected override void RunJobImplementation()
         {
-            var landUseBlockStagings = HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.Where(x=>x.UploadedByPersonID == PersonID).ToList();
+            var landUseBlockStagings = HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.Where(x => x.UploadedByPersonID == PersonID).ToList();
 
 
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
@@ -36,7 +34,7 @@ namespace Neptune.Web.ScheduledJobs
 
 
             var count = 0;
-            var errorList = new List<string> ();
+            var errorList = new List<string>();
             var landUseBlocksToUpload = new List<LandUseBlock>();
 
             foreach (var landUseBlockStaging in landUseBlockStagings)
@@ -57,32 +55,24 @@ namespace Neptune.Web.ScheduledJobs
 
                 landUseBlock.LandUseDescription = landUseBlockStaging.LandUseDescription;
 
-                try
+
+                landUseBlock.TrashGenerationRate = landUseBlockStaging.TrashGenerationRate;
+                landUseBlock.LandUseForTGR = landUseBlockStaging.LandUseForTGR;
+
+                if (landUseBlockStaging.LandUseForTGR == "Residential")
                 {
-
-                    landUseBlock.TrashGenerationRate = landUseBlockStaging.TrashGenerationRate.Value;
-                    landUseBlock.LandUseForTGR = landUseBlockStaging.LandUseForTGR;
-
-                    if (landUseBlockStaging.LandUseForTGR == "Residential")
-                    {
-                        landUseBlock.MedianHouseholdIncomeResidential = landUseBlockStaging.MedianHouseholdIncome.Value;
-                        landUseBlock.MedianHouseholdIncomeRetail = 0;
-                    }
-                    else if (landUseBlockStaging.LandUseForTGR == "Retail")
-                    {
-                        landUseBlock.MedianHouseholdIncomeResidential = 0;
-                        landUseBlock.MedianHouseholdIncomeRetail = landUseBlockStaging.MedianHouseholdIncome.Value;
-                    }
-                    else
-                    {
-                        landUseBlock.MedianHouseholdIncomeResidential = 0;
-                        landUseBlock.MedianHouseholdIncomeRetail = 0;
-                    }
+                    landUseBlock.MedianHouseholdIncomeResidential = landUseBlockStaging.MedianHouseholdIncome;
+                    landUseBlock.MedianHouseholdIncomeRetail = 0;
                 }
-                catch (InvalidOperationException)
+                else if (landUseBlockStaging.LandUseForTGR == "Retail")
                 {
-                    errorList.Add("The Trash Generation Rate and Median Household Income fields are not permitted to be null. Please ensure values for these fields are provided for all features in the upload.");
-                    break;
+                    landUseBlock.MedianHouseholdIncomeResidential = 0;
+                    landUseBlock.MedianHouseholdIncomeRetail = landUseBlockStaging.MedianHouseholdIncome;
+                }
+                else
+                {
+                    landUseBlock.MedianHouseholdIncomeResidential = 0;
+                    landUseBlock.MedianHouseholdIncomeRetail = 0;
                 }
 
                 var stormwaterJurisdictionName = landUseBlockStaging.StormwaterJurisdiction;

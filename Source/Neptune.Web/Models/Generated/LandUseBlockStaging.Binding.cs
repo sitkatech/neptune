@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlockStaging(int landUseBlockStagingID, string priorityLandUseType, string landUseDescription, DbGeometry landUseBlockStagingGeometry, decimal? trashGenerationRate, string landUseForTGR, decimal? medianHouseholdIncome, string stormwaterJurisdiction, string permitType, int? uploadedByPersonID) : this()
+        public LandUseBlockStaging(int landUseBlockStagingID, string priorityLandUseType, string landUseDescription, DbGeometry landUseBlockStagingGeometry, decimal trashGenerationRate, string landUseForTGR, decimal medianHouseholdIncome, string stormwaterJurisdiction, string permitType, int uploadedByPersonID) : this()
         {
             this.LandUseBlockStagingID = landUseBlockStagingID;
             this.PriorityLandUseType = priorityLandUseType;
@@ -47,21 +47,40 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlockStaging(DbGeometry landUseBlockStagingGeometry) : this()
+        public LandUseBlockStaging(DbGeometry landUseBlockStagingGeometry, decimal trashGenerationRate, decimal medianHouseholdIncome, string stormwaterJurisdiction, int uploadedByPersonID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.LandUseBlockStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.LandUseBlockStagingGeometry = landUseBlockStagingGeometry;
+            this.TrashGenerationRate = trashGenerationRate;
+            this.MedianHouseholdIncome = medianHouseholdIncome;
+            this.StormwaterJurisdiction = stormwaterJurisdiction;
+            this.UploadedByPersonID = uploadedByPersonID;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
+        /// </summary>
+        public LandUseBlockStaging(DbGeometry landUseBlockStagingGeometry, decimal trashGenerationRate, decimal medianHouseholdIncome, string stormwaterJurisdiction, Person uploadedByPerson) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.LandUseBlockStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.LandUseBlockStagingGeometry = landUseBlockStagingGeometry;
+            this.TrashGenerationRate = trashGenerationRate;
+            this.MedianHouseholdIncome = medianHouseholdIncome;
+            this.StormwaterJurisdiction = stormwaterJurisdiction;
+            this.UploadedByPersonID = uploadedByPerson.PersonID;
+            this.UploadedByPerson = uploadedByPerson;
+            uploadedByPerson.LandUseBlockStagingsWhereYouAreTheUploadedByPerson.Add(this);
+        }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static LandUseBlockStaging CreateNewBlank()
+        public static LandUseBlockStaging CreateNewBlank(Person uploadedByPerson)
         {
-            return new LandUseBlockStaging(default(DbGeometry));
+            return new LandUseBlockStaging(default(DbGeometry), default(decimal), default(decimal), default(string), uploadedByPerson);
         }
 
         /// <summary>
@@ -101,12 +120,12 @@ namespace Neptune.Web.Models
         public string PriorityLandUseType { get; set; }
         public string LandUseDescription { get; set; }
         public DbGeometry LandUseBlockStagingGeometry { get; set; }
-        public decimal? TrashGenerationRate { get; set; }
+        public decimal TrashGenerationRate { get; set; }
         public string LandUseForTGR { get; set; }
-        public decimal? MedianHouseholdIncome { get; set; }
+        public decimal MedianHouseholdIncome { get; set; }
         public string StormwaterJurisdiction { get; set; }
         public string PermitType { get; set; }
-        public int? UploadedByPersonID { get; set; }
+        public int UploadedByPersonID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return LandUseBlockStagingID; } set { LandUseBlockStagingID = value; } }
 

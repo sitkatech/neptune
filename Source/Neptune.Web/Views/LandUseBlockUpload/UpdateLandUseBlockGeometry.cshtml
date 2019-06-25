@@ -20,7 +20,7 @@
                     <li>The file geodatabase (.gdb) must be contained within a compressed zip file (.zip)</li>
                     <li>The zip file must contain only one file geodatabase and no other data</li>
                     <li>The file geodatabase must contain only one feature class</li>
-                    <li>The file must contain a field with Treatment BMP Name and all values must match a Treatment BMP name already in the Inventory Module</li>
+                    <li>The feature class must have fields exactly matching the Land Use Block schema. All fields in the schema are required; null values will cause the upload to fail.</li>
                     <li>
                         Geodatabases using ESRI Smart Database Compression (SDC) are not supported. Please
                         <a href="http://desktop.arcgis.com/en/arcmap/10.3/tools/data-management-toolbox/uncompress-file-geodatabase-data.htm">uncompress</a>
@@ -28,9 +28,7 @@
                     </li>
                     <li>Version 10.1+ file geodatabases are supported</li>
                 </ul>
-                <p>
-                    After you upload your file, you will be able to preview and verify the uploaded data on a map. Once you accept the uploaded data, new landUseBlocks will be added and any existing landUseBlock locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded landUseBlocks will be marked as provisional.
-                </p>
+                <p>After you upload your file the new Land Use Blocks will be added and overwrite any existing Land Use Blocks for your Jurisdiction. It may take up to twenty four hours to see updated Trash Results on the home page.</p>
                 <div>
                     @Html.EditorFor(x => x.FileResourceData)
                     @Html.ValidationMessageFor(x => x.FileResourceData)
