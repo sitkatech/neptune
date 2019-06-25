@@ -45,7 +45,7 @@ namespace LtInfo.Common.GdalOgr
             var commandLineArguments = BuildOgrInfoCommandLineArgumentsToConfirmAttributeExistsOnFeatureClass(gdbFileInfo, gdalDataDirectory, featureClassName);
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(ogrInfoFileInfo.DirectoryName, ogrInfoFileInfo.FullName, commandLineArguments, true, Convert.ToInt32(totalMilliseconds));
 
-            return processUtilityResult.StdOut.Contains($"{attributeName}:");
+            return processUtilityResult.StdOut.Contains($"{attributeName}:", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static Tuple<double, double, double, double> GetExtentFromGeoJson(FileInfo ogrInfoFileInfo, string geoJson, double totalMilliseconds)

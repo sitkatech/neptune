@@ -20,7 +20,7 @@ namespace Neptune.Web.Views.DelineationUpload
 
             stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
 
-            // todo: this looks a little backwards. See if you can write it the other way around?
+            // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write
             var treatmentBMPNames = delineationStagings.Select(x => x.TreatmentBMPName).ToList();
             var treatmentBMPsToUpdate = stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
 
@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.DelineationUpload
 
                 treatmentBMP.Delineation = new Models.Delineation(
                     wktAndAnnotation.DelineationStagingGeometry,
-                    DelineationType.Distributed.DelineationTypeID, true, treatmentBMP.TreatmentBMPID, DateTime.Now) {VerifiedByPersonID = currentPerson.PersonID, DateLastVerified = DateTime.Now};
+                    DelineationType.Distributed.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now) {VerifiedByPersonID = currentPerson.PersonID, DateLastVerified = DateTime.Now};
             }
 
             return treatmentBMPsToUpdate.Count;

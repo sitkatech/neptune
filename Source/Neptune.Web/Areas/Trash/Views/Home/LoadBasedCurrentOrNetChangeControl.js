@@ -1,15 +1,15 @@
 ﻿L.Control.LoadBasedCurrentOrNetChangeControl = L.Control.extend({
     onAdd: function (map) {
-        //window.stopClickPropagation(this.parentElement);
         this.map = map;
 
         var div = L.DomUtil.create('div', 'neptune-leaflet-control leaflet-bar');
         div.innerHTML = "<form>" +
+            "<label>Loading rate<br />(gal/ac/year)</label><br />" +
             "<div class='radio-inline'>" +
-            "<label><input type='radio' name='CurrentOrNetChangeLoadingBool' value='true' checked='checked'>Current Loading</label>" +
-            "</div>" +
+            "<label><input type='radio' name='CurrentOrNetChangeLoadingBool' value='true' checked='checked'>Current</label>" +
+            "</div>" + "<br />" + 
             "<div class='radio-inline'>" +
-            "<label><input type='radio' name='CurrentOrNetChangeLoadingBool' value='false'> Net Change in Loading</label>" +
+            "<label><input type='radio' name='CurrentOrNetChangeLoadingBool' value='false'>Net Change </label>" +
             "</div>" +
             "<img style='display:block' id='shownLayerLegendImg'/>" +
             "</form>";

@@ -84,7 +84,7 @@ namespace Neptune.Web.Views.LandUseBlockUpload
                             "Permit as PermitType", $"{PersonID} as UploadedByPersonID"
                         };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "LandUseBlockStaging", columns,
-                            NeptuneWebConfiguration.DatabaseConnectionString);
+                            NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
                     }
                     catch (Exception e)
                     {
