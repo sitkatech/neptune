@@ -78,7 +78,7 @@
       </assemblies>
     </compilation>
     <!-- ASP.NET session cookie should be httponly and secure -->
-    <httpCookies httpOnlyCookies="true" requireSSL="true" lockItem="true"/>
+    <httpCookies httpOnlyCookies="true" requireSSL="true" lockItem="true" domain=".ocstormwatertools.org"/>
     <authentication mode="None"/>
     <pages>
       <namespaces/>
