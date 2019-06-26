@@ -72,9 +72,9 @@ namespace Neptune.Web.Views.DelineationUpload
                 }
                 catch (Exception e)
                 {
+                    SitkaLogger.Instance.LogAbridgedErrorMessage(e);
                     errors.Add(new ValidationResult(
                         "There was a problem uploading your file geodatabase. Verify it meets the requirements and is not corrupt."));
-                    SitkaLogger.Instance.LogDetailedErrorMessage(e);
                 }
             }
 
@@ -115,7 +115,7 @@ namespace Neptune.Web.Views.DelineationUpload
                 }
                 catch (Exception e)
                 {
-                    SitkaLogger.Instance.LogDetailedErrorMessage(e);
+                    SitkaLogger.Instance.LogAbridgedErrorMessage(e);
                     return false;
                 }
             }

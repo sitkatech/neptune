@@ -15,7 +15,8 @@ CREATE TABLE [dbo].[DelineationStaging](
  CONSTRAINT [AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID] UNIQUE NONCLUSTERED 
 (
 	[TreatmentBMPName] ASC,
-	[StormwaterJurisdictionID] ASC
+	[StormwaterJurisdictionID] ASC,
+	[UploadedByPersonID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 

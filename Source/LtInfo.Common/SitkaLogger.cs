@@ -54,6 +54,15 @@ namespace LtInfo.Common
             }
         }
 
+        /// <summary>
+        /// Logs an error message when it is inappropriate to include all request information.
+        /// </summary>
+        /// <param name="exception"></param>
+        public void LogAbridgedErrorMessage(Exception exception)
+        {
+            LogDetailedErrorMessage("Unhandled Exception", exception, null);
+        }
+        
         public void LogDetailedErrorMessage(Exception exception)
         {
             var context = HttpContext.Current;
