@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Spatial;
+﻿using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
@@ -61,6 +62,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
     public class UnionOfParcelsViewModel
     {
-        public int[] ParcelIDs { get; set; }
+        public List<int> ParcelIDs { get; set; }
     }
 }
