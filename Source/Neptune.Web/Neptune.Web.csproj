@@ -1307,6 +1307,7 @@
     <Content Include="Areas\DroolTool\Views\Home\About.cshtml" />
     <Compile Include="Areas\DroolTool\Controllers\BackboneSegmentController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cshtml" />
+    <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentExportController.cs" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
