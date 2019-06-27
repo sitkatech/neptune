@@ -19,14 +19,16 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Models
 {
@@ -82,6 +84,41 @@ namespace Neptune.Web.Models
                     LayerInitialVisibility.Show,
                     clickThrough);
             }).ToList();
+        }
+
+        public static string GetGeoserverRequestUrl(this StormwaterJurisdiction stormwaterJurisdiction,
+            OnlandVisualTrashAssessmentExportTypeEnum exportType)
+        {
+            string typeName;
+
+            switch (exportType)
+            {
+                case OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas:
+                    typeName = "OCStormwater:OnlandVisualTrashAssessmentAreas";
+                    break;
+                case OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects:
+                    typeName = "OCStormwater:OnlandVisualTrashAssessmentTransects";
+                    break;
+                case OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints:
+                    typeName = "OCStormwater:OnlandVisualTrashAssessmentObservationPoints";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(exportType), exportType, null);
+            }
+
+            var cqlFilter = $"StormwaterJurisdictionID={stormwaterJurisdiction.StormwaterJurisdictionID}";
+
+            var parameters = new
+            {
+                service = "WFS",
+                version = "1.0.0",
+                request = "GetFeature",
+                typeName,
+                outputFormat = "shape-zip",
+                cql_filter = cqlFilter
+            };
+
+            return $"{NeptuneWebConfiguration.ParcelMapServiceUrl}?{NeptuneHelpers.GetQueryString(parameters)}";
         }
     }
 }

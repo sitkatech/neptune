@@ -1,6 +1,19 @@
-﻿@using Neptune.Web.Views.Shared
+﻿@using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport.ExportAssessmentGeospatialData
-   
+
+@section JavascriptAndStylesContent
+{
+    <style>
+        .systemText {
+            margin-top: 5px;
+        }
+        .row {
+            margin-top: 5px;
+        }
+    </style>
+}
 
 @{
     ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
@@ -8,15 +21,41 @@
 
 @foreach (var jurisdiction in ViewDataTyped.StormwaterJurisdictions)
 {
-    
+
+    var organizationDisplayName = jurisdiction.GetOrganizationDisplayName();
+
     <div class="row">
         <div class="col-xs-12 col-sm-12">
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
-                    Jurisdiction: @jurisdiction.GetOrganizationDisplayName()
+                    Jurisdiction:
+                    @organizationDisplayName
                 </div>
                 <div class="panel-body">
-                    This is where your download links will go ❤️
+                    <div class="row">
+                        <div class="col-sm-4 text-right">
+                            <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas)">Download Assessment Areas</a>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="systemText">Download all Assessment Areas for @organizationDisplayName as a shapefile</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 text-right">
+                            <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas)">Download Observation Points</a>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="systemText">Download all Observation Points for @organizationDisplayName as a shapefile</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 text-right">
+                            <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects)">Download Assessment Transects</a>
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="systemText">Download all Assessment Transects for @organizationDisplayName as a shapefile</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

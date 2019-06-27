@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\OnlandVisualTrashAssessmentExportTypeEnum.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialDataViewData.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
