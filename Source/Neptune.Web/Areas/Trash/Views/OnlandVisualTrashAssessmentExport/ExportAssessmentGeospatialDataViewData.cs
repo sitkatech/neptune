@@ -16,7 +16,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport
             EntityName = "On-land Visual Trash Assessment";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = "Export Geospatial Data";
-            StormwaterJurisdictions = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            StormwaterJurisdictions = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList().OrderBy(x=>x.GetOrganizationDisplayName()).ToList();
             
         }
     }

@@ -1,7 +1,7 @@
 ﻿@using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
-@inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport.ExportAssessmentGeospatialData
+@inherits ExportAssessmentGeospatialData
 
 @section JavascriptAndStylesContent
 {
@@ -24,6 +24,11 @@
 
     var organizationDisplayName = jurisdiction.GetOrganizationDisplayName();
 
+    var showAreas = jurisdiction.OnlandVisualTrashAssessmentAreas.Any();
+    var showTransects = jurisdiction.OnlandVisualTrashAssessmentAreas.Any(x=>x.TransectLine!= null);
+    var showObservationPoints = jurisdiction.OnlandVisualTrashAssessments.Any(x=>x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID);
+    
+
     <div class="row">
         <div class="col-xs-12 col-sm-12">
             <div class="panel panelNeptune">
@@ -32,30 +37,73 @@
                     @organizationDisplayName
                 </div>
                 <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-4 text-right">
-                            <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas)">Download Assessment Areas</a>
+                    @if (showAreas)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas)">Download Assessment Areas</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">Download all Assessment Areas for @organizationDisplayName as a shapefile</p>
+                            </div>
                         </div>
-                        <div class="col-sm-8">
-                            <p class="systemText">Download all Assessment Areas for @organizationDisplayName as a shapefile</p>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" disabled="disabled">Download Assessment Areas</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">There are no Assessment Areas to export for @organizationDisplayName</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-right">
-                            <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints)">Download Observation Points</a>
+                    }
+                    @if (showObservationPoints)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints)">Download Observation Points</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">Download all Observation Points for @organizationDisplayName as a shapefile</p>
+                            </div>
                         </div>
-                        <div class="col-sm-8">
-                            <p class="systemText">Download all Observation Points for @organizationDisplayName as a shapefile</p>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" disabled="disabled">Download Observation Points</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">There are no Observation Points to export for @organizationDisplayName</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 text-right">
-                            <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects)">Download Assessment Transects</a>
+                    }
+                    @if (showTransects)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects)">Download Assessment Transects</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">Download all Assessment Transects for @organizationDisplayName as a shapefile</p>
+                            </div>
                         </div>
-                        <div class="col-sm-8">
-                            <p class="systemText">Download all Assessment Transects for @organizationDisplayName as a shapefile</p>
+                    }
+                    else
+                    {
+                        
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" disabled="disabled">Download Assessment Transects</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">There are no Assessment Transects to export for @organizationDisplayName</p>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
