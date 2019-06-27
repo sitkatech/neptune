@@ -1,4 +1,5 @@
-﻿using LtInfo.Common.MvcResults;
+﻿using LtInfo.Common.DesignByContract;
+using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea;
 using Neptune.Web.Common;
@@ -8,13 +9,10 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using LtInfo.Common.DbSpatial;
-using LtInfo.Common.DesignByContract;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -43,10 +41,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var newUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.NewAssessment(onlandVisualTrashAssessmentArea));
             var editDetailsUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditBasics(onlandVisualTrashAssessmentArea));
-            var editLocationUrl =
-                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditLocation(onlandVisualTrashAssessmentArea));
+            var confirmEditLocationUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.ConfirmEditLocation(onlandVisualTrashAssessmentArea));
             var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
-                onlandVisualTrashAssessmentArea, mapInitJson, newUrl, editDetailsUrl, editLocationUrl);
+                onlandVisualTrashAssessmentArea, mapInitJson, newUrl, editDetailsUrl, confirmEditLocationUrl);
 
             return RazorView<Views.OnlandVisualTrashAssessmentArea.Detail, Views.OnlandVisualTrashAssessmentArea.DetailViewData>(viewData);
         }
@@ -82,6 +80,35 @@ namespace Neptune.Web.Areas.Trash.Controllers
             SetMessageForDisplay("Successfully updated OVTA Area details");
 
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
+        }
+
+
+        [HttpGet]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        public ActionResult ConfirmEditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+
+            var viewModel = new ConfirmDialogFormViewModel(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
+            return ViewConfirmEditLocationOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
+        }
+
+        [HttpPost]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        public ActionResult ConfirmEditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+           return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(c => c.EditLocation(onlandVisualTrashAssessmentAreaPrimaryKey)));
+        }
+
+        private PartialViewResult ViewConfirmEditLocationOnlandVisualTrashAssessmentArea(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, ConfirmDialogFormViewModel viewModel)
+        {
+            var n = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count;
+
+            var confirmMessage = (n < 2) ? "Any changes you make to the Assessment Area will apply to all future assessments" : $"Any changes you make to the Assessment Area will apply to the {n} Assessments associated with this area. Proceed?";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
         private ViewResult ViewEditLocation(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditLocationViewModel viewModel)
