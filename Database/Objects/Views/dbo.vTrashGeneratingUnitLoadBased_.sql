@@ -39,12 +39,6 @@ From
 		on d.TreatmentBMPID = tbmp.TreatmentBMPID
 	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
-	left join dbo.PriorityLandUseType plut
-		on lub.PriorityLandUseTypeID = plut.PriorityLandUseTypeID
-	left join dbo.StormwaterJurisdiction sj
-		on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
-	left join dbo.Organization o
-		on o.OrganizationID = sj.OrganizationID
 Where tbmp.TrashCaptureStatusTypeID = 1
 	and tgu.LandUseBlockID is not null
 	and d.IsVerified = 1

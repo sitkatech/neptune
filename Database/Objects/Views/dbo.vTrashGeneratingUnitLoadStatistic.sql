@@ -6,7 +6,14 @@ Everything needed to calculate the color-ramp symbology for the load-based maps
 */
 Create view dbo.vTrashGeneratingUnitLoadStatistic
 as
-
+Select
+	*,
+	case
+		when CurrentLoadingRate < ProgressLoadingRate then CurrentLoadingRate - BaselineLoadingRate
+		else ProgressLoadingRate - BaselineLoadingRate
+	end as LoadingRateDelta
+from
+(
 Select
 	PrimaryKey,
 	TrashGeneratingUnitID,
@@ -19,10 +26,11 @@ Select
 	Case
 		When DelineationIsVerified = 0 then BaselineLoadingRate
 		When IsFullTrashCapture = 1 then 2.5
-		When BaselineLoadingRate * (1-PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
+		When BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		Else 2.5
 	end as CurrentLoadingRate,
-	ProgressLoadingRate - BaselineLoadingRate as LoadingRateDelta
+	ProgressLoadingRate,
+	DelineationIsVerified
 From (
 
 	Select
@@ -33,8 +41,8 @@ From (
 		tgu.StormwaterJurisdictionID,
 		IsNull(
 			Case
-				when score.TrashGenerationRate is null then lub.TrashGenerationRate
-				else score.TrashGenerationRate
+				when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
+				else scoreBaseline.TrashGenerationRate
 			end, 0
 		) as BaselineLoadingRate,
 		case
@@ -45,7 +53,11 @@ From (
 		IsNull(d.IsVerified, 0) as DelineationIsVerified,
 		IsNull(
 			Case
-				when scoreProgress.TrashGenerationRate is null then lub.TrashGenerationRate
+				when scoreProgress.TrashGenerationRate is null then 
+					case
+						when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
+						else scoreBaseline.TrashGenerationRate
+					end
 				else scoreProgress.TrashGenerationRate
 			end, 0
 		) as ProgressLoadingRate
@@ -55,8 +67,8 @@ From (
 			on tgu.LandUseBlockID = lub.LandUseBlockID
 		left join dbo.OnlandVisualTrashAssessmentArea area
 			on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
-		left join dbo.OnlandVisualTrashAssessmentScore score
-			on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
+		left join dbo.OnlandVisualTrashAssessmentScore scoreBaseline
+			on area.OnlandVisualTrashAssessmentBaselineScoreID = scoreBaseline.OnlandVisualTrashAssessmentScoreID
 		left join dbo.vOnlandVisualTrashAssessmentAreaProgress areaProgress
 			on tgu.OnlandVisualTrashAssessmentAreaID = areaProgress.OnlandVisualTrashAssessmentAreaID
 		left join dbo.OnlandVisualTrashAssessmentScore scoreProgress
@@ -76,7 +88,7 @@ From (
 	Where 
 		tgu.LandUseBlockID is not null
 ) subq
-
+) subq2
 GO
 
 Drop View If Exists dbo.vGeoServerTrashGeneratingUnitLoad
