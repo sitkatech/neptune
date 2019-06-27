@@ -1,8 +1,8 @@
-﻿using GeoJSON.Net.Feature;
-using LtInfo.Common.DbSpatial;
+﻿using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DesignByContract;
-using LtInfo.Common.GeoJson;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
+using Neptune.Web.Areas.Trash.Views;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -16,10 +16,6 @@ using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using System.Xml.XPath;
-using LtInfo.Common.Mvc;
-using MoreLinq;
-using Neptune.Web.Areas.Trash.Views;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;
@@ -53,7 +49,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson,
-                NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAIndex));
+                NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAIndex), SitkaRoute<OnlandVisualTrashAssessmentExportController>.BuildUrlFromExpression(x=>x.ExportAssessmentGeospatialData()));
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -382,7 +378,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
             SetMessageForDisplay("The OVTA was successfully finalized");
-            
+
 
             if (viewModel.Finalize.GetValueOrDefault())
             {
@@ -453,18 +449,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = onlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentArea.RecomputeTransectLine(out var transectBackingAssessment);
-                
-                
+
+
                 if (transectBackingAssessment != null)
                 {
                     transectBackingAssessment.IsTransectBackingAssessment = true;
                 }
             }
 
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
-            
-                SetMessageForDisplay("The OVTA was successfully returned to the \"In Progress\" status");
-            
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
+
+            SetMessageForDisplay("The OVTA was successfully returned to the \"In Progress\" status");
+
 
             return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                 x.RecordObservations(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)));

@@ -1,0 +1,24 @@
+﻿@using Neptune.Web.Views.Shared
+@inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport.ExportAssessmentGeospatialData
+   
+
+@{
+    ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
+}
+
+@foreach (var jurisdiction in ViewDataTyped.StormwaterJurisdictions)
+{
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Jurisdiction: @jurisdiction.GetOrganizationDisplayName()
+                </div>
+                <div class="panel-body">
+                    This is where your download links will go ❤️
+                </div>
+            </div>
+        </div>
+    </div>
+}

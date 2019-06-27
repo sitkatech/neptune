@@ -16,12 +16,13 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public string AreaGridName { get; }
         public string AreaGridDataUrl { get; }
         public string NewUrl { get; }
+        public string ExportUrl { get; }
         public bool HasManagePermissions { get; }
 
-
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, string exportUrl)
             : base(currentPerson, neptunePage)
         {
+            ExportUrl = exportUrl;
             PageTitle = "All OVTAs";
             EntityName = $"{FieldDefinition.OnlandVisualTrashAssessment.GetFieldDefinitionLabelPluralized()}";
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);

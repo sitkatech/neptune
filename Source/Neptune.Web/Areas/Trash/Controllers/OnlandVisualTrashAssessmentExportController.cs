@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -11,6 +12,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class OnlandVisualTrashAssessmentExportController : NeptuneBaseController
     {
+        public ViewResult ExportAssessmentGeospatialData()
+        {
+
+            return RazorView<ExportAssessmentGeospatialData, ExportAssessmentGeospatialDataViewData>(
+                new ExportAssessmentGeospatialDataViewData(CurrentPerson));
+        }
 
         private string BuildGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum exportType,
             StormwaterJurisdiction stormwaterJurisdiction)
