@@ -10,7 +10,8 @@ Select
 	o.LocationPoint,
 	o.Note,
 	a.CompletedDate,
-	Score.OnlandVisualTrashAssessmentScoreDisplayName as AssessmentScore
+	Score.OnlandVisualTrashAssessmentScoreDisplayName as AssessmentScore,
+	area.StormwaterJurisdictionID
 from
 	dbo.OnlandVisualTrashAssessmentObservation o join dbo.OnlandVisualTrashAssessment a
 		on o.OnlandVisualTrashAssessmentID = a.OnlandVisualTrashAssessmentID
