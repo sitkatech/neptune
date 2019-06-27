@@ -25,16 +25,22 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, int stormwaterJurisdictionID, decimal baselineLoadingRate, int isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, decimal? currentLoadingRate, decimal? loadingRateDelta) : this()
+        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, int isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, decimal? loadingRateDelta) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPName = treatmentBMPName;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
+            this.OrganizationID = organizationID;
+            this.OrganizationName = organizationName;
             this.BaselineLoadingRate = baselineLoadingRate;
             this.IsFullTrashCapture = isFullTrashCapture;
             this.PartialTrashCaptureEffectivenessPercentage = partialTrashCaptureEffectivenessPercentage;
             this.CurrentLoadingRate = currentLoadingRate;
+            this.ProgressLoadingRate = progressLoadingRate;
+            this.DelineationIsVerified = delineationIsVerified;
+            this.LastCalculatedDate = lastCalculatedDate;
             this.LoadingRateDelta = loadingRateDelta;
         }
 
@@ -46,11 +52,17 @@ namespace Neptune.Web.Models
             this.PrimaryKey = vTrashGeneratingUnitLoadStatistic.PrimaryKey;
             this.TrashGeneratingUnitID = vTrashGeneratingUnitLoadStatistic.TrashGeneratingUnitID;
             this.TreatmentBMPID = vTrashGeneratingUnitLoadStatistic.TreatmentBMPID;
+            this.TreatmentBMPName = vTrashGeneratingUnitLoadStatistic.TreatmentBMPName;
             this.StormwaterJurisdictionID = vTrashGeneratingUnitLoadStatistic.StormwaterJurisdictionID;
+            this.OrganizationID = vTrashGeneratingUnitLoadStatistic.OrganizationID;
+            this.OrganizationName = vTrashGeneratingUnitLoadStatistic.OrganizationName;
             this.BaselineLoadingRate = vTrashGeneratingUnitLoadStatistic.BaselineLoadingRate;
             this.IsFullTrashCapture = vTrashGeneratingUnitLoadStatistic.IsFullTrashCapture;
             this.PartialTrashCaptureEffectivenessPercentage = vTrashGeneratingUnitLoadStatistic.PartialTrashCaptureEffectivenessPercentage;
             this.CurrentLoadingRate = vTrashGeneratingUnitLoadStatistic.CurrentLoadingRate;
+            this.ProgressLoadingRate = vTrashGeneratingUnitLoadStatistic.ProgressLoadingRate;
+            this.DelineationIsVerified = vTrashGeneratingUnitLoadStatistic.DelineationIsVerified;
+            this.LastCalculatedDate = vTrashGeneratingUnitLoadStatistic.LastCalculatedDate;
             this.LoadingRateDelta = vTrashGeneratingUnitLoadStatistic.LoadingRateDelta;
             CallAfterConstructor(vTrashGeneratingUnitLoadStatistic);
         }
@@ -60,11 +72,17 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get; set; }
         public int TrashGeneratingUnitID { get; set; }
         public int? TreatmentBMPID { get; set; }
+        public string TreatmentBMPName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
+        public int? OrganizationID { get; set; }
+        public string OrganizationName { get; set; }
         public decimal BaselineLoadingRate { get; set; }
         public int IsFullTrashCapture { get; set; }
         public int PartialTrashCaptureEffectivenessPercentage { get; set; }
         public decimal? CurrentLoadingRate { get; set; }
+        public decimal ProgressLoadingRate { get; set; }
+        public bool DelineationIsVerified { get; set; }
+        public DateTime? LastCalculatedDate { get; set; }
         public decimal? LoadingRateDelta { get; set; }
     }
 }

@@ -42,7 +42,7 @@
             });
 
         function getTGUPopup(event) {
-            var layerName = "OCStormwater:TrashGeneratingUnits";
+            var layerName = "OCStormwater:TrashGeneratingUnitLoads";
             var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
 
             var latlng = event.latlng;
@@ -74,15 +74,15 @@
 
             var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
             var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);
-            var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+            //var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
 
             var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
-            var ovtaScore = "<strong>Governing OVTA Score:   </strong>";
-            if (properties.AssessmentScore != "NotProvided") {
-                ovtaScore += "<a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.AssessmentScore + "</a><br>";
-            } else {
-                ovtaScore += "Not Assessed<br>";
-            }
+            //var ovtaScore = "<strong>Governing OVTA Score:   </strong>";
+            //if (properties.AssessmentScore != "NotProvided") {
+            //    ovtaScore += "<a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.AssessmentScore + "</a><br>";
+            //} else {
+            //    ovtaScore += "Not Assessed<br>";
+            //}
             var BMPName = "<strong>BMP Name:   </strong>";
             if (properties.TreatmentBMPID) {
                 BMPName += "<a href='" + BMPDetailUrl + " 'target='_blank'>" + properties.TreatmentBMPName + "</a><br>";
@@ -91,6 +91,10 @@
             }
             var stormwaterJurisdictionName = "<strong>Stormwater Jurisdiction:   </strong><a href='" + organizationDetailUrl + "' target='_blank'>" + properties.OrganizationName + "</a><br>";
 
+            var baselineScore = "<strong>Baseline Loading Rate:    </strong>" + properties.BaselineLoadingRate + "</br>";
+            var currentScore = "<strong>Loading Rate via Trash Capture:    </strong>" + properties.CurrentLoadingRate + "</br>";
+            var progressScore = "<strong>Loading Rate via OVTA:    </strong>" + properties.ProgressLoadingRate + "</br>";
+            
             var lastCalculatedDate = "<strong>Last Calculated Date:   </strong>";
             if (properties.LastCalculatedDate != null) {
                 var date = new Date(properties.LastCalculatedDate);
@@ -99,7 +103,13 @@
                 lastCalculatedDate += "Not Assessed";
             }
 
-
-            return landUseType + ovtaScore + BMPName + stormwaterJurisdictionName + lastCalculatedDate;
+            return landUseType +
+                //ovtaScore +
+                BMPName +
+                stormwaterJurisdictionName +
+                lastCalculatedDate +
+                baselineScore +
+                currentScore +
+                progressScore;
         }
     });

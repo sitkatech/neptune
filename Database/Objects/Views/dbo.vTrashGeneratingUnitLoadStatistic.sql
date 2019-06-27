@@ -18,8 +18,11 @@ Select
 	PrimaryKey,
 	TrashGeneratingUnitID,
 	TreatmentBMPID,
+	TreatmentBMPName,
 	TrashGeneratingUnitGeometry,
 	StormwaterJurisdictionID,
+	OrganizationID,
+	OrganizationName,
 	BaselineLoadingRate,
 	IsFullTrashCapture,
 	PartialTrashCaptureEffectivenessPercentage,
@@ -30,15 +33,18 @@ Select
 		Else 2.5
 	end as CurrentLoadingRate,
 	ProgressLoadingRate,
-	DelineationIsVerified
+	DelineationIsVerified,
+	LastUpdateDate as LastCalculatedDate
 From (
-
 	Select
 		TrashGeneratingUnitID as PrimaryKey,
 		TrashGeneratingUnitID,
 		tbmp.TreatmentBMPID,
+		tbmp.TreatmentBMPName,
 		tgu.TrashGeneratingUnitGeometry as TrashGeneratingUnitGeometry,
 		tgu.StormwaterJurisdictionID,
+		o.OrganizationID,
+		o.OrganizationName,
 		IsNull(
 			Case
 				when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
@@ -60,7 +66,8 @@ From (
 					end
 				else scoreProgress.TrashGenerationRate
 			end, 0
-		) as ProgressLoadingRate
+		) as ProgressLoadingRate,
+		tgu.LastUpdateDate
 	From
 		dbo.TrashGeneratingUnit tgu
 		left join dbo.LandUseBlock lub
