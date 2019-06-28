@@ -3,14 +3,16 @@ GO
 
 create view dbo.vGeoServerAssessmentAreaExport as
 	Select
-		area.OnlandVisualTrashAssessmentAreaID,
-		area.OnlandVisualTrashAssessmentAreaName,
-		area.StormwaterJurisdictionID,
+		area.OnlandVisualTrashAssessmentAreaID as OVTAAreaID,
+		area.OnlandVisualTrashAssessmentAreaName as OVTAAreaName,
+		area.StormwaterJurisdictionID as JurisID,
+		o.OrganizationName as JurisName,
 		area.OnlandVisualTrashAssessmentAreaGeometry,
 		score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
-		ovta.OnlandVisualTrashAssessmentID,
+		ovta.OnlandVisualTrashAssessmentID as AssessmentID,
 		ovta.CompletedDate,
-		ovta.IsProgressAssessment
+		ovta.IsProgressAssessment,
+		area.AssessmentAreaDescription as [Description]
 	from dbo.OnlandVisualTrashAssessmentArea area
 		left join (
 			Select
@@ -21,6 +23,10 @@ create view dbo.vGeoServerAssessmentAreaExport as
 		) ovta on area.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID
 		left join dbo.OnlandVisualTrashAssessmentScore score
 			on ovta.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID
+		left join dbo.StormwaterJurisdiction sj
+			on area.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
+		left join dbo.Organization o
+			on sj.OrganizationID = o.OrganizationID
 	where 
 		RankByCompletedDate between 1 and 5
 		or RankByCompletedDate is null -- have to account for this being null so we get the results of the left outer join

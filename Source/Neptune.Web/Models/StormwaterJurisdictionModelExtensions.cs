@@ -94,13 +94,13 @@ namespace Neptune.Web.Models
             switch (exportType)
             {
                 case OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas:
-                    typeName = "OCStormwater:OnlandVisualTrashAssessmentAreas";
+                    typeName = "OCStormwater:AssessmentAreaExport";
                     break;
                 case OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects:
-                    typeName = "OCStormwater:OnlandVisualTrashAssessmentTransects";
+                    typeName = "OCStormwater:TransectLineExport";
                     break;
                 case OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints:
-                    typeName = "OCStormwater:OnlandVisualTrashAssessmentObservationPoints";
+                    typeName = "OCStormwater:ObservationPointExport";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(exportType), exportType, null);
