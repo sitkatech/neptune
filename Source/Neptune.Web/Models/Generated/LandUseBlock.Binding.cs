@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlock(int landUseBlockID, int? priorityLandUseTypeID, string landUseDescription, DbGeometry landUseBlockGeometry, decimal trashGenerationRate, string landUseForTGR, decimal medianHouseholdIncomeResidential, decimal medianHouseholdIncomeRetail, int stormwaterJurisdictionID, int permitTypeID) : this()
+        public LandUseBlock(int landUseBlockID, int? priorityLandUseTypeID, string landUseDescription, DbGeometry landUseBlockGeometry, decimal trashGenerationRate, string landUseForTGR, decimal? medianHouseholdIncomeResidential, decimal? medianHouseholdIncomeRetail, int stormwaterJurisdictionID, int permitTypeID) : this()
         {
             this.LandUseBlockID = landUseBlockID;
             this.PriorityLandUseTypeID = priorityLandUseTypeID;
@@ -47,15 +47,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlock(DbGeometry landUseBlockGeometry, decimal trashGenerationRate, decimal medianHouseholdIncomeResidential, decimal medianHouseholdIncomeRetail, int stormwaterJurisdictionID, int permitTypeID) : this()
+        public LandUseBlock(DbGeometry landUseBlockGeometry, decimal trashGenerationRate, int stormwaterJurisdictionID, int permitTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.LandUseBlockID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.LandUseBlockGeometry = landUseBlockGeometry;
             this.TrashGenerationRate = trashGenerationRate;
-            this.MedianHouseholdIncomeResidential = medianHouseholdIncomeResidential;
-            this.MedianHouseholdIncomeRetail = medianHouseholdIncomeRetail;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.PermitTypeID = permitTypeID;
         }
@@ -63,14 +61,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public LandUseBlock(DbGeometry landUseBlockGeometry, decimal trashGenerationRate, decimal medianHouseholdIncomeResidential, decimal medianHouseholdIncomeRetail, StormwaterJurisdiction stormwaterJurisdiction, PermitType permitType) : this()
+        public LandUseBlock(DbGeometry landUseBlockGeometry, decimal trashGenerationRate, StormwaterJurisdiction stormwaterJurisdiction, PermitType permitType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.LandUseBlockID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.LandUseBlockGeometry = landUseBlockGeometry;
             this.TrashGenerationRate = trashGenerationRate;
-            this.MedianHouseholdIncomeResidential = medianHouseholdIncomeResidential;
-            this.MedianHouseholdIncomeRetail = medianHouseholdIncomeRetail;
             this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.LandUseBlocks.Add(this);
@@ -82,7 +78,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static LandUseBlock CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction, PermitType permitType)
         {
-            return new LandUseBlock(default(DbGeometry), default(decimal), default(decimal), default(decimal), stormwaterJurisdiction, permitType);
+            return new LandUseBlock(default(DbGeometry), default(decimal), stormwaterJurisdiction, permitType);
         }
 
         /// <summary>
@@ -135,8 +131,8 @@ namespace Neptune.Web.Models
         public DbGeometry LandUseBlockGeometry { get; set; }
         public decimal TrashGenerationRate { get; set; }
         public string LandUseForTGR { get; set; }
-        public decimal MedianHouseholdIncomeResidential { get; set; }
-        public decimal MedianHouseholdIncomeRetail { get; set; }
+        public decimal? MedianHouseholdIncomeResidential { get; set; }
+        public decimal? MedianHouseholdIncomeRetail { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public int PermitTypeID { get; set; }
         [NotMapped]

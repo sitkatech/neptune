@@ -9,7 +9,7 @@ CREATE TABLE [dbo].[LandUseBlockStaging](
 	[LandUseBlockStagingGeometry] [geometry] NOT NULL,
 	[TrashGenerationRate] [decimal](4, 1) NOT NULL,
 	[LandUseForTGR] [varchar](80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[MedianHouseholdIncome] [numeric](18, 0) NOT NULL,
+	[MedianHouseholdIncome] [numeric](18, 0) NULL,
 	[StormwaterJurisdiction] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[PermitType] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[UploadedByPersonID] [int] NOT NULL,

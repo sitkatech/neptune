@@ -21,8 +21,8 @@ namespace Neptune.Web.Models
             Property(x => x.LandUseBlockGeometry).HasColumnName(@"LandUseBlockGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.TrashGenerationRate).HasColumnName(@"TrashGenerationRate").HasColumnType("decimal").IsRequired().HasPrecision(4,1);
             Property(x => x.LandUseForTGR).HasColumnName(@"LandUseForTGR").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(80);
-            Property(x => x.MedianHouseholdIncomeResidential).HasColumnName(@"MedianHouseholdIncomeResidential").HasColumnType("decimal").IsRequired();
-            Property(x => x.MedianHouseholdIncomeRetail).HasColumnName(@"MedianHouseholdIncomeRetail").HasColumnType("decimal").IsRequired();
+            Property(x => x.MedianHouseholdIncomeResidential).HasColumnName(@"MedianHouseholdIncomeResidential").HasColumnType("decimal").IsOptional();
+            Property(x => x.MedianHouseholdIncomeRetail).HasColumnName(@"MedianHouseholdIncomeRetail").HasColumnType("decimal").IsOptional();
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
             Property(x => x.PermitTypeID).HasColumnName(@"PermitTypeID").HasColumnType("int").IsRequired();
 

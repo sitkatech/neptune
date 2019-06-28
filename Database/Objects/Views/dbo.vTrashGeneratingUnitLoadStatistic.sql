@@ -94,6 +94,7 @@ From (
 			on o.OrganizationID = sj.OrganizationID
 	Where 
 		tgu.LandUseBlockID is not null
+		and (lub.TrashGenerationRate is not null or scoreBaseline.TrashGenerationRate is not null)
 ) subq
 ) subq2
 GO

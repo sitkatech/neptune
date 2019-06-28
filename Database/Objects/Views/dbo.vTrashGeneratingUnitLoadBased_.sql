@@ -42,6 +42,7 @@ From
 Where tbmp.TrashCaptureStatusTypeID = 1
 	and tgu.LandUseBlockID is not null
 	and d.IsVerified = 1
+	and (lub.TrashGenerationRate is not null or score.TrashGenerationRate is not null)
 GO
 
 /*
@@ -100,6 +101,7 @@ From
 Where tbmp.TrashCaptureStatusTypeID = 2
 	and tgu.LandUseBlockID is not null
 	and d.IsVerified = 1
+	and (lub.TrashGenerationRate is not null or score.TrashGenerationRate is not null)
 	) sub
 GO
 
@@ -149,7 +151,7 @@ From
 Where tgu.LandUseBlockID is not null
 	and area.OnlandVisualTrashAssessmentBaselineScoreID is not null
 	and pscore.TrashGenerationRate is not null
-	and bscore.TrashGenerationRate is not null
+	and (lub.TrashGenerationRate is not null or bscore.TrashGenerationRate is not null)
 GO
 
 /*
@@ -189,4 +191,5 @@ From dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
 Where
 	lub.LandUseBlockID is not null
 	and lub.PriorityLandUseTypeID <> 7
+	and (lub.TrashGenerationRate is not null or score.TrashGenerationRate is not null)
 GO
