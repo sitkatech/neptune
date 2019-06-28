@@ -26,6 +26,7 @@ Select
 	BaselineLoadingRate,
 	IsFullTrashCapture,
 	PartialTrashCaptureEffectivenessPercentage,
+	PriorityLandUseTypeDisplayName as LandUseType,
 	Case
 		When DelineationIsVerified = 0 then BaselineLoadingRate
 		When IsFullTrashCapture = 1 then 2.5
@@ -45,6 +46,7 @@ From (
 		tgu.StormwaterJurisdictionID,
 		o.OrganizationID,
 		o.OrganizationName,
+		plut.PriorityLandUseTypeDisplayName,
 		IsNull(
 			Case
 				when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
