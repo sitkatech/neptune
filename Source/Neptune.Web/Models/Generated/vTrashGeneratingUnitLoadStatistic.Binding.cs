@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, int isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, decimal? loadingRateDelta) : this()
+        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, int isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, string landUseType, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, decimal? loadingRateDelta) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
@@ -37,6 +37,7 @@ namespace Neptune.Web.Models
             this.BaselineLoadingRate = baselineLoadingRate;
             this.IsFullTrashCapture = isFullTrashCapture;
             this.PartialTrashCaptureEffectivenessPercentage = partialTrashCaptureEffectivenessPercentage;
+            this.LandUseType = landUseType;
             this.CurrentLoadingRate = currentLoadingRate;
             this.ProgressLoadingRate = progressLoadingRate;
             this.DelineationIsVerified = delineationIsVerified;
@@ -59,6 +60,7 @@ namespace Neptune.Web.Models
             this.BaselineLoadingRate = vTrashGeneratingUnitLoadStatistic.BaselineLoadingRate;
             this.IsFullTrashCapture = vTrashGeneratingUnitLoadStatistic.IsFullTrashCapture;
             this.PartialTrashCaptureEffectivenessPercentage = vTrashGeneratingUnitLoadStatistic.PartialTrashCaptureEffectivenessPercentage;
+            this.LandUseType = vTrashGeneratingUnitLoadStatistic.LandUseType;
             this.CurrentLoadingRate = vTrashGeneratingUnitLoadStatistic.CurrentLoadingRate;
             this.ProgressLoadingRate = vTrashGeneratingUnitLoadStatistic.ProgressLoadingRate;
             this.DelineationIsVerified = vTrashGeneratingUnitLoadStatistic.DelineationIsVerified;
@@ -79,6 +81,7 @@ namespace Neptune.Web.Models
         public decimal BaselineLoadingRate { get; set; }
         public int IsFullTrashCapture { get; set; }
         public int PartialTrashCaptureEffectivenessPercentage { get; set; }
+        public string LandUseType { get; set; }
         public decimal? CurrentLoadingRate { get; set; }
         public decimal ProgressLoadingRate { get; set; }
         public bool DelineationIsVerified { get; set; }
