@@ -106,7 +106,7 @@ namespace Neptune.Web.Models
                     throw new ArgumentOutOfRangeException(nameof(exportType), exportType, null);
             }
 
-            var cqlFilter = $"StormwaterJurisdictionID={stormwaterJurisdiction.StormwaterJurisdictionID}";
+            var cqlFilter = $"JurisID={stormwaterJurisdiction.StormwaterJurisdictionID}";
 
             var parameters = new
             {
