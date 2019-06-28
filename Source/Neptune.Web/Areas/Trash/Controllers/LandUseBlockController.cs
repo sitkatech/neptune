@@ -20,17 +20,17 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using LtInfo.Common.MvcResults;
-using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Areas.Trash.Views.LandUseBlock;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.LandUseBlock;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace Neptune.Web.Controllers
+namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class LandUseBlockController : NeptuneBaseController
     {
@@ -39,9 +39,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LandUseBlock);
-            var landUseBlockBulkUploadURL =
+            var landUseBlockBulkUploadUrl =
                 SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(x => x.UpdateLandUseBlockGeometry());
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, landUseBlockBulkUploadURL);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, landUseBlockBulkUploadUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
