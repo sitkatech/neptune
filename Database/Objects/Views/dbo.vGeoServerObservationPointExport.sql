@@ -1,8 +1,7 @@
-
-Drop View If Exists dbo.vGeoServerObservationPoint
+Drop View If Exists dbo.vGeoServerObservationPointExport
 go
 
-Create View dbo.vGeoServerObservationPoint
+Create View dbo.vGeoServerObservationPointExport
 as
 Select
 	OnlandVisualTrashAssessmentAreaName,
