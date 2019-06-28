@@ -8,7 +8,7 @@ using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.LandUseBlock
+namespace Neptune.Web.Areas.Trash.Views.LandUseBlock
 {
     public class LandUseBlockGridSpec : GridSpec<Models.LandUseBlock>
     {

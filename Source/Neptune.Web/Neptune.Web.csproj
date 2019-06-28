@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -448,7 +448,7 @@
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummaryViewData.cs" />
     <Compile Include="Models\TrashGeneratingUnit.cs" />
     <Compile Include="Common\AreaCalculationsHelper.cs" />
-    <Compile Include="Controllers\LandUseBlockController.cs" />
+    <Compile Include="Areas\Trash\Controllers\LandUseBlockController.cs" />
     <Compile Include="Areas\DroolTool\Views\Home\About.cs" />
     <Compile Include="Areas\DroolTool\Views\Home\AboutViewData.cs" />
     <Compile Include="Areas\DroolTool\Security\DroolToolEditFeature.cs" />
@@ -470,11 +470,11 @@
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobLaunchHelper.cs" />
     <Compile Include="ScheduledJobs\TrashGeneratingUnitAdjustmentScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\TrashGeneratingUnitRefreshScheduledBackgroundJob.cs" />
-    <Compile Include="Views\LandUseBlock\Index.cs" />
-    <Compile Include="Views\LandUseBlock\IndexViewData.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlock\Index.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlock\IndexViewData.cs" />
     <Compile Include="Areas\Trash\Views\TrashGeneratingUnit\Index.cs" />
     <Compile Include="Areas\Trash\Views\TrashGeneratingUnit\IndexViewData.cs" />
-    <Compile Include="Views\LandUseBlock\LandUseBlockGridSpec.cs" />
+    <Compile Include="Areas\Trash\Views\LandUseBlock\LandUseBlockGridSpec.cs" />
     <Compile Include="Areas\Trash\Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />
     <Compile Include="Models\OVTAResultsSimple.cs" />
     <Compile Include="Areas\Trash\Controllers\TrashGeneratingUnitController.cs" />
@@ -1796,7 +1796,7 @@
     <Content Include="Views\TreatmentBMP\UploadTreatmentBMPs.cshtml" />
     <Content Include="Views\Shared\ProjectControls\BulkRowBMPDelineation.cshtml" />
     <Content Include="Areas\Trash\Views\TrashGeneratingUnit\Index.cshtml" />
-    <Content Include="Views\LandUseBlock\Index.cshtml" />
+    <Content Include="Areas\Trash\Views\LandUseBlock\Index.cshtml" />
     <Content Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cshtml" />
     <Content Include="Views\DelineationUpload\ApproveDelineationGisUpload.cshtml" />
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewModel.cs" />

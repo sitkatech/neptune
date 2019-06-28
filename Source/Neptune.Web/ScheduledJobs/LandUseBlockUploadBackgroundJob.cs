@@ -99,34 +99,34 @@ namespace Neptune.Web.ScheduledJobs
                 }
                 else
                 {
-                    var stormwaterJurisdiction = stormwaterJurisdictions
+                    var stormwaterJurisdictionToAssign = stormwaterJurisdictions
                         .Single(x => x.Organization.OrganizationName == landUseBlockStaging.StormwaterJurisdiction);
-                    if (stormwaterJurisdictionsPersonCanEdit.Select(x=>x.StormwaterJurisdictionID).Contains(stormwaterJurisdiction.StormwaterJurisdictionID))
+                    if (stormwaterJurisdictionsPersonCanEdit.Select(x=>x.StormwaterJurisdictionID).Contains(stormwaterJurisdictionToAssign.StormwaterJurisdictionID))
                     {
-                        landUseBlock.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
+                        landUseBlock.StormwaterJurisdictionID = stormwaterJurisdictionToAssign.StormwaterJurisdictionID;
+                        if (landUseBlockStaging.LandUseBlockStagingGeometry == null)
+                        {
+                            errorList.Add($"The Land Use Block Geometry at row {count} is null. A value must be provided");
+                        }
+                        else
+                        {
+
+                            var clippedGeometry = landUseBlock.LandUseBlockGeometry = landUseBlockStaging.LandUseBlockStagingGeometry.Intersection(stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry);
+
+                            if (clippedGeometry.IsEmpty)
+                            {
+                                errorList.Add($"The Land Use Block Geometry at row {count} is not in the assigned Stormwater Jurisdiction. Please make sure Land Use Block is in {stormwaterJurisdictionToAssign.Organization.OrganizationName}.");
+                            }
+
+                        }
                     }
                     else
                     {
-                        errorList.Add($"You do not have permission to edit Stormwater Jurisdiction {stormwaterJurisdiction.Organization.OrganizationName}. Please remove all features with this Stormwater Jurisdiction from the upload and try again.");
+                        errorList.Add($"You do not have permission to edit Stormwater Jurisdiction {stormwaterJurisdictionToAssign.Organization.OrganizationName}. Please remove all features with this Stormwater Jurisdiction from the upload and try again.");
                     }
                 }
 
-                if (landUseBlockStaging.LandUseBlockStagingGeometry == null)
-                {
-                    errorList.Add($"The Land Use Block Geometry at row {count} is null. A value must be provided");
-                }
-                else
-                {
-                    var stormwaterJurisdiction = stormwaterJurisdictions
-                        .Single(x => x.StormwaterJurisdictionID == landUseBlock.StormwaterJurisdictionID);
-                    var clippedGeometry = landUseBlock.LandUseBlockGeometry = landUseBlockStaging.LandUseBlockStagingGeometry.Intersection(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
-
-                    if (clippedGeometry.IsEmpty)
-                    {
-                        errorList.Add($"The Land Use Block Geometry at row {count} is not in the assigned Stormwater Jurisdiction. Please make sure Land Use Block is in {stormwaterJurisdiction.Organization.OrganizationName}.");
-                    }
-
-                }
+                
 
                 var permitType = landUseBlockStaging.PermitType;
                 if (string.IsNullOrEmpty(permitType))
