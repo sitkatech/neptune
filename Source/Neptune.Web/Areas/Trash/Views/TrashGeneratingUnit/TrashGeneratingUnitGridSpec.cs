@@ -37,7 +37,7 @@ namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
                     return "N/A";
                 }
 
-                return (x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate : x.LandUseBlock.TrashGenerationRate).ToString(CultureInfo.InvariantCulture);
+                return (x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScore != null ? x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore.TrashGenerationRate : x.LandUseBlock.TrashGenerationRate).GetValueOrDefault().ToString(CultureInfo.InvariantCulture);
             }, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
 
             Add("Current Loading Rate", x => CurrentLoadingRate(x), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
