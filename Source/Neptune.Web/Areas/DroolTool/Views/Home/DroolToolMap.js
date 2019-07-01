@@ -204,11 +204,6 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
                 }
-
-                var drainID = geoJsonResponse.features[0].properties.DrainID;
-
-                self.DisplayStormshed(drainID);
-
                 self.SelectNeighborhood(geoJsonResponse);
             });
 
@@ -282,6 +277,11 @@ NeptuneMaps.DroolToolMap.prototype.setSelectedNeighborhood = function (feature) 
 };
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
+
+    var drainID = geoJson.features[0].properties.DrainID;
+
+    this.DisplayStormshed(drainID);
+
     this.setSelectedNeighborhood(geoJson);
     this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
 
