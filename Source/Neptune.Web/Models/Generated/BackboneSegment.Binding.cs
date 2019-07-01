@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public BackboneSegment(int backboneSegmentID, DbGeometry backboneSegmentGeometry, int catchIDN, int? networkCatchmentID, int backboneSegmentTypeID, int? downstreamBackboneSegmentID) : this()
+        public BackboneSegment(int backboneSegmentID, DbGeometry backboneSegmentGeometry, int catchIDN, int? networkCatchmentID, int backboneSegmentTypeID, int? downstreamBackboneSegmentID, string streamName) : this()
         {
             this.BackboneSegmentID = backboneSegmentID;
             this.BackboneSegmentGeometry = backboneSegmentGeometry;
@@ -38,6 +38,7 @@ namespace Neptune.Web.Models
             this.NetworkCatchmentID = networkCatchmentID;
             this.BackboneSegmentTypeID = backboneSegmentTypeID;
             this.DownstreamBackboneSegmentID = downstreamBackboneSegmentID;
+            this.StreamName = streamName;
         }
 
         /// <summary>
@@ -123,6 +124,7 @@ namespace Neptune.Web.Models
         public int? NetworkCatchmentID { get; set; }
         public int BackboneSegmentTypeID { get; set; }
         public int? DownstreamBackboneSegmentID { get; set; }
+        public string StreamName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return BackboneSegmentID; } set { BackboneSegmentID = value; } }
 

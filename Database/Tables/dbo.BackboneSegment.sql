@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[BackboneSegment](
 	[NetworkCatchmentID] [int] NULL,
 	[BackboneSegmentTypeID] [int] NOT NULL,
 	[DownstreamBackboneSegmentID] [int] NULL,
+	[StreamName] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_BackboneSegment_BackboneSegmentID] PRIMARY KEY CLUSTERED 
 (
 	[BackboneSegmentID] ASC

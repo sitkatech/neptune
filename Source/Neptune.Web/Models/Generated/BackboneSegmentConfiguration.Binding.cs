@@ -21,6 +21,7 @@ namespace Neptune.Web.Models
             Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsOptional();
             Property(x => x.BackboneSegmentTypeID).HasColumnName(@"BackboneSegmentTypeID").HasColumnType("int").IsRequired();
             Property(x => x.DownstreamBackboneSegmentID).HasColumnName(@"DownstreamBackboneSegmentID").HasColumnType("int").IsOptional();
+            Property(x => x.StreamName).HasColumnName(@"StreamName").HasColumnType("varchar").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.NetworkCatchment).WithMany(b => b.BackboneSegments).HasForeignKey(c => c.NetworkCatchmentID).WillCascadeOnDelete(false); // FK_BackboneSegment_NetworkCatchment_NetworkCatchmentID
