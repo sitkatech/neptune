@@ -128,11 +128,11 @@
                     <div class="col-xs-7">
                         @if (ViewDataTyped.UserIsAdmin)
                         {
-                            @ViewDataTyped.Person.DroolToolRole.GetDisplayNameAsUrl()
+                            @ViewDataTyped.Person.GetDroolToolRoleDisplayNameAsUrl()
                         }
                         else
                         {
-                            @ViewDataTyped.Person.DroolToolRole.DroolToolRoleDisplayName
+                            @ViewDataTyped.Person.GetDroolToolRoleDisplayName()
                         }
                     </div>
                 </div>

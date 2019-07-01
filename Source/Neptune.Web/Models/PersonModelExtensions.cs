@@ -211,5 +211,23 @@ namespace Neptune.Web.Models
                 ? ""
                 : $"StormwaterJurisdictionID NOT IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
         }
+
+        public static HtmlString GetDroolToolRoleDisplayNameAsUrl(this Person person)
+        {
+            if (person.DroolToolRole != null)
+            {
+                return person.DroolToolRole.GetDisplayNameAsUrl();
+            }
+            else return new HtmlString("<p class='systemText'>No Drool Tool role set</p>");
+        }
+
+        public static HtmlString GetDroolToolRoleDisplayName(this Person person)
+        {
+            if (person.DroolToolRole != null)
+            {
+                return new HtmlString(person.DroolToolRole.DroolToolRoleDisplayName);
+            }
+            else return new HtmlString("<p class='systemText'>No Drool Tool role set</p>");
+        }
     }
 }

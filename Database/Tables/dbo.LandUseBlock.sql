@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[LandUseBlock](
 	[PriorityLandUseTypeID] [int] NULL,
 	[LandUseDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[LandUseBlockGeometry] [geometry] NOT NULL,
-	[TrashGenerationRate] [decimal](4, 1) NOT NULL,
+	[TrashGenerationRate] [decimal](4, 1) NULL,
 	[LandUseForTGR] [varchar](80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MedianHouseholdIncomeResidential] [numeric](18, 0) NULL,
 	[MedianHouseholdIncomeRetail] [numeric](18, 0) NULL,
