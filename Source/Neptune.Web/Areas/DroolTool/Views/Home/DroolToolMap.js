@@ -99,6 +99,7 @@ L.Control.NominatimSearchControl = L.Control.extend({
                 // NP/JHB June 2019 deliberate decision not to invest in deciding between multiple results
                 var lat = response[0].lat;
                 var lon = response[0].lon;
+                self.neptuneMap.SetClickMarker(lat, lon);
 
                 var customParams = {
                     cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
@@ -207,6 +208,8 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
                 self.SelectNeighborhood(geoJsonResponse);
             });
 
+            self.SetClickMarker(evt.latlng.lat, evt.latlng.lng)
+
         });
 
     this.showLocationControl = L.control.showLocationControl({
@@ -275,6 +278,21 @@ NeptuneMaps.DroolToolMap.prototype.setSelectedNeighborhood = function (feature) 
 
     this.lastSelected.bringToFront();
 };
+
+NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
+    if (this.clickMarker) {
+        this.map.removeLayer(this.clickMarker);
+    }
+
+    var icon = L.MakiMarkers.icon({
+        icon: "marker",
+        color: "#FFFF00",
+        size: "m"
+    });
+
+    this.clickMarker = L.marker({ lat: lat, lon: lon }, {icon:icon});
+    this.clickMarker.addTo(this.map);
+}
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
 
