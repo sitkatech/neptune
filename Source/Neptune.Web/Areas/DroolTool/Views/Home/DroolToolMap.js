@@ -164,7 +164,6 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
             { pane: "neighborhoodPane", styles: "neighborhood" },
             true);
 
-
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>",
         false);
@@ -179,18 +178,13 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
         neptuneMap: this
     });
 
-
-
-
     window.nominatimSearchControl = this.nominatimSearchControl;
     this.nominatimSearchControl.addTo(this.map);
-
-
+    
     this.neighborhoodDetailControl = L.control.neighborhoodDetailControl({
         position: "topleft",
         neptuneMap: this
     });
-
 
     this.neighborhoodDetailControl.addTo(this.map);
     var self = this;
@@ -206,10 +200,15 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
             L.Util.extend(customParams, self.neighborhoodLayerParams);
 
-            searchGeoserver(config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
+            searchGeoserver(self.config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
                 }
+
+                var drainID = geoJsonResponse.features[0].properties.DrainID;
+
+                self.DisplayStormshed(drainID);
+
                 self.SelectNeighborhood(geoJsonResponse);
             });
 
@@ -223,10 +222,68 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
+NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function(drainID) {
+    var customParams = {
+        cql_filter: "DrainID = '" + drainID + "'"
+    };
+
+    L.Util.extend(customParams, this.neighborhoodLayerParams);
+    var self = this;
+    searchGeoserver(this.config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
+        if (geoJsonResponse.totalFeatures === 0) {
+            return null;
+        }
+
+        if (self.stormshedLayer) {
+            self.map.removeLayer(self.stormshedLayer);
+        }
+
+        self.stormshedLayer = L.geoJson(geoJsonResponse,
+            {
+                style: function(feature) {
+                    return {
+                        fillColor: "#ffbd38",
+                        fill: true,
+                        fillOpacity: 0.4,
+                        color: "#ffaf0f",
+                        weight: 5,
+                        stroke: true
+                    };
+                }
+            });
+        self.stormshedLayer.addTo(self.map);
+        self.stormshedLayer.bringToBack();
+    });
+};
+
+
+NeptuneMaps.DroolToolMap.prototype.setSelectedNeighborhood = function (feature) {
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
+        this.map.removeLayer(this.lastSelected);
+    }
+
+    this.lastSelected = L.geoJson(feature,
+        {
+            style: function (feature) {
+                return {
+                    fillColor: "#ffad0a",
+                    fill: true,
+                    fillOpacity: 0.4,
+                    color: "#ffff00",
+                    weight: 5,
+                    stroke: true
+                };
+            }
+        });
+
+    this.lastSelected.addTo(this.map);
+
+    this.lastSelected.bringToFront();
+};
+
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
-    this.setSelectedFeature(geoJson);
+    this.setSelectedNeighborhood(geoJson);
     this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
-    this.map.fitBounds(this.lastSelected.getBounds());
 
     var self = this;
 
@@ -257,8 +314,6 @@ NeptuneMaps.DroolToolMap.prototype.highlightFlow = function(geoJson) {
         weight: 3,
         stroke: true
     });
-
-    this.map.fitBounds(this.backboneLayer.getBounds());
 };
 
 function searchGeoserver(geoServerUrl, params) {

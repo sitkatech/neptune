@@ -37,6 +37,9 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, customOptions) {
     var esriTerrainUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
     var esriTerrain = L.tileLayer.wms(esriTerrainUrl, tileOptions);
 
+    //var esriHillsahdeUrl = 'https://services.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}';
+    //var esriHillsahde = L.tileLayer.wms(esriHillsahdeUrl, tileOptions);
+
     var streetLabelsLayer = new L.TileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {});
 
     var baseLayers = { 'Aerial': esriAerial, 'Street': esriStreet, 'Terrain': esriTerrain };
