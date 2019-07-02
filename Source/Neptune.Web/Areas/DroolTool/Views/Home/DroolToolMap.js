@@ -169,13 +169,13 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
         this.addWmsLayer("OCStormwater:Backbone",
             "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Streams</span>",
             { pane: "neighborhoodPane", styles: "backbone" },
-            true);
+            false);
 
     this.watershedLayer =
         this.addWmsLayer("OCStormwater:Watersheds",
             "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Watersheds</span>",
             { pane: "neighborhoodPane", styles: "watershed" },
-            true);
+            false);
 
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>",
@@ -307,7 +307,7 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
 }
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
-
+    this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
     var drainID = geoJson.features[0].properties.DrainID;
 
     this.DisplayStormshed(drainID);
@@ -315,34 +315,32 @@ NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     this.setSelectedNeighborhood(geoJson);
     this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
 
-    var self = this;
+    if (this.traceLayer) {
+        this.traceLayer.remove();
+        this.traceLayer = null;
+    }
+};
 
-    getBackbone(geoJson.features[0].properties.NetworkCatchmentID, this.config.BackboneTraceUrlTemplate).then(function (response) {
+NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
+    var self = this;
+    getTrace(this.selectedNeighborhoodID, this.config.BackboneTraceUrlTemplate).then(function (response) {
         var backboneFeatureCollection = JSON.parse(response);
-        if (self.backboneLayer) {
-            self.backboneLayer.remove();
-            self.backboneLayer = null;
+        if (self.traceLayer) {
+            self.traceLayer.remove();
+            self.traceLayer = null;
         }
 
-        self.backboneLayer = L.geoJSON(backboneFeatureCollection,
+        self.traceLayer = L.geoJSON(backboneFeatureCollection,
             {
                 style: function (feature) {
                     return {
-                        color: "#0000FF",
-                        weight: 3,
+                        color: "#FFFF00",
+                        weight: 8,
                         stroke: true
                     };
                 }
             });
-        self.backboneLayer.addTo(self.map);
-    });
-};
-
-NeptuneMaps.DroolToolMap.prototype.highlightFlow = function(geoJson) {
-    this.backboneLayer.setStyle({
-        color: "#FFFF00",
-        weight: 3,
-        stroke: true
+        self.traceLayer.addTo(self.map);
     });
 };
 
@@ -353,7 +351,7 @@ function searchGeoserver(geoServerUrl, params) {
     });
 }
 
-function getBackbone(neighborhoodID, urlTemplate) {
+function getTrace(neighborhoodID, urlTemplate) {
     var backboneUrl = new Sitka.UrlTemplate(urlTemplate).ParameterReplace(neighborhoodID);
 
     return jQuery.ajax({
