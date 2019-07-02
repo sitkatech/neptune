@@ -1,4 +1,5 @@
-﻿using LtInfo.Common;
+﻿using System.Linq;
+using LtInfo.Common;
 using Neptune.Web.Areas.DroolTool.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -13,7 +14,8 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             PageTitle = "Welcome";
 
             GeoserverUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
-            StormwaterMapInitJson = new StormwaterMapInitJson("droolToolMap");
+            StormwaterMapInitJson = new StormwaterMapInitJson("droolToolMap", MapInitJson.DefaultZoomLevel,
+                MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(), new BoundingBox(HttpRequestStorage.DatabaseEntities.Watersheds.Select(x=>x.WatershedGeometry)));
 
             DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl);
         }
