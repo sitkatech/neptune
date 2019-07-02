@@ -30,11 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Watershed(int watershedID, DbGeometry watershedGeometry, string wwatershedName) : this()
+        public Watershed(int watershedID, DbGeometry watershedGeometry, string watershedName) : this()
         {
             this.WatershedID = watershedID;
             this.WatershedGeometry = watershedGeometry;
-            this.WwatershedName = wwatershedName;
+            this.WatershedName = watershedName;
         }
 
 
@@ -82,7 +82,7 @@ namespace Neptune.Web.Models
         [Key]
         public int WatershedID { get; set; }
         public DbGeometry WatershedGeometry { get; set; }
-        public string WwatershedName { get; set; }
+        public string WatershedName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WatershedID; } set { WatershedID = value; } }
 
@@ -90,7 +90,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int WwatershedName = 50;
+            public const int WatershedName = 50;
         }
     }
 }

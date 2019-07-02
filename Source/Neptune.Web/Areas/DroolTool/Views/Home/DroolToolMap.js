@@ -165,6 +165,18 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
             { pane: "neighborhoodPane", styles: "neighborhood" },
             true);
 
+    this.backboneLayer =
+        this.addWmsLayer("OCStormwater:Backbone",
+            "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Streams</span>",
+            { pane: "neighborhoodPane", styles: "backbone" },
+            true);
+
+    this.watershedLayer =
+        this.addWmsLayer("OCStormwater:Watersheds",
+            "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Watersheds</span>",
+            { pane: "neighborhoodPane", styles: "watershed" },
+            true);
+
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>",
         false);

@@ -5,7 +5,7 @@ GO
 CREATE TABLE [dbo].[Watershed](
 	[WatershedID] [int] IDENTITY(1,1) NOT NULL,
 	[WatershedGeometry] [geometry] NULL,
-	[WwatershedName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[WatershedName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_Watershed_WatershedID] PRIMARY KEY CLUSTERED 
 (
 	[WatershedID] ASC
