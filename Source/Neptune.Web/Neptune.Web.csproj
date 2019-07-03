@@ -976,6 +976,8 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\DroolTool\Content\h2oc_color_logo.PNG" />
+    <Content Include="Areas\DroolTool\Content\mnwd_color_logo.jpg" />
     <Content Include="Areas\DroolTool\Content\udt_color_logo.png" />
     <Content Include="Areas\DroolTool\Content\udt_mchr_logo.png" />
     <Content Include="Areas\DroolTool\Views\Home\DroolToolMap.js" />
