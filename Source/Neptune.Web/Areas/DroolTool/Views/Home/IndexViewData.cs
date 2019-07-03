@@ -8,8 +8,15 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
 {
     public class IndexViewData : DroolToolModuleViewData
     {
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage, true)
+        public bool FirstTimeVisit { get; }
+
+        public StormwaterMapInitJson StormwaterMapInitJson { get; }
+        public string GeoserverUrl { get; }
+        public DroolToolMapConfig DroolToolMapConfig { get; }
+
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, bool firstTimeVisit) : base(currentPerson, neptunePage, true)
         {
+            FirstTimeVisit = firstTimeVisit;
             EntityName = "Urban Drool Tool";
             PageTitle = "Welcome";
 
@@ -19,10 +26,6 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
 
             DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl);
         }
-
-        public StormwaterMapInitJson StormwaterMapInitJson { get; }
-        public string GeoserverUrl { get; }
-        public DroolToolMapConfig DroolToolMapConfig { get; }
     }
 
     public class DroolToolMapConfig

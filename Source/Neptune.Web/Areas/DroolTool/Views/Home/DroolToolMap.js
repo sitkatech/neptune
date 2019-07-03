@@ -146,8 +146,18 @@ L.Control.NominatimSearchControl = L.Control.extend({
     },
 });
 
+L.Control.ExplorerTrayControl = L.Control.extend({
+    onAdd: function(map) {
+        this.parentElement = L.DomUtil.create("div", "explorerTray");
+        return this.parentElement;
+    }
+
+});
+
+
 L.control.nominatimSearchControl = function (options) { return new L.Control.NominatimSearchControl(options); };
 L.control.neighborhoodDetailControl = function (options) { return new L.Control.NeighborhoodDetailControl(options); };
+L.control.explorerTrayControl = function (options) { return new L.Control.ExplorerTrayControl(options); };
 
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
@@ -200,6 +210,15 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
     });
 
     this.neighborhoodDetailControl.addTo(this.map);
+    
+    this.explorerTrayControl = L.control.explorerTrayControl({
+        position: "bottomright",
+        neptuneMap: this
+    });
+
+    this.explorerTrayControl.addTo(this.map);
+
+
     var self = this;
     this.map.on("click",
         function (evt) {

@@ -46,6 +46,18 @@
         #nominatimSearchInput {
             margin-top: 15px;
         }
+
+        .leaflet-bottom.leaflet-right {
+            width: 100%;
+        }
+
+        .explorerTray {
+            width: 60%;
+            height: 100px;
+            background-color: #00c1d5;
+            margin: 0 !important;
+            border-radius: 50px 0 0;
+        }
     </style>
 }
 
@@ -76,4 +88,17 @@
             </div>
         </div>
     </div>
+}
+
+@if (ViewDataTyped.FirstTimeVisit)
+{
+    <script>
+        window.alert("It's your first time visting!");
+    </script>
+}
+else
+{
+    <script>
+        window.alert("It's not your first time vissting!");
+    </script>
 }
