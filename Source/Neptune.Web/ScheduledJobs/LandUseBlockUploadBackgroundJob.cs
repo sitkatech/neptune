@@ -169,16 +169,21 @@ namespace Neptune.Web.ScheduledJobs
                 //}
 
                 // NP 6/25 SUPER gross to fire plain sql at the db, but trying to use the ORM as above results in exceeding any reasonable timeout
-                var landUseBlockIDsToClear = stormwaterJurisdictionToClears.SelectMany(x=>x.LandUseBlocks).Select(x=>x.LandUseBlockID);
-                var landUseBlockIDsToClearCommaSeparatedString = string.Join(",", landUseBlockIDsToClear);
-                
-                var nullOutTGULandUseBlockIDs =
-                    $"UPDATE dbo.TrashGeneratingUnit SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
-                var deleteLandUseBlocks = $"DELETE FROM dbo.LandUseBlock WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
+                var landUseBlockIDsToClear = stormwaterJurisdictionToClears.SelectMany(x=>x.LandUseBlocks).Select(x=>x.LandUseBlockID).ToList();
 
-                DbContext.Database.CommandTimeout = 960;
-                DbContext.Database.ExecuteSqlCommand(nullOutTGULandUseBlockIDs);
-                DbContext.Database.ExecuteSqlCommand(deleteLandUseBlocks);
+                if (landUseBlockIDsToClear.Any())
+                {
+                    var landUseBlockIDsToClearCommaSeparatedString = string.Join(",", landUseBlockIDsToClear);
+
+                    var nullOutTGULandUseBlockIDs =
+                        $"UPDATE dbo.TrashGeneratingUnit SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
+                    var deleteLandUseBlocks =
+                        $"DELETE FROM dbo.LandUseBlock WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
+
+                    DbContext.Database.CommandTimeout = 960;
+                    DbContext.Database.ExecuteSqlCommand(nullOutTGULandUseBlockIDs);
+                    DbContext.Database.ExecuteSqlCommand(deleteLandUseBlocks);
+                }
 
                 DbContext.LandUseBlocks.AddRange(landUseBlocksToUpload);
                 DbContext.SaveChanges(person);
