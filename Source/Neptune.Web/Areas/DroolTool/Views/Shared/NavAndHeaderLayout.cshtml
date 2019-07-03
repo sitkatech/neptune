@@ -50,29 +50,8 @@
 <body>
     <div class="expandToFillScreen">
         <header class="neptuneHeader">
-            @{ Html.RenderRazorSitkaPartial<NeptuneNavBar, NeptuneNavBarViewData>(ViewDataTyped.NeptuneNavBarViewData);}
+            
         </header>
-        <nav class="navbar neptuneNavbar">
-            <div>
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#neptune-collapse-navbar" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
-                    </button>
-                </div>
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="neptune-collapse-navbar">
-                    <ul class="nav navbar-nav navbar-left">
-                        @foreach (var topLevelMenu in ViewDataTyped.TopLevelLtInfoMenuItems)
-                        {
-                            @topLevelMenu.RenderMenu()
-                        }
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div>
-        </nav>
 
         @RenderSection("BeforeBodyContainer", false)
 
