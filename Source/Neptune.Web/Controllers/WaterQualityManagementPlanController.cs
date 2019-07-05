@@ -60,6 +60,7 @@ namespace Neptune.Web.Controllers
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
             var treatmentBmpGeoJsonFeatureCollection =
                 waterQualityManagementPlan.TreatmentBMPs.ToGeoJsonFeatureCollection();
+
             treatmentBmpGeoJsonFeatureCollection.Features.ForEach(x =>
             {
                 var treatmentBmpID = x.Properties.ContainsKey("TreatmentBMPID")

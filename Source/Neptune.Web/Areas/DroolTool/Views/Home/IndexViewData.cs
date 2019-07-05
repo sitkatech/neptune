@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using LtInfo.Common;
+﻿using LtInfo.Common;
 using Neptune.Web.Areas.DroolTool.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -10,20 +9,19 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
     {
         public bool FirstTimeVisit { get; }
 
-        public StormwaterMapInitJson StormwaterMapInitJson { get; }
+        public DroolToolMapInitJson StormwaterMapInitJson { get; }
         public string GeoserverUrl { get; }
         public DroolToolMapConfig DroolToolMapConfig { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, bool firstTimeVisit) : base(currentPerson, neptunePage, true)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, bool firstTimeVisit, DroolToolMapInitJson mapInitJson) : base(currentPerson, neptunePage, true)
         {
             FirstTimeVisit = firstTimeVisit;
             EntityName = "Urban Drool Tool";
             PageTitle = "Welcome";
 
             GeoserverUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
-            StormwaterMapInitJson = new StormwaterMapInitJson("droolToolMap", MapInitJson.DefaultZoomLevel,
-                MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(), new BoundingBox(HttpRequestStorage.DatabaseEntities.Watersheds.Select(x=>x.WatershedGeometry)));
 
+            StormwaterMapInitJson = mapInitJson;
             DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl);
         }
     }
