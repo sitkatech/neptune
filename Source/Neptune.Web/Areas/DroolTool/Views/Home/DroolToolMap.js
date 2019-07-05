@@ -201,7 +201,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
     this.backboneLayer =
         this.addWmsLayer("OCStormwater:Backbone",
             "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Streams</span>",
-            { pane: "neighborhoodPane", styles: "backbone" },
+            { pane: "neighborhoodPane", styles: "backbone_wide" },
             false);
 
     this.watershedLayer =

@@ -4,6 +4,9 @@ Go
 Create View dbo.vGeoServerBackbone
 as
 Select
-	*
+	b.*,
+	t.BackboneSegmentTypeName as BackboneSegmentType
 From
-	dbo.BackboneSegment
+	dbo.BackboneSegment b join dbo.BackboneSegmentType t
+		on b.BackboneSegmentTypeID = t.BackboneSegmentTypeID
+
