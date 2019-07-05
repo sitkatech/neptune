@@ -173,14 +173,12 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
-NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function (drainID) {
-    var customParams = {
-        cql_filter: "DrainID = '" + drainID + "'"
-    };
-
-    L.Util.extend(customParams, this.neighborhoodLayerWfsParams);
+NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function (selectedNeighborhoodID) {
     var self = this;
-    RemoteService.geoserverLookup(this.config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
+    RemoteService.getStormshed(selectedNeighborhoodID).then(function (response) {
+        var geoJsonResponse = JSON.parse(response);
+        debugger;
+        
         if (geoJsonResponse.totalFeatures === 0) {
             return null;
         }
@@ -251,9 +249,8 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
-    var drainID = geoJson.features[0].properties.DrainID;
 
-    this.DisplayStormshed(drainID);
+    this.DisplayStormshed(this.selectedNeighborhoodID);
 
     this.setSelectedNeighborhood(geoJson);
     this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
@@ -303,6 +300,14 @@ var RemoteService = {
 
         return jQuery.ajax({
             url: backboneUrl
+        });
+    },
+
+    getStormshed: function(neighborhoodID) {
+        var stormshedUrl = new Sitka.UrlTemplate(this.options.stormshedUrlTemplate).ParameterReplace(neighborhoodID);
+
+        return jQuery.ajax({
+            url: stormshedUrl
         });
     },
 
@@ -361,6 +366,7 @@ NeptuneMaps.DroolToolMap.prototype.configureRemoteService = function () {
     RemoteService.options.neighborhoodLayerWfsParams = this.neighborhoodLayerWfsParams;
     RemoteService.options.neptuneMap = this;
     RemoteService.options.geoserverUrl = this.config.GeoServerUrl;
+    RemoteService.options.stormshedUrlTemplate = this.config.StormshedUrlTemplate;
 };
 
 NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {

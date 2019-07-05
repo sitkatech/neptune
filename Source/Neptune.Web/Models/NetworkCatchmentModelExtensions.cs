@@ -52,23 +52,23 @@ namespace Neptune.Web.Models
             var backboneAccumulated = new List<BackboneSegment>();
 
             var startingPoint = networkCatchment.BackboneSegments;
-            var lookingAtDownstream = startingPoint.Where(x=>x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).ToList();
 
-            while (lookingAtDownstream.Any())
+            var lookingAt = startingPoint.Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).ToList();
+
+            while (lookingAt.Any())
             {
-                backboneAccumulated.AddRange(lookingAtDownstream);
+                backboneAccumulated.AddRange(lookingAt);
 
-                lookingAtDownstream = lookingAtDownstream.Where(x => x.DownstreamBackboneSegment != null).Select(x => x.DownstreamBackboneSegment).Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).Distinct().Except(backboneAccumulated).ToList();
-            }
+                var downFromHere = lookingAt.Where(x => x.DownstreamBackboneSegment != null)
+                    .Select(x => x.DownstreamBackboneSegment)
+                    .Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).Distinct()
+                    .Except(backboneAccumulated);
 
-            var lookingAtUpstream = startingPoint
-                .Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).ToList();
+                var upFromHere = lookingAt.SelectMany(x => x.BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment)
+                    .Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).Distinct()
+                    .Except(backboneAccumulated);
 
-            while (lookingAtUpstream.Any())
-            {
-                backboneAccumulated.AddRange(lookingAtUpstream);
-
-                lookingAtUpstream = lookingAtUpstream.SelectMany(x => x.BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment).Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).Distinct().Except(backboneAccumulated).ToList();
+                lookingAt = upFromHere.Union(downFromHere).ToList();
             }
 
             var networkCatchmentsInStormshed = backboneAccumulated.Select(x=>x.NetworkCatchment).Distinct();
