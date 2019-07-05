@@ -143,7 +143,7 @@ L.Control.NominatimSearchControl = L.Control.extend({
             this.options.nominatimApiKey +
             "&format=json&q=" +
             q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
-    },
+    }
 });
 
 L.Control.ExplorerTrayControl = L.Control.extend({
@@ -436,6 +436,16 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
 NeptuneMaps.DroolToolMap.prototype.initializeMask = function(watershedCoverageLayer) {
     L.geoJson(watershedCoverageLayer.GeoJsonFeatureCollection,
         {
-            invert: true
+            invert: true,
+            style: function (feature) {
+                return {
+                    fillColor: "#323232",
+                    fill: true,
+                    fillOpacity: 0.4,
+                    color: "#3388ff",
+                    weight: 5,
+                    stroke: true
+                };
+            }
         }).addTo(this.map);
 };
