@@ -51,7 +51,6 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         this.parentElement.append(highlightFlowButton);
 
         window.stopClickPropagation(this.parentElement);
-
         return this.parentElement;
     },
 
@@ -174,7 +173,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
-NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function(drainID) {
+NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function (drainID) {
     var customParams = {
         cql_filter: "DrainID = '" + drainID + "'"
     };
@@ -227,6 +226,8 @@ NeptuneMaps.DroolToolMap.prototype.setSelectedNeighborhood = function (feature) 
                 };
             }
         });
+
+    this.backboneLayer.setParams({ styles: "backbone_narrow" });
 
     this.lastSelected.addTo(this.map);
 
@@ -305,7 +306,6 @@ var RemoteService = {
         });
     },
 
-
     makeNominatimRequestUrl: function (q) {
         var base = "https://open.mapquestapi.com/nominatim/v1/search.php?key=";
 
@@ -314,6 +314,7 @@ var RemoteService = {
             "&format=json&q=" +
             q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
     },
+
     nominatimLookup: function(q) {
         var self = this;
         var neptuneMap = self.options.neptuneMap;
@@ -350,31 +351,6 @@ var RemoteService = {
         });
     }
 
-};
-
-function toast(toastText) {
-    jQuery.toast({
-        top: window.totalHeaderHeight + 8,
-        text: toastText,
-        hideAfter: 20000,
-        stack: 1,
-        icon: 'error',
-        bgColor: "#707070",
-        loaderBg: "#77cfdc"
-    });
-}
-
-window.stopClickPropagation = function (parentElement) {
-    L.DomEvent.on(parentElement, "mouseover", function (e) {
-        // todo: still not the best way to handle this event-pausing stuff
-        window.freeze = true;
-    });
-
-    L.DomEvent.on(parentElement,
-        "mouseout",
-        function (e) {
-            window.freeze = false;
-        });
 };
 
 /* Initializers--relatively boring and static*/
@@ -463,4 +439,31 @@ NeptuneMaps.DroolToolMap.prototype.initializeMask = function(watershedCoverageLa
                 };
             }
         }).addTo(this.map);
+};
+
+/* Utility functions */
+
+function toast(toastText) {
+    jQuery.toast({
+        top: window.totalHeaderHeight + 8,
+        text: toastText,
+        hideAfter: 20000,
+        stack: 1,
+        icon: 'error',
+        bgColor: "#707070",
+        loaderBg: "#77cfdc"
+    });
+}
+
+window.stopClickPropagation = function (parentElement) {
+    L.DomEvent.on(parentElement, "mouseover", function (e) {
+        // todo: still not the best way to handle this event-pausing stuff
+        window.freeze = true;
+    });
+
+    L.DomEvent.on(parentElement,
+        "mouseout",
+        function (e) {
+            window.freeze = false;
+        });
 };

@@ -1318,7 +1318,7 @@
     <Content Include="Areas\DroolTool\Views\Shared\SiteLayout.cshtml" />
     <Content Include="Areas\DroolTool\Views\web.config" />
     <Content Include="Areas\DroolTool\Views\Home\About.cshtml" />
-    <Compile Include="Areas\DroolTool\Controllers\BackboneSegmentController.cs" />
+    <Compile Include="Areas\DroolTool\Controllers\BackboneController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cshtml" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentExportController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cshtml" />
