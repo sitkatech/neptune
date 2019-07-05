@@ -77,73 +77,28 @@ L.Control.NominatimSearchControl = L.Control.extend({
         var searchButton = jQuery("#nominatimSearchButton").get(0);
 
         this.neptuneMap = this.options.neptuneMap;
-        var parentElement = L.DomUtil.create("div",
+        this.parentElement = L.DomUtil.create("div",
             "neighborhood-search-control");
-        parentElement.append(jQuery("#nominatimSearchWrapper").get(0));
+        this.parentElement.append(jQuery("#nominatimSearchWrapper").get(0));
         jQuery("#nominatimSearchWrapper").css("display", "block");
 
-        var self = this;
-
-        function search() {
+        L.DomEvent.on(searchButton, "click", function () {
             var q = jQuery("#nominatimSearchInput").val();
 
-            jQuery.ajax({
-                url: self.makeNominatimRequestUrl(q),
-                jsonp: false,
-                method: 'GET'
-            }).then(function (response) {
-                if (response.length === 0) {
-                    return null;
-                }
-
-                // NP/JHB June 2019 deliberate decision not to invest in deciding between multiple results
-                var lat = response[0].lat;
-                var lon = response[0].lon;
-                self.neptuneMap.SetClickMarker(lat, lon);
-
-                var customParams = {
-                    cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
-                };
-
-                L.Util.extend(customParams, self.options.wfsParams);
-
-                return searchGeoserver(self.options.geoserverUrl, customParams);
-            }).then(function (responseGeoJson) {
-                if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {
-                    toast(NEIGHBORHOOD_NOT_FOUND);
-                    return;
-                }
-                self.neptuneMap.SelectNeighborhood(responseGeoJson);
-            }).fail(function () {
-                toast(NOMINATIM_ERROR);
-            });
-        }
-
-        L.DomEvent.on(searchButton, "click", function () {
-            search();
+            RemoteService.nominatimLookup(q);
         });
-
         L.DomEvent.on(input, "keyup", function (event) {
             if (event.keyCode === 13) {
-                search();
+                var q = jQuery("#nominatimSearchInput").val();
+
+                RemoteService.nominatimLookup(q);
             }
         });
 
-        this.parentElement = parentElement;
-
+        
         window.stopClickPropagation(this.parentElement);
-
-        return parentElement;
+        return this.parentElement;
     },
-
-    makeNominatimRequestUrl: function (q) {
-        var base = "https://open.mapquestapi.com/nominatim/v1/search.php?key=";
-
-        return base +
-            this.options.nominatimApiKey +
-            "&format=json&q=" +
-            q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
-    }
 });
 
 L.Control.ExplorerTrayControl = L.Control.extend({
@@ -171,7 +126,7 @@ L.Control.ExplorerTrayControl = L.Control.extend({
                 "</div>" +
             "</div>";
 
-
+        window.stopClickPropagation(this.parentElement);
         return this.parentElement;
     }
 
@@ -185,8 +140,9 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
     this.config = config;
 
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
-
+    
     this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
+    this.configureRemoteService();
     this.initializeOverlays();
     this.initializeControls();
     this.initializeMask(mapInitJson.WatershedCoverage);
@@ -204,7 +160,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
             L.Util.extend(customParams, self.neighborhoodLayerWfsParams);
 
-            searchGeoserver(self.config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
+            RemoteService.geoserverLookup(self.config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
                 }
@@ -225,7 +181,7 @@ NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function(drainID) {
 
     L.Util.extend(customParams, this.neighborhoodLayerWfsParams);
     var self = this;
-    searchGeoserver(this.config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
+    RemoteService.geoserverLookup(this.config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
         if (geoJsonResponse.totalFeatures === 0) {
             return null;
         }
@@ -309,7 +265,7 @@ NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
 
 NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
     var self = this;
-    getTrace(this.selectedNeighborhoodID, this.config.BackboneTraceUrlTemplate).then(function (response) {
+    RemoteService.getTrace(this.selectedNeighborhoodID, this.config.BackboneTraceUrlTemplate).then(function (response) {
         var backboneFeatureCollection = JSON.parse(response);
         if (self.traceLayer) {
             self.traceLayer.remove();
@@ -330,20 +286,71 @@ NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
     });
 };
 
-function searchGeoserver(geoServerUrl, params) {
-    return jQuery.ajax({
-        url: geoServerUrl + L.Util.getParamString(params),
-        method: 'GET'
-    });
-}
+var RemoteService = {
+    options: {},
 
-function getTrace(neighborhoodID, urlTemplate) {
-    var backboneUrl = new Sitka.UrlTemplate(urlTemplate).ParameterReplace(neighborhoodID);
+    geoserverLookup: function (geoServerUrl, params) {
+        
+        return jQuery.ajax({
+            url: geoServerUrl + L.Util.getParamString(params),
+            method: 'GET'
+        });
+    },
 
-    return jQuery.ajax({
-        url: backboneUrl
-    });
-}
+    getTrace: function(neighborhoodID, urlTemplate) {
+        var backboneUrl = new Sitka.UrlTemplate(urlTemplate).ParameterReplace(neighborhoodID);
+
+        return jQuery.ajax({
+            url: backboneUrl
+        });
+    },
+
+
+    makeNominatimRequestUrl: function (q) {
+        var base = "https://open.mapquestapi.com/nominatim/v1/search.php?key=";
+
+        return base +
+            this.options.nominatimApiKey +
+            "&format=json&q=" +
+            q + "&viewbox=-117.82019474260474,33.440338462792681,-117.61081200648763,33.670204787351004" + "&bounded=1";
+    },
+    nominatimLookup: function(q) {
+        var self = this;
+        var neptuneMap = self.options.neptuneMap;
+        jQuery.ajax({
+            url: RemoteService.makeNominatimRequestUrl(q),
+            jsonp: false,
+            method: 'GET'
+        }).then(function (response) {
+            debugger;
+            if (response.length === 0) {
+                return null;
+            }
+
+            // NP/JHB June 2019 deliberate decision not to invest in deciding between multiple results
+            var lat = response[0].lat;
+            var lon = response[0].lon;
+            neptuneMap.SetClickMarker(lat, lon);
+
+            var customParams = {
+                cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
+            };
+
+            L.Util.extend(customParams, self.options.neighborhoodLayerWfsParams);
+
+            return RemoteService.geoserverLookup(self.options.geoserverUrl, customParams);
+        }).then(function (responseGeoJson) {
+            if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {
+                toast(NEIGHBORHOOD_NOT_FOUND);
+                return;
+            }
+            neptuneMap.SelectNeighborhood(responseGeoJson);
+        }).fail(function () {
+            toast(NOMINATIM_ERROR);
+        });
+    }
+
+};
 
 function toast(toastText) {
     jQuery.toast({
@@ -371,6 +378,14 @@ window.stopClickPropagation = function (parentElement) {
 };
 
 /* Initializers--relatively boring and static*/
+
+NeptuneMaps.DroolToolMap.prototype.configureRemoteService = function () {
+
+    RemoteService.options.nominatimApiKey = this.config.NominatimApiKey;
+    RemoteService.options.neighborhoodLayerWfsParams = this.neighborhoodLayerWfsParams;
+    RemoteService.options.neptuneMap = this;
+    RemoteService.options.geoserverUrl = this.config.GeoServerUrl;
+};
 
 NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
     var droolToolOverlayPane = this.map.createPane("droolToolOverlayPane");
