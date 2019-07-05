@@ -177,71 +177,20 @@ L.Control.ExplorerTrayControl = L.Control.extend({
 
 });
 
-
 L.control.nominatimSearchControl = function (options) { return new L.Control.NominatimSearchControl(options); };
 L.control.neighborhoodDetailControl = function (options) { return new L.Control.NeighborhoodDetailControl(options); };
 L.control.explorerTrayControl = function (options) { return new L.Control.ExplorerTrayControl(options); };
-
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
     this.config = config;
 
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
 
-    var neighborhoodPane = this.map.createPane("neighborhoodPane");
-    neighborhoodPane.style.zIndex = 10000;
-    this.map.getPane("markerPane").style.zIndex = 10001;
-
-    this.neighborhoodLayer =
-        this.addWmsLayer("OCStormwater:NetworkCatchments",
-            "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Neighborhoods</span>",
-            { pane: "neighborhoodPane", styles: "neighborhood" },
-            true);
-
-    this.backboneLayer =
-        this.addWmsLayer("OCStormwater:Backbone",
-            "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Streams</span>",
-            { pane: "neighborhoodPane", styles: "backbone_wide" },
-            false);
-
-    this.watershedLayer =
-        this.addWmsLayer("OCStormwater:Watersheds",
-            "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Watersheds</span>",
-            { pane: "neighborhoodPane", styles: "watershed" },
-            false);
-
-    this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>",
-        false);
-
-    this.neighborhoodLayerParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
-
-    this.nominatimSearchControl = L.control.nominatimSearchControl({
-        position: "topleft",
-        nominatimApiKey: config.NominatimApiKey,
-        geoserverUrl: config.GeoServerUrl,
-        wfsParams: this.neighborhoodLayerParams,
-        neptuneMap: this
-    });
-
-    window.nominatimSearchControl = this.nominatimSearchControl;
-    this.nominatimSearchControl.addTo(this.map);
+    this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
+    this.initializeOverlays();
+    this.initializeControls();
+    this.initializeMask(mapInitJson.WatershedCoverage);
     
-    this.neighborhoodDetailControl = L.control.neighborhoodDetailControl({
-        position: "topleft",
-        neptuneMap: this
-    });
-
-    this.neighborhoodDetailControl.addTo(this.map);
-    
-    this.explorerTrayControl = L.control.explorerTrayControl({
-        position: "bottomright",
-        neptuneMap: this
-    });
-
-    this.explorerTrayControl.addTo(this.map);
-
-
     var self = this;
     this.map.on("click",
         function (evt) {
@@ -253,7 +202,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
                 cql_filter: 'intersects(CatchmentGeometry, POINT(' + evt.latlng.lat + ' ' + evt.latlng.lng + '))'
             };
 
-            L.Util.extend(customParams, self.neighborhoodLayerParams);
+            L.Util.extend(customParams, self.neighborhoodLayerWfsParams);
 
             searchGeoserver(self.config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
                 if (geoJsonResponse.totalFeatures === 0) {
@@ -262,14 +211,9 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
                 self.SelectNeighborhood(geoJsonResponse);
             });
 
-            self.SetClickMarker(evt.latlng.lat, evt.latlng.lng)
+            self.SetClickMarker(evt.latlng.lat, evt.latlng.lng);
 
         });
-
-    this.showLocationControl = L.control.showLocationControl({
-        position: "topleft"
-    });
-    this.showLocationControl.addTo(this.map);
 };
 
 NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
@@ -279,7 +223,7 @@ NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function(drainID) {
         cql_filter: "DrainID = '" + drainID + "'"
     };
 
-    L.Util.extend(customParams, this.neighborhoodLayerParams);
+    L.Util.extend(customParams, this.neighborhoodLayerWfsParams);
     var self = this;
     searchGeoserver(this.config.GeoServerUrl, customParams).then(function(geoJsonResponse) {
         if (geoJsonResponse.totalFeatures === 0) {
@@ -424,4 +368,74 @@ window.stopClickPropagation = function (parentElement) {
         function (e) {
             window.freeze = false;
         });
+};
+
+/* Initializers--relatively boring and static*/
+
+NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
+    var droolToolOverlayPane = this.map.createPane("droolToolOverlayPane");
+    droolToolOverlayPane.style.zIndex = 10000;
+    this.map.getPane("markerPane").style.zIndex = 10001;
+
+    this.neighborhoodLayer =
+        this.addWmsLayer("OCStormwater:NetworkCatchments",
+            "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Neighborhoods</span>",
+            { pane: "droolToolOverlayPane", styles: "neighborhood" },
+            true);
+
+    this.backboneLayer =
+        this.addWmsLayer("OCStormwater:Backbone",
+            "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Streams</span>",
+            { pane: "droolToolOverlayPane", styles: "backbone_wide" },
+            false);
+
+    this.watershedLayer =
+        this.addWmsLayer("OCStormwater:Watersheds",
+            "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Watersheds</span>",
+            { pane: "droolToolOverlayPane", styles: "watershed" },
+            false);
+
+    this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>",
+        false);
+};
+
+NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
+    var config = this.config;
+    this.nominatimSearchControl = L.control.nominatimSearchControl({
+        position: "topleft",
+        nominatimApiKey: config.NominatimApiKey,
+        geoserverUrl: config.GeoServerUrl,
+        wfsParams: this.neighborhoodLayerWfsParams,
+        neptuneMap: this
+    });
+
+    window.nominatimSearchControl = this.nominatimSearchControl;
+    this.nominatimSearchControl.addTo(this.map);
+
+    this.neighborhoodDetailControl = L.control.neighborhoodDetailControl({
+        position: "topleft",
+        neptuneMap: this
+    });
+
+    this.neighborhoodDetailControl.addTo(this.map);
+
+    this.explorerTrayControl = L.control.explorerTrayControl({
+        position: "bottomright",
+        neptuneMap: this
+    });
+
+    this.explorerTrayControl.addTo(this.map);
+
+    this.showLocationControl = L.control.showLocationControl({
+        position: "topleft"
+    });
+    this.showLocationControl.addTo(this.map);
+};
+
+NeptuneMaps.DroolToolMap.prototype.initializeMask = function(watershedCoverageLayer) {
+    L.geoJson(watershedCoverageLayer.GeoJsonFeatureCollection,
+        {
+            invert: true
+        }).addTo(this.map);
 };
