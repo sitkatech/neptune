@@ -65,6 +65,15 @@
         .explorerTray img {
             max-width: 100%;
         }
+
+        .droolToolDialog {
+            background: none;
+            border: none;
+
+        }
+        .droolToolDialog .ui-dialog-titlebar {
+            display: none;
+        }
     </style>
 }
 
@@ -82,6 +91,12 @@
                 .append(jQuery(".leaflet-control-zoom"));
             jQuery(".leaflet-top.leaflet-right")
                 .append(jQuery(".leaflet-control-fullscreen"));
+
+            jQuery("#splashModal").dialog({
+                dialogClass: "droolToolDialog",
+                modal:true
+            });
+            jQuery("#splashModal").dialog("open");
         });
     </script>
 
@@ -94,5 +109,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    
+    <div id="splashModal">
+        Hello, World!
     </div>
 }

@@ -66,6 +66,10 @@
                 display: none;
             }
         }
+
+        /*.headerHidden {
+            display: none;
+        }*/
     </style>
 
     @RenderSection("JavascriptAndStylesContent", false)
@@ -73,7 +77,7 @@
 </head>
 <body>
     <div class="expandToFillScreen">
-        <header class="neptuneHeader">
+        <header class="neptuneHeader headerHidden">
             <div class="row">
                 <div class="col-xs-6">
                     <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" class="droolMainLogo"/>
