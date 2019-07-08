@@ -66,6 +66,11 @@
             max-width: 100%;
         }
 
+
+        .splashModal {
+            overflow: hidden !important;
+        }
+
         .droolToolDialog {
             background: none;
             border: none;
@@ -73,6 +78,57 @@
         }
         .droolToolDialog .ui-dialog-titlebar {
             display: none;
+        }
+
+        .droolToolSplashHeader {
+            color: #ffc03f;
+            font-size: 24pt;
+        }
+
+        .splashHeaderContainer {
+            padding: 0 5% 0 5%
+        }
+
+        .droolToolSplashSubheader {
+            color: white;
+            font-size: 12pt;
+        }
+
+        .splashSubheaderContainer {
+            padding: 0 5% 0 5%
+        }
+
+        .droolToolSpashCartouche {
+            background-color: white;
+            display: inline-block;
+            padding: 10px;
+            margin-top: 10px;
+            width: 40%;
+            border-radius: 22px;
+        }
+
+        .h2ocSplashLogo {
+            max-height: 70px;
+            margin-right: 25px;
+        }
+
+        .mnwdSplashLogo {
+            max-height: 80px;
+            margin-left: 25px;
+        }
+
+        .droolToolActionCall {
+            font-size: 16pt;
+            width: 340px;
+            padding: 10px;
+            border-radius: 22px;
+        }
+
+        @* LPT: Just use !important. Works > good*@
+        .ui-widget-overlay {
+            background: none !important;
+            background-color: #000000 !important;
+            opacity: .85 !important;
         }
     </style>
 }
@@ -92,9 +148,15 @@
             jQuery(".leaflet-top.leaflet-right")
                 .append(jQuery(".leaflet-control-fullscreen"));
 
+            var modalWidth = jQuery(window).width() * .5;
+
             jQuery("#splashModal").dialog({
                 dialogClass: "droolToolDialog",
-                modal:true
+                modal: true,
+                width: modalWidth,
+                minWidth: modalWidth,
+                maxWidth: modalWidth,
+                minHeight: 550
             });
             jQuery("#splashModal").dialog("open");
         });
@@ -111,7 +173,37 @@
         </div>
     </div>
     
-    <div id="splashModal">
-        Hello, World!
+    <div id="splashModal" style="overflow:hidden">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" style="width:60%"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center splashHeaderContainer">
+                <p class="droolToolSplashHeader">Learn about how your neighborhood is conserving water and protecting our streams and beaches</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center splashSubheaderContainer">
+                <p class="droolToolSplashSubheader">The Urban Drool Tool is a collaborative project between the Moulton Niguel Water District, the County of Orange, and the Cities of Aliso Viejo, Mission Viejo, Laguna Niguel, Laguna Woods, Laguna Hills.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 text-right" style="padding-right: 25px;">
+                <a class="btn btn-neptune droolToolActionCall">Enter Address to Get Started</a>
+            </div>
+            <div class="col-sm-6 text-left" style="padding-left: 25px;">
+                <a class="btn btn-neptune droolToolActionCall">Explore My Watershed</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <span class="droolToolSpashCartouche">
+                    <img src="@Url.Content("~/Areas/DroolTool/Content/h2oc_color_logo.png")" class="h2ocSplashLogo" />
+                    <img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdSplashLogo" />
+                </span>
+            </div>
+        </div>
     </div>
 }
