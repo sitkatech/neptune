@@ -1,8 +1,12 @@
 ﻿var resizeHandler = function (mapInitJson) {
-    var totalHeaderHeight = (jQuery("header").height() +
-        jQuery(".neptuneNavbar").height());
-    jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height() -
-        totalHeaderHeight);
+    var totalHeaderHeight = (jQuery("header").height());
+
+    if (jQuery("header").is(":hidden")){
+        jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height());
+    } else {
+        jQuery("#" + mapInitJson.MapDivID).height(jQuery(window).height() -
+            totalHeaderHeight);
+    }
 
     window.totalHeaderHeight = totalHeaderHeight;
 };
@@ -72,8 +76,8 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
 L.Control.NominatimSearchControl = L.Control.extend({
     onAdd: function (map) {
-        var input = jQuery("#nominatimSearchInput").get(0);
-        var searchButton = jQuery("#nominatimSearchButton").get(0);
+        var input = jQuery(".nominatimSearchInput").get(0);
+        var searchButton = jQuery(".nominatimSearchButton").get(0);
 
         this.neptuneMap = this.options.neptuneMap;
         this.parentElement = L.DomUtil.create("div",
@@ -82,18 +86,17 @@ L.Control.NominatimSearchControl = L.Control.extend({
         jQuery("#nominatimSearchWrapper").css("display", "block");
 
         L.DomEvent.on(searchButton, "click", function () {
-            var q = jQuery("#nominatimSearchInput").val();
+            var q = jQuery(".nominatimSearchInput").val();
 
             RemoteService.nominatimLookup(q);
         });
         L.DomEvent.on(input, "keyup", function (event) {
             if (event.keyCode === 13) {
-                var q = jQuery("#nominatimSearchInput").val();
+                var q = jQuery(".nominatimSearchInput").val();
 
                 RemoteService.nominatimLookup(q);
             }
         });
-
         
         window.stopClickPropagation(this.parentElement);
         return this.parentElement;
@@ -177,7 +180,7 @@ NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function (selectedNeighbor
     var self = this;
     RemoteService.getStormshed(selectedNeighborhoodID).then(function (response) {
         var geoJsonResponse = JSON.parse(response);
-        debugger;
+        
         
         if (geoJsonResponse.totalFeatures === 0) {
             return null;
@@ -328,7 +331,7 @@ var RemoteService = {
             jsonp: false,
             method: 'GET'
         }).then(function (response) {
-            debugger;
+            
             if (response.length === 0) {
                 return null;
             }
@@ -397,6 +400,17 @@ NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
         false);
 };
 
+NeptuneMaps.DroolToolMap.prototype.intializeTray = function () {
+    this.explorerTrayControl = L.control.explorerTrayControl({
+        position: "bottomright",
+        neptuneMap: this
+    });
+
+    this.explorerTrayControl.addTo(this.map);
+}
+
+
+
 NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     var config = this.config;
     this.nominatimSearchControl = L.control.nominatimSearchControl({
@@ -416,13 +430,6 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     });
 
     this.neighborhoodDetailControl.addTo(this.map);
-
-    this.explorerTrayControl = L.control.explorerTrayControl({
-        position: "bottomright",
-        neptuneMap: this
-    });
-
-    this.explorerTrayControl.addTo(this.map);
 
     this.showLocationControl = L.control.showLocationControl({
         position: "topleft"
