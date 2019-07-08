@@ -214,8 +214,7 @@ NeptuneMaps.DroolToolMap.prototype.zoomToStormshed = function() {
         return;
     }
 
-    this.map.fitBounds(this.stormshedLayer.getBounds());
-    this.map.panTo(Object.values(this.lastSelected._layers)[0].getCenter());
+    this.map.fitBounds(Object.values(this.lastSelected._layers)[0].getBounds());
 }
 
 NeptuneMaps.DroolToolMap.prototype.setSelectedNeighborhood = function (feature) {
