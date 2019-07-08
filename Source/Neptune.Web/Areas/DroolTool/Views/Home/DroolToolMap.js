@@ -110,19 +110,19 @@ L.Control.ExplorerTrayControl = L.Control.extend({
         this.parentElement.innerHTML = "<div class='row'>" +
                 "<div class='col-sm-4'>" +
                     "<div class='row'>" +
-                        "<div class='col-sm-4'><img src='/Areas/DroolTool/Content/photo-placeholder-square.png' class='img-circle' /></div>" +
+                        "<div class='col-sm-4'><img src='/Areas/DroolTool/Content/chevvy.png' class='img-circle' /></div>" +
                         "<div class='col-sm-8'>Where does my irrigation runoff go? (Start animation)</div>" +
                     "</div>" +
                 "</div>" +
                 "<div class='col-sm-4'>" +
                     "<div class='row'>" +
-                        "<div class='col-sm-4'><img src='/Areas/DroolTool/Content/photo-placeholder-square.png' class='img-circle' /></div>" +
+                        "<div class='col-sm-4'><img src='/Areas/DroolTool/Content/piggy.png' class='img-circle' /></div>" +
                         "<div class='col-sm-8'>View rebates and find out about water efficiency</div>" +
                     "</div>" +
                 "</div>" +
                 "<div class='col-sm-4'>" +
                     "<div class='row'>" +
-                        "<div class='col-sm-4'><img src='/Areas/DroolTool/Content/photo-placeholder-square.png' class='img-circle' /></div>" +
+                        "<div class='col-sm-4'><img src='/Areas/DroolTool/Content/moneywater.png' class='img-circle' /></div>" +
                         "<div class='col-sm-8'>Access my Water Bill (via Moulton Niguel Water District)</div>" +
                     "</div>" +
                 "</div>" +
