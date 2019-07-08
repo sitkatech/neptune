@@ -178,7 +178,8 @@ NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Ge
 
 NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function (selectedNeighborhoodID) {
     var self = this;
-    RemoteService.getStormshed(selectedNeighborhoodID).then(function (response) {
+
+    return RemoteService.getStormshed(selectedNeighborhoodID).then(function (response) {
         var geoJsonResponse = JSON.parse(response);
         
         
@@ -208,6 +209,14 @@ NeptuneMaps.DroolToolMap.prototype.DisplayStormshed = function (selectedNeighbor
     });
 };
 
+NeptuneMaps.DroolToolMap.prototype.zoomToStormshed = function() {
+    if (!this.stormshedLayer) {
+        return;
+    }
+
+    this.map.fitBounds(this.stormshedLayer.getBounds());
+    this.map.panTo(Object.values(this.lastSelected._layers)[0].getCenter());
+}
 
 NeptuneMaps.DroolToolMap.prototype.setSelectedNeighborhood = function (feature) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
@@ -252,9 +261,7 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
-
-    this.DisplayStormshed(this.selectedNeighborhoodID);
-
+    
     this.setSelectedNeighborhood(geoJson);
     this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
 
@@ -262,6 +269,8 @@ NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
         this.traceLayer.remove();
         this.traceLayer = null;
     }
+
+    return this.DisplayStormshed(this.selectedNeighborhoodID);
 };
 
 NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
@@ -326,12 +335,13 @@ var RemoteService = {
     nominatimLookup: function(q) {
         var self = this;
         var neptuneMap = self.options.neptuneMap;
-        jQuery.ajax({
+
+        return jQuery.ajax({
             url: RemoteService.makeNominatimRequestUrl(q),
             jsonp: false,
             method: 'GET'
-        }).then(function (response) {
-            
+        }).then(function(response) {
+
             if (response.length === 0) {
                 return null;
             }
@@ -348,13 +358,15 @@ var RemoteService = {
             L.Util.extend(customParams, self.options.neighborhoodLayerWfsParams);
 
             return RemoteService.geoserverLookup(self.options.geoserverUrl, customParams);
-        }).then(function (responseGeoJson) {
+        }).then(function(responseGeoJson) {
             if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {
                 toast(NEIGHBORHOOD_NOT_FOUND);
                 return;
             }
-            neptuneMap.SelectNeighborhood(responseGeoJson);
-        }).fail(function () {
+            neptuneMap.SelectNeighborhood(responseGeoJson).then(function() {
+                neptuneMap.zoomToStormshed();
+            });
+        }).fail(function() {
             toast(NOMINATIM_ERROR);
         });
     }
