@@ -77,7 +77,7 @@ namespace Neptune.Web.Models
             featureCollection.Features.AddRange(networkCatchmentsInStormshed.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.CatchmentGeometry);
-                feature.Properties.Add("dummy", "dummy");
+                feature.Properties.Add("NetworkCatchmentID", x.NetworkCatchmentID);
                 return feature;
             }));
 
