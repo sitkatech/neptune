@@ -1,7 +1,7 @@
 ﻿L.Control.ShowLocationControl = L.Control.extend({
     onAdd: function (map) {
-        var button = L.DomUtil.create("button", "btn btn-neptune btn-sm");
-        button.innerHTML = "<span class='glyphicon glyphicon-globe'></span> Show My Location";
+        var button = L.DomUtil.create("button", "btn btn-neptune btn-sm showLocation");
+        button.innerHTML = "<img src='/Areas/DroolTool/Content/35-512.png' style='height:20px;'>";
 
         var locateOptions = {
             setView: true,
