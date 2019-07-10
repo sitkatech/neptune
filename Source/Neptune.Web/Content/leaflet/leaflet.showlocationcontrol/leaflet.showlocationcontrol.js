@@ -29,5 +29,5 @@
 
 // options may include any valid options for L.Map.locate. Default options are setView and enableHighAccuracy
 L.control.showLocationControl = function (options) {
-    return new L.Control.ShowLocationControl(options)
+    return new L.Control.ShowLocationControl(options);
 };
