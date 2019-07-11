@@ -7,9 +7,11 @@
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
     <script src="@Url.Content("~/Content/JQuery/jquery.toast.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/JQuery/MonthPicker.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
     <script>
 
         window.mapInitJson =
@@ -19,6 +21,8 @@
         initResizeHandler(window.mapInitJson);
     </script>
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
+    
+    
 
     <style>
         .container-fluid.droolToolContent {
@@ -37,6 +41,7 @@
             /* todo: width should really be dynamish*/
             width: 280px;
             max-width: 280px;
+            z-index: initial;
         }
 
         #nominatimSearchWrapper {
@@ -144,6 +149,74 @@
         }
 
         .nominatimSearchButton { }
+
+        .form-control.metricMonthPicker {
+            width: auto;
+        }
+
+        #MonthPicker_Button_ {
+            width: 34px;
+            height: 34px;
+            background: none;
+            background-color: rgb(0, 153, 171);
+            border: none;
+        }
+
+            #MonthPicker_Button_:hover {
+                background-color: #00c1d5;
+            }
+
+
+        .monthPickerButtonIcon {
+            font-size: 14pt;
+            color: white;
+            margin-top: 5px;
+            margin-left: 1px;
+        }
+
+        .placeholderImages img {
+            height: 150px;
+        }
+
+        /* panel layout mechanics */
+        .panel-wrap {
+            position: absolute;
+
+            bottom: 0;
+
+            width: 100%;
+
+            height: 700px;
+
+            transform: translateX(0%);
+
+            transition: .3s ease-out;
+
+            z-index: -1;
+
+            top: 0;
+        }
+        .panel {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #333;
+            color: #eee;
+            overflow: auto;
+            padding: 1em;
+        }
+
+        /* simulate panel state control --
+this can also be triggered by a 
+class name added to the body tag. 
+Just using a checkbox sibling here
+for simplicity
+*/ 
+        .panel-slideout {
+            transform: translateX(100%);
+        }
     </style>
 }
 
@@ -152,18 +225,34 @@
 @section DroolToolMap
 {
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
+    
+    <div class="panel-wrap">
+        <div class="panel">
+            <h3>Yay! Panels!</h3>
+            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+
+            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+        </div>
+    </div>
 
     <script>
         jQuery(function () {
             window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
 
-            jQuery(".leaflet-top.leaflet-right")
-                .append(jQuery(".leaflet-control-zoom"));
-            jQuery(".leaflet-top.leaflet-right")
-                .append(jQuery(".leaflet-control-fullscreen"));
 
-            jQuery(".showLocationWrapper").append(jQuery(".showLocation"));
 
+            //uhhhh panel
+            jQuery(".neighborhood-detail-control").append(jQuery(".panel-wrap"));
+            
+            jQuery("[type='checkbox']").on("change",
+                function() {
+                    jQuery(".panel-wrap").addClass("panel-slideout");
+                });
+
+            // splish
             var modalWidth = jQuery(window).width() * .5;
 
             jQuery("#splashModal").dialog({

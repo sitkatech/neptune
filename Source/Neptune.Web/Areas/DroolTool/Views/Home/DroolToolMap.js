@@ -42,6 +42,28 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
         window.stopClickPropagation(this.parentElement);
 
+        var selectAMonth = L.DomUtil.create("p");
+        selectAMonth.innerHTML = "Select a month and year:";
+
+        this.parentElement.append(selectAMonth);
+
+        this.monthPicker = L.DomUtil.create("input", "metricMonthPicker form-control");
+        this.monthPicker.setAttribute("type", "text");
+
+        this.parentElement.append(this.monthPicker);
+
+        // todo: placehold images
+
+        var placeholder = L.DomUtil.create("div", "placeholderImages");
+        placeholder.innerHTML = "<br/><img src='/Areas/DroolTool/Content/photo-placeholder-square.png'/><br/><br/>" +
+            "<img src='/Areas/DroolTool/Content/photo-placeholder-square.png'/><br/><br/>" +
+            "<img src='/Areas/DroolTool/Content/photo-placeholder-square.png'/><br/><br/>" +
+            "<input id='clicker' type='checkbox' />" +
+            "<label for='clicker' > Click me! I'm an arbitrary trigger</label>'"
+
+        this.parentElement.append(placeholder);
+            
+
         var highlightFlowButton = L.DomUtil.create("button", "btn btn-neptune btn-sm");
         highlightFlowButton.innerHTML = "Where does my irrigation runoff go?";
 
@@ -54,8 +76,35 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
         this.parentElement.append(highlightFlowButton);
 
+
         window.stopClickPropagation(this.parentElement);
         return this.parentElement;
+    },
+
+    wireMonthPicker: function () {
+
+        jQuery(".metricMonthPicker").on("click", function () {
+            jQuery("#MonthPicker_Button_").click();
+        })
+
+        var getNeighborhoodID = function() {
+            return this.NeighborhoodID;
+        }.bind(this);
+        
+        jQuery(".metricMonthPicker").MonthPicker({
+                OnAfterChooseMonth: function() {
+                    var month = Number(this.value.split("/")[0]);
+                    var year = Number(this.value.split("/")[1]);
+                    console.log("0" + month + "/" + year);
+                    RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
+                        console.log(metricResponse);
+                    });
+                },
+            ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
+            }
+        );
+
+        jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
     },
 
     hide: function () {
@@ -67,9 +116,11 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
     },
 
     selectNeighborhood: function (properties) {
+        this.NeighborhoodID = properties.NetworkCatchmentID;
 
         this.selectedNeighborhoodText.innerHTML =
-            "Selected Neighborhood: " + properties.NetworkCatchmentID;
+            "Neighborhood Area (ac): " + properties.Area;
+        
         this.show();
     }
 });
@@ -156,7 +207,7 @@ L.control.explorerTrayControl = function (options) { return new L.Control.Explor
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
     this.config = config;
-
+    console.log(config);
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
     
     this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
@@ -399,8 +450,16 @@ var RemoteService = {
         }).fail(function() {
             toast(NOMINATIM_ERROR);
         });
-    }
+    },
 
+    getMetrics: function(neighborhoodID, year, month) {
+        var metricUrl = new Sitka.UrlTemplate(this.options.metricUrlTemplate).ParameterReplace(neighborhoodID, year, month);
+        console.log(metricUrl);
+        return jQuery.ajax({
+            url: metricUrl,
+            method: 'GET'
+        });
+    }
 };
 
 /* Initializers--relatively boring and static*/
@@ -412,6 +471,7 @@ NeptuneMaps.DroolToolMap.prototype.configureRemoteService = function () {
     RemoteService.options.neptuneMap = this;
     RemoteService.options.geoserverUrl = this.config.GeoServerUrl;
     RemoteService.options.stormshedUrlTemplate = this.config.StormshedUrlTemplate;
+    RemoteService.options.metricUrlTemplate = this.config.MetricUrlTemplate;
 };
 
 NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
@@ -478,11 +538,20 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     });
 
     this.neighborhoodDetailControl.addTo(this.map);
+    this.neighborhoodDetailControl.wireMonthPicker();
 
     this.showLocationControl = L.control.showLocationControl({
         position: "topleft"
     });
     this.showLocationControl.addTo(this.map);
+
+    // rearrange controls because leaflet provides the coarsest positioning system imaginable.
+    jQuery(".leaflet-top.leaflet-right")
+        .append(jQuery(".leaflet-control-zoom"));
+    jQuery(".leaflet-top.leaflet-right")
+        .append(jQuery(".leaflet-control-fullscreen"));
+
+    jQuery(".showLocationWrapper").append(jQuery(".showLocation"));
 };
 
 NeptuneMaps.DroolToolMap.prototype.initializeMask = function(watershedCoverageLayer) {
