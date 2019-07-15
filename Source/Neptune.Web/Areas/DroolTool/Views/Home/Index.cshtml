@@ -21,8 +21,8 @@
         initResizeHandler(window.mapInitJson);
     </script>
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
-    
-    
+
+
 
     <style>
         .container-fluid.droolToolContent {
@@ -181,20 +181,12 @@
         /* panel layout mechanics */
         .panel-wrap {
             position: absolute;
-
-            bottom: 0;
-
-            width: 100%;
-
-            height: 700px;
-
+            width: 90%;
+            height: 70%;
             transform: translateX(0%);
-
             transition: .3s ease-out;
-
             z-index: -1;
-
-            top: 0;
+            top: 20%;
         }
         .panel {
             position: absolute;
@@ -202,20 +194,19 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #333;
-            color: #eee;
             overflow: auto;
             padding: 1em;
         }
 
         /* simulate panel state control --
-this can also be triggered by a 
-class name added to the body tag. 
+this can also be triggered by a
+class name added to the body tag.
 Just using a checkbox sibling here
 for simplicity
-*/ 
+*/
         .panel-slideout {
-            transform: translateX(100%);
+            transform: translateX(66%);
+            width: 150%
         }
     </style>
 }
@@ -225,31 +216,125 @@ for simplicity
 @section DroolToolMap
 {
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
-    
+
     <div class="panel-wrap">
         <div class="panel">
-            <h3>Yay! Panels!</h3>
-            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+            <table class="table-responsive table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Monthly Snapshot</th>
+                        <th>12-Month Rolling Mean</th>
+                        <th>Slope as % of the last 12 month rolling mean</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of Residential and HOA Accounts</td>
+                        <td id="NumberOfReshoaAccounts"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Total Residential and HOA Irrigated Area, Square Feet</td>
+                        <td id="TotalReshoaIrrigatedArea"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Average Irrigated Area, Square Feet per Household</td>
+                        <td id="AverageIrrigatedArea"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Total Estimated Residential Water Users</td>
+                        <td id="TotalEstimatedReshoaUsers"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Total Budget, gallons</td>
+                        <td id="TotalBudget"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Total Outdoor Budget, gallons</td>
+                        <td id="TotalOutdoorBudget"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Average Total Usage, Gallons per Household</td>
+                        <td id="AverageTotalUsage"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Average Estimated Irrigation Usage, Gallons per Household</td>
+                        <td id="AverageEstimatedIrrigationUsage"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Accounts over Budget</td>
+                        <td id="NumberOfAccountsOverBudget"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Percent of Accounts over Budget </td>
+                        <td id="PercentOfAccountsOverBudget"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Average Over-budget Usage, Gallons per Household</td>
+                        <td id="AverageOverBudgetUsage"></td>
+                        <td id="AverageOverBudgetUsageRolling">N/A</td>
+                        <td id="AverageOverBudgetUsageSlope">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Total Over-budget Usage, Gallons</td>
+                        <td id="TotalOverBudgetUsage"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
+                        <td id="RebateParticipationPercentage"></td>
+                        <td id="RebateParticipationPercentageRolling">N/A</td>
+                        <td id="RebateParticipationPercentageSlope">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Total Area of Turf Replacement, sq-ft</td>
+                        <td id="TotalTurfReplacementArea"></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
 
-            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
-            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
-            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
-            <p>Distillery freegan bitters twee.  Food truck dreamcatcher PBR&amp;B chillwave brunch.  Fixie mustache umami Neutra dreamcatcher, Odd Future try-hard master cleanse pork belly iPhone Etsy.  Disrupt kogi Echo Park, wolf DIY literally meditation skateboard gentrify photo booth Carles asymmetrical mumblecore.  Fashion axe 3 wolf moon normcore scenester, bitters drinking vinegar banh mi keytar swag 8-bit.  Tote bag heirloom pickled authentic mlkshk, scenester hoodie shabby chic Kickstarter tattooed church-key Helvetica Wes Anderson.  Ennui craft beer art party, 8-bit chillwave single-origin coffee mlkshk.</p>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        jQuery(function () {
-            window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl", window.mapConfig);
-
+        jQuery(function() {
+            window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl",
+                window.mapConfig);
 
 
             //uhhhh panel
             jQuery(".neighborhood-detail-control").append(jQuery(".panel-wrap"));
-            
+
             jQuery("[type='checkbox']").on("change",
                 function() {
-                    jQuery(".panel-wrap").addClass("panel-slideout");
+                    if (this.checked) {
+                        jQuery(".panel-wrap").addClass("panel-slideout");
+                    } else {
+                        jQuery(".panel-wrap").removeClass("panel-slideout");
+                    }
                 });
 
             // splish
@@ -275,13 +360,13 @@ for simplicity
 
 
             jQuery("#enterAddressButton").on("click",
-                function () {
+                function() {
                     jQuery(".callToActionContainer").hide();
                     jQuery(".splashSearchContainer").show();
                 });
 
             jQuery("#closeSplashButton").on("click",
-                function () {
+                function() {
                     killSplash();
                 });
 
@@ -293,14 +378,15 @@ for simplicity
                     killSplash();
                 });
 
-            jQuery("#splashModal .nominatimSearchInput").on("keyup", function (event) {
-                if (event.keyCode === 13) {
-                    var q = jQuery("#splashModal .nominatimSearchInput").val();
-                    RemoteService.nominatimLookup(q);
-                    
-                    killSplash();
-                }
-            });
+            jQuery("#splashModal .nominatimSearchInput").on("keyup",
+                function(event) {
+                    if (event.keyCode === 13) {
+                        var q = jQuery("#splashModal .nominatimSearchInput").val();
+                        RemoteService.nominatimLookup(q);
+
+                        killSplash();
+                    }
+                });
 
         });
     </script>
@@ -309,7 +395,7 @@ for simplicity
         <div class="row" id="nominatimSearchWrapper">
             <div class="col-sm-10">
                 <div class="input-group">
-                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0; " placeholder="Search by address or landmark">
+                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
                     <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
                 </div>
             </div>
@@ -319,10 +405,10 @@ for simplicity
         </div>
     </div>
 
-    <div id="splashModal" style="overflow:hidden">
+    <div id="splashModal" style="overflow: hidden">
         <div class="row">
             <div class="col-sm-12 text-center">
-                <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" style="width:60%" />
+                <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" style="width: 60%" />
             </div>
         </div>
         <div class="row">

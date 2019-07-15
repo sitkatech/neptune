@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vDroolMetric(int primaryKey, int rawDroolMetricID, int oCSurveyCatchmentID, double metricYear, double metricMonth, double? numberOfReshoaAccounts, double? totalReshoaIrrigatedArea, double? averageIrrigatedArea, double? totalEstimatedReshoaUsers, double? totalBudget, double? totalOutdoorBudget, double? averageTotalUsage, double? averageEstimatedIrrigationUsage, double? numberOfAccountsOverBudget, double? percentOfAccountsOverBudget, double? averageOverBudgetUsage, double? averageOverBudgetUsageRolling, double? averageOverBudgetUsageSlope, double? totalOverBudgetUsage, double? rebateParticipationPercentage, double? rebateParticipationPercentageRolling, double? rebateParticipationPercentageSlope, double? totalTurfReplacementArea) : this()
+        public vDroolMetric(int primaryKey, int rawDroolMetricID, int oCSurveyCatchmentID, int metricYear, int metricMonth, double? numberOfReshoaAccounts, double? totalReshoaIrrigatedArea, double? averageIrrigatedArea, double? totalEstimatedReshoaUsers, double? totalBudget, double? totalOutdoorBudget, double? averageTotalUsage, double? averageEstimatedIrrigationUsage, double? numberOfAccountsOverBudget, double? percentOfAccountsOverBudget, double? averageOverBudgetUsage, double? averageOverBudgetUsageRolling, double? averageOverBudgetUsageSlope, double? totalOverBudgetUsage, double? rebateParticipationPercentage, double? rebateParticipationPercentageRolling, double? rebateParticipationPercentageSlope, double? totalTurfReplacementArea) : this()
         {
             this.PrimaryKey = primaryKey;
             this.RawDroolMetricID = rawDroolMetricID;
@@ -88,8 +88,8 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get; set; }
         public int RawDroolMetricID { get; set; }
         public int OCSurveyCatchmentID { get; set; }
-        public double MetricYear { get; set; }
-        public double MetricMonth { get; set; }
+        public int MetricYear { get; set; }
+        public int MetricMonth { get; set; }
         public double? NumberOfReshoaAccounts { get; set; }
         public double? TotalReshoaIrrigatedArea { get; set; }
         public double? AverageIrrigatedArea { get; set; }

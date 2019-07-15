@@ -78,14 +78,34 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
 
         window.stopClickPropagation(this.parentElement);
+
+        L.DomEvent.on(this.parentElement,
+            "mouseover",
+            function() {
+                map.dragging.disable();
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
+            });
+
+        L.DomEvent.on(this.parentElement,
+            "mouseout",
+            function() {
+                map.dragging.enable();
+                map.touchZoom.enable();
+                map.doubleClickZoom.enable();
+                map.scrollWheelZoom.enable();
+            });
+
         return this.parentElement;
     },
 
     wireMonthPicker: function () {
 
-        jQuery(".metricMonthPicker").on("click", function () {
-            jQuery("#MonthPicker_Button_").click();
-        })
+        jQuery(".metricMonthPicker").on("click",
+            function() {
+                jQuery("#MonthPicker_Button_").click();
+            });
 
         var getNeighborhoodID = function() {
             return this.NeighborhoodID;
@@ -97,7 +117,24 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                     var year = Number(this.value.split("/")[1]);
                     console.log("0" + month + "/" + year);
                     RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
-                        console.log(metricResponse);
+                        jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
+                        jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
+                        jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
+                        jQuery("#TotalEstimatedReshoaUsers").text(metricResponse.TotalEstimatedReshoaUsers);
+                        jQuery("#TotalBudget").text(metricResponse.TotalBudget);
+                        jQuery("#TotalOutdoorBudget").text(metricResponse.TotalOutdoorBudget);
+                        jQuery("#AverageTotalUsage").text(metricResponse.AverageTotalUsage);
+                        jQuery("#AverageEstimatedIrrigationUsage").text(metricResponse.AverageEstimatedIrrigationUsage);
+                        jQuery("#NumberOfAccountsOverBudget").text(metricResponse.NumberOfAccountsOverBudget);
+                        jQuery("#PercentOfAccountsOverBudget").text(metricResponse.PercentOfAccountsOverBudget);
+                        jQuery("#AverageOverBudgetUsage").text(metricResponse.AverageOverBudgetUsage);
+                        jQuery("#AverageOverBudgetUsageRolling").text(metricResponse.AverageOverBudgetUsageRolling);
+                        jQuery("#AverageOverBudgetUsageSlope").text(metricResponse.AverageOverBudgetUsageSlope);
+                        jQuery("#TotalOverBudgetUsage").text(metricResponse.TotalOverBudgetUsage);
+                        jQuery("#RebateParticipationPercentage").text(metricResponse.RebateParticipationPercentage);
+                        jQuery("#RebateParticipationPercentageRolling").text(metricResponse.RebateParticipationPercentageRolling);
+                        jQuery("#RebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
+                        jQuery("#TotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
                     });
                 },
             ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
@@ -454,7 +491,6 @@ var RemoteService = {
 
     getMetrics: function(neighborhoodID, year, month) {
         var metricUrl = new Sitka.UrlTemplate(this.options.metricUrlTemplate).ParameterReplace(neighborhoodID, year, month);
-        console.log(metricUrl);
         return jQuery.ajax({
             url: metricUrl,
             method: 'GET'
