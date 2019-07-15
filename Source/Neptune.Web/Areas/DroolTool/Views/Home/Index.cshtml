@@ -39,8 +39,8 @@
         }
         .neighborhood-detail-control {
             /* todo: width should really be dynamish*/
-            width: 280px;
-            max-width: 280px;
+            width: 231px;
+            max-width: 231px;
             z-index: initial;
         }
 
@@ -175,18 +175,18 @@
         }
 
         .placeholderImages img {
-            height: 150px;
+            width: 200px;
         }
 
         /* panel layout mechanics */
         .panel-wrap {
             position: absolute;
             width: 90%;
-            height: 70%;
+            height: 100%;
             transform: translateX(0%);
             transition: .3s ease-out;
             z-index: -1;
-            top: 20%;
+            top: 0;
         }
         .panel {
             position: absolute;
@@ -198,15 +198,26 @@
             padding: 1em;
         }
 
-        /* simulate panel state control --
-this can also be triggered by a
-class name added to the body tag.
-Just using a checkbox sibling here
-for simplicity
-*/
         .panel-slideout {
-            transform: translateX(66%);
-            width: 150%
+            transform: translateX(50%);
+            width: 200%
+        }
+
+        .panel systemText {
+            font-size: 10px;
+        }
+
+        .expando-bar {
+            position: absolute;
+            right: 0;
+            display: inline-block;
+            height: 100%;
+            width: 15px;
+            padding-top:110%
+        }
+
+        .expando-bar:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
     </style>
 }
@@ -219,103 +230,118 @@ for simplicity
 
     <div class="panel-wrap">
         <div class="panel">
-            <table class="table-responsive table table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Monthly Snapshot</th>
-                        <th>12-Month Rolling Mean</th>
-                        <th>Slope as % of the last 12 month rolling mean</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Number of Residential and HOA Accounts</td>
-                        <td id="NumberOfReshoaAccounts"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Total Residential and HOA Irrigated Area, Square Feet</td>
-                        <td id="TotalReshoaIrrigatedArea"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Average Irrigated Area, Square Feet per Household</td>
-                        <td id="AverageIrrigatedArea"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Total Estimated Residential Water Users</td>
-                        <td id="TotalEstimatedReshoaUsers"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Total Budget, gallons</td>
-                        <td id="TotalBudget"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Total Outdoor Budget, gallons</td>
-                        <td id="TotalOutdoorBudget"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Average Total Usage, Gallons per Household</td>
-                        <td id="AverageTotalUsage"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Average Estimated Irrigation Usage, Gallons per Household</td>
-                        <td id="AverageEstimatedIrrigationUsage"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Number of Accounts over Budget</td>
-                        <td id="NumberOfAccountsOverBudget"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Percent of Accounts over Budget </td>
-                        <td id="PercentOfAccountsOverBudget"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Average Over-budget Usage, Gallons per Household</td>
-                        <td id="AverageOverBudgetUsage"></td>
-                        <td id="AverageOverBudgetUsageRolling">N/A</td>
-                        <td id="AverageOverBudgetUsageSlope">N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Total Over-budget Usage, Gallons</td>
-                        <td id="TotalOverBudgetUsage"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
-                        <td id="RebateParticipationPercentage"></td>
-                        <td id="RebateParticipationPercentageRolling">N/A</td>
-                        <td id="RebateParticipationPercentageSlope">N/A</td>
-                    </tr>
-                    <tr>
-                        <td>Total Area of Turf Replacement, sq-ft</td>
-                        <td id="TotalTurfReplacementArea"></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
+            <h4>Neighborhood Metrics</h4>
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
+                    <p class="">Select a month and year:</p>
+                </div>
+                <div class="col-sm-7">
+                    <input class="metricMonthPicker form-control month-year-input" type="text"></div>
+            </div>
 
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table-responsive table table-striped table-condensed" style="margin-bottom:0">
+                        <thead>
+                        <tr>
+                            <th class="col-sm-4">Metric</th>
+                            <th>Snapshot</th>
+                            <th>Mean</th>
+                            <th>Slope</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Number of Residential and HOA Accounts</td>
+                            <td id="NumberOfReshoaAccounts"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Residential and HOA Irrigated Area, Square Feet</td>
+                            <td id="TotalReshoaIrrigatedArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Irrigated Area, Square Feet per Household</td>
+                            <td id="AverageIrrigatedArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Estimated Residential Water Users</td>
+                            <td id="TotalEstimatedReshoaUsers"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Budget, gallons</td>
+                            <td id="TotalBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Outdoor Budget, gallons</td>
+                            <td id="TotalOutdoorBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Total Usage, Gallons per Household</td>
+                            <td id="AverageTotalUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Estimated Irrigation Usage, Gallons per Household</td>
+                            <td id="AverageEstimatedIrrigationUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Accounts over Budget</td>
+                            <td id="NumberOfAccountsOverBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Percent of Accounts over Budget </td>
+                            <td id="PercentOfAccountsOverBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Over-budget Usage, Gallons per Household</td>
+                            <td id="AverageOverBudgetUsage"></td>
+                            <td id="AverageOverBudgetUsageRolling">N/A</td>
+                            <td id="AverageOverBudgetUsageSlope">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Over-budget Usage, Gallons</td>
+                            <td id="TotalOverBudgetUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
+                            <td id="RebateParticipationPercentage"></td>
+                            <td id="RebateParticipationPercentageRolling">N/A</td>
+                            <td id="RebateParticipationPercentageSlope">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Area of Turf Replacement, sq-ft</td>
+                            <td id="TotalTurfReplacementArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div><hr/>
+            <p class="systemText">N/A in the Mean and Slope columns indicates that the Mean or Slope is not relevant for a particular metric.</p>
+            <p class="systemText">Not Available in the Mean and Slope columns indicates that there is not enough historic data to calculate Mean or Slope for a particular metric for this month.</p>
         </div>
     </div>
 
@@ -328,12 +354,19 @@ for simplicity
             //uhhhh panel
             jQuery(".neighborhood-detail-control").append(jQuery(".panel-wrap"));
 
-            jQuery("[type='checkbox']").on("change",
-                function() {
-                    if (this.checked) {
+            jQuery(".expando-bar").on("click",
+                function () {
+                    this.expand = !this.expand;
+                    console.log(this.expand);
+                    if (this.expand) {
                         jQuery(".panel-wrap").addClass("panel-slideout");
+                        jQuery(this).removeClass("glyphicon-menu-right");
+                        jQuery(this).addClass("glyphicon-menu-left");
+
                     } else {
                         jQuery(".panel-wrap").removeClass("panel-slideout");
+                        jQuery(this).addClass("glyphicon-menu-right");
+                        jQuery(this).removeClass("glyphicon-menu-left");
                     }
                 });
 

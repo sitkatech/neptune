@@ -30,42 +30,32 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control");
         this.neptuneMap = this.options.neptuneMap;
 
+        var bar = L.DomUtil.create("span", "expando-bar glyphicon glyphicon-menu-right");
+
+        this.parentElement.append(bar);
+
         var h4 = L.DomUtil.create("h4");
         h4.innerHTML = "Selected Neighborhood";
         this.parentElement.append(h4);
 
-        this.selectedNeighborhoodText = L.DomUtil.create("p");
+        //this.selectedNeighborhoodText = L.DomUtil.create("p");
 
-        this.parentElement.append(this.selectedNeighborhoodText);
+        //this.parentElement.append(this.selectedNeighborhoodText);
 
         this.hide();
 
         window.stopClickPropagation(this.parentElement);
-
-        var selectAMonth = L.DomUtil.create("p");
-        selectAMonth.innerHTML = "Select a month and year:";
-
-        this.parentElement.append(selectAMonth);
-
-        this.monthPicker = L.DomUtil.create("input", "metricMonthPicker form-control");
-        this.monthPicker.setAttribute("type", "text");
-
-        this.parentElement.append(this.monthPicker);
-
-        // todo: placehold images
-
+        
         var placeholder = L.DomUtil.create("div", "placeholderImages");
-        placeholder.innerHTML = "<br/><img src='/Areas/DroolTool/Content/photo-placeholder-square.png'/><br/><br/>" +
-            "<img src='/Areas/DroolTool/Content/photo-placeholder-square.png'/><br/><br/>" +
-            "<img src='/Areas/DroolTool/Content/photo-placeholder-square.png'/><br/><br/>" +
-            "<input id='clicker' type='checkbox' />" +
-            "<label for='clicker' > Click me! I'm an arbitrary trigger</label>'"
+        placeholder.innerHTML = "<br/><img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'/><br/><br/>" +
+            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'/><br/><br/>" +
+            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'/><br/><br/>";
 
         this.parentElement.append(placeholder);
             
 
         var highlightFlowButton = L.DomUtil.create("button", "btn btn-neptune btn-sm");
-        highlightFlowButton.innerHTML = "Where does my irrigation runoff go?";
+        highlightFlowButton.innerHTML = "Where does my runoff go?";
 
         var self = this;
         L.DomEvent.on(highlightFlowButton,
@@ -153,10 +143,10 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
     },
 
     selectNeighborhood: function (properties) {
-        this.NeighborhoodID = properties.NetworkCatchmentID;
+        //this.NeighborhoodID = properties.NetworkCatchmentID;
 
-        this.selectedNeighborhoodText.innerHTML =
-            "Neighborhood Area (ac): " + properties.Area;
+        //this.selectedNeighborhoodText.innerHTML =
+        //    "Neighborhood Area (ac): " + properties.Area;
         
         this.show();
     }
