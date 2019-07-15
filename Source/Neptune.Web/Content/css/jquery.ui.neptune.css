@@ -1,5 +1,8 @@
 ﻿.ui-widget { font-family: inherit; font-size: 10pt; }
-.ui-widget-content { background: #15475C; color: #222222; }
+.ui-widget-content {
+    background: rgb(230, 230, 230);
+    color: #222222;
+}
 
 .ui-dialog { position: absolute; top: 0; left: 0; padding: 2px; width: 300px; overflow: hidden; }
 .ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: 2px 0 0 0; padding: .3em 1em .5em .4em; }

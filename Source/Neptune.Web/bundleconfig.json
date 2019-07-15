@@ -112,5 +112,11 @@
     "inputFiles": [
       "Content/JQuery/jquery.toast.css"
     ]
+  },
+  {
+    "outputFileName": "Content/css/jquery.ui.neptune.min.css",
+    "inputFiles": [
+      "Content/css/jquery.ui.neptune.css"
+    ]
   }
 ]
