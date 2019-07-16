@@ -194,13 +194,14 @@
             bottom: 0;
             left: 0;
             right: 0;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
             padding: 1em;
         }
 
         .panel-slideout {
             transform: translateX(50%);
-            width: 200%
+            width: 220%
         }
 
         .panel systemText {
@@ -233,7 +234,7 @@
             <h4>Neighborhood Metrics</h4>
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
-                    <p class="">Select a month and year:</p>
+                    <p style="font-weight:bold">Select a month and year:</p>
                 </div>
                 <div class="col-sm-7">
                     <input class="metricMonthPicker form-control month-year-input" type="text"></div>
