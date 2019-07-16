@@ -61,6 +61,8 @@ namespace Neptune.Web.Common
         public static readonly string PathToPythonExecutable = SitkaConfiguration.GetOptionalAppSetting("PathToPythonExecutable");
         public static readonly string PathToPythonTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPythonTestScript");
         public static readonly string PythonWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PythonWorkingDirectory");
+        public static string PathToTestBatchFile = SitkaConfiguration.GetOptionalAppSetting("PathToTestBatchFile");
+        public static string PathToTestPythonLauncher = SitkaConfiguration.GetOptionalAppSetting("PathToTestPythonLauncher");
 
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 
@@ -78,6 +80,7 @@ namespace Neptune.Web.Common
             SitkaConfiguration.GetRequiredAppSetting("CanonicalHostNameDroolTool");
 
         public static List<string> CanonicalHostNames => new List<string>(SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName"));
+
         public static readonly string NominatimApiKey = SitkaConfiguration.GetRequiredAppSetting("NominatimAPIKey");
 
         public static string GetCanonicalHost(string hostName, bool useApproximateMatch)

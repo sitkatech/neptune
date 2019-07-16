@@ -53,6 +53,12 @@
     <add key="aspnet:MaxJsonDeserializerMembers" value="150000" />
     <add key="AutoDelineateServiceUrl" value="${auto-delineate-service-url}"/>
     <add key="NominatimAPIKey" value="${nominatim-key}"/>
+    <add key="PathToPythonExecutable" value="${path-to-python-executable}"/>
+    <add key="PathToPythonTestScript" value="${path-to-python-test-script}"/>
+    <add key="PythonWorkingDirectory" value="${python-working-directory}"/>
+    <add key="PathToTestBatchFile" value="${path-to-test-batch-file}"/>
+    <add key="PathToTestPythonLauncher" value="${path-to-test-python-launcher}"/>
+
   </appSettings>
   <system.net>
     <mailSettings>

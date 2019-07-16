@@ -42,5 +42,37 @@ namespace Neptune.Web.Common
             Assert.That(processUtilityResult.ReturnCode == 0);
             Assert.That(processUtilityResult.StdOut.Contains("Success!"));
         }
+        [Test]
+        public void TestCanExecuteBatchFile()
+        {
+            var paramToEcho = "Echo Me!";
+
+            var commandLineArguments = new List<string> { "/q", "/c", NeptuneWebConfiguration.PathToTestBatchFile, paramToEcho };
+
+            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(@"C:\Temp", "cmd.exe", commandLineArguments, true, Convert.ToInt32(5000));
+
+            Assert.That(processUtilityResult.ReturnCode == 0);
+            Assert.That(processUtilityResult.StdOut.Contains(paramToEcho));
+        }
+
+        [Test]
+        public void TestCanExecutePythonScriptViaBatchFile()
+        {
+            var pythonWorkingDirectory = NeptuneWebConfiguration.PythonWorkingDirectory;
+
+            var commandLineArguments = new List<string>
+            {
+                "/q",
+                "/c",
+                NeptuneWebConfiguration.PathToTestPythonLauncher,
+                pythonWorkingDirectory,
+                NeptuneWebConfiguration.PathToPythonTestScript
+            };
+
+            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(@"C:\Temp", "cmd.exe", commandLineArguments, true, Convert.ToInt32(5000));
+
+            Assert.That(processUtilityResult.ReturnCode == 0);
+            Assert.That(processUtilityResult.StdOut.Contains("Success!"));
+        }
     }
 }
