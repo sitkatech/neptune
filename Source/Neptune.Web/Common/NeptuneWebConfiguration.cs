@@ -58,6 +58,10 @@ namespace Neptune.Web.Common
 
         public static readonly string AutoDelineateServiceUrl = SitkaConfiguration.GetOptionalAppSetting("AutoDelineateServiceUrl");
 
+        public static readonly string PathToPythonExecutable = SitkaConfiguration.GetOptionalAppSetting("PathToPythonExecutable");
+        public static readonly string PathToPythonTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPythonTestScript");
+        public static readonly string PythonWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PythonWorkingDirectory");
+
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 
         public static readonly NeptuneEnvironment NeptuneEnvironment = NeptuneEnvironment.MakeNeptuneEnvironment(SitkaConfiguration.GetRequiredAppSetting("NeptuneEnvironment"));
