@@ -60,9 +60,12 @@ namespace Neptune.Web.Common
 
         public static readonly string PathToPythonExecutable = SitkaConfiguration.GetOptionalAppSetting("PathToPythonExecutable");
         public static readonly string PathToPythonTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPythonTestScript");
+        public static readonly string PathToPyqgisTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisTestScript");
+        public static readonly string PyqgisTestWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PyqgisTestWorkingDirectory");
         public static readonly string PythonWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PythonWorkingDirectory");
         public static string PathToTestBatchFile = SitkaConfiguration.GetOptionalAppSetting("PathToTestBatchFile");
         public static string PathToTestPythonLauncher = SitkaConfiguration.GetOptionalAppSetting("PathToTestPythonLauncher");
+        public static string PathToPyqgisLauncher = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisLauncher");
 
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 

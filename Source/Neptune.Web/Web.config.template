@@ -55,9 +55,12 @@
     <add key="NominatimAPIKey" value="${nominatim-key}"/>
     <add key="PathToPythonExecutable" value="${path-to-python-executable}"/>
     <add key="PathToPythonTestScript" value="${path-to-python-test-script}"/>
+    <add key="PathToPyqgisTestScript" value="${path-to-pyqgis-test-script}"/>
+    <add key="PyqgisTestWorkingDirectory" value="${pyqgis-test-working-directory}"/>
     <add key="PythonWorkingDirectory" value="${python-working-directory}"/>
     <add key="PathToTestBatchFile" value="${path-to-test-batch-file}"/>
     <add key="PathToTestPythonLauncher" value="${path-to-test-python-launcher}"/>
+    <add key="PathToPyqgisLauncher" value="${path-to-pyqgis-launcher}"/>
 
   </appSettings>
   <system.net>

@@ -58,14 +58,12 @@ namespace Neptune.Web.Common
         [Test]
         public void TestCanExecutePythonScriptViaBatchFile()
         {
-            var pythonWorkingDirectory = NeptuneWebConfiguration.PythonWorkingDirectory;
-
             var commandLineArguments = new List<string>
             {
                 "/q",
                 "/c",
                 NeptuneWebConfiguration.PathToTestPythonLauncher,
-                pythonWorkingDirectory,
+                NeptuneWebConfiguration.PythonWorkingDirectory,
                 NeptuneWebConfiguration.PathToPythonTestScript
             };
 
@@ -73,6 +71,15 @@ namespace Neptune.Web.Common
 
             Assert.That(processUtilityResult.ReturnCode == 0);
             Assert.That(processUtilityResult.StdOut.Contains("Success!"));
+        }
+
+        [Test]
+        public void TestPyqgisLauncher()
+        {
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript, NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
+
+            Assert.That(processUtilityResult.StdOut.Contains("Success!"));
+            Assert.That(processUtilityResult.StdOut.Contains("CatchIDN"));
         }
     }
 }
