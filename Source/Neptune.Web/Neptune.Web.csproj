@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Common\QgisRunner.cs" />
     <Compile Include="Common\QgisRunnerTest.cs" />
+    <Compile Include="Controllers\QgisController.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
