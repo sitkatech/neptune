@@ -12,8 +12,7 @@ namespace Neptune.Web.Controllers
         {
             var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript, NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
 
-            if (processUtilityResult.ReturnCode == 0 && processUtilityResult.StdOut.Contains("Success") &&
-                processUtilityResult.StdOut.Contains("CatchIDN"))
+            if (processUtilityResult.ReturnCode == 0 && processUtilityResult.StdOut.Contains("Aliso Creek") )
             {
                 return Content("Pyqgis execution succeeded.");
             }

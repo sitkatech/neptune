@@ -17,11 +17,13 @@ namespace Neptune.Web.Common
                 "/q",
                 "/c",
                 NeptuneWebConfiguration.PathToPyqgisLauncher,
-                pathToPyqgisScript
+                pathToPyqgisScript,       
+                NeptuneWebConfiguration.DatabaseConnectionString
             };
 
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
                 "cmd.exe", commandLineArguments, true, Convert.ToInt32(5000));
+
             return processUtilityResult;
         }
     }

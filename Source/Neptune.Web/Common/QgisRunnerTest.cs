@@ -76,10 +76,10 @@ namespace Neptune.Web.Common
         [Test]
         public void TestPyqgisLauncher()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript, NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
+          var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript, NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
 
-            Assert.That(processUtilityResult.StdOut.Contains("Success!"));
-            Assert.That(processUtilityResult.StdOut.Contains("CatchIDN"));
+            Assert.That(processUtilityResult.ReturnCode == 0 );
+            Assert.That(processUtilityResult.StdOut.Contains("Aliso Creek"));
         }
     }
 }

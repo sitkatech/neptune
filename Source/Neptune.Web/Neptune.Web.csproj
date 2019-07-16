@@ -1006,6 +1006,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.js" />
     <Content Include="Common\TestCanExecutePythonScript.py" />
     <Content Include="Common\TestPyqgis.py" />
+    <Content Include="Common\TestPyqgisMssql.py" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
@@ -1340,11 +1341,6 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cshtml" />
     <Content Include="Common\TestCanExecuteBatchFile.bat" />
     <Content Include="Common\TestPythonLauncher.bat" />
-    <Content Include="Common\test_pyqgis\test_pyqgis.cpg" />
-    <Content Include="Common\test_pyqgis\test_pyqgis.dbf" />
-    <Content Include="Common\test_pyqgis\test_pyqgis.prj" />
-    <Content Include="Common\test_pyqgis\test_pyqgis.shp" />
-    <Content Include="Common\test_pyqgis\test_pyqgis.shx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
