@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -1004,9 +1004,9 @@
     <Content Include="Areas\Trash\Views\Home\TrashMapCommon.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditAssessmentAreaLocation.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.js" />
-    <Content Include="Common\TestCanExecutePythonScript.py" />
-    <Content Include="Common\TestPyqgis.py" />
-    <Content Include="Common\TestPyqgisMssql.py" />
+    <Content Include="PyQgis\TestCanExecutePythonScript.py" />
+    <Content Include="PyQgis\TestPyqgis.py" />
+    <Content Include="PyQgis\TestPyqgisMssql.py" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
@@ -1339,8 +1339,8 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cshtml" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentExportController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cshtml" />
-    <Content Include="Common\TestCanExecuteBatchFile.bat" />
-    <Content Include="Common\TestPythonLauncher.bat" />
+    <Content Include="PyQgis\TestCanExecuteBatchFile.bat" />
+    <Content Include="PyQgis\TestPythonLauncher.bat" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
