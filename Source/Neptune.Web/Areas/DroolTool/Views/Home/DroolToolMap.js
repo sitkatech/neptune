@@ -97,7 +97,8 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                 jQuery("#MonthPicker_Button_").click();
             });
 
-        var getNeighborhoodID = function() {
+        var getNeighborhoodID = function () {
+            debugger;
             return this.NeighborhoodID;
         }.bind(this);
         
@@ -105,7 +106,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                 OnAfterChooseMonth: function() {
                     var month = Number(this.value.split("/")[0]);
                     var year = Number(this.value.split("/")[1]);
-                    console.log("0" + month + "/" + year);
+                    
                     RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
                         jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
                         jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
@@ -143,7 +144,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
     },
 
     selectNeighborhood: function (properties) {
-        //this.NeighborhoodID = properties.NetworkCatchmentID;
+        this.NeighborhoodID = properties.NetworkCatchmentID;
 
         //this.selectedNeighborhoodText.innerHTML =
         //    "Neighborhood Area (ac): " + properties.Area;
@@ -234,7 +235,6 @@ L.control.explorerTrayControl = function (options) { return new L.Control.Explor
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
     this.config = config;
-    console.log(config);
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
     
     this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
