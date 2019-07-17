@@ -31,49 +31,6 @@ namespace Neptune.Web.Common
     public class QgisRunnerTest
     {
         [Test]
-        public void TestCanExecutePythonScript()
-        {
-            var pathToPythonExecutable = NeptuneWebConfiguration.PathToPythonExecutable;
-
-            var commandLineArguments = new List<string> { NeptuneWebConfiguration.PathToPythonTestScript };
-
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(NeptuneWebConfiguration.PythonWorkingDirectory, pathToPythonExecutable, commandLineArguments, true, Convert.ToInt32(5000));
-
-            Assert.That(processUtilityResult.ReturnCode == 0);
-            Assert.That(processUtilityResult.StdOut.Contains("Success!"));
-        }
-        [Test]
-        public void TestCanExecuteBatchFile()
-        {
-            var paramToEcho = "Echo Me!";
-
-            var commandLineArguments = new List<string> { "/q", "/c", NeptuneWebConfiguration.PathToTestBatchFile, paramToEcho };
-
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(@"C:\Temp", "cmd.exe", commandLineArguments, true, Convert.ToInt32(5000));
-
-            Assert.That(processUtilityResult.ReturnCode == 0);
-            Assert.That(processUtilityResult.StdOut.Contains(paramToEcho));
-        }
-
-        [Test]
-        public void TestCanExecutePythonScriptViaBatchFile()
-        {
-            var commandLineArguments = new List<string>
-            {
-                "/q",
-                "/c",
-                NeptuneWebConfiguration.PathToTestPythonLauncher,
-                NeptuneWebConfiguration.PythonWorkingDirectory,
-                NeptuneWebConfiguration.PathToPythonTestScript
-            };
-
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(@"C:\Temp", "cmd.exe", commandLineArguments, true, Convert.ToInt32(5000));
-
-            Assert.That(processUtilityResult.ReturnCode == 0);
-            Assert.That(processUtilityResult.StdOut.Contains("Success!"));
-        }
-
-        [Test]
         public void TestPyqgisLauncher()
         {
           var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript, NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
