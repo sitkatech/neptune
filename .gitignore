@@ -24,3 +24,4 @@
 /Source/Neptune.Web/Web.config
 
 *.received.txt
+/Source/Neptune.Web/PyQgis/__pycache__

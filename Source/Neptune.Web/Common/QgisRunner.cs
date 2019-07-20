@@ -1,10 +1,5 @@
-﻿using System;
+﻿using LtInfo.Common;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LtInfo.Common;
-using LtInfo.Common.GdalOgr;
 
 namespace Neptune.Web.Common
 {
@@ -22,7 +17,7 @@ namespace Neptune.Web.Common
             };
 
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
-                "cmd.exe", commandLineArguments, true, Convert.ToInt32(5000));
+                "cmd.exe", commandLineArguments, true, null);
 
             return processUtilityResult;
         }

@@ -10,7 +10,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult Test()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript, NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\");
 
             if (processUtilityResult.ReturnCode == 0 && processUtilityResult.StdOut.Contains("Aliso Creek") )
             {
@@ -19,6 +19,22 @@ namespace Neptune.Web.Controllers
             else
             {
                 return Content("Pyqgis execution failed.");
+            }
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TestFlattenDelineations()
+        {
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}FlattenDelineations.py", NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
+
+            if (processUtilityResult.ReturnCode == 0)
+            {
+                return Content($"Pyqgis execution succeeded. Output of QgisRunner test:\r\n {processUtilityResult.StdOut}");
+            }
+            else
+            {
+                return Content($"Pyqgis execution failed. Output of QgisRunner test:\r\n {processUtilityResult.StdOutAndStdErr}");
             }
         }
     }
