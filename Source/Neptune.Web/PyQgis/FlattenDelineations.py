@@ -67,6 +67,63 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data.addAttributes(attr)
     target.updateFields()
 
+class Flatten:
+    def __init__(self, candidate_layer):
+        self.candidate_layer = candidate_layer
+
+    def iterate(self):
+        self.intersect_layer = None
+        delineation_layer_dupe = duplicateLayer(self.candidate_layer, "Delineations (Duplicate)")
+
+        # (2) Identify all fields that contribute to intersections
+
+        join_prefix = "Joined_"
+
+        res = processing.run("qgis:joinattributesbylocation", {
+	        'INPUT':self.candidate_layer,
+	        'JOIN':delineation_layer_dupe,
+	        'PREDICATE': ['4','5'], # 4 := Overlaps, 5:= Within
+	        'JOIN_FIELDS':'',
+	        'METHOD':'0',
+	        'DISCARD_NONMATCHING':False,
+	        'PREFIX': join_prefix,
+	        'OUTPUT':r'memory:delineation_overlaps'
+        }, context=context)
+
+        intersect_contrib_layer = res['OUTPUT']
+        
+        if intersect_contrib_layer.isValid():
+            print("Intersection contributing features: " + str(intersect_contrib_layer.featureCount()))
+        else:
+            print("Output layer invalid :(")
+
+        # (3) and (4) Isolate the geometries from above
+        # TODO: fix this comment, it's wrong.
+        # a) We have to filter layer (2) to ignore the rows where both delineation IDs are equal (a field is always within itself)
+        # b) We also have to ignore duplicate records where the delineation IDs on the left and right are swapped.
+        # putting (a) and (b) together gives us the following, frustratingly simple, filter:
+
+        filter_icl = QgsFeatureRequest()
+        filter_icl.setFilterExpression("DelineationID < {joined_id}DelineationID".format(joined_id = join_prefix))
+
+        self.intersect_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Intersect Layer", "memory")
+        assignFieldsToLayerFromSourceLayer(left_ic_layer, self.candidate_layer)
+        ids_to_add_to_left_ic_layer = set()
+        ids_to_add_to_right_ic_layer = set()
+    
+        for feat in intersect_contrib_layer.getFeatures(filter_icl):
+            
+            left_feat = self.candidate_layer.getFeature(feat["DelineationID"])
+            right_feat = self.candidate_layer.getFeature(feat["{joined_id}DelineationID".format(joined_id = join_prefix)])
+            
+            if left_feat.geometry().isGeosEqual(right_feat.geometry()):
+                ## pick the winner and retain it
+                ## intersect left and right and retain the winner
+                winner = left_feat
+
+            
+
+
 if __name__ == '__main__':
     connstring_base = parseConnstring()
     
@@ -82,7 +139,7 @@ if __name__ == '__main__':
     context = dataobjects.createContext()
     context.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
     
-    # (1) Get the delineation layer and a duplicate
+    # (1) Get the delineation layer
     # Do note that the view here has all input filters built into it
 
     connstring_delineation = connstring_base + "tables=dbo.vDelineationTGUInput"
@@ -93,52 +150,7 @@ if __name__ == '__main__':
     else:
         print("Loaded Delineation layer!")
 
-    delineation_layer_dupe = duplicateLayer(delineation_layer, "Delineations (Duplicate)")
-
-    # (2) Identify all fields that contribute to intersections
-
-    join_prefix = "Joined_"
-
-    res = processing.run("qgis:joinattributesbylocation", {
-	    'INPUT':delineation_layer,
-	    'JOIN':delineation_layer_dupe,
-	    'PREDICATE': ['4','5'], # 4 := Overlaps, 5:= Within
-	    'JOIN_FIELDS':'',
-	    'METHOD':'0',
-	    'DISCARD_NONMATCHING':False,
-	    'PREFIX': join_prefix,
-	    'OUTPUT':r'memory:delineation_overlaps'
-    }, context=context)
-
-    intersect_contrib_layer = res['OUTPUT']
-        
-    if intersect_contrib_layer.isValid():
-        print("Intersection contributing features: " + str(intersect_contrib_layer.featureCount()))
-    else:
-        print("Output layer invalid :(")
-
-    # (3) and (4) Isolate the geometries from above
-    # a) We have to filter layer (2) to ignore the rows where both delineation IDs are equal (a field is always within itself)
-    # b) We also have to ignore duplicate records where the delineation IDs on the left and right are swapped.
-    # putting (a) and (b) together gives us the following, frustratingly simple, filter:
-
-    filter_icl = QgsFeatureRequest()
-    filter_icl.setFilterExpression("DelineationID < {joined_id}DelineationID".format(joined_id = join_prefix))
-
-    left_ic_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Left IC Layer", "memory")
-    right_ic_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Right IC Layer", "memory")
-    assignFieldsToLayerFromSourceLayer(left_ic_layer, delineation_layer)
-    assignFieldsToLayerFromSourceLayer(right_ic_layer, delineation_layer)
-    ids_to_add_to_left_ic_layer = set()
-    ids_to_add_to_right_ic_layer = set()
-
-
-    
-    for feat in intersect_contrib_layer.getFeatures(filter_icl):
-        ids_to_add_to_left_ic_layer.add(feat["DelineationID"])
-        ids_to_add_to_right_ic_layer.add(feat["{joined_id}DelineationID".format(joined_id = join_prefix)])
-
-    print(ids_to_add_to_left_ic_layer)
-    print(ids_to_add_to_right_ic_layer)
+    flatten = Flatten(delineation_layer)
+    flatten.iterate()
 
     qgs.exitQgis()
