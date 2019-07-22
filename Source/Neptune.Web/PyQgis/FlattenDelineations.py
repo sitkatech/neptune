@@ -13,7 +13,10 @@ from qgis.core import (
      QgsProcessingFeedback, 
      QgsVectorLayer,
      QgsFeatureRequest,
-     QgsDataSourceUri
+     QgsDataSourceUri,
+     QgsFeature,
+     QgsVectorFileWriter,
+     QgsCoordinateReferenceSystem
 )
 from qgis.analysis import QgsNativeAlgorithms
 
@@ -70,19 +73,109 @@ def assignFieldsToLayerFromSourceLayer(target, source):
 class Flatten:
     def __init__(self, candidate_layer):
         self.candidate_layer = candidate_layer
+        self.fields = self.candidate_layer.dataProvider().fields()
+        self.intersect_layer = None
+        self.equality_cycles = {}
+        self.next_equality_index = 0
+        
+    def run(self):
+        # iterate until candidate_layer is empty
 
     def iterate(self):
-        self.intersect_layer = None
-        delineation_layer_dupe = duplicateLayer(self.candidate_layer, "Delineations (Duplicate)")
+        self.candidate_layer.startEditing()
+        self.intersect_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Intersect Layer", "memory")
+        assignFieldsToLayerFromSourceLayer(self.intersect_layer, self.candidate_layer)
+        
+        # (2)(a) Collapse equality chains
+        self.removeEqualitiesFromCandidateLayer()
 
-        # (2) Identify all fields that contribute to intersections
+        # (2)(b) Deal with withins
+        self.handleInclusionsInCandidateLayer()
+
+        # (2)(c) Deal with ordinary overlaps
+        self.handleOverlapsInCandidateLayer()
+
+        ##at this point, intersection layer is complete (Up to correcting equality cycles)
+
+        self.graduate()
+
+    def removeEqualitiesFromCandidateLayer(self):
+        print("Start collapse equality chains")
+        print("Starting with {count} features".format(count = str(self.candidate_layer.featureCount())))
+
+        dupe = duplicateLayer(self.candidate_layer, "Duplicate")
+        join_prefix = "Joined_"
+
+        res = processing.run("qgis:joinattributesbylocation", {
+	        'INPUT': self.candidate_layer,
+	        'JOIN': dupe,
+	        'PREDICATE': ['2'], # 2 := Equals
+	        'JOIN_FIELDS':'',
+	        'METHOD':'0',
+	        'DISCARD_NONMATCHING':False,
+	        'PREFIX': join_prefix,
+	        'OUTPUT':r'memory:equalities'
+        }, context=context)
+
+        equalities_layer = res['OUTPUT']
+
+        # equality is reflexive, so this filter is wlog
+        filter_icl = QgsFeatureRequest()
+        filter_icl.setFilterExpression("DelineationID < {joined_id}DelineationID".format(joined_id = join_prefix))
+        
+        # for the equality predicate, we remove the losers from all future consideration
+        for feat in equalities_layer.getFeatures(filter_icl):
+            if feat["TrashCaptureEffectiveness"] <= feat["Joined_TrashCaptureEffectiveness"]:   # left side loses
+                self.removeFromCandidateLayer(feat["DelineationID"])
+            else:
+                self.removeFromCandidateLayer(feat["Joined_DelineationID"])                     # right side loses
+
+        self.candidate_layer.commitChanges()
+        print("Ending with {count} features".format(count = str(self.candidate_layer.featureCount())))
+
+    def handleInclusionsInCandidateLayer(self):
+        print("Start handle inclusions")
+        print("Starting with {count} features".format(count = str(self.candidate_layer.featureCount())))
+
+        dupe = duplicateLayer(self.candidate_layer, "Duplicate")
+        join_prefix = "Joined_"
+
+        res = processing.run("qgis:joinattributesbylocation", {
+	        'INPUT': self.candidate_layer,
+	        'JOIN': dupe,
+	        'PREDICATE': ['2'], # 5 := Within
+	        'JOIN_FIELDS':'',
+	        'METHOD':'0',
+	        'DISCARD_NONMATCHING':False,
+	        'PREFIX': join_prefix,
+	        'OUTPUT':r'memory:equalities'
+        }, context=context)
+
+        inclusions_layer = res['OUTPUT']
+
+        # within is not reflexive, so we only have to filter out self-equals
+        filter_icl = QgsFeatureRequest()
+        filter_icl.setFilterExpression("DelineationID != {joined_id}DelineationID".format(joined_id = join_prefix))
+
+        # the smaller is removed if it loses; else it is retained for the next iteration
+        for feat in inclusions_layer.getFeatures(filter_icl):
+            if feat["TrashCaptureEffectiveness"] <= feat["Joined_TrashCaptureEffectiveness"]:   # smaller loses
+                self.removeFromCandidateLayer(feat["DelineationID"])
+            else:                                                                               # smaller wins
+                self.addFeatureToIntersectLayer(feat["Joined_TrashCaptureEffectiveness"])
+
+        self.intersect_layer.commitChanges()
+        print("Ending with {count} features".format(count = str(self.candidate_layer.featureCount())))
+
+    def handleOverlapsInCandidateLayer(self):
+        dupe = duplicateLayer(self.candidate_layer, "Duplicate")
 
         join_prefix = "Joined_"
 
         res = processing.run("qgis:joinattributesbylocation", {
 	        'INPUT':self.candidate_layer,
-	        'JOIN':delineation_layer_dupe,
-	        'PREDICATE': ['4','5'], # 4 := Overlaps, 5:= Within
+	        'JOIN':dupe,
+	        'PREDICATE': ['4'], # 4 := Overlaps
 	        'JOIN_FIELDS':'',
 	        'METHOD':'0',
 	        'DISCARD_NONMATCHING':False,
@@ -92,37 +185,53 @@ class Flatten:
 
         intersect_contrib_layer = res['OUTPUT']
         
-        if intersect_contrib_layer.isValid():
-            print("Intersection contributing features: " + str(intersect_contrib_layer.featureCount()))
-        else:
-            print("Output layer invalid :(")
-
-        # (3) and (4) Isolate the geometries from above
-        # TODO: fix this comment, it's wrong.
-        # a) We have to filter layer (2) to ignore the rows where both delineation IDs are equal (a field is always within itself)
-        # b) We also have to ignore duplicate records where the delineation IDs on the left and right are swapped.
-        # putting (a) and (b) together gives us the following, frustratingly simple, filter:
-
+        # the overlap operation is reflexive, so this filter is wlog
         filter_icl = QgsFeatureRequest()
         filter_icl.setFilterExpression("DelineationID < {joined_id}DelineationID".format(joined_id = join_prefix))
-
-        self.intersect_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Intersect Layer", "memory")
-        assignFieldsToLayerFromSourceLayer(left_ic_layer, self.candidate_layer)
-        ids_to_add_to_left_ic_layer = set()
-        ids_to_add_to_right_ic_layer = set()
     
         for feat in intersect_contrib_layer.getFeatures(filter_icl):
-            
-            left_feat = self.candidate_layer.getFeature(feat["DelineationID"])
-            right_feat = self.candidate_layer.getFeature(feat["{joined_id}DelineationID".format(joined_id = join_prefix)])
-            
-            if left_feat.geometry().isGeosEqual(right_feat.geometry()):
-                ## pick the winner and retain it
-                ## intersect left and right and retain the winner
-                winner = left_feat
+            for lf in self.candidate_layer.getFeatures("DelineationID = {id}".format(id=feat["DelineationID"])):
+                left_feat = lf
 
-            
+            for rf in self.candidate_layer.getFeatures("DelineationID = {id}".format(id=feat["Joined_DelineationID"])):
+                right_feat = rf
 
+            retained_intersection = left_feat.geometry().intersection(right_feat.geometry())
+            
+            if left_feat.isValid() and right_feat.isValid():
+                if left_feat["TrashCaptureEffectiveness"] >= right_feat["TrashCaptureEffectiveness"]:
+                    ret_int_feat = QgsFeature(left_feat)
+                    ret_int_feat.setGeometry(retained_intersection)
+                else:
+                    ret_int_feat = QgsFeature(right_feat)
+                    ret_int_feat.setGeometry(retained_intersection)
+                self.intersect_layer.addFeature(ret_int_feat)
+            else:
+                print("Skipping")
+
+        self.intersect_layer.commitChanges()
+
+    def graduate(self):
+        ## subtract candidate_layer - intersect_layer
+        ## append the subtract to graduate_layer
+        ## assign candidate_layer := intersect_layer
+
+    def writeCandidateLayerToTempFile(self):
+        crs = QgsCoordinateReferenceSystem("epsg:4326")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\wow.shp", "UTF-8", crs , "ESRI Shapefile")
+
+    def writeIntersectLayerToTempFile(self):
+        crs = QgsCoordinateReferenceSystem("epsg:4326")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.intersect_layer, r"c:\temp\wow.shp", "UTF-8", crs , "ESRI Shapefile")
+
+    def removeFromCandidateLayer(self, delineationID):
+        for featToDelete in self.candidate_layer.getFeatures("DelineationID = {id}".format(id=delineationID)):
+            self.candidate_layer.deleteFeature(featToDelete.id())
+
+    def addFeatureToIntersectLayer(self, delineationID):
+        for featToAppend in self.candidate_layer.getFeatures("DelineationID = {id}".format(id=delineationID)):
+            self.intersect_layer.addFeature(featToAppend)
+                
 
 if __name__ == '__main__':
     connstring_base = parseConnstring()
@@ -152,5 +261,6 @@ if __name__ == '__main__':
 
     flatten = Flatten(delineation_layer)
     flatten.iterate()
+
 
     qgs.exitQgis()
