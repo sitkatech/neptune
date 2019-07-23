@@ -73,13 +73,20 @@ def assignFieldsToLayerFromSourceLayer(target, source):
 class Flatten:
     def __init__(self, candidate_layer):
         self.candidate_layer = candidate_layer
+        self.graduate_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Graduate Layer", "memory")
+        self.graduate_layer.startEditing()
         self.fields = self.candidate_layer.dataProvider().fields()
         self.intersect_layer = None
         self.equality_cycles = {}
         self.next_equality_index = 0
         
     def run(self):
-        # iterate until candidate_layer is empty
+        iteration_number = 0
+        candidates_count = self.candidate_layer.featureCount()
+        while (candidates_count > 0):
+            self.iterate()
+            candidates_count  = self.candidate_layer.featureCount()
+            iteration_number += 1
 
     def iterate(self):
         self.candidate_layer.startEditing()
@@ -212,17 +219,50 @@ class Flatten:
         self.intersect_layer.commitChanges()
 
     def graduate(self):
-        ## subtract candidate_layer - intersect_layer
-        ## append the subtract to graduate_layer
-        ## assign candidate_layer := intersect_layer
+        # short out if there are no intersections
+        if self.intersect_layer.featureCount() == 0:
+            #self.graduate_layer = duplicateLayer(self.candidate_layer, "Graduate Layer")
+            #self.candidate_layer = duplicateLayer(self.intersect_layer, "Candidate Layer")
+            self.graduate_layer = self.candidate_layer
+            self.candidate_layer = self.intersect_layer
+            pass
+
+        # Subtract the intersections from the layer under consideration
+        self.writeCandidateLayerToTempFile()
+        self.writeIntersectLayerToTempFile()
+
+        join_prefix = "Joined_"
+
+        res = processing.run("native:difference", {
+	        'INPUT':self.candidate_layer,
+	        'OVERLAY': self.intersect_layer,
+	        'OUTPUT':r'memory:difference'
+        }, context=context)
+
+        difference_layer = res["OUTPUT"]
+
+        # merge the difference in with the corrected layer from previous iterations
+        res = processing.run("native:mergevectorlayers", {
+	        'LAYERS': [self.graduate_layer, difference_layer],
+            'CRS': 'EPSG:4326',
+	        'OUTPUT':r'memory:graduate'
+        }, context=context)
+        
+        # reassign
+        self.graduate_layer = res['OUTPUT']
+        self.candidate_layer = self.intersect_layer
 
     def writeCandidateLayerToTempFile(self):
         crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\wow.shp", "UTF-8", crs , "ESRI Shapefile")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\candidate.shp", "UTF-8", crs , "ESRI Shapefile")
 
     def writeIntersectLayerToTempFile(self):
         crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.intersect_layer, r"c:\temp\wow.shp", "UTF-8", crs , "ESRI Shapefile")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.intersect_layer, r"c:\temp\intersect.shp", "UTF-8", crs , "ESRI Shapefile")
+
+    def writeGraduateLayerToTempFile(self):
+        crs = QgsCoordinateReferenceSystem("epsg:4326")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.graduate_layer, r"c:\temp\graduate.shp", "UTF-8", crs , "ESRI Shapefile")
 
     def removeFromCandidateLayer(self, delineationID):
         for featToDelete in self.candidate_layer.getFeatures("DelineationID = {id}".format(id=delineationID)):
@@ -230,8 +270,7 @@ class Flatten:
 
     def addFeatureToIntersectLayer(self, delineationID):
         for featToAppend in self.candidate_layer.getFeatures("DelineationID = {id}".format(id=delineationID)):
-            self.intersect_layer.addFeature(featToAppend)
-                
+            self.intersect_layer.addFeature(featToAppend)    
 
 if __name__ == '__main__':
     connstring_base = parseConnstring()
@@ -260,7 +299,7 @@ if __name__ == '__main__':
         print("Loaded Delineation layer!")
 
     flatten = Flatten(delineation_layer)
-    flatten.iterate()
-
+    flatten.run()
+    flatten.writeGraduateLayerToTempFile()
 
     qgs.exitQgis()
