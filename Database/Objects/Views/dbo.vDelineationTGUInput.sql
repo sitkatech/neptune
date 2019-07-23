@@ -5,7 +5,7 @@ Create View [dbo].[vDelineationTGUInput]
 As
 Select
 	d.DelineationID,
-	DelineationGeometry.Reduce(.0001) as DelineationGeometry,
+	DelineationGeometry,
 	t.StormwaterJurisdictionID,
 	ISNULL(Case
 		when tcs.TrashCaptureStatusTypeDisplayName = 'Full' then 100
