@@ -70,9 +70,11 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data.addAttributes(attr)
     target.updateFields()
 
-class Flatten:
 
-    def __init__(self, candidate_layer, layer_identifier):
+JOIN_PREFIX = "Joined_"
+
+class Flatten:
+    def __init__(self, candidate_layer, layer_identifier, compareFeaturesViaJoinedLayer, compareFeaturesViaSeparateLayers):
         self.candidate_layer = candidate_layer
         self.graduate_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "Graduate Layer", "memory")
         self.graduate_layer.startEditing()
@@ -80,8 +82,9 @@ class Flatten:
         self.intersect_layer = None
         self.equality_cycles = {}
         self.next_equality_index = 0
-        self.JOIN_PREFIX = "Joined_"
         self.layer_identifier = layer_identifier
+        self.compareFeaturesViaJoinedLayer = compareFeaturesViaJoinedLayer
+        self.compareFeaturesViaSeparateLayers = compareFeaturesViaSeparateLayers
         
     def run(self):
         iteration_number = 0
@@ -114,7 +117,7 @@ class Flatten:
         print("Starting with {count} features".format(count = str(self.candidate_layer.featureCount())))
 
         dupe = duplicateLayer(self.candidate_layer, "Duplicate")
-        join_prefix = self.JOIN_PREFIX
+        join_prefix = JOIN_PREFIX
 
         res = processing.run("qgis:joinattributesbylocation", {
 	        'INPUT': self.candidate_layer,
@@ -135,7 +138,7 @@ class Flatten:
         
         # for the equality predicate, we remove the losers from all future consideration
         for feat in equalities_layer.getFeatures(filter_icl):
-            if feat["TrashCaptureEffectiveness"] <= feat["Joined_TrashCaptureEffectiveness"]:   # left side loses
+            if self.compareFeatures(feat):   # left side loses
                 self.removeFromCandidateLayer(feat[self.getLayerIdentifier(False)])
             else:
                 self.removeFromCandidateLayer(feat[self.getLayerIdentifier(True)])                     # right side loses
@@ -145,25 +148,32 @@ class Flatten:
 
     def lessThanIDFilterString(self):
         # eg Table < Joined_TableID; prevents duplicate/permute records
-        return "{identifier} < {join_prefix}{identifier}".format(identifier = self.layer_identifier, join_prefix = self.JOIN_PREFIX)
+        return "{identifier} < {join_prefix}{identifier}".format(identifier = self.layer_identifier, join_prefix = JOIN_PREFIX)
 
     def neqIDFilterString(self):
         # eg TableID != Joined_TableID; prevents within from finding equalities
-        return "{identifier} != {join_prefix}{identifier}".format(identifier = self.layer_identifier, join_prefix = self.JOIN_PREFIX)
+        return "{identifier} != {join_prefix}{identifier}".format(identifier = self.layer_identifier, join_prefix = JOIN_PREFIX)
 
     def getLayerIdentifier(self, joined = False):
         if not joined:
             return self.layer_identifier
         else:
-            return "{jp}{li}".format(jp=self.JOIN_PREFIX, li=self.layer_identifier)
-       
+            return "{jp}{li}".format(jp=JOIN_PREFIX, li=self.layer_identifier)
 
+
+    # expected to return true if the left side (or the unjoined side) loses
+    def compareFeatures(self, left_feat, right_feat = None):
+        if right_feat == None:
+            return self.compareFeaturesViaJoinedLayer(left_feat)
+        else:
+            return self.compareFeaturesViaSeparateLayers(left_feat,right_feat)
+    
     def handleInclusionsInCandidateLayer(self):
         print("Start handle inclusions")
         print("Starting with {count} features".format(count = str(self.candidate_layer.featureCount())))
 
         dupe = duplicateLayer(self.candidate_layer, "Duplicate")
-        join_prefix = self.JOIN_PREFIX
+        join_prefix = JOIN_PREFIX
 
         res = processing.run("qgis:joinattributesbylocation", {
 	        'INPUT': self.candidate_layer,
@@ -180,7 +190,7 @@ class Flatten:
 
         # the smaller is removed if it loses; else it is retained for the next iteration
         for feat in inclusions_layer.getFeatures(self.neqIDFilterString()):
-            if feat["TrashCaptureEffectiveness"] <= feat["Joined_TrashCaptureEffectiveness"]:   # smaller loses
+            if self.compareFeatures(feat):   # smaller loses
                 self.removeFromCandidateLayer(feat[self.getLayerIdentifier(False)])
             else:                                                                               # smaller wins
                 self.addFeatureToIntersectLayer(feat[self.getLayerIdentifer(True)])
@@ -191,7 +201,7 @@ class Flatten:
     def handleOverlapsInCandidateLayer(self):
         dupe = duplicateLayer(self.candidate_layer, "Duplicate")
 
-        join_prefix = self.JOIN_PREFIX
+        join_prefix = JOIN_PREFIX
 
         res = processing.run("qgis:joinattributesbylocation", {
 	        'INPUT':self.candidate_layer,
@@ -218,11 +228,11 @@ class Flatten:
             retained_intersection = left_feat.geometry().intersection(right_feat.geometry())
             
             if left_feat.isValid() and right_feat.isValid():
-                if left_feat["TrashCaptureEffectiveness"] >= right_feat["TrashCaptureEffectiveness"]:
-                    ret_int_feat = QgsFeature(left_feat)
+                if self.comparecompareFeatures(left_feat, right_feat):   # left side loses
+                    ret_int_feat = QgsFeature(right_feat)
                     ret_int_feat.setGeometry(retained_intersection)
                 else:
-                    ret_int_feat = QgsFeature(right_feat)
+                    ret_int_feat = QgsFeature(left_feat)
                     ret_int_feat.setGeometry(retained_intersection)
                 self.intersect_layer.addFeature(ret_int_feat)
             else:
@@ -238,7 +248,7 @@ class Flatten:
             pass
 
         # Subtract the intersections from the layer under consideration
-        join_prefix = self.JOIN_PREFIX
+        join_prefix = JOIN_PREFIX
 
         res = processing.run("native:difference", {
 	        'INPUT':self.candidate_layer,
@@ -292,8 +302,14 @@ if __name__ == '__main__':
 
     # must set processing framework to skip invalid geometries as it defaults to halt-and-catch-fire
     context = dataobjects.createContext()
-    context.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
-    
+    context.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)\
+
+    # Set the decision functions for delineations
+    def compareDelineationsViaJoinedLayer(feat):
+        return feat["TrashCaptureEffectiveness"] <= feat["{jp}TrashCaptureEffectiveness".format(jp=JOIN_PREFIX)]
+    def compareDelineationsViaSeparateLayers(left_feat, right_feat):
+        return left_feat["TrashCaptureEffectiveness"] <= right_feat["TrashCaptureEffectiveness"]
+
     # (1) Get the delineation layer
     # Do note that the view here has all input filters built into it
 
@@ -305,7 +321,7 @@ if __name__ == '__main__':
     else:
         print("Loaded Delineation layer!")
 
-    flatten = Flatten(delineation_layer, "DelineationID")
+    flatten = Flatten(delineation_layer, "DelineationID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
     flatten.run()
     flatten.writeGraduateLayerToTempFile()
 
