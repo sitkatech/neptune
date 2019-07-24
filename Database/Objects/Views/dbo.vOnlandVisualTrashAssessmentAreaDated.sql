@@ -22,4 +22,5 @@ from dbo.OnlandVisualTrashAssessmentArea a
 		on a.OnlandVisualTrashAssessmentAreaID = q.OnlandVisualTrashAssessmentAreaID
 	join  dbo.OnlandVisualTrashAssessmentScore score
 		on score.OnlandVisualTrashAssessmentScoreID = q.OnlandVisualTrashAssessmentScoreID
+	where rownumber = 1
 GO
