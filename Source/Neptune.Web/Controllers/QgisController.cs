@@ -21,6 +21,21 @@ namespace Neptune.Web.Controllers
                 return Content($"Pyqgis execution failed. Output of QgisRunner test:\n {processUtilityResult.StdOutAndStdErr}");
             }
         }
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TestNoProcessing()
+        {
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\");
+
+            if (processUtilityResult.ReturnCode == 0)
+            {
+                return Content($"Pyqgis execution succeeded. Output of QgisRunner test:\n {processUtilityResult.StdOut}");
+            }
+            else
+            {
+                return Content($"Pyqgis execution failed. Output of QgisRunner test:\n {processUtilityResult.StdOutAndStdErr}");
+            }
+        }
 
         [HttpGet]
         [SitkaAdminFeature]
