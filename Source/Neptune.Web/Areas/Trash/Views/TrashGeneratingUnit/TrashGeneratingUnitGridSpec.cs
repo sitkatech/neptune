@@ -57,9 +57,9 @@ namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
 
         public static string CurrentLoadingRate(Models.TrashGeneratingUnit x)
         {
-            if (x.LandUseBlock == null)
+            if (x.LandUseBlock?.TrashGenerationRate == null)
             {
-                return "N/A";
+                return "Not Set";
             }
 
             // fully-captured automatically means that current loading rate is 2.5
