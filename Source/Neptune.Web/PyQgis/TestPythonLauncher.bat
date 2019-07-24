@@ -1,1 +1,0 @@
-%1\python.exe %2

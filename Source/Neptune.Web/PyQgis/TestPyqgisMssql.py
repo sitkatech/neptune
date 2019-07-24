@@ -1,7 +1,13 @@
 import argparse
 import os
 from qgis.core import *
-from qgis.core import QgsDataSourceUri
+
+from TestModule import *
+
+if module_import_successful:
+        print("Module import successful!")
+else:
+        print("Module import failed!")
 
 parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
 parser.add_argument('connstring', metavar='s', type=str, help='The connection string. This test will only run if the connection string points to a Neptune DB. Do not specify tables; the script will specify which table(s) it wants to look at.')
