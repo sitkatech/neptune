@@ -28,7 +28,8 @@ if __name__ == '__main__':
 
     QgsApplication.setPrefixPath('C:/OSGEO4~1/apps/qgis', True)
 
-    qgs = QgsApplication([], False)
+    #qgs = QgsApplication([], False, )
+    qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "desktop")
 
     qgs.initQgis()
 

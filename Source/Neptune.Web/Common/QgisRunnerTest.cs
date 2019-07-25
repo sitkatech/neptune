@@ -48,6 +48,7 @@ namespace Neptune.Web.Common
             Assert.That(processUtilityResult.ReturnCode == 0);
         }
 
+        [Test]
         public void TestProcessing2()
         {
             var processUtilityResult = QgisRunner.ExecutePyqgisScript(

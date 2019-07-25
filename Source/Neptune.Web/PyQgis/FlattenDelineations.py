@@ -8,6 +8,8 @@
 
 import sys
 
+print ("starting")
+
 from qgis.core import (
      QgsApplication, 
      QgsProcessingFeedback, 
@@ -19,6 +21,8 @@ from qgis.core import (
      QgsCoordinateReferenceSystem
 )
 from qgis.analysis import QgsNativeAlgorithms
+
+print ("imported Qgis")
 
 # Append the path where processing plugin can be found
 sys.path.append(r'C:\OSGeo4W64\apps\qgis\python\plugins')
@@ -368,9 +372,13 @@ class Flatten:
             return self.compareFeaturesViaSeparateLayers(left_feat,right_feat)
 
 
-    def writeCandidateLayerToTempFile(self):
+    def writeDelineationLayerToTempFile(self):
         crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\candidate.shp", "UTF-8", crs , "ESRI Shapefile")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\delineations.shp", "UTF-8", crs , "ESRI Shapefile")
+
+    def writeOVTALayerToTempFile(self):
+        crs = QgsCoordinateReferenceSystem("epsg:4326")
+        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\ovta.shp", "UTF-8", crs , "ESRI Shapefile")
 
     def writeIntersectLayerToTempFile(self):
         crs = QgsCoordinateReferenceSystem("epsg:4326")
@@ -394,7 +402,9 @@ if __name__ == '__main__':
     
     # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
     QgsApplication.setPrefixPath(r'C:\OSGEO4W64\apps\qgis', True)
-    qgs = QgsApplication([], False, "")
+    #qgs = QgsApplication([], False, "")
+    qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "server")
+
     qgs.initQgis()
         
     Processing.initialize()
@@ -430,7 +440,7 @@ if __name__ == '__main__':
     print("Flattening Delineations...\n")
     flatten = Flatten(delineation_layer, "DelineationID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
     flatten.run()
-    flatten.writeCandidateLayerToTempFile()
+    flatten.writeDelineationLayerToTempFile()
     print("\n\n")
 
     connstring_ovta = connstring_base + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
@@ -441,9 +451,9 @@ if __name__ == '__main__':
     else:
         print("Loaded OVTA Layer")
 
-    #print("Flattening OVTAs...\n")
-    #flatten = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
-    #flatten.run()
-    #flatten.writeCandidateLayerToTempFile()
+    print("Flattening OVTAs...\n")
+    flatten = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
+    flatten.run()
+    flatten.writeOVTALayerToTempFile()
 
     qgs.exitQgis()
