@@ -84,74 +84,19 @@ class Flatten:
         # don't use the DB as the datasource
         self.candidate_layer = duplicateLayer(candidate_layer, "Candidate Layer")
         
-        
-        
         self.fields = self.candidate_layer.dataProvider().fields()
-        
-        self.equality_cycles = {}
-        self.next_equality_index = 0
+                
         self.layer_identifier = layer_identifier
         self.compareFeaturesViaJoinedLayer = compareFeaturesViaJoinedLayer
         self.compareFeaturesViaSeparateLayers = compareFeaturesViaSeparateLayers
         
     def run(self):
-        iteration_number = 0
-        # python doesn't have do-while
-        while True:
-            print("Starting Iteration #" + str(iteration_number))
-            self.iterate()
-            iteration_number += 1
-            print("Ending Iteration #" + str(iteration_number) + "\n")
-
-            break; #todo: delete, testing only
-
-            if self.overlap_count_this_iteration == 0 and self.inclusion_count_this_iteration == 0:
-                break;
-            if iteration_number > 5:
-                print("Exceeded 5 iterations; dying now.")
-                break;
-
-        print("Finished after {count} iterations!\n\n\n".format(count=iteration_number))
-
-    def iterate(self):
         # (2)(a) Collapse equality chains
         self.removeEqualitiesFromCandidateLayer()
-
         # (2)(b) Deal with withins
         self.handleInclusionsInCandidateLayer()
         # (2)(c) Deal with ordinary overlaps
         self.handleOverlapsInCandidateLayer()
-        
-
-    #def dissolveGraduateLayer(self):
-    #    print("Starting dissolve graduates with {count} graduates".format(count=self.graduate_layer.featureCount()))
-    #    res = processing.run("native:dissolve",
-    #        {'INPUT': self.graduate_layer, 
-    #         'FIELD': [self.layer_identifier],  
-    #         'OUTPUT':'memory:dissolved_output'})
-
-    #    res2 = processing.run("native:buffer", 
-    #        {'INPUT':res['OUTPUT'],
-    #         'DISTANCE': -0.00005,
-    #         'SEGMENTS':5,
-    #         'END_CAP_STYLE':1,
-    #         'JOIN_STYLE':1,
-    #         'MITER_LIMIT':2,
-    #         'DISSOLVE':False,
-    #         'OUTPUT':'memory:debuffered_output'})
-
-    #    self.graduate_layer = res2['OUTPUT']
-
-    #    print("Ending dissolve graduates with {count} graduates".format(count=self.graduate_layer.featureCount()))
-
-
-    #def divideMultipartCandidates(self):
-        #print("Starting divide multipart candidates with {count} candidate features".format(count=self.candidate_layer.featureCount()))
-
-        #res = processing.run("native:multiparttosingleparts", {'INPUT': self.candidate_layer, 'OUTPUT':'memory:single_partized'})
-
-        #self.candidate_layer = res['OUTPUT']
-        #print("Ending divide multipart candidates with {count} candidate features".format(count=self.candidate_layer.featureCount()))
 
 
     def removeEqualitiesFromCandidateLayer(self):
@@ -205,7 +150,7 @@ class Flatten:
 	        'METHOD':'0',
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
-	        'OUTPUT':r'memory:equalities'
+	        'OUTPUT':r'memory:inclusions'
         }, context=context)
 
         inclusions_layer = res['OUTPUT']
@@ -316,37 +261,6 @@ class Flatten:
                 print(self.candidate_layer.commitErrors())
 
         print("Ending handle overlaps. Found " + str(self.overlap_count_this_iteration))
-    
-    #def graduate(self):
-    #    self.intersect_layer.countSymbolFeatures()
-    #    feature_count = self.intersect_layer.featureCount()
-
-    #    print("{count} features in intersect layer...".format(count=feature_count))
-
-    #    # Subtract the intersections from the layer under consideration
-    #    join_prefix = JOIN_PREFIX
-
-    #    res = processing.run("native:difference", {
-	   #     'INPUT':self.candidate_layer,
-	   #     'OVERLAY': self.intersect_layer,
-	   #     'OUTPUT':r'memory:difference'
-    #    }, context=context)
-
-    #    difference_layer = res["OUTPUT"]
-
-    #    # todo: don't use mergevectorlayers; just loop and add
-
-    #    # merge the difference in with the corrected layer from previous iterations
-    #    res = processing.run("native:mergevectorlayers", {
-	   #     'LAYERS': [self.graduate_layer, difference_layer],
-    #        'CRS': 'EPSG:4326',
-	   #     'OUTPUT':r'memory:graduate'
-    #    }, context=context)
-        
-    #    # reassign
-    #    self.graduate_layer = res['OUTPUT']
-
-    #    self.candidate_layer = self.intersect_layer
 
     # utility methods
     
@@ -426,8 +340,7 @@ if __name__ == '__main__':
     def compareAssessmentAreasViaSeparateLayers(left_feat, right_feat):
         return left_feat["MostRecentAssessmentDate"] <= right_feat["MostRecentAssessmentDate"]
     
-    #(1) Get the delineation layer
-    #Do note that the view here has all input filters built into it
+    #Do note that the views here has all input filters built into it
 
     connstring_delineation = connstring_base + "tables=dbo.vDelineationTGUInput"
     delineation_layer = QgsVectorLayer(connstring_delineation, "Delineations", "ogr")
