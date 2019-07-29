@@ -1004,14 +1004,12 @@
     <Content Include="Areas\Trash\Views\Home\TrashMapCommon.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditAssessmentAreaLocation.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.js" />
-    <Content Include="PyQgis\FlattenDelineations.py" />
+    <Content Include="PyQgis\ComputeTrashGeneratingUnits.py" />
     <Content Include="PyQgis\TestModule.py" />
     <Content Include="PyQgis\TestPyqgis.py" />
     <Content Include="PyQgis\TestPyqgisMssql.py" />
     <Content Include="PyQgis\TestCanExecutePythonScript.py" />
-    
-    
-        <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.js" />

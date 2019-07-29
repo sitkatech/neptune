@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.IO;
+using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Security;
 
@@ -10,7 +12,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult Test()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\");
+            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             if (processUtilityResult.ReturnCode == 0)
             {
@@ -25,7 +27,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestNoProcessing()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\");
+            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             if (processUtilityResult.ReturnCode == 0)
             {
@@ -39,9 +41,9 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
-        public ContentResult TestFlattenDelineations()
+        public ContentResult TestComputeTrashGeneratingUnits()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}FlattenDelineations.py", NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
+            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisTestWorkingDirectory, $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             if (processUtilityResult.ReturnCode == 0)
             {

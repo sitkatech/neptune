@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using LtInfo.Common;
 using NUnit.Framework;
 
@@ -32,7 +33,7 @@ namespace Neptune.Web.Common
         [Test]
         public void TestPyqgisLauncher()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript,
+            var processUtilityResult = QgisRunner.ExecuteGenericPyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript,
                 NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
 
             Assert.That(processUtilityResult.ReturnCode == 0);
@@ -41,7 +42,7 @@ namespace Neptune.Web.Common
         [Test]
         public void TestProcessing()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript(
+            var processUtilityResult = QgisRunner.ExecuteGenericPyqgisScript(
                 $"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisProcessing.py",
                 @"C:\Windows\System32\");
 
@@ -51,9 +52,9 @@ namespace Neptune.Web.Common
         [Test]
         public void TestProcessing2()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript(
-                $"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}FlattenDelineations.py",
-                @"C:\Windows\System32\");
+            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript(
+                $"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}ComputeTrashGeneratingUnits.py",
+                @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             Assert.That(processUtilityResult.ReturnCode == 0);
         }

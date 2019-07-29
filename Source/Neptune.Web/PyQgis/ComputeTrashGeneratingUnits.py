@@ -33,20 +33,28 @@ from processing.core.Processing import Processing
 
 import argparse
 
-def parseConnstring():
+JOIN_PREFIX = "Joined_"
+CONNSTRING_BASE = "CONNSTRING ERROR"
+OUTPUT_PATH = "OUTPUT PATH ERROR"
+
+def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
-    parser.add_argument('connstring', metavar='s', type=str, help='The connection string. This test will only run if the connection string points to a Neptune DB. Do not specify tables; the script will specify which table(s) it wants to look at.')
+    parser.add_argument('connstring', metavar='s', type=str, help='The connection string. Do not specify tables; the script will specify which table(s) it wants to look at.')
+    parser.add_argument('output_path', metavar='d', type=str, help='The path to write the final output to.')
+
 
     args = parser.parse_args()
 
-    connstring_base = "MSSQL:" + args.connstring
+    # this is easier to write than anything sane
+    global CONNSTRING_BASE
+    global OUTPUT_PATH
+    CONNSTRING_BASE = "MSSQL:" + args.connstring
+    OUTPUT_PATH = args.output_path
 
-    if not connstring_base.endswith(";"):
-            connstring_base = connstring_base + ";"
-    if "True" in connstring_base:
-            connstring_base = connstring_base.replace("True", "Yes")
-
-    return connstring_base
+    if not CONNSTRING_BASE.endswith(";"):
+            CONNSTRING_BASE = CONNSTRING_BASE + ";"
+    if "True" in CONNSTRING_BASE:
+            CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
 
 # Create an exact duplicate of the input layer.
 # Needed because the processing framework cannot actually operate with the same layer as multiple inputs to an algorithm
@@ -75,7 +83,6 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     target.updateFields()
 
 
-JOIN_PREFIX = "Joined_"
 
 class Flatten:
     
@@ -295,7 +302,7 @@ class Flatten:
             self.intersect_layer.addFeature(featToAppend)    
 
 if __name__ == '__main__':
-    connstring_base = parseConnstring()
+    parseArguments()
     
     # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
     QgsApplication.setPrefixPath(r'C:\OSGEO4W64\apps\qgis', True)
@@ -325,7 +332,7 @@ if __name__ == '__main__':
     
     #Do note that the views here has all input filters built into it
 
-    connstring_delineation = connstring_base + "tables=dbo.vDelineationTGUInput"
+    connstring_delineation = CONNSTRING_BASE + "tables=dbo.vDelineationTGUInput"
     delineation_layer = QgsVectorLayer(connstring_delineation, "Delineations", "ogr")
     
     if not delineation_layer.isValid():
@@ -339,7 +346,7 @@ if __name__ == '__main__':
     delineation_flattened_layer = flatten_delineations.working_layer
     print("\n\n")
 
-    connstring_ovta = connstring_base + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
+    connstring_ovta = CONNSTRING_BASE + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
     ovta_layer = QgsVectorLayer(connstring_ovta, "OVTAs", "ogr")
 
     if not ovta_layer.isValid():
@@ -364,7 +371,7 @@ if __name__ == '__main__':
 
     union_layer = union_res['OUTPUT']
 
-    connstring_land_use_block = connstring_base + "tables=dbo.LandUseBlock"
+    connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.LandUseBlock"
     land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
 
     if not land_use_block_layer.isValid():
@@ -372,7 +379,7 @@ if __name__ == '__main__':
     else:
         print("Loaded Land Use Block Layer")
 
-    print("Intersect Land Use Block layer with Union Layer")
+    print("Intersect Land Use Block layer with Union Layer. Will write to: " + OUTPUT_PATH)
 
     intersect_res = processing.run("native:intersection", {
         'INPUT': land_use_block_layer,
@@ -380,15 +387,10 @@ if __name__ == '__main__':
         'INPUT_FIELDS':[],
         'OVERLAY_FIELDS':[],
         'OVERLAY_FIELDS_PREFIX':'',
-        'OUTPUT':'memory:union_layer'
+        'OUTPUT':OUTPUT_PATH
         }, context=PROCESSING_CONTEXT)
 
     intersect_layer = intersect_res['OUTPUT']
-
-    print("Writing TGU layer...")
-
-    crs = QgsCoordinateReferenceSystem("epsg:4326")
-    error = QgsVectorFileWriter.writeAsVectorFormat(intersect_layer, r"c:\temp\damn_we_really_got_it.shp", "UTF-8", crs , "ESRI Shapefile")
 
     print("Successed!")
 
