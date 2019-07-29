@@ -79,12 +79,12 @@ JOIN_PREFIX = "Joined_"
 
 class Flatten:
     
-    def __init__(self, candidate_layer, layer_identifier, compareFeaturesViaJoinedLayer, compareFeaturesViaSeparateLayers):
+    def __init__(self, working_layer, layer_identifier, compareFeaturesViaJoinedLayer, compareFeaturesViaSeparateLayers):
         
         # don't use the DB as the datasource
-        self.candidate_layer = duplicateLayer(candidate_layer, "Candidate Layer")
+        self.working_layer = duplicateLayer(working_layer, "Candidate Layer")
         
-        self.fields = self.candidate_layer.dataProvider().fields()
+        self.fields = self.working_layer.dataProvider().fields()
                 
         self.layer_identifier = layer_identifier
         self.compareFeaturesViaJoinedLayer = compareFeaturesViaJoinedLayer
@@ -101,13 +101,13 @@ class Flatten:
 
     def removeEqualitiesFromCandidateLayer(self):
         print("Start collapse equality chains")
-        print("Starting with {count} features".format(count = str(self.candidate_layer.featureCount())))
+        print("Starting with {count} features".format(count = str(self.working_layer.featureCount())))
 
-        dupe = duplicateLayer(self.candidate_layer, "Duplicate")
+        dupe = duplicateLayer(self.working_layer, "Duplicate")
         join_prefix = JOIN_PREFIX
 
         res = processing.run("qgis:joinattributesbylocation", {
-	        'INPUT': self.candidate_layer,
+	        'INPUT': self.working_layer,
 	        'JOIN': dupe,
 	        'PREDICATE': ['2'], # 2 := Equals
 	        'JOIN_FIELDS':'',
@@ -115,7 +115,7 @@ class Flatten:
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
 	        'OUTPUT':r'memory:equalities'
-        }, context=context)
+        }, context=PROCESSING_CONTEXT)
 
         equalities_layer = res['OUTPUT']
 
@@ -123,7 +123,7 @@ class Flatten:
         filter_icl = QgsFeatureRequest()
         filter_icl.setFilterExpression(self.lessThanIDFilterString())
         
-        self.candidate_layer.startEditing()
+        self.working_layer.startEditing()
 
         # for the equality predicate, we remove the losers from all future consideration
         for feat in equalities_layer.getFeatures(filter_icl):
@@ -132,18 +132,18 @@ class Flatten:
             else:
                 self.removeFromCandidateLayer(feat[self.getLayerIdentifier(True)])                     # right side loses
 
-        self.candidate_layer.commitChanges()
-        print("Ending with {count} features".format(count = str(self.candidate_layer.featureCount())))
+        self.working_layer.commitChanges()
+        print("Ending with {count} features".format(count = str(self.working_layer.featureCount())))
     
     def handleInclusionsInCandidateLayer(self):
         print("Start handle inclusions")
-        print("Starting with {count} features".format(count = str(self.candidate_layer.featureCount())))
+        print("Starting with {count} features".format(count = str(self.working_layer.featureCount())))
 
-        dupe = duplicateLayer(self.candidate_layer, "Duplicate")
+        dupe = duplicateLayer(self.working_layer, "Duplicate")
         join_prefix = JOIN_PREFIX
 
         res = processing.run("qgis:joinattributesbylocation", {
-	        'INPUT': self.candidate_layer,
+	        'INPUT': self.working_layer,
 	        'JOIN': dupe,
 	        'PREDICATE': ['2'], # 5 := Within
 	        'JOIN_FIELDS':'',
@@ -151,11 +151,11 @@ class Flatten:
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
 	        'OUTPUT':r'memory:inclusions'
-        }, context=context)
+        }, context=PROCESSING_CONTEXT)
 
         inclusions_layer = res['OUTPUT']
 
-        self.candidate_layer.startEditing()
+        self.working_layer.startEditing()
 
         self.inclusion_count_this_iteration = 0
 
@@ -170,10 +170,10 @@ class Flatten:
                 # unless you're using FIDs (blech), QGIS can only supply a list of features to respond to a request. We know this is a unique identifier though
                 # (In the previous version of the algorithm, this would not work because the candidate layer would eventually have multiple features per layer identifier.
                 # In this version, we no longer create new features for the candidate layer)
-                for lf in self.candidate_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(False)])):
+                for lf in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(False)])):
                     left_feat = lf
 
-                for rf in self.candidate_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(True)])):
+                for rf in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(True)])):
                     right_feat = rf
 
                 # create the new geometry from the difference
@@ -185,22 +185,22 @@ class Flatten:
                 new_feat.setGeometry(new_right_feat_geom)
 
                 # delete the old feature and add the new
-                self.candidate_layer.deleteFeature(right_feat.id())
-                self.candidate_layer.addFeature(new_feat)
+                self.working_layer.deleteFeature(right_feat.id())
+                self.working_layer.addFeature(new_feat)
 
-        self.candidate_layer.commitChanges()
+        self.working_layer.commitChanges()
 
-        print("Ending with {count} features".format(count = str(self.candidate_layer.featureCount())))
+        print("Ending with {count} features".format(count = str(self.working_layer.featureCount())))
 
     def handleOverlapsInCandidateLayer(self):
         print("Starting handle overlaps")
 
-        dupe = duplicateLayer(self.candidate_layer, "Duplicate")
+        dupe = duplicateLayer(self.working_layer, "Duplicate")
 
         join_prefix = JOIN_PREFIX
 
         res = processing.run("qgis:joinattributesbylocation", {
-	        'INPUT':self.candidate_layer,
+	        'INPUT':self.working_layer,
 	        'JOIN':dupe,
 	        'PREDICATE': ['4'], # 4 := Overlaps
 	        'JOIN_FIELDS':'',
@@ -208,7 +208,7 @@ class Flatten:
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
 	        'OUTPUT':r'memory:overlaps'
-        }, context=context)
+        }, context=PROCESSING_CONTEXT)
 
         intersect_contrib_layer = res['OUTPUT']
 
@@ -217,14 +217,14 @@ class Flatten:
         # the overlap operation without withins is reflexive, so this filter is wlog
         for feat in intersect_contrib_layer.getFeatures(self.lessThanIDFilterString()):
             self.overlap_count_this_iteration += 1 
-            self.candidate_layer.startEditing()
+            self.working_layer.startEditing()
             # unless you're using FIDs (blech), QGIS can only supply a list of features to respond to a request. We know this is a unique identifier though
             # (In the previous version of the algorithm, this would not work because the candidate layer would eventually have multiple features per layer identifier.
             # In this version, we no longer create new features for the candidate layer)
-            for lf in self.candidate_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(False)])):
+            for lf in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(False)])):
                 left_feat = lf
 
-            for rf in self.candidate_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(True)])):
+            for rf in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(True)])):
                 right_feat = rf
 
             retained_intersection = left_feat.geometry().intersection(right_feat.geometry())
@@ -240,8 +240,8 @@ class Flatten:
                     new_feat.setGeometry(new_left_feat_geom)
 
                     # delete the old feature and add the new
-                    self.candidate_layer.deleteFeature(left_feat.id())
-                    self.candidate_layer.addFeature(new_feat)
+                    self.working_layer.deleteFeature(left_feat.id())
+                    self.working_layer.addFeature(new_feat)
                 else:                                             # Right side loses. Assign Right = Right - Left
                     # create the new geometry from the difference
                     new_right_feat_geom = right_feat.geometry().difference(left_feat.geometry())
@@ -251,14 +251,14 @@ class Flatten:
                     new_feat.setGeometry(new_right_feat_geom)
 
                     # delete the old feature and add the new
-                    self.candidate_layer.deleteFeature(right_feat.id())
-                    self.candidate_layer.addFeature(new_feat)
+                    self.working_layer.deleteFeature(right_feat.id())
+                    self.working_layer.addFeature(new_feat)
             else:
                 print("Skipping " + str(left_feat[self.layer_identifier]) + ", " + str(right_feat[self.layer_identifier]))
-            saved = self.candidate_layer.commitChanges()
+            saved = self.working_layer.commitChanges()
             if not saved:
                 print("Error saving on compare {left}, {right}".format(left=left_feat[self.layer_identifier], right=right_feat[self.layer_identifier]))
-                print(self.candidate_layer.commitErrors())
+                print(self.working_layer.commitErrors())
 
         print("Ending handle overlaps. Found " + str(self.overlap_count_this_iteration))
 
@@ -285,30 +285,13 @@ class Flatten:
         else:
             return self.compareFeaturesViaSeparateLayers(left_feat,right_feat)
 
-
-    def writeDelineationLayerToTempFile(self):
-        crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\delineations.shp", "UTF-8", crs , "ESRI Shapefile")
-
-    def writeOVTALayerToTempFile(self):
-        crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.candidate_layer, r"c:\temp\ovta.shp", "UTF-8", crs , "ESRI Shapefile")
-
-    def writeIntersectLayerToTempFile(self):
-        crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.intersect_layer, r"c:\temp\intersect.shp", "UTF-8", crs , "ESRI Shapefile")
-
-    def writeGraduateLayerToTempFile(self):
-        crs = QgsCoordinateReferenceSystem("epsg:4326")
-        error = QgsVectorFileWriter.writeAsVectorFormat(self.graduate_layer, r"c:\temp\graduate.shp", "UTF-8", crs , "ESRI Shapefile")
-
     def removeFromCandidateLayer(self, feature_id):
         print("Deleteing " + str(feature_id))
-        for featToDelete in self.candidate_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
-            self.candidate_layer.deleteFeature(featToDelete.id())
+        for featToDelete in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
+            self.working_layer.deleteFeature(featToDelete.id())
 
     def addFeatureToIntersectLayer(self, feature_id):
-        for featToAppend in self.candidate_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
+        for featToAppend in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
             self.intersect_layer.addFeature(featToAppend)    
 
 if __name__ == '__main__':
@@ -325,8 +308,8 @@ if __name__ == '__main__':
     QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
     # must set processing framework to skip invalid geometries as it defaults to halt-and-catch-fire
-    context = dataobjects.createContext()
-    context.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
+    PROCESSING_CONTEXT = dataobjects.createContext()
+    PROCESSING_CONTEXT.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
 
     # Set the decision functions for delineations
     def compareDelineationsViaJoinedLayer(feat):
@@ -351,9 +334,9 @@ if __name__ == '__main__':
         print("Loaded Delineation layer!")
 
     print("Flattening Delineations...\n")
-    flatten = Flatten(delineation_layer, "DelineationID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
-    flatten.run()
-    flatten.writeDelineationLayerToTempFile()
+    flatten_delineations = Flatten(delineation_layer, "DelineationID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
+    flatten_delineations.run()
+    delineation_flattened_layer = flatten_delineations.working_layer
     print("\n\n")
 
     connstring_ovta = connstring_base + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
@@ -365,8 +348,48 @@ if __name__ == '__main__':
         print("Loaded OVTA Layer")
 
     print("Flattening OVTAs...\n")
-    flatten = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
-    flatten.run()
-    flatten.writeOVTALayerToTempFile()
+    flatten_ovtas = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
+    flatten_ovtas.run()
+    ovta_flattened_layer = flatten_ovtas.working_layer
+
+    print("Union OVTA with Delineation\n")
+
+    # union and write to a temp file for testing
+    union_res = processing.run("native:union", {
+        'INPUT': ovta_flattened_layer,
+        'OVERLAY': delineation_flattened_layer,
+        'OVERLAY_FIELDS_PREFIX':'',
+        'OUTPUT':'memory:union_layer'
+        }, context=PROCESSING_CONTEXT)
+
+    union_layer = union_res['OUTPUT']
+
+    connstring_land_use_block = connstring_base + "tables=dbo.LandUseBlock"
+    land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
+
+    if not land_use_block_layer.isValid():
+        print("Land Use Block Layer failed to Load!")
+    else:
+        print("Loaded Land Use Block Layer")
+
+    print("Intersect Land Use Block layer with Union Layer")
+
+    intersect_res = processing.run("native:intersection", {
+        'INPUT': land_use_block_layer,
+        'OVERLAY': union_layer,
+        'INPUT_FIELDS':[],
+        'OVERLAY_FIELDS':[],
+        'OVERLAY_FIELDS_PREFIX':'',
+        'OUTPUT':'memory:union_layer'
+        }, context=PROCESSING_CONTEXT)
+
+    intersect_layer = intersect_res['OUTPUT']
+
+    print("Writing TGU layer...")
+
+    crs = QgsCoordinateReferenceSystem("epsg:4326")
+    error = QgsVectorFileWriter.writeAsVectorFormat(intersect_layer, r"c:\temp\damn_we_really_got_it.shp", "UTF-8", crs , "ESRI Shapefile")
+
+    print("Successed!")
 
     qgs.exitQgis()
