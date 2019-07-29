@@ -17,6 +17,8 @@ CREATE TABLE [dbo].[TrashGeneratingUnit](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
+ALTER TABLE [dbo].[TrashGeneratingUnit] ADD  CONSTRAINT [DF_LastUpdateDate]  DEFAULT (getdate()) FOR [LastUpdateDate]
+GO
 ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_Delineation_DelineationID] FOREIGN KEY([DelineationID])
 REFERENCES [dbo].[Delineation] ([DelineationID])
 GO
