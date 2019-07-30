@@ -125,37 +125,7 @@ namespace LtInfo.Common.GdalOgr
             ExecuteOgr2OgrCommand(commandLineArguments);
         }
 
-        /// <summary>
-        /// Single-purpose method used by TGU job
-        /// </summary>
-        /// <param name="coordinateSystemId"></param>
-        /// <param name="outputLayerName"></param>
-        /// <param name="outputPath"></param>
-        /// <param name="connectionString"></param>
-        public void ImportTrashGeneratingUnitsFromShapefile(int coordinateSystemId, string outputLayerName,
-            string outputPath, string connectionString)
-        {
-            var databaseConnectionString = $"MSSQL:{connectionString}";
-
-            var commandLineArguments = new List<string>
-            {
-                "-append",
-                "-sql",
-                $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID from '{outputLayerName}'",
-                "-f",
-                "MSSQLSpatial",
-                databaseConnectionString,
-                outputPath,
-                "-t_srs",
-                GetMapProjection(coordinateSystemId),
-                "-nln",
-                "dbo.TrashGeneratingUnit"
-            };
-                
-            ExecuteOgr2OgrCommand(commandLineArguments);
-        }
-
-        private ProcessUtilityResult ExecuteOgr2OgrCommand(List<string> commandLineArguments)
+        protected ProcessUtilityResult ExecuteOgr2OgrCommand(List<string> commandLineArguments)
         {
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
             if (processUtilityResult.ReturnCode != 0)

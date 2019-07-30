@@ -340,10 +340,10 @@ if __name__ == '__main__':
     else:
         print("Loaded Delineation layer!")
 
-    # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we debuffer to smooth those out.
+    # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we use the buffer-0 trick to smooth those out.
     debuffer = processing.run("native:buffer", {
         'INPUT':delineation_layer,
-        'DISTANCE':-1e-05,
+        'DISTANCE':0,
         'SEGMENTS':5,
         'END_CAP_STYLE':1,
         'JOIN_STYLE':1,
