@@ -340,6 +340,20 @@ if __name__ == '__main__':
     else:
         print("Loaded Delineation layer!")
 
+    # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we debuffer to smooth those out.
+    debuffer = processing.run("native:buffer", {
+        'INPUT':delineation_layer,
+        'DISTANCE':-1e-05,
+        'SEGMENTS':5,
+        'END_CAP_STYLE':1,
+        'JOIN_STYLE':1,
+        'MITER_LIMIT':2,
+        'DISSOLVE':False,
+        'OUTPUT':'memory:debuffered_delineations'},
+        context = PROCESSING_CONTEXT)
+
+    debuffered_delineation_layer = debuffer['OUTPUT']
+
     print("Flattening Delineations...\n")
     flatten_delineations = Flatten(delineation_layer, "DelineationID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
     flatten_delineations.run()
