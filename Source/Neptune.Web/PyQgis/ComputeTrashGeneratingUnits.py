@@ -393,18 +393,15 @@ if __name__ == '__main__':
     else:
         print("Loaded Land Use Block Layer")
 
-    print("Intersect Land Use Block layer with Union Layer. Will write to: " + OUTPUT_PATH)
+    print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
 
-    intersect_res = processing.run("native:intersection", {
+    # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
+    tgu_res = processing.run("native:union", {
         'INPUT': land_use_block_layer,
         'OVERLAY': union_layer,
-        'INPUT_FIELDS':[],
-        'OVERLAY_FIELDS':[],
         'OVERLAY_FIELDS_PREFIX':'',
         'OUTPUT':OUTPUT_PATH
         }, context=PROCESSING_CONTEXT)
-
-    intersect_layer = intersect_res['OUTPUT']
 
     print("Successed!")
 
