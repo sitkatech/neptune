@@ -25,7 +25,7 @@ Select
 	OrganizationID,
 	OrganizationName,
 	BaselineLoadingRate,
-	IsFullTrashCapture,
+	IsNull(Cast(IsFullTrashCapture as bit), 0) as IsFullTrashCapture,
 	PartialTrashCaptureEffectivenessPercentage,
 	PriorityLandUseTypeDisplayName as LandUseType,
 	PriorityLandUseTypeID,

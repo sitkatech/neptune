@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, int isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, string landUseType, int? priorityLandUseTypeID, bool? hasBaselineScore, bool? hasProgressScore, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, double area, decimal? loadingRateDelta) : this()
+        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, bool isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, string landUseType, int? priorityLandUseTypeID, bool? hasBaselineScore, bool? hasProgressScore, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, double area, decimal? loadingRateDelta) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
@@ -87,7 +87,7 @@ namespace Neptune.Web.Models
         public int? OrganizationID { get; set; }
         public string OrganizationName { get; set; }
         public decimal BaselineLoadingRate { get; set; }
-        public int IsFullTrashCapture { get; set; }
+        public bool IsFullTrashCapture { get; set; }
         public int PartialTrashCaptureEffectivenessPercentage { get; set; }
         public string LandUseType { get; set; }
         public int? PriorityLandUseTypeID { get; set; }

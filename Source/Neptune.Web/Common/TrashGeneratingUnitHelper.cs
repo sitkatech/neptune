@@ -86,16 +86,15 @@ namespace Neptune.Web.Common
 
         public static double LoadBasedPartialCapture(StormwaterJurisdiction jurisdiction)
         {
-            var vTrashGeneratingUnitLoadBasedPartialCaptures = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedPartialCaptures.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
+            var vTrashGeneratingUnitLoadStatistics = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.DelineationIsVerified && !x.IsFullTrashCapture);
 
-            return vTrashGeneratingUnitLoadBasedPartialCaptures.Any()
-                ? vTrashGeneratingUnitLoadBasedPartialCaptures.Sum(x =>
-                    x.Area * (double) (x.BaselineLoadingRate - x.ActualLoadingAfterTrashCapture) *
+            return vTrashGeneratingUnitLoadStatistics.Any()
+                ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
+                    x.Area * (double) (x.BaselineLoadingRate - x.CurrentLoadingRate) *
                     DbSpatialHelper.SqlGeometryAreaToAcres)
                 : 0;
         }
-
 
         public static double LoadBasedOVTAProgressScores(StormwaterJurisdiction jurisdiction)
         {
