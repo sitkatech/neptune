@@ -114,11 +114,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult LoadBasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
-            var ovtas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments;
 
             var viaFullCapture = TrashGeneratingUnitHelper.LoadBasedFullCapture(jurisdiction);
-
             var viaPartialCapture = TrashGeneratingUnitHelper.LoadBasedPartialCapture(jurisdiction);
             var viaOVTAs = TrashGeneratingUnitHelper.LoadBasedOVTAProgressScores(jurisdiction);
             var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;

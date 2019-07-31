@@ -74,11 +74,12 @@ namespace Neptune.Web.Common
 
         public static double LoadBasedFullCapture(StormwaterJurisdiction jurisdiction)
         {
-            var vTrashGeneratingUnitLoadBasedFullCaptures = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedFullCaptures.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
+            var vTrashGeneratingUnitLoadStatistics = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID
+                && x.IsFullTrashCapture && x.DelineationIsVerified);
 
-            return vTrashGeneratingUnitLoadBasedFullCaptures.Any()
-                ? vTrashGeneratingUnitLoadBasedFullCaptures.Sum(x =>
+            return vTrashGeneratingUnitLoadStatistics.Any()
+                ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
                     DbSpatialHelper.SqlGeometryAreaToAcres)
                 : 0;
