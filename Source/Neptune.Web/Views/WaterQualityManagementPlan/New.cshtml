@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
 @using Neptune.Web.Views.WaterQualityManagementPlan
 
 @inherits New
@@ -13,169 +14,181 @@
         <div class="form-horizontal">
             @using (Html.BeginForm())
             {
-                @Html.HiddenFor(m => m.WaterQualityManagementPlanID, new { Value = "-1"})
-            <fieldset>
-                <legend>Water Quality Management Plan Details</legend>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanName)
+                @Html.HiddenFor(m => m.WaterQualityManagementPlanID, new { Value = "-1" })
+                <fieldset>
+                    <legend>Water Quality Management Plan Details</legend>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanName)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.WaterQualityManagementPlanName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanName)
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.TextBoxFor(m => m.WaterQualityManagementPlanName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanName)
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
+                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPriorityID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @foreach (var priority in ViewDataTyped.WaterQualityManagementPlanPriorities)
+                            {
+                                <div class="radio-inline">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.WaterQualityManagementPlanPriorityID, priority.WaterQualityManagementPlanPriorityID)
+                                        @priority.WaterQualityManagementPlanPriorityDisplayName
+                                    </label>
+                                </div>
+                            }
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPriorityID)
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
-                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanStatusID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @foreach (var status in ViewDataTyped.WaterQualityManagementPlanStatuses)
+                            {
+                                <div class="radio-inline">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.WaterQualityManagementPlanStatusID, status.WaterQualityManagementPlanStatusID)
+                                        @status.WaterQualityManagementPlanStatusDisplayName
+                                    </label>
+                                </div>
+                            }
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanStatusID)
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPriorityID)
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @foreach (var developmentType in ViewDataTyped.WaterQualityManagementPlanDevelopmentTypes)
+                            {
+                                <div class="radio-inline">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.WaterQualityManagementPlanDevelopmentTypeID, developmentType.WaterQualityManagementPlanDevelopmentTypeID)
+                                        @developmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName
+                                    </label>
+                                </div>
+                            }
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @foreach (var priority in ViewDataTyped.WaterQualityManagementPlanPriorities)
-                        {
-                            <div class="radio-inline">
-                                <label>
-                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanPriorityID, priority.WaterQualityManagementPlanPriorityID)
-                                    @priority.WaterQualityManagementPlanPriorityDisplayName
-                                </label>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanLandUseID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanLandUseID, ViewDataTyped.WaterQualityManagementPlanLandUses)
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.ApprovalDate)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.EditorFor(m => m.ApprovalDate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ApprovalDate)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.DateOfContruction)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.EditorFor(m => m.DateOfContruction, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.DateOfContruction)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.HydromodificationAppliesID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @foreach (var HydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesType)
+                            {
+                                <div class="radio-inline">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.HydromodificationAppliesID, HydromodificationAppliesType.HydromodificationAppliesID)
+                                        @HydromodificationAppliesType.HydromodificationAppliesDisplayName
+                                    </label>
+                                </div>
+                            }
+                            @Html.ValidationMessageFor(m => m.HydromodificationAppliesID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.HydrologicSubareaID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.HydrologicSubareaID, ViewDataTyped.HydrologicSubareas)
+                            @Html.ValidationMessageFor(m => m.HydrologicSubareaID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPermitTermID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanPermitTermID, ViewDataTyped.WaterQualityManagementPlanPermitTerms)
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPermitTermID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.RecordNumber)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextAreaFor(m => m.RecordNumber, new { @class = "form-control" })
+                            <p class="help-block">If there are multiple Record Numbers separate them with a comma</p>
+                            @Html.ValidationMessageFor(m => m.RecordNumber)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.RecordedWQMPAreaInAcres)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.RecordedWQMPAreaInAcres, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.RecordedWQMPAreaInAcres)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.TrashCaptureStatusTypeID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.TrashCaptureStatusTypeID, ViewDataTyped.TrashCaptureStatusTypes)
+                            @Html.ValidationMessageFor(m => m.TrashCaptureStatusTypeID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="treatmentBMPTrashCaptureContainer">
+                            <div class="col-xs-12 col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(m => m.TrashCaptureEffectiveness)
                             </div>
-                        }
-                        @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPriorityID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanStatusID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @foreach (var status in ViewDataTyped.WaterQualityManagementPlanStatuses)
-                        {
-                            <div class="radio-inline">
-                                <label>
-                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanStatusID, status.WaterQualityManagementPlanStatusID)
-                                    @status.WaterQualityManagementPlanStatusDisplayName
-                                </label>
+                            <div class="col-xs-12 col-sm-9 input-group" style="width: 250px; padding-left: 15px">
+                                @Html.TextBox(@Html.NameFor(x => x.TrashCaptureEffectiveness).ToString(), (Model.TrashCaptureEffectiveness.HasValue ? Model.TrashCaptureEffectiveness.Value.ToString() : string.Empty), new { @class = "sitkaPercentage form-control", onchange = "this.value = Math.round(this.value);", step = "1", type = "number" })
+                                <span class="input-group-addon" style="border-top-right-radius: 4px; border-bottom-right-radius: 4px;">%</span>
+                                @Html.ValidationMessageFor(m => m.TrashCaptureEffectiveness)
                             </div>
-                        }
-                        @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanStatusID)
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @foreach (var developmentType in ViewDataTyped.WaterQualityManagementPlanDevelopmentTypes)
-                        {
-                            <div class="radio-inline">
-                                <label>
-                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanDevelopmentTypeID, developmentType.WaterQualityManagementPlanDevelopmentTypeID)
-                                    @developmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName
-                                </label>
-                            </div>
-                        }
-                        @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanLandUseID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanLandUseID, ViewDataTyped.WaterQualityManagementPlanLandUses)
-                        @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.ApprovalDate)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.EditorFor(m => m.ApprovalDate, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.ApprovalDate)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.DateOfContruction)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.EditorFor(m => m.DateOfContruction, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.DateOfContruction)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.HydromodificationAppliesID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @foreach (var HydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesType)
-                        {
-                            <div class="radio-inline">
-                                <label>
-                                    @Html.RadioButtonFor(m => m.HydromodificationAppliesID, HydromodificationAppliesType.HydromodificationAppliesID)
-                                    @HydromodificationAppliesType.HydromodificationAppliesDisplayName
-                                </label>
-                            </div>
-                        }
-                        @Html.ValidationMessageFor(m => m.HydromodificationAppliesID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.HydrologicSubareaID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.SearchableDropDownListFor(m => m.HydrologicSubareaID, ViewDataTyped.HydrologicSubareas)
-                        @Html.ValidationMessageFor(m => m.HydrologicSubareaID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPermitTermID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanPermitTermID, ViewDataTyped.WaterQualityManagementPlanPermitTerms)
-                        @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPermitTermID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.RecordNumber)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.TextAreaFor(m => m.RecordNumber, new { @class = "form-control" })
-                        <p class="help-block">If there are multiple Record Numbers separate them with a comma</p>
-                        @Html.ValidationMessageFor(m => m.RecordNumber)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.RecordedWQMPAreaInAcres)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.TextBoxFor(m => m.RecordedWQMPAreaInAcres, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.RecordedWQMPAreaInAcres)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.TrashCaptureStatusTypeID)
-                    </div>
-                    <div class="col-xs-12 col-sm-9">
-                        @Html.SearchableDropDownListFor(m => m.TrashCaptureStatusTypeID, ViewDataTyped.TrashCaptureStatusTypes)
-                        @Html.ValidationMessageFor(m => m.TrashCaptureStatusTypeID)
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
                 <fielset>
                     <legend>Maintenance Contact</legend>
                     <div class="form-group">
@@ -255,3 +268,24 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    jQuery(document).ready(function() {
+        if (jQuery("#@Html.IdFor(m => m.TrashCaptureStatusTypeID)").val() ==
+            @(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)) {
+            jQuery("#treatmentBMPTrashCaptureContainer").show();
+        } else {
+            jQuery("#treatmentBMPTrashCaptureContainer").hide();
+        }
+
+        jQuery("#@Html.IdFor(m=>m.TrashCaptureStatusTypeID)").change(function() {
+            if (jQuery("#@Html.IdFor(m=>m.TrashCaptureStatusTypeID)").val() ==
+                @(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)) {
+                jQuery("#treatmentBMPTrashCaptureContainer").show();
+            } else {
+                jQuery("#treatmentBMPTrashCaptureContainer").hide();
+            }
+        });
+    })
+</script>

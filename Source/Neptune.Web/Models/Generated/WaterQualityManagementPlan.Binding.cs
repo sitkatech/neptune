@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -60,6 +60,7 @@ namespace Neptune.Web.Models
             this.RecordNumber = recordNumber;
             this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
+            this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
         }
 
         /// <summary>
@@ -189,6 +190,7 @@ namespace Neptune.Web.Models
         public string RecordNumber { get; set; }
         public decimal? RecordedWQMPAreaInAcres { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
+        public int? TrashCaptureEffectiveness { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 

@@ -39,23 +39,26 @@
     </style>
 }
 
-<div class="row">
-    <div class="col-xs-12">
-        <span class="pull-right">
+@section RightOfPageTitle
+{
+
+    <div class="row">
+        <div class="col-xs-12">
+            <span class="pull-right">
 
 
-            @if (ViewDataTyped.HasSavedWqmpDraft)
-            {
-                @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
-            }
-            else
-            {
-                <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
-            }
-        </span>
+                @if (ViewDataTyped.HasSavedWqmpDraft)
+                {
+                    @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+                }
+                else
+                {
+                    <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
+                }
+            </span>
+        </div>
     </div>
-</div>
-
+}
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -166,6 +169,16 @@
                         @ViewDataTyped.WaterQualityManagementPlan.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName
                     </div>
                 </div>
+                @if (ViewDataTyped.WaterQualityManagementPlan.TrashCaptureStatusTypeID ==
+                     TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)
+                {
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Trash Capture Effectiveness</label>
+                        <div class="col-sm-7">
+                            @ViewDataTyped.TrashCaptureEffectiveness
+                        </div>
+                    </div>
+                }
                 <hr />
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Maintenance Contact</label>
@@ -189,11 +202,11 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                {
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
-                                };
+                                                    {
+                                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
+                                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
+                                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
+                                                    };
                             }
                             @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
                             {

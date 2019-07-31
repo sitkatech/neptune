@@ -93,6 +93,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             CalculatedParcelArea = calculatedParcelAcres != 0
                 ? $"{Math.Round(calculatedParcelAcres, 1).ToString(CultureInfo.InvariantCulture)} acres"
                 : "No parcels have been associated with this WQMP";
+
+            TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
+                ? "Not Provided"
+                : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
         }
+
+        public string TrashCaptureEffectiveness { get; }
     }
 }
