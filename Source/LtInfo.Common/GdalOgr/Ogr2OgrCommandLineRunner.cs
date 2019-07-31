@@ -41,7 +41,7 @@ namespace LtInfo.Common.GdalOgr
         private readonly FileInfo _ogr2OgrExecutable;
         private readonly int _coordinateSystemId;
         private readonly double _totalMilliseconds;
-        private readonly DirectoryInfo _gdalDataPath;
+        protected readonly DirectoryInfo _gdalDataPath;
 
         public Ogr2OgrCommandLineRunner(string pathToOgr2OgrExecutable, int coordinateSystemId, double totalMilliseconds)
         {
