@@ -45,6 +45,9 @@ namespace Neptune.Web.ScheduledJobs
                 DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, 4326, 210000);
+
+                Logger.Info($"GDAL_DATA: {Environment.GetEnvironmentVariable("GDAL_DATA")}");
+
                 ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile(4326, layerName, outputPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
             }
