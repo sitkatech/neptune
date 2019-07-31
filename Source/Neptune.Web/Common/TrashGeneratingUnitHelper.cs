@@ -96,18 +96,22 @@ namespace Neptune.Web.Common
                 : 0;
         }
 
+
         public static double LoadBasedOVTAProgressScores(StormwaterJurisdiction jurisdiction)
         {
-            var vTrashGeneratingUnitLoadBasedTrashAssessments = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedTrashAssessments.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
+            var vTrashGeneratingUnitLoadStatistics =
+                HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
+                    x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID
+                    && x.HasBaselineScore.GetValueOrDefault() && x.HasProgressScore.GetValueOrDefault());
 
-            return vTrashGeneratingUnitLoadBasedTrashAssessments.Any()
-                ? vTrashGeneratingUnitLoadBasedTrashAssessments.Sum(x =>
+            return vTrashGeneratingUnitLoadStatistics.Any()
+                ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - x.ProgressLoadingRate) *
                     DbSpatialHelper.SqlGeometryAreaToAcres)
                 : 0;
         }
 
+        // done
         public static double TargetLoadReduction(StormwaterJurisdiction jurisdiction)
         {
             var vTrashGeneratingUnitLoadStatistics = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
@@ -120,13 +124,6 @@ namespace Neptune.Web.Common
                 : 0;
         }
 
-
-        public static double TotalPLUAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
-        {
-            return trashGeneratingUnits.Where(x =>
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
-        }
 
         public static double EquivalentAreaAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {

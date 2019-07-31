@@ -365,8 +365,6 @@
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedFullCaptureConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedPartialCapture.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedPartialCaptureConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedTrashAssessment.Binding.cs" />
-    <Compile Include="Models\Generated\vTrashGeneratingUnitLoadBasedTrashAssessmentConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadStatistic.Binding.cs" />
     <Compile Include="Models\Generated\vTrashGeneratingUnitLoadStatisticConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlan.Binding.cs" />

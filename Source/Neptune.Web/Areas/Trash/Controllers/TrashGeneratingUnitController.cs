@@ -6,6 +6,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System.Web.Mvc;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit;
 
@@ -54,7 +55,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
-            var totalPLUAcres = trashGeneratingUnits.TotalPLUAcreage();
+            var totalPLUAcres = jurisdiction.LandUseBlocks
+                .Where(x => x.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID).Sum(x =>
+                    x.LandUseBlockGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres) ?? 0;
 
             var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
 
@@ -116,7 +119,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var viaFullCapture = TrashGeneratingUnitHelper.LoadBasedFullCapture(jurisdiction);
             var viaPartialCapture = TrashGeneratingUnitHelper.LoadBasedPartialCapture(jurisdiction);
+
             var viaOVTAs = TrashGeneratingUnitHelper.LoadBasedOVTAProgressScores(jurisdiction);
+
             var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;
 
             var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(jurisdiction);

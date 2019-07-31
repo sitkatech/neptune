@@ -29,6 +29,8 @@ Select
 	PartialTrashCaptureEffectivenessPercentage,
 	PriorityLandUseTypeDisplayName as LandUseType,
 	PriorityLandUseTypeID,
+	Cast(HasBaselineScore as bit) as HasBaselineScore,
+	Cast(HasProgressScore as bit) as HasProgressScore,
 	Case
 		When DelineationIsVerified = 0 then BaselineLoadingRate
 		When IsFullTrashCapture = 1 then 2.5
@@ -50,6 +52,14 @@ From (
 		o.OrganizationName,
 		plut.PriorityLandUseTypeDisplayName,
 		plut.PriorityLandUseTypeID,
+		Case
+			when area.OnlandVisualTrashAssessmentBaselineScoreID is null then 0
+			else 1
+		end as HasBaselineScore,
+		Case
+			when area.OnlandVisualTrashAssessmentProgressScoreID is null then 0
+			else 1
+		end as HasProgressScore,
 		IsNull(
 			Case
 				when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
