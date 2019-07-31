@@ -2,7 +2,7 @@ Drop View If Exists dbo.vTrashGeneratingUnitLoadStatistic
 GO
 
 /*
-Everything needed to calculate the color-ramp symbology for the load-based maps
+Everything needed to compute load-based results, including the choropleth symbology for the load-based maps
 */
 Create view dbo.vTrashGeneratingUnitLoadStatistic
 as
