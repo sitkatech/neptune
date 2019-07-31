@@ -46,8 +46,6 @@ namespace Neptune.Web.ScheduledJobs
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, 4326, 210000);
 
-                Logger.Info($"GDAL_DATA: {Environment.GetEnvironmentVariable("GDAL_DATA")}");
-
                 ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile(4326, layerName, outputPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
             }
@@ -84,6 +82,9 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "-append",
             "-sql",
             $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID from '{outputLayerName}' where LandUseBlo is not null",
+            "--config",
+            "GDAL_DATA",
+            _gdalDataPath.FullName,
             "-f",
             "MSSQLSpatial",
             databaseConnectionString,
