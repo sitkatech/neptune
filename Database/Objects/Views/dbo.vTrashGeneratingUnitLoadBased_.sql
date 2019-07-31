@@ -154,42 +154,42 @@ Where tgu.LandUseBlockID is not null
 	and (lub.TrashGenerationRate is not null or bscore.TrashGenerationRate is not null)
 GO
 
-/*
-target load reduction
-This is the difference between the actual loading and what the loading would be if every PLU was full capture
-*/
-Create view dbo.vTrashGeneratingUnitLoadBasedTargetReduction
-as
-Select
-	TrashGeneratingUnitID as PrimaryKey,
-	TrashGeneratingUnitID,
-	tgu.StormwaterJurisdictionID,
-	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
-	IsNull(Case
-		when score.TrashGenerationRate is null then lub.TrashGenerationRate
-		else score.TrashGenerationRate
-	end,0) as BaselineLoadingRate
+--/*
+--target load reduction
+--This is the difference between the actual loading and what the loading would be if every PLU was full capture
+--*/
+--Create view dbo.vTrashGeneratingUnitLoadBasedTargetReduction
+--as
+--Select
+--	TrashGeneratingUnitID as PrimaryKey,
+--	TrashGeneratingUnitID,
+--	tgu.StormwaterJurisdictionID,
+--	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
+--	IsNull(Case
+--		when score.TrashGenerationRate is null then lub.TrashGenerationRate
+--		else score.TrashGenerationRate
+--	end,0) as BaselineLoadingRate
 
-From dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
-		on tgu.LandUseBlockID = lub.LandUseBlockID
-	left join OnlandVisualTrashAssessmentArea area
-		on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
-	left join OnlandVisualTrashAssessmentScore score
-		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
-	left join dbo.Delineation d
-		on tgu.DelineationID = d.DelineationID
-	left join dbo.TreatmentBMP tbmp
-		on d.TreatmentBMPID = tbmp.TreatmentBMPID
-	left join dbo.TrashCaptureStatusType tcs
-		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
-	left join dbo.PriorityLandUseType plut
-		on lub.PriorityLandUseTypeID = plut.PriorityLandUseTypeID
-	left join dbo.StormwaterJurisdiction sj
-		on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
-	left join dbo.Organization o
-		on o.OrganizationID = sj.OrganizationID
-Where
-	lub.LandUseBlockID is not null
-	and lub.PriorityLandUseTypeID <> 7
-	and (lub.TrashGenerationRate is not null or score.TrashGenerationRate is not null)
-GO
+--From dbo.TrashGeneratingUnit tgu left join LandUseBlock lub
+--		on tgu.LandUseBlockID = lub.LandUseBlockID
+--	left join OnlandVisualTrashAssessmentArea area
+--		on tgu.OnlandVisualTrashAssessmentAreaID = area.OnlandVisualTrashAssessmentAreaID
+--	left join OnlandVisualTrashAssessmentScore score
+--		on area.OnlandVisualTrashAssessmentBaselineScoreID = score.OnlandVisualTrashAssessmentScoreID
+--	left join dbo.Delineation d
+--		on tgu.DelineationID = d.DelineationID
+--	left join dbo.TreatmentBMP tbmp
+--		on d.TreatmentBMPID = tbmp.TreatmentBMPID
+--	left join dbo.TrashCaptureStatusType tcs
+--		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
+--	left join dbo.PriorityLandUseType plut
+--		on lub.PriorityLandUseTypeID = plut.PriorityLandUseTypeID
+--	left join dbo.StormwaterJurisdiction sj
+--		on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
+--	left join dbo.Organization o
+--		on o.OrganizationID = sj.OrganizationID
+--Where
+--	lub.LandUseBlockID is not null
+--	and lub.PriorityLandUseTypeID <> 7
+--	and (lub.TrashGenerationRate is not null or score.TrashGenerationRate is not null)
+--GO

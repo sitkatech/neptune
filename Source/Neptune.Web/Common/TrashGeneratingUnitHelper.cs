@@ -110,12 +110,11 @@ namespace Neptune.Web.Common
 
         public static double TargetLoadReduction(StormwaterJurisdiction jurisdiction)
         {
-            var vTrashGeneratingUnitLoadBasedTargetReductions =
-                HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadBasedTargetReductions.Where(x =>
-                    x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID);
+            var vTrashGeneratingUnitLoadStatistics = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID);
 
-            return vTrashGeneratingUnitLoadBasedTargetReductions.Any()
-                ? vTrashGeneratingUnitLoadBasedTargetReductions.Sum(x =>
+            return vTrashGeneratingUnitLoadStatistics.Any()
+                ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
                     DbSpatialHelper.SqlGeometryAreaToAcres)
                 : 0;

@@ -330,7 +330,7 @@ if __name__ == '__main__':
     def compareAssessmentAreasViaSeparateLayers(left_feat, right_feat):
         return left_feat["MostRecentAssessmentDate"] <= right_feat["MostRecentAssessmentDate"]
     
-    #Do note that the views here has all input filters built into it
+    #Do note that the views here have all input filters built into them
 
     connstring_delineation = CONNSTRING_BASE + "tables=dbo.vDelineationTGUInput"
     delineation_layer = QgsVectorLayer(connstring_delineation, "Delineations", "ogr")
@@ -373,17 +373,18 @@ if __name__ == '__main__':
     flatten_ovtas.run()
     ovta_flattened_layer = flatten_ovtas.working_layer
 
+    ## todo: get and flatten the WQMP layer
+
     print("Union OVTA with Delineation\n")
 
-    # union and write to a temp file for testing
-    union_res = processing.run("native:union", {
+    ovta_delineation_res = processing.run("native:union", {
         'INPUT': ovta_flattened_layer,
         'OVERLAY': delineation_flattened_layer,
         'OVERLAY_FIELDS_PREFIX':'',
-        'OUTPUT':'memory:union_layer'
+        'OUTPUT':'memory:ovta_delineation_layer'
         }, context=PROCESSING_CONTEXT)
 
-    union_layer = union_res['OUTPUT']
+    ovta_delineation_layer = ovta_delineation_res['OUTPUT']
 
     connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.LandUseBlock"
     land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
@@ -393,12 +394,15 @@ if __name__ == '__main__':
     else:
         print("Loaded Land Use Block Layer")
 
+    ## TODO: union the ovta-delineation layer with the wqmp layer
+
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
 
+    ## TODO: overlay will be the ovta_delineation_wqmp_layer
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     tgu_res = processing.run("native:union", {
         'INPUT': land_use_block_layer,
-        'OVERLAY': union_layer,
+        'OVERLAY': ovta_delineation_layer,
         'OVERLAY_FIELDS_PREFIX':'',
         'OUTPUT':OUTPUT_PATH
         }, context=PROCESSING_CONTEXT)

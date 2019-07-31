@@ -8,6 +8,7 @@ Create view dbo.vTrashGeneratingUnitLoadStatistic
 as
 Select
 	*,
+	IsNull(TrashGeneratingUnitGeometry.STArea(), 0) as Area,
 	case
 		when CurrentLoadingRate < ProgressLoadingRate then CurrentLoadingRate - BaselineLoadingRate
 		else ProgressLoadingRate - BaselineLoadingRate
@@ -27,6 +28,7 @@ Select
 	IsFullTrashCapture,
 	PartialTrashCaptureEffectivenessPercentage,
 	PriorityLandUseTypeDisplayName as LandUseType,
+	PriorityLandUseTypeID,
 	Case
 		When DelineationIsVerified = 0 then BaselineLoadingRate
 		When IsFullTrashCapture = 1 then 2.5
@@ -47,6 +49,7 @@ From (
 		o.OrganizationID,
 		o.OrganizationName,
 		plut.PriorityLandUseTypeDisplayName,
+		plut.PriorityLandUseTypeID,
 		IsNull(
 			Case
 				when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
