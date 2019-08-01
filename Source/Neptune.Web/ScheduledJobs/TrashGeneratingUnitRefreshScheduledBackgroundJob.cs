@@ -81,7 +81,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
         {
             "-append",
             "-sql",
-            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID from '{outputLayerName}' where LandUseBlo is not null",
+            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from '{outputLayerName}' where LandUseBlo is not null",
             "--config",
             "GDAL_DATA",
             _gdalDataPath.FullName,

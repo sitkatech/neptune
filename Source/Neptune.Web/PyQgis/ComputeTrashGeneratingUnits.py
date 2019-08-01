@@ -372,9 +372,29 @@ if __name__ == '__main__':
     flatten_ovtas = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
     flatten_ovtas.run()
     ovta_flattened_layer = flatten_ovtas.working_layer
-
+    
     ## todo: get and flatten the WQMP layer
 
+    connstring_wqmp = CONNSTRING_BASE + "tables=dbo.vWaterQualityManagementPlanTGUInput"
+    wqmp_layer = QgsVectorLayer(connstring_wqmp, "WQMPs", "ogr")
+
+    if not wqmp_layer.isValid():
+        print("WQMP Layer failed to Load!")
+    else:
+        print("Loaded WQMP Layer!")
+
+    dissolve_res = processing.run("native:dissolve", {
+        'INPUT':wqmp_layer,
+        'FIELD':['WaterQualityManagementPlanID'],
+        'OUTPUT':'memory:wqmp_dissolved_layer'}, context=PROCESSING_CONTEXT)
+
+    wqmp_dissolved_layer = dissolve_res['OUTPUT']
+
+    print("Flattening WQMPs...\n")
+    flatten_wqmps = Flatten(wqmp_dissolved_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
+    flatten_wqmps.run()
+    wqmp_flattened_layer = flatten_wqmps.working_layer
+        
     print("Union OVTA with Delineation\n")
 
     ovta_delineation_res = processing.run("native:union", {
@@ -385,6 +405,17 @@ if __name__ == '__main__':
         }, context=PROCESSING_CONTEXT)
 
     ovta_delineation_layer = ovta_delineation_res['OUTPUT']
+
+    print("Union OVTA-Delineation with WQMP\n")
+
+    odw_res = processing.run("native:union", {
+        'INPUT': ovta_delineation_layer,
+        'OVERLAY': wqmp_flattened_layer,
+        'OVERLAY_FIELDS_PREFIX':'',
+        'OUTPUT':'memory:odw_layer'
+        }, context=PROCESSING_CONTEXT)
+
+    odw_layer = odw_res['OUTPUT']
 
     connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.LandUseBlock"
     land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
@@ -402,7 +433,7 @@ if __name__ == '__main__':
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     tgu_res = processing.run("native:union", {
         'INPUT': land_use_block_layer,
-        'OVERLAY': ovta_delineation_layer,
+        'OVERLAY': odw_layer,
         'OVERLAY_FIELDS_PREFIX':'',
         'OUTPUT':OUTPUT_PATH
         }, context=PROCESSING_CONTEXT)
