@@ -66,11 +66,15 @@
                 display: none;
             }
         }
-
-        .headerHidden {
-            display: none;
-        }
     </style>
+    @if(ViewDataTyped.IsHomePage)
+    {
+        <style>
+            .headerHidden {
+                display: none;
+            }
+        </style>
+    }
 
     @RenderSection("JavascriptAndStylesContent", false)
 
@@ -80,7 +84,8 @@
         <header class="neptuneHeader headerHidden">
             <div class="row">
                 <div class="col-xs-6">
-                    <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" class="droolMainLogo"/>
+                    <a href="/"><img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" class="droolMainLogo"/></a>
+                    <a href="/Home/About" style="color: #8a8c8f; font-weight:bold">About the Urban Drool Tool</a>
                 </div>
                 <div class="col-xs-6 extraLogosContainer">
                     <a href="https://www.mnwd.com"><img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdMainLogo" /></a>
