@@ -67,10 +67,15 @@ From (
 			end, 0
 		) as BaselineLoadingRate,
 		case
-			when tbmp.TrashCaptureStatusTypeID = 1 then 1
+			when tbmp.TrashCaptureStatusTypeID = 1 or wqmp.TrashCaptureStatusTypeID = 1 then 1
 			else 0
 		end as IsFullTrashCapture, 
-		IsNull(tbmp.TrashCaptureEffectiveness, 0) as PartialTrashCaptureEffectivenessPercentage,
+		IsNull(
+			case
+				when wqmp.TrashCaptureEffectiveness is not null then wqmp.TrashCaptureEffectiveness
+				else tbmp.TrashCaptureEffectiveness
+			end
+		, 0) as PartialTrashCaptureEffectivenessPercentage,
 		IsNull(d.IsVerified, 0) as DelineationIsVerified,
 		IsNull(
 			Case
@@ -99,6 +104,8 @@ From (
 			on tgu.DelineationID = d.DelineationID
 		left join dbo.TreatmentBMP tbmp
 			on d.TreatmentBMPID = tbmp.TreatmentBMPID
+		left join dbo.WaterQualityManagementPlan wqmp
+			on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 		left join dbo.TrashCaptureStatusType tcs
 			on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 		left join dbo.PriorityLandUseType plut
