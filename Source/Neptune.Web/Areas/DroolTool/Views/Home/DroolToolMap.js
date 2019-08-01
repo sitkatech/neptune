@@ -38,10 +38,6 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         h4.innerHTML = "Selected Neighborhood";
         this.parentElement.append(h4);
 
-        //this.selectedNeighborhoodText = L.DomUtil.create("p");
-
-        //this.parentElement.append(this.selectedNeighborhoodText);
-
         this.hide();
 
         window.stopClickPropagation(this.parentElement);
@@ -98,7 +94,6 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             });
 
         var getNeighborhoodID = function () {
-            debugger;
             return this.NeighborhoodID;
         }.bind(this);
         
@@ -145,9 +140,6 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
     selectNeighborhood: function (properties) {
         this.NeighborhoodID = properties.NetworkCatchmentID;
-
-        //this.selectedNeighborhoodText.innerHTML =
-        //    "Neighborhood Area (ac): " + properties.Area;
         
         this.show();
     }
@@ -369,16 +361,20 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
     this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
-    
-    this.setSelectedNeighborhood(geoJson);
-    this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
+    if (this.config.NetworkCatchmentsWhereItIsOkayToClickIDs.includes(this.selectedNeighborhoodID)) {
+        this.setSelectedNeighborhood(geoJson);
+        this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
 
-    if (this.traceLayer) {
-        this.traceLayer.remove();
-        this.traceLayer = null;
+        if (this.traceLayer) {
+            this.traceLayer.remove();
+            this.traceLayer = null;
+        }
+
+        return this.DisplayStormshedAndBackboneDetail(this.selectedNeighborhoodID);
+    } else {
+        toast(NEIGHBORHOOD_NOT_FOUND);
+        return jQuery.Deferred();
     }
-
-    return this.DisplayStormshedAndBackboneDetail(this.selectedNeighborhoodID);
 };
 
 NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
@@ -571,7 +567,7 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     });
     this.showLocationControl.addTo(this.map);
 
-    // rearrange controls because leaflet provides the coarsest positioning system imaginable.
+    // rearrange controls because leaflet provides the second-coarsest positioning system imaginable.
     jQuery(".leaflet-top.leaflet-right")
         .append(jQuery(".leaflet-control-zoom"));
     jQuery(".leaflet-top.leaflet-right")
@@ -613,7 +609,6 @@ function toast(toastText) {
 
 window.stopClickPropagation = function (parentElement) {
     L.DomEvent.on(parentElement, "mouseover", function (e) {
-        // todo: still not the best way to handle this event-pausing stuff
         window.freeze = true;
     });
 

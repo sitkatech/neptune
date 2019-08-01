@@ -1,4 +1,6 @@
-﻿using LtInfo.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LtInfo.Common;
 using Neptune.Web.Areas.DroolTool.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -22,16 +24,18 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             GeoserverUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
 
             StormwaterMapInitJson = mapInitJson;
-            DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl);
+            DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl, HttpRequestStorage.DatabaseEntities.NetworkCatchments.Where(x => x.BackboneSegments.Any()).Select(x => x.NetworkCatchmentID).ToList());
         }
+
     }
 
     public class DroolToolMapConfig
     {
-        public DroolToolMapConfig(string nominatimApiKey, string geoServerUrl)
+        public DroolToolMapConfig(string nominatimApiKey, string geoServerUrl, List<int> networkCatchmentsWhereItIsOkayToClickIDs)
         {
             NominatimApiKey = nominatimApiKey;
             GeoServerUrl = geoServerUrl;
+            NetworkCatchmentsWhereItIsOkayToClickIDs = networkCatchmentsWhereItIsOkayToClickIDs;
             BackboneTraceUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.DownstreamBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
             StormshedUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.StormshedBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
             MetricUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x =>
@@ -46,5 +50,6 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
         public string NominatimApiKey { get; }
         public string GeoServerUrl { get; }
         public string BackboneTraceUrlTemplate { get; }
+        public List<int> NetworkCatchmentsWhereItIsOkayToClickIDs { get; }
     }
 }
