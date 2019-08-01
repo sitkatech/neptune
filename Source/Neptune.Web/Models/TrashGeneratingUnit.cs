@@ -8,5 +8,6 @@ namespace Neptune.Web.Models
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
                 .Find(OnlandVisualTrashAssessmentAreaID);
         public TreatmentBMP TreatmentBMP => Delineation != null ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Find(Delineation.TreatmentBMPID) : null;
+        public WaterQualityManagementPlan WaterQualityManagementPlan => WaterQualityManagementPlanID != null ? HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Find(WaterQualityManagementPlanID) : null;
     }
 }
