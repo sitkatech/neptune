@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -996,6 +996,14 @@
     <Content Include="Areas\Trash\Views\Home\TrashMapCommon.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditAssessmentAreaLocation.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.js" />
+    <Content Include="Content\JQuery\jquery.slideout\jquery.slideout.css" />
+    <Content Include="Content\JQuery\jquery.slideout\jquery.slideout.js" />
+    <Content Include="Content\JQuery\jquery.slideout\jquery.slideout.min.css">
+      <DependentUpon>jquery.slideout.css</DependentUpon>
+    </Content>
+    <Content Include="Content\JQuery\jquery.slideout\jquery.slideout.min.js">
+      <DependentUpon>jquery.slideout.js</DependentUpon>
+    </Content>
     <Content Include="PyQgis\ComputeTrashGeneratingUnits.py" />
     <Content Include="PyQgis\TestModule.py" />
     <Content Include="PyQgis\TestPyqgis.py" />

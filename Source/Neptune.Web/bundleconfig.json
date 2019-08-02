@@ -118,5 +118,17 @@
     "inputFiles": [
       "Content/css/jquery.ui.neptune.css"
     ]
+  },
+  {
+    "outputFileName": "Content/JQuery/jquery.slideout/jquery.slideout.min.css",
+    "inputFiles": [
+      "Content/JQuery/jquery.slideout/jquery.slideout.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/JQuery/jquery.slideout/jquery.slideout.min.js",
+    "inputFiles": [
+      "Content/JQuery/jquery.slideout/jquery.slideout.js"
+    ]
   }
 ]
