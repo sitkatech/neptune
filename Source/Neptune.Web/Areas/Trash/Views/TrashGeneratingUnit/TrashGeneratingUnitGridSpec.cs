@@ -30,7 +30,7 @@ namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
             Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
             Add("Governing WQMP", x => x.WaterQualityManagementPlan?.GetNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
-            Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F12", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
             Add("Baseline Loading Rate", x =>
             {
                 if (x.LandUseBlock == null)

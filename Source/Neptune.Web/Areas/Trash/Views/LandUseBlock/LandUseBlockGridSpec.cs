@@ -30,6 +30,8 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlock
                     (x.TrashGeneratingUnits.Sum(y => y.TrashGeneratingUnitGeometry.Area ?? 0) *
                      DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100,
                 DhtmlxGridColumnFilterType.Numeric);
+            Add("Permit Type", x => x.PermitType.PermitTypeDisplayName, 100,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
 
     }

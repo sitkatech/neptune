@@ -102,7 +102,7 @@ namespace Neptune.Web.Common
             var vTrashGeneratingUnitLoadStatistics =
                 HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
                     x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID
-                    && x.HasBaselineScore.GetValueOrDefault() && x.HasProgressScore.GetValueOrDefault());
+                    && x.HasBaselineScore == true && x.HasProgressScore == true);
 
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
