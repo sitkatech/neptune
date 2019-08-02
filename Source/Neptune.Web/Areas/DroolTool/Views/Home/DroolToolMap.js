@@ -253,10 +253,8 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
                 }
-                self.SelectNeighborhood(geoJsonResponse);
+                self.SelectNeighborhood(geoJsonResponse, evt);
             });
-
-            self.SetClickMarker(evt.latlng.lat, evt.latlng.lng);
 
         });
 };
@@ -359,7 +357,7 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
     this.clickMarker.addTo(this.map);
 }
 
-NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
+NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson, evt) {
     this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
     if (this.config.NetworkCatchmentsWhereItIsOkayToClickIDs.includes(this.selectedNeighborhoodID)) {
         this.setSelectedNeighborhood(geoJson);
@@ -370,6 +368,7 @@ NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson) {
             this.traceLayer = null;
         }
 
+        this.SetClickMarker(evt.latlng.lat, evt.latlng.lng);
         return this.DisplayStormshedAndBackboneDetail(this.selectedNeighborhoodID);
     } else {
         toast(NEIGHBORHOOD_NOT_FOUND);
