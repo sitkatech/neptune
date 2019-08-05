@@ -10,7 +10,7 @@
     <script src="@Url.Content("~/Content/JQuery/MonthPicker.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
@@ -337,7 +337,9 @@
             window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl",
                 window.mapConfig);
 
-            jQuery(".aboutYourNeighborhoodSlideout").slideout({ targetSelector: '.sectionAboutYourNeighborhood' });
+            jQuery(".aboutYourNeighborhoodSlideout").slideout({ targetSelector: '.sectionAboutYourNeighborhood', xorSlideouts:true });
+            jQuery(".waterUsageSlideout").slideout({ targetSelector: '.sectionWaterUsage', xorSlideouts: true });
+            jQuery(".conservationActionsSlideout").slideout({ targetSelector: '.sectionConservationActions', xorSlideouts: true });
 
             // splish
             var modalWidth = jQuery(window).width() * .5;
