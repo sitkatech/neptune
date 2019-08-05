@@ -30,7 +30,8 @@
     display: inline-block;
     height: 100%;
     width: 15px;
-    padding-top: 110%
+    padding-top: 110%;
+                 top:0;
 }
 
 .expando-bar:hover {

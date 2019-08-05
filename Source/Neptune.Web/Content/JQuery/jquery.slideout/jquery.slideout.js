@@ -6,7 +6,9 @@
         $(targetSelector).append("<div class='slideout-wrap'></div>");
         $(targetSelector + " .slideout-wrap").append(this);
         this.addClass('slideout-content');
-        $(targetSelector).append("<span class='expando-bar'> --&gt; </span>");
+        $(targetSelector).append("<span class='expando-bar'><span class='expando-glyph glyphicon glyphicon-menu-right'></span></span>");
+        //debugger;
+        //$(targetSelector + " .expando-bar").append("<span class='expando-glyph glyphicon glyphicon-menu-right></span>");
 
         $(targetSelector + " .expando-bar").on("click",
             function() {
@@ -14,13 +16,13 @@
 
                 if (this.expand) {
                     $(targetSelector + " .slideout-wrap").addClass("slideout-expant");
-                    $(this).removeClass("glyphicon-menu-right");
-                    $(this).addClass("glyphicon-menu-left");
+                    $(targetSelector + " .expando-glyph").removeClass("glyphicon-menu-right");
+                    $(targetSelector + " .expando-glyph").addClass("glyphicon-menu-left");
 
                 } else {
                     $(targetSelector + " .slideout-wrap").removeClass("slideout-expant");
-                    $(this).addClass("glyphicon-menu-right");
-                    $(this).removeClass("glyphicon-menu-left");
+                    $(targetSelector + " .expando-glyph").addClass("glyphicon-menu-right");
+                    $(targetSelector + " .expando-glyph").removeClass("glyphicon-menu-left");
                 }
             });
     };

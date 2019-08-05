@@ -30,10 +30,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control");
         this.neptuneMap = this.options.neptuneMap;
 
-        var bar = L.DomUtil.create("span", "expando-bar glyphicon glyphicon-menu-right");
-
-        this.parentElement.append(bar);
-
+        
         var h4 = L.DomUtil.create("h4");
         h4.innerHTML = "Selected Neighborhood";
         this.parentElement.append(h4);
