@@ -30,41 +30,12 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control");
         this.neptuneMap = this.options.neptuneMap;
 
-        
-        var h4 = L.DomUtil.create("h4");
-        h4.innerHTML = "Selected Neighborhood";
-        this.parentElement.append(h4);
-
-        this.hide();
-
-        window.stopClickPropagation(this.parentElement);
-        
-        var placeholder = L.DomUtil.create("div", "placeholderImages");
-        placeholder.innerHTML = "<br/><img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'/><br/><br/>" +
-            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'/><br/><br/>" +
-            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'/><br/><br/>";
-
-        this.parentElement.append(placeholder);
-            
-
-        var highlightFlowButton = L.DomUtil.create("button", "btn btn-neptune btn-sm");
-        highlightFlowButton.innerHTML = "Where does my runoff go?";
-
-        var self = this;
-        L.DomEvent.on(highlightFlowButton,
-            "click",
-            function () {
-                self.neptuneMap.highlightFlow();
-            });
-
-        this.parentElement.append(highlightFlowButton);
-
-
+        // boilerplate-ish code to prevent clicks on this element from registering as clicks on the map proper
         window.stopClickPropagation(this.parentElement);
 
         L.DomEvent.on(this.parentElement,
             "mouseover",
-            function() {
+            function () {
                 map.dragging.disable();
                 map.touchZoom.disable();
                 map.doubleClickZoom.disable();
@@ -73,14 +44,38 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
         L.DomEvent.on(this.parentElement,
             "mouseout",
-            function() {
+            function () {
                 map.dragging.enable();
                 map.touchZoom.enable();
                 map.doubleClickZoom.enable();
                 map.scrollWheelZoom.enable();
             });
 
+        
+        this.parentElement.innerHTML = "<div>" +
+            "<h4 class=''>Selected Neighborhood</h4>" +
+            "<div class='placeholderImages'><br/>" +
+            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "</div>" +
+            "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
+            "</div>";
+
+        this.hide();
+
         return this.parentElement;
+    },
+
+    wireHighlightFlowButton: function() {
+        var highlightFlowButton = document.getElementById("highlightFlowButton");
+
+        var self = this;
+        L.DomEvent.on(highlightFlowButton,
+            "click",
+            function () {
+                self.neptuneMap.highlightFlow();
+            });
     },
 
     wireMonthPicker: function () {
@@ -557,6 +552,7 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
 
     this.neighborhoodDetailControl.addTo(this.map);
     this.neighborhoodDetailControl.wireMonthPicker();
+    this.neighborhoodDetailControl.wireHighlightFlowButton();
 
     this.showLocationControl = L.control.showLocationControl({
         position: "topleft"
