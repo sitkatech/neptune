@@ -54,10 +54,14 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         
         this.parentElement.innerHTML = "<div>" +
             "<h4 class=''>Selected Neighborhood</h4>" +
-            "<div class='placeholderImages'><br/>" +
-            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
-            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
-            "<img src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "<div class='sectionAboutYourNeighborhood' style='height:30%'><br/>" +
+            "<img class='placeholderImg' src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "</div>" +
+            "<div class='sectionWaterUsage'>" +
+            "<img class='placeholderImg' src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "</div>" +
+            "<div class='sectionConservationActions'>" +
+            "<img class='placeholderImg' src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
             "</div>" +
             "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
             "</div>";

@@ -17,6 +17,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1em;
+    background-color: white;
 }
 
 .slideout-expant {
@@ -26,12 +27,14 @@
 
 .expando-bar {
     position: absolute;
-    right: 0;
-    display: inline-block;
+    right: -8px;
     height: 100%;
     width: 15px;
-    padding-top: 110%;
-                 top:0;
+    top:0;
+}
+
+.expando-glyph {
+    top: 50%;
 }
 
 .expando-bar:hover {
