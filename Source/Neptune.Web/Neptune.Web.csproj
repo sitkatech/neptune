@@ -980,6 +980,9 @@
     <Content Include="Areas\DroolTool\Content\chevvy.png" />
     <Content Include="Areas\DroolTool\Content\h2oc_color_logo.PNG" />
     <Content Include="Areas\DroolTool\Content\mnwd_color_logo.jpg" />
+    <Content Include="Areas\DroolTool\Content\mock\slideout1.png" />
+    <Content Include="Areas\DroolTool\Content\mock\slideout2.png" />
+    <Content Include="Areas\DroolTool\Content\mock\slideout3.png" />
     <Content Include="Areas\DroolTool\Content\moneywater.png" />
     <Content Include="Areas\DroolTool\Content\photo-placeholder-square.png" />
     <Content Include="Areas\DroolTool\Content\piggy.png" />

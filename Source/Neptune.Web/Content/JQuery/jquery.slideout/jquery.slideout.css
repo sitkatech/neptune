@@ -20,9 +20,12 @@
     background-color: white;
 }
 
+.slideout-hid {
+    display: none;
+}
+
 .slideout-expant {
-    transform: translateX(50%);
-    width: 220%
+    transform: translateX(60%);
 }
 
 .expando-bar {

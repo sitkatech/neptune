@@ -51,17 +51,26 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                 map.scrollWheelZoom.enable();
             });
 
+        var currentMonthName = new Date().toLocaleString('default', { month: 'long' });
         
         this.parentElement.innerHTML = "<div>" +
             "<h4 class=''>Selected Neighborhood</h4>" +
-            "<div class='sectionAboutYourNeighborhood' style='height:30%'><br/>" +
-            "<img class='placeholderImg' src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "<span>Neighborhood Area (acres): </span><span id='Area'></span><br/>" +
+            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/><br/>" +
+            "<div class='sectionAboutYourNeighborhood' style='height:30%'>" +
+            "<strong>About Your Neighborhood</strong></br>" +
+            "<span>Number of Accounts: </span><span id='NumberOfReshoaAccounts'></span><br/>" +
+            "<span>Irrigated Area (acres): </span><span id='TotalReshoaIrrigatedArea'></span><br/>" +
+            "<span>Total Water Budget for " + currentMonthName + ": </span><span id='TotalBudget'></span><br/>" +
+            "<span>Outdoor Budget for " + currentMonthName +  ": </span><span id='TotalOutdoorBudget'></span><br/><br/>" +
             "</div>" +
             "<div class='sectionWaterUsage'>" +
-            "<img class='placeholderImg' src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "<strong>Water Usage</strong><br/>" +
+            "<img class='placeholderImg' src='/Areas/DroolTool/Content/mock/WaterUsagePlaceholder.png'><br/><br/>" +
             "</div>" +
             "<div class='sectionConservationActions'>" +
-            "<img class='placeholderImg' src='/Areas/DroolTool/Content/img-placeholder-rectangle.jpg'><br/><br/>" +
+            "<strong>Conservation Actions</strong><br/>" +
+            "<img class='placeholderImg' src='/Areas/DroolTool/Content/mock/ConservationActionPlaceholder.png'><br/><br/>" +
             "</div>" +
             "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
             "</div>";
@@ -82,23 +91,71 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             });
     },
 
-    wireMonthPicker: function () {
+    // neutered under #430; may bring back the heart and soul of this piece as part of a "Neighborhood Detail Page" later
+    //wireMonthPicker: function () {
 
-        jQuery(".metricMonthPicker").on("click",
-            function() {
-                jQuery("#MonthPicker_Button_").click();
-            });
+    //    jQuery(".metricMonthPicker").on("click",
+    //        function() {
+    //            jQuery("#MonthPicker_Button_").click();
+    //        });
 
-        var getNeighborhoodID = function () {
-            return this.NeighborhoodID;
-        }.bind(this);
+    //    var getNeighborhoodID = function () {
+    //        return this.NeighborhoodID;
+    //    }.bind(this);
         
-        jQuery(".metricMonthPicker").MonthPicker({
-                OnAfterChooseMonth: function() {
-                    var month = Number(this.value.split("/")[0]);
-                    var year = Number(this.value.split("/")[1]);
+    //    jQuery(".metricMonthPicker").MonthPicker({
+    //            OnAfterChooseMonth: function() {
+    //                var month = Number(this.value.split("/")[0]);
+    //                var year = Number(this.value.split("/")[1]);
                     
-                    RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
+    //                RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
+    //                    jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
+    //                    jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
+    //                    jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
+    //                    jQuery("#TotalEstimatedReshoaUsers").text(metricResponse.TotalEstimatedReshoaUsers);
+    //                    jQuery("#TotalBudget").text(metricResponse.TotalBudget);
+    //                    jQuery("#TotalOutdoorBudget").text(metricResponse.TotalOutdoorBudget);
+    //                    jQuery("#AverageTotalUsage").text(metricResponse.AverageTotalUsage);
+    //                    jQuery("#AverageEstimatedIrrigationUsage").text(metricResponse.AverageEstimatedIrrigationUsage);
+    //                    jQuery("#NumberOfAccountsOverBudget").text(metricResponse.NumberOfAccountsOverBudget);
+    //                    jQuery("#PercentOfAccountsOverBudget").text(metricResponse.PercentOfAccountsOverBudget);
+    //                    jQuery("#AverageOverBudgetUsage").text(metricResponse.AverageOverBudgetUsage);
+    //                    jQuery("#AverageOverBudgetUsageRolling").text(metricResponse.AverageOverBudgetUsageRolling);
+    //                    jQuery("#AverageOverBudgetUsageSlope").text(metricResponse.AverageOverBudgetUsageSlope);
+    //                    jQuery("#TotalOverBudgetUsage").text(metricResponse.TotalOverBudgetUsage);
+    //                    jQuery("#RebateParticipationPercentage").text(metricResponse.RebateParticipationPercentage);
+    //                    jQuery("#RebateParticipationPercentageRolling").text(metricResponse.RebateParticipationPercentageRolling);
+    //                    jQuery("#RebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
+    //                    jQuery("#TotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
+    //                });
+    //            },
+    //        ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
+    //        }
+    //    );
+
+    //    jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
+    //},
+
+    hide: function () {
+        this.parentElement.style.display = "none";
+    },
+
+    show: function () {
+        this.parentElement.style.display = "block";
+    },
+
+    selectNeighborhood: function (properties) {
+        this.NeighborhoodID = properties.NetworkCatchmentID;
+        
+        var now = new Date();
+        var year = now.getFullYear();
+        // js months are zero-indexed, one of two things in the whole wide world that should not be zero-indexed
+        var month = now.getMonth() + 1;
+
+        jQuery("#Area").text(properties.Area.toLocaleString());
+        jQuery("#DrainsTo").text(properties.Watershed);
+
+        RemoteService.getMetrics(this.NeighborhoodID, year, month).then(function (metricResponse) {
                         jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
                         jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
                         jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
@@ -118,25 +175,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                         jQuery("#RebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
                         jQuery("#TotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
                     });
-                },
-            ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
-            }
-        );
 
-        jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
-    },
-
-    hide: function () {
-        this.parentElement.style.display = "none";
-    },
-
-    show: function () {
-        this.parentElement.style.display = "block";
-    },
-
-    selectNeighborhood: function (properties) {
-        this.NeighborhoodID = properties.NetworkCatchmentID;
-        
         this.show();
     }
 });
@@ -555,7 +594,7 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     });
 
     this.neighborhoodDetailControl.addTo(this.map);
-    this.neighborhoodDetailControl.wireMonthPicker();
+    //this.neighborhoodDetailControl.wireMonthPicker();
     this.neighborhoodDetailControl.wireHighlightFlowButton();
 
     this.showLocationControl = L.control.showLocationControl({

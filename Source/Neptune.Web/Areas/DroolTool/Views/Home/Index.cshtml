@@ -42,8 +42,8 @@
         }
         .neighborhood-detail-control {
             /* todo: width should really be dynamish*/
-            width: 231px;
-            max-width: 231px;
+            width: 280px;
+            max-width: 280px;
             z-index: initial;
         }
 
@@ -182,7 +182,19 @@
         }
 
         .aboutYourNeighborhoodSlideout {
-            height: 425px;
+            height: 475px;
+        }
+
+        .waterUsageSlideout {
+            height: 245px;
+        }
+
+        .conservationActionsSlideout {
+            height: 185px;
+        }
+
+        .slideout img {
+            width: 425px;
         }
     </style>
 }
@@ -193,153 +205,26 @@
 {
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
 
-    <div class="aboutYourNeighborhoodSlideout">
-        <h4>Neighborhood Metrics</h4>
-        <div class="row" style="margin-bottom: 5px;">
-            <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
-                <p style="font-weight:bold">Select a month and year:</p>
-            </div>
-            <div class="col-sm-7">
-                <input class="metricMonthPicker form-control month-year-input" type="text">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <table class="table-responsive table table-striped table-condensed" style="margin-bottom:0">
-                    <thead>
-                        <tr>
-                            <th class="col-sm-4">Metric</th>
-                            <th>Snapshot</th>
-                            <th>Mean</th>
-                            <th>Slope</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Number of Residential and HOA Accounts</td>
-                            <td id="NumberOfReshoaAccounts"></td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>Total Residential and HOA Irrigated Area, Square Feet</td>
-                            <td id="TotalReshoaIrrigatedArea"></td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                        </tr>
-                        @*<tr>
-                                <td>Average Irrigated Area, Square Feet per Household</td>
-                                <td id="AverageIrrigatedArea"></td>
-                                <td>N/A</td>
-                                <td>N/A</td>
-                            </tr>
-                            <tr>
-                                <td>Total Estimated Residential Water Users</td>
-                                <td id="TotalEstimatedReshoaUsers"></td>
-                                <td>N/A</td>
-                                <td>N/A</td>
-                            </tr>*@
-                        <tr>
-                            <td>Total Budget, gallons</td>
-                            <td id="TotalBudget"></td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>Total Outdoor Budget, gallons</td>
-                            <td id="TotalOutdoorBudget"></td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div><hr />
-        <p class="systemText">N/A in the Mean and Slope columns indicates that the Mean or Slope is not relevant for a particular metric.</p>
-        <p class="systemText">Not Available in the Mean and Slope columns indicates that there is not enough historic data to calculate Mean or Slope for a particular metric for this month.</p>
+    <div class="aboutYourNeighborhoodSlideout slideout">
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout1.png")"/>
     </div>
 
-    <div style="display: none;">
-        <table>
-            <thead>
-                <tr>
-                    <th class="col-sm-4">Metric</th>
-                    <th>Snapshot</th>
-                    <th>Mean</th>
-                    <th>Slope</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Average Total Usage, Gallons per Household</td>
-                    <td id="AverageTotalUsage"></td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>Average Estimated Irrigation Usage, Gallons per Household</td>
-                    <td id="AverageEstimatedIrrigationUsage"></td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>Number of Accounts over Budget</td>
-                    <td id="NumberOfAccountsOverBudget"></td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>Percent of Accounts over Budget </td>
-                    <td id="PercentOfAccountsOverBudget"></td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>Average Over-budget Usage, Gallons per Household</td>
-                    <td id="AverageOverBudgetUsage"></td>
-                    <td id="AverageOverBudgetUsageRolling">N/A</td>
-                    <td id="AverageOverBudgetUsageSlope">N/A</td>
-                </tr>
-                <tr>
-                    <td>Total Over-budget Usage, Gallons</td>
-                    <td id="TotalOverBudgetUsage"></td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
-                    <td id="RebateParticipationPercentage"></td>
-                    <td id="RebateParticipationPercentageRolling">N/A</td>
-                    <td id="RebateParticipationPercentageSlope">N/A</td>
-                </tr>
-                <tr>
-                    <td>Total Area of Turf Replacement, sq-ft</td>
-                    <td id="TotalTurfReplacementArea"></td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-
-            </tbody>
-        </table>
+   <div class="waterUsageSlideout slideout">
+       <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout2.png")"/>
     </div>
 
-    <div class="waterUsageSlideout">
-        <p>Welcome to the Water Usage Slideout!</p>
-    </div>
-
-    <div class="conservationActionsSlideout">
-        <p>Welcome to the Conservation Actions Slideout!</p>
-    </div>
+   <div class="conservationActionsSlideout slideout">
+       <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout3.png")" />
+   </div>
 
     <script>
         jQuery(function() {
             window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl",
                 window.mapConfig);
 
-            jQuery(".aboutYourNeighborhoodSlideout").slideout({ targetSelector: '.sectionAboutYourNeighborhood', xorSlideouts:true });
-            jQuery(".waterUsageSlideout").slideout({ targetSelector: '.sectionWaterUsage', xorSlideouts: true });
-            jQuery(".conservationActionsSlideout").slideout({ targetSelector: '.sectionConservationActions', xorSlideouts: true });
+            jQuery(".aboutYourNeighborhoodSlideout").slideout({ targetSelector: '.sectionAboutYourNeighborhood', xorSlideouts:true, width:'450px' });
+            jQuery(".waterUsageSlideout").slideout({ targetSelector: '.sectionWaterUsage', xorSlideouts: true, width: '450px' });
+            jQuery(".conservationActionsSlideout").slideout({ targetSelector: '.sectionConservationActions', xorSlideouts: true, width: '450px' });
 
             // splish
             var modalWidth = jQuery(window).width() * .5;
