@@ -1,4 +1,5 @@
 Drop view if exists dbo.vGeoServerNetworkCatchment
+GO
 
 Create View dbo.vGeoServerNetworkCatchment As
 Select
