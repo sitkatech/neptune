@@ -182,7 +182,7 @@
         }
 
         .aboutYourNeighborhoodSlideout {
-            height: 475px;
+            height: 265px;
         }
 
         .waterUsageSlideout {
@@ -195,6 +195,27 @@
 
         .slideout img {
             width: 425px;
+        }
+
+
+        .aboutYourNeighborhoodSlideout img {
+            max-height: 245px;
+            height: auto;
+            width: auto;
+
+        }
+        .sectionAboutYourNeighborhood span:not(.expando-bar):not(.expando-glyph) {
+            float: right;
+            margin-right: 16px;
+        }
+
+        .neighborhoodSection {
+            padding: 2px;
+            margin-bottom: 2px;
+        }
+
+        .sectionAboutYourNeighborhood .slideout-expant {
+            transform: translateX(120%);
         }
     </style>
 }
@@ -222,9 +243,24 @@
             window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl",
                 window.mapConfig);
 
-            jQuery(".aboutYourNeighborhoodSlideout").slideout({ targetSelector: '.sectionAboutYourNeighborhood', xorSlideouts:true, width:'450px' });
-            jQuery(".waterUsageSlideout").slideout({ targetSelector: '.sectionWaterUsage', xorSlideouts: true, width: '450px' });
-            jQuery(".conservationActionsSlideout").slideout({ targetSelector: '.sectionConservationActions', xorSlideouts: true, width: '450px' });
+            jQuery(".aboutYourNeighborhoodSlideout").slideout({
+                targetSelector: '.sectionAboutYourNeighborhood',
+                xorSlideouts: true,
+                width: '230px',
+                clickTargetToExpand: true
+            });
+            jQuery(".waterUsageSlideout").slideout({
+                targetSelector: '.sectionWaterUsage',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: true
+            });
+            jQuery(".conservationActionsSlideout").slideout({
+                targetSelector: '.sectionConservationActions',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: true
+            });
 
             // splish
             var modalWidth = jQuery(window).width() * .5;

@@ -39,7 +39,16 @@
             $(targetSelector + " .expando-glyph").removeClass("glyphicon-menu-left");
         };
 
-        $(targetSelector + " .expando-bar").on("click",
+        var clickToExpandSelector;
+        if (options.clickTargetToExpand) {
+            $(targetSelector).addClass("click-to-expand-element");
+            clickToExpandSelector = targetSelector;
+        } else {
+            $(targetSelector + " .expando-bar").addClass("click-to-expand-element");
+            clickToExpandSelector = targetSelector + " .expando-bar";
+        }
+
+        $(clickToExpandSelector).on("click",
             function() {
                 this.expand = !this.expand;
 
