@@ -26,7 +26,6 @@
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
 
-
     <style>
         .container-fluid.droolToolContent {
             margin: 0;
@@ -82,10 +81,30 @@
             max-width: 100%;
         }
 
-
-        .splashModal {
-            overflow: hidden !important;
+        #splashModal{
+            background-color: #323232;
+            background-color: rgba(0, 0, 0, .8);
         }
+
+        #splashModal {
+            overflow: hidden !important;
+            position: fixed;
+            top: 0;
+            left:0;
+            z-index: 5000000;
+            height: 100%;
+            width: 100%;
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+        .droolSplashLogo {
+            max-width: 480px;
+        }
+
 
         .droolToolDialog {
             background: none;
@@ -165,9 +184,9 @@
             border: none;
         }
 
-            #MonthPicker_Button_:hover {
-                background-color: #00c1d5;
-            }
+        #MonthPicker_Button_:hover {
+            background-color: #00c1d5;
+        }
 
 
         .monthPickerButtonIcon {
@@ -218,25 +237,34 @@
             transform: translateX(120%);
         }
     </style>
+    
+    <style>
+        #newSplash {
+
+        }
+    </style>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+
+
 
 @section DroolToolMap
 {
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
 
     <div class="aboutYourNeighborhoodSlideout slideout">
-        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout1.png")"/>
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout1.png")" />
     </div>
 
-   <div class="waterUsageSlideout slideout">
-       <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout2.png")"/>
+    <div class="waterUsageSlideout slideout">
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout2.png")" />
     </div>
 
-   <div class="conservationActionsSlideout slideout">
-       <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout3.png")" />
-   </div>
+    <div class="conservationActionsSlideout slideout">
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout3.png")" />
+    </div>
 
     <script>
         jQuery(function() {
@@ -262,22 +290,9 @@
                 clickTargetToExpand: true
             });
 
-            // splish
-            var modalWidth = jQuery(window).width() * .5;
-
-            jQuery("#splashModal").dialog({
-                dialogClass: "droolToolDialog",
-                modal: true,
-                width: modalWidth,
-                minWidth: modalWidth,
-                maxWidth: modalWidth,
-                minHeight: 550,
-                closeOnEscape: false
-            });
-            jQuery("#splashModal").dialog("open");
 
             function killSplash() {
-                jQuery("#splashModal").dialog("close");
+                jQuery("#splashModal").detach();
                 window.map.intializeTray();
                 jQuery("header").show();
                 resizeHandler(window.mapInitJson);
@@ -330,44 +345,46 @@
         </div>
     </div>
 
-    <div id="splashModal" style="overflow: hidden">
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" style="width: 60%" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 text-center splashHeaderContainer">
-                <p class="droolToolSplashHeader">Learn about how your neighborhood is conserving water and protecting our streams and beaches</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 text-center splashSubheaderContainer">
-                <p class="droolToolSplashSubheader">The Urban Drool Tool is a collaborative project between the Moulton Niguel Water District, the County of Orange, and the Cities of Aliso Viejo, Mission Viejo, Laguna Niguel, Laguna Woods, Laguna Hills.</p>
-            </div>
-        </div>
-        <div class="row callToActionContainer">
-            <div class="col-sm-6 text-right " style="padding-right: 25px;">
-                <a class="btn btn-neptune droolToolActionCall" id="enterAddressButton">Enter Address to Get Started</a>
-            </div>
-            <div class="col-sm-6 text-left" style="padding-left: 25px;" id="closeSplashButton">
-                <a class="btn btn-neptune droolToolActionCall">Explore My Watershed</a>
-            </div>
-        </div>
-        <div class="row splashSearchContainer" style="display: none">
-            <div class="col-sm-12 text-center">
-                <div class="input-group">
-                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
-                    <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
+    <div id="splashModal" style="overflow: hidden;">
+        <div id="splashModalContent">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <img class="droolSplashLogo" src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" />
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <span class="droolToolSpashCartouche">
-                    <img src="@Url.Content("~/Areas/DroolTool/Content/h2oc_color_logo.png")" class="h2ocSplashLogo" />
-                    <img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdSplashLogo" />
-                </span>
+            <div class="row">
+                <div class="col-sm-12 text-center splashHeaderContainer">
+                    <p class="droolToolSplashHeader">Learn about how your neighborhood is conserving water and protecting our streams and beaches</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center splashSubheaderContainer">
+                    <p class="droolToolSplashSubheader">The Urban Drool Tool is a collaborative project between the Moulton Niguel Water District, the County of Orange, and the Cities of Aliso Viejo, Mission Viejo, Laguna Niguel, Laguna Woods, Laguna Hills.</p>
+                </div>
+            </div>
+            <div class="row callToActionContainer">
+                <div class="col-sm-6 text-right " style="padding-right: 25px;">
+                    <a class="btn btn-neptune droolToolActionCall" id="enterAddressButton">Enter Address to Get Started</a>
+                </div>
+                <div class="col-sm-6 text-left" style="padding-left: 25px;" id="closeSplashButton">
+                    <a class="btn btn-neptune droolToolActionCall">Explore My Watershed</a>
+                </div>
+            </div>
+            <div class="row splashSearchContainer" style="display: none">
+                <div class="col-sm-12 text-center">
+                    <div class="input-group">
+                        <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
+                        <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <span class="droolToolSpashCartouche">
+                        <img src="@Url.Content("~/Areas/DroolTool/Content/h2oc_color_logo.png")" class="h2ocSplashLogo" />
+                        <img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdSplashLogo" />
+                    </span>
+                </div>
             </div>
         </div>
     </div>
