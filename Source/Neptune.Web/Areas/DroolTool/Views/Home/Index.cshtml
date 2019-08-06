@@ -94,11 +94,14 @@
             z-index: 5000000;
             height: 100%;
             width: 100%;
-            display: flex;
+        }
 
-            align-items: center;
-
-            justify-content: center;
+        @@media only screen and (min-width:768) {
+            #splashModal {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
         }
 
         .droolSplashLogo {
@@ -235,12 +238,6 @@
 
         .sectionAboutYourNeighborhood .slideout-expant {
             transform: translateX(120%);
-        }
-    </style>
-    
-    <style>
-        #newSplash {
-
         }
     </style>
 }
