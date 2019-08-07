@@ -16,8 +16,20 @@
     justify-content: center;
   }
 }
+@media only screen and (max-width: 767px) {
+  .droolToolActionCallContainer {
+    text-align: center !important;
+    padding: 0 !important;
+  }
+}
 .droolSplashLogo {
   max-width: 480px;
+}
+.droolToolActionCall {
+  font-size: 16pt;
+  width: 340px;
+  padding: 10px;
+  border-radius: 22px;
 }
 .droolToolDialog {
   background: none;
