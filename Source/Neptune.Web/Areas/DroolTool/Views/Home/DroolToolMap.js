@@ -27,7 +27,7 @@ var NOMINATIM_ERROR =
 
 L.Control.NeighborhoodDetailControl = L.Control.extend({
     onAdd: function (map) {
-        this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control");
+        this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control neighborhood-detail-hidden-mobile ");
         this.neptuneMap = this.options.neptuneMap;
 
         // boilerplate-ish code to prevent clicks on this element from registering as clicks on the map proper
@@ -52,7 +52,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             });
 
         var currentMonthName = new Date().toLocaleString('default', { month: 'long' });
-        
+
         this.parentElement.innerHTML = "<div>" +
             "<h4 class=''>Selected Neighborhood</h4>" +
             "<span>Neighborhood Area: </span><span id='Area'></span> acres<br/>" +
@@ -61,21 +61,26 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             "<h6>About Your Neighborhood</h6>" +
             "<strong>Number of Accounts: </strong><span id='NumberOfReshoaAccounts'></span><br/>" +
             "<strong>Irrigated Area: </strong><span id='TotalReshoaIrrigatedArea'></span><br/>" +
-            "<strong>" + currentMonthName + " Water Budget: </strong><span id='TotalBudget'></span><br/>" +
-            "<strong>" + currentMonthName + " Outdoor Budget: </strong><span id='TotalOutdoorBudget'></span><br/>" +
+            "<strong>" +
+            currentMonthName +
+            " Water Budget: </strong><span id='TotalBudget'></span><br/>" +
+            "<strong>" +
+            currentMonthName +
+            " Outdoor Budget: </strong><span id='TotalOutdoorBudget'></span><br/>" +
             "</div>" +
             "<div class='neighborhoodSection sectionWaterUsage'>" +
             "<h6>Water Usage</h6>" +
-            "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Drool Rating</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Drool Trend</strong></div></div>" + 
-            "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_arr.png'/></div></div>" + 
-            "<div class='row'><div class='col-xs-6 text-center'> "+ currentMonthName+" range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" + 
-
+            "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Drool Rating</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Drool Trend</strong></div></div>" +
+            "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_arr.png'/></div></div>" +
+            "<div class='row'><div class='col-xs-6 text-center'> " +
+            currentMonthName +
+            " range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" +
             "</div>" +
             "<div class='neighborhoodSection sectionConservationActions'>" +
-            "<h6>Conservation Actions</h6>"+
-        "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Action Score</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Action Trend</strong></div></div>" +
+            "<h6>Conservation Actions</h6>" +
+            "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Action Score</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Action Trend</strong></div></div>" +
             "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_arr.png'/></div></div>" +
-            "<div class='row'><div class='col-xs-6 text-center'> Number of Water Conservation Actions by your Neighbors</div><div class='col-xs-6 text-center'>Improving</div></div>" + 
+            "<div class='row'><div class='col-xs-6 text-center'> Number of Water Conservation Actions by your Neighbors</div><div class='col-xs-6 text-center'>Improving</div></div>" +
             "</div>" +
             "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
             "</div>";
@@ -151,6 +156,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
 
     selectNeighborhood: function (properties) {
         this.NeighborhoodID = properties.NetworkCatchmentID;
+        this.neptuneMap.neighborhoodDetailShowMobileControl.button.disabled = false;
         
         var now = new Date();
         var year = now.getFullYear();
@@ -182,6 +188,43 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                     });
 
         this.show();
+    }
+});
+
+L.Control.NeighborhoodDetailShowMobile = L.Control.extend({
+    onAdd: function (map) {
+        var button = L.DomUtil.create("button", "btn btn-neptune btn-sm neighborhood-detail-show-mobile");
+        button.innerHTML = "<span class='glyphicon glyphicon-info-sign'></span>";
+        button.disabled = true;
+
+        L.DomEvent.on(button,
+            "click",
+            function () {
+                jQuery(".neighborhood-detail-control").removeClass("neighborhood-detail-hidden-mobile");
+                jQuery(button).addClass("neighborhood-detail-show-hidden-mobile");
+            });
+
+        this.button = button;
+        window.stopClickPropagation(this.button);
+        L.DomEvent.on(this.button,
+            "mouseover",
+            function () {
+                map.dragging.disable();
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
+            });
+
+        L.DomEvent.on(this.button,
+            "mouseout",
+            function () {
+                map.dragging.enable();
+                map.touchZoom.enable();
+                map.doubleClickZoom.enable();
+                map.scrollWheelZoom.enable();
+            });
+
+        return button;
     }
 });
 
@@ -264,6 +307,7 @@ L.Control.ExplorerTrayControl = L.Control.extend({
 L.control.nominatimSearchControl = function (options) { return new L.Control.NominatimSearchControl(options); };
 L.control.neighborhoodDetailControl = function (options) { return new L.Control.NeighborhoodDetailControl(options); };
 L.control.explorerTrayControl = function (options) { return new L.Control.ExplorerTrayControl(options); };
+L.control.neighborhoodDetailShowMobile = function (options) { return new L.Control.NeighborhoodDetailShowMobile(options); };
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
     this.config = config;
@@ -601,6 +645,12 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     this.neighborhoodDetailControl.addTo(this.map);
     //this.neighborhoodDetailControl.wireMonthPicker();
     this.neighborhoodDetailControl.wireHighlightFlowButton();
+
+    this.neighborhoodDetailShowMobileControl = L.control.neighborhoodDetailShowMobile({
+        position: "topleft"
+    });
+    this.neighborhoodDetailShowMobileControl.addTo(this.map);
+    
 
     this.showLocationControl = L.control.showLocationControl({
         position: "topleft"

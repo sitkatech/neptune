@@ -13,7 +13,7 @@
     <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
     <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
@@ -26,6 +26,27 @@
         initResizeHandler(window.mapInitJson);
     </script>
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
+    
+    <style>
+
+
+        @@media only screen and (max-width: 869px) {
+            .neighborhood-detail-hidden-mobile,
+            .neighborhood-detail-show-hidden-mobile {
+                display: none !important;
+            }
+        }
+
+        @@media only screen and (min-width: 870px) {
+            .neighborhood-detail-show-mobile {
+                display: none !important;
+            }
+        }
+
+        button.neighborhood-detail-show-mobile:disabled {
+            background-color: #606060;
+        }
+    </style>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
