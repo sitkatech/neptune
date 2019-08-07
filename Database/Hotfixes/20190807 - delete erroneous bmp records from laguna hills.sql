@@ -1,0 +1,1 @@
+Delete from TreatmentBMP where TreatmentBMPTypeID = 42 and StormwaterJurisdictionID = 4
