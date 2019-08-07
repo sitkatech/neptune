@@ -66,16 +66,16 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             "</div>" +
             "<div class='neighborhoodSection sectionWaterUsage'>" +
             "<h6>Water Usage</h6>" +
-            "<div class='row'><div class='col-sm-6 text-center'><strong>Neighborhood Drool Rating</strong></div><div class='col-sm-6 text-center'><strong>Neighborhood Drool Trend</strong></div></div>" + 
-            "<div class='row'><div class='col-sm-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_score.png'/></div><div class='col-sm-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_arr.png'/></div></div>" + 
-            "<div class='row'><div class='col-sm-6 text-center'> "+ currentMonthName+" range: XX to YY. Lower is better.</div><div class='col-sm-6 text-center'>Improving</div></div>" + 
+            "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Drool Rating</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Drool Trend</strong></div></div>" + 
+            "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_arr.png'/></div></div>" + 
+            "<div class='row'><div class='col-xs-6 text-center'> "+ currentMonthName+" range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" + 
 
             "</div>" +
             "<div class='neighborhoodSection sectionConservationActions'>" +
             "<h6>Conservation Actions</h6>"+
-        "<div class='row'><div class='col-sm-6 text-center'><strong>Neighborhood Action Score</strong></div><div class='col-sm-6 text-center'><strong>Neighborhood Action Trend</strong></div></div>" +
-            "<div class='row'><div class='col-sm-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_score.png'/></div><div class='col-sm-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_arr.png'/></div></div>" +
-            "<div class='row'><div class='col-sm-6 text-center'> Number of Water Conservation Actions by your Neighbors</div><div class='col-sm-6 text-center'>Improving</div></div>" + 
+        "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Action Score</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Action Trend</strong></div></div>" +
+            "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_arr.png'/></div></div>" +
+            "<div class='row'><div class='col-xs-6 text-center'> Number of Water Conservation Actions by your Neighbors</div><div class='col-xs-6 text-center'>Improving</div></div>" + 
             "</div>" +
             "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
             "</div>";
