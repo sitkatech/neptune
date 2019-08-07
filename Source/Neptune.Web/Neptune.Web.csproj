@@ -988,6 +988,12 @@
     <Content Include="Areas\DroolTool\Content\piggy.png" />
     <Content Include="Areas\DroolTool\Content\udt_color_logo.png" />
     <Content Include="Areas\DroolTool\Content\udt_mchr_logo.png" />
+    <Content Include="Areas\DroolTool\Views\Home\DroolToolMain.css">
+      <DependentUpon>DroolToolMain.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\DroolTool\Views\Home\DroolToolMain.min.css">
+      <DependentUpon>DroolToolMain.css</DependentUpon>
+    </Content>
     <Content Include="Areas\DroolTool\Views\Home\DroolToolMap.js" />
     <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.css">
       <DependentUpon>DroolToolSplash.less</DependentUpon>
@@ -1354,6 +1360,7 @@
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentExportController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cshtml" />
     <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.less" />
+    <Content Include="Areas\DroolTool\Views\Home\DroolToolMain.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

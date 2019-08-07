@@ -74,5 +74,9 @@
   {
     "outputFile": "Areas/DroolTool/Views/Home/DroolToolSplash.css",
     "inputFile": "Areas/DroolTool/Views/Home/DroolToolSplash.less"
+  },
+  {
+    "outputFile": "Areas/DroolTool/Views/Home/DroolToolMain.css",
+    "inputFile": "Areas/DroolTool/Views/Home/DroolToolMain.less"
   }
 ]

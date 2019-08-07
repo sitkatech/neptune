@@ -1,8 +1,6 @@
 ﻿#splashModal {
   background-color: #323232;
   background-color: rgba(0, 0, 0, 0.8);
-}
-#splashModal {
   overflow: hidden !important;
   position: fixed;
   top: 0;
