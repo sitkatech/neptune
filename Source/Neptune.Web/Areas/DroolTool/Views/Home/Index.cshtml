@@ -12,11 +12,11 @@
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
     <script>
 
         window.mapInitJson =
@@ -25,7 +25,7 @@
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
@@ -131,43 +131,55 @@
     <div id="splashModal" style="overflow: hidden;">
         <div id="splashModalContent">
             <div class="row">
-                <div class="col-sm-12 text-center">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center">
                     <img class="droolSplashLogo" src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" />
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
             <div class="row">
-                <div class="col-sm-12 text-center splashHeaderContainer">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center splashHeaderContainer">
                     <p class="droolToolSplashHeader">Learn about how your neighborhood is conserving water and protecting our streams and beaches</p>
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
             <div class="row">
-                <div class="col-sm-12 text-center splashSubheaderContainer">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center splashSubheaderContainer">
                     <p class="droolToolSplashSubheader">The Urban Drool Tool is a collaborative project between the Moulton Niguel Water District, the County of Orange, and the Cities of Aliso Viejo, Mission Viejo, Laguna Niguel, Laguna Woods, Laguna Hills.</p>
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
             <div class="row callToActionContainer">
-                <div class="col-sm-6 text-right " style="padding-right: 25px;">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-4 text-right " style="padding-right: 25px;">
                     <a class="btn btn-neptune droolToolActionCall" id="enterAddressButton">Enter Address to Get Started</a>
                 </div>
-                <div class="col-sm-6 text-left" style="padding-left: 25px;" id="closeSplashButton">
+                <div class="col-md-4text-left" style="padding-left: 25px;" id="closeSplashButton">
                     <a class="btn btn-neptune droolToolActionCall">Explore My Watershed</a>
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
             <div class="row splashSearchContainer" style="display: none">
-                <div class="col-sm-12 text-center">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center">
                     <div class="input-group">
                         <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
                         <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
                     </div>
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
             <div class="row">
-                <div class="col-sm-12 text-center">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center">
                     <span class="droolToolSpashCartouche">
                         <img src="@Url.Content("~/Areas/DroolTool/Content/h2oc_color_logo.png")" class="h2ocSplashLogo" />
                         <img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdSplashLogo" />
                     </span>
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
         </div>
     </div>
