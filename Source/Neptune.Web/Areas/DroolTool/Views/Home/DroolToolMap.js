@@ -54,7 +54,8 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         var currentMonthName = new Date().toLocaleString('default', { month: 'long' });
 
         this.parentElement.innerHTML = "<div>" +
-            "<h4 class=''>Selected Neighborhood</h4>" +
+            "<div class='row'><div class='col-xs-8'><h4 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
+            "" +
             "<span>Neighborhood Area: </span><span id='Area'></span> acres<br/>" +
             "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/><br/>" +
             "<div class='neighborhoodSection sectionAboutYourNeighborhood' style='height:30%'>" +
@@ -222,6 +223,12 @@ L.Control.NeighborhoodDetailShowMobile = L.Control.extend({
                 map.touchZoom.enable();
                 map.doubleClickZoom.enable();
                 map.scrollWheelZoom.enable();
+            });
+
+        jQuery('.neighborhod-detail-hide-button-mobile').on('click',
+            function () {
+                jQuery(".neighborhood-detail-control").addClass("neighborhood-detail-hidden-mobile");
+                jQuery(button).removeClass("neighborhood-detail-show-hidden-mobile");
             });
 
         return button;
