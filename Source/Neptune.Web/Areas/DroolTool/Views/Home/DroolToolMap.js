@@ -59,14 +59,14 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/><br/>" +
             "<div class='neighborhoodSection sectionAboutYourNeighborhood' style='height:30%'>" +
             "<h6>About Your Neighborhood</h6>" +
-            "<strong>Number of Accounts: </strong><span id='NumberOfReshoaAccounts'></span><br/>" +
-            "<strong>Irrigated Area: </strong><span id='TotalReshoaIrrigatedArea'></span><br/>" +
+            "<strong>Number of Accounts: </strong><span class='about-datum' id='NumberOfReshoaAccounts'></span><br/>" +
+            "<strong>Irrigated Area: </strong><span class='about-datum' id='TotalReshoaIrrigatedArea'></span><br/>" +
             "<strong>" +
             currentMonthName +
-            " Water Budget: </strong><span id='TotalBudget'></span><br/>" +
+            " Water Budget: </strong><span class='about-datum' id='TotalBudget'></span><br/>" +
             "<strong>" +
             currentMonthName +
-            " Outdoor Budget: </strong><span id='TotalOutdoorBudget'></span><br/>" +
+            " Outdoor Budget: </strong><span class='about-datum' id='TotalOutdoorBudget'></span><br/>" +
             "</div>" +
             "<div class='neighborhoodSection sectionWaterUsage'>" +
             "<h6>Water Usage</h6>" +

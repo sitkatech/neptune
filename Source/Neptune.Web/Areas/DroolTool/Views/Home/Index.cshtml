@@ -12,11 +12,11 @@
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")"/>
     <script>
 
         window.mapInitJson =
@@ -25,8 +25,8 @@
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
-    
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
+
     <style>
 
 
@@ -35,7 +35,40 @@
             .neighborhood-detail-show-hidden-mobile {
                 display: none !important;
             }
-        }
+
+            .neighborhood-detail-control {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                max-width: none;
+                z-index: 5000000000;
+                border: none !important;
+                margin: 0 !important;
+            }
+
+            .expando-bar {
+                display: none;
+            }
+
+            .leaflet-top {
+                position: static;
+            }
+            
+            body { overflow: hidden; }
+
+            #highlightFlowButton {
+                display: none;
+            }
+
+            .slideout {
+                width: 100% !important;
+                height: 100% !important;
+                 text-align: center !important;
+                 position: relative !important;
+            }
+    }
 
         @@media only screen and (min-width: 870px) {
             .neighborhood-detail-show-mobile {
@@ -46,6 +79,7 @@
         button.neighborhood-detail-show-mobile:disabled {
             background-color: #606060;
         }
+
     </style>
 }
 
@@ -79,19 +113,25 @@
                 targetSelector: '.sectionAboutYourNeighborhood',
                 xorSlideouts: true,
                 width: '230px',
-                clickTargetToExpand: true
+                clickTargetToExpand: true,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: {
+
+                }
             });
             jQuery(".waterUsageSlideout").slideout({
                 targetSelector: '.sectionWaterUsage',
                 xorSlideouts: true,
                 width: '450px',
-                clickTargetToExpand: true
+                clickTargetToExpand: true,
+                mediaQuery: " (min-width: 870px) "
             });
             jQuery(".conservationActionsSlideout").slideout({
                 targetSelector: '.sectionConservationActions',
                 xorSlideouts: true,
                 width: '450px',
-                clickTargetToExpand: true
+                clickTargetToExpand: true,
+                mediaQuery: " (min-width: 870px) "
             });
 
 

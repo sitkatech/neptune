@@ -15,7 +15,7 @@
 
         var targetSelector = options.targetSelector;
 
-        if ($(targetSelector).css("position") == "static") {
+        if ($(targetSelector).css("position") === "static") {
             $(targetSelector).css("position", "relative");
         }
 
@@ -49,7 +49,14 @@
         }
 
         $(clickToExpandSelector).on("click",
-            function() {
+            function () {
+
+                if (options.mediaQuery) {
+                    if (!window.matchMedia(options.mediaQuery).matches) {
+                        return;
+                    }
+                }
+
                 this.expand = !this.expand;
 
                 if (this.expand) {
@@ -59,7 +66,7 @@
                     if (options.xorSlideouts) {
                         var slideouts = window.xorSlideoutGroup.slideouts;
                         for (var i = 0; i < slideouts.length; i++) {
-                            if (slideouts[i] != this) {
+                            if (slideouts[i] !== this) {
 
                                 slideouts[i].closeSlideout();
                                 slideouts[i].expand = false;
@@ -71,6 +78,24 @@
                     this.closeSlideout();
                 }
             }.bind(this));
+
+        // intended for use in conjunction with mediaQuery
+        // clicking the alternate will open the drawer, but with a class that fullscreens it, and with a close button appended
+        if (options.alternate) {
+            $(targetSelector).append("<div class='expand-slideout-alternate-mobile-container'><button class='btn btn-sm btn-neptune expand-slideout-alternate-mobile'><span class='glyphicon glyphicon-option-horizontal '></span></button></div>");
+            this.append("<button class=' btn btn-sm btn-neptune glyphicon glyphicon-remove close-slideout-button-mobile'></button>");
+            $(targetSelector + " .close-slideout-button-mobile").on("click",
+                function() {
+                    $(targetSelector + " .slideout-wrap").removeClass("slideout-fullscreen-mobile");
+                    this.addClass("slideout-hid");
+                }.bind(this));
+
+            $(targetSelector + " .expand-slideout-alternate-mobile").on("click",
+                function () {
+                    $(targetSelector + " .slideout-wrap").addClass("slideout-fullscreen-mobile");
+                    this.removeClass("slideout-hid");
+                }.bind(this));
+        }
     };
 
 }(jQuery));

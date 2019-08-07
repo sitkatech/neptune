@@ -91,7 +91,7 @@
   height: auto;
   width: auto;
 }
-.sectionAboutYourNeighborhood span:not(.expando-bar):not(.expando-glyph) {
+.about-datum {
   float: right;
   margin-right: 16px;
 }

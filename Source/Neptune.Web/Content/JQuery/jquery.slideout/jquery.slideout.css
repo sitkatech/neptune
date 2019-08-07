@@ -28,12 +28,45 @@
     transform: translateX(60%);
 }
 
+.slideout-fullscreen-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    max-width: none;
+    z-index: 9999999999;
+    border: none !important;
+    margin: 0 !important;
+}
+
+.close-slideout-button-mobile {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    float: right;
+}
+
+.expand-slideout-alternate-mobile-container {
+    text-align: right;
+    
+}
+
+.expand-slideout-alternate-mobile, .close-slideout-button-mobile {
+    padding: 0 3px;
+    border: none;
+}
+
+.expand-slideout-alternate-mobile span, .close-slideout-button-mobile span {
+    top: 2px;
+}
+
 .expando-bar {
     position: absolute;
     right: 0;
     height: 100%;
     width: 15px;
-    top:0;
+    top: 0;
 }
 
 .expando-glyph {
