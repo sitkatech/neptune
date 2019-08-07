@@ -12,9 +12,9 @@
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")"/>
     <script>
 
         window.mapInitJson =
@@ -23,7 +23,7 @@
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
 
 
     <style>
@@ -81,7 +81,7 @@
             max-width: 100%;
         }
 
-        #splashModal{
+        #splashModal {
             background-color: #323232;
             background-color: rgba(0, 0, 0, .8);
         }
@@ -90,19 +90,22 @@
             overflow: hidden !important;
             position: fixed;
             top: 0;
-            left:0;
+            left: 0;
             z-index: 5000000;
             height: 100%;
             width: 100%;
         }
 
-        @@media only screen and (min-width:768) {
+        @@media only screen and (min-width: 768px) {
             #splashModal {
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
         }
+
+        /*@@media only screen and (max-width: 767) {
+        }*/
 
         .droolSplashLogo {
             max-width: 480px;
