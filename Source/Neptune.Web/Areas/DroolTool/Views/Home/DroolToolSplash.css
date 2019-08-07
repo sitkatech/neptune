@@ -9,19 +9,6 @@
   height: 100%;
   width: 100%;
 }
-@media only screen and (min-width: 768px) {
-  #splashModal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .droolToolActionCallContainer {
-    text-align: center !important;
-    padding: 0 !important;
-  }
-}
 .droolSplashLogo {
   max-width: 480px;
 }
@@ -67,4 +54,34 @@
 .mnwdSplashLogo {
   max-height: 80px;
   margin-left: 25px;
+}
+@media only screen and (min-width: 768px) {
+  #splashModal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .droolToolActionCallContainer {
+    text-align: center !important;
+    padding: 0 !important;
+  }
+  .droolToolActionCall {
+    font-size: 14pt;
+  }
+  .droolToolSpashCartouche {
+    padding: 5px 0 5px 0;
+  }
+  .splashCartoucheLogo {
+    margin: 0 !important;
+    transform: scale(0.9);
+  }
+  .droolSplashLogo {
+    max-width: none;
+    width: 100%;
+  }
+  .droolToolSplashHeader {
+    font-size: 18pt;
+  }
 }
