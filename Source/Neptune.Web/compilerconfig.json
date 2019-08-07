@@ -70,5 +70,9 @@
   {
     "outputFile": "Content/bootstrap-toggle/bootstrap-toggle.es5.js",
     "inputFile": "Content/bootstrap-toggle/bootstrap-toggle.js"
+  },
+  {
+    "outputFile": "Areas/DroolTool/Views/Home/DroolToolSplash.css",
+    "inputFile": "Areas/DroolTool/Views/Home/DroolToolSplash.less"
   }
 ]

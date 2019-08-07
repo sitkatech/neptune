@@ -989,6 +989,12 @@
     <Content Include="Areas\DroolTool\Content\udt_color_logo.png" />
     <Content Include="Areas\DroolTool\Content\udt_mchr_logo.png" />
     <Content Include="Areas\DroolTool\Views\Home\DroolToolMap.js" />
+    <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.css">
+      <DependentUpon>DroolToolSplash.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.min.css">
+      <DependentUpon>DroolToolSplash.css</DependentUpon>
+    </Content>
     <Content Include="Areas\DroolTool\Views\Home\NeighborhoodComponent.html" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedCurrentOrNetChangeControl.js" />
@@ -1347,6 +1353,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cshtml" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentExportController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cshtml" />
+    <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
