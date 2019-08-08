@@ -2,7 +2,7 @@
     onAdd: function (map) {
         var button = L.DomUtil.create("button", "btn btn-neptune btn-sm showLocation");
         button.innerHTML = "<img src='/Areas/DroolTool/Content/35-512.png' style='height:20px;'>";
-
+        button.title = "Show my location";
         var locateOptions = {
             setView: true,
             enableHighAccuracy: true
