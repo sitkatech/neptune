@@ -28,7 +28,7 @@ var NOMINATIM_ERROR =
 L.Control.DroolToolWatermark = L.Control.extend({
     onAdd: function (map) {
 
-        var div = L.DomUtil.create("div");
+        var div = L.DomUtil.create("div", "drool-tool-watermark");
         div.innerHTML =
             "<img src='/Areas/DroolTool/Content/udt_mchr_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70 style='margin-left: 10px; padding-top:10px;'/>";
 
@@ -285,8 +285,8 @@ L.Control.ExplorerTrayControl = L.Control.extend({
 
         this.parentElement.innerHTML =
             "<ul>" +
-            "<li><a id='animateButton' target='_blank'>" +
-            "<img src='/Areas/DroolTool/Content/chevvy.png' class='img-circle' />" +
+            "<li><a href='/Home/About' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/i.png' class='img-circle' />" +
             "</a></li>" +
             "<li><a href='https://www.mnwd.com/rebates/' target='_blank'>" +
             "<img src='/Areas/DroolTool/Content/piggy.png' class='img-circle' />" +

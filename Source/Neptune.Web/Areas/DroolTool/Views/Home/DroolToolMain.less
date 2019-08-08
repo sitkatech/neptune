@@ -40,7 +40,8 @@
 }
 
 .explorerTray {
-    background-color: #00c1d5;
+    background: none;
+    
     margin: 0 !important;
     border-radius: 50px 0 0;
     color: white;
@@ -49,7 +50,7 @@
 
     > ul {
         list-style: none;
-        padding-left: 10px;
+        padding-left: 5px;
         margin-bottom: 0px;
         padding-top: 8px;
     }
@@ -140,8 +141,9 @@
 }
 
 @media only screen and (max-width: 1260px){
-    .explorerTray{
-        display:none;
+    .explorerTray,
+    .drool-tool-watermark {
+        display: none;
     }
 }
 
