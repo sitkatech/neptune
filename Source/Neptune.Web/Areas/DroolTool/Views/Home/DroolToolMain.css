@@ -31,8 +31,6 @@
   width: 100%;
 }
 .explorerTray {
-  width: 60%;
-  height: 100px;
   background-color: #00c1d5;
   margin: 0 !important;
   border-radius: 50px 0 0;
@@ -40,8 +38,15 @@
   padding: 10px;
   font-size: 16px;
 }
+.explorerTray > ul {
+  list-style: none;
+  padding-left: 10px;
+  margin-bottom: 0px;
+  padding-top: 8px;
+}
 .explorerTray img {
-  max-width: 100%;
+  width: 50px;
+  margin-bottom: 10px;
 }
 .explorerTray img:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

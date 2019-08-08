@@ -30,7 +30,7 @@ L.Control.DroolToolWatermark = L.Control.extend({
 
         var div = L.DomUtil.create("div");
         div.innerHTML =
-            "<img src='/Areas/DroolTool/Content/udt_mchr_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70/>";
+            "<img src='/Areas/DroolTool/Content/udt_mchr_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70 style='margin-left: 10px; padding-top:10px;'/>";
 
         return div;
     }
@@ -283,38 +283,17 @@ L.Control.ExplorerTrayControl = L.Control.extend({
     onAdd: function(map) {
         this.parentElement = L.DomUtil.create("div", "explorerTray");
 
-        this.parentElement.innerHTML = "<div class='row'>" +
-                "<div class='col-sm-4'>" +
-                    "<div class='row'>" +
-                        "<div class='col-sm-4'>" +
-                            "<a id='animateButton'>" +
-                            "<img src='/Areas/DroolTool/Content/chevvy.png' class='img-circle' />" +
-                            "</a>" +
-                        "</div>" +
-                        "<div class='col-sm-8'>Where does my irrigation runoff go? (Start animation)</div>" +
-                    "</div>" +
-                "</div>" +
-                "<div class='col-sm-4'>" +
-                    "<div class='row'>" +
-                        "<div class='col-sm-4'>" +
-                            "<a href='https://www.mnwd.com/rebates/'>" +
-                            "<img src='/Areas/DroolTool/Content/piggy.png' class='img-circle' />" +
-                            "</a>" +
-                        "</div>" +
-                        "<div class='col-sm-8'>View rebates and find out about water efficiency</div>" +
-                    "</div>" +
-                "</div>" +
-                "<div class='col-sm-4'>" +
-                    "<div class='row'>" +
-                        "<div class='col-sm-4'>" +
-                            "<a href='https://www.mnwd.com/payment/'>" +
-                            "<img src='/Areas/DroolTool/Content/moneywater.png' class='img-circle' />" +
-                            "</a>" +
-                        "</div>" +
-                        "<div class='col-sm-8'>Access my Water Bill (via Moulton Niguel Water District)</div>" +
-                    "</div>" +
-                "</div>" +
-            "</div>";
+        this.parentElement.innerHTML =
+            "<ul>" +
+            "<li><a id='animateButton' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/chevvy.png' class='img-circle' />" +
+            "</a></li>" +
+            "<li><a href='https://www.mnwd.com/rebates/' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/piggy.png' class='img-circle' />" +
+            "</a></li>" +
+            "<li><a href='https://www.mnwd.com/payment/' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/moneywater.png' class='img-circle' />" +
+            "</a></li></ul>" ;
 
         window.stopClickPropagation(this.parentElement);
         return this.parentElement;
