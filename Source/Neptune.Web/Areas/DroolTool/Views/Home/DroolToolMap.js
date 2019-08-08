@@ -25,6 +25,21 @@ var NEIGHBORHOOD_NOT_FOUND =
 var NOMINATIM_ERROR =
     "There was an error retrieving the address. The address location service may be unavailable. If the issue persists, please contact support.";
 
+L.Control.DroolToolWatermark = L.Control.extend({
+    onAdd: function (map) {
+
+        var div = L.DomUtil.create("div");
+        div.innerHTML =
+            "<img src='/Areas/DroolTool/Content/udt_mchr_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70/>";
+
+        return div;
+    }
+});
+
+L.control.droolToolWatermark = function(options) {
+    return new L.Control.DroolToolWatermark(options);
+}
+
 L.Control.NeighborhoodDetailControl = L.Control.extend({
     onAdd: function (map) {
         this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control neighborhood-detail-hidden-mobile ");
@@ -648,6 +663,9 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
         position: "topleft",
         neptuneMap: this
     });
+
+    var watermark = L.control.droolToolWatermark({ position: 'bottomleft' });
+    watermark.addTo(this.map);
 
     this.neighborhoodDetailControl.addTo(this.map);
     //this.neighborhoodDetailControl.wireMonthPicker();
