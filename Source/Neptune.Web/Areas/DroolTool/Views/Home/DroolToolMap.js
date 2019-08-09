@@ -116,49 +116,49 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
     },
 
     // neutered under #430; may bring back the heart and soul of this piece as part of a "Neighborhood Detail Page" later
-    //wireMonthPicker: function () {
+    wireMonthPicker: function () {
 
-    //    jQuery(".metricMonthPicker").on("click",
-    //        function() {
-    //            jQuery("#MonthPicker_Button_").click();
-    //        });
+        jQuery(".metricMonthPicker").on("click",
+            function() {
+                jQuery("#MonthPicker_Button_").click();
+            });
 
-    //    var getNeighborhoodID = function () {
-    //        return this.NeighborhoodID;
-    //    }.bind(this);
+        var getNeighborhoodID = function () {
+            return this.NeighborhoodID;
+        }.bind(this);
         
-    //    jQuery(".metricMonthPicker").MonthPicker({
-    //            OnAfterChooseMonth: function() {
-    //                var month = Number(this.value.split("/")[0]);
-    //                var year = Number(this.value.split("/")[1]);
+        jQuery(".metricMonthPicker").MonthPicker({
+                OnAfterChooseMonth: function() {
+                    var month = Number(this.value.split("/")[0]);
+                    var year = Number(this.value.split("/")[1]);
                     
-    //                RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
-    //                    jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
-    //                    jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
-    //                    jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
-    //                    jQuery("#TotalEstimatedReshoaUsers").text(metricResponse.TotalEstimatedReshoaUsers);
-    //                    jQuery("#TotalBudget").text(metricResponse.TotalBudget);
-    //                    jQuery("#TotalOutdoorBudget").text(metricResponse.TotalOutdoorBudget);
-    //                    jQuery("#AverageTotalUsage").text(metricResponse.AverageTotalUsage);
-    //                    jQuery("#AverageEstimatedIrrigationUsage").text(metricResponse.AverageEstimatedIrrigationUsage);
-    //                    jQuery("#NumberOfAccountsOverBudget").text(metricResponse.NumberOfAccountsOverBudget);
-    //                    jQuery("#PercentOfAccountsOverBudget").text(metricResponse.PercentOfAccountsOverBudget);
-    //                    jQuery("#AverageOverBudgetUsage").text(metricResponse.AverageOverBudgetUsage);
-    //                    jQuery("#AverageOverBudgetUsageRolling").text(metricResponse.AverageOverBudgetUsageRolling);
-    //                    jQuery("#AverageOverBudgetUsageSlope").text(metricResponse.AverageOverBudgetUsageSlope);
-    //                    jQuery("#TotalOverBudgetUsage").text(metricResponse.TotalOverBudgetUsage);
-    //                    jQuery("#RebateParticipationPercentage").text(metricResponse.RebateParticipationPercentage);
-    //                    jQuery("#RebateParticipationPercentageRolling").text(metricResponse.RebateParticipationPercentageRolling);
-    //                    jQuery("#RebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
-    //                    jQuery("#TotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
-    //                });
-    //            },
-    //        ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
-    //        }
-    //    );
+                    RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
+                        jQuery("#legacyPanelNumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
+                        jQuery("#legacyPanelTotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
+                        jQuery("#legacyPanelAverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
+                        jQuery("#legacyPanelTotalEstimatedReshoaUsers").text(metricResponse.TotalEstimatedReshoaUsers);
+                        jQuery("#legacyPanelTotalBudget").text(metricResponse.TotalBudget);
+                        jQuery("#legacyPanelTotalOutdoorBudget").text(metricResponse.TotalOutdoorBudget);
+                        jQuery("#legacyPanelAverageTotalUsage").text(metricResponse.AverageTotalUsage);
+                        jQuery("#legacyPanelAverageEstimatedIrrigationUsage").text(metricResponse.AverageEstimatedIrrigationUsage);
+                        jQuery("#legacyPanelNumberOfAccountsOverBudget").text(metricResponse.NumberOfAccountsOverBudget);
+                        jQuery("#legacyPanelPercentOfAccountsOverBudget").text(metricResponse.PercentOfAccountsOverBudget);
+                        jQuery("#legacyPanelAverageOverBudgetUsage").text(metricResponse.AverageOverBudgetUsage);
+                        jQuery("#legacyPanelAverageOverBudgetUsageRolling").text(metricResponse.AverageOverBudgetUsageRolling);
+                        jQuery("#legacyPanelAverageOverBudgetUsageSlope").text(metricResponse.AverageOverBudgetUsageSlope);
+                        jQuery("#legacyPanelTotalOverBudgetUsage").text(metricResponse.TotalOverBudgetUsage);
+                        jQuery("#legacyPanelRebateParticipationPercentage").text(metricResponse.RebateParticipationPercentage);
+                        jQuery("#legacyPanelRebateParticipationPercentageRolling").text(metricResponse.RebateParticipationPercentageRolling);
+                        jQuery("#legacyPanelRebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
+                        jQuery("#legacyPanelTotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
+                    });
+                },
+            ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
+            }
+        );
 
-    //    jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
-    //},
+        jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
+    },
 
     hide: function () {
         this.parentElement.style.display = "none";
