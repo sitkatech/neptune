@@ -10,7 +10,7 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
     public class NetworkCatchmentController : NeptuneBaseController
     {
 
-        // TODO: This method doesn't actually use the year/month parameters, it just returns the most recent available datum
+        
         [HttpGet]
         [DroolToolViewFeature]
         public JsonResult Metrics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
@@ -18,6 +18,20 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
 
             var vDroolMetric = HttpRequestStorage.DatabaseEntities.vDroolMetrics.OrderByDescending(x=>x.MetricDate).First(x=>x.OCSurveyCatchmentID == networkCatchment.OCSurveyCatchmentID).ToDroolMetricSimple();
+
+            return Json(vDroolMetric, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        [DroolToolViewFeature]
+        public JsonResult MetricsForMonth(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey, int year, int month)
+        {
+
+            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+
+            var vDroolMetric = HttpRequestStorage.DatabaseEntities.vDroolMetrics.SingleOrDefault(x =>
+                x.OCSurveyCatchmentID == networkCatchment.OCSurveyCatchmentID && x.MetricYear == year &&
+                x.MetricMonth == month).ToDroolMetricSimple();
+
 
             return Json(vDroolMetric, JsonRequestBehavior.AllowGet);
         }

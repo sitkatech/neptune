@@ -41,7 +41,12 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             MetricUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x =>
                     x.Metrics(UrlTemplate.Parameter1Int)))
                 .UrlTemplateString;
+            MetricForMonthUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x =>
+                    x.MetricsForMonth(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3Int)))
+                .UrlTemplateString;
         }
+
+        public string MetricForMonthUrlTemplate { get; set; }
 
         public string MetricUrlTemplate { get; }
 

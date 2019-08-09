@@ -110,6 +110,9 @@
   padding: 2px;
   margin-bottom: 2px;
 }
+.legacySlideout {
+  height: 540px;
+}
 .sectionAboutYourNeighborhood .slideout-expant {
   transform: translateX(120%);
 }

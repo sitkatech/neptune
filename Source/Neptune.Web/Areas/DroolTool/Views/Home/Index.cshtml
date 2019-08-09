@@ -12,11 +12,11 @@
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
     <script>
 
         window.mapInitJson =
@@ -25,7 +25,7 @@
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
     <style>
 
@@ -55,8 +55,10 @@
             .leaflet-top {
                 position: static;
             }
-            
-            body { overflow: hidden; }
+
+            body {
+                overflow: hidden;
+            }
 
             #highlightFlowButton {
                 display: none;
@@ -65,23 +67,25 @@
             .slideout {
                 width: 100% !important;
                 height: 100% !important;
-                 text-align: center !important;
-                 position: relative !important;
+                text-align: center !important;
+                position: relative !important;
             }
-    }
+        }
 
         @@media only screen and (min-width: 870px) {
             .neighborhood-detail-show-mobile {
                 display: none !important;
             }
+
             .expand-slideout-alternate-mobile-container,
-            .close-slideout-button-mobile{display:none !important}
+            .close-slideout-button-mobile {
+                display: none !important
+            }
         }
 
         button.neighborhood-detail-show-mobile:disabled {
             background-color: #606060;
         }
-
     </style>
 }
 
@@ -104,6 +108,122 @@
 
     <div class="conservationActionsSlideout slideout">
         <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout3.png")" />
+    </div>
+
+    <div class="legacySlideout">
+        <h4>Neighborhood Metrics</h4>
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
+                <p style="font-weight:bold">Select a month and year:</p>
+            </div>
+            <div class="col-sm-7">
+                <input class="metricMonthPicker form-control month-year-input" type="text">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table-responsive table table-striped table-condensed" style="margin-bottom:0">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-4">Metric</th>
+                            <th>Snapshot</th>
+                            <th>Mean</th>
+                            <th>Slope</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Number of Residential and HOA Accounts</td>
+                            <td id="legacyPanelNumberOfReshoaAccounts"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Residential and HOA Irrigated Area, Square Feet</td>
+                            <td id="legacyPanelTotalReshoaIrrigatedArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Irrigated Area, Square Feet per Household</td>
+                            <td id="legacyPanelAverageIrrigatedArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Estimated Residential Water Users</td>
+                            <td id="legacyPanelTotalEstimatedReshoaUsers"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Budget, gallons</td>
+                            <td id="legacyPanelTotalBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Outdoor Budget, gallons</td>
+                            <td id="legacyPanelTotalOutdoorBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Total Usage, Gallons per Household</td>
+                            <td id="legacyPanelAverageTotalUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Estimated Irrigation Usage, Gallons per Household</td>
+                            <td id="legacyPanelAverageEstimatedIrrigationUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Accounts over Budget</td>
+                            <td id="legacyPanelNumberOfAccountsOverBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Percent of Accounts over Budget </td>
+                            <td id="legacyPanelPercentOfAccountsOverBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Over-budget Usage, Gallons per Household</td>
+                            <td id="legacyPanelAverageOverBudgetUsage"></td>
+                            <td id="legacyPanelAverageOverBudgetUsageRolling">N/A</td>
+                            <td id="legacyPanelAverageOverBudgetUsageSlope">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Over-budget Usage, Gallons</td>
+                            <td id="legacyPanelTotalOverBudgetUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
+                            <td id="legacyPanelRebateParticipationPercentage"></td>
+                            <td id="legacyPanelRebateParticipationPercentageRolling">N/A</td>
+                            <td id="legacyPanelRebateParticipationPercentageSlope">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Area of Turf Replacement, sq-ft</td>
+                            <td id="legacyPanelTotalTurfReplacementArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div><hr />
+        <p class="systemText">N/A in the Mean and Slope columns indicates that the Mean or Slope is not relevant for a particular metric.</p>
+        <p class="systemText">Not Available in the Mean and Slope columns indicates that there is not enough historic data to calculate Mean or Slope for a particular metric for this month.</p>
     </div>
 
     <script>
@@ -134,6 +254,17 @@
                 clickTargetToExpand: true,
                 mediaQuery: " (min-width: 870px) ",
                 alternate: true
+            });
+            jQuery(".legacySlideout").slideout({
+                targetSelector: '.legacy-slideout-target',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: false,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true,
+                manuallyWired: {
+                    clickToExpandSelector: ".expandLegacySlideout"
+                }
             });
 
 

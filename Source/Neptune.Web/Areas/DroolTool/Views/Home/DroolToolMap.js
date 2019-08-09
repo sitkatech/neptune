@@ -72,6 +72,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         var currentMonthName = new Date().toLocaleString('default', { month: 'long' });
 
         this.parentElement.innerHTML = "<div>" +
+            "<div class='legacy-slideout-target'></div>" +
             "<div class='row'><div class='col-xs-8'><h5 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
             "" +
             "<span>Neighborhood Area: </span><span id='Area'></span> acres<br/>" +
@@ -96,7 +97,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_arr.png'/></div></div>" +
             "<div class='row'><div class='col-xs-6 text-center'> Number of Water Conservation Actions by your Neighbors</div><div class='col-xs-6 text-center'>Improving</div></div>" +
             "</div>" +
-            "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
+            "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button><button class='btn btn-neptune btn-sm expandLegacySlideout'>More</button>" +
             "</div>";
 
         this.hide();
@@ -132,7 +133,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
                     var month = Number(this.value.split("/")[0]);
                     var year = Number(this.value.split("/")[1]);
                     
-                    RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
+                    RemoteService.getMetricsForMonth(getNeighborhoodID(), year, month).then(function(metricResponse) {
                         jQuery("#legacyPanelNumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
                         jQuery("#legacyPanelTotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
                         jQuery("#legacyPanelAverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
@@ -569,6 +570,14 @@ var RemoteService = {
             url: metricUrl,
             method: 'GET'
         });
+    },
+
+    getMetricsForMonth: function (neighborhoodID, year, month) {
+        var metricUrl = new Sitka.UrlTemplate(this.options.metricForMonthUrlTemplate).ParameterReplace(neighborhoodID, year, month);
+        return jQuery.ajax({
+            url: metricUrl,
+            method: 'GET'
+        });
     }
 };
 
@@ -582,6 +591,7 @@ NeptuneMaps.DroolToolMap.prototype.configureRemoteService = function () {
     RemoteService.options.geoserverUrl = this.config.GeoServerUrl;
     RemoteService.options.stormshedUrlTemplate = this.config.StormshedUrlTemplate;
     RemoteService.options.metricUrlTemplate = this.config.MetricUrlTemplate;
+    RemoteService.options.metricForMonthUrlTemplate = this.config.MetricForMonthUrlTemplate;
 };
 
 NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
@@ -651,7 +661,7 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
     watermark.addTo(this.map);
 
     this.neighborhoodDetailControl.addTo(this.map);
-    //this.neighborhoodDetailControl.wireMonthPicker();
+    this.neighborhoodDetailControl.wireMonthPicker();
     this.neighborhoodDetailControl.wireHighlightFlowButton();
 
     this.neighborhoodDetailShowMobileControl = L.control.neighborhoodDetailShowMobile({

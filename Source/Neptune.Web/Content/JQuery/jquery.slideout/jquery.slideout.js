@@ -22,7 +22,6 @@
         $(targetSelector).append("<div class='slideout-wrap'></div>");
         $(targetSelector + " .slideout-wrap").append(this);
         this.addClass('slideout-content slideout-hid');
-        $(targetSelector).append("<span class='expando-bar'><span class='expando-glyph glyphicon glyphicon-menu-right'></span></span>");
 
         this.openSlideout = function() {
             $(targetSelector + " .slideout-wrap").addClass("slideout-expant");
@@ -40,12 +39,17 @@
         };
 
         var clickToExpandSelector;
-        if (options.clickTargetToExpand) {
-            $(targetSelector).addClass("click-to-expand-element");
-            clickToExpandSelector = targetSelector;
+        if (!options.manuallyWired) {
+            $(targetSelector).append("<span class='expando-bar'><span class='expando-glyph glyphicon glyphicon-menu-right'></span></span>");
+            if (options.clickTargetToExpand) {
+                $(targetSelector).addClass("click-to-expand-element");
+                clickToExpandSelector = targetSelector;
+            } else {
+                $(targetSelector + " .expando-bar").addClass("click-to-expand-element");
+                clickToExpandSelector = targetSelector + " .expando-bar";
+            }
         } else {
-            $(targetSelector + " .expando-bar").addClass("click-to-expand-element");
-            clickToExpandSelector = targetSelector + " .expando-bar";
+            clickToExpandSelector = options.manuallyWired.clickToExpandSelector;
         }
 
         $(clickToExpandSelector).on("click",
