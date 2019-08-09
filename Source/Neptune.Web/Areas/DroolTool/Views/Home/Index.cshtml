@@ -70,6 +70,12 @@
                 text-align: center !important;
                 position: relative !important;
             }
+
+            .expandLegacySlideout,
+            .legacySlideout,
+            .legacy-slideout-target .expand-slideout-alternate-mobile-container {
+                display: none;
+            }
         }
 
         @@media only screen and (min-width: 870px) {
@@ -266,6 +272,14 @@
                     clickToExpandSelector: ".expandLegacySlideout"
                 }
             });
+
+            jQuery(".expandLegacySlideout").on('click', function() {
+                if (this.innerHTML === 'More') {
+                    this.innerHTML = "Less";
+                } else {
+                    this.innerHTML = "More";
+                }
+            })
 
 
             function killSplash() {
