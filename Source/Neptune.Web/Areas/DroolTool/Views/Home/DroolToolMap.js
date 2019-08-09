@@ -25,6 +25,9 @@ var NEIGHBORHOOD_NOT_FOUND =
 var NOMINATIM_ERROR =
     "There was an error retrieving the address. The address location service may be unavailable. If the issue persists, please contact support.";
 
+var MONTHS = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
 L.Control.DroolToolWatermark = L.Control.extend({
     onAdd: function (map) {
 
@@ -72,25 +75,20 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             "<div class='row'><div class='col-xs-8'><h5 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
             "" +
             "<span>Neighborhood Area: </span><span id='Area'></span> acres<br/>" +
-            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span>" +
+            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/>" +
+            "<span class='showingDataFor' style='display:none;'>Showing data for <span class='currentMonthName'></span> <span class='currentYear'></span></span>" + 
             "<div class='neighborhoodSection sectionAboutYourNeighborhood' style='height:30%'>" +
             "<h6>About Your Neighborhood</h6>" +
             "<strong>Number of Accounts: </strong><span class='about-datum' id='NumberOfReshoaAccounts'></span><br/>" +
             "<strong>Irrigated Area: </strong><span class='about-datum' id='TotalReshoaIrrigatedArea'></span><br/>" +
-            "<strong>" +
-            currentMonthName +
-            " Water Budget: </strong><span class='about-datum' id='TotalBudget'></span><br/>" +
-            "<strong>" +
-            currentMonthName +
-            " Outdoor Budget: </strong><span class='about-datum' id='TotalOutdoorBudget'></span><br/>" +
+            "<strong>Water Budget: </strong><span class='about-datum' id='TotalBudget'></span><br/>" +
+            "<strong>Outdoor Budget: </strong><span class='about-datum' id='TotalOutdoorBudget'></span><br/>" +
             "</div>" +
             "<div class='neighborhoodSection sectionWaterUsage'>" +
             "<h6>Water Usage</h6>" +
             "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Drool Rating</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Drool Trend</strong></div></div>" +
             "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_arr.png'/></div></div>" +
-            "<div class='row'><div class='col-xs-6 text-center'> " +
-            currentMonthName +
-            " range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" +
+            "<div class='row'><div class='col-xs-6 text-center'>Range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" +
             "</div>" +
             "<div class='neighborhoodSection sectionConservationActions'>" +
             "<h6>Conservation Actions</h6>" +
@@ -183,6 +181,12 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         jQuery("#DrainsTo").text(properties.Watershed);
 
         RemoteService.getMetrics(this.NeighborhoodID, year, month).then(function (metricResponse) {
+            var monthName = MONTHS[metricResponse.MetricMonth];
+            var year = metricResponse.MetricYear;
+            jQuery(".currentMonthName").text(monthName);
+            jQuery(".currentYear").text(year);
+            jQuery(".showingDataFor").show();
+
                         jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
                         jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
                         jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
@@ -560,7 +564,7 @@ var RemoteService = {
     },
 
     getMetrics: function(neighborhoodID, year, month) {
-        var metricUrl = new Sitka.UrlTemplate(this.options.metricUrlTemplate).ParameterReplace(neighborhoodID, year, month);
+        var metricUrl = new Sitka.UrlTemplate(this.options.metricUrlTemplate).ParameterReplace(neighborhoodID);
         return jQuery.ajax({
             url: metricUrl,
             method: 'GET'

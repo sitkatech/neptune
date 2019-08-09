@@ -2,8 +2,8 @@ namespace Neptune.Web.Models
 {
     public class DroolMetricSimple
     {
-        public string MetricYear { get; set; }
-        public string MetricMonth { get; set; }
+        public int? MetricYear { get; set; }
+        public int? MetricMonth { get; set; }
         public string NumberOfReshoaAccounts { get; set; }
         public string TotalReshoaIrrigatedArea { get; set; }
         public string AverageIrrigatedArea { get; set; }
@@ -25,8 +25,8 @@ namespace Neptune.Web.Models
 
         public DroolMetricSimple(vDroolMetric vDroolMetric)
         {
-            MetricYear = vDroolMetric?.MetricYear.ToString("N");
-            MetricMonth = vDroolMetric?.MetricMonth.ToString("N");
+            MetricYear = vDroolMetric?.MetricYear;
+            MetricMonth = vDroolMetric?.MetricMonth;
             NumberOfReshoaAccounts = vDroolMetric?.NumberOfReshoaAccounts == null ? "Not Available" : vDroolMetric.NumberOfReshoaAccounts.Value.ToString("N");
             TotalReshoaIrrigatedArea = vDroolMetric?.TotalReshoaIrrigatedArea == null ? "Not Available" : vDroolMetric.TotalReshoaIrrigatedArea.Value.ToString("N");
             AverageIrrigatedArea = vDroolMetric?.AverageIrrigatedArea == null ? "Not Available" : vDroolMetric.AverageIrrigatedArea.Value.ToString("N");

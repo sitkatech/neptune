@@ -9,6 +9,7 @@ Select
 	[MetricCatchIDN] as OCSurveyCatchmentID, 
 	[MetricYear] as MetricYear,
 	[MetricMonth] as MetricMonth,
+	MetricDate as MetricDate,
 	[reshoa_MeterID_count] as NumberOfReshoaAccounts,
 	[reshoa_irrg_area_sqft_sum] as TotalReshoaIrrigatedArea,
 	[reshoa_irrg_area_sqft_mean] as AverageIrrigatedArea,
