@@ -181,7 +181,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         jQuery("#DrainsTo").text(properties.Watershed);
 
         RemoteService.getMetrics(this.NeighborhoodID, year, month).then(function (metricResponse) {
-            var monthName = MONTHS[metricResponse.MetricMonth];
+            var monthName = MONTHS[metricResponse.MetricMonth - 1];
             var year = metricResponse.MetricYear;
             jQuery(".currentMonthName").text(monthName);
             jQuery(".currentYear").text(year);
