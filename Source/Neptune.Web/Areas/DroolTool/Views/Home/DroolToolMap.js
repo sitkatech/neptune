@@ -69,10 +69,10 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         var currentMonthName = new Date().toLocaleString('default', { month: 'long' });
 
         this.parentElement.innerHTML = "<div>" +
-            "<div class='row'><div class='col-xs-8'><h4 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
+            "<div class='row'><div class='col-xs-8'><h5 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
             "" +
             "<span>Neighborhood Area: </span><span id='Area'></span> acres<br/>" +
-            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/><br/>" +
+            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span>" +
             "<div class='neighborhoodSection sectionAboutYourNeighborhood' style='height:30%'>" +
             "<h6>About Your Neighborhood</h6>" +
             "<strong>Number of Accounts: </strong><span class='about-datum' id='NumberOfReshoaAccounts'></span><br/>" +

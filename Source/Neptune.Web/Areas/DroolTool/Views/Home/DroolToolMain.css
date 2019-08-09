@@ -15,6 +15,12 @@
   max-width: 280px;
   z-index: initial;
 }
+.neighborhood-detail-control h4,
+.neighborhood-detail-control h5,
+.neighborhood-detail-control h6 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 #nominatimSearchWrapper {
   width: 350px;
 }
