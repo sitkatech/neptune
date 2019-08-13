@@ -33,7 +33,7 @@ L.Control.DroolToolWatermark = L.Control.extend({
 
         var div = L.DomUtil.create("div", "drool-tool-watermark");
         div.innerHTML =
-            "<img src='/Areas/DroolTool/Content/udt_mchr_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70 style='margin-left: 10px; padding-top:10px;'/>";
+            "<img src='/Areas/DroolTool/Content/udt_color_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70 style='margin-left: 10px; padding-top:10px;'/>";
 
         return div;
     }

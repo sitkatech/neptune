@@ -22,7 +22,7 @@
   margin-bottom: 5px;
 }
 #nominatimSearchWrapper {
-  width: 350px;
+  width: 325px;
 }
 .showLocation {
   margin: 0 !important;
@@ -133,4 +133,11 @@
 .showLocation {
   position: absolute;
   left: -5px;
+}
+.leaflet-control-zoom,
+.leaflet-control-fullscreen {
+  position: static;
+}
+.dropdown-menu {
+  padding-left: 5px;
 }
