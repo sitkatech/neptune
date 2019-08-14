@@ -15,6 +15,8 @@ select
 	ovtaad.OnlandVisualTrashAssessmentAreaID,
 	tbmp.TreatmentBMPID,
 	tbmp.TreatmentBMPName,
+	wqmp.WaterQualityManagementPlanID,
+	wqmp.WaterQualityManagementPlanName,
 	plut.PriorityLandUseTypeDisplayName as LandUseType,
 	tgu.LastUpdateDate as LastCalculatedDate
 from dbo.TrashGeneratingUnit tgu
@@ -34,4 +36,6 @@ from dbo.TrashGeneratingUnit tgu
 		on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 	left join dbo.Organization o
 		on o.OrganizationID = sj.OrganizationID
+	left join dbo.WaterQualityManagementPlan wqmp
+		on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 Go
