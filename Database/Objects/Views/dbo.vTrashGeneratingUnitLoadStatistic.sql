@@ -44,6 +44,7 @@ Select
 	PriorityLandUseTypeDisplayName,
 	OnlandVisualTrashAssessmentAreaID,
 	WaterQualityManagementPlanID,
+	WaterQualityManagementPlanName,
 	LandUseBlockID,
 	LastUpdateDate
 From (
@@ -60,6 +61,7 @@ From (
 		plut.PriorityLandUseTypeID,
 		tgu.OnlandVisualTrashAssessmentAreaID,
 		wqmp.WaterQualityManagementPlanID,
+		wqmp.WaterQualityManagementPlanName,
 		lub.LandUseBlockID,
 		Case
 			when area.OnlandVisualTrashAssessmentBaselineScoreID is null then 0
