@@ -443,6 +443,7 @@
     <Compile Include="Models\DelineationGeometryStaging.cs" />
     <Compile Include="Models\DelineationGeometryStagingModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSummary.cs" />
+    <Compile Include="Models\vTrashGeneratingUnitLoadStatisticModelExtensions.cs" />
     <Compile Include="ScheduledJobs\LandUseBlockUploadBackgroundJob.cs" />
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cs" />
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />

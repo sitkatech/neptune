@@ -21,6 +21,7 @@ Select
 	TreatmentBMPID,
 	TreatmentBMPName,
 	TrashGeneratingUnitGeometry,
+	TrashGeneratingUnitGeometry.STArea() as TrashGeneratingUnitArea,
 	StormwaterJurisdictionID,
 	OrganizationID,
 	OrganizationName,
@@ -39,7 +40,12 @@ Select
 	end as CurrentLoadingRate,
 	ProgressLoadingRate,
 	DelineationIsVerified,
-	LastUpdateDate as LastCalculatedDate
+	LastUpdateDate as LastCalculatedDate,
+	PriorityLandUseTypeDisplayName,
+	OnlandVisualTrashAssessmentAreaID,
+	WaterQualityManagementPlanID,
+	LandUseBlockID,
+	LastUpdateDate
 From (
 	Select
 		TrashGeneratingUnitID as PrimaryKey,
@@ -52,6 +58,9 @@ From (
 		o.OrganizationName,
 		plut.PriorityLandUseTypeDisplayName,
 		plut.PriorityLandUseTypeID,
+		tgu.OnlandVisualTrashAssessmentAreaID,
+		wqmp.WaterQualityManagementPlanID,
+		lub.LandUseBlockID,
 		Case
 			when area.OnlandVisualTrashAssessmentBaselineScoreID is null then 0
 			else 1
