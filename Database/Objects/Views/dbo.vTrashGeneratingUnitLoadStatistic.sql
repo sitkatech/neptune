@@ -33,8 +33,8 @@ Select
 	Cast(HasBaselineScore as bit) as HasBaselineScore,
 	Cast(HasProgressScore as bit) as HasProgressScore,
 	Case
-		When DelineationIsVerified = 0 then BaselineLoadingRate
 		When IsFullTrashCapture = 1 then 2.5
+		When (DelineationIsVerified = 0 and WaterQualityManagementPlanID is null) then BaselineLoadingRate
 		When BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		Else 2.5
 	end as CurrentLoadingRate,

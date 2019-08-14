@@ -83,8 +83,8 @@
                 BMPName += "--<br>";
             }
             var WQMPName = "<strong>Governing WQMP:   </strong>";
-            if (properties.TreatmentWQMPID) {
-                WQMPName += "<a href='" + WQMPDetailUrl + " 'target='_blank'>" + properties.TreatmentWQMPName + "</a><br>";
+            if (properties.WaterQualityManagementPlanID) {
+                WQMPName += "<a href='" + WQMPDetailUrl + " 'target='_blank'>" + properties.WaterQualityManagementPlanName + "</a><br>";
             } else {
                 WQMPName += "--<br>";
             }

@@ -84,7 +84,7 @@
                 BMPName += "--<br>";
             }
             var WQMPName = "<strong>WQMP Name:   </strong>";
-            if (properties.TreatmentWQMPID) {
+            if (properties.WaterQualityManagementPlanID) {
                 WQMPName += "<a href='" + WQMPDetailUrl + " 'target='_blank'>" + properties.WaterQualityManagementPlanName + "</a><br>";
             } else {
                 WQMPName += "--<br>";

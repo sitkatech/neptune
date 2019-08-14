@@ -7,7 +7,12 @@ select
 	tgu.StormwaterJurisdictionID,
 	o.OrganizationID,
 	o.OrganizationName,
-	case when tbmp.TreatmentBMPID is null then 'NotProvided' else tcs.TrashCaptureStatusTypeName end as TrashCaptureStatus,
+	case
+		when tbmp.TrashCaptureStatusTypeID = 1 or wqmp.TrashCaptureStatusTypeID = 1 then 'Full'
+		when tbmp.TrashCaptureStatusTypeID = 2 or wqmp.TrashCaptureStatusTypeID = 2 then 'Partial'
+		when tbmp.TrashCaptureStatusTypeID = 3 or wqmp.TrashCaptureStatusTypeID = 3 then 'None'
+		else 'NotProvided'
+	end as TrashCaptureStatus,
 	case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
 	Case when tgu.LandUseBlockID is null then 0 when plut.PriorityLandUseTypeName = 'ALU' then 0 else 1 end as IsPriorityLandUse, -- ALUs are not PLUs
 	Case when tgu.LandUseBlockID is null then 1 else 0 end as NoDataProvided,
