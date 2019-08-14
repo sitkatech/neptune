@@ -67,7 +67,7 @@
             var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
             var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);
             var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
-            var WQMPADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.WQMPAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+            var WQMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.WQMPAUrlTemplate).ParameterReplace(properties.WaterQualityManagementPlanID);
 
             var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
             var ovtaScore = "<strong>Governing OVTA Score:   </strong>";

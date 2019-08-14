@@ -74,8 +74,7 @@
 
             var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
             var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);
-            var WQMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.WQMPUrlTemplate).ParameterReplace(properties.TreatmentWQMPID);
-            //var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+            var WQMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.WQMPUrlTemplate).ParameterReplace(properties.WaterQualityManagementPlanID);
 
             var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
             var BMPName = "<strong>BMP Name:   </strong>";
@@ -107,6 +106,7 @@
             return landUseType +
                 //ovtaScore +
                 BMPName +
+                WQMPName + 
                 stormwaterJurisdictionName +
                 lastCalculatedDate +
                 baselineScore +

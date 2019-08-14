@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, double? trashGeneratingUnitArea, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, bool isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, string landUseType, int? priorityLandUseTypeID, bool? hasBaselineScore, bool? hasProgressScore, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, string priorityLandUseTypeDisplayName, int? onlandVisualTrashAssessmentAreaID, int? waterQualityManagementPlanID, int? landUseBlockID, DateTime? lastUpdateDate, double area, decimal? loadingRateDelta) : this()
+        public vTrashGeneratingUnitLoadStatistic(int primaryKey, int trashGeneratingUnitID, int? treatmentBMPID, string treatmentBMPName, double? trashGeneratingUnitArea, int stormwaterJurisdictionID, int? organizationID, string organizationName, decimal baselineLoadingRate, bool isFullTrashCapture, int partialTrashCaptureEffectivenessPercentage, string landUseType, int? priorityLandUseTypeID, bool? hasBaselineScore, bool? hasProgressScore, decimal? currentLoadingRate, decimal progressLoadingRate, bool delineationIsVerified, DateTime? lastCalculatedDate, string priorityLandUseTypeDisplayName, int? onlandVisualTrashAssessmentAreaID, int? waterQualityManagementPlanID, string waterQualityManagementPlanName, int? landUseBlockID, DateTime? lastUpdateDate, double area, decimal? loadingRateDelta) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
@@ -49,6 +49,7 @@ namespace Neptune.Web.Models
             this.PriorityLandUseTypeDisplayName = priorityLandUseTypeDisplayName;
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
+            this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
             this.LandUseBlockID = landUseBlockID;
             this.LastUpdateDate = lastUpdateDate;
             this.Area = area;
@@ -82,6 +83,7 @@ namespace Neptune.Web.Models
             this.PriorityLandUseTypeDisplayName = vTrashGeneratingUnitLoadStatistic.PriorityLandUseTypeDisplayName;
             this.OnlandVisualTrashAssessmentAreaID = vTrashGeneratingUnitLoadStatistic.OnlandVisualTrashAssessmentAreaID;
             this.WaterQualityManagementPlanID = vTrashGeneratingUnitLoadStatistic.WaterQualityManagementPlanID;
+            this.WaterQualityManagementPlanName = vTrashGeneratingUnitLoadStatistic.WaterQualityManagementPlanName;
             this.LandUseBlockID = vTrashGeneratingUnitLoadStatistic.LandUseBlockID;
             this.LastUpdateDate = vTrashGeneratingUnitLoadStatistic.LastUpdateDate;
             this.Area = vTrashGeneratingUnitLoadStatistic.Area;
@@ -113,6 +115,7 @@ namespace Neptune.Web.Models
         public string PriorityLandUseTypeDisplayName { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
+        public string WaterQualityManagementPlanName { get; set; }
         public int? LandUseBlockID { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public double Area { get; set; }
