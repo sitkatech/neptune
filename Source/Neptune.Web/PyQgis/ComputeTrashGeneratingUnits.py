@@ -381,15 +381,8 @@ if __name__ == '__main__':
     else:
         print("Loaded WQMP Layer!")
 
-    dissolve_res = processing.run("native:dissolve", {
-        'INPUT':wqmp_layer,
-        'FIELD':['WaterQualityManagementPlanID'],
-        'OUTPUT':'memory:wqmp_dissolved_layer'}, context=PROCESSING_CONTEXT)
-
-    wqmp_dissolved_layer = dissolve_res['OUTPUT']
-
     print("Flattening WQMPs...\n")
-    flatten_wqmps = Flatten(wqmp_dissolved_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
+    flatten_wqmps = Flatten(wqmp_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
     flatten_wqmps.run()
     wqmp_flattened_layer = flatten_wqmps.working_layer
         
