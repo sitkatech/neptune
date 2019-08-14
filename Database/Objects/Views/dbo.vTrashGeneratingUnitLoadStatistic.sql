@@ -27,6 +27,7 @@ Select
 	OrganizationName,
 	BaselineLoadingRate,
 	IsNull(Cast(IsFullTrashCapture as bit), 0) as IsFullTrashCapture,
+	IsNull(Cast(IsPartialTrashCapture as bit), 0) as IsPartialTrashCapture,
 	PartialTrashCaptureEffectivenessPercentage,
 	PriorityLandUseTypeDisplayName as LandUseType,
 	PriorityLandUseTypeID,
@@ -78,9 +79,13 @@ From (
 			end, 0
 		) as BaselineLoadingRate,
 		case
-			when tbmp.TrashCaptureStatusTypeID = 1 or wqmp.TrashCaptureStatusTypeID = 1 then 1
+			when (tbmp.TrashCaptureStatusTypeID = 1 and d.IsVerified = 1) or wqmp.TrashCaptureStatusTypeID = 1 then 1
 			else 0
 		end as IsFullTrashCapture, 
+		case
+			when (tbmp.TrashCaptureStatusTypeID = 2 and d.IsVerified = 1) or wqmp.TrashCaptureStatusTypeID = 2 then 1
+			else 0
+		end as IsPartialTrashCapture, 
 		IsNull(
 			case
 				when wqmp.TrashCaptureEffectiveness is not null then wqmp.TrashCaptureEffectiveness
