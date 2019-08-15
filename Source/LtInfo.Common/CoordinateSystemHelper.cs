@@ -10,6 +10,10 @@ namespace LtInfo.Common
         public const int WGS_1984_SRID = 4326;
         public const int NAD_83_HARN_CA_ZONE_VI_SRID = 2771;
 
+        public static ProjectionInfo WebMercator => KnownCoordinateSystems.Geographic.World.WGS1984;
+
+        public static ProjectionInfo CaStatePlane => KnownCoordinateSystems.Projected.StatePlaneNad1983Harn.NAD1983HARNStatePlaneCaliforniaVIFIPS0406;
+
         public static DbGeometry ProjectWebMercatorToCaliforniaStatePlaneVI(DbGeometry inputGeometry)
         {
             var wkb = inputGeometry.AsBinary();
@@ -32,15 +36,8 @@ namespace LtInfo.Common
                 counterY = counterY + 2;
             }
 
-
-
-            var webMercator = KnownCoordinateSystems.Geographic.World.WGS1984;
-
-            var caStatePlane = KnownCoordinateSystems.Projected.StatePlaneNad1983Harn.NAD1983HARNStatePlaneCaliforniaVIFIPS0406;
-
-            Reproject.ReprojectPoints(pointArray, zArray, webMercator, caStatePlane, 0, (pointArray.Length / 2));
+            Reproject.ReprojectPoints(pointArray, zArray, WebMercator, CaStatePlane, 0, (pointArray.Length / 2));
             
-
             counterX = 0;
             counterY = 1;
             foreach (var coordinate in internalGeometry.Coordinates)
@@ -51,8 +48,6 @@ namespace LtInfo.Common
                 counterX = counterX + 2;
                 counterY = counterY + 2;
             }
-            //**geom.GeometryChanged(); **
-            
 
             var outputWkb = internalGeometry.AsBinary();
 
@@ -81,16 +76,8 @@ namespace LtInfo.Common
                 counterY = counterY + 2;
             }
 
-
-
-            var webMercator = KnownCoordinateSystems.Geographic.World.WGS1984;
-
-            var caStatePlane = KnownCoordinateSystems.Projected.StatePlaneNad1983Feet
-                .NAD1983StatePlaneCaliforniaVIFIPS0406Feet;
-
-            Reproject.ReprojectPoints(pointArray, zArray, caStatePlane, webMercator, 0, (pointArray.Length / 2));
+            Reproject.ReprojectPoints(pointArray, zArray, CaStatePlane, WebMercator, 0, (pointArray.Length / 2));
             
-
             counterX = 0;
             counterY = 1;
             foreach (var coordinate in internalGeometry.Coordinates)
@@ -101,8 +88,6 @@ namespace LtInfo.Common
                 counterX = counterX + 2;
                 counterY = counterY + 2;
             }
-            //**geom.GeometryChanged(); **
-            
 
             var outputWkb = internalGeometry.AsBinary();
 
