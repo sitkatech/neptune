@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DotSpatial.Projections;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.Web.Common
@@ -32,12 +33,17 @@ namespace Neptune.Web.Common
                 counterY = counterY + 2;
             }
 
-            var epsg25832 = new DotSpatial.Projections.ProjectionInfo();
+            var authorityCode = KnownCoordinateSystems.Projected.StatePlaneNad1983.NAD1983StatePlaneCaliforniaVIFIPS0406.AuthorityCode;
+
+            var epsg4326 = new ProjectionInfo();
+            //DotSpatial.Projections.ProjectionInfo
+            
             var epsg3857 = new DotSpatial.Projections.ProjectionInfo();
-            epsg25832.ParseEsriString(baa);
+            epsg4326.ParseEsriString(baa);
+            //epsg25832.
             epsg3857.ParseEsriString(moo);
 
-            DotSpatial.Projections.Reproject.ReprojectPoints(pointArray, zArray, epsg25832, epsg3857, 0, (pointArray.Length / 2));
+            DotSpatial.Projections.Reproject.ReprojectPoints(pointArray, zArray, epsg4326, epsg3857, 0, (pointArray.Length / 2));
 
             counterX = 0;
             counterY = 1;
