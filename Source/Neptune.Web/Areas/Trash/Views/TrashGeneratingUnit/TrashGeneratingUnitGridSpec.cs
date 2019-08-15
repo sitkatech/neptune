@@ -35,7 +35,7 @@ namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
             Add("Trash Capture Effectiveness via BMP",
                             x => x.TreatmentBMP()?.TrashCaptureEffectiveness?.ToString(CultureInfo.InvariantCulture) ?? "Not Provided", 150,
                             DhtmlxGridColumnFilterType.Numeric);
-            Add("Trash Capture Effectiveness via BMP",
+            Add("Trash Capture Effectiveness via WQMP",
                             x => x.WaterQualityManagementPlan()?.TrashCaptureEffectiveness?.ToString(CultureInfo.InvariantCulture) ?? "Not Provided", 150,
                             DhtmlxGridColumnFilterType.Numeric);
             Add("Median Household Income (Residential)", x => x.LandUseBlock()?.MedianHouseholdIncomeResidential, 200);
