@@ -8,7 +8,7 @@ namespace LtInfo.Common
     public class CoordinateSystemHelper
     {
         public const int WGS_1984_SRID = 4326;
-        public const int NAD_1983_FEET_CA_STATE_PLANE_VI_SRID = 102646;
+        public const int NAD_83_HARN_CA_ZONE_VI_SRID = 2771;
 
         public static DbGeometry ProjectWebMercatorToCaliforniaStatePlaneVI(DbGeometry inputGeometry)
         {
@@ -36,8 +36,7 @@ namespace LtInfo.Common
 
             var webMercator = KnownCoordinateSystems.Geographic.World.WGS1984;
 
-            var caStatePlane = KnownCoordinateSystems.Projected.StatePlaneNad1983Feet
-                .NAD1983StatePlaneCaliforniaVIFIPS0406Feet;
+            var caStatePlane = KnownCoordinateSystems.Projected.StatePlaneNad1983Harn.NAD1983HARNStatePlaneCaliforniaVIFIPS0406;
 
             Reproject.ReprojectPoints(pointArray, zArray, webMercator, caStatePlane, 0, (pointArray.Length / 2));
             
@@ -57,7 +56,7 @@ namespace LtInfo.Common
 
             var outputWkb = internalGeometry.AsBinary();
 
-            return DbGeometry.FromBinary(outputWkb, NAD_1983_FEET_CA_STATE_PLANE_VI_SRID);
+            return DbGeometry.FromBinary(outputWkb, NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
         public static DbGeometry ProjectCaliforniaStatePlaneVIToWebMercator(DbGeometry inputGeometry)
@@ -107,7 +106,7 @@ namespace LtInfo.Common
 
             var outputWkb = internalGeometry.AsBinary();
 
-            return DbGeometry.FromBinary(outputWkb, NAD_1983_FEET_CA_STATE_PLANE_VI_SRID);
+            return DbGeometry.FromBinary(outputWkb, NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
     }
