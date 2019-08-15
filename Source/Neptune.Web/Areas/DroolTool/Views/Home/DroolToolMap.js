@@ -25,6 +25,24 @@ var NEIGHBORHOOD_NOT_FOUND =
 var NOMINATIM_ERROR =
     "There was an error retrieving the address. The address location service may be unavailable. If the issue persists, please contact support.";
 
+var MONTHS = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
+L.Control.DroolToolWatermark = L.Control.extend({
+    onAdd: function (map) {
+
+        var div = L.DomUtil.create("div", "drool-tool-watermark");
+        div.innerHTML =
+            "<img src='/Areas/DroolTool/Content/udt_color_logo.png' height=70 /><img src='/Areas/DroolTool/Content/h2oc_color_logo.png' height=70/><img src='/Areas/DroolTool/Content/mnwd_color_logo.png' height=70 style='margin-left: 10px; padding-top:10px;'/>";
+
+        return div;
+    }
+});
+
+L.control.droolToolWatermark = function(options) {
+    return new L.Control.DroolToolWatermark(options);
+}
+
 L.Control.NeighborhoodDetailControl = L.Control.extend({
     onAdd: function (map) {
         this.parentElement = L.DomUtil.create("div", "leaflet-bar leaflet-control neptune-leaflet-control neighborhood-detail-control neighborhood-detail-hidden-mobile ");
@@ -54,28 +72,24 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         var currentMonthName = new Date().toLocaleString('default', { month: 'long' });
 
         this.parentElement.innerHTML = "<div>" +
-            "<div class='row'><div class='col-xs-8'><h4 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
+            "<div class='legacy-slideout-target'></div>" +
+            "<div class='row'><div class='col-xs-8'><h5 class=''>Selected Neighborhood</h4></div><div class='col-xs-2 text-right'><button class='btn btn-sm btn-neptune neighborhod-detail-hide-button-mobile' style=' outline: currentcolor none medium;position: fixed;right: 5px;'><span class='glyphicon glyphicon-remove'></span></button></div></div>" + 
             "" +
             "<span>Neighborhood Area: </span><span id='Area'></span> acres<br/>" +
-            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/><br/>" +
+            "<span>Drains to </span><span id='DrainsTo'></span><span> Watershed</span><br/>" +
+            "<span class='showingDataFor' style='display:none;'>Showing data for <span class='currentMonthName'></span> <span class='currentYear'></span></span>" + 
             "<div class='neighborhoodSection sectionAboutYourNeighborhood' style='height:30%'>" +
             "<h6>About Your Neighborhood</h6>" +
             "<strong>Number of Accounts: </strong><span class='about-datum' id='NumberOfReshoaAccounts'></span><br/>" +
             "<strong>Irrigated Area: </strong><span class='about-datum' id='TotalReshoaIrrigatedArea'></span><br/>" +
-            "<strong>" +
-            currentMonthName +
-            " Water Budget: </strong><span class='about-datum' id='TotalBudget'></span><br/>" +
-            "<strong>" +
-            currentMonthName +
-            " Outdoor Budget: </strong><span class='about-datum' id='TotalOutdoorBudget'></span><br/>" +
+            "<strong>Water Budget: </strong><span class='about-datum' id='TotalBudget'></span><br/>" +
+            "<strong>Outdoor Budget: </strong><span class='about-datum' id='TotalOutdoorBudget'></span><br/>" +
             "</div>" +
             "<div class='neighborhoodSection sectionWaterUsage'>" +
             "<h6>Water Usage</h6>" +
             "<div class='row'><div class='col-xs-6 text-center'><strong>Neighborhood Drool Rating</strong></div><div class='col-xs-6 text-center'><strong>Neighborhood Drool Trend</strong></div></div>" +
             "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/wuplace_arr.png'/></div></div>" +
-            "<div class='row'><div class='col-xs-6 text-center'> " +
-            currentMonthName +
-            " range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" +
+            "<div class='row'><div class='col-xs-6 text-center'>Range: XX to YY. Lower is better.</div><div class='col-xs-6 text-center'>Improving</div></div>" +
             "</div>" +
             "<div class='neighborhoodSection sectionConservationActions'>" +
             "<h6>Conservation Actions</h6>" +
@@ -83,7 +97,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
             "<div class='row'><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_score.png'/></div><div class='col-xs-6 text-center'><img src='/Areas/DroolTool/Content/mock/caplace_arr.png'/></div></div>" +
             "<div class='row'><div class='col-xs-6 text-center'> Number of Water Conservation Actions by your Neighbors</div><div class='col-xs-6 text-center'>Improving</div></div>" +
             "</div>" +
-            "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button>" +
+            "<button class='btn btn-neptune btn-sm' id='highlightFlowButton'>Where does my runoff go?</button><button class='btn btn-neptune btn-sm expandLegacySlideout'>More</button>" +
             "</div>";
 
         this.hide();
@@ -103,49 +117,49 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
     },
 
     // neutered under #430; may bring back the heart and soul of this piece as part of a "Neighborhood Detail Page" later
-    //wireMonthPicker: function () {
+    wireMonthPicker: function () {
 
-    //    jQuery(".metricMonthPicker").on("click",
-    //        function() {
-    //            jQuery("#MonthPicker_Button_").click();
-    //        });
+        jQuery(".metricMonthPicker").on("click",
+            function() {
+                jQuery("#MonthPicker_Button_").click();
+            });
 
-    //    var getNeighborhoodID = function () {
-    //        return this.NeighborhoodID;
-    //    }.bind(this);
+        var getNeighborhoodID = function () {
+            return this.NeighborhoodID;
+        }.bind(this);
         
-    //    jQuery(".metricMonthPicker").MonthPicker({
-    //            OnAfterChooseMonth: function() {
-    //                var month = Number(this.value.split("/")[0]);
-    //                var year = Number(this.value.split("/")[1]);
+        jQuery(".metricMonthPicker").MonthPicker({
+                OnAfterChooseMonth: function() {
+                    var month = Number(this.value.split("/")[0]);
+                    var year = Number(this.value.split("/")[1]);
                     
-    //                RemoteService.getMetrics(getNeighborhoodID(), year, month).then(function(metricResponse) {
-    //                    jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
-    //                    jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
-    //                    jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
-    //                    jQuery("#TotalEstimatedReshoaUsers").text(metricResponse.TotalEstimatedReshoaUsers);
-    //                    jQuery("#TotalBudget").text(metricResponse.TotalBudget);
-    //                    jQuery("#TotalOutdoorBudget").text(metricResponse.TotalOutdoorBudget);
-    //                    jQuery("#AverageTotalUsage").text(metricResponse.AverageTotalUsage);
-    //                    jQuery("#AverageEstimatedIrrigationUsage").text(metricResponse.AverageEstimatedIrrigationUsage);
-    //                    jQuery("#NumberOfAccountsOverBudget").text(metricResponse.NumberOfAccountsOverBudget);
-    //                    jQuery("#PercentOfAccountsOverBudget").text(metricResponse.PercentOfAccountsOverBudget);
-    //                    jQuery("#AverageOverBudgetUsage").text(metricResponse.AverageOverBudgetUsage);
-    //                    jQuery("#AverageOverBudgetUsageRolling").text(metricResponse.AverageOverBudgetUsageRolling);
-    //                    jQuery("#AverageOverBudgetUsageSlope").text(metricResponse.AverageOverBudgetUsageSlope);
-    //                    jQuery("#TotalOverBudgetUsage").text(metricResponse.TotalOverBudgetUsage);
-    //                    jQuery("#RebateParticipationPercentage").text(metricResponse.RebateParticipationPercentage);
-    //                    jQuery("#RebateParticipationPercentageRolling").text(metricResponse.RebateParticipationPercentageRolling);
-    //                    jQuery("#RebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
-    //                    jQuery("#TotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
-    //                });
-    //            },
-    //        ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
-    //        }
-    //    );
+                    RemoteService.getMetricsForMonth(getNeighborhoodID(), year, month).then(function(metricResponse) {
+                        jQuery("#legacyPanelNumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
+                        jQuery("#legacyPanelTotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
+                        jQuery("#legacyPanelAverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
+                        jQuery("#legacyPanelTotalEstimatedReshoaUsers").text(metricResponse.TotalEstimatedReshoaUsers);
+                        jQuery("#legacyPanelTotalBudget").text(metricResponse.TotalBudget);
+                        jQuery("#legacyPanelTotalOutdoorBudget").text(metricResponse.TotalOutdoorBudget);
+                        jQuery("#legacyPanelAverageTotalUsage").text(metricResponse.AverageTotalUsage);
+                        jQuery("#legacyPanelAverageEstimatedIrrigationUsage").text(metricResponse.AverageEstimatedIrrigationUsage);
+                        jQuery("#legacyPanelNumberOfAccountsOverBudget").text(metricResponse.NumberOfAccountsOverBudget);
+                        jQuery("#legacyPanelPercentOfAccountsOverBudget").text(metricResponse.PercentOfAccountsOverBudget);
+                        jQuery("#legacyPanelAverageOverBudgetUsage").text(metricResponse.AverageOverBudgetUsage);
+                        jQuery("#legacyPanelAverageOverBudgetUsageRolling").text(metricResponse.AverageOverBudgetUsageRolling);
+                        jQuery("#legacyPanelAverageOverBudgetUsageSlope").text(metricResponse.AverageOverBudgetUsageSlope);
+                        jQuery("#legacyPanelTotalOverBudgetUsage").text(metricResponse.TotalOverBudgetUsage);
+                        jQuery("#legacyPanelRebateParticipationPercentage").text(metricResponse.RebateParticipationPercentage);
+                        jQuery("#legacyPanelRebateParticipationPercentageRolling").text(metricResponse.RebateParticipationPercentageRolling);
+                        jQuery("#legacyPanelRebateParticipationPercentageSlope").text(metricResponse.RebateParticipationPercentageSlope);
+                        jQuery("#legacyPanelTotalTurfReplacementArea").text(metricResponse.TotalTurfReplacementArea);
+                    });
+                },
+            ButtonIcon: "glyphicon glyphicon-calendar monthPickerButtonIcon"
+            }
+        );
 
-    //    jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
-    //},
+        jQuery(".monthPickerButtonIcon").removeClass("ui-button-icon-primary ui-icon");
+    },
 
     hide: function () {
         this.parentElement.style.display = "none";
@@ -168,6 +182,12 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
         jQuery("#DrainsTo").text(properties.Watershed);
 
         RemoteService.getMetrics(this.NeighborhoodID, year, month).then(function (metricResponse) {
+            var monthName = MONTHS[metricResponse.MetricMonth - 1];
+            var year = metricResponse.MetricYear;
+            jQuery(".currentMonthName").text(monthName);
+            jQuery(".currentYear").text(year);
+            jQuery(".showingDataFor").show();
+
                         jQuery("#NumberOfReshoaAccounts").text(metricResponse.NumberOfReshoaAccounts);
                         jQuery("#TotalReshoaIrrigatedArea").text(metricResponse.TotalReshoaIrrigatedArea);
                         jQuery("#AverageIrrigatedArea").text(metricResponse.AverageIrrigatedArea);
@@ -268,38 +288,17 @@ L.Control.ExplorerTrayControl = L.Control.extend({
     onAdd: function(map) {
         this.parentElement = L.DomUtil.create("div", "explorerTray");
 
-        this.parentElement.innerHTML = "<div class='row'>" +
-                "<div class='col-sm-4'>" +
-                    "<div class='row'>" +
-                        "<div class='col-sm-4'>" +
-                            "<a id='animateButton'>" +
-                            "<img src='/Areas/DroolTool/Content/chevvy.png' class='img-circle' />" +
-                            "</a>" +
-                        "</div>" +
-                        "<div class='col-sm-8'>Where does my irrigation runoff go? (Start animation)</div>" +
-                    "</div>" +
-                "</div>" +
-                "<div class='col-sm-4'>" +
-                    "<div class='row'>" +
-                        "<div class='col-sm-4'>" +
-                            "<a href='https://www.mnwd.com/rebates/'>" +
-                            "<img src='/Areas/DroolTool/Content/piggy.png' class='img-circle' />" +
-                            "</a>" +
-                        "</div>" +
-                        "<div class='col-sm-8'>View rebates and find out about water efficiency</div>" +
-                    "</div>" +
-                "</div>" +
-                "<div class='col-sm-4'>" +
-                    "<div class='row'>" +
-                        "<div class='col-sm-4'>" +
-                            "<a href='https://www.mnwd.com/payment/'>" +
-                            "<img src='/Areas/DroolTool/Content/moneywater.png' class='img-circle' />" +
-                            "</a>" +
-                        "</div>" +
-                        "<div class='col-sm-8'>Access my Water Bill (via Moulton Niguel Water District)</div>" +
-                    "</div>" +
-                "</div>" +
-            "</div>";
+        this.parentElement.innerHTML =
+            "<ul>" +
+            "<li><a href='/Home/About' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/i.png' class='img-circle' />" +
+            "</a></li>" +
+            "<li><a href='https://www.mnwd.com/rebates/' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/piggy.png' class='img-circle' />" +
+            "</a></li>" +
+            "<li><a href='https://www.mnwd.com/payment/' target='_blank'>" +
+            "<img src='/Areas/DroolTool/Content/moneywater.png' class='img-circle' />" +
+            "</a></li></ul>" ;
 
         window.stopClickPropagation(this.parentElement);
         return this.parentElement;
@@ -566,7 +565,15 @@ var RemoteService = {
     },
 
     getMetrics: function(neighborhoodID, year, month) {
-        var metricUrl = new Sitka.UrlTemplate(this.options.metricUrlTemplate).ParameterReplace(neighborhoodID, year, month);
+        var metricUrl = new Sitka.UrlTemplate(this.options.metricUrlTemplate).ParameterReplace(neighborhoodID);
+        return jQuery.ajax({
+            url: metricUrl,
+            method: 'GET'
+        });
+    },
+
+    getMetricsForMonth: function (neighborhoodID, year, month) {
+        var metricUrl = new Sitka.UrlTemplate(this.options.metricForMonthUrlTemplate).ParameterReplace(neighborhoodID, year, month);
         return jQuery.ajax({
             url: metricUrl,
             method: 'GET'
@@ -584,6 +591,7 @@ NeptuneMaps.DroolToolMap.prototype.configureRemoteService = function () {
     RemoteService.options.geoserverUrl = this.config.GeoServerUrl;
     RemoteService.options.stormshedUrlTemplate = this.config.StormshedUrlTemplate;
     RemoteService.options.metricUrlTemplate = this.config.MetricUrlTemplate;
+    RemoteService.options.metricForMonthUrlTemplate = this.config.MetricForMonthUrlTemplate;
 };
 
 NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
@@ -649,8 +657,11 @@ NeptuneMaps.DroolToolMap.prototype.initializeControls = function () {
         neptuneMap: this
     });
 
+    var watermark = L.control.droolToolWatermark({ position: 'bottomleft' });
+    watermark.addTo(this.map);
+
     this.neighborhoodDetailControl.addTo(this.map);
-    //this.neighborhoodDetailControl.wireMonthPicker();
+    this.neighborhoodDetailControl.wireMonthPicker();
     this.neighborhoodDetailControl.wireHighlightFlowButton();
 
     this.neighborhoodDetailShowMobileControl = L.control.neighborhoodDetailShowMobile({

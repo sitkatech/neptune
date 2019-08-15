@@ -21,25 +21,33 @@ Select
 	TreatmentBMPID,
 	TreatmentBMPName,
 	TrashGeneratingUnitGeometry,
+	TrashGeneratingUnitGeometry.STArea() as TrashGeneratingUnitArea,
 	StormwaterJurisdictionID,
 	OrganizationID,
 	OrganizationName,
 	BaselineLoadingRate,
 	IsNull(Cast(IsFullTrashCapture as bit), 0) as IsFullTrashCapture,
+	IsNull(Cast(IsPartialTrashCapture as bit), 0) as IsPartialTrashCapture,
 	PartialTrashCaptureEffectivenessPercentage,
 	PriorityLandUseTypeDisplayName as LandUseType,
 	PriorityLandUseTypeID,
 	Cast(HasBaselineScore as bit) as HasBaselineScore,
 	Cast(HasProgressScore as bit) as HasProgressScore,
 	Case
-		When DelineationIsVerified = 0 then BaselineLoadingRate
 		When IsFullTrashCapture = 1 then 2.5
+		When (DelineationIsVerified = 0 and WaterQualityManagementPlanID is null) then BaselineLoadingRate
 		When BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		Else 2.5
 	end as CurrentLoadingRate,
 	ProgressLoadingRate,
 	DelineationIsVerified,
-	LastUpdateDate as LastCalculatedDate
+	LastUpdateDate as LastCalculatedDate,
+	PriorityLandUseTypeDisplayName,
+	OnlandVisualTrashAssessmentAreaID,
+	WaterQualityManagementPlanID,
+	WaterQualityManagementPlanName,
+	LandUseBlockID,
+	LastUpdateDate
 From (
 	Select
 		TrashGeneratingUnitID as PrimaryKey,
@@ -52,6 +60,10 @@ From (
 		o.OrganizationName,
 		plut.PriorityLandUseTypeDisplayName,
 		plut.PriorityLandUseTypeID,
+		tgu.OnlandVisualTrashAssessmentAreaID,
+		wqmp.WaterQualityManagementPlanID,
+		wqmp.WaterQualityManagementPlanName,
+		lub.LandUseBlockID,
 		Case
 			when area.OnlandVisualTrashAssessmentBaselineScoreID is null then 0
 			else 1
@@ -67,9 +79,13 @@ From (
 			end, 0
 		) as BaselineLoadingRate,
 		case
-			when tbmp.TrashCaptureStatusTypeID = 1 or wqmp.TrashCaptureStatusTypeID = 1 then 1
+			when (tbmp.TrashCaptureStatusTypeID = 1 and d.IsVerified = 1) or wqmp.TrashCaptureStatusTypeID = 1 then 1
 			else 0
 		end as IsFullTrashCapture, 
+		case
+			when (tbmp.TrashCaptureStatusTypeID = 2 and d.IsVerified = 1) or wqmp.TrashCaptureStatusTypeID = 2 then 1
+			else 0
+		end as IsPartialTrashCapture, 
 		IsNull(
 			case
 				when wqmp.TrashCaptureEffectiveness is not null then wqmp.TrashCaptureEffectiveness

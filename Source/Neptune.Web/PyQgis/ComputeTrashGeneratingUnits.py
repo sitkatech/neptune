@@ -373,8 +373,6 @@ if __name__ == '__main__':
     flatten_ovtas.run()
     ovta_flattened_layer = flatten_ovtas.working_layer
     
-    ## todo: get and flatten the WQMP layer
-
     connstring_wqmp = CONNSTRING_BASE + "tables=dbo.vWaterQualityManagementPlanTGUInput"
     wqmp_layer = QgsVectorLayer(connstring_wqmp, "WQMPs", "ogr")
 
@@ -383,15 +381,8 @@ if __name__ == '__main__':
     else:
         print("Loaded WQMP Layer!")
 
-    dissolve_res = processing.run("native:dissolve", {
-        'INPUT':wqmp_layer,
-        'FIELD':['WaterQualityManagementPlanID'],
-        'OUTPUT':'memory:wqmp_dissolved_layer'}, context=PROCESSING_CONTEXT)
-
-    wqmp_dissolved_layer = dissolve_res['OUTPUT']
-
     print("Flattening WQMPs...\n")
-    flatten_wqmps = Flatten(wqmp_dissolved_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
+    flatten_wqmps = Flatten(wqmp_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
     flatten_wqmps.run()
     wqmp_flattened_layer = flatten_wqmps.working_layer
         
@@ -424,8 +415,6 @@ if __name__ == '__main__':
         print("Land Use Block Layer failed to Load!")
     else:
         print("Loaded Land Use Block Layer")
-
-    ## TODO: union the ovta-delineation layer with the wqmp layer
 
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
 

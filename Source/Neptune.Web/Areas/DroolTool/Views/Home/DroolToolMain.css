@@ -15,8 +15,14 @@
   max-width: 280px;
   z-index: initial;
 }
+.neighborhood-detail-control h4,
+.neighborhood-detail-control h5,
+.neighborhood-detail-control h6 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 #nominatimSearchWrapper {
-  width: 350px;
+  width: 325px;
 }
 .showLocation {
   margin: 0 !important;
@@ -31,17 +37,22 @@
   width: 100%;
 }
 .explorerTray {
-  width: 60%;
-  height: 100px;
-  background-color: #00c1d5;
+  background: none;
   margin: 0 !important;
   border-radius: 50px 0 0;
   color: white;
   padding: 10px;
   font-size: 16px;
 }
+.explorerTray > ul {
+  list-style: none;
+  padding-left: 5px;
+  margin-bottom: 0px;
+  padding-top: 8px;
+}
 .explorerTray img {
-  max-width: 100%;
+  width: 50px;
+  margin-bottom: 10px;
 }
 .explorerTray img:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -99,11 +110,18 @@
   padding: 2px;
   margin-bottom: 2px;
 }
+.legacySlideout {
+  height: 540px;
+}
+.expandLegacySlideout {
+  margin-left: 8px;
+}
 .sectionAboutYourNeighborhood .slideout-expant {
   transform: translateX(120%);
 }
 @media only screen and (max-width: 1260px) {
-  .explorerTray {
+  .explorerTray,
+  .drool-tool-watermark {
     display: none;
   }
 }
@@ -115,4 +133,14 @@
 .showLocation {
   position: absolute;
   left: -5px;
+}
+.leaflet-control-zoom,
+.leaflet-control-fullscreen {
+  position: static;
+}
+.dropdown-menu {
+  padding-left: 5px;
+}
+.leaflet-top.leaflet-left {
+  z-index: 20000;
 }

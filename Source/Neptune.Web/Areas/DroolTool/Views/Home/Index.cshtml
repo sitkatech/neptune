@@ -12,11 +12,11 @@
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")"/>
-    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")"/>
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
     <script>
 
         window.mapInitJson =
@@ -25,7 +25,7 @@
 
         initResizeHandler(window.mapInitJson);
     </script>
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
     <style>
 
@@ -52,11 +52,10 @@
                 display: none;
             }
 
-            .leaflet-top {
-                position: static;
+
+            body {
+                overflow: hidden;
             }
-            
-            body { overflow: hidden; }
 
             #highlightFlowButton {
                 display: none;
@@ -65,23 +64,43 @@
             .slideout {
                 width: 100% !important;
                 height: 100% !important;
-                 text-align: center !important;
-                 position: relative !important;
+                text-align: center !important;
+                position: relative !important;
             }
-    }
+
+            .expandLegacySlideout,
+            .legacySlideout,
+            .legacy-slideout-target .expand-slideout-alternate-mobile-container {
+                display: none;
+            }
+        }
 
         @@media only screen and (min-width: 870px) {
             .neighborhood-detail-show-mobile {
                 display: none !important;
             }
+
             .expand-slideout-alternate-mobile-container,
-            .close-slideout-button-mobile{display:none !important}
+            .close-slideout-button-mobile {
+                display: none !important
+            }
         }
 
         button.neighborhood-detail-show-mobile:disabled {
             background-color: #606060;
         }
 
+        #mnwd-links {
+            border: 2px solid rgba(0,0,0,.2);
+            margin-left: 2px;
+            margin-right: 8px;
+        }
+
+            #mnwd-links button {
+                padding-right: 10px;
+                padding-left: 10px;
+                margin-right: 0px;
+            }
     </style>
 }
 
@@ -106,6 +125,122 @@
         <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout3.png")" />
     </div>
 
+    <div class="legacySlideout">
+        <h4>Neighborhood Metrics</h4>
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
+                <p style="font-weight:bold">Select a month and year:</p>
+            </div>
+            <div class="col-sm-7">
+                <input class="metricMonthPicker form-control month-year-input" type="text">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table-responsive table table-striped table-condensed" style="margin-bottom:0">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-4">Metric</th>
+                            <th>Snapshot</th>
+                            <th>Mean</th>
+                            <th>Slope</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Number of Residential and HOA Accounts</td>
+                            <td id="legacyPanelNumberOfReshoaAccounts"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Residential and HOA Irrigated Area, Square Feet</td>
+                            <td id="legacyPanelTotalReshoaIrrigatedArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Irrigated Area, Square Feet per Household</td>
+                            <td id="legacyPanelAverageIrrigatedArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Estimated Residential Water Users</td>
+                            <td id="legacyPanelTotalEstimatedReshoaUsers"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Budget, gallons</td>
+                            <td id="legacyPanelTotalBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Outdoor Budget, gallons</td>
+                            <td id="legacyPanelTotalOutdoorBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Total Usage, Gallons per Household</td>
+                            <td id="legacyPanelAverageTotalUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Estimated Irrigation Usage, Gallons per Household</td>
+                            <td id="legacyPanelAverageEstimatedIrrigationUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Accounts over Budget</td>
+                            <td id="legacyPanelNumberOfAccountsOverBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Percent of Accounts over Budget </td>
+                            <td id="legacyPanelPercentOfAccountsOverBudget"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Average Over-budget Usage, Gallons per Household</td>
+                            <td id="legacyPanelAverageOverBudgetUsage"></td>
+                            <td id="legacyPanelAverageOverBudgetUsageRolling">N/A</td>
+                            <td id="legacyPanelAverageOverBudgetUsageSlope">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Over-budget Usage, Gallons</td>
+                            <td id="legacyPanelTotalOverBudgetUsage"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
+                            <td id="legacyPanelRebateParticipationPercentage"></td>
+                            <td id="legacyPanelRebateParticipationPercentageRolling">N/A</td>
+                            <td id="legacyPanelRebateParticipationPercentageSlope">N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Total Area of Turf Replacement, sq-ft</td>
+                            <td id="legacyPanelTotalTurfReplacementArea"></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div><hr />
+        <p class="systemText">N/A in the Mean and Slope columns indicates that the Mean or Slope is not relevant for a particular metric.</p>
+        <p class="systemText">Not Available in the Mean and Slope columns indicates that there is not enough historic data to calculate Mean or Slope for a particular metric for this month.</p>
+    </div>
+
     <script>
         jQuery(function() {
             window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl",
@@ -117,30 +252,48 @@
                 width: '230px',
                 clickTargetToExpand: true,
                 mediaQuery: " (min-width: 870px) ",
-                alternate: {
-
-                }
+                alternate: true
             });
             jQuery(".waterUsageSlideout").slideout({
                 targetSelector: '.sectionWaterUsage',
                 xorSlideouts: true,
                 width: '450px',
                 clickTargetToExpand: true,
-                mediaQuery: " (min-width: 870px) "
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true
             });
             jQuery(".conservationActionsSlideout").slideout({
                 targetSelector: '.sectionConservationActions',
                 xorSlideouts: true,
                 width: '450px',
                 clickTargetToExpand: true,
-                mediaQuery: " (min-width: 870px) "
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true
             });
+            jQuery(".legacySlideout").slideout({
+                targetSelector: '.legacy-slideout-target',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: false,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true,
+                manuallyWired: {
+                    clickToExpandSelector: ".expandLegacySlideout"
+                }
+            });
+
+            jQuery(".expandLegacySlideout").on('click', function() {
+                if (this.innerHTML === 'More') {
+                    this.innerHTML = "Less";
+                } else {
+                    this.innerHTML = "More";
+                }
+            })
 
 
             function killSplash() {
                 jQuery("#splashModal").detach();
                 window.map.intializeTray();
-                jQuery("header").show();
                 resizeHandler(window.mapInitJson);
             }
 
@@ -174,6 +327,8 @@
                     }
                 });
 
+
+            jQuery(".leaflet-top.leaflet-right").prepend(jQuery("#mnwd-links"));
         });
     </script>
 
@@ -181,7 +336,7 @@
         <div class="row" id="nominatimSearchWrapper">
             <div class="col-xs-10">
                 <div class="input-group">
-                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
+                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search address or landmark">
                     <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
                 </div>
             </div>
@@ -245,5 +400,39 @@
                 <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
         </div>
+    </div>
+
+    <div id="mnwd-links" class="leaflet-control" style="display: inline;">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+            <li>
+                <a href='/Home/About' target='_blank'>
+                    About
+                </a>
+            </li>
+            <li>
+                <a href='https://www.mnwd.com/' target='_blank'>
+                    Moulton Niguel Water District Home
+                </a>
+            </li>
+            <li>
+                <a href='https://h2oc.org' target='_blank'>
+                    Stormwater Program Home
+                </a>
+            </li>
+            <li>
+                <a href='https://www.mnwd.com/rebates/' target='_blank'>
+                    Rebates
+                </a>
+            </li>
+            <li>
+                <a href='https://www.mnwd.com/payment/' target='_blank'>
+                    View Bill
+                </a>
+            </li>
+
+        </ul>
     </div>
 }

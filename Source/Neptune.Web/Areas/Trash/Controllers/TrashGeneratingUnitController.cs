@@ -23,23 +23,23 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<TrashGeneratingUnit> TrashGeneratingUnitGridJsonData()
+        public GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic> TrashGeneratingUnitGridJsonData()
         {
             // ReSharper disable once InconsistentNaming
-            var treatmentBMPs = GetTrashGeneratingUnitsAndGridSpec(out var gridSpec);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TrashGeneratingUnit>(treatmentBMPs, gridSpec);
+            List<vTrashGeneratingUnitLoadStatistic> treatmentBMPs = GetTrashGeneratingUnitsAndGridSpec(out var gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<TrashGeneratingUnit> GetTrashGeneratingUnitsAndGridSpec(out TrashGeneratingUnitGridSpec gridSpec)
+        private List<vTrashGeneratingUnitLoadStatistic> GetTrashGeneratingUnitsAndGridSpec(out TrashGeneratingUnitGridSpec gridSpec)
         {
             gridSpec = new TrashGeneratingUnitGridSpec();
 
             var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID).ToList();
 
-            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x => x.LastUpdateDate)
-                .Include(x => x.LandUseBlock)
-                .Include(x => x.StormwaterJurisdiction.Organization).ToList();
+            return HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
+                .Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID))
+                .OrderByDescending(x => x.LastUpdateDate).ToList();
         }
 
         [HttpGet]

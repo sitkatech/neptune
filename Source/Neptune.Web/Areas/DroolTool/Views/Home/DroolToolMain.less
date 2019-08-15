@@ -17,10 +17,15 @@
     width: 280px;
     max-width: 280px;
     z-index: initial;
+
+    h4, h5, h6 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }
 
 #nominatimSearchWrapper {
-    width: 350px;
+    width: 325px;
 }
 
 .showLocation {
@@ -40,17 +45,23 @@
 }
 
 .explorerTray {
-    width: 60%;
-    height: 100px;
-    background-color: #00c1d5;
+    background: none;
     margin: 0 !important;
     border-radius: 50px 0 0;
     color: white;
     padding: 10px;
     font-size: 16px;
 
+    > ul {
+        list-style: none;
+        padding-left: 5px;
+        margin-bottom: 0px;
+        padding-top: 8px;
+    }
+
     img {
-        max-width: 100%;
+        width: 50px;
+        margin-bottom: 10px;
 
         &:hover {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -129,23 +140,46 @@
     margin-bottom: 2px;
 }
 
+.legacySlideout {
+    height: 540px;
+}
+
+.expandLegacySlideout {
+    margin-left: 8px;
+}
+
 .sectionAboutYourNeighborhood .slideout-expant {
     transform: translateX(120%);
 }
 
-@media only screen and (max-width: 1260px){
-    .explorerTray{
-        display:none;
+@media only screen and (max-width: 1260px) {
+    .explorerTray,
+    .drool-tool-watermark {
+        display: none;
     }
 }
 
-@media only screen and (max-width:392px){
-    .leaflet-control-layers{
-        display:none;
+@media only screen and (max-width:392px) {
+    .leaflet-control-layers {
+        display: none;
     }
 }
 
-.showLocation{
-    position:absolute;
+.showLocation {
+    position: absolute;
     left: -5px;
+}
+
+
+.leaflet-control-zoom,
+.leaflet-control-fullscreen {
+    position: static;
+}
+
+.dropdown-menu {
+    padding-left: 5px;
+}
+
+.leaflet-top.leaflet-left {
+    z-index: 20000;
 }

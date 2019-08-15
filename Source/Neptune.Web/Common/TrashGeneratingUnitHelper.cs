@@ -76,7 +76,7 @@ namespace Neptune.Web.Common
         {
             var vTrashGeneratingUnitLoadStatistics = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID
-                && x.IsFullTrashCapture && x.DelineationIsVerified);
+                && x.IsFullTrashCapture );
 
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
@@ -88,7 +88,7 @@ namespace Neptune.Web.Common
         public static double LoadBasedPartialCapture(StormwaterJurisdiction jurisdiction)
         {
             var vTrashGeneratingUnitLoadStatistics = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.DelineationIsVerified && !x.IsFullTrashCapture);
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.IsPartialTrashCapture);
 
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
@@ -130,7 +130,7 @@ namespace Neptune.Web.Common
             return trashGeneratingUnits.Where(x =>
                 x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
                 OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
-                x.TreatmentBMP?.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
+                !x.IsFullTrashCapture &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
@@ -140,8 +140,7 @@ namespace Neptune.Web.Common
         public static double FullTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return trashGeneratingUnits.Where(x =>
-                x.TreatmentBMP?.TrashCaptureStatusTypeID ==
-                TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
+                x.IsFullTrashCapture &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID

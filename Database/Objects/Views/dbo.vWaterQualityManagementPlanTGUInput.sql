@@ -4,9 +4,9 @@ Go
 Create View dbo.vWaterQualityManagementPlanTGUInput
 as
 Select
-	wp.WaterQualityManagementPlanParcelID as PrimaryKey,
+	w.WaterQualityManagementPlanID as PrimaryKey,
 	w.WaterQualityManagementPlanID,
-	p.ParcelGeometry,
+	WaterQualityManagementPlanGeometry,
 	w.StormwaterJurisdictionID,
 	ISNULL(Case
 		when tcs.TrashCaptureStatusTypeDisplayName = 'Full' then 100
@@ -16,9 +16,15 @@ Select
 	end, 0.0) as TrashCaptureEffectiveness,
 	tcs.TrashCaptureStatusTypeDisplayName
 From
-	dbo.WaterQualityManagementPlan w join dbo.WaterQualityManagementPlanParcel wp
+	dbo.WaterQualityManagementPlan w join (
+		Select 
+			wp.WaterQualityManagementPlanID,
+			geometry::UnionAggregate(ParcelGeometry) as WaterQualityManagementPlanGeometry
+		from WaterQualityManagementPlanParcel wp join Parcel p
+			on wp.ParcelID = p.ParcelID
+		group by wp.WaterQualityManagementPlanID
+	) wp
 		on w.WaterQualityManagementPlanID = wp.WaterQualityManagementPlanID
-	join dbo.Parcel p
-		on wp.ParcelID = p.ParcelID
 	join dbo.TrashCaptureStatusType tcs
 		on w.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
+GO
