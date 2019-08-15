@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DotSpatial.Projections;
+using NetTopologySuite.Geometries;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DotSpatial.Projections;
-using LtInfo.Common.DbSpatial;
-using NetTopologySuite.Geometries;
 
-namespace Neptune.Web.Common
+namespace LtInfo.Common
 {
-    public class CoordinateSystemTransformHelper
+    public class CoordinateSystemHelper
     {
         public const int WGS_1984_SRID = 4326;
         public const int NAD_1983_FEET_CA_STATE_PLANE_VI_SRID = 102646;
