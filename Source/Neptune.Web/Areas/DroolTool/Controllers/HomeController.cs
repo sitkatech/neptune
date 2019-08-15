@@ -31,7 +31,7 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
 
             var watershedCoverage = HttpRequestStorage.DatabaseEntities.Watersheds.Select(x => x.WatershedGeometry).ToList()
                 .UnionListGeometries();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(watershedCoverage);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(watershedCoverage);
             var watershedCoverageLayerGeoJson = new LayerGeoJson("WatershedCoverage", new FeatureCollection(new List<Feature> {feature}), "#ffffff", 0,
                 LayerInitialVisibility.Hide);
             var stormwaterMapInitJson = new DroolToolMapInitJson("droolToolMap",

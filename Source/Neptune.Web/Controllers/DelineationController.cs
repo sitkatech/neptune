@@ -76,7 +76,7 @@ namespace Neptune.Web.Controllers
                 return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
             }
 
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(treatmentBMP.Delineation.DelineationGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(treatmentBMP.Delineation.DelineationGeometry);
             feature.Properties.Add("Area", treatmentBMP.GetDelineationAreaString());
             feature.Properties.Add("DelineationType",
                 treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");

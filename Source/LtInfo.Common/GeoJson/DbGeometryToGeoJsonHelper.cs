@@ -33,7 +33,7 @@ namespace LtInfo.Common.GeoJson
 
 
 
-        public static Feature FromDbGeometryWithReprojectionChec(DbGeometry inp)
+        public static Feature FromDbGeometryWithReprojectionChecc(DbGeometry inp) 
         {
             // this is going TO the browser, so it needs to be transformed from 102646 to 4326 if it's not already
             if (inp.CoordinateSystemId != CoordinateSystemHelper.WGS_1984_SRID)
@@ -41,6 +41,29 @@ namespace LtInfo.Common.GeoJson
                 inp = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(inp);
             }
 
+            switch (inp.SpatialTypeName)
+            {
+                case "MultiPolygon":
+                    return new Feature(MultiPolygonFromDbGeometry(inp));
+                case "Polygon":
+                    return new Feature(PolygonFromDbGeometry(inp));
+                case "Point":
+                    return new Feature(PointFromDbGeometry(inp));
+                case "MultiPoint":
+                    return new Feature(MultiPointFromDbGeometry(inp));
+                case "MultiLineString":
+                    return new Feature(MultiLineStringFromDbGeometry(inp));
+                case "LineString":
+                    return new Feature(LineStringFromDbGeometry(inp));
+                case "GeometryCollection":
+                    SitkaLogger.Instance.LogDetailedErrorMessage("Error parsing geometry: " + inp.SpatialTypeName);
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+        public static Feature FromDbGeometryNoReprojecc(DbGeometry inp) // only use NoReprojecc if you're ABSOLUTELY sure that you're sending web-appropriate cooooooooooords
+        {
             switch (inp.SpatialTypeName)
             {
                 case "MultiPolygon":

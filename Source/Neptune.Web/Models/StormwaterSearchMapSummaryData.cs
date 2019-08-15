@@ -36,7 +36,7 @@ namespace Neptune.Web.Models
         public StormwaterSearchMapSummaryData(string mapSummaryUrl, DbGeometry geometry, double? latitude, double? longitude, int entityID)
         {
             MapSummaryUrl = mapSummaryUrl;
-            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(geometry);
+            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(geometry);
             Latitude = latitude;
             Longitude = longitude;
             EntityID = entityID;
