@@ -17,7 +17,8 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
 
-            var vDroolMetric = HttpRequestStorage.DatabaseEntities.vDroolMetrics.OrderByDescending(x=>x.MetricDate).First(x=>x.OCSurveyCatchmentID == networkCatchment.OCSurveyCatchmentID).ToDroolMetricSimple();
+            var databaseEntitiesVDroolMetrics = HttpRequestStorage.DatabaseEntities.vDroolMetrics.Where(x=>x.OCSurveyCatchmentID == networkCatchment.OCSurveyCatchmentID).ToList();
+            var vDroolMetric = databaseEntitiesVDroolMetrics.OrderByDescending(x=>x.MetricDate).FirstOrDefault()?.ToDroolMetricSimple();
 
             return Json(vDroolMetric, JsonRequestBehavior.AllowGet);
         }
