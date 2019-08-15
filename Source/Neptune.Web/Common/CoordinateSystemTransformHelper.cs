@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DotSpatial.Projections;
+using LtInfo.Common.DbSpatial;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.Web.Common
 {
     public class CoordinateSystemTransformHelper
     {
-        public const string baa = "EPSG:4326";
-        public const string moo = "EPSG:2771";
+        public const int WGS_1984_SRID = 4326;
+        public const int NAD_1983_FEET_CA_STATE_PLANE_VI_SRID = 102646;
 
-        public static Geometry ProjectWebMercatorToCaliforniaStatePlaneVI(byte[] wkb)
+        public static DbGeometry ProjectWebMercatorToCaliforniaStatePlaneVI(DbGeometry inputGeometry)
         {
-            NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
-            Geometry geom = (Geometry)reader.Read(wkb);
+            var wkb = inputGeometry.AsBinary();
 
-            double[] pointArray = new double[geom.Coordinates.Count() * 2];
+            NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
+            Geometry internalGeometry = (Geometry)reader.Read(wkb);
+
+            double[] pointArray = new double[internalGeometry.Coordinates.Count() * 2];
             double[] zArray = new double[1];
             zArray[0] = 1;
 
             int counterX = 0;
             int counterY = 1;
-            foreach (var coordinate in geom.Coordinates)
+            foreach (var coordinate in internalGeometry.Coordinates)
             {
                 pointArray[counterX] = coordinate.X;
                 pointArray[counterY] = coordinate.Y;
@@ -35,17 +39,17 @@ namespace Neptune.Web.Common
 
 
 
-            var epsg4326 = KnownCoordinateSystems.Geographic.World.WGS1984;
+            var webMercator = KnownCoordinateSystems.Geographic.World.WGS1984;
 
-            var epsg2771 = KnownCoordinateSystems.Projected.StatePlaneNad1983Feet
+            var caStatePlane = KnownCoordinateSystems.Projected.StatePlaneNad1983Feet
                 .NAD1983StatePlaneCaliforniaVIFIPS0406Feet;
 
-            DotSpatial.Projections.Reproject.ReprojectPoints(pointArray, zArray, epsg4326, epsg2771, 0, (pointArray.Length / 2));
+            Reproject.ReprojectPoints(pointArray, zArray, webMercator, caStatePlane, 0, (pointArray.Length / 2));
             
 
             counterX = 0;
             counterY = 1;
-            foreach (var coordinate in geom.Coordinates)
+            foreach (var coordinate in internalGeometry.Coordinates)
             {
                 coordinate.X = pointArray[counterX];
                 coordinate.Y = pointArray[counterY];
@@ -54,7 +58,61 @@ namespace Neptune.Web.Common
                 counterY = counterY + 2;
             }
             //**geom.GeometryChanged(); **
-            return geom;
+            
+
+            var outputWkb = internalGeometry.AsBinary();
+
+            return DbGeometry.FromBinary(outputWkb, NAD_1983_FEET_CA_STATE_PLANE_VI_SRID);
+        }
+
+        public static DbGeometry ProjectCaliforniaStatePlaneVIToWebMercator(DbGeometry inputGeometry)
+        {
+            var wkb = inputGeometry.AsBinary();
+
+            NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
+            Geometry internalGeometry = (Geometry)reader.Read(wkb);
+
+            double[] pointArray = new double[internalGeometry.Coordinates.Count() * 2];
+            double[] zArray = new double[1];
+            zArray[0] = 1;
+
+            int counterX = 0;
+            int counterY = 1;
+            foreach (var coordinate in internalGeometry.Coordinates)
+            {
+                pointArray[counterX] = coordinate.X;
+                pointArray[counterY] = coordinate.Y;
+
+                counterX = counterX + 2;
+                counterY = counterY + 2;
+            }
+
+
+
+            var webMercator = KnownCoordinateSystems.Geographic.World.WGS1984;
+
+            var caStatePlane = KnownCoordinateSystems.Projected.StatePlaneNad1983Feet
+                .NAD1983StatePlaneCaliforniaVIFIPS0406Feet;
+
+            Reproject.ReprojectPoints(pointArray, zArray, caStatePlane, webMercator, 0, (pointArray.Length / 2));
+            
+
+            counterX = 0;
+            counterY = 1;
+            foreach (var coordinate in internalGeometry.Coordinates)
+            {
+                coordinate.X = pointArray[counterX];
+                coordinate.Y = pointArray[counterY];
+
+                counterX = counterX + 2;
+                counterY = counterY + 2;
+            }
+            //**geom.GeometryChanged(); **
+            
+
+            var outputWkb = internalGeometry.AsBinary();
+
+            return DbGeometry.FromBinary(outputWkb, NAD_1983_FEET_CA_STATE_PLANE_VI_SRID);
         }
 
     }

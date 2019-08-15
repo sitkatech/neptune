@@ -44,15 +44,11 @@ namespace Neptune.Web.Controllers
         public ContentResult TestReproject()
         {
             var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Find(30);
-            var wkb = stormwaterJurisdiction.StormwaterJurisdictionGeometry.AsBinary();
-            var wkt = stormwaterJurisdiction.StormwaterJurisdictionGeometry.AsText();
 
-            var projectEpsg25832ToEpsg3857 = CoordinateSystemTransformHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(wkb);
+            var projectEpsg25832ToEpsg3857 = CoordinateSystemTransformHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
 
-            var wkb2 = projectEpsg25832ToEpsg3857.AsBinary();
-            var fromBinary = DbGeometry.FromBinary(wkb2, 2771);
 
-            return Content($"Original wkt: {wkt}\n New Wkt: {fromBinary.AsText()}");
+            return Content($"Transformed geometry area: {projectEpsg25832ToEpsg3857.Area}");
         }
 
         [AnonymousUnclassifiedFeature]
