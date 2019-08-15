@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
 
         private static GeoJSON.Net.Feature.Feature MakeFeatureWithRelevantProperties(County county)
         {
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(county.CountyFeature);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(county.CountyFeature);
             feature.Properties.Add("State", county.StateProvince.StateProvinceAbbreviation);
             feature.Properties.Add("County", county.CountyName);
             return feature;

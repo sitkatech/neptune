@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using LtInfo.Common;
 using Neptune.Web.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.GdalOgr;
@@ -137,8 +138,15 @@ namespace Neptune.Web.Models
             return new BoundingBox(DefaultSouthWestPoint, DefaultNorthEastPoint);
         }
 
-        public static List<Point> GetPointsFromDbGeometry(DbGeometry geometry)
+        private static List<Point> GetPointsFromDbGeometry(DbGeometry geometry)
         {
+            // since the bounding box is being sent TO the browser, we better reproject to Web Mercator if necessary
+            if (geometry.CoordinateSystemId != CoordinateSystemHelper.WGS_1984_SRID)
+            {
+                geometry = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(geometry);
+            }
+
+
             var pointList = new List<Point>();
             if (!DbGeometryToGeoJsonHelper.CanParseGeometry(geometry))
             {

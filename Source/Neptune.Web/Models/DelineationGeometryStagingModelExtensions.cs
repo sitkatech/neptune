@@ -19,7 +19,7 @@ namespace Neptune.Web.Models
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(DbGeometry.FromText(""));
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(DbGeometry.FromText(""));
                 
                 feature.Properties.Add("FeatureWeight", 1);
                 feature.Properties.Add("FillPolygon", true);

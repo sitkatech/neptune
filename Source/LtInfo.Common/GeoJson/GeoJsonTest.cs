@@ -74,7 +74,7 @@ namespace LtInfo.Common.GeoJson
             _testGeospatialObjects.ForEach(c =>
             {
                 var geom = DbGeometry.FromText(c.Geometry);
-                var f = DbGeometryToGeoJsonHelper.FromDbGeometry(geom);
+                var f = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(geom);
                 f.Id = c.ID.ToString(CultureInfo.InvariantCulture);
                 f.Properties.Add("Name", c.Name);
                 fc.Features.Add(f);

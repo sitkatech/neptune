@@ -31,8 +31,16 @@ namespace LtInfo.Common.GeoJson
     {
         public const string POLYGON_EMPTY = "POLYGON EMPTY";
 
-        public static Feature FromDbGeometry(DbGeometry inp)
+
+
+        public static Feature FromDbGeometryWithReprojectionChec(DbGeometry inp)
         {
+            // this is going TO the browser, so it needs to be transformed from 102646 to 4326 if it's not already
+            if (inp.CoordinateSystemId != CoordinateSystemHelper.WGS_1984_SRID)
+            {
+                inp = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(inp);
+            }
+
             switch (inp.SpatialTypeName)
             {
                 case "MultiPolygon":

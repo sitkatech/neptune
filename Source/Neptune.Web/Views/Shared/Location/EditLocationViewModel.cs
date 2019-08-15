@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
@@ -50,7 +51,8 @@ namespace Neptune.Web.Views.Shared.Location
         public virtual void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
             // note that these nullables will never be null due to the Required attribute
-            treatmentBMP.LocationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(), TreatmentBMPPointY.GetValueOrDefault(), MapInitJson.CoordinateSystemId);
+            // this is coming FROM the browser, so it has to be reprojected to CA State Plane
+            treatmentBMP.LocationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(), TreatmentBMPPointY.GetValueOrDefault(), MapInitJson.CoordinateSystemId));
         }
 
     }

@@ -547,8 +547,9 @@ namespace Neptune.Web.Controllers
         {
             var mapFormID = "treatmentBMPEditLocation";
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
-            var boundingBox = treatmentBMP?.LocationPoint != null
-                ? new BoundingBox(treatmentBMP.LocationPoint)
+            var treatmentBMPLocationPoint = treatmentBMP?.LocationPoint;
+            var boundingBox = treatmentBMPLocationPoint != null
+                ? new BoundingBox(CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(treatmentBMP.LocationPoint))
                 : BoundingBox.MakeNewDefaultBoundingBox();
             var mapInitJson =
                 new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)

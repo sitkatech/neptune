@@ -122,7 +122,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(x.LocationPoint);
                 feature.Properties.Add("Name", x.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
@@ -141,7 +141,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(x.LocationPoint);
                 var trashCaptureStatusType = x.TrashCaptureStatusType;
                 
                 feature.Properties.Add("Name", x.TreatmentBMPName);
@@ -181,7 +181,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(treatmentBMP.LocationPoint);
                 feature.Properties.Add("Name", treatmentBMP.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
@@ -200,7 +200,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(x.LocationPoint);
                 AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
                 return feature;
             }));
@@ -218,7 +218,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(treatmentBMP.LocationPoint);
                 AddAllCommonPropertiesToTreatmentBMPFeature(feature, treatmentBMP);
                 foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
                 {

@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
 using Neptune.Web.Views.Shared.Location;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -35,8 +36,10 @@ namespace Neptune.Web.Views.FieldVisit
 
         public LocationViewModel(Models.FieldVisit fieldVisit)
         {
-            TreatmentBMPPointY = fieldVisit.TreatmentBMP.LocationPoint.YCoordinate;
-            TreatmentBMPPointX = fieldVisit.TreatmentBMP.LocationPoint.XCoordinate;
+            // this is going TO The browser, so it has to be reprojected to web mercator
+            var reprojected = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(fieldVisit.TreatmentBMP.LocationPoint);
+            TreatmentBMPPointY = reprojected.YCoordinate;
+            TreatmentBMPPointX = reprojected.XCoordinate;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Neptune.Web.Controllers
             var dbGeometry = DbGeometry.FromText(networkCatchments, 4326);
 
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(dbGeometry);
             featureCollection.Features.Add(feature);
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
