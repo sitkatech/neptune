@@ -95,7 +95,8 @@ namespace Neptune.Web.Controllers
                 : DbGeometry.FromText(viewModel.WellKnownText, MapInitJson.CoordinateSystemId).ToSqlGeometry()
                     .MakeValid().ToDbGeometry();
 
-            geom = geom?.FixSrid();
+            // like all POSTs from the browser, transform to State Plane 
+            geom = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(geom);
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
