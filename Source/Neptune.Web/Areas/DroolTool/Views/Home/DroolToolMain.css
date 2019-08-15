@@ -141,3 +141,6 @@
 .dropdown-menu {
   padding-left: 5px;
 }
+.leaflet-top.leaflet-left {
+  z-index: 20000;
+}
