@@ -13,7 +13,7 @@ namespace Neptune.Web.Common
         public const string baa = "EPSG:4326";
         public const string moo = "EPSG:2771";
 
-        public static Geometry Project_EPSG25832_To_EPSG3857(byte[] wkb)
+        public static Geometry ProjectWebMercatorToCaliforniaStatePlaneVI(byte[] wkb)
         {
             NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
             Geometry geom = (Geometry)reader.Read(wkb);
@@ -33,17 +33,15 @@ namespace Neptune.Web.Common
                 counterY = counterY + 2;
             }
 
-            var authorityCode = KnownCoordinateSystems.Projected.StatePlaneNad1983.NAD1983StatePlaneCaliforniaVIFIPS0406.AuthorityCode;
 
-            var epsg4326 = new ProjectionInfo();
-            //DotSpatial.Projections.ProjectionInfo
+
+            var epsg4326 = KnownCoordinateSystems.Geographic.World.WGS1984;
+
+            var epsg2771 = KnownCoordinateSystems.Projected.StatePlaneNad1983Feet
+                .NAD1983StatePlaneCaliforniaVIFIPS0406Feet;
+
+            DotSpatial.Projections.Reproject.ReprojectPoints(pointArray, zArray, epsg4326, epsg2771, 0, (pointArray.Length / 2));
             
-            var epsg3857 = new DotSpatial.Projections.ProjectionInfo();
-            epsg4326.ParseEsriString(baa);
-            //epsg25832.
-            epsg3857.ParseEsriString(moo);
-
-            DotSpatial.Projections.Reproject.ReprojectPoints(pointArray, zArray, epsg4326, epsg3857, 0, (pointArray.Length / 2));
 
             counterX = 0;
             counterY = 1;

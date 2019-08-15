@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using Hangfire;
@@ -44,13 +45,14 @@ namespace Neptune.Web.Controllers
         {
             var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Find(30);
             var wkb = stormwaterJurisdiction.StormwaterJurisdictionGeometry.AsBinary();
+            var wkt = stormwaterJurisdiction.StormwaterJurisdictionGeometry.AsText();
 
-            var projectEpsg25832ToEpsg3857 = CoordinateSystemTransformHelper.Project_EPSG25832_To_EPSG3857(wkb);
+            var projectEpsg25832ToEpsg3857 = CoordinateSystemTransformHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(wkb);
 
-            var wkb2 = projectEpsg25832ToEpsg3857.AsBinary()
+            var wkb2 = projectEpsg25832ToEpsg3857.AsBinary();
+            var fromBinary = DbGeometry.FromBinary(wkb2, 2771);
 
-                ;
-            return Content($"Original wkb: {wkb}\n New Wkb: {wkb2}");
+            return Content($"Original wkt: {wkt}\n New Wkt: {fromBinary.AsText()}");
         }
 
         [AnonymousUnclassifiedFeature]
