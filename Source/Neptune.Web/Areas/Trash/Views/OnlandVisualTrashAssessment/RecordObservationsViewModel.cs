@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using MoreLinq;
 using Neptune.Web.Common;
@@ -43,6 +44,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 (x, y) =>
                 {
                     x.Note = y.Note;
+                    // as we know, when we come FROM the browser, we normally transform TO state plane
+                    // not here though, since Observations don't actually get used in any spatial analysis and therefore the projection doesn't matter.
                     x.LocationPoint = y.LocationPoint;
                 });
 

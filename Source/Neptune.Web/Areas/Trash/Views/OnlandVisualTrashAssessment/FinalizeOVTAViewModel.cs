@@ -84,7 +84,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
                 {
-                    var onlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessment.DraftGeometry.FixSrid();
+                    // the draft geometry stayed in 4326 while it was still a draft, but now it has to grow up and be 2771
+                    var onlandVisualTrashAssessmentAreaGeometry =
+                        CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(onlandVisualTrashAssessment
+                            .DraftGeometry);
 
                     var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
                         onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessmentAreaGeometry);
@@ -144,6 +147,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 (z,w) => z.ExplanationIfTypeIsOther = w.ExplanationIfTypeIsOther
                 );
 
+            // bug?: why are we nulling these unconditionally?
             onlandVisualTrashAssessment.DraftAreaDescription = null;
             onlandVisualTrashAssessment.DraftAreaName = null;
             onlandVisualTrashAssessment.DraftGeometry = null;

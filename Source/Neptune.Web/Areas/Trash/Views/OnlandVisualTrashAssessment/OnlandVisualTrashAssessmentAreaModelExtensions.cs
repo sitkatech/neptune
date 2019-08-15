@@ -111,7 +111,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             if (onlandVisualTrashAssessmentArea.TransectLine != null)
             {
                 var featureCollection = new FeatureCollection();
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(onlandVisualTrashAssessmentArea.TransectLine.ToSqlGeometry().MakeValid().ToDbGeometry());
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChec(onlandVisualTrashAssessmentArea.TransectLine);
                 featureCollection.Features.AddRange(new List<Feature> {feature});
 
                 LayerGeoJson transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
