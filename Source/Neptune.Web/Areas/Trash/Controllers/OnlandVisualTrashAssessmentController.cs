@@ -376,7 +376,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Load();
             viewModel.UpdateModel(onlandVisualTrashAssessment, HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Local);
 
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
             SetMessageForDisplay("The OVTA was successfully finalized");
 
 
@@ -456,8 +455,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     transectBackingAssessment.IsTransectBackingAssessment = true;
                 }
             }
-
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
 
             SetMessageForDisplay("The OVTA was successfully returned to the \"In Progress\" status");
 
@@ -545,7 +542,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                             ?.OnlandVisualTrashAssessmentScoreID;
                 }
 
-                onlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits(CurrentPerson);
             }
 
             SetMessageForDisplay("Successfully deleted the assessment.");

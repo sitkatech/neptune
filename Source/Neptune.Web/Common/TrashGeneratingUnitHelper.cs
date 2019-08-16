@@ -1,76 +1,13 @@
-﻿using System;
+﻿using LtInfo.Common.DbSpatial;
 using Neptune.Web.Models;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Spatial;
 using System.Linq;
-using Hangfire;
-using LtInfo.Common.DbSpatial;
-using MoreLinq;
-using Neptune.Web.Areas.Trash.Controllers;
-using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Common
 {
     public static partial class TrashGeneratingUnitHelper
     {
         private const decimal FullTrashCaptureLoading = 2.5m;
-
-        // In contrast to the original implementation of these methods, the caller is now responsible for all SaveChangeses
-        public static void UpdateTrashGeneratingUnits(this Delineation delineation, Person currentPerson)
-        {
-            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
-            {
-                AdjustedDelineationID = delineation.DelineationID
-            };
-            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(30));
-
-
-        }
-
-        public static void UpdateTrashGeneratingUnitsAfterDelete(this DbGeometry deletedGeometry, Person currentPerson)
-        {
-            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
-            {
-                DeletedGeometry = deletedGeometry
-            };
-            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(30));
-        }
-        
-
-        public static void UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations, Person currentPerson)
-        {
-            var trashGeneratingUnitAdjustments = delineations.Select(delineation => new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
-            {
-                AdjustedDelineationID = delineation.DelineationID
-            });
-            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.AddRange(trashGeneratingUnitAdjustments);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(30));
-        }
-
-        public static void UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
-        {
-            var trashGeneratingUnitAdjustment = new TrashGeneratingUnitAdjustment(DateTime.Now, currentPerson, false)
-            {
-                AdjustedOnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID
-            };
-            HttpRequestStorage.DatabaseEntities.TrashGeneratingUnitAdjustments.Add(trashGeneratingUnitAdjustment);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob(), TimeSpan.FromSeconds(30));
-        }
 
         public static double LoadBasedFullCapture(StormwaterJurisdiction jurisdiction)
         {

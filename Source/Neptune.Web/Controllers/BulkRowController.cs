@@ -86,7 +86,6 @@ namespace Neptune.Web.Controllers
 
             var numberOfVerifiedBMPDelineations = bmpDelineations.Count;
 
-            bmpDelineations.UpdateTrashGeneratingUnits(CurrentPerson);
             SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
             
             return new ModalDialogFormJsonResult();
