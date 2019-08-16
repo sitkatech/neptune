@@ -30,7 +30,7 @@ namespace LtInfo.Common.DbSpatial
 {
     public static class DbSpatialHelper
     {
-        public const double SqlGeometryAreaToAcres = 2471054;
+        public const double SquareMetersToAcres = 0.000247105;
         private const double MetersPerFoot = 0.3048;
 
         public static double FeetToAverageLatLonDegree(DbGeometry geometry, double feet)

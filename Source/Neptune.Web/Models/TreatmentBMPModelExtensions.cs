@@ -254,7 +254,7 @@ namespace Neptune.Web.Models
 
         public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
         {
-            return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres)?.ToString("0.00") ?? "-";
+            return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Neptune.Web.Common
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
-                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                    DbSpatialHelper.SquareMetersToAcres)
                 : 0;
         }
 
@@ -93,7 +93,7 @@ namespace Neptune.Web.Common
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - x.CurrentLoadingRate) *
-                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                    DbSpatialHelper.SquareMetersToAcres)
                 : 0;
         }
 
@@ -107,7 +107,7 @@ namespace Neptune.Web.Common
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - x.ProgressLoadingRate) *
-                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                    DbSpatialHelper.SquareMetersToAcres)
                 : 0;
         }
 
@@ -120,7 +120,7 @@ namespace Neptune.Web.Common
             return vTrashGeneratingUnitLoadStatistics.Any()
                 ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
                     x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
-                    DbSpatialHelper.SqlGeometryAreaToAcres)
+                    DbSpatialHelper.SquareMetersToAcres)
                 : 0;
         }
 

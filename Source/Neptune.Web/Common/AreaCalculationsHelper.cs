@@ -13,7 +13,7 @@ namespace Neptune.Web.Common
         public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return Math.Round(trashGeneratingUnits
-                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), DecimalPlacesToDisplay); // will never be null
+                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SquareMetersToAcres).Sum().GetValueOrDefault(), DecimalPlacesToDisplay); // will never be null
         }
     }
 }

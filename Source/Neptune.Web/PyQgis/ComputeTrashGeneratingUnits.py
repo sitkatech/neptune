@@ -62,7 +62,7 @@ def parseArguments():
 # One concludes, after much trial and error, that the processing framework is actually operating on two separate copies of the layer behind the scenes.
 def duplicateLayer(qgs_vector_layer, duplicate_layer_name):
     # fixme: we might never use layer types other than polygon, but we might want this parameterized in the future
-    layer_dupe = QgsVectorLayer("MultiPolygon?crs=epsg:4326", duplicate_layer_name, "memory")
+    layer_dupe = QgsVectorLayer("MultiPolygon?crs=epsg:2771", duplicate_layer_name, "memory")
 
     mem_layer_data = layer_dupe.dataProvider()
 

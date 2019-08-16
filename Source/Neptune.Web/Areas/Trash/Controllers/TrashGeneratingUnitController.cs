@@ -57,7 +57,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var totalPLUAcres = jurisdiction.LandUseBlocks
                 .Where(x => x.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID && x.PermitTypeID == PermitType.PhaseIMS4.PermitTypeID).Sum(x =>
-                    x.LandUseBlockGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres) ?? 0;
+                    x.LandUseBlockGeometry.Area * DbSpatialHelper.SquareMetersToAcres) ?? 0;
 
             var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
 

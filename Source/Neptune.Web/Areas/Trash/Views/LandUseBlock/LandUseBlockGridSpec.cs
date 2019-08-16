@@ -18,7 +18,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlock
             Add("Block ID", x => x.LandUseBlockID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("Land Use Type", x => x.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
-            Add("Block Area", x => ((x.LandUseBlockGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Block Area", x => ((x.LandUseBlockGeometry.Area ?? 0) * DbSpatialHelper.SquareMetersToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
             Add(Models.FieldDefinition.LoadingRate.ToGridHeaderString(), x => x.TrashGenerationRate.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Land Use Description", x => x.LandUseDescription, 100, DhtmlxGridColumnFilterType.Text);
@@ -28,7 +28,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlock
                 DhtmlxGridColumnFilterType.Text);
             Add("Trash Results Area", x =>
                     (x.TrashGeneratingUnits.Sum(y => y.TrashGeneratingUnitGeometry.Area ?? 0) *
-                     DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100,
+                     DbSpatialHelper.SquareMetersToAcres).ToString("F2", CultureInfo.InvariantCulture), 100,
                 DhtmlxGridColumnFilterType.Numeric);
             Add("Permit Type", x => x.PermitType.PermitTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
