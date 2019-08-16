@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
 
@@ -44,9 +45,9 @@ namespace Neptune.Web.ScheduledJobs
                 // a GDAL command pulls the shapefile into the database.
                 DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
                 var ogr2OgrCommandLineRunner =
-                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, 4326, 210000);
+                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 210000);
 
-                ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile(4326, layerName, outputPath,
+                ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, layerName, outputPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
             }
             catch (Ogr2OgrCommandLineException e)
