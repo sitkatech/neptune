@@ -43,4 +43,5 @@ from dbo.TrashGeneratingUnit tgu
 		on o.OrganizationID = sj.OrganizationID
 	left join dbo.WaterQualityManagementPlan wqmp
 		on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
+WHERE tgu.TrashGeneratingUnitGeometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
 Go
