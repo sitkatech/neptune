@@ -18,12 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using LtInfo.Common.DesignByContract;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using LtInfo.Common.DesignByContract;
 
 namespace LtInfo.Common.GdalOgr
 {
@@ -32,7 +31,7 @@ namespace LtInfo.Common.GdalOgr
     /// </summary>
     public class Ogr2OgrCommandLineRunner
     {
-        public const int DefaultCoordinateSystemId = 4326;
+        public const int DefaultCoordinateSystemId = 2771;
         public const int DefaultTimeOut = 210000;
         public const string OgrGeoJsonTableName = "OGRGeoJSON";
 
