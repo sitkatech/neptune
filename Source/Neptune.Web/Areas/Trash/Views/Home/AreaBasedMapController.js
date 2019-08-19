@@ -67,19 +67,26 @@
             var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
             var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);
             var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+            var WQMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.WQMPUrlTemplate).ParameterReplace(properties.WaterQualityManagementPlanID);
 
             var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
             var ovtaScore = "<strong>Governing OVTA Score:   </strong>";
             if (properties.AssessmentScore != "NotProvided") {
                 ovtaScore += "<a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.AssessmentScore + "</a><br>";
             } else {
-                ovtaScore += "Not Assessed<br>";
+                ovtaScore += "--<br>";
             }
-            var BMPName = "<strong>BMP Name:   </strong>";
+            var BMPName = "<strong>Governing BMP:   </strong>";
             if (properties.TreatmentBMPID) {
                 BMPName += "<a href='" + BMPDetailUrl + " 'target='_blank'>" + properties.TreatmentBMPName + "</a><br>";
             } else {
-                BMPName += "Delineation Not Provided<br>";
+                BMPName += "--<br>";
+            }
+            var WQMPName = "<strong>Governing WQMP:   </strong>";
+            if (properties.WaterQualityManagementPlanID) {
+                WQMPName += "<a href='" + WQMPDetailUrl + " 'target='_blank'>" + properties.WaterQualityManagementPlanName + "</a><br>";
+            } else {
+                WQMPName += "--<br>";
             }
             var stormwaterJurisdictionName = "<strong>Stormwater Jurisdiction:   </strong><a href='" + organizationDetailUrl + "' target='_blank'>" + properties.OrganizationName + "</a><br>";
 
@@ -88,11 +95,11 @@
                 var date = new Date(properties.LastCalculatedDate);
                 lastCalculatedDate += date.toLocaleDateString() + "<br>";
             } else {
-                lastCalculatedDate += "Not Assessed";
+                lastCalculatedDate += "--";
             }
             
 
-            return landUseType + ovtaScore + BMPName + stormwaterJurisdictionName + lastCalculatedDate;
+            return landUseType + ovtaScore + BMPName + WQMPName + stormwaterJurisdictionName + lastCalculatedDate;
         }
 
     });

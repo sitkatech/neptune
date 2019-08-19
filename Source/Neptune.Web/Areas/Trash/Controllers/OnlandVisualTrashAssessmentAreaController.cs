@@ -187,7 +187,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewDeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
             }
 
-            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry.UpdateTrashGeneratingUnitsAfterDelete(CurrentPerson);
             onlandVisualTrashAssessmentArea.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 

@@ -71,11 +71,6 @@ namespace Neptune.Web.ScheduledJobs
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);
         }
-        
-        public static void RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob()
-        {
-            ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob();
-        }
 
         public static void RunLandUseBlockUploadBackgroundJob(int personID)
         {

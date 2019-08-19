@@ -10,8 +10,13 @@
     <script src="@Url.Content("~/Content/JQuery/MonthPicker.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMap.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.js")" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolSplash.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Areas/DroolTool/Views/Home/DroolToolMain.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/MonthPicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.slideout/jquery.slideout.min.css")" />
     <script>
 
         window.mapInitJson =
@@ -22,328 +27,218 @@
     </script>
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
-
-
     <style>
-        .container-fluid.droolToolContent {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            width: 100%;
-        }
-
-        .neighborhood-search-control {
-            /* todo: width should really be dynamish*/
-            width: 350px !important;
-            max-width: 350px;
-        }
-        .neighborhood-detail-control {
-            /* todo: width should really be dynamish*/
-            width: 231px;
-            max-width: 231px;
-            z-index: initial;
-        }
-
-        #nominatimSearchWrapper {
-            width: 350px;
-        }
-
-        .showLocation {
-            margin: 0 !important;
-        }
-
-        .selectedNeighborhoodText {
-            margin-bottom: 15px;
-        }
-
-        .nominatimSearchInput {
-            margin-top: 15px;
-        }
-
-        .leaflet-bottom.leaflet-right {
-            width: 100%;
-        }
-
-        .explorerTray {
-            width: 60%;
-            height: 100px;
-            background-color: #00c1d5;
-            margin: 0 !important;
-            border-radius: 50px 0 0;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        .explorerTray img {
-            max-width: 100%;
-        }
 
 
-        .splashModal {
-            overflow: hidden !important;
-        }
+        @@media only screen and (max-width: 869px) {
+            .neighborhood-detail-hidden-mobile,
+            .neighborhood-detail-show-hidden-mobile {
+                display: none !important;
+            }
 
-        .droolToolDialog {
-            background: none;
-            border: none;
+            .neighborhood-detail-control {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                max-width: none;
+                z-index: 5000000000;
+                border: none !important;
+                margin: 0 !important;
+            }
 
-        }
-        .droolToolDialog .ui-dialog-titlebar {
-            display: none;
-        }
-
-        .droolToolSplashHeader {
-            color: #ffc03f;
-            font-size: 24pt;
-        }
-
-        .splashHeaderContainer {
-            padding: 0 5% 0 5%
-        }
-
-        .droolToolSplashSubheader {
-            color: white;
-            font-size: 12pt;
-        }
-
-        .splashSubheaderContainer {
-            padding: 0 5% 0 5%
-        }
-
-        .droolToolSpashCartouche {
-            background-color: white;
-            display: inline-block;
-            padding: 10px;
-            margin-top: 10px;
-            width: 40%;
-            border-radius: 22px;
-        }
-
-        .h2ocSplashLogo {
-            max-height: 70px;
-            margin-right: 25px;
-        }
-
-        .mnwdSplashLogo {
-            max-height: 80px;
-            margin-left: 25px;
-        }
-
-        .droolToolActionCall {
-            font-size: 16pt;
-            width: 340px;
-            padding: 10px;
-            border-radius: 22px;
-        }
-
-        .explorerTray a img:hover {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        }
-
-        @* LPT: Just use !important. Works > good*@
-        .ui-widget-overlay {
-            background: none !important;
-            background-color: #000000 !important;
-            opacity: .85 !important;
-        }
-
-        .nominatimSearchButton { }
-
-        .form-control.metricMonthPicker {
-            width: auto;
-        }
-
-        #MonthPicker_Button_ {
-            width: 34px;
-            height: 34px;
-            background: none;
-            background-color: rgb(0, 153, 171);
-            border: none;
-        }
-
-            #MonthPicker_Button_:hover {
-                background-color: #00c1d5;
+            .expando-bar {
+                display: none;
             }
 
 
-        .monthPickerButtonIcon {
-            font-size: 14pt;
-            color: white;
-            margin-top: 5px;
-            margin-left: 1px;
+            body {
+                overflow: hidden;
+            }
+
+            #highlightFlowButton {
+                display: none;
+            }
+
+            .slideout {
+                width: 100% !important;
+                height: 100% !important;
+                text-align: center !important;
+                position: relative !important;
+            }
+
+            .expandLegacySlideout,
+            .legacySlideout,
+            .legacy-slideout-target .expand-slideout-alternate-mobile-container {
+                display: none;
+            }
         }
 
-        .placeholderImages img {
-            width: 200px;
+        @@media only screen and (min-width: 870px) {
+            .neighborhood-detail-show-mobile {
+                display: none !important;
+            }
+
+            .expand-slideout-alternate-mobile-container,
+            .close-slideout-button-mobile {
+                display: none !important
+            }
         }
 
-        /* panel layout mechanics */
-        .panel-wrap {
-            position: absolute;
-            width: 90%;
-            height: 100%;
-            transform: translateX(0%);
-            transition: .3s ease-out;
-            z-index: -1;
-            top: 0;
-        }
-        .panel {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 1em;
+        button.neighborhood-detail-show-mobile:disabled {
+            background-color: #606060;
         }
 
-        .panel-slideout {
-            transform: translateX(50%);
-            width: 220%
+        #mnwd-links {
+            border: 2px solid rgba(0,0,0,.2);
+            margin-left: 2px;
+            margin-right: 8px;
         }
 
-        .panel systemText {
-            font-size: 10px;
-        }
-
-        .expando-bar {
-            position: absolute;
-            right: 0;
-            display: inline-block;
-            height: 100%;
-            width: 15px;
-            padding-top:110%
-        }
-
-        .expando-bar:hover {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        }
+            #mnwd-links button {
+                padding-right: 10px;
+                padding-left: 10px;
+                margin-right: 0px;
+            }
     </style>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
+
+
+
 @section DroolToolMap
 {
     <div class="container-fluid" id="@ViewDataTyped.StormwaterMapInitJson.MapDivID" style="width: 100%; height: 1000px;"></div>
 
-    <div class="panel-wrap">
-        <div class="panel">
-            <h4>Neighborhood Metrics</h4>
-            <div class="row" style="margin-bottom: 5px;">
-                <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
-                    <p style="font-weight:bold">Select a month and year:</p>
-                </div>
-                <div class="col-sm-7">
-                    <input class="metricMonthPicker form-control month-year-input" type="text"></div>
-            </div>
+    <div class="aboutYourNeighborhoodSlideout slideout">
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout1.png")" />
+    </div>
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <table class="table-responsive table table-striped table-condensed" style="margin-bottom:0">
-                        <thead>
+    <div class="waterUsageSlideout slideout">
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout2.png")" />
+    </div>
+
+    <div class="conservationActionsSlideout slideout">
+        <img src="@Url.Content("~/Areas/DroolTool/Content/mock/slideout3.png")" />
+    </div>
+
+    <div class="legacySlideout">
+        <h4>Neighborhood Metrics</h4>
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-sm-5" style="margin-top: 7px; margin-bottom: 3px;">
+                <p style="font-weight:bold">Select a month and year:</p>
+            </div>
+            <div class="col-sm-7">
+                <input class="metricMonthPicker form-control month-year-input" type="text">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table-responsive table table-striped table-condensed" style="margin-bottom:0">
+                    <thead>
                         <tr>
                             <th class="col-sm-4">Metric</th>
                             <th>Snapshot</th>
                             <th>Mean</th>
                             <th>Slope</th>
                         </tr>
-                        </thead>
-                        <tbody>
+                    </thead>
+                    <tbody>
                         <tr>
                             <td>Number of Residential and HOA Accounts</td>
-                            <td id="NumberOfReshoaAccounts"></td>
+                            <td id="legacyPanelNumberOfReshoaAccounts"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Total Residential and HOA Irrigated Area, Square Feet</td>
-                            <td id="TotalReshoaIrrigatedArea"></td>
+                            <td id="legacyPanelTotalReshoaIrrigatedArea"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Average Irrigated Area, Square Feet per Household</td>
-                            <td id="AverageIrrigatedArea"></td>
+                            <td id="legacyPanelAverageIrrigatedArea"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Total Estimated Residential Water Users</td>
-                            <td id="TotalEstimatedReshoaUsers"></td>
+                            <td id="legacyPanelTotalEstimatedReshoaUsers"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Total Budget, gallons</td>
-                            <td id="TotalBudget"></td>
+                            <td id="legacyPanelTotalBudget"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Total Outdoor Budget, gallons</td>
-                            <td id="TotalOutdoorBudget"></td>
+                            <td id="legacyPanelTotalOutdoorBudget"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Average Total Usage, Gallons per Household</td>
-                            <td id="AverageTotalUsage"></td>
+                            <td id="legacyPanelAverageTotalUsage"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Average Estimated Irrigation Usage, Gallons per Household</td>
-                            <td id="AverageEstimatedIrrigationUsage"></td>
+                            <td id="legacyPanelAverageEstimatedIrrigationUsage"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Number of Accounts over Budget</td>
-                            <td id="NumberOfAccountsOverBudget"></td>
+                            <td id="legacyPanelNumberOfAccountsOverBudget"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Percent of Accounts over Budget </td>
-                            <td id="PercentOfAccountsOverBudget"></td>
+                            <td id="legacyPanelPercentOfAccountsOverBudget"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Average Over-budget Usage, Gallons per Household</td>
-                            <td id="AverageOverBudgetUsage"></td>
-                            <td id="AverageOverBudgetUsageRolling">N/A</td>
-                            <td id="AverageOverBudgetUsageSlope">N/A</td>
+                            <td id="legacyPanelAverageOverBudgetUsage"></td>
+                            <td id="legacyPanelAverageOverBudgetUsageRolling">N/A</td>
+                            <td id="legacyPanelAverageOverBudgetUsageSlope">N/A</td>
                         </tr>
                         <tr>
                             <td>Total Over-budget Usage, Gallons</td>
-                            <td id="TotalOverBudgetUsage"></td>
+                            <td id="legacyPanelTotalOverBudgetUsage"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
                         <tr>
                             <td>Percent of Households Participating in Water Conservation Rebates and Incentives</td>
-                            <td id="RebateParticipationPercentage"></td>
-                            <td id="RebateParticipationPercentageRolling">N/A</td>
-                            <td id="RebateParticipationPercentageSlope">N/A</td>
+                            <td id="legacyPanelRebateParticipationPercentage"></td>
+                            <td id="legacyPanelRebateParticipationPercentageRolling">N/A</td>
+                            <td id="legacyPanelRebateParticipationPercentageSlope">N/A</td>
                         </tr>
                         <tr>
                             <td>Total Area of Turf Replacement, sq-ft</td>
-                            <td id="TotalTurfReplacementArea"></td>
+                            <td id="legacyPanelTotalTurfReplacementArea"></td>
                             <td>N/A</td>
                             <td>N/A</td>
                         </tr>
 
-                        </tbody>
-                    </table>
-                </div>
-            </div><hr/>
-            <p class="systemText">N/A in the Mean and Slope columns indicates that the Mean or Slope is not relevant for a particular metric.</p>
-            <p class="systemText">Not Available in the Mean and Slope columns indicates that there is not enough historic data to calculate Mean or Slope for a particular metric for this month.</p>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        </div><hr />
+        <p class="systemText">N/A in the Mean and Slope columns indicates that the Mean or Slope is not relevant for a particular metric.</p>
+        <p class="systemText">Not Available in the Mean and Slope columns indicates that there is not enough historic data to calculate Mean or Slope for a particular metric for this month.</p>
     </div>
 
     <script>
@@ -351,44 +246,54 @@
             window.map = new NeptuneMaps.DroolToolMap(window.mapInitJson, "Hillshade", "@ViewDataTyped.GeoserverUrl",
                 window.mapConfig);
 
-
-            //uhhhh panel
-            jQuery(".neighborhood-detail-control").append(jQuery(".panel-wrap"));
-
-            jQuery(".expando-bar").on("click",
-                function () {
-                    this.expand = !this.expand;
-                    console.log(this.expand);
-                    if (this.expand) {
-                        jQuery(".panel-wrap").addClass("panel-slideout");
-                        jQuery(this).removeClass("glyphicon-menu-right");
-                        jQuery(this).addClass("glyphicon-menu-left");
-
-                    } else {
-                        jQuery(".panel-wrap").removeClass("panel-slideout");
-                        jQuery(this).addClass("glyphicon-menu-right");
-                        jQuery(this).removeClass("glyphicon-menu-left");
-                    }
-                });
-
-            // splish
-            var modalWidth = jQuery(window).width() * .5;
-
-            jQuery("#splashModal").dialog({
-                dialogClass: "droolToolDialog",
-                modal: true,
-                width: modalWidth,
-                minWidth: modalWidth,
-                maxWidth: modalWidth,
-                minHeight: 550,
-                closeOnEscape: false
+            jQuery(".aboutYourNeighborhoodSlideout").slideout({
+                targetSelector: '.sectionAboutYourNeighborhood',
+                xorSlideouts: true,
+                width: '230px',
+                clickTargetToExpand: true,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true
             });
-            jQuery("#splashModal").dialog("open");
+            jQuery(".waterUsageSlideout").slideout({
+                targetSelector: '.sectionWaterUsage',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: true,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true
+            });
+            jQuery(".conservationActionsSlideout").slideout({
+                targetSelector: '.sectionConservationActions',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: true,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true
+            });
+            jQuery(".legacySlideout").slideout({
+                targetSelector: '.legacy-slideout-target',
+                xorSlideouts: true,
+                width: '450px',
+                clickTargetToExpand: false,
+                mediaQuery: " (min-width: 870px) ",
+                alternate: true,
+                manuallyWired: {
+                    clickToExpandSelector: ".expandLegacySlideout"
+                }
+            });
+
+            jQuery(".expandLegacySlideout").on('click', function() {
+                if (this.innerHTML === 'More') {
+                    this.innerHTML = "Less";
+                } else {
+                    this.innerHTML = "More";
+                }
+            })
+
 
             function killSplash() {
-                jQuery("#splashModal").dialog("close");
+                jQuery("#splashModal").detach();
                 window.map.intializeTray();
-                jQuery("header").show();
                 resizeHandler(window.mapInitJson);
             }
 
@@ -422,62 +327,112 @@
                     }
                 });
 
+
+            jQuery(".leaflet-top.leaflet-right").prepend(jQuery("#mnwd-links"));
         });
     </script>
 
     <div id="hiddenOnLoadControlElements" style="display: none;">
         <div class="row" id="nominatimSearchWrapper">
-            <div class="col-sm-10">
+            <div class="col-xs-10">
                 <div class="input-group">
-                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
+                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search address or landmark">
                     <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
                 </div>
             </div>
-            <div class="col-sm-2 showLocationWrapper" style="padding: 0;">
+            <div class="col-xs-2 showLocationWrapper" style="padding: 0;">
 
             </div>
         </div>
     </div>
 
-    <div id="splashModal" style="overflow: hidden">
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <img src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" style="width: 60%" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 text-center splashHeaderContainer">
-                <p class="droolToolSplashHeader">Learn about how your neighborhood is conserving water and protecting our streams and beaches</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 text-center splashSubheaderContainer">
-                <p class="droolToolSplashSubheader">The Urban Drool Tool is a collaborative project between the Moulton Niguel Water District, the County of Orange, and the Cities of Aliso Viejo, Mission Viejo, Laguna Niguel, Laguna Woods, Laguna Hills.</p>
-            </div>
-        </div>
-        <div class="row callToActionContainer">
-            <div class="col-sm-6 text-right " style="padding-right: 25px;">
-                <a class="btn btn-neptune droolToolActionCall" id="enterAddressButton">Enter Address to Get Started</a>
-            </div>
-            <div class="col-sm-6 text-left" style="padding-left: 25px;" id="closeSplashButton">
-                <a class="btn btn-neptune droolToolActionCall">Explore My Watershed</a>
-            </div>
-        </div>
-        <div class="row splashSearchContainer" style="display: none">
-            <div class="col-sm-12 text-center">
-                <div class="input-group">
-                    <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
-                    <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
+    <div id="splashModal" style="overflow: hidden;">
+        <div id="splashModalContent">
+            <div class="row">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center">
+                    <img class="droolSplashLogo" src="@Url.Content("~/Areas/DroolTool/Content/udt_color_logo.png")" />
                 </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center splashHeaderContainer">
+                    <p class="droolToolSplashHeader">Learn about how your neighborhood is conserving water and protecting our streams and beaches</p>
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center splashSubheaderContainer">
+                    <p class="droolToolSplashSubheader">The Urban Drool Tool is a collaborative project between the Moulton Niguel Water District, the County of Orange, and the Cities of Aliso Viejo, Mission Viejo, Laguna Niguel, Laguna Woods, Laguna Hills.</p>
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-4 col-sm-6 col-xs-12 droolToolActionCallContainer text-right" style="padding-right: 25px;">
+                    <a class="btn btn-neptune droolToolActionCall" id="enterAddressButton">Enter Address to Get Started</a>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 droolToolActionCallContainer text-left" style="padding-left: 25px;" id="closeSplashButton">
+                    <a class="btn btn-neptune droolToolActionCall">Explore My Watershed</a>
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+            </div>
+            <div class="row splashSearchContainer" style="display: none">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center">
+                    <div class="input-group splashSearchGroup">
+                        <input type="text" class="form-control nominatimSearchInput" style="outline: currentcolor none medium; margin-top: 0;" placeholder="Search by address or landmark">
+                        <span class="input-group-btn"><a class="btn btn-sm btn-neptune nominatimSearchButton" style="height: 34px; color: white; padding-top: 7px;"><i class="glyphicon glyphicon-search"></i></a></span>
+                    </div>
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
+                <div class="col-md-8 text-center">
+                    <span class="droolToolSpashCartouche">
+                        <img src="@Url.Content("~/Areas/DroolTool/Content/h2oc_color_logo.png")" class="h2ocSplashLogo splashCartoucheLogo" />
+                        <img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdSplashLogo splashCartoucheLogo" />
+                    </span>
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs"></div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <span class="droolToolSpashCartouche">
-                    <img src="@Url.Content("~/Areas/DroolTool/Content/h2oc_color_logo.png")" class="h2ocSplashLogo" />
-                    <img src="@Url.Content("~/Areas/DroolTool/Content/mnwd_color_logo.jpg")" class="mnwdSplashLogo" />
-                </span>
-            </div>
-        </div>
+    </div>
+
+    <div id="mnwd-links" class="leaflet-control" style="display: inline;">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+            <li>
+                <a href='/Home/About' target='_blank'>
+                    About
+                </a>
+            </li>
+            <li>
+                <a href='https://www.mnwd.com/' target='_blank'>
+                    Moulton Niguel Water District Home
+                </a>
+            </li>
+            <li>
+                <a href='https://h2oc.org' target='_blank'>
+                    Stormwater Program Home
+                </a>
+            </li>
+            <li>
+                <a href='https://www.mnwd.com/rebates/' target='_blank'>
+                    Rebates
+                </a>
+            </li>
+            <li>
+                <a href='https://www.mnwd.com/payment/' target='_blank'>
+                    View Bill
+                </a>
+            </li>
+
+        </ul>
     </div>
 }

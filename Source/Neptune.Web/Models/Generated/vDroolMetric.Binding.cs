@@ -25,13 +25,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vDroolMetric(int primaryKey, int rawDroolMetricID, int oCSurveyCatchmentID, int metricYear, int metricMonth, double? numberOfReshoaAccounts, double? totalReshoaIrrigatedArea, double? averageIrrigatedArea, double? totalEstimatedReshoaUsers, double? totalBudget, double? totalOutdoorBudget, double? averageTotalUsage, double? averageEstimatedIrrigationUsage, double? numberOfAccountsOverBudget, double? percentOfAccountsOverBudget, double? averageOverBudgetUsage, double? averageOverBudgetUsageRolling, double? averageOverBudgetUsageSlope, double? totalOverBudgetUsage, double? rebateParticipationPercentage, double? rebateParticipationPercentageRolling, double? rebateParticipationPercentageSlope, double? totalTurfReplacementArea) : this()
+        public vDroolMetric(int primaryKey, int rawDroolMetricID, int oCSurveyCatchmentID, int metricYear, int metricMonth, DateTime metricDate, double? numberOfReshoaAccounts, double? totalReshoaIrrigatedArea, double? averageIrrigatedArea, double? totalEstimatedReshoaUsers, double? totalBudget, double? totalOutdoorBudget, double? averageTotalUsage, double? averageEstimatedIrrigationUsage, double? numberOfAccountsOverBudget, double? percentOfAccountsOverBudget, double? averageOverBudgetUsage, double? averageOverBudgetUsageRolling, double? averageOverBudgetUsageSlope, double? totalOverBudgetUsage, double? rebateParticipationPercentage, double? rebateParticipationPercentageRolling, double? rebateParticipationPercentageSlope, double? totalTurfReplacementArea) : this()
         {
             this.PrimaryKey = primaryKey;
             this.RawDroolMetricID = rawDroolMetricID;
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
             this.MetricYear = metricYear;
             this.MetricMonth = metricMonth;
+            this.MetricDate = metricDate;
             this.NumberOfReshoaAccounts = numberOfReshoaAccounts;
             this.TotalReshoaIrrigatedArea = totalReshoaIrrigatedArea;
             this.AverageIrrigatedArea = averageIrrigatedArea;
@@ -62,6 +63,7 @@ namespace Neptune.Web.Models
             this.OCSurveyCatchmentID = vDroolMetric.OCSurveyCatchmentID;
             this.MetricYear = vDroolMetric.MetricYear;
             this.MetricMonth = vDroolMetric.MetricMonth;
+            this.MetricDate = vDroolMetric.MetricDate;
             this.NumberOfReshoaAccounts = vDroolMetric.NumberOfReshoaAccounts;
             this.TotalReshoaIrrigatedArea = vDroolMetric.TotalReshoaIrrigatedArea;
             this.AverageIrrigatedArea = vDroolMetric.AverageIrrigatedArea;
@@ -90,6 +92,7 @@ namespace Neptune.Web.Models
         public int OCSurveyCatchmentID { get; set; }
         public int MetricYear { get; set; }
         public int MetricMonth { get; set; }
+        public DateTime MetricDate { get; set; }
         public double? NumberOfReshoaAccounts { get; set; }
         public double? TotalReshoaIrrigatedArea { get; set; }
         public double? AverageIrrigatedArea { get; set; }

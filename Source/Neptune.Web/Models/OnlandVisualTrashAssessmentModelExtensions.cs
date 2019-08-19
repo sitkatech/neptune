@@ -126,7 +126,7 @@ namespace Neptune.Web.Models
         {
             var featureCollection = new FeatureCollection();
 
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(ovta.GetAreaViaTransect());
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(ovta.GetAreaViaTransect());
 
             featureCollection.Features.Add(feature);
             return featureCollection;
@@ -177,7 +177,7 @@ namespace Neptune.Web.Models
                     return null;
                 }
 
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry());
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry());
                 featureCollection.Features.AddRange(new List<Feature> { feature });
 
                 transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
@@ -213,7 +213,8 @@ namespace Neptune.Web.Models
                         // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
                         dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
                     }
-                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
+                    // we're sending the DRAFT geometry, which is stored in 4326 because there was no imperative to reproject it to area-preserving.
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometryNoReprojecc(dbGeometry);
                     geoJsonFeatureCollection.Features.Add(feature);
                 }
             }

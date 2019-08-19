@@ -12,12 +12,6 @@ namespace Neptune.Web.ScheduledJobs
             var trashGeneratingUnitRefreshScheduledBackgroundJob = new TrashGeneratingUnitRefreshScheduledBackgroundJob();
             trashGeneratingUnitRefreshScheduledBackgroundJob.RunJob();
         }
-        public static void RunTrashGeneratingUnitAdjustmentScheduledBackgroundJob()
-        {
-            var trashGeneratingUnitAdjustmentScheduledBackgroundJob = new TrashGeneratingUnitAdjustmentScheduledBackgroundJob();
-            trashGeneratingUnitAdjustmentScheduledBackgroundJob.RunJob();
-        }
-
         public static void RunLandUseBlockUploadBackgroundJob(int personID)
         {
             var landUseBlockUploadBackgroundJob = new LandUseBlockUploadBackgroundJob(personID);

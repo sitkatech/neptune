@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
+
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditLocationViewModel : Neptune.Web.Views.Shared.Location.EditLocationViewModel
@@ -33,8 +35,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public EditLocationViewModel(Models.TreatmentBMP treatmentBMP)
         {
-            TreatmentBMPPointY = treatmentBMP.LocationPoint.YCoordinate;
-            TreatmentBMPPointX = treatmentBMP.LocationPoint.XCoordinate;
+            var reprojected = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(treatmentBMP.LocationPoint);
+            TreatmentBMPPointY = reprojected.YCoordinate;
+            TreatmentBMPPointX = reprojected.XCoordinate;
         }
     }
 }

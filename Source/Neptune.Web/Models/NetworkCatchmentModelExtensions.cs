@@ -39,7 +39,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(backboneDownstream.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.BackboneSegmentGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.BackboneSegmentGeometry);
                 feature.Properties.Add("dummy", "dummy");
                 return feature;
             }));
@@ -76,7 +76,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(networkCatchmentsInStormshed.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.CatchmentGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.CatchmentGeometry);
                 feature.Properties.Add("NetworkCatchmentID", x.NetworkCatchmentID);
                 return feature;
             }));

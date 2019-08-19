@@ -87,6 +87,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
         public int? TrashCaptureStatusTypeID { get; set; }
 
+        [DisplayName("Trash Capture Effectiveness")]
+        [Range(1, 99, ErrorMessage = "The Trash Effectiveness must be between 1 and 99, if the score is 100 please select Full")]
+        public int? TrashCaptureEffectiveness { get; set; }
+
 
         /// <summary>
         /// Needed by model binder
@@ -119,6 +123,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             RecordNumber = waterQualityManagementPlan.RecordNumber;
             RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
             TrashCaptureStatusTypeID = waterQualityManagementPlan.TrashCaptureStatusTypeID;
+            TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness;
         }
 
         public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -148,6 +153,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
             waterQualityManagementPlan.RecordNumber = RecordNumber;
             waterQualityManagementPlan.RecordedWQMPAreaInAcres = RecordedWQMPAreaInAcres;
+            waterQualityManagementPlan.TrashCaptureEffectiveness = TrashCaptureEffectiveness;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

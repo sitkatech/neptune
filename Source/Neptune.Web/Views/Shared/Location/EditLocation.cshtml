@@ -143,6 +143,7 @@
 
     jQuery(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        console.log(mapInitJson);
         var neptuneMap = new NeptuneMaps.Stormwater(mapInitJson);
         neptuneMap.initializeTreatmentBMPEditor();
         neptuneMap.map.on("locationfound", onLocationFound);

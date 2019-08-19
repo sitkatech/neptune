@@ -51,7 +51,6 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
 
         assessmentAreaMap.map.on('draw:created',
             function (e) {
-                debugger;
                 var layer = e.layer;
                 assessmentAreaMap.editableFeatureGroup.addLayer(layer);
                 var leafletId = layer._leaflet_id;

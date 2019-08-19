@@ -19,24 +19,34 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Linq;
-using System.Web.Mvc;
-using Hangfire;
 using LtInfo.Common;
-using Neptune.Web.Security;
-using Neptune.Web.Models;
 using Neptune.Web.Common;
-using Neptune.Web.ScheduledJobs;
-using Neptune.Web.Views.Shared;
+using Neptune.Web.Models;
+using Neptune.Web.Security;
 using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Home;
 using Neptune.Web.Views.Map;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.JurisdictionControls;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Neptune.Web.Controllers
 {
     public class HomeController : NeptuneBaseController
     {
+
+        [SitkaAdminFeature]
+        [HttpGet]
+        public ContentResult TestReproject()
+        {
+            var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Find(30);
+
+            var projectEpsg25832ToEpsg3857 = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
+
+            return Content($"Transformed geometry area: {projectEpsg25832ToEpsg3857.Area}");
+        }
+
         [AnonymousUnclassifiedFeature]
         [CrossAreaRoute]
         public FileResult ExportGridToExcel(string gridName, bool printFooter)

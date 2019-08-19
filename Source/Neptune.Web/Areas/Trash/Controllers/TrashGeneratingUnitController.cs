@@ -6,6 +6,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System.Web.Mvc;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit;
 
@@ -22,23 +23,23 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<TrashGeneratingUnit> TrashGeneratingUnitGridJsonData()
+        public GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic> TrashGeneratingUnitGridJsonData()
         {
             // ReSharper disable once InconsistentNaming
-            var treatmentBMPs = GetTrashGeneratingUnitsAndGridSpec(out var gridSpec);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TrashGeneratingUnit>(treatmentBMPs, gridSpec);
+            List<vTrashGeneratingUnitLoadStatistic> treatmentBMPs = GetTrashGeneratingUnitsAndGridSpec(out var gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<TrashGeneratingUnit> GetTrashGeneratingUnitsAndGridSpec(out TrashGeneratingUnitGridSpec gridSpec)
+        private List<vTrashGeneratingUnitLoadStatistic> GetTrashGeneratingUnitsAndGridSpec(out TrashGeneratingUnitGridSpec gridSpec)
         {
             gridSpec = new TrashGeneratingUnitGridSpec();
 
             var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID).ToList();
 
-            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x => x.LastUpdateDate)
-                .Include(x => x.LandUseBlock)
-                .Include(x => x.StormwaterJurisdiction.Organization).ToList();
+            return HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
+                .Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID))
+                .OrderByDescending(x => x.LastUpdateDate).ToList();
         }
 
         [HttpGet]
@@ -54,7 +55,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
-            var totalPLUAcres = trashGeneratingUnits.TotalPLUAcreage();
+            var totalPLUAcres = jurisdiction.LandUseBlocks
+                .Where(x => x.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID && x.PermitTypeID == PermitType.PhaseIMS4.PermitTypeID).Sum(x =>
+                    x.LandUseBlockGeometry.Area * DbSpatialHelper.SquareMetersToAcres) ?? 0;
 
             var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
 
@@ -111,8 +114,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult LoadBasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
-            var ovtas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments;
 
             var viaFullCapture = TrashGeneratingUnitHelper.LoadBasedFullCapture(jurisdiction);
             var viaPartialCapture = TrashGeneratingUnitHelper.LoadBasedPartialCapture(jurisdiction);

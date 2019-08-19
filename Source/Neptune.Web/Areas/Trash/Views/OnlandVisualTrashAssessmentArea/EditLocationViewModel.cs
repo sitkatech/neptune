@@ -57,6 +57,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         {
             if (IsParcelPicker.GetValueOrDefault())
             {
+                // since this is parcel picks, we don't need to reproject; the parcels are already in the correct system (State Plane)
                 var unionListGeometries = HttpRequestStorage.DatabaseEntities.Parcels.Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList().UnionListGeometries();
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = unionListGeometries.FixSrid();
             }
@@ -67,7 +68,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
                         .ToDbGeometry());
                 var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
 
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = unionListGeometries.FixSrid();
+                // since this is coming from the browser, we have to transform to State Plane
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry =
+                    CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(unionListGeometries);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
         }

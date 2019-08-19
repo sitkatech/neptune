@@ -26,6 +26,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[RecordNumber] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[RecordedWQMPAreaInAcres] [decimal](5, 1) NULL,
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
+	[TrashCaptureEffectiveness] [int] NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanID] ASC
@@ -82,3 +83,7 @@ ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_W
 REFERENCES [dbo].[WaterQualityManagementPlanStatus] ([WaterQualityManagementPlanStatusID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID]
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [CK_WaterQualityManagementPlan_TrashCaptureEffectivenessMustBeBetween1And99] CHECK  (([TrashCaptureEffectiveness] IS NULL OR [TrashCaptureEffectiveness]>(0) AND [TrashCaptureEffectiveness]<(100)))
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [CK_WaterQualityManagementPlan_TrashCaptureEffectivenessMustBeBetween1And99]
