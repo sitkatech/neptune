@@ -8,6 +8,7 @@ using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
 using System.Web.WebPages;
+using LtInfo.Common;
 
 namespace Neptune.Web.Common
 {
@@ -126,7 +127,7 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.LocationPoint = DbGeometry.FromText(
-                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", MapInitJson.CoordinateSystemId);
+                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
             }
 
 

@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using NUnit.Framework;
@@ -178,7 +179,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
                 errorList.Any(x => !x.Contains("Treatment BMP Latitude can not be converted to Decimal format at row: "));
                 errorList.Any(x => !x.Contains("Treatment BMP Longitude can not be converted to Decimal format at row: "));
                 errorList.Any(x => !x.Contains("Treatment BMP Longitude"));
-                Assert.That(treatmentBmpUploadSimples[0].LocationPoint.ToString(), Is.EqualTo($"SRID={MapInitJson.CoordinateSystemId};POINT (10 30)"));
+                Assert.That(treatmentBmpUploadSimples[0].LocationPoint.ToString(), Is.EqualTo($"SRID={CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID};POINT (10 30)"));
             }
 
             [Test]

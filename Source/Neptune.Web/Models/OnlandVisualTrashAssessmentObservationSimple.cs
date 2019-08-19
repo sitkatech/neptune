@@ -4,6 +4,7 @@ using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 
 namespace Neptune.Web.Models
@@ -53,7 +54,7 @@ namespace Neptune.Web.Models
         public OnlandVisualTrashAssessmentObservation ToOnlandVisualTrashAssessmentObservation()
         {
             DbGeometry locationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(LocationX.GetValueOrDefault(),
-                LocationY.GetValueOrDefault(), MapInitJson.CoordinateSystemId);
+                LocationY.GetValueOrDefault(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 
             return new OnlandVisualTrashAssessmentObservation(OnlandVisualTrashAssessmentObservationID,
                 OnlandVisualTrashAssessmentID, locationPoint, Note, ObservationDateTime);

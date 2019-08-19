@@ -64,7 +64,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
             else
             {
                 var dbGeometrys = WktAndAnnotations.Select(x =>
-                    DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId).ToSqlGeometry().MakeValid()
+                    DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry().MakeValid()
                         .ToDbGeometry());
                 var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
 
@@ -91,7 +91,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
                 {
                     yield return new ValidationResult("Assessment Area Geometry is required.");
                 }
-                else if (WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId))
+                else if (WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID))
                     .Any(x => !x.IsValid))
                 {
                     yield return new ValidationResult(

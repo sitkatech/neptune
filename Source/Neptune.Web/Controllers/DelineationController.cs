@@ -92,7 +92,7 @@ namespace Neptune.Web.Controllers
         {
             var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
                 ? null
-                : DbGeometry.FromText(viewModel.WellKnownText, MapInitJson.CoordinateSystemId).ToSqlGeometry()
+                : DbGeometry.FromText(viewModel.WellKnownText, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry()
                     .MakeValid().ToDbGeometry();
 
             // like all POSTs from the browser, transform to State Plane 

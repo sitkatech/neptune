@@ -16,6 +16,7 @@ using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;
@@ -274,7 +275,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var unionOfSelectedParcelGeometries = HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => viewModel.ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
                 .UnionListGeometries();
-            onlandVisualTrashAssessment.DraftGeometry = unionOfSelectedParcelGeometries;
+
+            //store it in 2771 for safekeeping
+            onlandVisualTrashAssessment.DraftGeometry =
+                CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(unionOfSelectedParcelGeometries);
 
             return RedirectToAppropriateStep(viewModel, OVTASection.AddOrRemoveParcels,
                 onlandVisualTrashAssessment);
@@ -312,10 +316,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewRefineAssessmentArea(onlandVisualTrashAssessment, viewModel);
             }
 
-            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, MapInitJson.CoordinateSystemId).ToSqlGeometry().MakeValid().ToDbGeometry());
+            // these come in in web mercator...
+            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry().MakeValid().ToDbGeometry());
             var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
-
-            onlandVisualTrashAssessment.DraftGeometry = unionListGeometries;
+            
+            // ...and then get fixed here
+            onlandVisualTrashAssessment.DraftGeometry = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(unionListGeometries);
             onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = true;
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 

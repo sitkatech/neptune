@@ -20,12 +20,12 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using LtInfo.Common;
 
 namespace Neptune.Web.Models
 {
     public class MapInitJson
     {
-        public const int CoordinateSystemId = 4326;
         protected internal const int DefaultZoomLevel = 10;
 
         public string MapDivID;

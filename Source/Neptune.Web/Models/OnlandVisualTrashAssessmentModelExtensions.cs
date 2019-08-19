@@ -96,7 +96,8 @@ namespace Neptune.Web.Models
 
                 var linestring = $"LINESTRING ({points})";
 
-                return DbGeometry.LineFromText(linestring, MapInitJson.CoordinateSystemId);
+                // the transect is going to be in 2771 because it was generated from points in 2771
+                return DbGeometry.LineFromText(linestring, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
             }
 
             return null;
@@ -211,10 +212,10 @@ namespace Neptune.Web.Models
                     if (reduce)
                     {
                         // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
-                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
+                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry().FixSrid();
                     }
                     // we're sending the DRAFT geometry, which is stored in 4326 because there was no imperative to reproject it to area-preserving.
-                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometryNoReprojecc(dbGeometry);
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry);
                     geoJsonFeatureCollection.Features.Add(feature);
                 }
             }
