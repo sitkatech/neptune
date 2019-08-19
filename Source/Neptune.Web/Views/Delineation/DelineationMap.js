@@ -485,15 +485,9 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.displayLoading();
 
     var self = this;
-    this.selectFeatureByWfs(
+    this.getFeatureInfo(
         "OCStormwater:NetworkCatchments",
-        {
-            cql_filter: "intersects(CatchmentGeometry, POINT(" +
-                latLng.lat +
-                " " +
-                latLng.lng +
-                "))"
-        }).then(function (response) {
+        [latLng.lng, latLng.lat]).then(function (response) {
             if (response.features[0]) {
                 return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
             } else {

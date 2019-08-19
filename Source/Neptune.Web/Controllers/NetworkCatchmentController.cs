@@ -6,6 +6,7 @@ using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Newtonsoft.Json;
@@ -36,7 +37,7 @@ namespace Neptune.Web.Controllers
                 .Where(x => networkCatchmentIDs.Contains(x.NetworkCatchmentID)).Select(x => x.CatchmentGeometry)
                 .ToList().UnionListGeometries().ExteriorRing.AsText().Replace("LINESTRING", "POLYGON").Replace("(", "((").Replace(")", "))");
 
-            var dbGeometry = DbGeometry.FromText(networkCatchments, 4326);
+            var dbGeometry = DbGeometry.FromText(networkCatchments, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 
             var featureCollection = new FeatureCollection();
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry);
