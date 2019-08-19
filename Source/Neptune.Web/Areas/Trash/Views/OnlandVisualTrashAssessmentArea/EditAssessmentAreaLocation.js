@@ -62,23 +62,10 @@ NeptuneMaps.AssessmentAreaMap.prototype.prepFeatureGroupAndDrawControl = functio
 };
 
 NeptuneMaps.AssessmentAreaMap.prototype.onClickPickParcel = function (event) {
-    var parcelMapSericeLayerName = "OCStormwater:Parcels";
-
     var latlng = event.latlng;
-    var latlngWrapped = latlng.wrap();
-
-    var wfsParametersExtended = {
-        typeName: parcelMapSericeLayerName,
-        cql_filter: "intersects(ParcelGeometry, POINT(" + latlngWrapped.lat + " " + latlngWrapped.lng + "))"
-    };
-
-    wfsParametersExtended = L.Util.extend(wfsParametersExtended, this.wfsParams);
 
     var self = this;
-    jQuery.ajax({
-        url: this.geoserverUrlOWS + L.Util.getParamString(wfsParametersExtended),
-
-    }).then(function (response) {
+    self.getFeatureInfo("OCStormwater:Parcels", [latlng.lng, latlng.lat]).then(function (response) {
         if (response.features.length === 0)
             return;
 

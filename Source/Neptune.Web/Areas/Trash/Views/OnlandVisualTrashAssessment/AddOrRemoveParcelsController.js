@@ -11,31 +11,22 @@
                 return;
 
             var latlng = event.latlng;
-            var latlngWrapped = latlng.wrap();
-            var parameters = L.Util.extend($scope.neptuneMap.wfsParams,
-                {
-                    typeName: parcelMapSericeLayerName,
-                    cql_filter: "intersects(ParcelGeometry, POINT(" + latlngWrapped.lat + " " + latlngWrapped.lng + "))"
-                });
-            SitkaAjax.ajax({
-                url: mapServiceUrl + L.Util.getParamString(parameters),
-                dataType: "json",
-                jsonpCallback: "getJson"
-            },
-                function (response) {
-                    if (response.features.length === 0)
-                        return;
 
-                    var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
+            $scope.neptuneMap.getFeatureInfo("OCStormwater:Parcels", [latlng.lng, latlng.lat]).then(function(response) {
+                if (response.features.length === 0)
+                    return;
 
-                    $scope.toggleParcel(mergedProperties.ParcelID, function () {
+                var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
+
+                $scope.toggleParcel(mergedProperties.ParcelID,
+                    function() {
                         $scope.$apply();
                     });
-
-                },
-                function () {
-                    console.error("There was an error selecting the " + $scope.AngularViewData.ParcelFieldDefinitionLabel + " from list");
-                });
+            }).fail(function() {
+                console.error("There was an error selecting the " +
+                    $scope.AngularViewData.ParcelFieldDefinitionLabel +
+                    " from list");
+            });
         }
 
         $scope.toggleParcel = function(parcelId, callback) {
