@@ -84,7 +84,10 @@
 
         var latlng = event.latlng;
 
-        $scope.neptuneMap.getFeatureInfo("OCStormwater:Parcels", [latlng.lng, latlng.lat]).then(function(response) {
+        $scope.neptuneMap.geoserverUrlOWS = $scope.AngularViewData.MapServiceUrl;
+        var getFeatureInfo = NeptuneMaps.GeoServerMap.prototype.getFeatureInfo.bind($scope.neptuneMap);
+
+        getFeatureInfo("OCStormwater:Parcels", [latlng.lng, latlng.lat]).then(function(response) {
             if (response.features.length === 0)
                 return;
 
