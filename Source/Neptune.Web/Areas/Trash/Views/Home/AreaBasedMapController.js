@@ -34,19 +34,9 @@
 
         function getTGUPopup(event) {
             var layerName = "OCStormwater:TrashGeneratingUnits";
-            var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
 
             var latlng = event.latlng;
-            var latLngWrapped = latlng.wrap();
-            var parameters = L.Util.extend($scope.neptuneMap.createWfsParamsWithLayerName(layerName),
-                {
-                    typeName: layerName,
-                    cql_filter: "intersects(TrashGeneratingUnitGeometry, POINT(" + latLngWrapped.lat + " " + latLngWrapped.lng + "))"
-                });
-            jQuery.ajax({
-                url: mapServiceUrl + L.Util.getParamString(parameters),
-                type: "GET"
-            }).then(function (response) {
+            $scope.neptuneMap.getFeatureInfo(layerName, [latlng.lng, latlng.lat]).then(function (response) {
                 if (response.features.length == 0) {
                     return;
                 }
