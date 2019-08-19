@@ -222,13 +222,6 @@ NeptuneMaps.AssessmentAreaMap.prototype.acceptParcelsAndRefine = function () {
         this.map.removeLayer(this.selectedParcelLayer);
     }
 
-    var wfsParametersExtended = {
-        typeName: "OCStormwater:Parcels",
-        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")"
-    };
-
-    wfsParametersExtended = L.Util.extend(wfsParametersExtended, this.wfsParams);
-
     var self = this;
     jQuery.ajax({
         url: self.options.ParcelUnionUrl,
