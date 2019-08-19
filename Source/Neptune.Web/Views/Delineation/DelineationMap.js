@@ -730,7 +730,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
             "))"
     };
     var self = this;
-    this.selectFeatureByWfs("OCStormwater:Delineations", params).then(function(response) {
+    this.getFeatureInfo("OCStormwater:Delineations", [latlng.lng, latlng.lat]).then(function(response) {
         if (response.totalFeatures === 0) {
             return; // no one cares
         }

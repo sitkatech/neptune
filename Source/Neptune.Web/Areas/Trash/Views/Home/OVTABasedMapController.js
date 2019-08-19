@@ -30,30 +30,19 @@
             $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas", ovtaLayerLabel);
 
         $scope.neptuneMap.map.on("click", function (event) {
-            var cqlFilter = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + event.latlng.lat + " " + event.latlng.lng + "))";
-
-            var customParams = {
-                "cql_filter": cqlFilter,
-                "typeName": "OnlandVisualTrashAssessmentAreas"
-            };
-
-            $scope.selectOVTAArea(customParams);
+            $scope.selectOVTAArea(event.latlng);
         });
 
-        $scope.selectOVTAArea = function (customParams) {
+        $scope.selectOVTAArea = function (latlng) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
             }
-
-            var parameters = L.Util.extend($scope.neptuneMap.wfsParams, customParams);
-
-            jQuery.ajax({
-                url: $scope.neptuneMap.geoserverUrlOWS + L.Util.getParamString(parameters),
-                type: "GET"
-            }).then(function (response) {
+            $scope.neptuneMap.getFeatureInfo("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                [latlng.lng, latlng.lat]).then(function (response) {
                 if (!response.features || !response.features[0]) {
                     return;
                 }
+                
                 $scope.lastSelected = L.geoJson(response,
                     {
                         style: function (feature) {
@@ -133,20 +122,11 @@
             });
 
         function makeOVTAPopup(event) {
-            var layerName = "OCStormwater:OnlandVisualTrashAssessmentAreas";
-            var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
 
             var latlng = event.latlng;
-            var latLngWrapped = latlng.wrap();
-            var parameters = L.Util.extend($scope.neptuneMap.createWfsParamsWithLayerName(layerName),
-                {
-                    typeName: layerName,
-                    cql_filter: "intersects(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + latLngWrapped.lat + " " + latLngWrapped.lng + "))"
-                });
-            jQuery.ajax({
-                url: mapServiceUrl + L.Util.getParamString(parameters),
-                type: "GET"
-            }).then(function(response) {
+
+            $scope.neptuneMap.getFeatureInfo("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                [latlng.lng, latlng.lat]).then(function(response) {
                 if (response.features.length == 0) {
                     return;
                 }
