@@ -333,13 +333,27 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
                 return;
             }
 
-            var customParams = {
-                cql_filter: 'intersects(CatchmentGeometry, POINT(' + evt.latlng.lat + ' ' + evt.latlng.lng + '))'
-            };
+            var lat = evt.latlng.lat;
+            var lon = evt.latlng.lng;
 
-            L.Util.extend(customParams, self.neighborhoodLayerWfsParams);
+            console.log(lat);
+            console.log(lon);
 
-            RemoteService.geoserverLookup(self.config.GeoServerUrl, customParams).then(function (geoJsonResponse) {
+            var xy = [lon, lat];
+
+            //var xy_proj = NeptuneMaps.epsg4326ToEpsg2771(xy);
+
+            //lat = xy_proj[1];
+            //lon = xy_proj[0];
+
+            //var customParams = {
+            //    cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
+            //};
+
+            //L.Util.extend(customParams, self.neighborhoodLayerWfsParams);
+
+            RemoteService.geoserverNetworkCatchmentLookup(xy).then(function (geoJsonResponse) {
+                debugger;
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
                 }
@@ -492,12 +506,9 @@ NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
 var RemoteService = {
     options: {},
 
-    geoserverLookup: function (geoServerUrl, params) {
-        
-        return jQuery.ajax({
-            url: geoServerUrl + L.Util.getParamString(params),
-            method: 'GET'
-        });
+    geoserverNetworkCatchmentLookup: function (xy) {
+
+        return this.options.neptuneMap.getFeatureInfo("OCStormwater:NetworkCatchments", xy);
     },
 
     getTrace: function(neighborhoodID, urlTemplate) {
@@ -542,15 +553,22 @@ var RemoteService = {
             // NP/JHB June 2019 deliberate decision not to invest in deciding between multiple results
             var lat = response[0].lat;
             var lon = response[0].lon;
-            neptuneMap.SetClickMarker(lat, lon);
+            var xy = [lon, lat];
 
-            var customParams = {
-                cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
-            };
+            //var xy_proj = NeptuneMaps.epsg4326ToEpsg2771(xy);
 
-            L.Util.extend(customParams, self.options.neighborhoodLayerWfsParams);
+            //lat = xy_proj[1];
+            //lon = xy_proj[0];
 
-            return RemoteService.geoserverLookup(self.options.geoserverUrl, customParams);
+            //neptuneMap.SetClickMarker(lat, lon);
+
+            //var customParams = {
+            //    cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
+            //};
+
+            //L.Util.extend(customParams, self.options.neighborhoodLayerWfsParams);
+            debugger;
+            return RemoteService.geoserverNetworkCatchmentLookup(xy);
         }).then(function(responseGeoJson) {
             if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {
                 toast(NEIGHBORHOOD_NOT_FOUND);

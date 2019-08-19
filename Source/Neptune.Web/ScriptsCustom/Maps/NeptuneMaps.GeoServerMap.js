@@ -91,3 +91,36 @@ NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function(layerName, para
         type: "GET"
     });
 };
+
+NeptuneMaps.GeoServerMap.prototype.getFeatureInfo = function (layerName, xy) {
+
+    var x1 = xy[0];
+    var y1 = xy[1];
+    var x2 = x1 + 0.0001;
+    var y2 = y1 + 0.0001;
+
+    var bbox = [x1, y1, x2, y2].join(",");
+
+
+    var params =  {
+        service: "WMS",
+        transparent: true,
+        version: "1.1.1",
+        request: "GetFeatureInfo",
+        info_format: "application/json",
+        tiled: true,
+        QUERY_LAYERS: layerName,
+        layers: layerName,
+        X: 50,
+        Y: 50,
+        SRS: 'EPSG:4326',
+        WIDTH: 101,
+        HEIGHT: 101,
+        BBOX: bbox
+    };
+
+    return jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(params),
+        type: "GET"
+    });
+};
