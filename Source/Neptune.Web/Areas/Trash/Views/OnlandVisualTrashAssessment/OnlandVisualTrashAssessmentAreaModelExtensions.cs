@@ -140,7 +140,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             if (onlandVisualTrashAssessments.Any(x=>x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID))
             {
                 onlandVisualTrashAssessment = onlandVisualTrashAssessments.MinBy(x => x.CompletedDate);
-                return onlandVisualTrashAssessment.GetTransect()?.FixSrid();
+                return onlandVisualTrashAssessment.GetTransect()?.FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
             }
 
             onlandVisualTrashAssessment = null;

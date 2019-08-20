@@ -76,7 +76,7 @@ if __name__ == '__main__':
     connstring_delineation = connstring_base + "tables=dbo.vDelineationTGUInput"
 
     delineation_layer = QgsVectorLayer(connstring_delineation, "vDelineationTGUInput1", "ogr")
-    delineation_layer_dupe = QgsVectorLayer("Polygon?crs=epsg:4326", "vDelineationTGUInput2", "memory")
+    delineation_layer_dupe = QgsVectorLayer("Polygon?crs=epsg:2771", "vDelineationTGUInput2", "memory")
 
     feats = [feat for feat in delineation_layer.getFeatures()]
 

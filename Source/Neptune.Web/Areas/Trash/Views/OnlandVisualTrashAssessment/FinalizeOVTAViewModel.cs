@@ -90,7 +90,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                             .DraftGeometry);
 
                     var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
-                        onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessmentAreaGeometry);
+                        onlandVisualTrashAssessment.StormwaterJurisdiction,
+                        onlandVisualTrashAssessmentAreaGeometry)
+                    {
+                        OnlandVisualTrashAssessmentAreaGeometry4326 = onlandVisualTrashAssessment.DraftGeometry
+                    };
+
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
 
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =

@@ -212,9 +212,8 @@ namespace Neptune.Web.Models
                     if (reduce)
                     {
                         // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
-                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry().FixSrid();
+                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
                     }
-                    // we're sending the DRAFT geometry, which is stored in 4326 because there was no imperative to reproject it to area-preserving.
                     var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry);
                     geoJsonFeatureCollection.Features.Add(feature);
                 }

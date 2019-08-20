@@ -47,6 +47,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     // as we know, when we come FROM the browser, we normally transform TO state plane
                     // not here though, since Observations don't actually get used in any spatial analysis and therefore the projection doesn't matter.
                     x.LocationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(y.LocationPoint);
+                    x.LocationPoint4326 = y.LocationPoint;
                 });
 
             updatedDict.ForEach(x =>

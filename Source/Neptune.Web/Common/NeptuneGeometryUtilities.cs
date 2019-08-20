@@ -7,7 +7,7 @@ namespace Neptune.Web.Common
 {
     public static class NeptuneGeometryUtilities
     {
-        public static DbGeometry FixSrid(this DbGeometry geometry)
+        public static DbGeometry FixSrid(this DbGeometry geometry, int srid)
         {
             if (geometry == null)
             {
@@ -28,8 +28,7 @@ namespace Neptune.Web.Common
                 wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture));
             }
 
-            // Since FixSrid is for storing data, State Plane is the way to go
-            geometry = DbGeometry.FromText(wellKnownText, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+            geometry = DbGeometry.FromText(wellKnownText, srid);
             return geometry;
         }
     }

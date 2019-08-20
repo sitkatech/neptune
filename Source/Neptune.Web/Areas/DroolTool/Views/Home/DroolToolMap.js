@@ -341,17 +341,6 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
             var xy = [lon, lat];
 
-            //var xy_proj = NeptuneMaps.epsg4326ToEpsg2771(xy);
-
-            //lat = xy_proj[1];
-            //lon = xy_proj[0];
-
-            //var customParams = {
-            //    cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
-            //};
-
-            //L.Util.extend(customParams, self.neighborhoodLayerWfsParams);
-
             RemoteService.geoserverNetworkCatchmentLookup(xy).then(function (geoJsonResponse) {
                 debugger;
                 if (geoJsonResponse.totalFeatures === 0) {
@@ -555,19 +544,6 @@ var RemoteService = {
             var lon = response[0].lon;
             var xy = [lon, lat];
 
-            //var xy_proj = NeptuneMaps.epsg4326ToEpsg2771(xy);
-
-            //lat = xy_proj[1];
-            //lon = xy_proj[0];
-
-            //neptuneMap.SetClickMarker(lat, lon);
-
-            //var customParams = {
-            //    cql_filter: 'intersects(CatchmentGeometry, POINT(' + lat + ' ' + lon + '))'
-            //};
-
-            //L.Util.extend(customParams, self.options.neighborhoodLayerWfsParams);
-            debugger;
             return RemoteService.geoserverNetworkCatchmentLookup(xy);
         }).then(function(responseGeoJson) {
             if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {

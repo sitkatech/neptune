@@ -35,18 +35,6 @@ namespace Neptune.Web.Controllers
 {
     public class HomeController : NeptuneBaseController
     {
-
-        [SitkaAdminFeature]
-        [HttpGet]
-        public ContentResult TestReproject()
-        {
-            var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Find(30);
-
-            var projectEpsg25832ToEpsg3857 = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
-
-            return Content($"Transformed geometry area: {projectEpsg25832ToEpsg3857.Area}");
-        }
-
         [AnonymousUnclassifiedFeature]
         [CrossAreaRoute]
         public FileResult ExportGridToExcel(string gridName, bool printFooter)

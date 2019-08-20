@@ -59,18 +59,24 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
             {
                 // since this is parcel picks, we don't need to reproject; the parcels are already in the correct system (State Plane)
                 var unionListGeometries = HttpRequestStorage.DatabaseEntities.Parcels.Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList().UnionListGeometries();
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = unionListGeometries.FixSrid();
+                var onlandVisualTrashAssessmentAreaGeometry2771 = unionListGeometries.FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessmentAreaGeometry2771;
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(onlandVisualTrashAssessmentAreaGeometry2771);
             }
             else
             {
                 var dbGeometrys = WktAndAnnotations.Select(x =>
                     DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry().MakeValid()
                         .ToDbGeometry());
-                var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
+                var newGeometry4326 = dbGeometrys.ToList().UnionListGeometries();
 
                 // since this is coming from the browser, we have to transform to State Plane
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry =
-                    CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(unionListGeometries);
+                    CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(newGeometry4326);
+
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 =
+                    newGeometry4326.FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
         }

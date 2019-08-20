@@ -90,15 +90,17 @@ namespace Neptune.Web.Controllers
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             ForTreatmentBMPViewModel viewModel)
         {
-            var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
+            var geom4326 = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
                 ? null
                 : DbGeometry.FromText(viewModel.WellKnownText, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry()
                     .MakeValid().ToDbGeometry();
 
+            DbGeometry geom2771 = null;
+
             // like all POSTs from the browser, transform to State Plane 
-            if (geom != null)
+            if (geom4326 != null)
             {
-                geom = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(geom);
+                geom2771 = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(geom4326);
             }
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -116,9 +118,10 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPDelineation != null)
             {
                 
-                if (geom != null)
+                if (geom4326 != null)
                 {
-                    treatmentBMPDelineation.DelineationGeometry = geom;
+                    treatmentBMPDelineation.DelineationGeometry = geom2771;
+                    treatmentBMPDelineation.DelineationGeometry4326 = geom4326;
                     treatmentBMPDelineation.DelineationTypeID =
                         delineationType.DelineationTypeID;
                     treatmentBMPDelineation.IsVerified = false;
@@ -131,12 +134,12 @@ namespace Neptune.Web.Controllers
             }
             else
             {
-                if (geom == null)
+                if (geom4326 == null)
                 {
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now);
+                var delineation = new Delineation(geom4326, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
             }
 
