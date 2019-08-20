@@ -408,7 +408,7 @@ if __name__ == '__main__':
 
     odw_layer = odw_res['OUTPUT']
 
-    connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.LandUseBlock"
+    connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.vLandUseBlockTGUInput"
     land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
 
     if not land_use_block_layer.isValid():
