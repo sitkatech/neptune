@@ -96,7 +96,10 @@ namespace Neptune.Web.Controllers
                     .MakeValid().ToDbGeometry();
 
             // like all POSTs from the browser, transform to State Plane 
-            geom = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(geom);
+            if (geom != null)
+            {
+                geom = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(geom);
+            }
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
