@@ -84,16 +84,16 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
                 {
-                    // the draft geometry stayed in 4326 while it was still a draft, but now it has to grow up and be 2771
-                    var onlandVisualTrashAssessmentAreaGeometry =
-                        CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(onlandVisualTrashAssessment
-                            .DraftGeometry);
+
+                    var onlandVisualTrashAssessmentAreaGeometry2771 =
+                        onlandVisualTrashAssessment
+                            .DraftGeometry;
 
                     var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
                         onlandVisualTrashAssessment.StormwaterJurisdiction,
-                        onlandVisualTrashAssessmentAreaGeometry)
+                        onlandVisualTrashAssessmentAreaGeometry2771)
                     {
-                        OnlandVisualTrashAssessmentAreaGeometry4326 = onlandVisualTrashAssessment.DraftGeometry
+                        OnlandVisualTrashAssessmentAreaGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(onlandVisualTrashAssessment.DraftGeometry)
                     };
 
                     HttpRequestStorage.DatabaseEntities.SaveChanges();

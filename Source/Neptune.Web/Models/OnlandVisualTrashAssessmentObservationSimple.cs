@@ -41,8 +41,9 @@ namespace Neptune.Web.Models
             OnlandVisualTrashAssessmentID = o.OnlandVisualTrashAssessmentID;
             Note = o.Note;
             ObservationDateTime = o.ObservationDatetime;
-            LocationX = o.LocationPoint.XCoordinate.GetValueOrDefault();
-            LocationY = o.LocationPoint.YCoordinate.GetValueOrDefault();
+            
+            LocationX = o.LocationPoint4326.XCoordinate.GetValueOrDefault();
+            LocationY = o.LocationPoint4326.YCoordinate.GetValueOrDefault();
 
             // todo: ensure there is a database constraint ensuring one photo per observo
             var photo = o.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();

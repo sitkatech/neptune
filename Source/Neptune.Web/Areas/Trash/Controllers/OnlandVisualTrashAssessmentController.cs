@@ -274,11 +274,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var unionOfSelectedParcelGeometries = HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => viewModel.ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
-                .UnionListGeometries();
-
-            //store it in 2771 for safekeeping
-            onlandVisualTrashAssessment.DraftGeometry =
-                CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(unionOfSelectedParcelGeometries);
+                .UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+            
+            onlandVisualTrashAssessment.DraftGeometry = unionOfSelectedParcelGeometries;
 
             return RedirectToAppropriateStep(viewModel, OVTASection.AddOrRemoveParcels,
                 onlandVisualTrashAssessment);
