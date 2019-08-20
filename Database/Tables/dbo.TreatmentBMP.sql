@@ -24,6 +24,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
 	[SizingBasisTypeID] [int] NOT NULL,
 	[TrashCaptureEffectiveness] [int] NULL,
+	[LocationPoint4326] [geometry] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC

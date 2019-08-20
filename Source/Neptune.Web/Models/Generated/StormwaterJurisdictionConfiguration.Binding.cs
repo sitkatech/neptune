@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             Property(x => x.StormwaterJurisdictionGeometry).HasColumnName(@"StormwaterJurisdictionGeometry").HasColumnType("geometry").IsOptional();
             Property(x => x.StateProvinceID).HasColumnName(@"StateProvinceID").HasColumnType("int").IsRequired();
             Property(x => x.IsTransportationJurisdiction).HasColumnName(@"IsTransportationJurisdiction").HasColumnType("bit").IsRequired();
+            Property(x => x.StormwaterJurisdictionGeometry4326).HasColumnName(@"StormwaterJurisdictionGeometry4326").HasColumnType("geometry").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.StormwaterJurisdictions).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_StormwaterJurisdiction_Organization_OrganizationID

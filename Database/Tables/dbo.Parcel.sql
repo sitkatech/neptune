@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[Parcel](
 	[SquareFeetHome] [int] NULL,
 	[SquareFeetLot] [int] NULL,
 	[ParcelAreaInAcres] [float] NOT NULL,
+	[ParcelGeometry4326] [geometry] NULL,
  CONSTRAINT [PK_Parcel_ParcelID] PRIMARY KEY CLUSTERED 
 (
 	[ParcelID] ASC

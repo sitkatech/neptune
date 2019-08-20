@@ -30,13 +30,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessmentObservation(int onlandVisualTrashAssessmentObservationID, int onlandVisualTrashAssessmentID, DbGeometry locationPoint, string note, DateTime observationDatetime) : this()
+        public OnlandVisualTrashAssessmentObservation(int onlandVisualTrashAssessmentObservationID, int onlandVisualTrashAssessmentID, DbGeometry locationPoint, string note, DateTime observationDatetime, DbGeometry locationPoint4326) : this()
         {
             this.OnlandVisualTrashAssessmentObservationID = onlandVisualTrashAssessmentObservationID;
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.LocationPoint = locationPoint;
             this.Note = note;
             this.ObservationDatetime = observationDatetime;
+            this.LocationPoint4326 = locationPoint4326;
         }
 
         /// <summary>
@@ -123,6 +124,7 @@ namespace Neptune.Web.Models
         public DbGeometry LocationPoint { get; set; }
         public string Note { get; set; }
         public DateTime ObservationDatetime { get; set; }
+        public DbGeometry LocationPoint4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentObservationID; } set { OnlandVisualTrashAssessmentObservationID = value; } }
 

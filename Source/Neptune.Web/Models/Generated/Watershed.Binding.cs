@@ -30,11 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Watershed(int watershedID, DbGeometry watershedGeometry, string watershedName) : this()
+        public Watershed(int watershedID, DbGeometry watershedGeometry, string watershedName, DbGeometry watershedGeometry4326) : this()
         {
             this.WatershedID = watershedID;
             this.WatershedGeometry = watershedGeometry;
             this.WatershedName = watershedName;
+            this.WatershedGeometry4326 = watershedGeometry4326;
         }
 
 
@@ -83,6 +84,7 @@ namespace Neptune.Web.Models
         public int WatershedID { get; set; }
         public DbGeometry WatershedGeometry { get; set; }
         public string WatershedName { get; set; }
+        public DbGeometry WatershedGeometry4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WatershedID; } set { WatershedID = value; } }
 

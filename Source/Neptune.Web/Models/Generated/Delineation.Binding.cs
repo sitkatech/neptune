@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID, DateTime dateLastModified) : this()
+        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID, DateTime dateLastModified, DbGeometry delineationGeometry4326) : this()
         {
             this.DelineationID = delineationID;
             this.DelineationGeometry = delineationGeometry;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.VerifiedByPersonID = verifiedByPersonID;
             this.TreatmentBMPID = treatmentBMPID;
             this.DateLastModified = dateLastModified;
+            this.DelineationGeometry4326 = delineationGeometry4326;
         }
 
         /// <summary>
@@ -132,6 +133,7 @@ namespace Neptune.Web.Models
         public int? VerifiedByPersonID { get; set; }
         public int TreatmentBMPID { get; set; }
         public DateTime DateLastModified { get; set; }
+        public DbGeometry DelineationGeometry4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 

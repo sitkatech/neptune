@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID) : this()
+        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry networkCatchment4326) : this()
         {
             this.NetworkCatchmentID = networkCatchmentID;
             this.DrainID = drainID;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.CatchmentGeometry = catchmentGeometry;
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
             this.OCSurveyDownstreamCatchmentID = oCSurveyDownstreamCatchmentID;
+            this.NetworkCatchment4326 = networkCatchment4326;
         }
 
         /// <summary>
@@ -119,6 +120,7 @@ namespace Neptune.Web.Models
         public DbGeometry CatchmentGeometry { get; set; }
         public int OCSurveyCatchmentID { get; set; }
         public int? OCSurveyDownstreamCatchmentID { get; set; }
+        public DbGeometry NetworkCatchment4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
 

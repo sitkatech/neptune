@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[LandUseBlock](
 	[MedianHouseholdIncomeRetail] [numeric](18, 0) NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[PermitTypeID] [int] NOT NULL,
+	[LandUseBlock4326] [geometry] NULL,
  CONSTRAINT [PK_LandUseBlock_LandUseBlockID] PRIMARY KEY CLUSTERED 
 (
 	[LandUseBlockID] ASC

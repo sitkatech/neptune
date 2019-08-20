@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentBaselineScoreID, string assessmentAreaDescription, DbGeometry transectLine, int? onlandVisualTrashAssessmentProgressScoreID) : this()
+        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentBaselineScoreID, string assessmentAreaDescription, DbGeometry transectLine, int? onlandVisualTrashAssessmentProgressScoreID, DbGeometry onlandVisualTrashAssessmentAreaGeometry4326, DbGeometry transectLine4326) : this()
         {
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentAreaName;
@@ -40,6 +40,8 @@ namespace Neptune.Web.Models
             this.AssessmentAreaDescription = assessmentAreaDescription;
             this.TransectLine = transectLine;
             this.OnlandVisualTrashAssessmentProgressScoreID = onlandVisualTrashAssessmentProgressScoreID;
+            this.OnlandVisualTrashAssessmentAreaGeometry4326 = onlandVisualTrashAssessmentAreaGeometry4326;
+            this.TransectLine4326 = transectLine4326;
         }
 
         /// <summary>
@@ -129,6 +131,8 @@ namespace Neptune.Web.Models
         public string AssessmentAreaDescription { get; set; }
         public DbGeometry TransectLine { get; set; }
         public int? OnlandVisualTrashAssessmentProgressScoreID { get; set; }
+        public DbGeometry OnlandVisualTrashAssessmentAreaGeometry4326 { get; set; }
+        public DbGeometry TransectLine4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentAreaID; } set { OnlandVisualTrashAssessmentAreaID = value; } }
 

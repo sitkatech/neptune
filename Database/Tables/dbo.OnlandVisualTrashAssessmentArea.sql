@@ -11,6 +11,8 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 	[AssessmentAreaDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[TransectLine] [geometry] NULL,
 	[OnlandVisualTrashAssessmentProgressScoreID] [int] NULL,
+	[OnlandVisualTrashAssessmentAreaGeometry4326] [geometry] NULL,
+	[TransectLine4326] [geometry] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentAreaID] ASC

@@ -10,6 +10,7 @@ CREATE TABLE [dbo].[BackboneSegment](
 	[BackboneSegmentTypeID] [int] NOT NULL,
 	[DownstreamBackboneSegmentID] [int] NULL,
 	[StreamName] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[BackboneSegmentGeometry4326] [geometry] NULL,
  CONSTRAINT [PK_BackboneSegment_BackboneSegmentID] PRIMARY KEY CLUSTERED 
 (
 	[BackboneSegmentID] ASC

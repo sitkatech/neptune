@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentObservation](
 	[LocationPoint] [geometry] NOT NULL,
 	[Note] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ObservationDatetime] [datetime] NOT NULL,
+	[LocationPoint4326] [geometry] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentObservation_OnlandVisualTrashAssessmentObservationID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentObservationID] ASC

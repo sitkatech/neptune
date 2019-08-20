@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
             Property(x => x.SquareFeetHome).HasColumnName(@"SquareFeetHome").HasColumnType("int").IsOptional();
             Property(x => x.SquareFeetLot).HasColumnName(@"SquareFeetLot").HasColumnType("int").IsOptional();
             Property(x => x.ParcelAreaInAcres).HasColumnName(@"ParcelAreaInAcres").HasColumnType("float").IsRequired();
+            Property(x => x.ParcelGeometry4326).HasColumnName(@"ParcelGeometry4326").HasColumnType("geometry").IsOptional();
 
             // Foreign keys
 
