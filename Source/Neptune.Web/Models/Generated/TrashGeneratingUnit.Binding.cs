@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TrashGeneratingUnit(int trashGeneratingUnitID, int stormwaterJurisdictionID, int? onlandVisualTrashAssessmentAreaID, int? landUseBlockID, DbGeometry trashGeneratingUnitGeometry, DateTime? lastUpdateDate, int? delineationID, int? waterQualityManagementPlanID) : this()
+        public TrashGeneratingUnit(int trashGeneratingUnitID, int stormwaterJurisdictionID, int? onlandVisualTrashAssessmentAreaID, int? landUseBlockID, DbGeometry trashGeneratingUnitGeometry, DateTime? lastUpdateDate, int? delineationID, int? waterQualityManagementPlanID, DbGeometry trashGeneratingUnitGeometry4326) : this()
         {
             this.TrashGeneratingUnitID = trashGeneratingUnitID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.LastUpdateDate = lastUpdateDate;
             this.DelineationID = delineationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
+            this.TrashGeneratingUnitGeometry4326 = trashGeneratingUnitGeometry4326;
         }
 
         /// <summary>
@@ -116,6 +117,7 @@ namespace Neptune.Web.Models
         public DateTime? LastUpdateDate { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
+        public DbGeometry TrashGeneratingUnitGeometry4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TrashGeneratingUnitID; } set { TrashGeneratingUnitID = value; } }
 

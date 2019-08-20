@@ -16,7 +16,7 @@ select
 	case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
 	Case when tgu.LandUseBlockID is null then 0 when plut.PriorityLandUseTypeName = 'ALU' then 0 else 1 end as IsPriorityLandUse, -- ALUs are not PLUs
 	Case when tgu.LandUseBlockID is null then 1 else 0 end as NoDataProvided,
-	TrashGeneratingUnitGeometry,
+	TrashGeneratingUnitGeometry4326 as TrashGeneratingUnitGeometry,
 	ovtaad.OnlandVisualTrashAssessmentAreaID,
 	tbmp.TreatmentBMPID,
 	tbmp.TreatmentBMPName,
