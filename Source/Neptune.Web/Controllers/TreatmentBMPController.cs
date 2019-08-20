@@ -453,9 +453,10 @@ namespace Neptune.Web.Controllers
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
-                var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint,
-                    bmp.LocationPoint.YCoordinate.GetValueOrDefault(),
-                    bmp.LocationPoint.XCoordinate.GetValueOrDefault(),
+                var reprojectedLocationPoint = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(bmp.LocationPoint);
+                var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), reprojectedLocationPoint,
+                    reprojectedLocationPoint.YCoordinate.GetValueOrDefault(),
+                    reprojectedLocationPoint.XCoordinate.GetValueOrDefault(),
                     bmp.TreatmentBMPID); // X/YCoordinate will never be null
                 var listItem = new ListItem(bmp.TreatmentBMPName,
                     JsonConvert.SerializeObject(treatmentBMPMapSummaryData));

@@ -55,7 +55,7 @@
                 function (ev, suggestion) {
                     var summaryDataJson = JSON.parse(suggestion.Value);
                     $scope.loadSummaryPanel(summaryDataJson.MapSummaryUrl);
-                    $scope.neptuneMap.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 13);
+                    $scope.neptuneMap.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 18);
                     $scope.neptuneMap.map.invalidateSize();
                     setTimeout(function () {
                             $scope.applyMap(L.GeoJSON.geometryToLayer(summaryDataJson.GeometryJson), summaryDataJson.EntityID);
