@@ -3,7 +3,7 @@ Go
 
 Create view dbo.vGeoServerTrashGeneratingUnit as
 select
-	TrashGeneratingUnitID,
+	TrashGeneratingUnit4326ID,
 	tgu.StormwaterJurisdictionID,
 	o.OrganizationID,
 	o.OrganizationName,
@@ -16,7 +16,7 @@ select
 	case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
 	Case when tgu.LandUseBlockID is null then 0 when plut.PriorityLandUseTypeName = 'ALU' then 0 else 1 end as IsPriorityLandUse, -- ALUs are not PLUs
 	Case when tgu.LandUseBlockID is null then 1 else 0 end as NoDataProvided,
-	TrashGeneratingUnitGeometry4326 as TrashGeneratingUnitGeometry,
+	TrashGeneratingUnit4326Geometry as TrashGeneratingUnitGeometry,
 	ovtaad.OnlandVisualTrashAssessmentAreaID,
 	tbmp.TreatmentBMPID,
 	tbmp.TreatmentBMPName,
@@ -24,7 +24,7 @@ select
 	wqmp.WaterQualityManagementPlanName,
 	plut.PriorityLandUseTypeDisplayName as LandUseType,
 	tgu.LastUpdateDate as LastCalculatedDate
-from dbo.TrashGeneratingUnit tgu
+from dbo.TrashGeneratingUnit4326 tgu
 	left join dbo.vOnlandVisualTrashAssessmentAreaDated ovtaad
 		on tgu.OnlandVisualTrashAssessmentAreaID = ovtaad.OnlandVisualTrashAssessmentAreaID
 	left join dbo.Delineation d
@@ -43,5 +43,5 @@ from dbo.TrashGeneratingUnit tgu
 		on o.OrganizationID = sj.OrganizationID
 	left join dbo.WaterQualityManagementPlan wqmp
 		on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
-WHERE tgu.TrashGeneratingUnitGeometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
+WHERE tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
 Go

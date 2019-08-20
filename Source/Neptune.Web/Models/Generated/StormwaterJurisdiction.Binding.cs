@@ -30,6 +30,7 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessmentAreas = new HashSet<OnlandVisualTrashAssessmentArea>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
+            this.TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
         }
@@ -89,13 +90,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DelineationStagings.Any() || LandUseBlocks.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || StormwaterJurisdictionPeople.Any() || TrashGeneratingUnits.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
+            return DelineationStagings.Any() || LandUseBlocks.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || StormwaterJurisdictionPeople.Any() || TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -150,6 +151,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in TrashGeneratingUnit4326s.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in TreatmentBMPs.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -177,6 +183,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
+        public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
         public virtual Organization Organization { get; set; }

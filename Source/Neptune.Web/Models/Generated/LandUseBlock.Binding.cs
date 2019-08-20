@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected LandUseBlock()
         {
             this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
+            this.TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
         }
 
         /// <summary>
@@ -86,13 +87,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TrashGeneratingUnits.Any();
+            return TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LandUseBlock).Name, typeof(TrashGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LandUseBlock).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name};
 
 
         /// <summary>
@@ -121,6 +122,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
+
+            foreach(var x in TrashGeneratingUnit4326s.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -139,6 +145,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return LandUseBlockID; } set { LandUseBlockID = value; } }
 
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
+        public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         public PriorityLandUseType PriorityLandUseType { get { return PriorityLandUseTypeID.HasValue ? PriorityLandUseType.AllLookupDictionary[PriorityLandUseTypeID.Value] : null; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public PermitType PermitType { get { return PermitType.AllLookupDictionary[PermitTypeID]; } }

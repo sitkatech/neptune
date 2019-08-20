@@ -80,6 +80,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new SupportRequestLogConfiguration());
             modelBuilder.Configurations.Add(new TrainingVideoConfiguration());
             modelBuilder.Configurations.Add(new TrashGeneratingUnitConfiguration());
+            modelBuilder.Configurations.Add(new TrashGeneratingUnit4326Configuration());
             modelBuilder.Configurations.Add(new TrashGeneratingUnitAdjustmentConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPAssessmentConfiguration());
@@ -155,6 +156,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         public virtual DbSet<SupportRequestLog> SupportRequestLogs { get; set; }
         public virtual DbSet<TrainingVideo> TrainingVideos { get; set; }
+        public virtual DbSet<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         public virtual DbSet<TrashGeneratingUnitAdjustment> TrashGeneratingUnitAdjustments { get; set; }
         public virtual DbSet<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public virtual DbSet<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get; set; }
@@ -504,6 +506,9 @@ namespace Neptune.Web.Models
                     var trashCaptureStatusType = TrashCaptureStatusType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(trashCaptureStatusType, "TrashCaptureStatusType", primaryKey);
                     return trashCaptureStatusType;
+
+                case "TrashGeneratingUnit4326":
+                    return TrashGeneratingUnit4326s.GetTrashGeneratingUnit4326(primaryKey);
 
                 case "TrashGeneratingUnitAdjustment":
                     return TrashGeneratingUnitAdjustments.GetTrashGeneratingUnitAdjustment(primaryKey);

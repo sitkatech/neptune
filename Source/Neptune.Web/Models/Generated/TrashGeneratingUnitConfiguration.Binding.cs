@@ -23,7 +23,6 @@ namespace Neptune.Web.Models
             Property(x => x.LastUpdateDate).HasColumnName(@"LastUpdateDate").HasColumnType("datetime").IsOptional();
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
-            Property(x => x.TrashGeneratingUnitGeometry4326).HasColumnName(@"TrashGeneratingUnitGeometry4326").HasColumnType("geometry").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.TrashGeneratingUnits).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnit_StormwaterJurisdiction_StormwaterJurisdictionID

@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[TrashGeneratingUnit]
+//  Source Table: [dbo].[TrashGeneratingUnit4326]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[TrashGeneratingUnit] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[TrashGeneratingUnit]")]
-    public partial class TrashGeneratingUnit : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[TrashGeneratingUnit4326] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[TrashGeneratingUnit4326]")]
+    public partial class TrashGeneratingUnit4326 : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected TrashGeneratingUnit()
+        protected TrashGeneratingUnit4326()
         {
 
         }
@@ -30,13 +30,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TrashGeneratingUnit(int trashGeneratingUnitID, int stormwaterJurisdictionID, int? onlandVisualTrashAssessmentAreaID, int? landUseBlockID, DbGeometry trashGeneratingUnitGeometry, DateTime? lastUpdateDate, int? delineationID, int? waterQualityManagementPlanID) : this()
+        public TrashGeneratingUnit4326(int trashGeneratingUnit4326ID, int stormwaterJurisdictionID, int? onlandVisualTrashAssessmentAreaID, int? landUseBlockID, DbGeometry trashGeneratingUnit4326Geometry, DateTime? lastUpdateDate, int? delineationID, int? waterQualityManagementPlanID) : this()
         {
-            this.TrashGeneratingUnitID = trashGeneratingUnitID;
+            this.TrashGeneratingUnit4326ID = trashGeneratingUnit4326ID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.LandUseBlockID = landUseBlockID;
-            this.TrashGeneratingUnitGeometry = trashGeneratingUnitGeometry;
+            this.TrashGeneratingUnit4326Geometry = trashGeneratingUnit4326Geometry;
             this.LastUpdateDate = lastUpdateDate;
             this.DelineationID = delineationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -45,34 +45,34 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TrashGeneratingUnit(int stormwaterJurisdictionID, DbGeometry trashGeneratingUnitGeometry) : this()
+        public TrashGeneratingUnit4326(int stormwaterJurisdictionID, DbGeometry trashGeneratingUnit4326Geometry) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TrashGeneratingUnitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TrashGeneratingUnit4326ID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
-            this.TrashGeneratingUnitGeometry = trashGeneratingUnitGeometry;
+            this.TrashGeneratingUnit4326Geometry = trashGeneratingUnit4326Geometry;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TrashGeneratingUnit(StormwaterJurisdiction stormwaterJurisdiction, DbGeometry trashGeneratingUnitGeometry) : this()
+        public TrashGeneratingUnit4326(StormwaterJurisdiction stormwaterJurisdiction, DbGeometry trashGeneratingUnit4326Geometry) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TrashGeneratingUnitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TrashGeneratingUnit4326ID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
-            stormwaterJurisdiction.TrashGeneratingUnits.Add(this);
-            this.TrashGeneratingUnitGeometry = trashGeneratingUnitGeometry;
+            stormwaterJurisdiction.TrashGeneratingUnit4326s.Add(this);
+            this.TrashGeneratingUnit4326Geometry = trashGeneratingUnit4326Geometry;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TrashGeneratingUnit CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction)
+        public static TrashGeneratingUnit4326 CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction)
         {
-            return new TrashGeneratingUnit(stormwaterJurisdiction, default(DbGeometry));
+            return new TrashGeneratingUnit4326(stormwaterJurisdiction, default(DbGeometry));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TrashGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TrashGeneratingUnit4326).Name};
 
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.TrashGeneratingUnits.Remove(this);
+            dbContext.TrashGeneratingUnit4326s.Remove(this);
         }
         
         /// <summary>
@@ -108,16 +108,16 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int TrashGeneratingUnitID { get; set; }
+        public int TrashGeneratingUnit4326ID { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         public int? LandUseBlockID { get; set; }
-        public DbGeometry TrashGeneratingUnitGeometry { get; set; }
+        public DbGeometry TrashGeneratingUnit4326Geometry { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return TrashGeneratingUnitID; } set { TrashGeneratingUnitID = value; } }
+        public int PrimaryKey { get { return TrashGeneratingUnit4326ID; } set { TrashGeneratingUnit4326ID = value; } }
 
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public virtual LandUseBlock LandUseBlock { get; set; }
