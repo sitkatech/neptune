@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[geometry_columns](
 (
 	[f_table_catalog] ASC,
 	[f_table_schema] ASC,
-	[f_table_name] ASC
+	[f_table_name] ASC,
+	[f_geometry_column] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]

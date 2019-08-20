@@ -4,6 +4,7 @@ using System.Diagnostics;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 using System.Linq;
+using LtInfo.Common;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.DelineationUpload
@@ -26,13 +27,20 @@ namespace Neptune.Web.Views.DelineationUpload
 
             foreach (var treatmentBMP in treatmentBMPsToUpdate)
             {
-                var wktAndAnnotation = delineationStagings.Single(z => treatmentBMP.TreatmentBMPName == z.TreatmentBMPName);
+                var delineationStaging = delineationStagings.Single(z => treatmentBMP.TreatmentBMPName == z.TreatmentBMPName);
 
                 treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
 
                 treatmentBMP.Delineation = new Models.Delineation(
-                    wktAndAnnotation.DelineationStagingGeometry,
-                    DelineationType.Distributed.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now) {VerifiedByPersonID = currentPerson.PersonID, DateLastVerified = DateTime.Now};
+                    delineationStaging.DelineationStagingGeometry,
+                    DelineationType.Distributed.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now)
+                {
+                    VerifiedByPersonID = currentPerson.PersonID,
+                    DateLastVerified = DateTime.Now,
+                    DelineationGeometry4326 =
+                        CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(delineationStaging
+                            .DelineationStagingGeometry)
+                };
             }
 
             return treatmentBMPsToUpdate.Count;

@@ -45,9 +45,19 @@ namespace Neptune.Web.ScheduledJobs
                 // a GDAL command pulls the shapefile into the database.
                 DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
                 var ogr2OgrCommandLineRunner =
-                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 210000);
+                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
 
-                ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, layerName, outputPath,
+                ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile2771(layerName, outputPath,
+                    NeptuneWebConfiguration.DatabaseConnectionString);
+
+                // repeat everything above for 4326
+
+                // a GDAL command pulls the shapefile into the database.
+                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
+                var ogr2OgrCommandLineRunner4326 =
+                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.WGS_1984_SRID, 3.6e+6);
+
+                ogr2OgrCommandLineRunner4326.ImportTrashGeneratingUnitsFromShapefile4326(layerName, outputPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
             }
             catch (Ogr2OgrCommandLineException e)
@@ -69,11 +79,10 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
     /// <summary>
     /// Single-purpose method used by TGU job
     /// </summary>
-    /// <param name="coordinateSystemId"></param>
     /// <param name="outputLayerName"></param>
     /// <param name="outputPath"></param>
     /// <param name="connectionString"></param>
-    public void ImportTrashGeneratingUnitsFromShapefile(int coordinateSystemId, string outputLayerName,
+    public void ImportTrashGeneratingUnitsFromShapefile2771(string outputLayerName,
         string outputPath, string connectionString)
     {
         var databaseConnectionString = $"MSSQL:{connectionString}";
@@ -92,9 +101,37 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             databaseConnectionString,
             outputPath,
             "-t_srs",
-            GetMapProjection(coordinateSystemId),
+            GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
             "dbo.TrashGeneratingUnit"
+        };
+
+        ExecuteOgr2OgrCommand(commandLineArguments);
+    }
+
+    // same as above but it uses 4326 instead
+    public void ImportTrashGeneratingUnitsFromShapefile4326(string outputLayerName,
+        string outputPath, string connectionString)
+    {
+        var databaseConnectionString = $"MSSQL:{connectionString}";
+
+        var commandLineArguments = new List<string>
+        {
+            "-skipfailures",
+            "-append",
+            "-sql",
+            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from '{outputLayerName}' where LandUseBlo is not null",
+            "--config",
+            "GDAL_DATA",
+            _gdalDataPath.FullName,
+            "-f",
+            "MSSQLSpatial",
+            databaseConnectionString,
+            outputPath,
+            "-t_srs",
+            GetMapProjection(CoordinateSystemHelper.WGS_1984_SRID),
+            "-nln",
+            "dbo.TrashGeneratingUnit4326"
         };
 
         ExecuteOgr2OgrCommand(commandLineArguments);

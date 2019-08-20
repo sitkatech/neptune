@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Mail;
+using LtInfo.Common;
 using LtInfo.Common.Email;
 
 namespace Neptune.Web.ScheduledJobs
@@ -126,10 +127,12 @@ namespace Neptune.Web.ScheduledJobs
                             }
                             else
                             {
+                                var clippedGeometry = landUseBlockStaging.LandUseBlockStagingGeometry.Intersection(
+                                    stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry);
 
-                                var clippedGeometry = landUseBlock.LandUseBlockGeometry =
-                                    landUseBlockStaging.LandUseBlockStagingGeometry.Intersection(
-                                        stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry);
+                                landUseBlock.LandUseBlockGeometry = clippedGeometry;
+                                landUseBlock.LandUseBlockGeometry4326 =
+                                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(clippedGeometry);
 
                                 if (clippedGeometry.IsEmpty)
                                 {
