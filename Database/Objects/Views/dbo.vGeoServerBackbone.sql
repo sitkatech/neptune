@@ -4,7 +4,13 @@ Go
 Create View dbo.vGeoServerBackbone
 as
 Select
-	b.*,
+	BackboneSegmentID,
+CatchIDN,
+NetworkCatchmentID,
+b. BackboneSegmentTypeID,
+DownstreamBackboneSegmentID,
+StreamName,
+BackboneSegmentGeometry4326 as BackboneSegmentGeometry,
 	t.BackboneSegmentTypeName as BackboneSegmentType
 From
 	dbo.BackboneSegment b join dbo.BackboneSegmentType t

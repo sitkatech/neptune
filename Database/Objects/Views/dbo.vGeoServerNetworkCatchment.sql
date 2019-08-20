@@ -8,7 +8,7 @@ Select
 	OCSurveyDownstreamCatchmentID,
 	DrainID,
 	Watershed,
-	CatchmentGeometry,
+	CatchmentGeometry4326 as CatchmentGeometry,
 	CatchmentGeometry.STArea() * 2471054 as Area
 from dbo.NetworkCatchment
 GO

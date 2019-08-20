@@ -4,7 +4,7 @@ GO
 Create View dbo.vGeoServerDelineation as
 Select
 	d.DelineationID,
-	DelineationGeometry,
+	DelineationGeometry4326 as DelineationGeometry,
 	DelineationTypeName as DelineationType,
 	t.TreatmentBMPID,
 	sj.StormwaterJurisdictionID,

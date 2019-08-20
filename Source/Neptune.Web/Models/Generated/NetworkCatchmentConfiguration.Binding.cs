@@ -21,7 +21,7 @@ namespace Neptune.Web.Models
             Property(x => x.CatchmentGeometry).HasColumnName(@"CatchmentGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.OCSurveyCatchmentID).HasColumnName(@"OCSurveyCatchmentID").HasColumnType("int").IsRequired();
             Property(x => x.OCSurveyDownstreamCatchmentID).HasColumnName(@"OCSurveyDownstreamCatchmentID").HasColumnType("int").IsOptional();
-            Property(x => x.NetworkCatchment4326).HasColumnName(@"NetworkCatchment4326").HasColumnType("geometry").IsOptional();
+            Property(x => x.CatchmentGeometry4326).HasColumnName(@"CatchmentGeometry4326").HasColumnType("geometry").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.OCSurveyDownstreamCatchment).WithMany(b => b.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment).HasForeignKey(c => c.OCSurveyDownstreamCatchmentID).WillCascadeOnDelete(false); // FK_NetworkCatchment_NetworkCatchment_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID

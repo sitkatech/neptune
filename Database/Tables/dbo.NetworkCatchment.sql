@@ -9,7 +9,7 @@ CREATE TABLE [dbo].[NetworkCatchment](
 	[CatchmentGeometry] [geometry] NOT NULL,
 	[OCSurveyCatchmentID] [int] NOT NULL,
 	[OCSurveyDownstreamCatchmentID] [int] NULL,
-	[NetworkCatchment4326] [geometry] NULL,
+	[CatchmentGeometry4326] [geometry] NULL,
  CONSTRAINT [PK_NetworkCatchment_NetworkCatchmentID] PRIMARY KEY CLUSTERED 
 (
 	[NetworkCatchmentID] ASC

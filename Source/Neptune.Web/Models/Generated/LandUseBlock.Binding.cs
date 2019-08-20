@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlock(int landUseBlockID, int? priorityLandUseTypeID, string landUseDescription, DbGeometry landUseBlockGeometry, decimal? trashGenerationRate, string landUseForTGR, decimal? medianHouseholdIncomeResidential, decimal? medianHouseholdIncomeRetail, int stormwaterJurisdictionID, int permitTypeID, DbGeometry landUseBlock4326) : this()
+        public LandUseBlock(int landUseBlockID, int? priorityLandUseTypeID, string landUseDescription, DbGeometry landUseBlockGeometry, decimal? trashGenerationRate, string landUseForTGR, decimal? medianHouseholdIncomeResidential, decimal? medianHouseholdIncomeRetail, int stormwaterJurisdictionID, int permitTypeID, DbGeometry landUseBlockGeometry4326) : this()
         {
             this.LandUseBlockID = landUseBlockID;
             this.PriorityLandUseTypeID = priorityLandUseTypeID;
@@ -42,7 +42,7 @@ namespace Neptune.Web.Models
             this.MedianHouseholdIncomeRetail = medianHouseholdIncomeRetail;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.PermitTypeID = permitTypeID;
-            this.LandUseBlock4326 = landUseBlock4326;
+            this.LandUseBlockGeometry4326 = landUseBlockGeometry4326;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Neptune.Web.Models
         public decimal? MedianHouseholdIncomeRetail { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public int PermitTypeID { get; set; }
-        public DbGeometry LandUseBlock4326 { get; set; }
+        public DbGeometry LandUseBlockGeometry4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return LandUseBlockID; } set { LandUseBlockID = value; } }
 

@@ -7,7 +7,7 @@ as
 select
 	p.ParcelID,
 	p.ParcelNumber,
-	p.ParcelGeometry,
+	p.ParcelGeometry4326 as ParcelGeometry,
 	p.OwnerName,
 	p.ParcelStreetNumber,
 	p.ParcelAddress,

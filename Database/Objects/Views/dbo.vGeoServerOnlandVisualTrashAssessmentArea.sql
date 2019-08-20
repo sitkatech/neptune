@@ -6,7 +6,7 @@ create view dbo.vGeoServerOnlandVisualTrashAssessmentArea as
 		area.OnlandVisualTrashAssessmentAreaID,
 		area.OnlandVisualTrashAssessmentAreaName,
 		area.StormwaterJurisdictionID,
-		area.OnlandVisualTrashAssessmentAreaGeometry,
+		area.OnlandVisualTrashAssessmentAreaGeometry4326 as OnlandVisualTrashAssessmentAreaGeometry,
 		score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
 		ovta.OnlandVisualTrashAssessmentID,
 		ovta.CompletedDate,

@@ -1,14 +1,12 @@
-if exists (select * from dbo.sysobjects where id = object_id('dbo. vGeoServerLandUseBlock '))
-	drop view dbo.vGeoServerParcel
-go
+Drop view if exists dbo.vGeoServerLandUseBlock
+Go
 
-create view  dbo . vGeoServerLandUseBlock 
+create view  dbo.vGeoServerLandUseBlock 
 as
 select
-	LandUseBlockID
-      ,PriorityLandUseTypeID
-      ,LandUseDescription
-      ,LandUseBlockGeometry
-
+	LandUseBlockID,
+	PriorityLandUseTypeID,
+	LandUseDescription,
+	LandUseBlockGeometry4326 as LandUseBlockGeometry 
 from dbo.LandUseBlock
 GO

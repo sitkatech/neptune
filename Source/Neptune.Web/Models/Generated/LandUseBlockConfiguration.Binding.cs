@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
             Property(x => x.MedianHouseholdIncomeRetail).HasColumnName(@"MedianHouseholdIncomeRetail").HasColumnType("decimal").IsOptional();
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
             Property(x => x.PermitTypeID).HasColumnName(@"PermitTypeID").HasColumnType("int").IsRequired();
-            Property(x => x.LandUseBlock4326).HasColumnName(@"LandUseBlock4326").HasColumnType("geometry").IsOptional();
+            Property(x => x.LandUseBlockGeometry4326).HasColumnName(@"LandUseBlockGeometry4326").HasColumnType("geometry").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.LandUseBlocks).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_LandUseBlock_StormwaterJurisdiction_StormwaterJurisdictionID
