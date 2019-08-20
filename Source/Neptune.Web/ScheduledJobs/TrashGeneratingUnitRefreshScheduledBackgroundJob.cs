@@ -42,18 +42,20 @@ namespace Neptune.Web.ScheduledJobs
 
             try
             {
-                // a GDAL command pulls the shapefile into the database.
+                // kill the old TGUs
                 DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
+                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
+
+                // a GDAL command pulls the shapefile into the database.
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
 
                 ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile2771(layerName, outputPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
 
-                // repeat everything above for 4326
+                // repeat but with 4326
 
-                // a GDAL command pulls the shapefile into the database.
-                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
+                
                 var ogr2OgrCommandLineRunner4326 =
                     new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.WGS_1984_SRID, 3.6e+6);
 
