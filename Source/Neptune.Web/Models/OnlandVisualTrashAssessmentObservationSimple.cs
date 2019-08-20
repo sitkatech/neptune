@@ -53,11 +53,14 @@ namespace Neptune.Web.Models
 
         public OnlandVisualTrashAssessmentObservation ToOnlandVisualTrashAssessmentObservation()
         {
-            DbGeometry locationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(LocationX.GetValueOrDefault(),
+            DbGeometry locationPoint4326 = DbSpatialHelper.MakeDbGeometryFromCoordinates(LocationX.GetValueOrDefault(),
                 LocationY.GetValueOrDefault(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 
+            var locationPoint2771 =
+                CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
+
             return new OnlandVisualTrashAssessmentObservation(OnlandVisualTrashAssessmentObservationID,
-                OnlandVisualTrashAssessmentID, locationPoint, Note, ObservationDateTime);
+                OnlandVisualTrashAssessmentID, locationPoint2771, Note, ObservationDateTime, locationPoint4326);
         }
     }
 }

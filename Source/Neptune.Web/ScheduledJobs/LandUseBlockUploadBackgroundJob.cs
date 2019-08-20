@@ -57,7 +57,7 @@ namespace Neptune.Web.ScheduledJobs
                 foreach (var landUseBlockStaging in landUseBlockStagings)
                 {
                     var landUseBlock = new LandUseBlock(default(int), default(int), string.Empty, default(DbGeometry),
-                        default(decimal), string.Empty, default(decimal), default(decimal), default(int), default(int));
+                        default(decimal), string.Empty, default(decimal), default(decimal), default(int), default(int), default(DbGeometry));
 
 
                     var landUseBlockPLUType = landUseBlockStaging.PriorityLandUseType;
