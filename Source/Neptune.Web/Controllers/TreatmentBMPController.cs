@@ -34,6 +34,7 @@ using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -539,15 +540,17 @@ namespace Neptune.Web.Controllers
         {
             var mapFormID = "treatmentBMPEditLocation";
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
-            var treatmentBMPLocationPoint = treatmentBMP?.LocationPoint;
-            var boundingBox = treatmentBMPLocationPoint != null
-                ? new BoundingBox(CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(treatmentBMP.LocationPoint))
+
+            var boundingBox = treatmentBMP.LocationPoint4326 != null
+                ? new BoundingBox(treatmentBMP.LocationPoint4326)
                 : BoundingBox.MakeNewDefaultBoundingBox();
+
             var mapInitJson =
                 new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
                 {
                     AllowFullScreen = false
                 };
+
             var viewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
 
             return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);

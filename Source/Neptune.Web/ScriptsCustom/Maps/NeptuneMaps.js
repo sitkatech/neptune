@@ -26,7 +26,7 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, customOptions) {
     this.MapDivId = mapInitJson.MapDivID;
     var tileOptions = {
         maxNativeZoom: 18,
-        maxZoom:22
+        maxZoom:18
     };
     var esriAerialUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
     var esriAerial = new L.TileLayer(esriAerialUrl, tileOptions);

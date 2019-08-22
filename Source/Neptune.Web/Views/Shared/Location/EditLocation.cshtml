@@ -145,6 +145,7 @@
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         console.log(mapInitJson);
         var neptuneMap = new NeptuneMaps.Stormwater(mapInitJson);
+        window.neptuneMap = neptuneMap;
         neptuneMap.initializeTreatmentBMPEditor();
         neptuneMap.map.on("locationfound", onLocationFound);
         neptuneMap.map.on('locationerror', onLocationError);
@@ -189,6 +190,7 @@
         }
 
         HookupCheckIfFormIsDirtyNoDisable(undefined);
+        neptuneMap.map.setZoom(16);
     });
 
 
