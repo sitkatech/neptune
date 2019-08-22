@@ -17,6 +17,7 @@ using static System.String;
 namespace Neptune.Web.Models
 {
 
+    // ReSharper disable once UnusedMember.Global
     public static class OnlandVisualTrashAssessmentModelExtensions
     {
         public static readonly UrlTemplate<int> EditUrlTemplate =
@@ -52,14 +53,14 @@ namespace Neptune.Web.Models
         }
 
 
-        public static readonly UrlTemplate<int> EditStatusToAllowEditURLTemplate =
+        public static readonly UrlTemplate<int> EditStatusToAllowEditUrlTemplate =
            new UrlTemplate<int>(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t =>
                     t.EditStatusToAllowEdit(UrlTemplate.Parameter1Int)));
 
         public static string GetEditStatusToAllowEditUrl(this OnlandVisualTrashAssessment ovta)
         {
-            return EditStatusToAllowEditURLTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
+            return EditStatusToAllowEditUrlTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
         }
 
         public static HtmlString GetEditUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
@@ -68,14 +69,11 @@ namespace Neptune.Web.Models
                 .HasPermission(currentPerson, onlandVisualTrashAssessment)
                 .HasPermission;
             if (!userCanEdit) return new HtmlString(Empty);
-
-            var modalDialogForm = new ModalDialogForm(GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
-                ModalDialogFormHelper.DefaultDialogWidth, "Return to Edit");
-
+            
             return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
                    OnlandVisualTrashAssessmentStatus.Complete
                 ? ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
-                    Format("Return to Edit On-land Visual Trash Assessment for {0}", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName),
+                    $"Return to Edit On-land Visual Trash Assessment for {onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}",
                     500, "Continue", "Cancel", new List<string> { "gridButton" },
                     null, null) : DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(GetEditUrl(onlandVisualTrashAssessment));
         }
@@ -140,8 +138,10 @@ namespace Neptune.Web.Models
                 return new List<int>();
             }
 
-            var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
+            // NP 8/22 these are supposed to be in 2771 already, but due to a b*g somewhere, some of them have 4326 as their SRID even though the coords are 2771...
+            var draftGeometry = onlandVisualTrashAssessment.DraftGeometry.FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 
+            // ... and the wrong SRID would cause this next lookup to fail bigly 
             var parcelIDs = draftGeometry == null
                 ? onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x => x.ParcelID)
                 : HttpRequestStorage.DatabaseEntities.Parcels

@@ -274,7 +274,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var unionOfSelectedParcelGeometries = HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => viewModel.ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
-                .UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+                .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
             
             onlandVisualTrashAssessment.DraftGeometry = unionOfSelectedParcelGeometries;
 
