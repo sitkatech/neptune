@@ -27,7 +27,6 @@ namespace Neptune.Web.Models
             // Foreign keys
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.TrashGeneratingUnit4326s).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnit4326_StormwaterJurisdiction_StormwaterJurisdictionID
             HasOptional(a => a.LandUseBlock).WithMany(b => b.TrashGeneratingUnit4326s).HasForeignKey(c => c.LandUseBlockID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnit4326_LandUseBlock_LandUseBlockID
-            HasOptional(a => a.Delineation).WithMany(b => b.TrashGeneratingUnit4326s).HasForeignKey(c => c.DelineationID).WillCascadeOnDelete(false); // FK_TrashGeneratingUnit4326_Delineation_DelineationID
         }
     }
 }

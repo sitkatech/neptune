@@ -24,8 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Delineation()
         {
-            this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
-            this.TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
+
         }
 
         /// <summary>
@@ -88,13 +87,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any();
+            return false;
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name};
 
 
         /// <summary>
@@ -110,24 +109,8 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(dbContext);
+            
             Delete(dbContext);
-        }
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
-            foreach(var x in TrashGeneratingUnits.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in TrashGeneratingUnit4326s.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
         }
 
         [Key]
@@ -143,8 +126,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 
-        public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
-        public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
         public virtual Person VerifiedByPerson { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

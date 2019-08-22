@@ -20,11 +20,6 @@ CREATE TABLE [dbo].[TrashGeneratingUnit](
 GO
 ALTER TABLE [dbo].[TrashGeneratingUnit] ADD  CONSTRAINT [DF_LastUpdateDate]  DEFAULT (getdate()) FOR [LastUpdateDate]
 GO
-ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_Delineation_DelineationID] FOREIGN KEY([DelineationID])
-REFERENCES [dbo].[Delineation] ([DelineationID])
-GO
-ALTER TABLE [dbo].[TrashGeneratingUnit] CHECK CONSTRAINT [FK_TrashGeneratingUnit_Delineation_DelineationID]
-GO
 ALTER TABLE [dbo].[TrashGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit_LandUseBlock_LandUseBlockID] FOREIGN KEY([LandUseBlockID])
 REFERENCES [dbo].[LandUseBlock] ([LandUseBlockID])
 GO

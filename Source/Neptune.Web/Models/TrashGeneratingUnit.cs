@@ -1,3 +1,4 @@
+using System.Linq;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -7,7 +8,10 @@ namespace Neptune.Web.Models
         public OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea =>
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
                 .Find(OnlandVisualTrashAssessmentAreaID);
-        public TreatmentBMP TreatmentBMP => Delineation != null ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Find(Delineation.TreatmentBMPID) : null;
+        public TreatmentBMP TreatmentBMP => DelineationID != null ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Single(x=>x.Delineation.DelineationID == DelineationID) : null;
+
+        public Delineation Delineation =>
+            DelineationID != null ? HttpRequestStorage.DatabaseEntities.Delineations.Find(DelineationID) : null;
         public WaterQualityManagementPlan WaterQualityManagementPlan => WaterQualityManagementPlanID != null ? HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Find(WaterQualityManagementPlanID) : null;
 
         public bool IsFullTrashCapture => (this.TreatmentBMP?.TrashCaptureStatusTypeID ==
