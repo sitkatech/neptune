@@ -92,8 +92,8 @@ namespace Neptune.Web.Controllers
         {
             var geom4326 = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
                 ? null
-                : DbGeometry.FromText(viewModel.WellKnownText, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry()
-                    .MakeValid().ToDbGeometry();
+                : DbGeometry.FromText(viewModel.WellKnownText, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry()
+                    .MakeValid().ToDbGeometry().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
 
             DbGeometry geom2771 = null;
 
@@ -139,7 +139,9 @@ namespace Neptune.Web.Controllers
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation(geom4326, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now);
+                var delineation =
+                    new Delineation(geom2771, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID,
+                        DateTime.Now) {DelineationGeometry4326 = geom4326};
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
             }
 
