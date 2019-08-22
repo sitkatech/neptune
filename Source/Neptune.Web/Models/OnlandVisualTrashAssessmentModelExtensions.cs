@@ -140,10 +140,13 @@ namespace Neptune.Web.Models
                 return new List<int>();
             }
 
-            var parcelIDs = onlandVisualTrashAssessment.DraftGeometry == null
+            var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
+
+            var parcelIDs = draftGeometry == null
                 ? onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x => x.ParcelID)
                 : HttpRequestStorage.DatabaseEntities.Parcels
-                    .Where(x => onlandVisualTrashAssessment.DraftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
+                    .Where(x => draftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
+
             return parcelIDs.ToList();
         }
 

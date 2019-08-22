@@ -33,9 +33,12 @@ namespace Neptune.Web.Controllers
 
             networkCatchmentIDs.Add(networkCatchment.NetworkCatchmentID);
 
-            var networkCatchments = HttpRequestStorage.DatabaseEntities.NetworkCatchments
+            var unionOfUpstreamNetworkCatchments = HttpRequestStorage.DatabaseEntities.NetworkCatchments
                 .Where(x => networkCatchmentIDs.Contains(x.NetworkCatchmentID)).Select(x => x.CatchmentGeometry)
-                .ToList().UnionListGeometries().ExteriorRing.AsText().Replace("LINESTRING", "POLYGON").Replace("(", "((").Replace(")", "))");
+                .ToList().UnionListGeometries();
+
+            var asText = unionOfUpstreamNetworkCatchments.AsText();
+            var networkCatchments = unionOfUpstreamNetworkCatchments.ExteriorRing.AsText().Replace("LINESTRING", "POLYGON").Replace("(", "((").Replace(")", "))");
 
             var dbGeometry = DbGeometry.FromText(networkCatchments, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 

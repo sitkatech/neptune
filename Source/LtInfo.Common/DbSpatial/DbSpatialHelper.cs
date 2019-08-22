@@ -104,20 +104,30 @@ namespace LtInfo.Common.DbSpatial
             geometries.ForEach(x => x.DbGeometry = x.SqlGeometry.Reduce(thresholdInDegrees).ToDbGeometry());
         }
 
-        public static DbGeometry UnionListGeometries(this IList<DbGeometry> geoms)
+        public static DbGeometry UnionListGeometries(this IList<DbGeometry> inputGeometries)
         {
-            if (geoms.Count == 0)
-            {
-                return null;
-            }
+            // all geometries have to have the same SRS or the union isn't defined anyway, so just grab the first one
+            var coordinateSystemId = inputGeometries.First().CoordinateSystemId;
 
-            DbGeometry union = geoms.First();
+            NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
 
-            for (var i = 1; i < geoms.Count; i++)
-            {
-                var temp = union.Union(geoms[i]);
-                union = temp;
-            }
+            var internalGeometries = inputGeometries.Select(x => reader.Read(x.AsBinary())).ToList();
+
+            var geometry = NetTopologySuite.Operation.Union.CascadedPolygonUnion.Union(internalGeometries);
+
+            var union = DbGeometry.FromBinary(geometry.AsBinary(), coordinateSystemId);
+            //if (inputGeometries.Count == 0)
+            //{
+            //    return null;
+            //}
+
+            //DbGeometry union = inputGeometries.First();
+
+            //for (var i = 1; i < inputGeometries.Count; i++)
+            //{
+            //    var temp = union.Union(inputGeometries[i]);
+            //    union = temp;
+            //}
 
             return union;
         }
