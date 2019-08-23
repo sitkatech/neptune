@@ -319,6 +319,7 @@
             }
             var formData = new FormData();
             formData.append("Photo", file);
+            formData.boundary = "----------opu" + new Date().getTime();
 
             if (file.type.split('/')[0] !== "image") {
                 $scope.photoFileTypeError = true;
