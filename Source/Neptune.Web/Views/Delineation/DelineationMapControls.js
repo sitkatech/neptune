@@ -365,11 +365,11 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         }
     },
 
-    enableDelineationButton() {
+    enableDelineationButton: function() {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
     },
 
-    preselectDelineationType(type) {
+    preselectDelineationType: function(type) {
         jQuery("input[name='flowOption'][value='" + type + "']").prop("checked", true);
     }
 });
