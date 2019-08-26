@@ -312,14 +312,17 @@
 
         $scope.stagePhoto = function () {
             var file = jQuery("#photoUpload")[0].files[0];
-            if (!file.name.trim()) {
-                var blob = file.slice(0, file.size, file.type);
-                var newFile = new File([blob], 'image.jpg', { type: file.type });
-                file = newFile;
-            }
+            //if (!file.name.trim()) {
+            //    var blob = file.slice(0, file.size, file.type);
+            //    var newFile = new File([blob], 'image.jpg', { type: file.type });
+            //    file = newFile;
+            //}
+
+            var blob = file.slice(0, file.size, file.type);
+
             var formData = new FormData();
-            formData.append("Photo", file);
-            formData.boundary = "----------opu" + new Date().getTime();
+            formData.append("Photo", blob, 'image.jpg');
+            //formData.boundary = "----------opu" + new Date().getTime();
 
             if (file.type.split('/')[0] !== "image") {
                 $scope.photoFileTypeError = true;
@@ -327,6 +330,8 @@
                 jQuery("#photoUpload").fileinput('reset');
                 return;
             }
+
+            debugger;
 
             $.ajax({
                 url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
