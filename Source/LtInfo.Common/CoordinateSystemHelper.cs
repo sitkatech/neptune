@@ -91,7 +91,7 @@ namespace LtInfo.Common
 
             var outputWkb = internalGeometry.AsBinary();
 
-            return DbGeometry.FromBinary(outputWkb, NAD_83_HARN_CA_ZONE_VI_SRID);
+            return DbGeometry.FromBinary(outputWkb, WGS_1984_SRID);
         }
 
     }
