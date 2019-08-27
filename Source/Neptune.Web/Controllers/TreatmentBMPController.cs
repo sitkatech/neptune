@@ -403,18 +403,11 @@ namespace Neptune.Web.Controllers
                 return ViewConvertTreatmentBMPTypeTreatmentBMP(treatmentBMP, viewModel);
             }
 
-            // delete any assessment, benchmark, and maintenance records
-            foreach (var maintenanceRecord in treatmentBMP.MaintenanceRecords.ToList())
+            // delete any field visit, assessment, benchmark, and maintenance records
+            foreach (var fieldVisit in treatmentBMP.FieldVisits.ToList())
             {
-                maintenanceRecord.DeleteFull(HttpRequestStorage.DatabaseEntities);
+                fieldVisit.DeleteFull(HttpRequestStorage.DatabaseEntities);
             }
-
-            treatmentBMP.MaintenanceRecords = null;
-            foreach (var treatmentBMPAssessment in treatmentBMP.TreatmentBMPAssessments.ToList())
-            {
-                treatmentBMPAssessment.DeleteFull(HttpRequestStorage.DatabaseEntities);
-            }
-            treatmentBMP.TreatmentBMPAssessments = null;
 
             foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList())
             {
