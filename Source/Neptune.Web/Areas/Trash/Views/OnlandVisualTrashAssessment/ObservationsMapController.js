@@ -331,14 +331,15 @@
                 return;
             }
 
-            debugger;
-
             $.ajax({
                 url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
                 data: formData,
                 processData: false,
                 contentType: false,
                 type: 'POST',
+                beforeSend: function (request) {
+                    request.setRequestHeader("Connection", "keep-alive");
+                },
                 success: function (data) {
                     $scope.photoFileTypeError = false;
 
