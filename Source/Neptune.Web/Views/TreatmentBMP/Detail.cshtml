@@ -90,12 +90,7 @@
                 </div>
             }
 
-
-
-
-
             <div style="display: inline-block; vertical-align: top;">
-
                 @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
             </div>
         </div>
@@ -120,8 +115,14 @@
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetDisplayNameAsUrl()</div>
+                    <label class="col-sm-5 control-label text-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> { "btn", "btn-neptune", "btn-xs" }, null, null)
+                        &nbsp;&nbsp;
+                        @Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")
+                    </label>
+                    <div class="col-sm-7">
+                        @ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetDisplayNameAsUrl()
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>

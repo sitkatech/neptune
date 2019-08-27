@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Data.Entity.Spatial;
-using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -65,6 +63,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public readonly string VerifiedUnverifiedUrl;
         public string TrashCaptureEffectiveness { get; }
+        public string ChangeTreatmentBMPTypeUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
@@ -107,6 +106,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             TrashCaptureEffectiveness = TreatmentBMP.TrashCaptureEffectiveness == null ? "Not Provided" : TreatmentBMP.TrashCaptureEffectiveness + "%";
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
+
+            ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(t => t.ConvertTreatmentBMPType(treatmentBMP));
         }
     }
 }
