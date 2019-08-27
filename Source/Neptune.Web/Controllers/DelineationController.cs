@@ -228,7 +228,7 @@ namespace Neptune.Web.Controllers
             
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay("The Delination was successfully deleted.");
+            SetMessageForDisplay("The Delineation was successfully deleted.");
 
 
             return new ModalDialogFormJsonResult(
