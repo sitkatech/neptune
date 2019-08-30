@@ -20,6 +20,15 @@
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedMapController.js")"></script>
     <script type="text/javascript">
+
+        jQuery(document).ready(function () {
+            if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
+                jQuery("#warnInternetExplorer").show();
+            }
+            window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl, config);
+            jQuery('.selectpicker').selectpicker("val", [1, 2]);
+            jQuery('#trashCaptureStatusTypeDropdown').change();
+        });
         // <![CDATA[
         angular.module("NeptuneApp")
             .factory("angularModelAndViewData",
@@ -30,11 +39,6 @@
                             @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
                     };
             });
-
-        jQuery(document).ready(function() {
-            jQuery('.selectpicker').selectpicker("val", [1, 2]);
-            jQuery('#trashCaptureStatusTypeDropdown').change();
-        });
         // ]]>
     </script>
 
@@ -384,6 +388,7 @@
                     </div>
                 </div>@*OVTABasedMapController*@
             </div>
+            <p class="systemText text-danger" id="warnInternetExplorer" style="display: none;">Your browser might not support all features of this map. Please switch to Google Chrome or Mozilla Firefox for the best experience.</p>
         </div>
     </div>
 </div>

@@ -355,7 +355,7 @@
                 },
                 error: function (jq, ts, et) {
                     window.alert(
-                        "There was an error uploading the image. Please try again. If the issue persists, please contact Support.");
+                        "There was an error uploading the image. Please try again. If you are using Safari, please switch to Google Chrome as Safari does not support key features of this page.");
                 }
             });
         };
