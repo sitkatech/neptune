@@ -312,14 +312,17 @@
 
         $scope.stagePhoto = function () {
             var file = jQuery("#photoUpload")[0].files[0];
-            if (!file.name.trim()) {
-                var blob = file.slice(0, file.size, file.type);
-                var newFile = new File([blob], 'image.jpg', { type: file.type });
-                file = newFile;
-            }
+            //if (!file.name.trim()) {
+            //    var blob = file.slice(0, file.size, file.type);
+            //    var newFile = new File([blob], 'image.jpg', { type: file.type });
+            //    file = newFile;
+            //}
+
+            var blob = file.slice(0, file.size, file.type);
+
             var formData = new FormData();
-            formData.append("Photo", file);
-            formData.boundary = "----------opu" + new Date().getTime();
+            formData.append("Photo", blob, 'image.jpg');
+            //formData.boundary = "----------opu" + new Date().getTime();
 
             if (file.type.split('/')[0] !== "image") {
                 $scope.photoFileTypeError = true;
@@ -334,6 +337,9 @@
                 processData: false,
                 contentType: false,
                 type: 'POST',
+                beforeSend: function (request) {
+                    request.setRequestHeader("Connection", "keep-alive");
+                },
                 success: function (data) {
                     $scope.photoFileTypeError = false;
 
@@ -349,7 +355,7 @@
                 },
                 error: function (jq, ts, et) {
                     window.alert(
-                        "There was an error uploading the image. Please try again. If the issue persists, please contact Support.");
+                        "There was an error uploading the image. Please try again. If you are using Safari, please switch to Google Chrome as Safari does not support key features of this page.");
                 }
             });
         };

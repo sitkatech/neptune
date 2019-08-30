@@ -453,7 +453,10 @@
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPType.cs" />
     <Compile Include="Views\TreatmentBMP\EditLocationViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPTypeViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPTypeViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummary.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPAssessmentSummaryViewData.cs" />
     <Compile Include="Models\TrashGeneratingUnit.cs" />
@@ -1855,6 +1858,7 @@
     <Compile Include="Views\DelineationUpload\ApproveDelineationGisUploadViewModel.cs" />
     <Content Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometry.cshtml" />
     <Content Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cshtml" />
+    <Content Include="Views\TreatmentBMP\ConvertTreatmentBMPType.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

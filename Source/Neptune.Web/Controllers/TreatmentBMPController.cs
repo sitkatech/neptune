@@ -383,6 +383,80 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [TreatmentBMPManageFeature]
+        public PartialViewResult ConvertTreatmentBMPType(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new ConvertTreatmentBMPTypeViewModel();
+            return ViewConvertTreatmentBMPTypeTreatmentBMP(treatmentBMP, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult ConvertTreatmentBMPType(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
+            ConvertTreatmentBMPTypeViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewConvertTreatmentBMPTypeTreatmentBMP(treatmentBMP, viewModel);
+            }
+
+            // delete any field visit, assessment, benchmark, and maintenance records
+            foreach (var fieldVisit in treatmentBMP.FieldVisits.ToList())
+            {
+                fieldVisit.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            }
+
+            foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList())
+            {
+                treatmentBMPBenchmarkAndThreshold.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            }
+
+            treatmentBMP.TreatmentBMPBenchmarkAndThresholds = null;
+
+            var newTreatmentBMPType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(viewModel.TreatmentBMPTypeID.Value);
+            var validCustomAttributeTypes = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
+
+            // we need to clone the attributes instead of simply changing the bmp type and treatmentbmptypecustomattributetype ids
+            var customAttributesCloned = new List<CustomAttribute>();
+            foreach (var customAttribute in treatmentBMP.CustomAttributes.Where(z => validCustomAttributeTypes.Select(y => y.CustomAttributeTypeID).Contains(z.CustomAttributeTypeID))
+                .ToList())
+            {
+                var treatmentBMPTypeCustomAttributeType = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Single(c => c.CustomAttributeTypeID == customAttribute.CustomAttributeTypeID);
+                var customAttributeCloned = new CustomAttribute(treatmentBMP.TreatmentBMPID, treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID, treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeID, treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
+                customAttributesCloned.Add(customAttributeCloned);
+                foreach (var value in customAttribute.CustomAttributeValues)
+                {
+                    var customAttributeValue = new CustomAttributeValue(customAttributeCloned, value.AttributeValue);
+                }
+            }
+
+            // delete any custom attributes that are not valid for the new treatment bmp type
+            foreach (var customAttribute in treatmentBMP.CustomAttributes.ToList())
+            {
+                customAttribute.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            }
+            // force a save changes to clear out fk references when we switch the bmp type
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            // now add the cloned custom attributes to the db context
+            HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributesCloned);
+            treatmentBMP.TreatmentBMPTypeID = viewModel.TreatmentBMPTypeID.Value;
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewConvertTreatmentBMPTypeTreatmentBMP(TreatmentBMP treatmentBMP,
+            ConvertTreatmentBMPTypeViewModel viewModel)
+        {
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Where(x => x.TreatmentBMPTypeID != treatmentBMP.TreatmentBMPTypeID).ToList();
+            var viewData = new ConvertTreatmentBMPTypeViewData(treatmentBMP, treatmentBMPTypes);
+            return RazorPartialView<ConvertTreatmentBMPType, ConvertTreatmentBMPTypeViewData, ConvertTreatmentBMPTypeViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
         [TreatmentBMPDeleteFeature]
         public PartialViewResult Delete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {

@@ -43,6 +43,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 700px;"></div>
+        <p class="systemText text-danger" id="warnInternetExplorer" style="display: none;">Your browser might not support all features of this map. Please switch to Google Chrome or Mozilla Firefox for the best experience.</p>
     </div>
 </div>
 
@@ -54,7 +55,10 @@
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
 
 
-    jQuery(function() {
+    jQuery(function () {
+        if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
+            jQuery("#warnInternetExplorer").show();
+        }
         window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl, config);
 
         if (@ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS()) {
@@ -62,9 +66,4 @@
             window.delineationMap.preselectTreatmentBMP(@ViewDataTyped.InitialTreatmentBMPID);
         }
     });
-</script>
-
-<script>
-    jQuery(document).ready(function () {
-    })
 </script>

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -32,6 +34,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
+
+                var modelStateKeys = ModelState.Keys;
+
+                var modelStateKeyValuesAsStrings = modelStateKeys.Select(x => $"{x}: {ModelState[x]}");
+
+                Logger.Error(string.Join("\n", modelStateKeyValuesAsStrings));
+
+                SitkaGlobalBase.CancelErrorLoggingFromApplicationEnd();
                 return Json(new
                 {
                     Error =

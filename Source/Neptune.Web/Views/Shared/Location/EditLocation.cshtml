@@ -143,9 +143,12 @@
 
     jQuery(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        console.log(mapInitJson);
         var neptuneMap = new NeptuneMaps.Stormwater(mapInitJson);
-        window.neptuneMap = neptuneMap;
+
+        neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+            "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
+
+            window.neptuneMap = neptuneMap;
         neptuneMap.initializeTreatmentBMPEditor();
         neptuneMap.map.on("locationfound", onLocationFound);
         neptuneMap.map.on('locationerror', onLocationError);
