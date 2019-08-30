@@ -5,7 +5,7 @@
 
 NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl, config) {
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
-
+    configureProj4Defs();
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
 
@@ -417,6 +417,17 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 
 
     promise.then(function (featureCollection) {
+        var newcoords = [];
+        var coordinates = featureCollection.features[0].geometry.coordinates[0];
+        var wgs = proj4("EPSG:4326");
+        var casp = proj4("EPSG:2230");
+        for (var i = 0; i < coordinates.length; i++) {
+            var newcoord = proj4(casp, wgs, coordinates[i]);
+            newcoords.push(newcoord);
+        }
+
+        featureCollection.features[0].geometry.coordinates[0] = newcoords;
+
         self.addBMPDelineationLayerFromDEM(featureCollection);
 
         self.removeLoading();
@@ -878,3 +889,16 @@ var confirmDeleteDelineation = function(treatmentBMPName) {
     alertDiv.modal({ keyboard: true });
     alertDiv.draggable({ handle: ".modal-header" });
 };
+
+var configureProj4Defs = function() {
+    proj4.defs([
+        [
+            "EPSG:4326",
+            'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]'
+        ],
+        [
+            "EPSG:2230",
+            'PROJCS["NAD83 / California zone 6 (ftUS)",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],UNIT["US survey foot",0.3048006096012192,AUTHORITY["EPSG","9003"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["standard_parallel_1",33.88333333333333],PARAMETER["standard_parallel_2",32.78333333333333],PARAMETER["latitude_of_origin",32.16666666666666],PARAMETER["central_meridian",-116.25],PARAMETER["false_easting",6561666.667],PARAMETER["false_northing",1640416.667],AUTHORITY["EPSG","2230"],AXIS["X",EAST],AXIS["Y",NORTH]]'
+        ]
+    ]);
+}

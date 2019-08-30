@@ -47,7 +47,6 @@ var buildAutoDelineateParameterString = function (latLng) {
 var buildAutoDelineateParameters = function (latLng) {
     return {
         f: "json",
-        "env:outSR": NeptuneMaps.Constants.spatialReference,
         Input_Batch_Point: JSON.stringify(buildInputBatchPointParameter(latLng)),
         Snap_Distance: JSON.stringify({ "distance": 10, "units": "esriFeet" })
     };
