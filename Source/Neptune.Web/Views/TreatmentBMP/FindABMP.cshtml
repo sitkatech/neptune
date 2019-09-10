@@ -82,6 +82,14 @@
 
 }
 
+
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.HasEditPermissions)
+    {
+        <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
+    }}
+
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
@@ -150,7 +158,7 @@
     <hr/>
     <div class="row">
         <div class="col-sm-12">
-            <h4 style="margin-top: 0;">Didn't find the BMP you are looking for?</h4>
+            <h4 style="margin-top: 0;">Didn't find the BMP you were looking for?</h4>
             <a href="@ViewDataTyped.AllBMPsUrl" class="btn btn-neptune btn">View list of All BMPs</a>
             @if (ViewDataTyped.HasManagePermissions)
             {

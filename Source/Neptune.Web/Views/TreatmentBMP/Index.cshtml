@@ -31,7 +31,7 @@
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.HasManagePermissions)
+    @if (ViewDataTyped.HasEditPermissions)
     {
         <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
     }
