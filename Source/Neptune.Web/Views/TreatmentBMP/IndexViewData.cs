@@ -14,7 +14,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string GridDataUrl { get; }
         public string NewUrl { get; }
         public string BulkBMPUploadUrl { get; set; }
-        public bool HasManagePermissions { get; }
+        public bool HasEditPermissions { get; }
         public string DownloadBMPInventoryUrl { get; }
         public bool HasAdminPermissions { get; }
 
@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.TreatmentBMPGridJsonData());
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             BulkBMPUploadUrl = bulkBMPUploadUrl;
-            HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             DownloadBMPInventoryUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.BMPInventoryExport());

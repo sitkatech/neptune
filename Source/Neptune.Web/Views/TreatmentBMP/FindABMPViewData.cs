@@ -38,6 +38,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasManagePermissions { get; }
         public ViewDataForAngular ViewDataForAngular { get; set; }
         public string AllBMPsUrl { get; }
+        public bool HasEditPermissions { get; set; }
 
 
         public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
@@ -46,12 +47,15 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             PageTitle = "Find a BMP";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             MapInitJson = mapInitJson;
             FindTreatmentBMPByNameUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindByName(null));
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl, treatmentBMPTypeSimples);
+            HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+
         }
     }
 

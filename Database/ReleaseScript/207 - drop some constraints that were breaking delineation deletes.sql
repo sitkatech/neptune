@@ -1,5 +1,0 @@
-Alter table dbo.TrashGeneratingUnit
-Drop constraint FK_TrashGeneratingUnit_Delineation_DelineationID
-
-Alter table dbo.TrashGeneratingUnit4326
-Drop constraint FK_TrashGeneratingUnit4326_Delineation_DelineationID
