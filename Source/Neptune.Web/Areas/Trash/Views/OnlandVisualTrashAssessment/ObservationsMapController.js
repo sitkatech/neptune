@@ -320,16 +320,24 @@
 
             var blob = file.slice(0, file.size, file.type);
 
+            var filename;
+            if (file.name.trim()) {
+                filename = file.name.trim();
+
+            } else {
+                filename = "image.jpg";
+            }
+
             var formData = new FormData();
-            formData.append("Photo", blob, 'image.jpg');
+            formData.append("Photo", blob, filename);
             //formData.boundary = "----------opu" + new Date().getTime();
 
-            if (file.type.split('/')[0] !== "image") {
-                $scope.photoFileTypeError = true;
-                $scope.$apply();
-                jQuery("#photoUpload").fileinput('reset');
-                return;
-            }
+            //if (file.type.split('/')[0] !== "image") {
+            //    $scope.photoFileTypeError = true;
+            //    $scope.$apply();
+            //    jQuery("#photoUpload").fileinput('reset');
+            //    return;
+            //}
 
             $.ajax({
                 url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
