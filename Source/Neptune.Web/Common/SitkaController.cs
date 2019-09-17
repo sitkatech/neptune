@@ -468,6 +468,27 @@ namespace Neptune.Web.Common
                 return sw.GetStringBuilder().ToString();
             }
         }
+
+        protected string RenderPartialViewToString(string viewName, object viewData, object viewModel)
+        {
+            if (string.IsNullOrEmpty(viewName))
+            {
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+            }
+
+            ViewData[TypedWebViewPage.ViewDataDictionaryKey] = viewData;
+
+            ViewData.Model = viewModel;
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
+        }
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
