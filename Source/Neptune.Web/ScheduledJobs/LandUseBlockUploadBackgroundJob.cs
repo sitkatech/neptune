@@ -206,11 +206,15 @@ namespace Neptune.Web.ScheduledJobs
 
                         var nullOutTGULandUseBlockIDs =
                             $"UPDATE dbo.TrashGeneratingUnit SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
+
+                        var nullOutTGU4326LandUseBlockIDs =
+                            $"UPDATE dbo.TrashGeneratingUnit4326 SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
                         var deleteLandUseBlocks =
                             $"DELETE FROM dbo.LandUseBlock WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
 
                         DbContext.Database.CommandTimeout = 960;
                         DbContext.Database.ExecuteSqlCommand(nullOutTGULandUseBlockIDs);
+                        DbContext.Database.ExecuteSqlCommand(nullOutTGU4326LandUseBlockIDs);
                         DbContext.Database.ExecuteSqlCommand(deleteLandUseBlocks);
                     }
 
