@@ -61,7 +61,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public int? OwnerOrganizationID { get; set; }
 
         [DisplayName("Year Built")]
-        [Range(NeptuneDateUtilities.MinimumYear, 2050, ErrorMessage = "Please enter a valid year range")]
         public int? YearBuilt { get; set; }
 
         [DisplayName("Water Quality Management Plan")]
