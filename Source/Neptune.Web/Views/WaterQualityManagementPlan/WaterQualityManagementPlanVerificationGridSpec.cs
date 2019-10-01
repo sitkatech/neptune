@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Visit Status", x => x.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName,
                 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Verification Status",
-                x => x.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
+                x => x.WaterQualityManagementPlanVerifyStatus?.WaterQualityManagementPlanVerifyStatusName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Source Control Condition", x => x.SourceControlCondition, 150);
             Add("Enforcement of Follow-up Actions", x => x.EnforcementOrFollowupActions, 150);
             Add("Draft or Finalized",

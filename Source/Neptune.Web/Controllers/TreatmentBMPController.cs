@@ -19,9 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
+using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
@@ -31,18 +31,17 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using LtInfo.Common.DhtmlWrappers;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -153,21 +152,21 @@ namespace Neptune.Web.Controllers
 
             var notes = treatmentBMPObservations.ToList().Select(x =>
             {
-                var notems = JsonConvert.DeserializeObject<DiscreteObservationSchema>(x.ObservationData)
+                var notesForThisObservation = JsonConvert.DeserializeObject<DiscreteObservationSchema>(x.ObservationData)
                     .SingleValueObservations.Select(y => y.Notes);
 
-                var @join = String.Join(". ", notems);
+                var joinedNotes = String.Join(". ", notesForThisObservation);
 
-                if (string.IsNullOrWhiteSpace(@join))
+                if (string.IsNullOrWhiteSpace(joinedNotes))
                 {
-                    @join = "[None provided]";
+                    joinedNotes = "[None provided]";
                 }
 
                 return new
                 {
                     x.TreatmentBMPAssessmentID,
                     Notes =
-                        $"{x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} Failure Notes: {@join}"
+                        $"{x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} Failure Notes: {joinedNotes}"
                 };
             });
 
@@ -416,7 +415,7 @@ namespace Neptune.Web.Controllers
 
             treatmentBMP.TreatmentBMPBenchmarkAndThresholds = null;
 
-            var newTreatmentBMPType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(viewModel.TreatmentBMPTypeID.Value);
+            var newTreatmentBMPType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(viewModel.TreatmentBMPTypeID.GetValueOrDefault());
             var validCustomAttributeTypes = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
 
             // we need to clone the attributes instead of simply changing the bmp type and treatmentbmptypecustomattributetype ids
@@ -443,7 +442,7 @@ namespace Neptune.Web.Controllers
 
             // now add the cloned custom attributes to the db context
             HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributesCloned);
-            treatmentBMP.TreatmentBMPTypeID = viewModel.TreatmentBMPTypeID.Value;
+            treatmentBMP.TreatmentBMPTypeID = viewModel.TreatmentBMPTypeID.GetValueOrDefault();
 
             return new ModalDialogFormJsonResult();
         }
@@ -480,9 +479,6 @@ namespace Neptune.Web.Controllers
             var treatmentBMPDelineation = treatmentBMP.Delineation;
 
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            treatmentBMPDelineation?.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay($"Successfully deleted the Treatment BMP {treatmentBMPTreatmentBMPName}");

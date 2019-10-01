@@ -25,6 +25,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return Content("");
         }
 
+        public const string ErrorPageReportPath = "~/Views/Shared/PerformanceMeasureControls/PerformanceMeasureReportedValuesSummary.cshtml";
+
         [HttpPost]
         [NeptuneViewFeature]
         public ActionResult StageObservationPhoto(
@@ -35,13 +37,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
 
-                var modelStateKeys = ModelState.Keys;
-
-                var modelStateKeyValuesAsStrings = modelStateKeys.Select(x => $"{x}: {ModelState[x]}");
-
-                Logger.Error(string.Join("\n", modelStateKeyValuesAsStrings));
-
                 SitkaGlobalBase.CancelErrorLoggingFromApplicationEnd();
+
+                var error = RenderPartialViewToString(
+                    "~/Areas/Trash/Views/OnlandVisualTrashAssessmentPhoto/ObservationPhotoStaging.cshtml",
+                    new ObservationPhotoStagingViewData(), opss);
+
+                Logger.Error($"Error reported in OnlandVisualTrashAssessment/RecordObservations: \n{error}");
+
                 return Json(new
                 {
                     Error =
@@ -105,6 +108,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
             [SitkaFileExtensions("jpg|jpeg|gif|png")]
             [Required]
             public HttpPostedFileBase Photo { get; set; }
+        }
+
+        public class ObservationPhotoStagingViewData
+        {
+
+        }
+
+        public abstract class ObservationPhotoStaging : TypedWebPartialViewPage<ObservationPhotoStagingViewData,
+            ObservationPhotoStagingSimple>
+        {
+
         }
     }
 }

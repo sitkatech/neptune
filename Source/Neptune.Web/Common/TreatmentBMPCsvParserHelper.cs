@@ -182,6 +182,10 @@ namespace Neptune.Web.Common
                         treatmentBMP.YearBuilt = yearBuiltOrInstalledInt;
                     }
                 }
+                else
+                {
+                    treatmentBMP.YearBuilt = null;
+                }
             }
 
 

@@ -64,7 +64,7 @@ namespace Neptune.Web.ScheduledJobs
             }
             catch (Ogr2OgrCommandLineException e)
             {
-                Logger.Error("TGU loading via GDAL failed. TGU layer may be corrupted as a result.", e);
+                Logger.Error("TGU loading via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
                 throw;
             }
         }
