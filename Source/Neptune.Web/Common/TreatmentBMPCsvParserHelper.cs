@@ -126,8 +126,10 @@ namespace Neptune.Web.Common
             }
             else
             {
-                treatmentBMP.LocationPoint = DbGeometry.FromText(
-                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                treatmentBMP.LocationPoint4326 = DbGeometry.FromText(
+                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", CoordinateSystemHelper.WGS_1984_SRID);
+                treatmentBMP.LocationPoint =
+                    CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(treatmentBMP.LocationPoint4326);
             }
 
 

@@ -128,6 +128,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     var transect = onlandVisualTrashAssessment.GetTransect();
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = transect;
                     onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
+
+                    var transectBackingAssessment = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.GetTransectBackingAssessment();
+                    if (transectBackingAssessment != null)
+                    {
+                        transectBackingAssessment.IsTransectBackingAssessment = false;
+                    }
                 }
             }
             else
