@@ -6,8 +6,8 @@ select '${db-user}' as AccountName, 'U' as AccountType
 into #accountsToCreate
 union select '${db-batch-user}', 'U'
 union select '${db-geoserver-user}', 'U'
-union select 'Sitka\H20 QA Support', 'G'
-union select 'Sitka\H20 QA Tester', 'G'
+union select 'Sitka\H2O QA Support', 'G'
+union select 'Sitka\H2O QA Tester', 'G'
 
 -- Clear out any existing logins
 print 'Clearing out any existing logins'
