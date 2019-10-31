@@ -167,9 +167,9 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
  */
 
 NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function() {
-    window.alert("You are in Edit Location mode, but I'm kicking you back out after you close this alert!");
+    window.alert("Now you're in Edit Location mode, and you can't get out unless you press either the save or the cancel button! :D");
     // todo: give 'em a point editor
-    this.selectedAssetControl.exitEditLocationMode();
+    
 };
 
 /* "Draw Catchment Mode"

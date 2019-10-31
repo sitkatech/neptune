@@ -39,6 +39,20 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             function (e) {
                 this.thinButtonHandler();
             }.bind(this));
+
+        L.DomEvent.on(this.getTrackedElement("saveLocationButton"),
+            "click",
+            function(e) {
+                this.exitEditLocationMode(true);
+            }.bind(this));
+
+        L.DomEvent.on(this.getTrackedElement("cancelLocationButton"),
+            "click",
+            function(e) {
+                this.exitEditLocationMode(false);
+            }.bind(this));
+
+        
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
@@ -150,10 +164,20 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     launchEditLocationMode: function() {
         // todo: hide the buttons what need to be hid and show+handle the buttons what need to be shown+handled
         this.disableDelineationButton();
+
+        this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
+
     },
 
-    exitEditLocationMode: function() {
+    exitEditLocationMode: function(save) {
         // todo: opposite of the above
+        if (save) {
+            window.alert("You've chosen to save and exit edit location mode!");
+        } else {
+            window.alert("You've chosen to exit-without-saving edit location mode!");
+        }
+        
+        this.getTrackedElement("editLocationModeButtonsWrapper").classList.add("hiddenControlElement");
         this.enableDelineationButton();
     },
 
