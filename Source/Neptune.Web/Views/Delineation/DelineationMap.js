@@ -162,6 +162,16 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
     window.freeze = false;
 };
 
+/* "Edit Location Mode"
+ * This is an add-on feature that allows a user to move the BMP pin to change its location from the delineation map.
+ */
+
+NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function() {
+    window.alert("You are in Edit Location mode, but I'm kicking you back out after you close this alert!");
+    // todo: give 'em a point editor
+    this.selectedAssetControl.exitEditLocationMode();
+};
+
 /* "Draw Catchment Mode"
  * This is the bread and butter of the delineation workflows.
  * When in this mode, the user is given access to a Leaflet.Draw control pointed at this.selectedBMPDelineationLayer.

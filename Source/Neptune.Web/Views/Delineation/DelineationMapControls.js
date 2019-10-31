@@ -44,6 +44,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     treatmentBMP: function (treatmentBMPFeature) {
         this.registerDelineationButtonHandler(treatmentBMPFeature);
         this.registerDeleteButtonHandler(treatmentBMPFeature);
+        this.registerEditLocationButtonHandler(treatmentBMPFeature);
 
         var detailLink = this.getTrackedElement("selectedBMPDetailLink");
         var href =
@@ -126,6 +127,34 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         L.DomEvent.on(deleteButton,
             "click", this._deleteDelineationHandler
         );
+    },
+
+    registerEditLocationButtonHandler: function (treatmentBMPFeature) {
+        var self = this;
+        var editLocationButton = this.getTrackedElement("editLocationButton");
+
+        if (this._editBMPLocationHandler) {
+            L.DomEvent.off(editLocationButton, "click", this._beginDelineationHandler);
+            this._beginDelineationHandler = null;
+        }
+
+        this._editBMPLocationHandler = function(e) {
+            self.launchEditLocationMode();
+            window.delineationMap.launchEditLocationMode();
+            e.stopPropagation();
+        };
+
+        L.DomEvent.on(editLocationButton, "click", this._editBMPLocationHandler);
+    },
+
+    launchEditLocationMode: function() {
+        // todo: hide the buttons what need to be hid and show+handle the buttons what need to be shown+handled
+        this.disableDelineationButton();
+    },
+
+    exitEditLocationMode: function() {
+        // todo: opposite of the above
+        this.enableDelineationButton();
     },
 
     launchDrawCatchmentMode: function (drawModeOptions) {
