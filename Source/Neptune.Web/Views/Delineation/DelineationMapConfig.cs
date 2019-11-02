@@ -13,6 +13,7 @@ namespace Neptune.Web.Views.Delineation
         public string CatchmentTraceUrlTemplate { get; }
         public string ChangeDelineationStatusUrlTemplate { get; }
         public string TreatmentBMPDelineationUrlTemplate { get; }
+        public string TreatmentBMPLocationUrlTemplate { get; }
 
         public DelineationMapConfig(string jurisdictionCQLFilter)
         {
@@ -22,9 +23,10 @@ namespace Neptune.Web.Views.Delineation
             DeleteDelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(x => x.MapDelete(UrlTemplate.Parameter1Int))).UrlTemplateString;
             ChangeDelineationStatusUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(x=>x.ChangeDelineationStatus(UrlTemplate.Parameter1Int))).UrlTemplateString;
             TreatmentBMPDelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(x=>x.ForTreatmentBMP(UrlTemplate.Parameter1Int))).UrlTemplateString;
-
+            TreatmentBMPLocationUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditLocationFromDelineationMap(UrlTemplate.Parameter1Int))).UrlTemplateString;
             AutoDelineateBaseUrl =
                 "https://ocgis.com/arcpub/rest/services/Flood/OCPWGlobalStormwaterDelineationServiceSurfaceOnly/GPServer/Global%20Surface%20Delineation/";
         }
+        
     }
 }

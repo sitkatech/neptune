@@ -8,8 +8,8 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     configureProj4Defs();
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
-
-    this.initializeTreatmentBMPClusteredLayer(mapInitJson);
+    this.mapInitJson = mapInitJson;
+    this.initializeTreatmentBMPClusteredLayer();
 
     this.addDelineationWmsLayers();
 
@@ -47,8 +47,8 @@ NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.
 
 /* Constants */
 
-var TOLERANCE_CENTRALIZED    = 0.0001;
-var TOLERANCE_DISTRIBUTED    = 0.000015;
+var TOLERANCE_CENTRALIZED = 0.0001;
+var TOLERANCE_DISTRIBUTED = 0.000015;
 var TOLERANCE_STEP_INCREMENT = 0.000001;
 
 var DELINEATION_DISTRIBUTED = "Distributed";
@@ -80,12 +80,13 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
         { cql_filter: "DelineationType = 'Centralized'" + jurisdictionCQLFilter, maxZoom: 22 });
 };
 
-NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function() {
+NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
     this.distributedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
     this.centralizedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
 };
 
-NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function (mapInitJson) {
+NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function () {
+    var mapInitJson = this.mapInitJson;
     this.treatmentBMPLayer = L.geoJson(
         mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
         {
@@ -95,7 +96,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
             }.bind(this)
         });
     if (this.markerClusterGroup) {
-        this.map.removeLayer(markerClusterGroup);
+        this.map.removeLayer(this.markerClusterGroup);
     }
 
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
@@ -166,10 +167,7 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
  * This is an add-on feature that allows a user to move the BMP pin to change its location from the delineation map.
  */
 
-NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function() {
-    window.alert("Now you're in Edit Location mode, and you can't get out unless you press either the save or the cancel button! :D");
-    // todo: kill all clicks
-    // todo: handle: click -> move selected bmp pin
+NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
     this.treatmentBMPLayer.off("click");
     this.map.off("click");
 
@@ -177,20 +175,49 @@ NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function() {
     this.map.on("click",
         function (e) {
             var latlng = e.latlng;
-            
+
             self.lastSelectedMarker.setLatLng(latlng);
+            self.treatmentBMPLocationModel = {
+                TreatmentBMPPointY: latlng.lat,
+                TreatmentBMPPointX: latlng.lng
+            };
         });
-    
+
 };
 
-NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function(save) {
-    // todo: kill edit handler
-    // todo: restore all clicks
+NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
+    var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
 
-    if (save) {
+    if (save && this.treatmentBMPLocationModel) {
         window.alert("You've chosen to save and exit edit location mode!");
+
+        var treatmentBMPLocationUrl = new Sitka.UrlTemplate(this.config.TreatmentBMPLocationUrlTemplate).ParameterReplace(treatmentBMPID);
+
+        var self = this;
+        jQuery.ajax({
+            url: treatmentBMPLocationUrl,
+            data: self.treatmentBMPLocationModel,
+            type: 'POST'
+        }).then(function (response) {
+var            mijfs = self.mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection.features;
+            var a = _.find(mijfs, function(o) { return o.properties.TreatmentBMPID == treatmentBMPID });
+
+            var coords = a.geometry.coordinates;
+
+            coords[0] = self.treatmentBMPLocationModel.TreatmentBMPPointX;
+            coords[1] = self.treatmentBMPLocationModel.TreatmentBMPPointY;
+
+            self.initializeTreatmentBMPClusteredLayer();
+
+
+            self.preselectTreatmentBMP(treatmentBMPID);
+        }).fail(function () {
+            alert(
+                "There was an error saving the location.");
+        });
     } else {
-        window.alert("You've chosen to exit-without-saving edit location mode!");
+        this.lastSelected.remove();
+        this.preselectTreatmentBMP(treatmentBMPID);
     }
     this.map.off("click");
     this.hookupDeselectOnClick();
@@ -247,22 +274,22 @@ NeptuneMaps.DelineationMap.prototype.unthinDelineationVertices = function () {
         });
 }
 
-NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function(drawModeOptions, tolerance) {
+NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function (drawModeOptions, tolerance) {
     if (!this.delineationFeatureSavedForReset) {
         return;
     }
 
     var editableFeatureGroup = this.editableFeatureGroup;
 
-    
+
     this.editableFeatureGroup.clearLayers();
 
     var downsampledDelineationFeature = downsampleGeoJsonFeature(this.delineationFeatureSavedForReset, tolerance);
     L.geoJSON(downsampledDelineationFeature,
         {
-            onEachFeature: function(feature, layer) {
+            onEachFeature: function (feature, layer) {
                 if (layer.getLayers) {
-                    layer.getLayers().forEach(function(l) { editableFeatureGroup.addLayer(l); });
+                    layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
                 } else {
                     editableFeatureGroup.addLayer(layer);
                 }
@@ -271,7 +298,7 @@ NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function(drawMode
 };
 
 NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOptions) {
-    
+
     var self = this;
     this.editableFeatureGroup = new L.FeatureGroup();
     var editableFeatureGroup = this.editableFeatureGroup;
@@ -304,7 +331,7 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
     this.map.addLayer(editableFeatureGroup);
     editableFeatureGroup.persist = true;
     if (drawModeOptions.delineationStrategy === STRATEGY_NETWORK_TRACE) {
-        
+
         jQuery(".leaflet-draw-edit-edit").on("click",
             function (e) {
                 if (!editableFeatureGroup.persist) {
@@ -389,7 +416,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
     this.map.setZoom(this.restoreZoom);
 };
 
-NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
+NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     // had better be only one feature
     var persistableFeatureJson;
     if (this.editableFeatureGroup.persist) {
@@ -468,7 +495,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         self.removeLoading();
         self.enableUserInteraction();
 
-        
+
 
         var drawModeOptions = { tolerance: TOLERANCE_DISTRIBUTED, delineationType: DELINEATION_DISTRIBUTED, delineationStrategy: STRATEGY_AUTODEM };
 
@@ -569,7 +596,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function(networkCatchmentID) {
+NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (networkCatchmentID) {
     var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(networkCatchmentID);
 
     return jQuery.ajax({
@@ -680,7 +707,7 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
  * @param {any} treatmentBMPFeature
  */
 
-NeptuneMaps.DelineationMap.prototype.deleteDelineation = function(treatmentBMPFeature) {
+NeptuneMaps.DelineationMap.prototype.deleteDelineation = function (treatmentBMPFeature) {
     var deleteUrl =
         new Sitka.UrlTemplate(this.config.DeleteDelineationUrlTemplate).ParameterReplace(treatmentBMPFeature.properties
             .TreatmentBMPID);
@@ -740,7 +767,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     return promise;
 };
 
-NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function(verified) {
+NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
     var delineationID = this.getSelectedBMPFeature().properties.DelineationID;
 
     var url = new Sitka.UrlTemplate(this.config.ChangeDelineationStatusUrlTemplate).ParameterReplace(delineationID);
@@ -751,7 +778,7 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function(verified
         data: {
             IsVerified: verified
         }
-    }).then(function(data) {
+    }).then(function (data) {
         if (!data.success) {
             window.alert(
                 "There was an error changing the delineation status. Please try again. If the issue persists, please contact Support.");
@@ -767,7 +794,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
         jurisdictionCQLFilter = "";
     }
 
-    var params= {
+    var params = {
         cql_filter: jurisdictionCQLFilter +
             "INTERSECTS(DelineationGeometry, POINT(" +
             latlng.lat +
@@ -776,7 +803,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
             "))"
     };
     var self = this;
-    this.getFeatureInfo("OCStormwater:Delineations", [latlng.lng, latlng.lat]).then(function(response) {
+    this.getFeatureInfo("OCStormwater:Delineations", [latlng.lng, latlng.lat]).then(function (response) {
         if (response.totalFeatures === 0) {
             return; // no one cares
         }
@@ -899,33 +926,33 @@ var killPolygonDraw = function () {
     jQuery(".leaflet-draw-toolbar-top").hide();
 };
 
-var unKillPolygonDraw = function() {
+var unKillPolygonDraw = function () {
     jQuery(".leaflet-draw-toolbar-top").show();
 };
 
-var confirmDeleteDelineation = function(treatmentBMPName) {
+var confirmDeleteDelineation = function (treatmentBMPName) {
     var alertHtml =
         "<div class='modal neptune-modal' style='width: 500px; margin:auto;'>" +
-            "<div class='modal-dialog neptune-modal-dialog'>" +
-            "<div class='modal-content'>" +
-            "<div class='modal-header'>" +
-            "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
-            "<span class='modal-title'>Delete Delineation</span>" +
-            "</div>" +
-            "<div class='modal-body'><p>Are you sure you want to delete the delineation for BMP " + treatmentBMPName + "?</p></div>" +
-            "<div class='modal-footer'>" +
-            "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
-            "<button type='button' class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='window.delineationMap.postDelete()' data-dismiss='modal'>Continue</a>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</div>";
+        "<div class='modal-dialog neptune-modal-dialog'>" +
+        "<div class='modal-content'>" +
+        "<div class='modal-header'>" +
+        "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
+        "<span class='modal-title'>Delete Delineation</span>" +
+        "</div>" +
+        "<div class='modal-body'><p>Are you sure you want to delete the delineation for BMP " + treatmentBMPName + "?</p></div>" +
+        "<div class='modal-footer'>" +
+        "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
+        "<button type='button' class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='window.delineationMap.postDelete()' data-dismiss='modal'>Continue</a>" +
+        "</div>" +
+        "</div>" +
+        "</div>" +
+        "</div>";
     var alertDiv = jQuery(alertHtml);
     alertDiv.modal({ keyboard: true });
     alertDiv.draggable({ handle: ".modal-header" });
 };
 
-var configureProj4Defs = function() {
+var configureProj4Defs = function () {
     proj4.defs([
         [
             "EPSG:4326",
