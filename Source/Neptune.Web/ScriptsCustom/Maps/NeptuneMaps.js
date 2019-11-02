@@ -384,6 +384,8 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
         this.map.removeLayer(this.lastSelected);
     }
 
+    var self = this;
+
     this.lastSelected = L.geoJson(feature,
         {
             pointToLayer: function (feature, latlng) {
@@ -392,12 +394,14 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
                     color: "#FFFF00",
                     size: "m"
                 });
-
-                return L.marker(latlng,
+                
+                self.lastSelectedMarker = L.marker(latlng,
                     {
                         icon: icon,
                         riseOnHover: true
                     });
+
+                return self.lastSelectedMarker;
             },
             style: function (feature) {
                 return {

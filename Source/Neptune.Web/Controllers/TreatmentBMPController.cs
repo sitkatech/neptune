@@ -649,6 +649,34 @@ namespace Neptune.Web.Controllers
                     x.Detail(treatmentBMPPrimaryKey)));
         }
 
+        [HttpGet]
+        [TreatmentBMPEditFeature]
+        public ContentResult EditLocationFromDelineationMap(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            return Content("");
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public JsonResult EditLocationFromDelineationMap(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditLocationViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                // todo error lol
+            }
+
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
+
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+
+            return Json(new {success = true});
+        }
+
+
+
         [NeptuneViewFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {

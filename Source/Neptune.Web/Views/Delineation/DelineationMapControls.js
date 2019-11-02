@@ -162,23 +162,20 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     launchEditLocationMode: function() {
-        // todo: hide the buttons what need to be hid and show+handle the buttons what need to be shown+handled
-        this.disableDelineationButton();
+        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
+        this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
 
         this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
 
     },
 
     exitEditLocationMode: function(save) {
-        // todo: opposite of the above
-        if (save) {
-            window.alert("You've chosen to save and exit edit location mode!");
-        } else {
-            window.alert("You've chosen to exit-without-saving edit location mode!");
-        }
-        
+        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
+        this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("editLocationModeButtonsWrapper").classList.add("hiddenControlElement");
         this.enableDelineationButton();
+
+        window.delineationMap.exitEditLocationMode(save);
     },
 
     launchDrawCatchmentMode: function (drawModeOptions) {
