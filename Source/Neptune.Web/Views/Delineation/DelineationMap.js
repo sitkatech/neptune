@@ -170,26 +170,29 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
     this.treatmentBMPLayer.off("click");
     this.map.off("click");
-
+    jQuery("#delineationMap").css("cursor", "pointer");
     var self = this;
     this.map.on("click",
         function (e) {
-            var latlng = e.latlng;
+            if (!window.freeze) {
 
-            self.lastSelectedMarker.setLatLng(latlng);
-            self.treatmentBMPLocationModel = {
-                TreatmentBMPPointY: latlng.lat,
-                TreatmentBMPPointX: latlng.lng
-            };
+                var latlng = e.latlng;
+
+                self.lastSelectedMarker.setLatLng(latlng);
+                self.treatmentBMPLocationModel = {
+                    TreatmentBMPPointY: latlng.lat,
+                    TreatmentBMPPointX: latlng.lng
+                };
+            }
         });
 
 };
 
 NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
     var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
-
+    jQuery("#delineationMap").css("cursor", "grab");
     if (save && this.treatmentBMPLocationModel) {
-        window.alert("You've chosen to save and exit edit location mode!");
+        this.displayLoading();
 
         var treatmentBMPLocationUrl = new Sitka.UrlTemplate(this.config.TreatmentBMPLocationUrlTemplate).ParameterReplace(treatmentBMPID);
 
@@ -198,8 +201,8 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             url: treatmentBMPLocationUrl,
             data: self.treatmentBMPLocationModel,
             type: 'POST'
-        }).then(function (response) {
-var            mijfs = self.mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection.features;
+        }).then(function(response) {
+            var mijfs = self.mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection.features;
             var a = _.find(mijfs, function(o) { return o.properties.TreatmentBMPID == treatmentBMPID });
 
             var coords = a.geometry.coordinates;
@@ -208,17 +211,26 @@ var            mijfs = self.mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureC
             coords[1] = self.treatmentBMPLocationModel.TreatmentBMPPointY;
 
             self.initializeTreatmentBMPClusteredLayer();
+            var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
+            self.setSelectedFeature(movedLayer.feature);
+            self.removeLoading();
 
-
-            self.preselectTreatmentBMP(treatmentBMPID);
-        }).fail(function () {
+        }).fail(function() {
             alert(
                 "There was an error saving the location.");
+
+
+            self.initializeTreatmentBMPClusteredLayer();
+            var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
+            self.setSelectedFeature(movedLayer.feature);
+            self.removeLoading();
+
         });
     } else {
         this.lastSelected.remove();
         this.preselectTreatmentBMP(treatmentBMPID);
     }
+    
     this.map.off("click");
     this.hookupDeselectOnClick();
     this.hookupSelectTreatmentBMPOnClick();
