@@ -10,6 +10,9 @@
   width: 375px;
   min-height: 260px;
 }
+.leaflet-interactive {
+  cursor: inherit !important;
+}
 .leaflet-bar hr {
   margin-top: 10px;
   margin-bottom: 10px;

@@ -53,7 +53,7 @@ namespace Neptune.Web.Views.Shared.Location
             // note that these nullables will never be null due to the Required attribute
             // this is coming FROM the browser, so it has to be reprojected to CA State Plane
             var locationPoint4326 = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(),
-                TreatmentBMPPointY.GetValueOrDefault(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                TreatmentBMPPointY.GetValueOrDefault(), CoordinateSystemHelper.WGS_1984_SRID);
             treatmentBMP.LocationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(
                 locationPoint4326);
             treatmentBMP.LocationPoint4326 = locationPoint4326;
