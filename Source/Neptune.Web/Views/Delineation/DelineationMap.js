@@ -191,12 +191,13 @@ NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
 NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
     var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
     jQuery("#delineationMap").css("cursor", "grab");
+
+    var self = this;
     if (save && this.treatmentBMPLocationModel) {
         this.displayLoading();
 
         var treatmentBMPLocationUrl = new Sitka.UrlTemplate(this.config.TreatmentBMPLocationUrlTemplate).ParameterReplace(treatmentBMPID);
 
-        var self = this;
         jQuery.ajax({
             url: treatmentBMPLocationUrl,
             data: self.treatmentBMPLocationModel,
@@ -224,7 +225,8 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
         });
     } else {
         this.lastSelected.remove();
-        this.preselectTreatmentBMP(treatmentBMPID);
+        var movedLayer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
+        this.setSelectedFeature(movedLayer.feature);
     }
     
     this.map.off("click");
@@ -777,7 +779,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
 NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
     var delineationID = this.getSelectedBMPFeature().properties.DelineationID;
-
+    console.log("No damn good reason for me to be here!");
     var url = new Sitka.UrlTemplate(this.config.ChangeDelineationStatusUrlTemplate).ParameterReplace(delineationID);
 
     jQuery.ajax({
@@ -788,8 +790,11 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verifie
         }
     }).then(function (data) {
         if (!data.success) {
-            window.alert(
-                "There was an error changing the delineation status. Please try again. If the issue persists, please contact Support.");
+            toast(
+                "There was an error changing the delineation status.",
+                "error");
+        } else {
+            toast("The Delineation status was successfully changed.", "success");
         }
     });
 };

@@ -103,7 +103,9 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         // hook up event handler on button
         jQuery("#verifyDelineationButton").off("change");
         jQuery("#verifyDelineationButton").change(function (e) {
-            self.changeDelineationStatus(jQuery(this).prop("checked"));
+            if (window.freeze) {
+                self.changeDelineationStatus(jQuery(this).prop("checked"));
+            }
         });
     },
 
