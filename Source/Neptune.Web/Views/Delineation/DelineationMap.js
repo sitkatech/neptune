@@ -170,7 +170,7 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
     this.treatmentBMPLayer.off("click");
     this.map.off("click");
-    jQuery("#delineationMap").css("cursor", "pointer");
+    jQuery("#delineationMap").css("cursor", "crosshair");
     var self = this;
     this.map.on("click",
         function (e) {
@@ -191,12 +191,13 @@ NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
 NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
     var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
     jQuery("#delineationMap").css("cursor", "grab");
+
+    var self = this;
     if (save && this.treatmentBMPLocationModel) {
         this.displayLoading();
 
         var treatmentBMPLocationUrl = new Sitka.UrlTemplate(this.config.TreatmentBMPLocationUrlTemplate).ParameterReplace(treatmentBMPID);
 
-        var self = this;
         jQuery.ajax({
             url: treatmentBMPLocationUrl,
             data: self.treatmentBMPLocationModel,
@@ -214,21 +215,18 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-
+            toast("Successfully updated Treatment BMP location.", "success");
         }).fail(function() {
-            alert(
-                "There was an error saving the location.");
-
-
             self.initializeTreatmentBMPClusteredLayer();
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-
+            toast("There was an error updating the Treatment BMP location.");
         });
     } else {
         this.lastSelected.remove();
-        this.preselectTreatmentBMP(treatmentBMPID);
+        var movedLayer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
+        this.setSelectedFeature(movedLayer.feature);
     }
     
     this.map.off("click");
@@ -781,7 +779,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
 NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
     var delineationID = this.getSelectedBMPFeature().properties.DelineationID;
-
+    console.log("No damn good reason for me to be here!");
     var url = new Sitka.UrlTemplate(this.config.ChangeDelineationStatusUrlTemplate).ParameterReplace(delineationID);
 
     jQuery.ajax({
@@ -792,8 +790,11 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verifie
         }
     }).then(function (data) {
         if (!data.success) {
-            window.alert(
-                "There was an error changing the delineation status. Please try again. If the issue persists, please contact Support.");
+            toast(
+                "There was an error changing the delineation status.",
+                "error");
+        } else {
+            toast("The Delineation status was successfully changed.", "success");
         }
     });
 };
@@ -976,3 +977,15 @@ var configureProj4Defs = function () {
         ]
     ]);
 };
+
+function toast(toastText, level) {
+    jQuery.toast({
+        top: 8,
+        text: toastText,
+        hideAfter: 3500,
+        stack: 1,
+        icon: level,
+        bgColor: "#707070",
+        loaderBg: "#77cfdc"
+    });
+}
