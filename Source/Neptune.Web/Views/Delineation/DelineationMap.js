@@ -214,17 +214,13 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-            toast("Successfully updated Treatment BMP Location", "success");
+            toast("Successfully updated Treatment BMP location.", "success");
         }).fail(function() {
-            alert(
-                "There was an error saving the location.");
-
-
             self.initializeTreatmentBMPClusteredLayer();
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-
+            toast("There was an error updating the Treatment BMP location.");
         });
     } else {
         this.lastSelected.remove();
