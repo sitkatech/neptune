@@ -72,17 +72,17 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
     // delete this line when the analysts realize that they actually do want the delineations hidden by jurisdiction
     jurisdictionCQLFilter = "";
 
-    this.distributedLayer = this.addWmsLayer("OCStormwater:Delineations",
-        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)",
-        { cql_filter: "DelineationType = 'Distributed'" + jurisdictionCQLFilter, maxZoom: 22 });
-    this.centralizedLayer = this.addWmsLayer("OCStormwater:Delineations",
-        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)",
-        { cql_filter: "DelineationType = 'Centralized'" + jurisdictionCQLFilter, maxZoom: 22 });
+    this.verifiedLayer = this.addWmsLayer("OCStormwater:Delineations",
+        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Verified)",
+        { cql_filter: "DelineationStatus = 'Verified'" + jurisdictionCQLFilter, maxZoom: 22 });
+    this.provisionalLayer = this.addWmsLayer("OCStormwater:Delineations",
+        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Provisional)",
+        { cql_filter: "DelineationStatus = 'Provisional'" + jurisdictionCQLFilter, maxZoom: 22 });
 };
 
 NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
-    this.distributedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
-    this.centralizedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
+    this.verifiedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
+    this.provisionalLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
 };
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function () {
@@ -823,10 +823,10 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
         var delineation = response.features[0];
 
         if ((delineation.properties.DelineationType === DELINEATION_DISTRIBUTED &&
-            self.map.hasLayer(self.distributedLayer))
+            self.map.hasLayer(self.verifiedLayer))
             ||
             (delineation.properties.DelineationType === DELINEATION_CENTRALIZED &&
-                self.map.hasLayer(self.centralizedLayer))
+                self.map.hasLayer(self.provisionalLayer))
 
         ) {
             var treatmentBMPID = delineation.properties.TreatmentBMPID;

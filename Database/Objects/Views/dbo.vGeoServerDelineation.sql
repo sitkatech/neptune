@@ -9,7 +9,11 @@ Select
 	t.TreatmentBMPID,
 	sj.StormwaterJurisdictionID,
 	t.TreatmentBMPName,
-	o.OrganizationName
+	o.OrganizationName,
+	Case
+		when d.IsVerified = 1 then 'Verified'
+		else 'Provisional'
+	end as DelineationStatus
 from
 	dbo.Delineation d inner join dbo.DelineationType dt
 		on d.DelineationTypeID = dt.DelineationTypeID
