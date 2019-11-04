@@ -4,6 +4,7 @@ GO
 Create View dbo.vGeoServerDelineation as
 Select
 	d.DelineationID,
+	Null as WaterQualityManagementPlanID,
 	DelineationGeometry4326 as DelineationGeometry,
 	DelineationTypeName as DelineationType,
 	t.TreatmentBMPID,
@@ -23,3 +24,17 @@ from
 		on t.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 	left join dbo.Organization o
 		on sj.OrganizationID = o.OrganizationID
+
+union all
+
+select 
+	Null as DelineationID,
+	WaterQualityManagementPlanID,
+	WaterQualityManagementPlanGeometry as DelineationGeometry,
+	'WQMP' as DelineationType,
+	Null as TreatmentBMPID,
+	StormwaterJurisdictionID,
+	Null as TreatmentBMPName,
+	OrganizationName,
+	'Provisional' as DelineationStatus
+from vWaterQualityManagementPlanTGUInput

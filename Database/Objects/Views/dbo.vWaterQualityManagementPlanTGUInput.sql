@@ -8,6 +8,7 @@ Select
 	w.WaterQualityManagementPlanID,
 	WaterQualityManagementPlanGeometry,
 	w.StormwaterJurisdictionID,
+	som.OrganizationName as OrganizationName,
 	ISNULL(Case
 		when tcs.TrashCaptureStatusTypeDisplayName = 'Full' then 100
 		when tcs.TrashCaptureStatusTypeDisplayName = 'None' or tcs.TrashCaptureStatusTypeDisplayName = 'Not Provided' then 0
@@ -27,4 +28,7 @@ From
 		on w.WaterQualityManagementPlanID = wp.WaterQualityManagementPlanID
 	join dbo.TrashCaptureStatusType tcs
 		on w.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
+	join dbo.vStormwaterJurisdictionOrganizationMapping som
+		on w.StormwaterJurisdictionID = som.StormwaterJurisdictionID
+
 GO
