@@ -214,7 +214,7 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-
+            toast("Successfully updated Treatment BMP Location", "success");
         }).fail(function() {
             alert(
                 "There was an error saving the location.");
@@ -976,3 +976,15 @@ var configureProj4Defs = function () {
         ]
     ]);
 };
+
+function toast(toastText, level) {
+    jQuery.toast({
+        top: 8,
+        text: toastText,
+        hideAfter: 3500,
+        stack: 1,
+        icon: level,
+        bgColor: "#707070",
+        loaderBg: "#77cfdc"
+    });
+}
