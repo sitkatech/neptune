@@ -675,6 +675,13 @@ namespace Neptune.Web.Controllers
             return Json(new {success = true});
         }
 
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult TestHruRequestFeature(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            return Json(new HruRequestFeature(treatmentBMP), JsonRequestBehavior.AllowGet);
+        }
 
 
         [NeptuneViewFeature]
