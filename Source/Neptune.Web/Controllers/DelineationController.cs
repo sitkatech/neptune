@@ -172,8 +172,6 @@ namespace Neptune.Web.Controllers
             delineation.DateLastVerified = DateTime.Now;
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
 
-            SetMessageForDisplay("The Delineation status was successfully changed.");
-
             return Json(new {success = true});
         }
 
