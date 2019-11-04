@@ -170,7 +170,7 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
     this.treatmentBMPLayer.off("click");
     this.map.off("click");
-    jQuery("#delineationMap").css("cursor", "pointer");
+    jQuery("#delineationMap").css("cursor", "crosshair");
     var self = this;
     this.map.on("click",
         function (e) {
