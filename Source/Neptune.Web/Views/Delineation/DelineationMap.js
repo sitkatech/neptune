@@ -813,7 +813,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
             latlng.lat +
             " " +
             latlng.lng +
-            "))"
+            ")) AND DelineationType <> 'WQMP'"
     };
     var self = this;
     this.getFeatureInfo("OCStormwater:Delineations", [latlng.lng, latlng.lat]).then(function (response) {
