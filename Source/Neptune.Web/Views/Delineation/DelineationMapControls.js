@@ -55,7 +55,9 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         
     },
 
-    treatmentBMP: function (treatmentBMPFeature) {
+    treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
+
+        console.log(window.delineationMap.selectedBMPDelineationLayer);
         this.registerDelineationButtonHandler(treatmentBMPFeature);
         this.registerDeleteButtonHandler(treatmentBMPFeature);
         this.registerEditLocationButtonHandler(treatmentBMPFeature);
@@ -94,14 +96,15 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             style: "neptuneToggle"
         });
 
-        if (treatmentBMPFeature.properties.IsDelineationVerified) {
-            $('#verifyDelineationButton').bootstrapToggle("on");
-        }
-
         var self = this;
 
-        // hook up event handler on button
+        // preset and hook up event handler on button
         jQuery("#verifyDelineationButton").off("change");
+        if (delineationStatus === "Verified") {
+            $('#verifyDelineationButton').bootstrapToggle("on");
+        } else {
+            $('#verifyDelineationButton').bootstrapToggle("off");
+        }
         jQuery("#verifyDelineationButton").change(function (e) {
             if (window.freeze) {
                 self.changeDelineationStatus(jQuery(this).prop("checked"));
