@@ -819,13 +819,13 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verifie
         }
     }).then(function (data) {
         if (!data.success) {
-            self.cacheBustDelineationWmsLayers();
 
             toast(
                 "There was an error changing the delineation status.",
                 "error");
 
         } else {
+            self.cacheBustDelineationWmsLayers();
             toast("The Delineation status was successfully changed.", "success");
         }
     });
