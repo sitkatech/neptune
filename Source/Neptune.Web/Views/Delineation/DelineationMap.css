@@ -34,7 +34,7 @@ label.group {
   transform: translate(50%, 50%);
 }
 .leaflet-control-layers-list {
-  width: 175px;
+  width: 210px;
   padding: 5px;
 }
 .leaflet-bar a#selectedBMPDetailLink {

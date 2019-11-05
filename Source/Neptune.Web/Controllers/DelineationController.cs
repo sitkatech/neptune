@@ -81,6 +81,9 @@ namespace Neptune.Web.Controllers
             feature.Properties.Add("DelineationType",
                 treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");
 
+            feature.Properties.Add("DelineationStatus",
+                treatmentBMP.Delineation?.IsVerified ?? false ? "Verified" : "Provisional");
+
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
 

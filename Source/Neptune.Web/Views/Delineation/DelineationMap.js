@@ -54,6 +54,9 @@ var TOLERANCE_STEP_INCREMENT = 0.000001;
 var DELINEATION_DISTRIBUTED = "Distributed";
 var DELINEATION_CENTRALIZED = "Centralized";
 
+var DELINEATION_VERIFIED = "Verified";
+var DELINEATION_PROVISIONAL = "Provisional";
+
 var STRATEGY_AUTODEM = "AutoDEM";
 var STRATEGY_NETWORK_TRACE = "NetworkTrace";
 var STRATEGY_MANUAL = "Manual";
@@ -72,12 +75,27 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
     // delete this line when the analysts realize that they actually do want the delineations hidden by jurisdiction
     jurisdictionCQLFilter = "";
 
+    var verifiedLegendUrl = '/Content/img/legendImages/delineationVerified.png';
+    var verifiedLabel = "<span>Delineations (Verified) </br><img src='" + verifiedLegendUrl + "'/></span>";
     this.verifiedLayer = this.addWmsLayer("OCStormwater:Delineations",
-        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Verified)",
-        { cql_filter: "DelineationStatus = 'Verified'" + jurisdictionCQLFilter, maxZoom: 22 });
+        verifiedLabel,
+        {
+            styles: "delineation",
+            cql_filter: "DelineationStatus = 'Verified'" + jurisdictionCQLFilter,
+            maxZoom: 22
+        },
+        false);
+
+    var provisionalLegendUrl = '/Content/img/legendImages/delineationProvisional.png';
+    var provisionalLabel = "<span>Delineations (Provisional) </br><img src='" + provisionalLegendUrl + "'/></span>";
     this.provisionalLayer = this.addWmsLayer("OCStormwater:Delineations",
-        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Provisional)",
-        { cql_filter: "DelineationStatus = 'Provisional'" + jurisdictionCQLFilter, maxZoom: 22 });
+        provisionalLabel,
+        {
+            styles: "delineation",
+            cql_filter: "DelineationStatus = 'Provisional'" + jurisdictionCQLFilter,
+            maxZoom: 22
+        },
+        true);
 };
 
 NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
@@ -112,11 +130,20 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
 
-    this.selectedAssetControl.treatmentBMP(layer.feature);
     var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
     var self = this;
     promise.then(function () {
+        var delineationStatus;
+        if (self.selectedBMPDelineationLayer) {
+            delineationStatus = self.selectedBMPDelineationLayer.getLayers()[0].feature.properties
+                .DelineationStatus;
+        } else {
+            delineationStatus = "None";
+        }
+        self.selectedAssetControl.treatmentBMP(layer.feature, delineationStatus);
+
+
         if (self.selectedBMPDelineationLayer) {
             self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds(), { maxZoom: 18 });
         } else {
@@ -779,6 +806,8 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
 NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
     var delineationID = this.getSelectedBMPFeature().properties.DelineationID;
+    var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
+
     console.log("No damn good reason for me to be here!");
     var url = new Sitka.UrlTemplate(this.config.ChangeDelineationStatusUrlTemplate).ParameterReplace(delineationID);
 
@@ -790,9 +819,12 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verifie
         }
     }).then(function (data) {
         if (!data.success) {
+            self.cacheBustDelineationWmsLayers();
+
             toast(
                 "There was an error changing the delineation status.",
                 "error");
+
         } else {
             toast("The Delineation status was successfully changed.", "success");
         }
@@ -820,13 +852,12 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
         if (response.totalFeatures === 0) {
             return; // no one cares
         }
-
         var delineation = response.features[0];
 
-        if ((delineation.properties.DelineationType === DELINEATION_DISTRIBUTED &&
+        if ((delineation.properties.DelineationStatus === DELINEATION_VERIFIED &&
             self.map.hasLayer(self.verifiedLayer))
             ||
-            (delineation.properties.DelineationType === DELINEATION_CENTRALIZED &&
+            (delineation.properties.DelineationStatus === DELINEATION_PROVISIONAL &&
                 self.map.hasLayer(self.provisionalLayer))
 
         ) {
@@ -834,8 +865,16 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
             var layer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             if (layer) {
                 self.setSelectedFeature(layer.feature);
-                self.retrieveAndShowBMPDelineation(layer.feature);
-                self.selectedAssetControl.treatmentBMP(layer.feature);
+                self.retrieveAndShowBMPDelineation(layer.feature).then(function (response) {
+                    var delineationStatus;
+                    if (self.selectedBMPDelineationLayer) {
+                        delineationStatus = self.selectedBMPDelineationLayer.getLayers()[0].feature.properties
+                            .DelineationStatus;
+                    } else {
+                        delineationStatus = "None";
+                    }
+                    self.selectedAssetControl.treatmentBMP(layer.feature, delineationStatus);
+                });
             }
         }
     });
@@ -863,8 +902,16 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
         function (e) {
             if (!window.freeze) {
                 self.setSelectedFeature(e.layer.feature);
-                self.selectedAssetControl.treatmentBMP(e.layer.feature);
-                self.retrieveAndShowBMPDelineation(e.layer.feature);
+                self.retrieveAndShowBMPDelineation(e.layer.feature).then(function (response) {
+                    var delineationStatus;
+                    if (self.selectedBMPDelineationLayer) {
+                        delineationStatus = self.selectedBMPDelineationLayer.getLayers()[0].feature.properties
+                            .DelineationStatus;
+                    } else {
+                        delineationStatus = "None";
+                    }
+                    self.selectedAssetControl.treatmentBMP(e.layer.feature, delineationStatus);
+                });
             }
         });
 
