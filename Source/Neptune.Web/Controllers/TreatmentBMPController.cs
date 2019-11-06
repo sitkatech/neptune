@@ -27,11 +27,13 @@ using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
+using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -39,11 +41,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net.Http;
 using System.Web.Mvc;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Neptune.Web.Common.EsriAsynchronousJob;
-using Newtonsoft.Json;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -683,7 +681,7 @@ namespace Neptune.Web.Controllers
         public ContentResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
 
-            var postUrl = @"https://ocgis.com/arcpub/rest/services/Environmental_Resources/HRUComposite/GPServer/HRUComposite";
+            var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -699,9 +697,10 @@ namespace Neptune.Web.Controllers
                 f = "pjson"
             };
 
-            var resultsAsJsonString = esriAsynchronousJobRunner.RunJobRaw(serializeObject);
+            var hruResponseFeatures =
+                esriAsynchronousJobRunner.RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HruResponseFeature>>>(serializeObject).value.features;
 
-            return Content(resultsAsJsonString);
+            return Content("Gottem!");
         }
 
         

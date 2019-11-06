@@ -8,23 +8,26 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
-    public class EsriGPRecordSetLayer
+    public class EsriGPRecordSetLayer<T>
     {
         public string geometryType { get; set; }
         public string exceededTransferLimit { get; set; }
         public List<EsriField> fields { get; set; }
         public EsriSpatialReference spatialReference { get; set; }
-        public List<HruRequestFeature> features { get; set; }
+        public List<T> features { get; set; }
+    }
 
-        public static EsriGPRecordSetLayer GetGPRecordSetLayer(TreatmentBMP treatmentBMP)
+    public static class EsriGPRecordSetLayer
+    {
+        public static EsriGPRecordSetLayer<HruRequestFeature> GetGPRecordSetLayer(TreatmentBMP treatmentBMP)
         {
-            return new EsriGPRecordSetLayer
+            return new EsriGPRecordSetLayer<HruRequestFeature>
             {
 
-                features = new List<HruRequestFeature> {new HruRequestFeature(treatmentBMP)},
+                features = new List<HruRequestFeature> { new HruRequestFeature(treatmentBMP) },
                 geometryType = "esriGeometryPolygon",
                 exceededTransferLimit = "false",
-                spatialReference = new EsriSpatialReference {wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID},
+                spatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID },
                 fields = new List<EsriField>
                 {
                     new EsriField

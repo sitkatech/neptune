@@ -52,6 +52,7 @@
     <add key="MapServiceLayerNameNetworkCatchment" value="${map-service-layer-name-networkcatchment}"/>
     <add key="aspnet:MaxJsonDeserializerMembers" value="150000" />
     <add key="AutoDelineateServiceUrl" value="${auto-delineate-service-url}"/>
+    <add key="HRUServiceBaseUrl" value="${hru-service-base-url}"/>
     <add key="NominatimAPIKey" value="${nominatim-key}"/>
     <add key="PathToPyqgisTestScript" value="${path-to-pyqgis-test-script}"/>
     <add key="PyqgisTestWorkingDirectory" value="${pyqgis-test-working-directory}"/>

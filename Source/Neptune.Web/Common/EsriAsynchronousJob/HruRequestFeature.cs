@@ -39,4 +39,24 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             };
         }
     }
+
+    public class HruResponseFeature
+    {
+        public HruResponseFeatureAttributes attributes { get; set; }
+
+        public EsriPolygonGeometry geometry { get; set; }
+
+    }
+
+    public class HruResponseFeatureAttributes
+    {
+        public int OBJECTID { get; set; }
+        public int QueryFeatureID { get; set; }
+        public string HRU_Composite_LSPC_LU_DESC { get; set; }
+        public string HRU_Composite_soil_hsg { get; set; }
+        public int HRU_Composite_slope_pct { get; set; }
+        public double SUM_imp_acres { get; set; }
+        public double Shape_Length { get; set; }
+        public double Shape_Area { get; set; }
+    }
 }

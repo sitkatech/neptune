@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading;
 using Newtonsoft.Json;
@@ -103,5 +104,13 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                    || jobStatusResponse.jobStatus == EsriJobStatus.esriJobWaiting
                    || jobStatusResponse.jobStatus == EsriJobStatus.esriJobSubmitted;
         }
+    }
+
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public class EsriAsynchronousJobOutputParameter<T>
+    {
+        public string paramName { get; set; }
+        public string dataType { get; set; }
+        public T value { get; set; }
     }
 }
