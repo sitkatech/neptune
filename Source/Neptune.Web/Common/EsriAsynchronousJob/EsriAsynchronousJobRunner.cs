@@ -29,44 +29,12 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
         public T RunJob<T>(Object requestObject)
         {
-            var requestFormData = requestObject.ToKeyValue();
-            var requestContent = new FormUrlEncodedContent(requestFormData);
-
-            var httpResponseMessage = HttpClient.PostAsync(PostUrl, requestContent).Result;
-            var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-            var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responseContent);
-
-            JobID = jobStatusResponse.jobId;
-            var jobStatusUrl = JobStatusUrl;
-            var isExecuting = jobStatusResponse.IsExecuting();
-
-            while (isExecuting)
-            {
-                var jobStatusHttpResponseMessage = HttpClient.GetAsync(jobStatusUrl).Result;
-                jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content.ReadAsStringAsync().Result);
-                isExecuting = jobStatusResponse.IsExecuting();
-            }
-
-            switch (jobStatusResponse.jobStatus)
-            {
-                case EsriJobStatus.esriJobSucceeded:
-                    var jobResultHttpResponseMessage = HttpClient.GetAsync(JobResultUrl).Result;
-                    return JsonConvert.DeserializeObject<T>(jobResultHttpResponseMessage.Content.ReadAsStringAsync().Result);
-                case EsriJobStatus.esriJobCancelling:
-                case EsriJobStatus.esriJobCancelled:
-                    throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);
-                case EsriJobStatus.esriJobFailed:
-                    throw new EsriAsynchronousJobFailedException(jobStatusResponse.jobId);
-                default:
-                    // ReSharper disable once NotResolvedInText
-                    throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
-                        $"Unexpected job status from HRU job {jobStatusResponse.jobId}");
-            }
-
+            var responseRaw = RunJobRaw(requestObject);
+            return JsonConvert.DeserializeObject<T>(responseRaw);
         }
 
 
-        public string RunJob(Object requestObject)
+        public string RunJobRaw(Object requestObject)
         {
             var requestFormData = requestObject.ToKeyValue();
             var requestContent = new FormUrlEncodedContent(requestFormData);
@@ -93,7 +61,6 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             {
                 case EsriJobStatus.esriJobSucceeded:
                     return HttpClient.GetAsync(JobResultUrl).Result.Content.ReadAsStringAsync().Result;
-                //return JsonConvert.DeserializeObject<T>(jobResultHttpResponseMessage.Content.ReadAsStringAsync().Result);
                 case EsriJobStatus.esriJobCancelling:
                 case EsriJobStatus.esriJobCancelled:
                     throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);

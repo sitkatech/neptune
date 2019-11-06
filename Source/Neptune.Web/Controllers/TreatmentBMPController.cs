@@ -699,7 +699,7 @@ namespace Neptune.Web.Controllers
                 f = "pjson"
             };
 
-            var resultsAsJsonString = esriAsynchronousJobRunner.RunJob(serializeObject);
+            var resultsAsJsonString = esriAsynchronousJobRunner.RunJobRaw(serializeObject);
 
             return Content(resultsAsJsonString);
         }
