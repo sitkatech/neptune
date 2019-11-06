@@ -32,7 +32,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -40,8 +39,11 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -677,12 +679,43 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
-        public JsonResult TestHruRequestFeature(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public JsonResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
+
+            var postUrl = @"https://ocgis.com/arcpub/rest/services/Environmental_Resources/HRUComposite/GPServer/HRUComposite/submitJob";
+
+            var client = new HttpClient();
+
+
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            return Json(new HruRequestFeature(treatmentBMP), JsonRequestBehavior.AllowGet);
+
+            var hruRequest = new HruRequest(treatmentBMP);
+
+            //var serializeObject = JsonConvert.SerializeObject(hruRequest);
+            var serializeObject = new
+            {
+                Input_Polygons = JsonConvert.SerializeObject(hruRequest),
+                returnZ = false,
+                returnM = false,
+                returnTrueCurves = false,
+                f = "html"
+            }.ToKeyValue();
+            //var deserializeObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(serializeObject).ToList();
+            //HttpContent content = new FormUrlEncodedContent(deserializeObject.ToList());
+
+            var content = new FormUrlEncodedContent(serializeObject);
+
+            var httpResponseMessage = client.PostAsync(postUrl, content).Result;
+
+            var uri = httpResponseMessage.RequestMessage.RequestUri.ToString();
+
+            var stringo = httpResponseMessage.Content.ReadAsStringAsync().Result;
+
+
+            return Json(new {Input_Polygons = hruRequest, results = uri}, JsonRequestBehavior.AllowGet);
         }
 
+        
 
         [NeptuneViewFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
@@ -804,6 +837,51 @@ namespace Neptune.Web.Controllers
         {
             ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
                 outputShapefileName, update);
+        }
+    }
+
+    public static class ObjectExtensions
+    {
+        public static IDictionary<string, string> ToKeyValue(this object metaToken)
+        {
+            if (metaToken == null)
+            {
+                return null;
+            }
+
+            JToken token = metaToken as JToken;
+            if (token == null)
+            {
+                return ToKeyValue(JObject.FromObject(metaToken));
+            }
+
+            if (token.HasValues)
+            {
+                var contentData = new Dictionary<string, string>();
+                foreach (var child in token.Children().ToList())
+                {
+                    var childContent = child.ToKeyValue();
+                    if (childContent != null)
+                    {
+                        contentData = contentData.Concat(childContent)
+                            .ToDictionary(k => k.Key, v => v.Value);
+                    }
+                }
+
+                return contentData;
+            }
+
+            var jValue = token as JValue;
+            if (jValue?.Value == null)
+            {
+                return null;
+            }
+
+            var value = jValue?.Type == JTokenType.Date ?
+                jValue?.ToString("o", CultureInfo.InvariantCulture) :
+                jValue?.ToString(CultureInfo.InvariantCulture);
+
+            return new Dictionary<string, string> { { token.Path, value } };
         }
     }
 }
