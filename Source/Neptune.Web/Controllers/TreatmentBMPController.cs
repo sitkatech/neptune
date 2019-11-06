@@ -42,8 +42,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Mvc;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Neptune.Web.Common.EsriAsynchronousJob;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -680,13 +680,11 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
-        public JsonResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public ContentResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
 
-            var postUrl = @"https://ocgis.com/arcpub/rest/services/Environmental_Resources/HRUComposite/GPServer/HRUComposite/submitJob";
-
-            var client = new HttpClient();
-
+            var postUrl = @"https://ocgis.com/arcpub/rest/services/Environmental_Resources/HRUComposite/GPServer/HRUComposite";
+            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 
@@ -699,51 +697,11 @@ namespace Neptune.Web.Controllers
                 returnM = false,
                 returnTrueCurves = false,
                 f = "pjson"
-            }.ToKeyValue();
+            };
 
-            var content = new FormUrlEncodedContent(serializeObject);
+            var resultsAsJsonString = esriAsynchronousJobRunner.RunJob(serializeObject);
 
-            var httpResponseMessage = client.PostAsync(postUrl, content).Result;
-
-            var responsecontent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-
-            var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responsecontent);
-            var jobStatusUrl =
-                $@"https://ocgis.com/arcpub/rest/services/Environmental_Resources/HRUComposite/GPServer/HRUComposite/jobs/{jobStatusResponse.jobId}/?f=pjson";
-            var stillGoing = jobStatusResponse.jobStatus == EsriJobStatus.esriJobExecuting
-                             || jobStatusResponse.jobStatus == EsriJobStatus.esriJobWaiting
-                             || jobStatusResponse.jobStatus == EsriJobStatus.esriJobSubmitted;
-
-            while (stillGoing)
-            {
-                var jobStatusHttpResponseMessage = client.GetAsync(jobStatusUrl).Result;
-                jobStatusResponse = JsonConvert.DeserializeObject <EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content.ReadAsStringAsync().Result);
-                stillGoing = jobStatusResponse.jobStatus == EsriJobStatus.esriJobExecuting;
-            }
-
-            string message;
-
-            switch (jobStatusResponse.jobStatus)
-            {
-                case EsriJobStatus.esriJobSucceeded:
-                    message = "Good job!";
-                    // todo: how about actually do something with that response body?
-                    break;
-                case EsriJobStatus.esriJobCancelling:
-                case EsriJobStatus.esriJobCancelled:
-                    message = "How did you cancel job?";
-                    break;
-                case EsriJobStatus.esriJobFailed:
-                    message = "Bad job!";
-                    break;
-                default:
-                    // ReSharper disable once NotResolvedInText
-                    throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
-                        $"Unexpected job status from HRU job {jobStatusResponse.jobId}");
-            }
-            
-
-            return Json(new {Message = message, Input_Polygons = hruRequest}, JsonRequestBehavior.AllowGet);
+            return Content(resultsAsJsonString);
         }
 
         
@@ -868,51 +826,6 @@ namespace Neptune.Web.Controllers
         {
             ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
                 outputShapefileName, update);
-        }
-    }
-
-    public static class ObjectExtensions
-    {
-        public static IDictionary<string, string> ToKeyValue(this object metaToken)
-        {
-            if (metaToken == null)
-            {
-                return null;
-            }
-
-            JToken token = metaToken as JToken;
-            if (token == null)
-            {
-                return ToKeyValue(JObject.FromObject(metaToken));
-            }
-
-            if (token.HasValues)
-            {
-                var contentData = new Dictionary<string, string>();
-                foreach (var child in token.Children().ToList())
-                {
-                    var childContent = child.ToKeyValue();
-                    if (childContent != null)
-                    {
-                        contentData = contentData.Concat(childContent)
-                            .ToDictionary(k => k.Key, v => v.Value);
-                    }
-                }
-
-                return contentData;
-            }
-
-            var jValue = token as JValue;
-            if (jValue?.Value == null)
-            {
-                return null;
-            }
-
-            var value = jValue?.Type == JTokenType.Date ?
-                jValue?.ToString("o", CultureInfo.InvariantCulture) :
-                jValue?.ToString(CultureInfo.InvariantCulture);
-
-            return new Dictionary<string, string> { { token.Path, value } };
         }
     }
 }
