@@ -5,65 +5,60 @@
 using LtInfo.Common;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Neptune.Web.Models
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public class HruRequest
+    public class EsriGPRecordSetLayer
     {
-        [JsonProperty]
-        public static string geometryType { get; }
-        [JsonProperty]
-        public static string exceededTransferLimit { get; }
-        [JsonProperty]
-        public static List<EsriField> fields { get; }
-        [JsonProperty]
-        public static EsriSpatialReference spatialReference { get; }
-        [JsonProperty]
-        public List<HruRequestFeature> features { get; }
+        public string geometryType { get; set; }
+        public string exceededTransferLimit { get; set; }
+        public List<EsriField> fields { get; set; }
+        public EsriSpatialReference spatialReference { get; set; }
+        public List<HruRequestFeature> features { get; set; }
 
-        static HruRequest()
+        public static EsriGPRecordSetLayer GetGPRecordSetLayer(TreatmentBMP treatmentBMP)
         {
-            geometryType = "esriGeometryPolygon";
-            exceededTransferLimit = "false";
-            spatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID };
-            fields = new List<EsriField>
+            return new EsriGPRecordSetLayer
             {
-                new EsriField
-                {
-                    name = "OBJECTID",
-                    type = "esriFieldTypeOID",
-                    alias = "OBJECTID"
 
-                },
-
-                new EsriField
+                features = new List<HruRequestFeature> {new HruRequestFeature(treatmentBMP)},
+                geometryType = "esriGeometryPolygon",
+                exceededTransferLimit = "false",
+                spatialReference = new EsriSpatialReference {wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID},
+                fields = new List<EsriField>
                 {
-                    name = "QueryFeatureID",
-                    type = "esriFieldTypeString",
-                    alias = "QueryFeatureID",
-                    length = 255
-                },
+                    new EsriField
+                    {
+                        name = "OBJECTID",
+                        type = "esriFieldTypeOID",
+                        alias = "OBJECTID"
 
-                new EsriField
-                {
-                    name = "Shape_Length",
-                    type = "esriFieldTypeDouble",
-                    alias = "Shape_Length"
-                },
+                    },
 
-                new EsriField
-                {
-                    name = "Shape_Area",
-                    type = "esriFieldTypeDouble",
-                    alias = "Shape_Area"
+                    new EsriField
+                    {
+                        name = "QueryFeatureID",
+                        type = "esriFieldTypeString",
+                        alias = "QueryFeatureID",
+                        length = 255
+                    },
+
+                    new EsriField
+                    {
+                        name = "Shape_Length",
+                        type = "esriFieldTypeDouble",
+                        alias = "Shape_Length"
+                    },
+
+                    new EsriField
+                    {
+                        name = "Shape_Area",
+                        type = "esriFieldTypeDouble",
+                        alias = "Shape_Area"
+                    }
                 }
             };
-        }
-
-        public HruRequest(TreatmentBMP treatmentBMP)
-        {
-            features = new List<HruRequestFeature>{new HruRequestFeature(treatmentBMP)};
         }
     }
 
@@ -124,5 +119,44 @@ namespace Neptune.Web.Models
         public int QueryFeatureID { get; set; } // actually wants to be a string..?
         public double Shape_Length { get; set; }
         public double Shape_Area { get; set; }
+    }
+
+    public class EsriJobStatusResponse
+    {
+        public string jobId { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EsriJobStatus jobStatus { get; set; }
+
+        public List<EsriJobMessage> messages { get; set; }
+    }
+
+    public class EsriJobMessage
+    {
+        public string description { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EsriJobMessageType type { get; set; }
+    }
+
+    public enum EsriJobMessageType
+    {
+        esriJobMessageTypeInformative,
+        esriJobMessageTypeWarning,
+        esriJobMessageTypeError,
+        esriJobMessageTypeEmpty,
+        esriJobMessageTypeAbort,
+
+    }
+
+    public enum EsriJobStatus
+    {
+        esriJobWaiting,
+        esriJobSubmitted,
+        esriJobExecuting,
+        esriJobSucceeded,
+        esriJobFailed,
+        esriJobCancelling,
+        esriJobCancelled
     }
 }

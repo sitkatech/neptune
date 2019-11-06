@@ -41,7 +41,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
@@ -49,6 +49,7 @@ using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
 using EditViewData = Neptune.Web.Views.TreatmentBMP.EditViewData;
 using EditViewModel = Neptune.Web.Views.TreatmentBMP.EditViewModel;
+using ListItem = System.Web.UI.WebControls.ListItem;
 using TreatmentBMPAssessmentSummary = Neptune.Web.Models.TreatmentBMPAssessmentSummary;
 
 namespace Neptune.Web.Controllers
@@ -689,30 +690,60 @@ namespace Neptune.Web.Controllers
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 
-            var hruRequest = new HruRequest(treatmentBMP);
+            var hruRequest = EsriGPRecordSetLayer.GetGPRecordSetLayer(treatmentBMP);
 
-            //var serializeObject = JsonConvert.SerializeObject(hruRequest);
             var serializeObject = new
             {
                 Input_Polygons = JsonConvert.SerializeObject(hruRequest),
                 returnZ = false,
                 returnM = false,
                 returnTrueCurves = false,
-                f = "html"
+                f = "pjson"
             }.ToKeyValue();
-            //var deserializeObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(serializeObject).ToList();
-            //HttpContent content = new FormUrlEncodedContent(deserializeObject.ToList());
 
             var content = new FormUrlEncodedContent(serializeObject);
 
             var httpResponseMessage = client.PostAsync(postUrl, content).Result;
 
-            var uri = httpResponseMessage.RequestMessage.RequestUri.ToString();
+            var responsecontent = httpResponseMessage.Content.ReadAsStringAsync().Result;
 
-            var stringo = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responsecontent);
+            var jobStatusUrl =
+                $@"https://ocgis.com/arcpub/rest/services/Environmental_Resources/HRUComposite/GPServer/HRUComposite/jobs/{jobStatusResponse.jobId}/?f=pjson";
+            var stillGoing = jobStatusResponse.jobStatus == EsriJobStatus.esriJobExecuting
+                             || jobStatusResponse.jobStatus == EsriJobStatus.esriJobWaiting
+                             || jobStatusResponse.jobStatus == EsriJobStatus.esriJobSubmitted;
 
+            while (stillGoing)
+            {
+                var jobStatusHttpResponseMessage = client.GetAsync(jobStatusUrl).Result;
+                jobStatusResponse = JsonConvert.DeserializeObject <EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content.ReadAsStringAsync().Result);
+                stillGoing = jobStatusResponse.jobStatus == EsriJobStatus.esriJobExecuting;
+            }
 
-            return Json(new {Input_Polygons = hruRequest, results = uri}, JsonRequestBehavior.AllowGet);
+            string message;
+
+            switch (jobStatusResponse.jobStatus)
+            {
+                case EsriJobStatus.esriJobSucceeded:
+                    message = "Good job!";
+                    // todo: how about actually do something with that response body?
+                    break;
+                case EsriJobStatus.esriJobCancelling:
+                case EsriJobStatus.esriJobCancelled:
+                    message = "How did you cancel job?";
+                    break;
+                case EsriJobStatus.esriJobFailed:
+                    message = "Bad job!";
+                    break;
+                default:
+                    // ReSharper disable once NotResolvedInText
+                    throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
+                        $"Unexpected job status from HRU job {jobStatusResponse.jobId}");
+            }
+            
+
+            return Json(new {Message = message, Input_Polygons = hruRequest}, JsonRequestBehavior.AllowGet);
         }
 
         
