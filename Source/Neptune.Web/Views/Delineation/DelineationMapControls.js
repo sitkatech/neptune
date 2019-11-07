@@ -56,8 +56,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
-
-        console.log(window.delineationMap.selectedBMPDelineationLayer);
+        this.treatmentBMPFeature = treatmentBMPFeature;
         this.registerDelineationButtonHandler(treatmentBMPFeature);
         this.registerDeleteButtonHandler(treatmentBMPFeature);
         this.registerEditLocationButtonHandler(treatmentBMPFeature);
@@ -172,13 +171,15 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
 
+        jQuery(this.getTrackedElement("delineationButton")).off("click");
     },
 
-    exitEditLocationMode: function(save) {
+    exitEditLocationMode: function (save) {
+        this.registerDelineationButtonHandler(this.treatmentBMPFeature);
         this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("editLocationModeButtonsWrapper").classList.add("hiddenControlElement");
-        this.enableDelineationButton();
+        this.disableDelineationButton();
 
         window.delineationMap.exitEditLocationMode(save);
     },

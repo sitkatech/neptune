@@ -93,6 +93,12 @@
             <div style="display: inline-block; vertical-align: top;">
                 @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
             </div>
+            @if(ViewDataTyped.TreatmentBMP.Delineation != null)
+            {
+                <div style="display: inline-block; vertical-align: top;">
+                    <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>
+                </div>
+            }
         </div>
     }
 }

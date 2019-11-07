@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[HRUCharacteristic](
 	[HydrologicSoilGroup] [varchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SlopePercentage] [int] NOT NULL,
 	[ImperviousAcres] [float] NOT NULL,
+	[LastUpdated] [datetime] NOT NULL,
 	[TreatmentBMPID] [int] NULL,
  CONSTRAINT [PK_HRUCharacteristic_HRUCharacteristicID] PRIMARY KEY CLUSTERED 
 (

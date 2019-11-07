@@ -1,15 +1,14 @@
-﻿using System;
-using System.Globalization;
-using System.Web;
-using LtInfo.Common.DbSpatial;
+﻿using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.Views;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Models;
+using System.Globalization;
+using System.Web;
 
 namespace Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit
 {
-    public class TrashGeneratingUnitGridSpec : GridSpec<Models.vTrashGeneratingUnitLoadStatistic>
+    public class TrashGeneratingUnitGridSpec : GridSpec<vTrashGeneratingUnitLoadStatistic>
     {
         public TrashGeneratingUnitGridSpec()
         {

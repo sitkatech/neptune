@@ -679,14 +679,15 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
-        public ContentResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public ActionResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 
             RetrieveAndSaveHRUCharacteristics(treatmentBMP);
 
-            return Content(treatmentBMP.HRUCharacteristics.Count.ToString());
+            return Redirect(
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMPPrimaryKey)));
         }
 
         private static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics)

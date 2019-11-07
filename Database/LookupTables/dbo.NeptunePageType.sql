@@ -45,4 +45,5 @@ values
 (41, 'TreatmentBMPAssessment', 'Treatment BMP Assessment', 2),
 (42, 'EditOVTAArea', 'Edit OVTA Area', 2),
 (43, 'LandUseBlock', 'Land Use Block', 2),
-(44, 'ExportAssessmentGeospatialData', 'Export Assessment Geospatial Data', 2)
+(44, 'ExportAssessmentGeospatialData', 'Export Assessment Geospatial Data', 2),
+(45, 'HRUCharacteristics', 'HRU Characteristics', 2)

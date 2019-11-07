@@ -17,7 +17,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             if (iHaveHRUCharacteristics is TreatmentBMP)
             {
                 return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres)
+                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
                     {TreatmentBMPID = iHaveHRUCharacteristics.PrimaryKey};
             }
             else

@@ -241,6 +241,7 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
+            self.selectedAssetControl.enableDelineationButton();
             toast("Successfully updated Treatment BMP location.", "success");
         }).fail(function() {
             self.initializeTreatmentBMPClusteredLayer();

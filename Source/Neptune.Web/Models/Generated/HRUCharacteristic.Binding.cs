@@ -30,20 +30,21 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, int? treatmentBMPID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
             this.LSPCLandUseDescription = lSPCLandUseDescription;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
             this.SlopePercentage = slopePercentage;
             this.ImperviousAcres = imperviousAcres;
+            this.LastUpdated = lastUpdated;
             this.TreatmentBMPID = treatmentBMPID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres) : this()
+        public HRUCharacteristic(string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.HRUCharacteristicID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -52,6 +53,7 @@ namespace Neptune.Web.Models
             this.HydrologicSoilGroup = hydrologicSoilGroup;
             this.SlopePercentage = slopePercentage;
             this.ImperviousAcres = imperviousAcres;
+            this.LastUpdated = lastUpdated;
         }
 
 
@@ -60,7 +62,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static HRUCharacteristic CreateNewBlank()
         {
-            return new HRUCharacteristic(default(string), default(string), default(int), default(double));
+            return new HRUCharacteristic(default(string), default(string), default(int), default(double), default(DateTime));
         }
 
         /// <summary>
@@ -101,6 +103,7 @@ namespace Neptune.Web.Models
         public string HydrologicSoilGroup { get; set; }
         public int SlopePercentage { get; set; }
         public double ImperviousAcres { get; set; }
+        public DateTime LastUpdated { get; set; }
         public int? TreatmentBMPID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HRUCharacteristicID; } set { HRUCharacteristicID = value; } }
