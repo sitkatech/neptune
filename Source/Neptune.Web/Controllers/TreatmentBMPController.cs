@@ -42,6 +42,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
+using ApprovalUtilities.Utilities;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -697,16 +698,18 @@ namespace Neptune.Web.Controllers
                 f = "pjson"
             };
 
-            var hruResponseFeatures =
-                esriAsynchronousJobRunner.RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HruResponseFeature>>>(serializeObject).Value.Features;
+            
+            HttpRequestStorage.DatabaseEntities.HRUCharacteristics.DeleteHRUCharacteristic(treatmentBMP.HRUCharacteristics);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            var hruCharacteristics =
+                esriAsynchronousJobRunner.RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(serializeObject).Value.Features.Select(x => x.ToHRUCharacteristic(treatmentBMP));
 
-            hruResponseFeatures.Select(x => new HRUCharacteristic(x.Attributes.LSPCLandUseDescription,
-                x.Attributes.HydrologicSoilGroup, x.Attributes.SlopePercentage, x.Attributes.ImperviousAcres){TreatmentBMPID = treatmentBMP.TreatmentBMPID});
-
-            return Content("Gottem!");
+            treatmentBMP.HRUCharacteristics.AddAll(hruCharacteristics);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Load();
+            return Content(treatmentBMP.HRUCharacteristics.Count.ToString());
         }
 
-        
 
         [NeptuneViewFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)

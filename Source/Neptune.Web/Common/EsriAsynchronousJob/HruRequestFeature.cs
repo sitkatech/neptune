@@ -8,16 +8,16 @@ using Newtonsoft.Json;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
-    public class HruRequestFeature
+    public class HRURequestFeature
     {
         [JsonProperty("attributes")]
-        public HruRequestFeatureAttributes Attributes { get; set; }
+        public HRURequestFeatureAttributes Attributes { get; set; }
         [JsonProperty("geometry")]
         public EsriPolygonGeometry Geometry { get; set; }
 
-        public HruRequestFeature(TreatmentBMP treatmentBMP)
+        public HRURequestFeature(TreatmentBMP treatmentBMP)
         {
-            Attributes = new HruRequestFeatureAttributes
+            Attributes = new HRURequestFeatureAttributes
             {
                 ObjectID = treatmentBMP.TreatmentBMPID,
                 QueryFeatureID = treatmentBMP.TreatmentBMPID,
@@ -42,16 +42,21 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         }
     }
 
-    public class HruResponseFeature
+    public class HRUResponseFeature
     {
         [JsonProperty("attributes")]
-        public HruResponseFeatureAttributes Attributes { get; set; }
+        public HRUResponseFeatureAttributes Attributes { get; set; }
         [JsonProperty("geometry")]
         public EsriPolygonGeometry Geometry { get; set; }
 
+        public HRUCharacteristic ToHRUCharacteristic(TreatmentBMP treatmentBMP)
+        {
+            return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
+                Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres){TreatmentBMPID = treatmentBMP.TreatmentBMPID};
+        }
     }
 
-    public class HruResponseFeatureAttributes
+    public class HRUResponseFeatureAttributes
     {
         [JsonProperty("OBJECTID")]
         public int ObjectID { get; set; }

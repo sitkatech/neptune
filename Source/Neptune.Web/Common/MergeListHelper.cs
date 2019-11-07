@@ -82,6 +82,10 @@ namespace Neptune.Web.Common
 
         private static T MatchRecord<T>(this IEnumerable<T> listToSearch, T itemToSearch, Match<T> matcher)
         {
+            if (matcher == null)
+            {
+                return default(T);
+            }
             return listToSearch.SingleOrDefault(x => matcher(itemToSearch, x));
         }
     }

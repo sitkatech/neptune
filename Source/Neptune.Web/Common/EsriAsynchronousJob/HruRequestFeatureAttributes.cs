@@ -2,7 +2,7 @@
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
-    public class HruRequestFeatureAttributes
+    public class HRURequestFeatureAttributes
     {
         [JsonProperty("OBJECTID")]
         public int ObjectID { get; set; }
