@@ -23,10 +23,12 @@ namespace Neptune.Web.Models
             Property(x => x.LastUpdated).HasColumnName(@"LastUpdated").HasColumnType("datetime").IsRequired();
             Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
+            Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.TreatmentBMP).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID
             HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_WaterQualityManagementPlan_WaterQualityManagementPlanID
+            HasOptional(a => a.NetworkCatchment).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.NetworkCatchmentID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_NetworkCatchment_NetworkCatchmentID
         }
     }
 }

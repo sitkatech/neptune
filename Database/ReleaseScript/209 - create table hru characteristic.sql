@@ -7,10 +7,12 @@ ImperviousAcres float not null,
 LastUpdated datetime not null,
 TreatmentBMPID int null constraint FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID foreign key references dbo.TreatmentBMP(TreatmentBMPID),
 WaterQualityManagementPlanID int null constraint FK_HRUCharacteristic_WaterQualityManagementPlan_WaterQualityManagementPlanID foreign key references dbo.WaterQualityManagementPlan(WaterQualityManagementPlanID),
+NetworkCatchmentID int null constraint FK_HRUCharacteristic_NetworkCatchment_NetworkCatchmentID foreign key references dbo.NetworkCatchment(NetworkCatchmentID),
 constraint CK_HRUCharacteristic_SlopePercentageIsAPercentage check (SlopePercentage >= 0 and SlopePercentage <= 100),
 constraint CK_HRUCharacteristic_XorForeignKeys check(
-	(TreatmentBMPID is not null and WaterQualityManagementPlanID is null)
-	OR (TreatmentBMPID is null and WaterQualityManagementPlanID is not null)
+	   (TreatmentBMPID is not null and WaterQualityManagementPlanID is null and NetworkCatchmentID is null)
+	OR (TreatmentBMPID is null and WaterQualityManagementPlanID is not null and NetworkCatchmentID is null)
+	OR (TreatmentBMPID is null and WaterQualityManagementPlanID is null and NetworkCatchmentID is not null)
 )
 )
 
