@@ -681,12 +681,20 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
-            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 
-            var hruRequest = EsriGPRecordSetLayer.GetGPRecordSetLayer(treatmentBMP);
+            RetrieveAndSaveHRUCharacteristics(treatmentBMP);
+
+            return Content(treatmentBMP.HRUCharacteristics.Count.ToString());
+        }
+
+        private static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics)
+        {
+            var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
+            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
+
+            var hruRequest = EsriGPRecordSetLayer.GetGPRecordSetLayer(iHaveHRUCharacteristics);
 
             var serializeObject = new
             {
@@ -697,15 +705,15 @@ namespace Neptune.Web.Controllers
                 f = "pjson"
             };
 
-            HttpRequestStorage.DatabaseEntities.HRUCharacteristics.DeleteHRUCharacteristic(treatmentBMP.HRUCharacteristics);
+            HttpRequestStorage.DatabaseEntities.HRUCharacteristics.DeleteHRUCharacteristic(iHaveHRUCharacteristics.HRUCharacteristics);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             var hruCharacteristics =
-                esriAsynchronousJobRunner.RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(serializeObject).Value.Features.Select(x => x.ToHRUCharacteristic(treatmentBMP));
+                esriAsynchronousJobRunner
+                    .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(serializeObject).Value
+                    .Features.Select(x => x.ToHRUCharacteristic(iHaveHRUCharacteristics));
 
-            treatmentBMP.HRUCharacteristics.AddAll(hruCharacteristics);
+            iHaveHRUCharacteristics.HRUCharacteristics.AddAll(hruCharacteristics);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            return Content(treatmentBMP.HRUCharacteristics.Count.ToString());
         }
 
 
