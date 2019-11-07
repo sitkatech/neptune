@@ -26,7 +26,12 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                         Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
                     { WaterQualityManagementPlanID = iHaveHRUCharacteristics.PrimaryKey };
             }
-            else
+            else if (iHaveHRUCharacteristics is NetworkCatchment)
+            {
+                return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
+                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
+                    { NetworkCatchmentID = iHaveHRUCharacteristics.PrimaryKey };
+            }
             {
                 throw new NotImplementedException(
                     "Tried to add HRU characteristics to an entity that hasn't fully implemented them yet.");

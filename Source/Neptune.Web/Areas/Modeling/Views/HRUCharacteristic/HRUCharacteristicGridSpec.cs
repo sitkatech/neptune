@@ -37,6 +37,7 @@ namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic{
             Add("Impervious Acres", x => x.ImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal);
             Add("Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
             Add("Water Quality Management Plan", x => x.WaterQualityManagementPlan?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
+            Add("Network Catchment", x => x.NetworkCatchment?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
             Add("Last Updated", x => x.LastUpdated, 150, DhtmlxGridColumnFormatType.Date);
         }
     }

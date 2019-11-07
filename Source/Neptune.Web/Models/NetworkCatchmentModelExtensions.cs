@@ -1,12 +1,32 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using GeoJSON.Net.Feature;
+using LtInfo.Common;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Models
 {
     public static class NetworkCatchmentModelExtensions
     {
+        private static readonly UrlTemplate<int> DetailUrlTemplate =
+            new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(c =>
+                c.Detail(UrlTemplate.Parameter1Int)));
+
+
+
+
+
+
+        public static HtmlString GetDisplayNameAsUrl(this NetworkCatchment networkCatchment)
+        {
+
+            return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(networkCatchment.NetworkCatchmentID)}'>{networkCatchment.Watershed} - {networkCatchment.DrainID}</a>"); 
+        }
+
         public static List<int> TraceUpstreamCatchmentsReturnIDList(this NetworkCatchment networkCatchment)
         {
             var idList = new List<int>();
