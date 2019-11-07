@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,17 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Common\EsriAsynchronousJob\EsriAsynchronousJobRunner.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriField.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriGPRecordSetLayer.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriJobMessage.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriJobMessageType.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriJobStatus.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriJobStatusResponse.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriPolygonGeometry.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\EsriSpatialReference.cs" />
-    <Compile Include="Common\EsriAsynchronousJob\HruRequestFeatureAttributes.cs" />
-    <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -144,6 +133,10 @@
     <Compile Include="Models\Generated\FundingSourcePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\GoogleChartType.Binding.cs" />
     <Compile Include="Models\Generated\GoogleChartTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\HRUCharacteristic.Binding.cs" />
+    <Compile Include="Models\Generated\HRUCharacteristic.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\HRUCharacteristicConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\HRUCharacteristicPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\HydrologicSubarea.Binding.cs" />
     <Compile Include="Models\Generated\HydrologicSubarea.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\HydrologicSubareaConfiguration.Binding.cs" />
@@ -444,6 +437,17 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriAsynchronousJobRunner.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriField.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriGPRecordSetLayer.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriJobMessage.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriJobMessageType.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriJobStatus.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriJobStatusResponse.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriPolygonGeometry.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\EsriSpatialReference.cs" />
+    <Compile Include="Common\EsriAsynchronousJob\HruRequestFeatureAttributes.cs" />
+    <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Common\QgisRunner.cs" />
     <Compile Include="Common\QgisRunnerTest.cs" />
     <Compile Include="Controllers\QgisController.cs" />

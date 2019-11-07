@@ -1,10 +1,16 @@
-﻿namespace Neptune.Web.Common.EsriAsynchronousJob
+﻿using Newtonsoft.Json;
+
+namespace Neptune.Web.Common.EsriAsynchronousJob
 {
     public class HruRequestFeatureAttributes
     {
-        public int OBJECTID { get; set; }
+        [JsonProperty("OBJECTID")]
+        public int ObjectID { get; set; }
+        [JsonProperty("QueryFeatureID")]
         public int QueryFeatureID { get; set; } // actually wants to be a string..?
-        public double Shape_Length { get; set; }
-        public double Shape_Area { get; set; }
+        [JsonProperty("Shape_Length")]
+        public double Length { get; set; }
+        [JsonProperty("Shape_Area")]
+        public double Area { get; set; }
     }
 }

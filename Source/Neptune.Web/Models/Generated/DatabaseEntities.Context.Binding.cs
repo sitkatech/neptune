@@ -49,6 +49,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new FundingEventConfiguration());
             modelBuilder.Configurations.Add(new FundingEventFundingSourceConfiguration());
             modelBuilder.Configurations.Add(new FundingSourceConfiguration());
+            modelBuilder.Configurations.Add(new HRUCharacteristicConfiguration());
             modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockStagingConfiguration());
@@ -127,6 +128,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<FundingEventFundingSource> FundingEventFundingSources { get; set; }
         public virtual DbSet<FundingEvent> FundingEvents { get; set; }
         public virtual DbSet<FundingSource> FundingSources { get; set; }
+        public virtual DbSet<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
@@ -303,6 +305,9 @@ namespace Neptune.Web.Models
                     var googleChartType = GoogleChartType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
                     return googleChartType;
+
+                case "HRUCharacteristic":
+                    return HRUCharacteristics.GetHRUCharacteristic(primaryKey);
 
                 case "HydrologicSubarea":
                     return HydrologicSubareas.GetHydrologicSubarea(primaryKey);

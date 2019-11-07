@@ -109,8 +109,11 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class EsriAsynchronousJobOutputParameter<T>
     {
-        public string paramName { get; set; }
-        public string dataType { get; set; }
-        public T value { get; set; }
+        [JsonProperty("paramName")]
+        public string ParameterName { get; set; }
+        [JsonProperty("dataType")]
+        public string DataType { get; set; }
+        [JsonProperty("value")]
+        public T Value { get; set; }
     }
 }

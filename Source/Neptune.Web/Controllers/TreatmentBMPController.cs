@@ -698,7 +698,10 @@ namespace Neptune.Web.Controllers
             };
 
             var hruResponseFeatures =
-                esriAsynchronousJobRunner.RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HruResponseFeature>>>(serializeObject).value.features;
+                esriAsynchronousJobRunner.RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HruResponseFeature>>>(serializeObject).Value.Features;
+
+            hruResponseFeatures.Select(x => new HRUCharacteristic(x.Attributes.LSPCLandUseDescription,
+                x.Attributes.HydrologicSoilGroup, x.Attributes.SlopePercentage, x.Attributes.ImperviousAcres){TreatmentBMPID = treatmentBMP.TreatmentBMPID});
 
             return Content("Gottem!");
         }

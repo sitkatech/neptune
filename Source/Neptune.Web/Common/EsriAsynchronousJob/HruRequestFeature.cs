@@ -4,23 +4,25 @@
 
 using System.Collections.Generic;
 using Neptune.Web.Models;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
     public class HruRequestFeature
     {
-        public HruRequestFeatureAttributes attributes { get; set; }
-
-        public EsriPolygonGeometry geometry { get; set; }
+        [JsonProperty("attributes")]
+        public HruRequestFeatureAttributes Attributes { get; set; }
+        [JsonProperty("geometry")]
+        public EsriPolygonGeometry Geometry { get; set; }
 
         public HruRequestFeature(TreatmentBMP treatmentBMP)
         {
-            attributes = new HruRequestFeatureAttributes
+            Attributes = new HruRequestFeatureAttributes
             {
-                OBJECTID = treatmentBMP.TreatmentBMPID,
+                ObjectID = treatmentBMP.TreatmentBMPID,
                 QueryFeatureID = treatmentBMP.TreatmentBMPID,
-                Shape_Area = treatmentBMP.Delineation.DelineationGeometry.Area.GetValueOrDefault(),
-                Shape_Length = treatmentBMP.Delineation.DelineationGeometry.Length.GetValueOrDefault(),
+                Area = treatmentBMP.Delineation.DelineationGeometry.Area.GetValueOrDefault(),
+                Length = treatmentBMP.Delineation.DelineationGeometry.Length.GetValueOrDefault(),
             };
 
             var coordinates = new List<double[]>();
@@ -33,30 +35,39 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 coordinates.Add(new[] { lon, lat });
             }
 
-            geometry = new EsriPolygonGeometry
+            Geometry = new EsriPolygonGeometry
             {
-                rings = new List<List<double[]>> { coordinates }
+                Rings = new List<List<double[]>> { coordinates }
             };
         }
     }
 
     public class HruResponseFeature
     {
-        public HruResponseFeatureAttributes attributes { get; set; }
-
-        public EsriPolygonGeometry geometry { get; set; }
+        [JsonProperty("attributes")]
+        public HruResponseFeatureAttributes Attributes { get; set; }
+        [JsonProperty("geometry")]
+        public EsriPolygonGeometry Geometry { get; set; }
 
     }
 
     public class HruResponseFeatureAttributes
     {
-        public int OBJECTID { get; set; }
+        [JsonProperty("OBJECTID")]
+        public int ObjectID { get; set; }
+        [JsonProperty("QueryFeatureID")]
         public int QueryFeatureID { get; set; }
-        public string HRU_Composite_LSPC_LU_DESC { get; set; }
-        public string HRU_Composite_soil_hsg { get; set; }
-        public int HRU_Composite_slope_pct { get; set; }
-        public double SUM_imp_acres { get; set; }
-        public double Shape_Length { get; set; }
-        public double Shape_Area { get; set; }
+        [JsonProperty("HRU_Composite_LSPC_LU_DESC")]
+        public string LSPCLandUseDescription { get; set; }
+        [JsonProperty("HRU_Composite_soil_hsg")]
+        public string HydrologicSoilGroup { get; set; }
+        [JsonProperty("HRU_Composite_slope_pct")]
+        public int SlopePercentage { get; set; }
+        [JsonProperty("SUM_imp_acres")]
+        public double ImperviousAcres { get; set; }
+        [JsonProperty("Shape_Length")]
+        public double Length { get; set; }
+        [JsonProperty("Shape_Area")]
+        public double Area { get; set; }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
     public class EsriPolygonGeometry
     {
-        public List<List<double[]>> rings { get; set; }
+        [JsonProperty("rings")]
+        public List<List<double[]>> Rings { get; set; }
     }
 }

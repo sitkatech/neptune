@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
             this.Delineations = new HashSet<Delineation>();
             this.FieldVisits = new HashSet<FieldVisit>();
             this.FundingEvents = new HashSet<FundingEvent>();
+            this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
@@ -118,13 +119,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
+            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || HRUCharacteristics.Any() || MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(HRUCharacteristic).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
 
 
         /// <summary>
@@ -165,6 +166,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in FundingEvents.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in HRUCharacteristics.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -232,6 +238,7 @@ namespace Neptune.Web.Models
         public Delineation Delineation { get { return Delineations.SingleOrDefault(); } set { Delineations = new List<Delineation>{value};} }
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
+        public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
