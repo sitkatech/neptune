@@ -97,8 +97,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
                 ? "Not Provided"
                 : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
+
+            HRURefreshUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x =>
+                    x.RefreshHRUCharacteristics(waterQualityManagementPlan));
         }
 
         public string TrashCaptureEffectiveness { get; }
+        public string HRURefreshUrl { get; }
     }
 }

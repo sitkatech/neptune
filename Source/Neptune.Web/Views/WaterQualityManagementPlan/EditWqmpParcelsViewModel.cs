@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -34,6 +35,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 newWaterQualityManagementPlanParcels,
                 HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.Local,
                 (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
+
+            // update the cached total boundary
+            waterQualityManagementPlan.WaterQualityManagementPlanBoundary = HttpRequestStorage.DatabaseEntities.Parcels
+                .Where(x => ParcelIDs.Contains(x.PrimaryKey)).Select(x => x.ParcelGeometry).ToList()
+                .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
     }
 }

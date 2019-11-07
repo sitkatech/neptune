@@ -39,7 +39,7 @@ namespace Neptune.Web.Models
                     c.Delete(UrlTemplate.Parameter1Int))).ParameterReplace(WaterQualityManagementPlanID);
         }
 
-        public HtmlString GetNameAsUrl()
+        public HtmlString GetDisplayNameAsUrl()
         {
             return UrlTemplate.MakeHrefString(GetDetailUrl(), WaterQualityManagementPlanName);
         }

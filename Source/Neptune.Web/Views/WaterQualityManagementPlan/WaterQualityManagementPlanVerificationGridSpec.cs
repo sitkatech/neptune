@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add(string.Empty,
                 x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"), 60,
                 DhtmlxGridColumnFilterType.None);
-            Add("WQMP Name", x => x.WaterQualityManagementPlan.GetNameAsUrl(), 300);
+            Add("WQMP Name", x => x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300);
             Add("Jurisdiction", x => x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
             Add("Last O&M Verification", x => x.LastEditedDate, 150);
             Add("Last Edited By", x => x.LastEditedByPerson.GetFullNameFirstLast(), 150, DhtmlxGridColumnFilterType.SelectFilterStrict);

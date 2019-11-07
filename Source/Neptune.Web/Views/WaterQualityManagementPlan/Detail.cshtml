@@ -44,18 +44,25 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <span class="pull-right">
+            <div class="pull-right">
+                <div>
 
-
-                @if (ViewDataTyped.HasSavedWqmpDraft)
+                    @if (ViewDataTyped.HasSavedWqmpDraft)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                    else
+                    {
+                        <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
+                    }
+                </div>
+                @if(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
                 {
-                    @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+                    <div style="display: inline-block; vertical-align: top;">
+                        <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>
+                    </div>
                 }
-                else
-                {
-                    <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
-                }
-            </span>
+            </div>
         </div>
     </div>
 }

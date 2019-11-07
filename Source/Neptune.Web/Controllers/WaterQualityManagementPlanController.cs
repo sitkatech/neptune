@@ -117,6 +117,16 @@ namespace Neptune.Web.Controllers
             return new GridJsonNetJObjectResult<Parcel>(parcels, gridSpec);
         }
 
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan);
+            return Redirect(
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlanPrimaryKey)));
+        }
+
 
         #region CRUD Water Quality Management Plan
         [HttpGet]

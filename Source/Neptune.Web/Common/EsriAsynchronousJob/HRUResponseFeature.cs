@@ -19,6 +19,12 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
                         Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
                     {TreatmentBMPID = iHaveHRUCharacteristics.PrimaryKey};
+            } else if (iHaveHRUCharacteristics is WaterQualityManagementPlan)
+
+            {
+                return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
+                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
+                    { WaterQualityManagementPlanID = iHaveHRUCharacteristics.PrimaryKey };
             }
             else
             {
