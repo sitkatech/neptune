@@ -23,13 +23,12 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
             "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
             { pane: "networkCatchmentPane" }, true);
 
-    var parcelsLegendUrl = geoserverUrl +
-        "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AParcels&style=parcel_alt&scale=5000&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-    var parcelsLabel = "<span>Parcels </br><img src='" + parcelsLegendUrl + "'/></span>";
+    var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
+    var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
     this.addWmsLayer("OCStormwater:Parcels",
         parcelsLabel,
         {
-            styles: "parcel_alt"
+            styles: "parcel"
         }, true);
     networkCatchmentLayer.bringToFront();
 
