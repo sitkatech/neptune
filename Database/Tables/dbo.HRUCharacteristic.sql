@@ -10,6 +10,7 @@ CREATE TABLE [dbo].[HRUCharacteristic](
 	[ImperviousAcres] [float] NOT NULL,
 	[LastUpdated] [datetime] NOT NULL,
 	[TreatmentBMPID] [int] NULL,
+	[WaterQualityManagementPlanID] [int] NULL,
  CONSTRAINT [PK_HRUCharacteristic_HRUCharacteristicID] PRIMARY KEY CLUSTERED 
 (
 	[HRUCharacteristicID] ASC
@@ -22,6 +23,15 @@ REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
 GO
 ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID]
 GO
+ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
+REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
+GO
+ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_WaterQualityManagementPlan_WaterQualityManagementPlanID]
+GO
 ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [CK_HRUCharacteristic_SlopePercentageIsAPercentage] CHECK  (([SlopePercentage]>=(0) AND [SlopePercentage]<=(100)))
 GO
 ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [CK_HRUCharacteristic_SlopePercentageIsAPercentage]
+GO
+ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [CK_HRUCharacteristic_XorForeignKeys] CHECK  (([TreatmentBMPID] IS NOT NULL AND [WaterQualityManagementPlanID] IS NULL OR [TreatmentBMPID] IS NULL AND [WaterQualityManagementPlanID] IS NOT NULL))
+GO
+ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [CK_HRUCharacteristic_XorForeignKeys]

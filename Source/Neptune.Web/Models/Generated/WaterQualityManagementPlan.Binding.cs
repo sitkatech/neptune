@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected WaterQualityManagementPlan()
         {
+            this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
             this.QuickBMPs = new HashSet<QuickBMP>();
             this.SourceControlBMPs = new HashSet<SourceControlBMP>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
@@ -35,7 +36,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, DbGeometry waterQualityManagementPlanBoundary) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -61,6 +62,7 @@ namespace Neptune.Web.Models
             this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
             this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
+            this.WaterQualityManagementPlanBoundary = waterQualityManagementPlanBoundary;
         }
 
         /// <summary>
@@ -104,13 +106,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
+            return HRUCharacteristics.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(HRUCharacteristic).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -134,6 +136,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteChildren(DatabaseEntities dbContext)
         {
+
+            foreach(var x in HRUCharacteristics.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
 
             foreach(var x in QuickBMPs.ToList())
             {
@@ -191,9 +198,11 @@ namespace Neptune.Web.Models
         public decimal? RecordedWQMPAreaInAcres { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
+        public DbGeometry WaterQualityManagementPlanBoundary { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
+        public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }

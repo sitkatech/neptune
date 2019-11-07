@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
             this.LSPCLandUseDescription = lSPCLandUseDescription;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.ImperviousAcres = imperviousAcres;
             this.LastUpdated = lastUpdated;
             this.TreatmentBMPID = treatmentBMPID;
+            this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
         }
 
         /// <summary>
@@ -105,10 +106,12 @@ namespace Neptune.Web.Models
         public double ImperviousAcres { get; set; }
         public DateTime LastUpdated { get; set; }
         public int? TreatmentBMPID { get; set; }
+        public int? WaterQualityManagementPlanID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HRUCharacteristicID; } set { HRUCharacteristicID = value; } }
 
         public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
 
         public static class FieldLengths
         {

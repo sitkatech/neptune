@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using LtInfo.Common;
@@ -8,7 +9,7 @@ using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
-    public partial class WaterQualityManagementPlan : IAuditableEntity
+    public partial class WaterQualityManagementPlan : IAuditableEntity, IHaveHRUCharacteristics
     {
         private static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
             SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
@@ -83,6 +84,11 @@ namespace Neptune.Web.Models
             }
 
             return true;
+        }
+
+        public DbGeometry GetCatchmentGeometry()
+        {
+            return WaterQualityManagementPlanBoundary;
         }
     }
 }
