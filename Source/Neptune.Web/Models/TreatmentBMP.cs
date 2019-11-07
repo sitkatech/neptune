@@ -20,13 +20,14 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
 {
-    public partial class TreatmentBMP : IAuditableEntity
+    public partial class TreatmentBMP : IAuditableEntity, IHaveHRUCharacteristics
     {
         public bool CanView(Person person)
         {
@@ -170,6 +171,11 @@ namespace Neptune.Web.Models
             return delineationType != null
                 ? new HtmlString(delineationType?.DelineationTypeDisplayName)
                 : new HtmlString("<p class='systemText'>No Delineation Provided</p>");
+        }
+
+        public DbGeometry GetCatchmentGeometry()
+        {
+            return Delineation?.DelineationGeometry;
         }
     }
 }

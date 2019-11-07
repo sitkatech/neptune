@@ -15,20 +15,20 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         [JsonProperty("geometry")]
         public EsriPolygonGeometry Geometry { get; set; }
 
-        public HRURequestFeature(TreatmentBMP treatmentBMP)
+        public HRURequestFeature(IHaveHRUCharacteristics iHaveHRUCharacteristics)
         {
             Attributes = new HRURequestFeatureAttributes
             {
-                ObjectID = treatmentBMP.TreatmentBMPID,
-                QueryFeatureID = treatmentBMP.TreatmentBMPID,
-                Area = treatmentBMP.Delineation.DelineationGeometry.Area.GetValueOrDefault(),
-                Length = treatmentBMP.Delineation.DelineationGeometry.Length.GetValueOrDefault(),
+                ObjectID = iHaveHRUCharacteristics.PrimaryKey,
+                QueryFeatureID = iHaveHRUCharacteristics.PrimaryKey,
+                Area = iHaveHRUCharacteristics.GetCatchmentGeometry().Area.GetValueOrDefault(),
+                Length = iHaveHRUCharacteristics.GetCatchmentGeometry().Length.GetValueOrDefault(),
             };
 
             var coordinates = new List<double[]>();
-            for (var i = 1; i <= treatmentBMP.Delineation.DelineationGeometry.ExteriorRing.PointCount; i++)
+            for (var i = 1; i <= iHaveHRUCharacteristics.GetCatchmentGeometry().ExteriorRing.PointCount; i++)
             {
-                var point = treatmentBMP.Delineation.DelineationGeometry.ExteriorRing.PointAt(i);
+                var point = iHaveHRUCharacteristics.GetCatchmentGeometry().ExteriorRing.PointAt(i);
                 var lon = point.XCoordinate.GetValueOrDefault();
                 var lat = point.YCoordinate.GetValueOrDefault();
 

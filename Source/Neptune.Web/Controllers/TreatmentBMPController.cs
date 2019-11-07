@@ -681,7 +681,6 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestHruRequest(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
 
@@ -698,7 +697,6 @@ namespace Neptune.Web.Controllers
                 f = "pjson"
             };
 
-            
             HttpRequestStorage.DatabaseEntities.HRUCharacteristics.DeleteHRUCharacteristic(treatmentBMP.HRUCharacteristics);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             var hruCharacteristics =
@@ -706,7 +704,7 @@ namespace Neptune.Web.Controllers
 
             treatmentBMP.HRUCharacteristics.AddAll(hruCharacteristics);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Load();
+
             return Content(treatmentBMP.HRUCharacteristics.Count.ToString());
         }
 

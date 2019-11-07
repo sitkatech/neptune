@@ -453,6 +453,7 @@
     <Compile Include="Controllers\QgisController.cs" />
     <Compile Include="Models\DroolMetricSimple.cs" />
     <Compile Include="Common\EsriAsynchronousJob\HruRequestFeature.cs" />
+    <Compile Include="Models\IHaveHRUCharacteristics.cs" />
     <Compile Include="Models\vDroolMetricModelExtensions.cs" />
     <Compile Include="Areas\DroolTool\Controllers\NetworkCatchmentController.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\OnlandVisualTrashAssessmentExportTypeEnum.cs" />

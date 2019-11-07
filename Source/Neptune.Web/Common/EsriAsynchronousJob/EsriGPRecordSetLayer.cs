@@ -26,12 +26,12 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
     public static class EsriGPRecordSetLayer
     {
-        public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(TreatmentBMP treatmentBMP)
+        public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(IHaveHRUCharacteristics iHaveHRUCharacteristics)
         {
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
 
-                Features = new List<HRURequestFeature> { new HRURequestFeature(treatmentBMP) },
+                Features = new List<HRURequestFeature> { new HRURequestFeature(iHaveHRUCharacteristics) },
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
                 SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID },
