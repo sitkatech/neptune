@@ -163,6 +163,7 @@ namespace Neptune.Web.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(c=>c.Index()), currentPerson, "Trash Generating Units", "Group3"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(c=>c.Index()), currentPerson, "Land Use Blocks", "Group3"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(c=>c.Index()), currentPerson, "HRU Characteristics", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NetworkCatchmentController>(c=>c.Index()), currentPerson, "Network Catchments", "Group3"));
 
             return manageMenu;
         }

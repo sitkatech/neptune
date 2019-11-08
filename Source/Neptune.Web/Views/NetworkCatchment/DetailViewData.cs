@@ -12,7 +12,8 @@ namespace Neptune.Web.Views.NetworkCatchment
         public DetailViewData(Person currentPerson, Models.NetworkCatchment networkCatchment) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Network Catchment";
-            PageTitle = $"{networkCatchment.Watershed} - {networkCatchment.DrainID}";
+            EntityUrl = SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x => x.Index());
+            PageTitle = $"{networkCatchment.Watershed} {networkCatchment.DrainID}: {networkCatchment.NetworkCatchmentID}";
 
             NetworkCatchment = networkCatchment;
             HRURefreshUrl =

@@ -12,7 +12,8 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString()
         {
-            return $"{Watershed} - {DrainID}";
+            return $"{Watershed} {DrainID}: {NetworkCatchmentID}";
+            
         }
     }
 }

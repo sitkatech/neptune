@@ -1,0 +1,99 @@
+﻿@using LtInfo.Common
+@using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.NetworkCatchment.Index
+
+@section JavascriptAndStylesContent
+{
+    @{MapJavascriptIncludes.RenderPartialView(Html);}
+    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        var networkCatchmentMap;
+        var selectedFeature;
+        jQuery(function() {
+            var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+            var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
+            var networkCatchmentLayerName = @Html.Raw(ViewDataTyped.NetworkCatchmentLayerName.ToJS());
+
+            networkCatchmentMap = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", geoserverUrl);
+
+            networkCatchmentMap.wmsParams = networkCatchmentMap.createWmsParamsWithLayerName(networkCatchmentLayerName);
+            networkCatchmentMap.wfsParams = networkCatchmentMap.createWfsParamsWithLayerName(networkCatchmentLayerName);
+
+
+            var networkCatchmentLayer =
+                networkCatchmentMap.addWmsLayer("OCStormwater:NetworkCatchments",
+                    "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
+                    { }, false);
+
+            networkCatchmentMap.map.on('click', selectCatchment);
+        });
+
+        var selectCatchment = function(evt) {
+            var customParams = {
+                cql_filter: 'intersects(CatchmentGeometry, POINT(' + evt.latlng.lat + ' ' + evt.latlng.lng + '))'
+            }
+            selectCatchmentByWFS(customParams, evt.latlng);
+        };
+
+        var selectCatchmentByWFS = function(customParams, latlng) {
+            if (!Sitka.Methods.isUndefinedNullOrEmpty(selectedFeature)) {
+                networkCatchmentMap.map.removeLayer(selectedFeature);
+                networkCatchmentMap.layerControl.removeLayer(selectedFeature);
+            }
+                
+            var parameters = L.Util.extend(networkCatchmentMap.wfsParams, customParams);
+            SitkaAjax.ajax({
+                    url: networkCatchmentMap.geoserverUrlOWS + L.Util.getParamString(parameters),
+                    dataType: 'json',
+                    jsonpCallback: 'getJson'
+                },
+                function(response) {
+                    selectedFeature = L.geoJSON(response);
+                    console.log(response);
+                    console.log(selectedFeature);
+
+                    if (response.features) {
+                        var properties = response.features[0].properties;
+
+                        var content = '<dl>' +
+                            '<dt>Catchment ID and Detail Link</dt>' +
+                            '<dd>' +
+                            "<a href='/NetworkCatchment/Detail/" +
+                            properties.NetworkCatchmentID +
+                            "'>" +
+                            properties.OCSurveyCatchmentID +
+                            "</a>" +
+                            '</dd>' +
+                            '<dt>Downstream Catchment ID</dt>' +
+                            '<dd>' +
+                            properties.OCSurveyDownstreamCatchmentID +
+                            '</dd>' +
+                            '<dt>Drain ID</dt>' +
+                            '<dd>' +
+                            properties.DrainID +
+                            '</dd>' +
+                            '<dt>Watershed</dt>' +
+                            '<dd>' +
+                            properties.Watershed +
+                            '</dd>' +
+                            '</dl>';
+
+                        var popup = L.popup()
+                            .setLatLng(latlng)
+                            .setContent(content)
+                            .openOn(networkCatchmentMap.map);
+                    }
+                });
+        };
+
+
+    </script>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="neptuneMap" id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 925px;"></div>
+    </div>
+</div>
