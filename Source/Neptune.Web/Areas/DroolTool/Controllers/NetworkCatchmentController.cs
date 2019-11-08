@@ -9,8 +9,6 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
 {
     public class NetworkCatchmentController : NeptuneBaseController
     {
-
-        
         [HttpGet]
         [DroolToolViewFeature]
         public JsonResult Metrics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
