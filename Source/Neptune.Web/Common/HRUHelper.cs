@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using ApprovalUtilities.Utilities;
+using LtInfo.Common;
+using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
@@ -10,10 +13,11 @@ namespace Neptune.Web.Common
     {
         public static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics)
         {
+            Check.Assert(iHaveHRUCharacteristics.GetCatchmentGeometry() != null, "Entity must have a catchment geometry to calculate HRU Characteristics.");
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
 
-            var hruRequest = EsriGPRecordSetLayer.GetGPRecordSetLayer(iHaveHRUCharacteristics);
+            var hruRequest = GetGPRecordSetLayer(iHaveHRUCharacteristics);
 
             var serializeObject = new
             {
@@ -33,6 +37,50 @@ namespace Neptune.Web.Common
 
             iHaveHRUCharacteristics.HRUCharacteristics.AddAll(hruCharacteristics);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+        }
+
+        public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(IHaveHRUCharacteristics iHaveHRUCharacteristics)
+        {
+            return new EsriGPRecordSetLayer<HRURequestFeature>
+            {
+
+                Features = new List<HRURequestFeature> { new HRURequestFeature(iHaveHRUCharacteristics) },
+                GeometryType = "esriGeometryPolygon",
+                ExceededTransferLimit = "false",
+                SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID },
+                Fields = new List<EsriField>
+                {
+                    new EsriField
+                    {
+                        Name = "OBJECTID",
+                        Type = "esriFieldTypeOID",
+                        Alias = "OBJECTID"
+
+                    },
+
+                    new EsriField
+                    {
+                        Name = "QueryFeatureID",
+                        Type = "esriFieldTypeString",
+                        Alias = "QueryFeatureID",
+                        Length = 255
+                    },
+
+                    new EsriField
+                    {
+                        Name = "Shape_Length",
+                        Type = "esriFieldTypeDouble",
+                        Alias = "Shape_Length"
+                    },
+
+                    new EsriField
+                    {
+                        Name = "Shape_Area",
+                        Type = "esriFieldTypeDouble",
+                        Alias = "Shape_Area"
+                    }
+                }
+            };
         }
     }
 }
