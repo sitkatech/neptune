@@ -56,6 +56,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
+            modelBuilder.Configurations.Add(new NeighborhoodConfiguration());
             modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
@@ -136,6 +137,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+        public virtual DbSet<Neighborhood> Neighborhoods { get; set; }
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
@@ -343,6 +345,9 @@ namespace Neptune.Web.Models
                     var measurementUnitType = MeasurementUnitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(measurementUnitType, "MeasurementUnitType", primaryKey);
                     return measurementUnitType;
+
+                case "Neighborhood":
+                    return Neighborhoods.GetNeighborhood(primaryKey);
 
                 case "NeptuneArea":
                     var neptuneArea = NeptuneArea.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

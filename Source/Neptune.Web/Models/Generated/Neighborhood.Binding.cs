@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[NetworkCatchment]
+//  Source Table: [dbo].[Neighborhood]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,54 +15,54 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[NetworkCatchment] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[NetworkCatchment]")]
-    public partial class NetworkCatchment : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[Neighborhood] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[Neighborhood]")]
+    public partial class Neighborhood : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected NetworkCatchment()
+        protected Neighborhood()
         {
-            this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
-            this.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<NetworkCatchment>();
+            this.BackboneSegments = new HashSet<BackboneSegment>();
+            this.NeighborhoodsWhereYouAreTheOCSurveyDownstreamNeighborhood = new HashSet<Neighborhood>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326) : this()
+        public Neighborhood(int neighborhoodID, string drainID, string watershed, DbGeometry neighborhoodGeometry, int oCSurveyNeighborhoodID, int? oCSurveyDownstreamNeighborhoodID, DbGeometry neighborhoodGeometry4326) : this()
         {
-            this.NetworkCatchmentID = networkCatchmentID;
+            this.NeighborhoodID = neighborhoodID;
             this.DrainID = drainID;
             this.Watershed = watershed;
-            this.CatchmentGeometry = catchmentGeometry;
-            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
-            this.OCSurveyDownstreamCatchmentID = oCSurveyDownstreamCatchmentID;
-            this.CatchmentGeometry4326 = catchmentGeometry4326;
+            this.NeighborhoodGeometry = neighborhoodGeometry;
+            this.OCSurveyNeighborhoodID = oCSurveyNeighborhoodID;
+            this.OCSurveyDownstreamNeighborhoodID = oCSurveyDownstreamNeighborhoodID;
+            this.NeighborhoodGeometry4326 = neighborhoodGeometry4326;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID) : this()
+        public Neighborhood(string drainID, string watershed, DbGeometry neighborhoodGeometry, int oCSurveyNeighborhoodID) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.NetworkCatchmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.NeighborhoodID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.DrainID = drainID;
             this.Watershed = watershed;
-            this.CatchmentGeometry = catchmentGeometry;
-            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
+            this.NeighborhoodGeometry = neighborhoodGeometry;
+            this.OCSurveyNeighborhoodID = oCSurveyNeighborhoodID;
         }
 
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static NetworkCatchment CreateNewBlank()
+        public static Neighborhood CreateNewBlank()
         {
-            return new NetworkCatchment(default(string), default(string), default(DbGeometry), default(int));
+            return new Neighborhood(default(string), default(string), default(DbGeometry), default(int));
         }
 
         /// <summary>
@@ -71,13 +71,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return HRUCharacteristics.Any() || NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
+            return BackboneSegments.Any() || NeighborhoodsWhereYouAreTheOCSurveyDownstreamNeighborhood.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(NetworkCatchment).Name, typeof(HRUCharacteristic).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Neighborhood).Name, typeof(BackboneSegment).Name};
 
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.NetworkCatchments.Remove(this);
+            dbContext.Neighborhoods.Remove(this);
         }
         
         /// <summary>
@@ -102,31 +102,31 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
-            foreach(var x in HRUCharacteristics.ToList())
+            foreach(var x in BackboneSegments.ToList())
             {
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
+            foreach(var x in NeighborhoodsWhereYouAreTheOCSurveyDownstreamNeighborhood.ToList())
             {
                 x.DeleteFull(dbContext);
             }
         }
 
         [Key]
-        public int NetworkCatchmentID { get; set; }
+        public int NeighborhoodID { get; set; }
         public string DrainID { get; set; }
         public string Watershed { get; set; }
-        public DbGeometry CatchmentGeometry { get; set; }
-        public int OCSurveyCatchmentID { get; set; }
-        public int? OCSurveyDownstreamCatchmentID { get; set; }
-        public DbGeometry CatchmentGeometry4326 { get; set; }
+        public DbGeometry NeighborhoodGeometry { get; set; }
+        public int OCSurveyNeighborhoodID { get; set; }
+        public int? OCSurveyDownstreamNeighborhoodID { get; set; }
+        public DbGeometry NeighborhoodGeometry4326 { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
+        public int PrimaryKey { get { return NeighborhoodID; } set { NeighborhoodID = value; } }
 
-        public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
-        public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
-        public virtual NetworkCatchment OCSurveyDownstreamCatchment { get; set; }
+        public virtual ICollection<BackboneSegment> BackboneSegments { get; set; }
+        public virtual ICollection<Neighborhood> NeighborhoodsWhereYouAreTheOCSurveyDownstreamNeighborhood { get; set; }
+        public virtual Neighborhood OCSurveyDownstreamNeighborhood { get; set; }
 
         public static class FieldLengths
         {

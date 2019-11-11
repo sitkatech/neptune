@@ -6,11 +6,11 @@ CREATE TABLE [dbo].[BackboneSegment](
 	[BackboneSegmentID] [int] IDENTITY(1,1) NOT NULL,
 	[BackboneSegmentGeometry] [geometry] NOT NULL,
 	[CatchIDN] [int] NOT NULL,
-	[NetworkCatchmentID] [int] NULL,
 	[BackboneSegmentTypeID] [int] NOT NULL,
 	[DownstreamBackboneSegmentID] [int] NULL,
 	[StreamName] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[BackboneSegmentGeometry4326] [geometry] NULL,
+	[NeighborhoodID] [int] NULL,
  CONSTRAINT [PK_BackboneSegment_BackboneSegmentID] PRIMARY KEY CLUSTERED 
 (
 	[BackboneSegmentID] ASC
@@ -28,7 +28,7 @@ REFERENCES [dbo].[BackboneSegmentType] ([BackboneSegmentTypeID])
 GO
 ALTER TABLE [dbo].[BackboneSegment] CHECK CONSTRAINT [FK_BackboneSegment_BackboneSegmentType_BackboneSegmentTypeID]
 GO
-ALTER TABLE [dbo].[BackboneSegment]  WITH CHECK ADD  CONSTRAINT [FK_BackboneSegment_NetworkCatchment_NetworkCatchmentID] FOREIGN KEY([NetworkCatchmentID])
-REFERENCES [dbo].[NetworkCatchment] ([NetworkCatchmentID])
+ALTER TABLE [dbo].[BackboneSegment]  WITH CHECK ADD  CONSTRAINT [FK_BackboneSegment_Neighborhood_NeighborhoodID] FOREIGN KEY([NeighborhoodID])
+REFERENCES [dbo].[Neighborhood] ([NeighborhoodID])
 GO
-ALTER TABLE [dbo].[BackboneSegment] CHECK CONSTRAINT [FK_BackboneSegment_NetworkCatchment_NetworkCatchmentID]
+ALTER TABLE [dbo].[BackboneSegment] CHECK CONSTRAINT [FK_BackboneSegment_Neighborhood_NeighborhoodID]

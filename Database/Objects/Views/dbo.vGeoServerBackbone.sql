@@ -6,7 +6,7 @@ as
 Select
 	BackboneSegmentID,
 CatchIDN,
-NetworkCatchmentID,
+NeighborhoodID,
 b. BackboneSegmentTypeID,
 DownstreamBackboneSegmentID,
 StreamName,

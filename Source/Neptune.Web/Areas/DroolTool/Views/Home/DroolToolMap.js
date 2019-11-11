@@ -452,7 +452,7 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson, evt) {
     this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
-    if (this.config.NetworkCatchmentsWhereItIsOkayToClickIDs.includes(this.selectedNeighborhoodID)) {
+    if (this.config.NeighborhoodsWhereItIsOkayToClickIDs.includes(this.selectedNeighborhoodID)) {
         this.setSelectedNeighborhood(geoJson);
         this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
 

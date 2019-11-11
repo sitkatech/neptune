@@ -1,12 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Models
 {
@@ -15,11 +14,6 @@ namespace Neptune.Web.Models
         private static readonly UrlTemplate<int> DetailUrlTemplate =
             new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(c =>
                 c.Detail(UrlTemplate.Parameter1Int)));
-
-
-
-
-
 
         public static HtmlString GetDisplayNameAsUrl(this NetworkCatchment networkCatchment)
         {
@@ -43,7 +37,7 @@ namespace Neptune.Web.Models
             return idList;
         }
 
-        public static FeatureCollection TraceBackboneDownstream(this NetworkCatchment networkCatchment)
+        public static FeatureCollection TraceBackboneDownstream(this Neighborhood networkCatchment)
         {
             var backboneDownstream = new List<BackboneSegment>();
 
@@ -67,7 +61,7 @@ namespace Neptune.Web.Models
             return featureCollection;
         }
 
-        public static FeatureCollection GetStormshedViaBackboneTrace(this NetworkCatchment networkCatchment)
+        public static FeatureCollection GetStormshedViaBackboneTrace(this Neighborhood networkCatchment)
         {
             var backboneAccumulated = new List<BackboneSegment>();
 
@@ -91,13 +85,13 @@ namespace Neptune.Web.Models
                 lookingAt = upFromHere.Union(downFromHere).ToList();
             }
 
-            var networkCatchmentsInStormshed = backboneAccumulated.Select(x=>x.NetworkCatchment).Distinct();
+            var networkCatchmentsInStormshed = backboneAccumulated.Select(x=>x.Neighborhood).Distinct();
 
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(networkCatchmentsInStormshed.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.CatchmentGeometry);
-                feature.Properties.Add("NetworkCatchmentID", x.NetworkCatchmentID);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.NeighborhoodGeometry);
+                feature.Properties.Add("NeighborhoodID", x.NeighborhoodID);
                 return feature;
             }));
 

@@ -24,18 +24,18 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             GeoserverUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
 
             StormwaterMapInitJson = mapInitJson;
-            DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl, HttpRequestStorage.DatabaseEntities.NetworkCatchments.Where(x => x.BackboneSegments.Any()).Select(x => x.NetworkCatchmentID).ToList());
+            DroolToolMapConfig = new DroolToolMapConfig(NeptuneWebConfiguration.NominatimApiKey, NeptuneWebConfiguration.ParcelMapServiceUrl, HttpRequestStorage.DatabaseEntities.Neighborhoods.Where(x => x.BackboneSegments.Any()).Select(x => x.NeighborhoodID).ToList());
         }
 
     }
 
     public class DroolToolMapConfig
     {
-        public DroolToolMapConfig(string nominatimApiKey, string geoServerUrl, List<int> networkCatchmentsWhereItIsOkayToClickIDs)
+        public DroolToolMapConfig(string nominatimApiKey, string geoServerUrl, List<int> neighborhoodsWhereItIsOkayToClickIDs)
         {
             NominatimApiKey = nominatimApiKey;
             GeoServerUrl = geoServerUrl;
-            NetworkCatchmentsWhereItIsOkayToClickIDs = networkCatchmentsWhereItIsOkayToClickIDs;
+            NeighborhoodsWhereItIsOkayToClickIDs = neighborhoodsWhereItIsOkayToClickIDs;
             BackboneTraceUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.DownstreamBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
             StormshedUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.StormshedBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
             MetricUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x =>
@@ -55,6 +55,6 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
         public string NominatimApiKey { get; }
         public string GeoServerUrl { get; }
         public string BackboneTraceUrlTemplate { get; }
-        public List<int> NetworkCatchmentsWhereItIsOkayToClickIDs { get; }
+        public List<int> NeighborhoodsWhereItIsOkayToClickIDs { get; }
     }
 }

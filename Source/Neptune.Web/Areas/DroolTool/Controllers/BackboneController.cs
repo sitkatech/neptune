@@ -12,11 +12,11 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
     {
         [HttpGet]
         [DroolToolViewFeature]
-        public ContentResult DownstreamBackboneFeatureCollection(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        public ContentResult DownstreamBackboneFeatureCollection(NeighborhoodPrimaryKey neighborhoodPrimaryKey)
         {
-            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+            var neighborhood = neighborhoodPrimaryKey.EntityObject;
 
-            var traceBackboneDownstream = networkCatchment.TraceBackboneDownstream();
+            var traceBackboneDownstream = neighborhood.TraceBackboneDownstream();
 
             var jobject = JObject.FromObject(traceBackboneDownstream).ToString(Formatting.None);
 
@@ -25,11 +25,11 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
 
         [HttpGet]
         [DroolToolViewFeature]
-        public ContentResult StormshedBackboneFeatureCollection(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        public ContentResult StormshedBackboneFeatureCollection(NeighborhoodPrimaryKey neighborhoodPrimaryKey)
         {
-            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+            var neighborhood = neighborhoodPrimaryKey.EntityObject;
 
-            var traceBackboneDownstream = networkCatchment.GetStormshedViaBackboneTrace();
+            var traceBackboneDownstream = neighborhood.GetStormshedViaBackboneTrace();
             
             var jobject = JObject.FromObject(traceBackboneDownstream).ToString(Formatting.None);
 
