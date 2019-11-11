@@ -8,6 +8,7 @@ using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Views;
 using Neptune.Web.Views.NetworkCatchment;
 using Newtonsoft.Json;
@@ -75,6 +76,13 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, networkCatchmentPrimaryKey.EntityObject));
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TestRefresh()
+        {
+            return Content(NetworkCatchmentRefreshScheduledBackgroundJob.TestRunJob());
         }
     }
 }
