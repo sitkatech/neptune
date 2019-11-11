@@ -170,7 +170,7 @@ L.Control.NeighborhoodDetailControl = L.Control.extend({
     },
 
     selectNeighborhood: function (properties) {
-        this.NeighborhoodID = properties.NetworkCatchmentID;
+        this.NeighborhoodID = properties.NeighborhoodID;
         this.neptuneMap.neighborhoodDetailShowMobileControl.button.disabled = false;
         
         var now = new Date();
@@ -319,7 +319,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
     this.config = config;
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
     
-    this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments");
+    this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:Neighborhoods");
     this.backboneLayerWmsParams = this.createWmsParamsWithLayerName("OCStormwater:Backbone");
     this.configureRemoteService();
     this.initializeOverlays();
@@ -341,7 +341,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
 
             var xy = [lon, lat];
 
-            RemoteService.geoserverNetworkCatchmentLookup(xy).then(function (geoJsonResponse) {
+            RemoteService.geoserverNeighborhoodLookup(xy).then(function (geoJsonResponse) {
                 debugger;
                 if (geoJsonResponse.totalFeatures === 0) {
                     return null;
@@ -390,10 +390,10 @@ NeptuneMaps.DroolToolMap.prototype.DisplayStormshedAndBackboneDetail = function 
 
         var ids = _.map(geoJsonResponse.features,
             function(f) {
-                return f.properties.NetworkCatchmentID
+                return f.properties.NeighborhoodID
             });
 
-        var cql_filter = "NetworkCatchmentID in (" + ids.join(",") + ")";
+        var cql_filter = "NeighborhoodID in (" + ids.join(",") + ")";
 
         var wmsParams = { styles: "backbone_narrow", wmsParameterThatDoesNotExist: Date.now(), pane: "droolToolOverlayPane", cql_filter: cql_filter };
 
@@ -451,7 +451,7 @@ NeptuneMaps.DroolToolMap.prototype.SetClickMarker = function(lat, lon) {
 }
 
 NeptuneMaps.DroolToolMap.prototype.SelectNeighborhood = function (geoJson, evt) {
-    this.selectedNeighborhoodID = geoJson.features[0].properties.NetworkCatchmentID;
+    this.selectedNeighborhoodID = geoJson.features[0].properties.NeighborhoodID;
     if (this.config.NeighborhoodsWhereItIsOkayToClickIDs.includes(this.selectedNeighborhoodID)) {
         this.setSelectedNeighborhood(geoJson);
         this.neighborhoodDetailControl.selectNeighborhood(geoJson.features[0].properties);
@@ -495,9 +495,9 @@ NeptuneMaps.DroolToolMap.prototype.highlightFlow = function () {
 var RemoteService = {
     options: {},
 
-    geoserverNetworkCatchmentLookup: function (xy) {
+    geoserverNeighborhoodLookup: function (xy) {
 
-        return this.options.neptuneMap.getFeatureInfo("OCStormwater:NetworkCatchments", xy);
+        return this.options.neptuneMap.getFeatureInfo("OCStormwater:Neighborhoods", xy);
     },
 
     getTrace: function(neighborhoodID, urlTemplate) {
@@ -544,7 +544,7 @@ var RemoteService = {
             var lon = response[0].lon;
             var xy = [lon, lat];
 
-            return RemoteService.geoserverNetworkCatchmentLookup(xy);
+            return RemoteService.geoserverNeighborhoodLookup(xy);
         }).then(function(responseGeoJson) {
             if (!responseGeoJson || responseGeoJson.totalFeatures === 0) {
                 toast(NEIGHBORHOOD_NOT_FOUND);
@@ -594,8 +594,8 @@ NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
     this.map.getPane("markerPane").style.zIndex = 10001;
 
     this.neighborhoodLayer =
-        this.addWmsLayer("OCStormwater:NetworkCatchments",
-            "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Neighborhoods</span>",
+        this.addWmsLayer("OCStormwater:Neighborhoods",
+            "<span><img src='/Content/img/legendImages/neighborhood.png' height='12px' style='margin-bottom:3px;' /> Neighborhoods</span>",
             { pane: "droolToolOverlayPane", styles: "neighborhood" },
             true);
 

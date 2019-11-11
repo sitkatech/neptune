@@ -38,10 +38,10 @@ namespace Neptune.Web.Areas.DroolTool.Views.Home
             NeighborhoodsWhereItIsOkayToClickIDs = neighborhoodsWhereItIsOkayToClickIDs;
             BackboneTraceUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.DownstreamBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
             StormshedUrlTemplate = new UrlTemplate<int>(SitkaRoute<BackboneController>.BuildUrlFromExpression(x => x.StormshedBackboneFeatureCollection(UrlTemplate.Parameter1Int))).UrlTemplateString;
-            MetricUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x =>
+            MetricUrlTemplate = new UrlTemplate<int>(SitkaRoute<NeighborhoodController>.BuildUrlFromExpression(x =>
                     x.Metrics(UrlTemplate.Parameter1Int)))
                 .UrlTemplateString;
-            MetricForMonthUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x =>
+            MetricForMonthUrlTemplate = new UrlTemplate<int>(SitkaRoute<NeighborhoodController>.BuildUrlFromExpression(x =>
                     x.MetricsForMonth(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int, UrlTemplate.Parameter3Int)))
                 .UrlTemplateString;
         }
