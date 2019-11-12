@@ -213,17 +213,17 @@ namespace LtInfo.Common.GdalOgr
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(pathToOgr2OgrExecutable, CoordinateSystemId, totalMilliseconds);
             var geoJson = ogr2OgrCommandLineRunner.ImportFileGdbToGeoJson(gdbFileInfo, sourceLayerName, true);
 
-            var sourceColumnName1 = "mystringcolumn";
             var destinationTableName = "test_table";
-            var destinationColumnName = "attribute";
-            
+
+            var sqlSelectClause = string.Format("mystringcolumn as attribute, {0} as ProjectID", 77);
+
             try
             {                
                 CreateOgrRequiredTables(destinationTableName, null);
                 
                 // Act
                 // ---
-                ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(geoJson, TempDbSqlDatabase.DatabaseConnectionStringToTempDb, destinationTableName, sourceColumnName1, destinationColumnName, string.Format(", {0} as ProjectID", 77));
+                ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(geoJson, TempDbSqlDatabase.DatabaseConnectionStringToTempDb, destinationTableName, sqlSelectClause);
                 var result = ExecAdHocSql(string.Format("select * from {0}", destinationTableName));
 
                 // Assert
@@ -231,9 +231,6 @@ namespace LtInfo.Common.GdalOgr
                           
                 Assert.That(result, Is.Not.Null, "Should have found the table imported");
                 Assert.That(result.Rows.Count, Is.EqualTo(6), "Should have gotten 6 rows");
-                
-                //var myStringColumns = result.Rows.Cast<DataRow>().Select(x => x.IsNull(destinationColumnName) ? null : x[destinationColumnName].ToString()).ToList();
-                //Assert.That(myStringColumns, Is.EquivalentTo(new[] { "?\0Excavate channels to lakes", "?\0Excavate channels to lakes", null, null, "?\0LCEP s", "?\0LCEP s" }), "Should have gotten these values for MyStringColumn");
                 
             }
             finally
