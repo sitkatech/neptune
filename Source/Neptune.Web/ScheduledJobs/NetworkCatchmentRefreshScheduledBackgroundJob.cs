@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
-using GeoJSON.Net.Feature;
+﻿using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Web;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -23,58 +22,59 @@ namespace Neptune.Web.ScheduledJobs
 
         public static string TestRunJob()
         {
-            var client = new HttpClient();
-            var resultOffset = 0;
-            var baseRequestUri = NeptuneWebConfiguration.RegionalSubbasinServiceUrl;
-            var done = false;
             var collectedFeatureCollection = new FeatureCollection();
-
-            while (!done)
+            using (var client = new HttpClient())
             {
-                var queryStringObject = new
+                var resultOffset = 0;
+                var baseRequestUri = NeptuneWebConfiguration.RegionalSubbasinServiceUrl;
+                var done = false;
+
+                while (!done)
                 {
-                    where = "1=1",
-                    geometryType = "esriGeometryEnvelope",
-                    spatialRel = "esriSpatialRelIntersects",
-                    outFields = "*",
-                    returnGeometry = true,
-                    returnTrueCurves = false,
-                    outSR = 2771,
-                    returnIdsOnly = false,
-                    returnCountOnly = false,
-                    returnZ = false,
-                    returnM = false,
-                    returnDistinctValues = false,
-                    returnExtentOnly = false,
-                    f = "geojson",
-                    resultOffset = resultOffset,
-                    resultRecordCount = 1000
-                };
+                    var queryStringObject = new
+                    {
+                        where = "1=1",
+                        geometryType = "esriGeometryEnvelope",
+                        spatialRel = "esriSpatialRelIntersects",
+                        outFields = "*",
+                        returnGeometry = true,
+                        returnTrueCurves = false,
+                        outSR = 2771,
+                        returnIdsOnly = false,
+                        returnCountOnly = false,
+                        returnZ = false,
+                        returnM = false,
+                        returnDistinctValues = false,
+                        returnExtentOnly = false,
+                        f = "geojson",
+                        resultOffset = resultOffset,
+                        resultRecordCount = 1000
+                    };
 
-                var configurationSerialized = JsonConvert.SerializeObject(queryStringObject, Formatting.None,
-                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
-                var nameValueCollection =
-                    JsonConvert.DeserializeObject<Dictionary<string, string>>(configurationSerialized);
-                var queryParameters = string.Join("&",
-                    nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string) x.Value)}"));
-                var uri = $"{baseRequestUri}?{queryParameters}";
-                var response = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+                    var configurationSerialized = JsonConvert.SerializeObject(queryStringObject, Formatting.None,
+                        new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
+                    var nameValueCollection =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(configurationSerialized);
+                    var queryParameters = string.Join("&",
+                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string) x.Value)}"));
+                    var uri = $"{baseRequestUri}?{queryParameters}";
+                    var response = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
 
-                resultOffset += 1000;
+                    resultOffset += 1000;
 
-                done = !JsonConvert.DeserializeObject<EsriQueryResponse>(response).ExceededTransferLimit;
+                    done = !JsonConvert.DeserializeObject<EsriQueryResponse>(response).ExceededTransferLimit;
 
-                var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(response);
-                collectedFeatureCollection.Features.AddRange(featureCollection.Features);
+                    var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(response);
+                    collectedFeatureCollection.Features.AddRange(featureCollection.Features);
+                }
             }
 
             var mergedResponse = JsonConvert.SerializeObject(collectedFeatureCollection);
 
-            //var disposableTempFile = new DisposableTempFile();
-            //var filename = disposableTempFile.FileInfo.FullName;
-            //File.WriteAllText(disposableTempFile.FileInfo.FullName, mergedResponse);
-            //var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
-            //ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(mergedResponse, NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging", "", "","");
+            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
+            ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(mergedResponse,
+                NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging",
+                "CatchID as OCSurveyCatchmentID, DwnCatchID as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed");
 
             return mergedResponse;
         }

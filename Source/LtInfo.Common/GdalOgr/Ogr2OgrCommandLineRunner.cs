@@ -82,18 +82,19 @@ namespace LtInfo.Common.GdalOgr
             return processUtilityResult.StdOut;
         }
 
-        public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string sourceColumnName, string destinationColumnName, string extraColumns)
+        public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string sqlSelectClause)
         {
             var databaseConnectionString = $"MSSQL:{connectionString}";
             using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
             {
                 File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
                 var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToMsSql(geoJsonFile.FileInfo,
-                    sourceColumnName, destinationTableName, destinationColumnName, _gdalDataPath, databaseConnectionString, _coordinateSystemId, extraColumns);
+                     destinationTableName,  _gdalDataPath, databaseConnectionString, _coordinateSystemId, sqlSelectClause);
                 ExecuteOgr2OgrCommand(commandLineArguments);
             }
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void ImportGeoJsonToEsriShapefile(string geoJson, string outputFilePath, string outputFileName)
         {
             using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
@@ -140,6 +141,7 @@ namespace LtInfo.Common.GdalOgr
         }
 
         // The FileGDB driver for Ogr2Ogr prints an empty line to standard error and returns a code even when successful, so we have to trap that case explicitly
+        // ReSharper disable once UnusedMethodReturnValue.Local
         private ProcessUtilityResult ExecuteOgr2OgrCommandForFileGdbWrite(List<string> commandLineArguments)
         {
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
@@ -219,7 +221,7 @@ namespace LtInfo.Common.GdalOgr
             return commandLineArguments;
         }
 
-        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string sourceColumnName, string destinationTableName, string destinationColumnName, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, int coordinateSystemId, string extraColumns)
+        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string destinationTableName, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, int coordinateSystemId, string sqlSelectClause)
         {
             //c:\SVN\sitkatech\trunk\Corral\Build>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f MSSQLSpatial "MSSQL:server=localhost;database=tempdb;trusted_connection=yes" "C:\temp\geojson.json" -nln "TestTable"            
 
@@ -227,7 +229,7 @@ namespace LtInfo.Common.GdalOgr
             {
                 "-append",
                 "-sql",
-                $"SELECT {sourceColumnName} AS {destinationColumnName}{extraColumns} FROM {OgrGeoJsonTableName}",
+                $"SELECT {sqlSelectClause} FROM {OgrGeoJsonTableName}",
                 "--config",
                 "GDAL_DATA",
                 gdalDataDirectoryInfo.FullName,
