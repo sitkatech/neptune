@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         [Required]
         [DisplayName("BMP Type")]
-        public int BMPType { get; set; }
+        public int? BMPType { get; set; }
 
         public UploadTreatmentBMPsViewModel()
         {
