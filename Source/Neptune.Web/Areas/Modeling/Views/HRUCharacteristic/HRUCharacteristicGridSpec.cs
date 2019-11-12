@@ -31,6 +31,10 @@ namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic{
     {
         public HRUCharacteristicGridSpec()
         {
+            Add("Type of HRU Entity",
+                x => x.TreatmentBMP != null ? "Treatment BMP" :
+                    (x.WaterQualityManagementPlan != null ? "Water Quality Management Plan" : "Network Catchment"), 150,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("LSPC Land Use Description", x => x.LSPCLandUseDescription.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Soil Group", x => x.HydrologicSoilGroup.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Slope Percentage", x => x.SlopePercentage, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);

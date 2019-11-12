@@ -27,7 +27,6 @@ using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
-using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
@@ -42,7 +41,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
-using ApprovalUtilities.Utilities;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -678,7 +676,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [SitkaAdminFeature]
+        [NeptuneAdminFeature]
         public ActionResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;

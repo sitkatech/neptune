@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [SitkaAdminFeature]
+        [NeptuneAdminFeature]
         public ActionResult RefreshHRUCharacteristics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
