@@ -63,7 +63,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [SitkaAdminFeature]
+        [NeptuneAdminFeature]
         public ActionResult RefreshHRUCharacteristics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
@@ -72,7 +72,7 @@ namespace Neptune.Web.Controllers
                 SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x => x.Detail(networkCatchmentPrimaryKey)));
         }
         [HttpGet]
-        [SitkaAdminFeature]
+        [NeptuneAdminFeature]
         public ViewResult Detail(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, networkCatchmentPrimaryKey.EntityObject));

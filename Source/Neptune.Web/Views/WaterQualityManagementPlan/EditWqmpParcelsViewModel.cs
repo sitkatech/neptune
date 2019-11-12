@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             // update the cached total boundary
             waterQualityManagementPlan.WaterQualityManagementPlanBoundary = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => ParcelIDs.Contains(x.PrimaryKey)).Select(x => x.ParcelGeometry).ToList()
+                .Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
                 .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
     }

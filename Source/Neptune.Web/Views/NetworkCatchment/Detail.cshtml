@@ -18,11 +18,12 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using Neptune.Web.Models
 @inherits Neptune.Web.Views.NetworkCatchment.Detail
 @section RightOfPageTitle{
     <div class="pull-right">
 
-        @if (ViewDataTyped.NetworkCatchment.CatchmentGeometry != null)
+        @if (ViewDataTyped.NetworkCatchment.CatchmentGeometry != null && ViewDataTyped.CurrentPerson.IsAdministrator())
         {
             <div style="display: inline-block; vertical-align: top;">
                 <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>

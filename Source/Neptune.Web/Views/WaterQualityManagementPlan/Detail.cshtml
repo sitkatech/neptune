@@ -56,7 +56,7 @@
                         <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
                     }
                 </div>
-                @if(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+                @if(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && ViewDataTyped.CurrentPerson.IsAdministrator())
                 {
                     <div style="display: inline-block; vertical-align: top;">
                         <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>

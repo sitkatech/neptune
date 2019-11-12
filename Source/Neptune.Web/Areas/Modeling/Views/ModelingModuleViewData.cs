@@ -4,6 +4,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Views;
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Areas.Modeling.Controllers;
 using Neptune.Web.Areas.Trash.Controllers;
 using HomeController = Neptune.Web.Controllers.HomeController;
 
@@ -41,6 +42,9 @@ namespace Neptune.Web.Areas.Modeling.Views
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(c => c.Index()), currentPerson, "Trash Generating Units", "Group3"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(c => c.Index()), currentPerson, "Land Use Blocks", "Group3"));
+
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(c => c.Index()), currentPerson, "HRU Characteristics", "Group4"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NetworkCatchmentController>(c => c.Index()), currentPerson, "Network Catchments", "Group4"));
             return manageMenu;
         }
     }

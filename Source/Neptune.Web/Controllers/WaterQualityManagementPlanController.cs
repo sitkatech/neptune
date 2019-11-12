@@ -118,7 +118,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [SitkaAdminFeature]
+        [NeptuneAdminFeature]
         public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
