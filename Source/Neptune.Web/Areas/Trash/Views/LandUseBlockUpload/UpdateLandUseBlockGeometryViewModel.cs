@@ -98,6 +98,11 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
                         {
                             errors.Add(new ValidationResult("The upload contained features with null values. All fields are required."));
                         }
+                        else if (e.Message.Contains("Unrecognised field name",
+                            StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            errors.Add(new ValidationResult("The columns in the uploaded file did not match the Land Use Block schema. The file cannot be uploaded."));
+                        }
                         else
                         {
                             errors.Add(new ValidationResult($"There was a problem processing the Feature Class \"{featureClassNames[0]}\". Please check that the file is not corrupt and try again."));
