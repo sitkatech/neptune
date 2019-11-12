@@ -115,7 +115,8 @@ namespace Neptune.Web.Common
             treatmentBMP.TreatmentBMPName = treatmentBMPName;
 
             treatmentBMP.TreatmentBMPTypeID = bmpType;
-            treatmentBMP.TreatmentBMPType = treatmentBMPs.First(x => x.TreatmentBMPTypeID == bmpType).TreatmentBMPType;
+            treatmentBMP.TreatmentBMPType =
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType);
           
             var treatmentBMPLatitude = row[fieldsDict["Latitude"]];
             var treatmentBMPLongitude = row[fieldsDict["Longitude"]];

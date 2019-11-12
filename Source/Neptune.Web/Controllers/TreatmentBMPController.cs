@@ -771,7 +771,7 @@ namespace Neptune.Web.Controllers
             var uploadCSV = viewModel.UploadCSV;
             var bmpType = viewModel.BMPType;
 
-            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType, out var errorList,
+            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType.GetValueOrDefault(), out var errorList,
                 out var customAttributes, out var customAttributeValues);
 
             if (errorList.Count != 0)
