@@ -176,10 +176,11 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
     exitEditLocationMode: function (save) {
         this.registerDelineationButtonHandler(this.treatmentBMPFeature);
-        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
+
+        // note that we don't bring back the edit/delete delineation buttons here; the save Promise will do that as a completion action
+
         this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("editLocationModeButtonsWrapper").classList.add("hiddenControlElement");
-        this.disableDelineationButton();
 
         window.delineationMap.exitEditLocationMode(save);
     },
@@ -267,6 +268,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             return; //misplaced call
         }
         this.getTrackedElement("delineationButton").removeAttribute("disabled");
+    },
+
+    showDelineationButtons: function() {
+        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
     },
 
     thin: function (tolerance) {

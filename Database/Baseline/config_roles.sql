@@ -5,7 +5,7 @@ if object_id('tempdb.dbo.#accountsToCreate') is not null drop table #accountsToC
 select '${db-user}' as AccountName, 'U' as AccountType
 into #accountsToCreate
 union select '${db-batch-user}', 'U'
-union select '${db-geoserver-user}', 'U'
+union select '${db-geoserver-user}', 'S'
 union select 'Sitka\H2O QA Support', 'G'
 union select 'Sitka\H2O QA Tester', 'G'
 
@@ -23,8 +23,8 @@ from
     union select '${local-db-batch-user}', 'U'
     union select '${qa-db-batch-user}', 'U'
     union select '${prod-db-batch-user}', 'U'
-	union select '${local-db-geoserver-user}', 'U'
-	union select '${qa-db-geoserver-user}', 'U'
+	union select '${local-db-geoserver-user}', 'S'
+	union select '${qa-db-geoserver-user}', 'S'
 	union select '${prod-db-geoserver-user}', 'U'
     union select 'Sitka\H2O QA Support', 'G'
     union select 'Sitka\H2O QA Tester', 'G'

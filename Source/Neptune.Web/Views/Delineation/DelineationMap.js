@@ -165,6 +165,9 @@ NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function () {
  */
 
 NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function (treatmentBMPFeature) {
+    if (this.beginDelineationControl) {
+        return; // misplaced call
+    }
     this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" }, treatmentBMPFeature);
     this.beginDelineationControl.addTo(this.map);
     this.beginDelineationControl.preselectDelineationType(treatmentBMPFeature.properties.DelineationType);
@@ -241,16 +244,19 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-            self.selectedAssetControl.enableDelineationButton();
+            self.selectedAssetControl.showDelineationButtons();
             toast("Successfully updated Treatment BMP location.", "success");
         }).fail(function() {
             self.initializeTreatmentBMPClusteredLayer();
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
+            self.selectedAssetControl.showDelineationButtons();
             toast("There was an error updating the Treatment BMP location.");
         });
     } else {
+        // don't jump through the hoops of actually saving, nothing was changed.
+        this.selectedAssetControl.showDelineationButtons();
         this.lastSelected.remove();
         var movedLayer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
         this.setSelectedFeature(movedLayer.feature);
