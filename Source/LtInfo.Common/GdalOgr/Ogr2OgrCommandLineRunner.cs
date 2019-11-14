@@ -94,6 +94,18 @@ namespace LtInfo.Common.GdalOgr
             }
         }
 
+        public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string sqlSelectClause, int sourceCrsId, int targetCrsId)
+        {
+            var databaseConnectionString = $"MSSQL:{connectionString}";
+            using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
+            {
+                File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
+                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToMsSql(geoJsonFile.FileInfo,
+                     destinationTableName,  _gdalDataPath, databaseConnectionString, sqlSelectClause, sourceCrsId, targetCrsId);
+                ExecuteOgr2OgrCommand(commandLineArguments);
+            }
+        }
+
         // ReSharper disable once UnusedMember.Global
         public void ImportGeoJsonToEsriShapefile(string geoJson, string outputFilePath, string outputFileName)
         {
@@ -235,7 +247,33 @@ namespace LtInfo.Common.GdalOgr
                 gdalDataDirectoryInfo.FullName,
                 "-t_srs",
                 GetMapProjection(coordinateSystemId),
-                "-explodecollections",
+                "-f",
+                "MSSQLSpatial",
+                databaseConnectionString,
+                sourceGeoJsonFile.FullName,
+                "-nln",
+                destinationTableName
+            };
+
+            return commandLineArguments;
+        }
+
+        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string destinationTableName, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sqlSelectClause, int sourceCrsId, int targetCrsId )
+        {
+            //c:\SVN\sitkatech\trunk\Corral\Build>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f MSSQLSpatial "MSSQL:server=localhost;database=tempdb;trusted_connection=yes" "C:\temp\geojson.json" -nln "TestTable"            
+
+            var commandLineArguments = new List<string>
+            {
+                "-append",
+                "-sql",
+                $"SELECT {sqlSelectClause} FROM {OgrGeoJsonTableName}",
+                "--config",
+                "GDAL_DATA",
+                gdalDataDirectoryInfo.FullName,
+                "-s_srs",
+                GetMapProjection(sourceCrsId),
+                "-t_srs",
+                GetMapProjection(targetCrsId),
                 "-f",
                 "MSSQLSpatial",
                 databaseConnectionString,
