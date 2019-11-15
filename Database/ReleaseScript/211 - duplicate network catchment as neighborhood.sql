@@ -55,3 +55,10 @@ GO
 
 Alter Table dbo.BackboneSegment
 Drop Column NetworkCatchmentID
+
+ALTER TABLE [dbo].[RawDroolMetric] DROP CONSTRAINT [FK_RawDroolMetric_NetworkCatchment_CatchIDN_OCSurveyCatchmentID]
+GO
+
+ALTER TABLE [dbo].[RawDroolMetric] Add CONSTRAINT [FK_RawDroolMetric_Neighborhood_CatchIDN_OCSurveyNeighborhoodID] FOREIGN KEY([MetricCatchIDN])
+REFERENCES [dbo].Neighborhood ([OCSurveyNeighborhoodID])
+GO

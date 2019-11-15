@@ -4,12 +4,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[NetworkCatchment](
 	[NetworkCatchmentID] [int] IDENTITY(1,1) NOT NULL,
-	[DrainID] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[Watershed] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[DrainID] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Watershed] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[CatchmentGeometry] [geometry] NOT NULL,
 	[OCSurveyCatchmentID] [int] NOT NULL,
 	[OCSurveyDownstreamCatchmentID] [int] NULL,
 	[CatchmentGeometry4326] [geometry] NULL,
+	[LastUpdate] [datetime] NULL,
  CONSTRAINT [PK_NetworkCatchment_NetworkCatchmentID] PRIMARY KEY CLUSTERED 
 (
 	[NetworkCatchmentID] ASC

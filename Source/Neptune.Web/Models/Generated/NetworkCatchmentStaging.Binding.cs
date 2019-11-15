@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchmentStaging(int networkCatchmentStagingID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID) : this()
+        public NetworkCatchmentStaging(int networkCatchmentStagingID, string drainID, string watershed, DbGeometry catchmentGeometry, int? oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID) : this()
         {
             this.NetworkCatchmentStagingID = networkCatchmentStagingID;
             this.DrainID = drainID;
@@ -40,19 +40,6 @@ namespace Neptune.Web.Models
             this.OCSurveyDownstreamCatchmentID = oCSurveyDownstreamCatchmentID;
         }
 
-        /// <summary>
-        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
-        /// </summary>
-        public NetworkCatchmentStaging(string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID) : this()
-        {
-            // Mark this as a new object by setting primary key with special value
-            this.NetworkCatchmentStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            
-            this.DrainID = drainID;
-            this.Watershed = watershed;
-            this.CatchmentGeometry = catchmentGeometry;
-            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
-        }
 
 
         /// <summary>
@@ -60,7 +47,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static NetworkCatchmentStaging CreateNewBlank()
         {
-            return new NetworkCatchmentStaging(default(string), default(string), default(DbGeometry), default(int));
+            return new NetworkCatchmentStaging();
         }
 
         /// <summary>
@@ -100,7 +87,7 @@ namespace Neptune.Web.Models
         public string DrainID { get; set; }
         public string Watershed { get; set; }
         public DbGeometry CatchmentGeometry { get; set; }
-        public int OCSurveyCatchmentID { get; set; }
+        public int? OCSurveyCatchmentID { get; set; }
         public int? OCSurveyDownstreamCatchmentID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NetworkCatchmentStagingID; } set { NetworkCatchmentStagingID = value; } }

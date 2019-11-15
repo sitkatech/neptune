@@ -25,10 +25,21 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 Length = iHaveHRUCharacteristics.GetCatchmentGeometry().Length.GetValueOrDefault(),
             };
 
+            var rings = new List<List<double[]>>();
+
+            // todo: make this iterate through the geometry parts since this might be a multipolygon
+
             var coordinates = new List<double[]>();
-            for (var i = 1; i <= iHaveHRUCharacteristics.GetCatchmentGeometry().ExteriorRing.PointCount; i++)
+            
+            // this will break unceremoniously if catchment geometry is multipolygon instead of polygon. 
+            // unclear if this is going to break anything in practice.
+            // I don't even know if the HRU service will accept a multi-geometry.
+
+            var catchmentGeometry = iHaveHRUCharacteristics.GetCatchmentGeometry();
+
+            for (var i = 1; i <= catchmentGeometry.ExteriorRing.PointCount; i++)
             {
-                var point = iHaveHRUCharacteristics.GetCatchmentGeometry().ExteriorRing.PointAt(i);
+                var point = catchmentGeometry.ExteriorRing.PointAt(i);
                 var lon = point.XCoordinate.GetValueOrDefault();
                 var lat = point.YCoordinate.GetValueOrDefault();
 

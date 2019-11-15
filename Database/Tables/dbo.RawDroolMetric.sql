@@ -643,7 +643,7 @@ CREATE TABLE [dbo].[RawDroolMetric](
 ) ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[RawDroolMetric]  WITH CHECK ADD  CONSTRAINT [FK_RawDroolMetric_NetworkCatchment_CatchIDN_OCSurveyCatchmentID] FOREIGN KEY([MetricCatchIDN])
-REFERENCES [dbo].[NetworkCatchment] ([OCSurveyCatchmentID])
+ALTER TABLE [dbo].[RawDroolMetric]  WITH CHECK ADD  CONSTRAINT [FK_RawDroolMetric_Neighborhood_CatchIDN_OCSurveyNeighborhoodID] FOREIGN KEY([MetricCatchIDN])
+REFERENCES [dbo].[Neighborhood] ([OCSurveyNeighborhoodID])
 GO
-ALTER TABLE [dbo].[RawDroolMetric] CHECK CONSTRAINT [FK_RawDroolMetric_NetworkCatchment_CatchIDN_OCSurveyCatchmentID]
+ALTER TABLE [dbo].[RawDroolMetric] CHECK CONSTRAINT [FK_RawDroolMetric_Neighborhood_CatchIDN_OCSurveyNeighborhoodID]

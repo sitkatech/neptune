@@ -1,9 +1,9 @@
 CREATE TABLE dbo.NetworkCatchmentStaging(
 	NetworkCatchmentStagingID int IDENTITY(1,1) NOT NULL,
-	DrainID varchar(10) NOT NULL,
-	Watershed varchar(100) NOT NULL,
-	CatchmentGeometry geometry NOT NULL,
-	OCSurveyCatchmentID int NOT NULL,
+	DrainID varchar(10) NULL,
+	Watershed varchar(100) NULL,
+	CatchmentGeometry geometry NULL,
+	OCSurveyCatchmentID int NULL,
 	OCSurveyDownstreamCatchmentID int NULL
  CONSTRAINT PK_NetworkCatchmentStaging_NetworkCatchmentStagingID PRIMARY KEY CLUSTERED 
 (
@@ -23,3 +23,13 @@ GO
 
 Insert into geometry_columns values
 ('Neptune', 'dbo', 'NetworkCatchmentStaging', 'CatchmentGeometry', 2, 2771, 'MULTIPOLYGON')
+
+Alter table dbo.NetworkCatchment
+Add LastUpdate datetime null
+Go
+
+Alter table dbo.NetworkCatchment
+Alter column DrainID varchar(10) null
+
+Alter table dbo.NetworkCatchment
+Alter Column Watershed varchar(100) null

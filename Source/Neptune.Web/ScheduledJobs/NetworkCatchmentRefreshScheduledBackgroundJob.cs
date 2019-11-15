@@ -1,4 +1,5 @@
-﻿using GeoJSON.Net.Feature;
+﻿using System;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
@@ -25,10 +26,10 @@ namespace Neptune.Web.ScheduledJobs
             NeptuneEnvironmentType.Qa
         };
 
-        public static string TestRunJob()
+        public static string TestRunJob(DatabaseEntities dbContext)
         {
-            HttpRequestStorage.DatabaseEntities.NetworkCatchmentStagings.DeleteNetworkCatchmentStaging(HttpRequestStorage.DatabaseEntities.NetworkCatchmentStagings.ToList());
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            dbContext.NetworkCatchmentStagings.DeleteNetworkCatchmentStaging(dbContext.NetworkCatchmentStagings.ToList());
+            dbContext.SaveChanges();
 
             //var readAllText = File.ReadAllText(@"C:\Users\nick.padinha\Documents\Neptune\networkcatchmos\networkcatchmos.json");
             //var collectedFeatureCollection = JsonConvert.DeserializeObject<FeatureCollection>(readAllText);
@@ -80,46 +81,51 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
 
-            // build a new feature collection where Watershed,CatchID is unique
-            // shouldn't have to do this, but the data source is u n r e l i a b l e
+            //// build a new feature collection where Watershed,CatchID is unique
+            //// shouldn't have to do this, but the data source is u n r e l i a b l e
 
-            IEnumerable<Feature> enumerable = collectedFeatureCollection.Features.GroupBy(x => new
-                    { Watershed = x.Properties["Watershed"], CatchID = x.Properties["CatchID"] })
-                .Select(x => x.FirstOrDefault());
+            IEnumerable<Feature> featuresWhereCatchIdnIsUnique = collectedFeatureCollection.Features.GroupBy(x => x.Properties["CatchIDN"] ).Select(x => x.FirstOrDefault());
 
-            var goodFeatureCollection = new FeatureCollection(enumerable.ToList());
+            var featureCollectionWhereCatchIdnIsUnique = new FeatureCollection(featuresWhereCatchIdnIsUnique.ToList());
 
-            var mergedResponse = JsonConvert.SerializeObject(goodFeatureCollection);
+            var mergedResponse = JsonConvert.SerializeObject(featureCollectionWhereCatchIdnIsUnique);
 
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
             ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(mergedResponse,
                 NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging",
-                "CatchID as OCSurveyCatchmentID, DwnCatchID as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
+                "CatchIDN as OCSurveyCatchmentID, DwnCatchIDN as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 
             // merge the things
 
-            HttpRequestStorage.DatabaseEntities.NetworkCatchments.Load();
 
-            var existingNetworkCatchments = HttpRequestStorage.DatabaseEntities.NetworkCatchments.Local;
-            var newNetworkCatchments = HttpRequestStorage.DatabaseEntities.NetworkCatchmentStagings.ToList().Select(x =>
-                new NetworkCatchment(x.DrainID, x.Watershed, x.CatchmentGeometry, x.OCSurveyCatchmentID)
-                {
-                    CatchmentGeometry4326 =
-                        CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(x.CatchmentGeometry),
-                        OCSurveyDownstreamCatchmentID = x.OCSurveyDownstreamCatchmentID != 0 ? x.OCSurveyDownstreamCatchmentID : null
-                }).ToList();
-            existingNetworkCatchments.Merge(newNetworkCatchments,
-                HttpRequestStorage.DatabaseEntities.NetworkCatchments.Local,
-                (x, y) => x.OCSurveyCatchmentID == y.OCSurveyCatchmentID && x.Watershed == y.Watershed,
-                (x, y) =>
-                {
-                    x.CatchmentGeometry = y.CatchmentGeometry;
-                    x.CatchmentGeometry4326 = y.CatchmentGeometry4326;
-                    x.OCSurveyDownstreamCatchmentID = y.OCSurveyDownstreamCatchmentID;
-                    x.DrainID = y.DrainID;
-                });
+            var ocSurveyCatchmentIDs = dbContext.NetworkCatchmentStagings.Select(x=>x.OCSurveyCatchmentID).ToList();
 
+            // null out the downstream catchments that don't exist
+            // should't have to do this but the data source is u n r e l i a b l e
+
+            foreach (var networkCatchmentStaging in dbContext.NetworkCatchmentStagings.Where(x => ! ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID)))
+            {
+                networkCatchmentStaging.OCSurveyDownstreamCatchmentID = null;
+            }
+
+            dbContext.SaveChanges();
+
+            // MergeListHelper is too unsophisticated to handle same-table foreign keys, so we use a SQL Server merge instead, which actually works
+
+            dbContext.Database.CommandTimeout = 300;
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateNetworkCatchmentLiveFromStaging");
+            
+            // unfortunately, now we have to create the catchment geometries in 4326, since SQL isn't capable of doing this.
+            dbContext.NetworkCatchments.Load();
+            foreach (var networkCatchment in dbContext.NetworkCatchments)
+            {
+                networkCatchment.CatchmentGeometry4326 =
+                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(
+                        networkCatchment.CatchmentGeometry);
+            }
+
+            dbContext.SaveChanges();
 
 
             return mergedResponse;
@@ -127,7 +133,7 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            TestRunJob();
+            TestRunJob(DbContext);
         }
     }
 

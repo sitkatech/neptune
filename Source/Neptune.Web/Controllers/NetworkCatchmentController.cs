@@ -82,7 +82,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestRefresh()
         {
-            return Content(NetworkCatchmentRefreshScheduledBackgroundJob.TestRunJob());
+            return Content(NetworkCatchmentRefreshScheduledBackgroundJob.TestRunJob(HttpRequestStorage.DatabaseEntities));
         }
     }
 }

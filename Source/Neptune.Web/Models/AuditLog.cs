@@ -53,7 +53,9 @@ namespace Neptune.Web.Models
             "OnlandVisualTrashAssessmentObservationPhoto",
             "OnlandVisualTrashAssessmentPreliminarySourceIdentificationType",
             "OnlandVisualTrashAssessmentObservationPhotoStaging",
-            "DelineationStaging"
+            "DelineationStaging",
+            "NetworkCatchment",
+            "NetworkCatchmentStaging"
         };
 
         public string GetAuditDescriptionDisplay()

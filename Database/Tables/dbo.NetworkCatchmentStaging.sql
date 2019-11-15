@@ -4,10 +4,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[NetworkCatchmentStaging](
 	[NetworkCatchmentStagingID] [int] IDENTITY(1,1) NOT NULL,
-	[DrainID] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[Watershed] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[CatchmentGeometry] [geometry] NOT NULL,
-	[OCSurveyCatchmentID] [int] NOT NULL,
+	[DrainID] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Watershed] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[CatchmentGeometry] [geometry] NULL,
+	[OCSurveyCatchmentID] [int] NULL,
 	[OCSurveyDownstreamCatchmentID] [int] NULL,
  CONSTRAINT [PK_NetworkCatchmentStaging_NetworkCatchmentStagingID] PRIMARY KEY CLUSTERED 
 (
