@@ -1,18 +1,24 @@
-﻿using Neptune.Web.Common;
+﻿using System.Collections.Generic;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
+using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
+using LtInfo.Common.MvcResults;
+using Neptune.Web.Areas.Modeling.Views.HRUCharacteristic;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Views;
 using Neptune.Web.Views.NetworkCatchment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Index = Neptune.Web.Views.NetworkCatchment.Index;
+using IndexViewData = Neptune.Web.Views.NetworkCatchment.IndexViewData;
 
 namespace Neptune.Web.Controllers
 {
@@ -79,10 +85,39 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [SitkaAdminFeature]
-        public ContentResult TestRefresh()
+        [NeptuneAdminFeature]
+        public ActionResult RefreshFromOCSurvey()
         {
-            return Content(NetworkCatchmentRefreshScheduledBackgroundJob.TestRunJob(HttpRequestStorage.DatabaseEntities));
+            //return Content(NetworkCatchmentRefreshScheduledBackgroundJob.RunRefresh(HttpRequestStorage.DatabaseEntities));
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkCatchmentRefreshBackgroundJob(CurrentPerson.PersonID));
+
+            SetMessageForDisplay("Network Catchment refresh will run in the background.");
+            return Redirect(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x => x.Grid()));
+        }
+
+
+        [NeptuneAdminFeature]
+        public ViewResult Grid()
+        {
+            var viewData = new Views.NetworkCatchment.GridViewData(CurrentPerson);
+            return RazorView<Views.NetworkCatchment.Grid, Views.NetworkCatchment.GridViewData>(viewData);
+        }
+
+        [NeptuneAdminFeature]
+        public GridJsonNetJObjectResult<NetworkCatchment> NetworkCatchmentGridJsonData()
+        {
+            // ReSharper disable once InconsistentNaming
+            List<NetworkCatchment> networkCatchments = GetNetworkCatchmentsAndGridSpec(out var gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<NetworkCatchment>(networkCatchments, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        private List<NetworkCatchment> GetNetworkCatchmentsAndGridSpec(out NetworkCatchmentGridSpec gridSpec)
+        {
+            gridSpec = new NetworkCatchmentGridSpec();
+
+            return HttpRequestStorage.DatabaseEntities.NetworkCatchments.ToList();
         }
     }
 }

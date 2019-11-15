@@ -19,6 +19,13 @@ namespace Neptune.Web.ScheduledJobs
 {
     class NetworkCatchmentRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
+        public NetworkCatchmentRefreshScheduledBackgroundJob(int currentPersonPersonID)
+        {
+            PersonID = currentPersonPersonID;
+        }
+
+        public int PersonID { get; set; }
+
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Local,
@@ -26,10 +33,10 @@ namespace Neptune.Web.ScheduledJobs
             NeptuneEnvironmentType.Qa
         };
 
-        public static string TestRunJob(DatabaseEntities dbContext)
+        public static string RunRefresh(DatabaseEntities dbContext, Person person)
         {
             dbContext.NetworkCatchmentStagings.DeleteNetworkCatchmentStaging(dbContext.NetworkCatchmentStagings.ToList());
-            dbContext.SaveChanges();
+            dbContext.SaveChanges(person);
 
             //var readAllText = File.ReadAllText(@"C:\Users\nick.padinha\Documents\Neptune\networkcatchmos\networkcatchmos.json");
             //var collectedFeatureCollection = JsonConvert.DeserializeObject<FeatureCollection>(readAllText);
@@ -73,8 +80,16 @@ namespace Neptune.Web.ScheduledJobs
                     var response = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
 
                     resultOffset += 1000;
-
-                    done = !JsonConvert.DeserializeObject<EsriQueryResponse>(response).ExceededTransferLimit;
+                    try
+                    {
+                        done = !JsonConvert.DeserializeObject<EsriQueryResponse>(response).ExceededTransferLimit;
+                    }
+                    catch (JsonReaderException jre)
+                    {
+                        throw new RemoteServiceException(
+                            $"The Network Catchment service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Please do not file a bug report for this error.",
+                            jre);
+                    }
 
                     var featureCollection = JsonConvert.DeserializeObject<FeatureCollection>(response);
                     collectedFeatureCollection.Features.AddRange(featureCollection.Features);
@@ -109,7 +124,8 @@ namespace Neptune.Web.ScheduledJobs
                 networkCatchmentStaging.OCSurveyDownstreamCatchmentID = null;
             }
 
-            dbContext.SaveChanges();
+            dbContext.SaveChanges(person);
+
 
             // MergeListHelper is too unsophisticated to handle same-table foreign keys, so we use a SQL Server merge instead, which actually works
 
@@ -125,7 +141,8 @@ namespace Neptune.Web.ScheduledJobs
                         networkCatchment.CatchmentGeometry);
             }
 
-            dbContext.SaveChanges();
+            dbContext.SaveChanges(person);
+
 
 
             return mergedResponse;
@@ -133,8 +150,14 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            TestRunJob(DbContext);
+            var person = DbContext.People.Find(PersonID);
+            RunRefresh(DbContext, person);
         }
+    }
+
+    public class RemoteServiceException : Exception
+    {
+        public RemoteServiceException(String message, Exception innerException) : base(message, innerException) { }
     }
 
     public class EsriQueryResponse

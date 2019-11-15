@@ -493,6 +493,9 @@
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryErrors.cs" />
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewData.cs" />
     <Compile Include="Areas\Trash\Views\LandUseBlockUpload\UpdateLandUseBlockGeometryViewModel.cs" />
+    <Compile Include="Views\NetworkCatchment\NetworkCatchmentGridSpec.cs" />
+    <Compile Include="Views\NetworkCatchment\Grid.cs" />
+    <Compile Include="Views\NetworkCatchment\GridViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPType.cs" />
     <Compile Include="Views\TreatmentBMP\EditLocationViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPTypeViewData.cs" />
@@ -1903,6 +1906,7 @@
     <Content Include="Views\TreatmentBMP\ConvertTreatmentBMPType.cshtml" />
     <Content Include="Views\NetworkCatchment\Detail.cshtml" />
     <Content Include="Views\NetworkCatchment\Index.cshtml" />
+    <Content Include="Views\NetworkCatchment\Grid.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

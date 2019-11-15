@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -25,7 +26,7 @@
             var networkCatchmentLayer =
                 networkCatchmentMap.addWmsLayer("OCStormwater:NetworkCatchments",
                     "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
-                    { }, false);
+                    { styles: "network_catchment_wide"}, false);
 
             networkCatchmentMap.map.on('click', selectCatchment);
         });
@@ -90,6 +91,14 @@
 
 
     </script>
+}
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.HasAdminPermissions)
+    {
+        <a class="btn btn-neptune" href="@ViewDataTyped.RefreshUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh") @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh") Refresh From OC Survey</a>
+    }
+
 }
 
 <div class="row">

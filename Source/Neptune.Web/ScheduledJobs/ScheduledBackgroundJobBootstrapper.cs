@@ -75,7 +75,6 @@ namespace Neptune.Web.ScheduledJobs
         public static void RunLandUseBlockUploadBackgroundJob(int personID)
         {
             ScheduledBackgroundJobLaunchHelper.RunLandUseBlockUploadBackgroundJob(personID);
-
         }
 
         private static void AddRecurringJob(string jobName, Expression<Action> methodCallExpression,

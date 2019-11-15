@@ -15,6 +15,11 @@ namespace Neptune.Web.Models
             new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(c =>
                 c.Detail(UrlTemplate.Parameter1Int)));
 
+        public static string GetDetailUrl(this NetworkCatchment networkCatchment)
+        {
+            return DetailUrlTemplate.ParameterReplace(networkCatchment.NetworkCatchmentID);
+        }
+
         public static HtmlString GetDisplayNameAsUrl(this NetworkCatchment networkCatchment)
         {
 

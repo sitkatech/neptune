@@ -62,6 +62,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeLandUseBlock LandUseBlock = NeptunePageTypeLandUseBlock.Instance;
         public static readonly NeptunePageTypeExportAssessmentGeospatialData ExportAssessmentGeospatialData = NeptunePageTypeExportAssessmentGeospatialData.Instance;
         public static readonly NeptunePageTypeHRUCharacteristics HRUCharacteristics = NeptunePageTypeHRUCharacteristics.Instance;
+        public static readonly NeptunePageTypeNetworkCatchments NetworkCatchments = NeptunePageTypeNetworkCatchments.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -71,7 +72,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, NetworkCatchments };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -205,6 +206,8 @@ namespace Neptune.Web.Models
                     return ManageTreatmentBMPTypesList;
                 case NeptunePageTypeEnum.ModelingHomePage:
                     return ModelingHomePage;
+                case NeptunePageTypeEnum.NetworkCatchments:
+                    return NetworkCatchments;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
                 case NeptunePageTypeEnum.OVTAIndex:
@@ -282,7 +285,8 @@ namespace Neptune.Web.Models
         EditOVTAArea = 42,
         LandUseBlock = 43,
         ExportAssessmentGeospatialData = 44,
-        HRUCharacteristics = 45
+        HRUCharacteristics = 45,
+        NetworkCatchments = 46
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -547,5 +551,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeHRUCharacteristics(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeHRUCharacteristics Instance = new NeptunePageTypeHRUCharacteristics(45, @"HRUCharacteristics", @"HRU Characteristics", 2);
+    }
+
+    public partial class NeptunePageTypeNetworkCatchments : NeptunePageType
+    {
+        private NeptunePageTypeNetworkCatchments(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeNetworkCatchments Instance = new NeptunePageTypeNetworkCatchments(46, @"NetworkCatchments", @"Network Catchments", 2);
     }
 }

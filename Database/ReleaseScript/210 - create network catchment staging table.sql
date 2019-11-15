@@ -33,3 +33,14 @@ Alter column DrainID varchar(10) null
 
 Alter table dbo.NetworkCatchment
 Alter Column Watershed varchar(100) null
+
+Insert into dbo.NeptunePageType (NeptunePageTypeID,
+NeptunePageTypeName,
+NeptunePageTypeDisplayName,
+NeptunePageRenderTypeID)
+values
+(46, 'NetworkCatchments', 'Network Catchments', 2)
+
+Insert into dbo.NeptunePage (NeptunePageTypeID)
+values
+(46)
