@@ -44,7 +44,9 @@ namespace Neptune.Web.Common
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
 
-                Features = new List<HRURequestFeature> { new HRURequestFeature(iHaveHRUCharacteristics) },
+                //Features = new List<HRURequestFeature> { new HRURequestFeature(iHaveHRUCharacteristics) },
+
+                Features = iHaveHRUCharacteristics.GetHRURequestFeatures().ToList(),
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
                 SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID },
