@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using ApprovalUtilities.Utilities;
+using Microsoft.Ajax.Utilities;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
@@ -96,37 +97,35 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
 
-            //// build a new feature collection where Watershed,CatchID is unique
-            //// shouldn't have to do this, but the data source is u n r e l i a b l e
+            var catchIdnsThatAreNotUniqueAndAreThereforeBad = collectedFeatureCollection.Features
+                .GroupBy(x => x.Properties["CatchIDN"]).Where(x => x.Count() > 1).Select(x=> int.Parse(x.Key.ToString())).ToList();
 
-            IEnumerable<Feature> featuresWhereCatchIdnIsUnique = collectedFeatureCollection.Features.GroupBy(x => x.Properties["CatchIDN"] ).Select(x => x.FirstOrDefault());
+            if (catchIdnsThatAreNotUniqueAndAreThereforeBad.Any())
+            {
+                throw new RemoteServiceException(
+                    $"The Network Catchment service returned an invalid collection. The following Catchment IDs are duplicated:\n{string.Join(", ", catchIdnsThatAreNotUniqueAndAreThereforeBad)}");
+            }
 
-            var featureCollectionWhereCatchIdnIsUnique = new FeatureCollection(featuresWhereCatchIdnIsUnique.ToList());
-
-            var mergedResponse = JsonConvert.SerializeObject(featureCollectionWhereCatchIdnIsUnique);
+            var jsonFeatureCollection = JsonConvert.SerializeObject(collectedFeatureCollection);
 
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
-            ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(mergedResponse,
+            ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
                 NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging",
                 "CatchIDN as OCSurveyCatchmentID, DwnCatchIDN as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
 
             // merge the things
-
-
+            
             var ocSurveyCatchmentIDs = dbContext.NetworkCatchmentStagings.Select(x=>x.OCSurveyCatchmentID).ToList();
 
-            // null out the downstream catchments that don't exist
-            // should't have to do this but the data source is u n r e l i a b l e
+            var stagedNetworkCatchmentsWithBrokenDownstreamRel = dbContext.NetworkCatchmentStagings.Where(x => x.OCSurveyDownstreamCatchmentID != 0 && !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID)).ToList();
 
-            foreach (var networkCatchmentStaging in dbContext.NetworkCatchmentStagings.Where(x => ! ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID)))
+            if (stagedNetworkCatchmentsWithBrokenDownstreamRel.Any())
             {
-                networkCatchmentStaging.OCSurveyDownstreamCatchmentID = null;
+                throw new RemoteServiceException(
+                    $"The Network Catchment service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedNetworkCatchmentsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
             }
-
-            dbContext.SaveChanges(person);
-
-
+            
             // MergeListHelper is too unsophisticated to handle same-table foreign keys, so we use a SQL Server merge instead, which actually works
 
             dbContext.Database.CommandTimeout = 300;
@@ -145,7 +144,7 @@ namespace Neptune.Web.ScheduledJobs
 
 
 
-            return mergedResponse;
+            return jsonFeatureCollection;
         }
 
         protected override void RunJobImplementation()
@@ -157,7 +156,15 @@ namespace Neptune.Web.ScheduledJobs
 
     public class RemoteServiceException : Exception
     {
-        public RemoteServiceException(String message, Exception innerException) : base(message, innerException) { }
+        public RemoteServiceException(String message) : base(message)
+        {
+
+        }
+
+        public RemoteServiceException(String message, Exception innerException) : base(message, innerException)
+        {
+
+        }
     }
 
     public class EsriQueryResponse
