@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using ApprovalUtilities.Utilities;
 using Microsoft.Ajax.Utilities;
@@ -38,10 +39,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             dbContext.NetworkCatchmentStagings.DeleteNetworkCatchmentStaging(dbContext.NetworkCatchmentStagings.ToList());
             dbContext.SaveChanges(person);
-
-            //var readAllText = File.ReadAllText(@"C:\Users\nick.padinha\Documents\Neptune\networkcatchmos\networkcatchmos.json");
-            //var collectedFeatureCollection = JsonConvert.DeserializeObject<FeatureCollection>(readAllText);
-
+            
             var collectedFeatureCollection = new FeatureCollection();
             using (var client = new HttpClient())
             {
@@ -78,7 +76,17 @@ namespace Neptune.Web.ScheduledJobs
                     var queryParameters = string.Join("&",
                         nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string)x.Value)}"));
                     var uri = $"{baseRequestUri}?{queryParameters}";
-                    var response = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+                    string response;
+                    try
+                    {
+                        response = client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (TaskCanceledException tce)
+                    {
+                        throw new RemoteServiceException(
+                            $"The Network Catchment service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            tce);
+                    }
 
                     resultOffset += 1000;
                     try
@@ -88,7 +96,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (JsonReaderException jre)
                     {
                         throw new RemoteServiceException(
-                            $"The Network Catchment service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Please do not file a bug report for this error.",
+                            $"The Network Catchment service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             jre);
                     }
 
