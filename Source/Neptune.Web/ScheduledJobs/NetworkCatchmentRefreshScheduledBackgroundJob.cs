@@ -35,11 +35,79 @@ namespace Neptune.Web.ScheduledJobs
             NeptuneEnvironmentType.Qa
         };
 
-        public static string RunRefresh(DatabaseEntities dbContext, Person person)
+        public static void RunRefresh(DatabaseEntities dbContext, Person person)
         {
             dbContext.NetworkCatchmentStagings.DeleteNetworkCatchmentStaging(dbContext.NetworkCatchmentStagings.ToList());
             dbContext.SaveChanges(person);
             
+            var newNetworkCatchmentFeatureCollection = RetrieveFeatureCollectionFromArcServer();
+            ThrowIfCatchIdnNotUnique(newNetworkCatchmentFeatureCollection);
+            StageFeatureCollection(newNetworkCatchmentFeatureCollection);
+            ThrowIfDownstreamInvalid(dbContext);
+            MergeAndReproject(dbContext, person);
+        }
+
+        private static void MergeAndReproject(DatabaseEntities dbContext, Person person)
+        {
+// MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
+            dbContext.Database.CommandTimeout = 300;
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateNetworkCatchmentLiveFromStaging");
+
+            // unfortunately, now we have to create the catchment geometries in 4326, since SQL isn't capable of doing this.
+            dbContext.NetworkCatchments.Load();
+            foreach (var networkCatchment in dbContext.NetworkCatchments)
+            {
+                networkCatchment.CatchmentGeometry4326 =
+                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(
+                        networkCatchment.CatchmentGeometry);
+            }
+
+            dbContext.SaveChanges(person);
+        }
+
+        private static void ThrowIfDownstreamInvalid(DatabaseEntities dbContext)
+        {
+            // this is done against the staged feature collection because it's easier to implement in LINQ than against the raw JSON response
+            var ocSurveyCatchmentIDs = dbContext.NetworkCatchmentStagings.Select(x => x.OCSurveyCatchmentID).ToList();
+
+            var stagedNetworkCatchmentsWithBrokenDownstreamRel = dbContext.NetworkCatchmentStagings.Where(x =>
+                    x.OCSurveyDownstreamCatchmentID != 0 && !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID))
+                .ToList();
+
+            if (stagedNetworkCatchmentsWithBrokenDownstreamRel.Any())
+            {
+                throw new RemoteServiceException(
+                    $"The Network Catchment service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedNetworkCatchmentsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
+            }
+        }
+
+        private static void StageFeatureCollection(FeatureCollection newNetworkCatchmentFeatureCollection)
+        {
+            var jsonFeatureCollection = JsonConvert.SerializeObject(newNetworkCatchmentFeatureCollection);
+
+            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
+                CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
+            ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
+                NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging",
+                "CatchIDN as OCSurveyCatchmentID, DwnCatchIDN as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
+                CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+        }
+
+        private static void ThrowIfCatchIdnNotUnique(FeatureCollection newNetworkCatchmentFeatureCollection)
+        {
+            var catchIdnsThatAreNotUnique = newNetworkCatchmentFeatureCollection.Features
+                .GroupBy(x => x.Properties["CatchIDN"]).Where(x => x.Count() > 1).Select(x => int.Parse(x.Key.ToString()))
+                .ToList();
+
+            if (catchIdnsThatAreNotUnique.Any())
+            {
+                throw new RemoteServiceException(
+                    $"The Network Catchment service returned an invalid collection. The following Catchment IDs are duplicated:\n{string.Join(", ", catchIdnsThatAreNotUnique)}");
+            }
+        }
+
+        private static FeatureCollection RetrieveFeatureCollectionFromArcServer()
+        {
             var collectedFeatureCollection = new FeatureCollection();
             using (var client = new HttpClient())
             {
@@ -70,11 +138,11 @@ namespace Neptune.Web.ScheduledJobs
                     };
 
                     var configurationSerialized = JsonConvert.SerializeObject(queryStringObject, Formatting.None,
-                        new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                        new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
                     var nameValueCollection =
                         JsonConvert.DeserializeObject<Dictionary<string, string>>(configurationSerialized);
                     var queryParameters = string.Join("&",
-                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string)x.Value)}"));
+                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string) x.Value)}"));
                     var uri = $"{baseRequestUri}?{queryParameters}";
                     string response;
                     try
@@ -105,54 +173,7 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
 
-            var catchIdnsThatAreNotUniqueAndAreThereforeBad = collectedFeatureCollection.Features
-                .GroupBy(x => x.Properties["CatchIDN"]).Where(x => x.Count() > 1).Select(x=> int.Parse(x.Key.ToString())).ToList();
-
-            if (catchIdnsThatAreNotUniqueAndAreThereforeBad.Any())
-            {
-                throw new RemoteServiceException(
-                    $"The Network Catchment service returned an invalid collection. The following Catchment IDs are duplicated:\n{string.Join(", ", catchIdnsThatAreNotUniqueAndAreThereforeBad)}");
-            }
-
-            var jsonFeatureCollection = JsonConvert.SerializeObject(collectedFeatureCollection);
-
-            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
-            ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
-                NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging",
-                "CatchIDN as OCSurveyCatchmentID, DwnCatchIDN as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
-                CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
-
-            // merge the things
-            
-            var ocSurveyCatchmentIDs = dbContext.NetworkCatchmentStagings.Select(x=>x.OCSurveyCatchmentID).ToList();
-
-            var stagedNetworkCatchmentsWithBrokenDownstreamRel = dbContext.NetworkCatchmentStagings.Where(x => x.OCSurveyDownstreamCatchmentID != 0 && !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID)).ToList();
-
-            if (stagedNetworkCatchmentsWithBrokenDownstreamRel.Any())
-            {
-                throw new RemoteServiceException(
-                    $"The Network Catchment service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedNetworkCatchmentsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
-            }
-            
-            // MergeListHelper is too unsophisticated to handle same-table foreign keys, so we use a SQL Server merge instead, which actually works
-
-            dbContext.Database.CommandTimeout = 300;
-            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateNetworkCatchmentLiveFromStaging");
-            
-            // unfortunately, now we have to create the catchment geometries in 4326, since SQL isn't capable of doing this.
-            dbContext.NetworkCatchments.Load();
-            foreach (var networkCatchment in dbContext.NetworkCatchments)
-            {
-                networkCatchment.CatchmentGeometry4326 =
-                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(
-                        networkCatchment.CatchmentGeometry);
-            }
-
-            dbContext.SaveChanges(person);
-
-
-
-            return jsonFeatureCollection;
+            return collectedFeatureCollection;
         }
 
         protected override void RunJobImplementation()

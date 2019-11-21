@@ -600,10 +600,20 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.treatmentBMPLayer.off("click");
     this.displayLoading();
 
+
+    var someWfsParams = {
+        cql_filter: 'intersects(CatchmentGeometry, POINT(' + latLng.lat + ' ' + latLng.lng + '))'
+    };
+    var wfsAjax = this.selectFeatureByWfs("OCStormwater:NetworkCatchments", someWfsParams);
+
     var self = this;
-    this.getFeatureInfo(
+var wmsAjax=    this.getFeatureInfo(
         "OCStormwater:NetworkCatchments",
-        [latLng.lng, latLng.lat]).then(function (response) {
+        [latLng.lng, latLng.lat]
+    );
+    
+    
+    wfsAjax.then(function (response) {
             if (response.features[0]) {
                 return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
             } else {

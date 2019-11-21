@@ -11,7 +11,11 @@ When Matched
 		t.DrainID = s.DrainID,
 		t.Watershed = s.Watershed,
 		t.CatchmentGeometry = s.CatchmentGeometry,
-		t.OCSurveyDownstreamCatchmentID = s.OCSurveyDownstreamCatchmentID,
+		t.OCSurveyDownstreamCatchmentID =
+			case
+				when s.OCSurveyDownstreamCatchmentID = 0 then null
+				else s.OCSurveyDownstreamCatchmentID
+			end,
 		t.LastUpdate = GetDate(),
 		t.CatchmentGeometry4326 = null
 When not matched by Target
