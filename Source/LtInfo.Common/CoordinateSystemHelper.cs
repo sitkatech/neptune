@@ -97,7 +97,7 @@ namespace LtInfo.Common
 
             if (!dbGeometry.IsValid)
             {
-                dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(WGS_1984_SRID);
+                dbGeometry = dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(WGS_1984_SRID);
             }
 
             return dbGeometry;

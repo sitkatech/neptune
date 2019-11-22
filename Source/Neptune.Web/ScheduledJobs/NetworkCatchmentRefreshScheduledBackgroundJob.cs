@@ -49,7 +49,7 @@ namespace Neptune.Web.ScheduledJobs
 
         private static void MergeAndReproject(DatabaseEntities dbContext, Person person)
         {
-// MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
+            // MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
             dbContext.Database.CommandTimeout = 30000;
             dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateNetworkCatchmentLiveFromStaging");
 
@@ -61,6 +61,8 @@ namespace Neptune.Web.ScheduledJobs
                     CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(
                         networkCatchment.CatchmentGeometry);
             }
+
+
 
             dbContext.SaveChanges(person);
         }
