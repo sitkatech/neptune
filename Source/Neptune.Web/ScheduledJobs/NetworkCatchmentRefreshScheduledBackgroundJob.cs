@@ -50,7 +50,7 @@ namespace Neptune.Web.ScheduledJobs
         private static void MergeAndReproject(DatabaseEntities dbContext, Person person)
         {
 // MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
-            dbContext.Database.CommandTimeout = 300;
+            dbContext.Database.CommandTimeout = 30000;
             dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateNetworkCatchmentLiveFromStaging");
 
             // unfortunately, now we have to create the catchment geometries in 4326, since SQL isn't capable of doing this.
@@ -70,6 +70,7 @@ namespace Neptune.Web.ScheduledJobs
             // this is done against the staged feature collection because it's easier to implement in LINQ than against the raw JSON response
             var ocSurveyCatchmentIDs = dbContext.NetworkCatchmentStagings.Select(x => x.OCSurveyCatchmentID).ToList();
 
+            dbContext.Database.CommandTimeout = 30000;
             var stagedNetworkCatchmentsWithBrokenDownstreamRel = dbContext.NetworkCatchmentStagings.Where(x =>
                     x.OCSurveyDownstreamCatchmentID != 0 && !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID))
                 .ToList();
