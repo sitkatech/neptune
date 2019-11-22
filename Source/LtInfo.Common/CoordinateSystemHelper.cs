@@ -1,7 +1,9 @@
-﻿using DotSpatial.Projections;
+﻿using System;
+using DotSpatial.Projections;
 using NetTopologySuite.Geometries;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using LtInfo.Common.DbSpatial;
 
 namespace LtInfo.Common
 {
@@ -91,8 +93,44 @@ namespace LtInfo.Common
 
             var outputWkb = internalGeometry.AsBinary();
 
-            return DbGeometry.FromBinary(outputWkb, WGS_1984_SRID);
+            var dbGeometry = DbGeometry.FromBinary(outputWkb, WGS_1984_SRID);
+
+            if (!dbGeometry.IsValid)
+            {
+                dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(WGS_1984_SRID);
+            }
+
+            return dbGeometry;
         }
 
+    }
+
+    public static class GeometryExtensions
+    {
+        public static DbGeometry FixSrid(this DbGeometry geometry, int srid)
+        {
+            if (geometry == null)
+            {
+                return geometry;
+            }
+            var wellKnownText = geometry.ToString();
+
+            // geometry.ToString() includes the SRID at the beginning of the string but is otherwise legal WKT
+            if (wellKnownText.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
+            {
+                wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
+            }
+            else if (wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture) > -1)
+            {
+                wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture));
+            }
+            else if (wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture) > -1)
+            {
+                wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture));
+            }
+
+            geometry = DbGeometry.FromText(wellKnownText, srid);
+            return geometry;
+        }
     }
 }
