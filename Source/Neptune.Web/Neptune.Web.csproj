@@ -496,6 +496,7 @@
     <Compile Include="Views\NetworkCatchment\NetworkCatchmentGridSpec.cs" />
     <Compile Include="Views\NetworkCatchment\Grid.cs" />
     <Compile Include="Views\NetworkCatchment\GridViewData.cs" />
+    <Compile Include="Views\Shared\HRUCharacteristics\HRUCharacteristics.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPType.cs" />
     <Compile Include="Views\TreatmentBMP\EditLocationViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPTypeViewData.cs" />
