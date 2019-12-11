@@ -39,6 +39,7 @@ namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic{
             Add("Hydrologic Soil Group", x => x.HydrologicSoilGroup.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Slope Percentage", x => x.SlopePercentage, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
             Add("Impervious Acres", x => x.ImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal);
+            Add("Total Acres", x => x.Area, 100, DhtmlxGridColumnFormatType.Decimal);
             Add("Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
             Add("Water Quality Management Plan", x => x.WaterQualityManagementPlan?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
             Add("Network Catchment", x => x.NetworkCatchment?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);

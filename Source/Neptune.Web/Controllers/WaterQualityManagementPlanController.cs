@@ -123,6 +123,8 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan);
+            SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
             return Redirect(
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlanPrimaryKey)));
         }

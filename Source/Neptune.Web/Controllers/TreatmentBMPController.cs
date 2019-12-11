@@ -681,6 +681,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             HRUHelper.RetrieveAndSaveHRUCharacteristics(treatmentBMP);
+            SetMessageForDisplay($"Successfully updated HRU Characteristics for {treatmentBMP.TreatmentBMPName}");
             return Redirect(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMPPrimaryKey)));
         }

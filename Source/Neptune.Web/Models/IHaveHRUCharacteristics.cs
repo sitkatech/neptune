@@ -17,8 +17,30 @@ namespace Neptune.Web.Models
     {
         public static double GetLandUse(this IHaveHRUCharacteristics entityWithHRUCharacteristics)
         {
-            throw new NotImplementedException();
+            //entityWithHRUCharacteristics.HRUCharacteristics
 
+            throw new NotImplementedException();
         }
+        public static double GetArea(this IHaveHRUCharacteristics entityWithHRUCharacteristics)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static double GetImperviousCover(this IHaveHRUCharacteristics entityWithHRUCharacteristics)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static double GetGrossArea(this IHaveHRUCharacteristics entityWithHRUCharacteristics)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class HRUCharacteristicsSummarySimple
+    {
+        public string LandUse { get; set; }
+        public double Area { get; set; }
+        public double ImperviousCover { get; set; }
     }
 }

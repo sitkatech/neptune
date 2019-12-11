@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID, int? networkCatchmentID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID, int? networkCatchmentID, double area) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
             this.LSPCLandUseDescription = lSPCLandUseDescription;
@@ -41,12 +41,13 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.NetworkCatchmentID = networkCatchmentID;
+            this.Area = area;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated) : this()
+        public HRUCharacteristic(string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.HRUCharacteristicID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -56,6 +57,7 @@ namespace Neptune.Web.Models
             this.SlopePercentage = slopePercentage;
             this.ImperviousAcres = imperviousAcres;
             this.LastUpdated = lastUpdated;
+            this.Area = area;
         }
 
 
@@ -64,7 +66,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static HRUCharacteristic CreateNewBlank()
         {
-            return new HRUCharacteristic(default(string), default(string), default(int), default(double), default(DateTime));
+            return new HRUCharacteristic(default(string), default(string), default(int), default(double), default(DateTime), default(double));
         }
 
         /// <summary>
@@ -109,6 +111,7 @@ namespace Neptune.Web.Models
         public int? TreatmentBMPID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         public int? NetworkCatchmentID { get; set; }
+        public double Area { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HRUCharacteristicID; } set { HRUCharacteristicID = value; } }
 

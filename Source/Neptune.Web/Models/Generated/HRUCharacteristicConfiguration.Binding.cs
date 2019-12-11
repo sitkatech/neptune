@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
             Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
             Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsOptional();
+            Property(x => x.Area).HasColumnName(@"Area").HasColumnType("float").IsRequired();
 
             // Foreign keys
             HasOptional(a => a.TreatmentBMP).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID

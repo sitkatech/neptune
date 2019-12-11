@@ -74,6 +74,8 @@ namespace Neptune.Web.Controllers
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
             HRUHelper.RetrieveAndSaveHRUCharacteristics(networkCatchment);
+            SetMessageForDisplay($"Successfully updated HRU Characteristics for {networkCatchment.Watershed} {networkCatchment.DrainID}: {networkCatchment.NetworkCatchmentID}");
+
             return Redirect(
                 SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x => x.Detail(networkCatchmentPrimaryKey)));
         }

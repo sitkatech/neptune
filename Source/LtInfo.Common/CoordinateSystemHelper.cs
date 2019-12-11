@@ -12,6 +12,8 @@ namespace LtInfo.Common
         public const int WGS_1984_SRID = 4326;
         public const int NAD_83_HARN_CA_ZONE_VI_SRID = 2771;
 
+        public const double SquareFeetToAcresDivisor = 43560;
+
         public static ProjectionInfo WebMercator => KnownCoordinateSystems.Geographic.World.WGS1984;
 
         public static ProjectionInfo CaStatePlane => KnownCoordinateSystems.Projected.StatePlaneNad1983Harn.NAD1983HARNStatePlaneCaliforniaVIFIPS0406;

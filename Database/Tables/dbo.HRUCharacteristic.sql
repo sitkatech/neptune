@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[HRUCharacteristic](
 	[TreatmentBMPID] [int] NULL,
 	[WaterQualityManagementPlanID] [int] NULL,
 	[NetworkCatchmentID] [int] NULL,
+	[Area] [float] NOT NULL,
  CONSTRAINT [PK_HRUCharacteristic_HRUCharacteristicID] PRIMARY KEY CLUSTERED 
 (
 	[HRUCharacteristicID] ASC

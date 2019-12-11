@@ -1,4 +1,5 @@
 ﻿using System;
+using LtInfo.Common;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
 
@@ -17,20 +18,20 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             if (iHaveHRUCharacteristics is TreatmentBMP)
             {
                 return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
+                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now, Attributes.Area / CoordinateSystemHelper.SquareFeetToAcresDivisor)
                     {TreatmentBMPID = iHaveHRUCharacteristics.PrimaryKey};
             } else if (iHaveHRUCharacteristics is WaterQualityManagementPlan)
 
             {
                 return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
-                    { WaterQualityManagementPlanID = iHaveHRUCharacteristics.PrimaryKey };
+                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now, Attributes.Area / CoordinateSystemHelper.SquareFeetToAcresDivisor)
+                { WaterQualityManagementPlanID = iHaveHRUCharacteristics.PrimaryKey };
             }
             else if (iHaveHRUCharacteristics is NetworkCatchment)
             {
                 return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
-                    { NetworkCatchmentID = iHaveHRUCharacteristics.PrimaryKey };
+                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now, Attributes.Area / CoordinateSystemHelper.SquareFeetToAcresDivisor)
+                { NetworkCatchmentID = iHaveHRUCharacteristics.PrimaryKey };
             }
             {
                 throw new NotImplementedException(

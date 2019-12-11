@@ -43,9 +43,6 @@ namespace Neptune.Web.Common
         {
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
-
-                //Features = new List<HRURequestFeature> { new HRURequestFeature(iHaveHRUCharacteristics) },
-
                 Features = iHaveHRUCharacteristics.GetHRURequestFeatures().ToList(),
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
