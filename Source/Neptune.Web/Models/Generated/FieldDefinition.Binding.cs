@@ -87,6 +87,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTotalAchieved TotalAchieved = FieldDefinitionTotalAchieved.Instance;
         public static readonly FieldDefinitionTargetLoadReduction TargetLoadReduction = FieldDefinitionTargetLoadReduction.Instance;
         public static readonly FieldDefinitionLoadingRate LoadingRate = FieldDefinitionLoadingRate.Instance;
+        public static readonly FieldDefinitionLandUse LandUse = FieldDefinitionLandUse.Instance;
+        public static readonly FieldDefinitionArea Area = FieldDefinitionArea.Instance;
+        public static readonly FieldDefinitionImperviousCover ImperviousCover = FieldDefinitionImperviousCover.Instance;
+        public static readonly FieldDefinitionGrossArea GrossArea = FieldDefinitionGrossArea.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -96,7 +100,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousCover, GrossArea };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -178,6 +182,8 @@ namespace Neptune.Web.Models
             {
                 case FieldDefinitionEnum.AlternativeScore:
                     return AlternativeScore;
+                case FieldDefinitionEnum.Area:
+                    return Area;
                 case FieldDefinitionEnum.AssessmentFailsIfObservationFails:
                     return AssessmentFailsIfObservationFails;
                 case FieldDefinitionEnum.AssessmentForInternalUseOnly:
@@ -218,14 +224,20 @@ namespace Neptune.Web.Models
                     return FundingEvent;
                 case FieldDefinitionEnum.FundingSource:
                     return FundingSource;
+                case FieldDefinitionEnum.GrossArea:
+                    return GrossArea;
                 case FieldDefinitionEnum.HasAllRequiredDocuments:
                     return HasAllRequiredDocuments;
+                case FieldDefinitionEnum.ImperviousCover:
+                    return ImperviousCover;
                 case FieldDefinitionEnum.IsPostMaintenanceAssessment:
                     return IsPostMaintenanceAssessment;
                 case FieldDefinitionEnum.IsPrimaryContactOrganization:
                     return IsPrimaryContactOrganization;
                 case FieldDefinitionEnum.Jurisdiction:
                     return Jurisdiction;
+                case FieldDefinitionEnum.LandUse:
+                    return LandUse;
                 case FieldDefinitionEnum.LoadingRate:
                     return LoadingRate;
                 case FieldDefinitionEnum.MaintenanceRecord:
@@ -390,7 +402,11 @@ namespace Neptune.Web.Models
         ViaOVTAScore = 67,
         TotalAchieved = 68,
         TargetLoadReduction = 69,
-        LoadingRate = 70
+        LoadingRate = 70,
+        LandUse = 71,
+        Area = 72,
+        ImperviousCover = 73,
+        GrossArea = 74
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -805,5 +821,29 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionLoadingRate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionLoadingRate Instance = new FieldDefinitionLoadingRate(70, @"LoadingRate", @"Loading Rate", @"", true);
+    }
+
+    public partial class FieldDefinitionLandUse : FieldDefinition
+    {
+        private FieldDefinitionLandUse(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionLandUse Instance = new FieldDefinitionLandUse(71, @"LandUse", @"Land Use", @"", true);
+    }
+
+    public partial class FieldDefinitionArea : FieldDefinition
+    {
+        private FieldDefinitionArea(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionArea Instance = new FieldDefinitionArea(72, @"Area", @"Area", @"", true);
+    }
+
+    public partial class FieldDefinitionImperviousCover : FieldDefinition
+    {
+        private FieldDefinitionImperviousCover(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionImperviousCover Instance = new FieldDefinitionImperviousCover(73, @"ImperviousCover", @"Impervious Cover", @"", true);
+    }
+
+    public partial class FieldDefinitionGrossArea : FieldDefinition
+    {
+        private FieldDefinitionGrossArea(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionGrossArea Instance = new FieldDefinitionGrossArea(74, @"GrossArea", @"Gross Area", @"", true);
     }
 }

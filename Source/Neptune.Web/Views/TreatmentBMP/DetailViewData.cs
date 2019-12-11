@@ -26,6 +26,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -66,7 +67,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string ChangeTreatmentBMPTypeUrl { get; }
         public string HRURefreshUrl { get; }
 
-        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
+        public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
+
+        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
@@ -98,6 +101,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(x => x.ManageTreatmentBMPImages(TreatmentBMP));
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
+            HRUCharacteristicsViewData = hruCharacteristicsViewData;
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
             DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";

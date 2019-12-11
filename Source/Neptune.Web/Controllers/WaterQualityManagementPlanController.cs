@@ -8,6 +8,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 
 namespace Neptune.Web.Controllers
@@ -101,7 +102,10 @@ namespace Neptune.Web.Controllers
             x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
                 waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
+                waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
+                waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
+                waterQualityManagementPlanVerifyTreatmentBMP, new HRUCharacteristicsViewData(waterQualityManagementPlan));
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

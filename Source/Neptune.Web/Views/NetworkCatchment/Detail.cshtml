@@ -19,7 +19,16 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.HRUCharacteristics
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.NetworkCatchment.Detail
+
+@section JavascriptAndStylesContent
+{
+ @{ MapJavascriptIncludes.RenderPartialView(Html); }
+}
 @section RightOfPageTitle{
     <div class="pull-right">
 
@@ -31,3 +40,90 @@
         }
     </div>
 }
+
+<div class="row">
+    <!-- left-->
+    <div class="col-xs-12 col-sm-6">
+        <div class="row">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Basics
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Catchment ID</label>
+                        <div class="col-sm-7">@ViewDataTyped.NetworkCatchment.OCSurveyCatchmentID</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Downstream Catchment ID</label>
+                        <div class="col-sm-7">
+                            @if (ViewDataTyped.NetworkCatchment.OCSurveyDownstreamCatchmentID != null)
+                            {
+                                <a href="@ViewDataTyped.NetworkCatchment.OCSurveyDownstreamCatchment.GetDetailUrl()">@ViewDataTyped.NetworkCatchment.OCSurveyDownstreamCatchmentID</a>
+                            }
+                            else
+                            {
+                                <p class="systemText">This Network Catchment is the downstream terminus of its watershed and flows directly to the ocean.</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Drain ID</label>
+                        <div class="col-sm-7">@ViewDataTyped.NetworkCatchment.DrainID</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Watershed</label>
+                        <div class="col-sm-7">@ViewDataTyped.NetworkCatchment.Watershed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Land Use Statistics
+                </div>
+                <div class="panel-body">
+                    @if (ViewDataTyped.NetworkCatchment.HRUCharacteristics.Any())
+                    {
+                        HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
+                    }
+                    else
+                    {
+                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--right-->
+    <div class="col-xs-12 col-sm-6">
+        <div class="row">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Location
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div></div>
+
+
+    <script type="text/javascript">
+    var map;
+    jQuery(document).ready(function() {
+        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        map = new NeptuneMaps.Map(mapInitJson);
+    });
+    </script>

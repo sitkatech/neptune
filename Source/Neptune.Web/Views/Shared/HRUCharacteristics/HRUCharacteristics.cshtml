@@ -1,0 +1,25 @@
+﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
+@inherits Neptune.Web.Views.Shared.HRUCharacteristics.HRUCharacteristics
+
+<table class="table table-responsive" style="text-align:center">
+    <thead>
+        <tr>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.LandUse)</th>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.Area)</th>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.ImperviousCover)</th>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.GrossArea)</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var summary in ViewDataTyped.HRUCharacteristicsSummaries)
+    {
+        <tr>
+            <td>@summary.LandUse</td>
+            <td>@summary.Area</td>
+            <td>@summary.ImperviousCover</td>
+            <td>@summary.Area</td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1908,6 +1908,7 @@
     <Content Include="Views\NetworkCatchment\Detail.cshtml" />
     <Content Include="Views\NetworkCatchment\Index.cshtml" />
     <Content Include="Views\NetworkCatchment\Grid.cshtml" />
+    <Content Include="Views\Shared\HRUCharacteristics\HRUCharacteristics.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

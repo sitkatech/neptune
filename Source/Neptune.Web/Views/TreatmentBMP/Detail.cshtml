@@ -26,6 +26,7 @@
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Views.Shared.HRUCharacteristics
 @using Neptune.Web.Views.Shared.SortOrder
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -93,7 +94,7 @@
             <div style="display: inline-block; vertical-align: top;">
                 @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
             </div>
-            @if(ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.CurrentPerson.IsAdministrator())
+            @if (ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.CurrentPerson.IsAdministrator())
             {
                 <div style="display: inline-block; vertical-align: top;">
                     <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>
@@ -165,7 +166,7 @@
                         @ViewDataTyped.TreatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName
                     </div>
                 </div>
-                @if(ViewDataTyped.DisplayTrashCaptureEffectiveness)
+                @if (ViewDataTyped.DisplayTrashCaptureEffectiveness)
                 {
                     <div class="row">
                         <label class="col-sm-5 control-label text-right">Trash Capture Effectiveness</label>
@@ -375,6 +376,26 @@
                             <p style="margin-top: 8px;">@ViewDataTyped.DelineationStatus</p>
                         </div>
                     </div>
+                }
+            </div>
+
+        </div>
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Land Use Statistics
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.TreatmentBMP.HRUCharacteristics.Any() && ViewDataTyped.TreatmentBMP.Delineation != null)
+                {
+                    HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
+                }
+                else if (ViewDataTyped.TreatmentBMP.Delineation == null)
+                {
+                    <p class="systemText">No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.</p>
+                }
+                else
+                {
+                    <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
                 }
             </div>
 

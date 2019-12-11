@@ -71,4 +71,9 @@ VALUES
 (67, N'ViaOVTAScore', N'Via OVTA Score', N'', 1),
 (68, N'TotalAchieved', N'Total Achieved', N'', 1),
 (69, N'TargetLoadReduction', N'Target Load Reduction', N'', 1),
-(70, N'LoadingRate', N'Loading Rate', N'', 1)
+(70, N'LoadingRate', N'Loading Rate', N'', 1),
+(71, N'LandUse', N'Land Use', N'', 1),
+(72, N'Area', N'Area', N'', 1),
+(73, N'ImperviousCover', N'Impervious Cover', N'', 1),
+(74, N'GrossArea', N'Gross Area', N'', 1),
+(75, N'LandUseStatistics', N'Land Use Statistics', N'', 1)

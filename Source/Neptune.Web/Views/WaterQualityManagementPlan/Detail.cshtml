@@ -6,6 +6,7 @@
 @using Neptune.Web.Models
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.HRUCharacteristics
 @using Neptune.Web.Views.WaterQualityManagementPlan
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -231,20 +232,44 @@
         </div>
     </div>
     <div class="col-xs-12 col-sm-6">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Locations
+        <div class="row">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Locations
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">Add Parcels</a>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Add Treatment BMPs</a>
+                    </div>
+                    <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
+                    <div class="row" style="margin-top: 12px;">
+                        <label class="col-sm-5 control-label">Calculated Parcel Area:</label>
+                        <div class="col-sm-7">@ViewDataTyped.CalculatedParcelArea</div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div>
-                    <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">Add Parcels</a>
-                    <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Add Treatment BMPs</a>
+        </div>
+        <div class="row">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Land Use Statistics
                 </div>
-                <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
-                <div class="row" style="margin-top: 12px;">
-                    <label class="col-sm-5 control-label">Calculated Parcel Area:</label>
-                    <div class="col-sm-7">@ViewDataTyped.CalculatedParcelArea</div>
+                <div class="panel-body">
+                    @if (ViewDataTyped.WaterQualityManagementPlan.HRUCharacteristics.Any() && ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() != null)
+                    {
+                        HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
+                    }
+                    else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
+                    {
+                        <p class="systemText">No treatment area is provided for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">treatment area is provided</a>.</p>
+                    }
+                    else
+                    {
+                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()</p>
+                    }
                 </div>
+
             </div>
         </div>
     </div>

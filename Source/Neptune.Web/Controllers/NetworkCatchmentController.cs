@@ -15,6 +15,7 @@ using Neptune.Web.Areas.Modeling.Views.HRUCharacteristic;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Views;
 using Neptune.Web.Views.NetworkCatchment;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Index = Neptune.Web.Views.NetworkCatchment.Index;
@@ -83,7 +84,21 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Detail(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
-            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, networkCatchmentPrimaryKey.EntityObject));
+            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+
+
+            var networkCatchmentCatchmentGeometry4326 = networkCatchment.CatchmentGeometry4326;
+
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReprojecc(networkCatchmentCatchmentGeometry4326);
+            var geoJsonFeatureCollection = new FeatureCollection(new List<Feature>(){geoJson});
+            var layerGeoJson = new LayerGeoJson("Catchment Boundary",geoJsonFeatureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
+            var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBox(networkCatchmentCatchmentGeometry4326));
+
+
+            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson,
+                networkCatchment,
+                new HRUCharacteristicsViewData(networkCatchment),
+                stormwaterMapInitJson));
         }
 
         [HttpGet]
