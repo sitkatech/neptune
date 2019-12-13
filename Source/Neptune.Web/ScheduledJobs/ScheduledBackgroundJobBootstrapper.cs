@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Hangfire;
+using Hangfire.SqlServer;
+using Hangfire.Storage;
+using Neptune.Web.Common;
+using Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using Hangfire;
-using Hangfire.SqlServer;
-using Hangfire.Storage;
-using Owin;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {

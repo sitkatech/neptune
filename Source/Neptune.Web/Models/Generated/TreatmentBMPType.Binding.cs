@@ -39,23 +39,25 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPType(int treatmentBMPTypeID, string treatmentBMPTypeName, string treatmentBMPTypeDescription) : this()
+        public TreatmentBMPType(int treatmentBMPTypeID, string treatmentBMPTypeName, string treatmentBMPTypeDescription, bool delineationShouldBeReconciled) : this()
         {
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
             this.TreatmentBMPTypeDescription = treatmentBMPTypeDescription;
+            this.DelineationShouldBeReconciled = delineationShouldBeReconciled;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPType(string treatmentBMPTypeName, string treatmentBMPTypeDescription) : this()
+        public TreatmentBMPType(string treatmentBMPTypeName, string treatmentBMPTypeDescription, bool delineationShouldBeReconciled) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
             this.TreatmentBMPTypeDescription = treatmentBMPTypeDescription;
+            this.DelineationShouldBeReconciled = delineationShouldBeReconciled;
         }
 
 
@@ -64,7 +66,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPType CreateNewBlank()
         {
-            return new TreatmentBMPType(default(string), default(string));
+            return new TreatmentBMPType(default(string), default(string), default(bool));
         }
 
         /// <summary>
@@ -159,6 +161,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPTypeID { get; set; }
         public string TreatmentBMPTypeName { get; set; }
         public string TreatmentBMPTypeDescription { get; set; }
+        public bool DelineationShouldBeReconciled { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeID; } set { TreatmentBMPTypeID = value; } }
 
