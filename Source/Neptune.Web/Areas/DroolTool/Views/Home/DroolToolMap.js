@@ -317,7 +317,7 @@ L.control.neighborhoodDetailShowMobile = function (options) { return new L.Contr
 
 NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl, config) {
     this.config = config;
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
+    NeptuneMaps.Map.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl, { collapseLayerControl: true });
     
     this.neighborhoodLayerWfsParams = this.createWfsParamsWithLayerName("OCStormwater:Neighborhoods");
     this.backboneLayerWmsParams = this.createWmsParamsWithLayerName("OCStormwater:Backbone");
@@ -352,7 +352,7 @@ NeptuneMaps.DroolToolMap = function (mapInitJson, initialBaseLayerShown, geoServ
         });
 };
 
-NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+NeptuneMaps.DroolToolMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
 
 NeptuneMaps.DroolToolMap.prototype.DisplayStormshedAndBackboneDetail = function (selectedNeighborhoodID) {
     var self = this;

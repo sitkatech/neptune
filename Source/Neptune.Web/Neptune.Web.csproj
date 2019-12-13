@@ -1330,9 +1330,6 @@
     <Content Include="ScriptsCustom\FancyboxReady.min.js.map" />
     <Content Include="ScriptsCustom\GoogleAnalytics.min.js.map" />
     <Content Include="ScriptsCustom\ManagePhotoWithPreview.js" />
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js">
-      <DependentUpon>NeptuneMaps.GeoServerMap.js</DependentUpon>
-    </Content>
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js">
       <DependentUpon>NeptuneMaps.js</DependentUpon>
     </Content>
@@ -1545,7 +1542,6 @@
     <Content Include="ScriptsCustom\FancyboxReady.min.js" />
     <Content Include="ScriptsCustom\GoogleAnalytics.js" />
     <Content Include="ScriptsCustom\GoogleAnalytics.min.js" />
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.min.js">

@@ -20,8 +20,8 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 NeptuneMaps.TrashModuleMap = function (mapInitJson, initialBaseLayerShown, geoServerUrl) {
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl);
+    NeptuneMaps.Map.call(this, mapInitJson, initialBaseLayerShown, geoServerUrl);
 
 };
 
-NeptuneMaps.TrashModuleMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+NeptuneMaps.TrashModuleMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);

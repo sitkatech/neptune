@@ -19,7 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 NeptuneMaps.ParcelSearch = function (parcelLocationSummaryMapInitJson, initialBaseLayer, geoserverUrl, parcelSummaryUrl) {
-    NeptuneMaps.GeoServerMap.call(this, parcelLocationSummaryMapInitJson, initialBaseLayer, geoserverUrl);
+    NeptuneMaps.Map.call(this, parcelLocationSummaryMapInitJson, initialBaseLayer, geoserverUrl);
 
     this.parcelSummaryUrl = parcelSummaryUrl;
 
@@ -31,7 +31,7 @@ NeptuneMaps.ParcelSearch = function (parcelLocationSummaryMapInitJson, initialBa
     this.map.on('click', this.selectParcel, this);
 };
 
-NeptuneMaps.ParcelSearch.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+NeptuneMaps.ParcelSearch.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
 
 NeptuneMaps.ParcelSearch.prototype.findParcelAndAddToMap = function (parcelNumber) {
     var customParams = {
