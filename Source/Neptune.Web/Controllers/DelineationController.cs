@@ -32,8 +32,14 @@ using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common.DhtmlWrappers;
+using Neptune.Web.Views.TreatmentBMP;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
+using TreatmentBMPAssessmentSummary = Neptune.Web.Models.TreatmentBMPAssessmentSummary;
 
 namespace Neptune.Web.Controllers
 {
@@ -62,6 +68,25 @@ namespace Neptune.Web.Controllers
                 SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult DelineationReconciliationReport()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationReconciliationReport);
+            var networkCatchmentsLastUpdated = HttpRequestStorage.DatabaseEntities.NetworkCatchments.Max(x => x.LastUpdate);
+            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated);
+            return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<vTreatmentBMPWithMisalignedDistributedDelineation> DelineationReconciliationReportGridJsonData()
+        {
+            var gridSpec = new MisalignedDistributedDelineationGridSpec();
+            var vMostRecentTreatmentBMPAssessments = HttpRequestStorage.DatabaseEntities.vTreatmentBMPWithMisalignedDistributedDelineations.ToList().OrderBy(x => x.TreatmentBMPName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPWithMisalignedDistributedDelineation>(vMostRecentTreatmentBMPAssessments, gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [HttpGet]

@@ -598,8 +598,11 @@
     var map;
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        map = new NeptuneMaps.Map(mapInitJson);
-
+        map = new NeptuneMaps.Map(mapInitJson, null, @Html.Raw(ViewDataTyped.MapServiceUrl.ToJS()));
+        var networkCatchmentLayer =
+            map.addWmsLayer("OCStormwater:NetworkCatchments",
+                "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
+                { styles: "network_catchment_wide"}, true);
 
         if (mapInitJson.DelineationLayer) {
             var delineationLayer = L.geoJSON(mapInitJson.DelineationLayer.GeoJsonFeatureCollection);

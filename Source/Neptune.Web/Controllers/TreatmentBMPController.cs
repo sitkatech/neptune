@@ -183,7 +183,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-
+            var mapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
             var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
             mapInitJson.Layers.Add(
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
@@ -200,7 +200,7 @@ namespace Neptune.Web.Controllers
                     x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
-                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(treatmentBMP));
+                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(treatmentBMP), mapServiceUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

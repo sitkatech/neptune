@@ -97,13 +97,23 @@ namespace Neptune.Web.Views
                 BuildBMPInventoryMenu(currentPerson),
                 BuildProgramInfoMenu(currentPerson),
                 BuildDashboardMenu(currentPerson),
-                LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"),
+                BuildDelineationMenu(currentPerson),
                 BuildManageMenu(CurrentPerson)
             };
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
             TopLevelLtInfoMenuItems.SelectMany(x => x.ChildMenus).ToList().ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-dropdown-item" });
 
+        }
+
+        private static LtInfoMenuItem BuildDelineationMenu(Person currentPerson)
+        {
+            var delineationMenu = new LtInfoMenuItem("Delineation");
+
+            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
+            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
+            
+            return delineationMenu;
         }
 
         private static LtInfoMenuItem BuildBMPInventoryMenu(Person currentPerson)
@@ -129,7 +139,7 @@ namespace Neptune.Web.Views
             return bmpMenu;
         }
 
-        private LtInfoMenuItem BuildProgramInfoMenu(Person currentPerson)
+        private static LtInfoMenuItem BuildProgramInfoMenu(Person currentPerson)
         {
             var programInfoMenu = new LtInfoMenuItem("Program Info");
 
