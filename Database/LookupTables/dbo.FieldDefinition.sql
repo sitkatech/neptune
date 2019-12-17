@@ -76,4 +76,5 @@ VALUES
 (72, N'Area', N'Area', N'', 1),
 (73, N'ImperviousArea', N'Impervious Area', N'', 1),
 (74, N'GrossArea', N'Gross Area', N'', 1),
-(75, N'LandUseStatistics', N'Land Use Statistics', N'', 1)
+(75, N'LandUseStatistics', N'Land Use Statistics', N'', 1),
+(76, N'NetworkCatchment', N'Network Catchment', N'', 1)
