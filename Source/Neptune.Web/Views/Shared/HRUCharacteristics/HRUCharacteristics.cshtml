@@ -6,7 +6,7 @@
     <thead>
         <tr>
             <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.LandUse)</th>
-            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.Area)</th>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.Area) <strong>(ac)</strong></th>
             <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.ImperviousArea)</th>
         </tr>
     </thead>
@@ -19,7 +19,7 @@
             <td>@summary.ImperviousCover</td>
         </tr>
     }
-    <tr>
+    <tr style="font-weight: bold">
         <td>@ViewDataTyped.HRUCharacteristicsTotal.LandUse</td>
         <td>@ViewDataTyped.HRUCharacteristicsTotal.Area</td>
         <td>@ViewDataTyped.HRUCharacteristicsTotal.ImperviousCover</td>

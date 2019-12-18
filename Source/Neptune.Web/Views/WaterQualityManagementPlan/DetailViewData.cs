@@ -97,7 +97,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             // TODO: Never compare floating-point values to zero. We should establish an application-wide error tolerance and use that instead of the direct comparison
             CalculatedParcelArea = calculatedParcelAcres != 0
-                ? $"{Math.Round(calculatedParcelAcres, 1).ToString(CultureInfo.InvariantCulture)} acres"
+                ? $"{Math.Round(calculatedParcelAcres, 2).ToString(CultureInfo.InvariantCulture)} acres"
                 : "No parcels have been associated with this WQMP";
 
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null

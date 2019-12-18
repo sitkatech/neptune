@@ -13,8 +13,10 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Index = Neptune.Web.Views.NetworkCatchment.Index;
 using IndexViewData = Neptune.Web.Views.NetworkCatchment.IndexViewData;
@@ -82,8 +84,11 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Detail(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
-            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+            //HttpRequestStorage.DatabaseEntities.NetworkCatchments.Load();
 
+            var networkCatchment = //networkCatchmentPrimaryKey.EntityObject;
+
+            HttpRequestStorage.DatabaseEntities.NetworkCatchments.Find(networkCatchmentPrimaryKey.PrimaryKeyValue);
 
             var networkCatchmentCatchmentGeometry4326 = networkCatchment.CatchmentGeometry4326;
 
