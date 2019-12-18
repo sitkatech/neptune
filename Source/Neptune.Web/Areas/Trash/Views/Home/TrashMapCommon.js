@@ -42,7 +42,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
     $scope.treatmentBMPLayerLookup = new Map();
 
-    $scope.neptuneMap = new NeptuneMaps.GeoServerMap(mapInitJson,
+    $scope.neptuneMap = new NeptuneMaps.Map(mapInitJson,
         "Terrain",
         $scope.AngularViewData.GeoServerUrl);
 

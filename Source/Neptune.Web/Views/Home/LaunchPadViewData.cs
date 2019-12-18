@@ -32,7 +32,8 @@ namespace Neptune.Web.Views.Home
         public string ViewAssessmentAndMaintenanceRecordsUrl { get; }
         public string ViewWaterQualityManagementPlansUrl { get; }
         public string ManagerDashboardUrl { get; }
-        
+        public string ViewDelineationReconciliationReportUrl { get; }
+
         public LaunchPadViewData(Person currentPerson, Models.NeptunePage launchPadNeptunePage, int numberOfBmpTypes, string managerDashboardDescription)
         {
             CurrentPerson = currentPerson;
@@ -57,6 +58,7 @@ namespace Neptune.Web.Views.Home
             EditUserRolesUrl = SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Index());
             AddAFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
             ManagerDashboardUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index());
+            ViewDelineationReconciliationReportUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationReconciliationReport());
         }
     }
 }

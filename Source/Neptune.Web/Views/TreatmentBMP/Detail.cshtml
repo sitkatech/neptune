@@ -94,16 +94,16 @@
             <div style="display: inline-block; vertical-align: top;">
                 @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
             </div>
-            @if (ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.CurrentPerson.IsAdministrator())
-            {
-                <div style="display: inline-block; vertical-align: top;">
-                    <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>
-                </div>
-            }
         </div>
     }
 }
 
+@if (ViewDataTyped.DelineationHasDiscrepancy)
+{
+<div class="alert alert-info">
+    This BMP delineation may have errors - It is not consistent with the most recent Regional Sub-basin Layer.
+</div>
+}
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -382,6 +382,9 @@
         </div>
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
+                <div class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh").ToString(), ViewDataTyped.HRURefreshUrl, "Refresh HRU Statistics", new List<string>(), ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.CurrentPerson.IsAdministrator())
+                </div>
                 Land Use Statistics
             </div>
             <div class="panel-body">
@@ -598,8 +601,11 @@
     var map;
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        map = new NeptuneMaps.Map(mapInitJson);
-
+        map = new NeptuneMaps.Map(mapInitJson, null, @Html.Raw(ViewDataTyped.MapServiceUrl.ToJS()));
+        var networkCatchmentLayer =
+            map.addWmsLayer("OCStormwater:NetworkCatchments",
+                "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
+                { styles: "network_catchment_wide"}, true);
 
         if (mapInitJson.DelineationLayer) {
             var delineationLayer = L.geoJSON(mapInitJson.DelineationLayer.GeoJsonFeatureCollection);

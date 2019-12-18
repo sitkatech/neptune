@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -137,18 +136,6 @@ namespace Neptune.Web.Controllers
 
             var viewData = new DetailViewData(CurrentPerson, organization);
             return RazorView<Detail, DetailViewData>(viewData);
-        }
-
-        // ReSharper disable once UnusedMember.Local
-        private static MapInitJson GetMapInitJson(Organization organization, out bool hasSpatialData, Person person)
-        {
-            hasSpatialData = false;
-            
-            var layers = new List<LayerGeoJson>();
-
-            var boundingBox = BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layers);
-
-            return new MapInitJson($"organization_{organization.OrganizationID}_Map", 10, layers, boundingBox);
         }
 
         [HttpGet]

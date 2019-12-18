@@ -85,7 +85,7 @@
         var latlng = event.latlng;
 
         $scope.neptuneMap.geoserverUrlOWS = $scope.AngularViewData.MapServiceUrl;
-        var getFeatureInfo = NeptuneMaps.GeoServerMap.prototype.getFeatureInfo.bind($scope.neptuneMap);
+        var getFeatureInfo = NeptuneMaps.Map.prototype.getFeatureInfo.bind($scope.neptuneMap);
 
         getFeatureInfo("OCStormwater:Parcels", [latlng.lng, latlng.lat]).then(function(response) {
             if (response.features.length === 0)
@@ -137,7 +137,7 @@
 
         var wmsParameters = L.Util.extend(
             {
-                layers: $scope.AngularViewData.ParcelMapSericeLayerName,
+                layers: $scope.AngularViewData.ParcelMapServiceLayerName,
                 cql_filter: "ParcelID in (" + $scope.AngularModel.ParcelIDs.join(",") + ")",
                 styles: "parcel_yellow"
             },
@@ -185,7 +185,8 @@
     };
 
     function initializeMap() {
-        $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson, "Hybrid");
+        $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson, "Hybrid", $scope.AngularViewData.MapServiceUrl);
+        $scope.neptuneMap.addWmsLayer("OCStormwater:Parcels", "All Parcels");
         $scope.neptuneMap.map.on("click", onMapClick);
         $scope.neptuneMap.map.scrollWheelZoom.enable();
 

@@ -7,14 +7,10 @@ using Newtonsoft.Json;
 
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
-using ApprovalUtilities.Utilities;
-using Microsoft.Ajax.Utilities;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
