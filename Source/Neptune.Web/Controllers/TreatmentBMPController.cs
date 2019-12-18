@@ -183,7 +183,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-
+            var mapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
             var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
             mapInitJson.Layers.Add(
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
@@ -200,7 +200,7 @@ namespace Neptune.Web.Controllers
                     x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
-                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(treatmentBMP));
+                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(treatmentBMP), mapServiceUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -678,13 +678,33 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public ActionResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public PartialViewResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            return ViewRefreshHRUCharacteristics(treatmentBMP, new ConfirmDialogFormViewModel());
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshHRUCharacteristics(treatmentBMP, viewModel);
+            }
+
             HRUHelper.RetrieveAndSaveHRUCharacteristics(treatmentBMP);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {treatmentBMP.TreatmentBMPName}");
-            return Redirect(
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMPPrimaryKey)));
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshHRUCharacteristics(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for Treatment BMP '{treatmentBMP.TreatmentBMPName}'?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
 

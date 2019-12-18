@@ -63,6 +63,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeExportAssessmentGeospatialData ExportAssessmentGeospatialData = NeptunePageTypeExportAssessmentGeospatialData.Instance;
         public static readonly NeptunePageTypeHRUCharacteristics HRUCharacteristics = NeptunePageTypeHRUCharacteristics.Instance;
         public static readonly NeptunePageTypeNetworkCatchments NetworkCatchments = NeptunePageTypeNetworkCatchments.Instance;
+        public static readonly NeptunePageTypeDelineationReconciliationReport DelineationReconciliationReport = NeptunePageTypeDelineationReconciliationReport.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -72,7 +73,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, NetworkCatchments };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, NetworkCatchments, DelineationReconciliationReport };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -152,6 +153,8 @@ namespace Neptune.Web.Models
                     return BulkUploadRequest;
                 case NeptunePageTypeEnum.DelineationMap:
                     return DelineationMap;
+                case NeptunePageTypeEnum.DelineationReconciliationReport:
+                    return DelineationReconciliationReport;
                 case NeptunePageTypeEnum.DroolToolAboutPage:
                     return DroolToolAboutPage;
                 case NeptunePageTypeEnum.DroolToolHomePage:
@@ -286,7 +289,8 @@ namespace Neptune.Web.Models
         LandUseBlock = 43,
         ExportAssessmentGeospatialData = 44,
         HRUCharacteristics = 45,
-        NetworkCatchments = 46
+        NetworkCatchments = 46,
+        DelineationReconciliationReport = 47
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -557,5 +561,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeNetworkCatchments(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeNetworkCatchments Instance = new NeptunePageTypeNetworkCatchments(46, @"NetworkCatchments", @"Network Catchments", 2);
+    }
+
+    public partial class NeptunePageTypeDelineationReconciliationReport : NeptunePageType
+    {
+        private NeptunePageTypeDelineationReconciliationReport(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeDelineationReconciliationReport Instance = new NeptunePageTypeDelineationReconciliationReport(47, @"DelineationReconciliationReport", @"Delineation Reconciliation Report", 2);
     }
 }

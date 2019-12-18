@@ -1,10 +1,10 @@
-﻿/* Extension of GeoServerMap with functionality for the Delineation Workflow
+﻿/* Extension of Neptune.Map with functionality for the Delineation Workflow
  * Leaflet controls (JS) in DelineationMapControls.js
  * Leaflet controls (HTML Templates) in DelineationMapTemplate.cshtml
  */
 
 NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl, config) {
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
+    NeptuneMaps.Map.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
     configureProj4Defs();
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
@@ -13,7 +13,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 
     this.addDelineationWmsLayers();
 
-    // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
+    // ensure that wms layers fetched through the Neptune.Map interface are always above all other layers
     var networkCatchmentPane = this.map.createPane("networkCatchmentPane");
     networkCatchmentPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
@@ -42,7 +42,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.hookupDeselectOnClick();
 };
 
-NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
 
 /* Constants */
 

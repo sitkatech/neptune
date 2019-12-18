@@ -33,7 +33,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data.Entity.Spatial;
+using System.Linq;
 using System.Web.Mvc;
+using Hangfire;
+using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Controllers
 {
@@ -62,6 +65,25 @@ namespace Neptune.Web.Controllers
                 SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult DelineationReconciliationReport()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationReconciliationReport);
+            var networkCatchmentsLastUpdated = HttpRequestStorage.DatabaseEntities.NetworkCatchments.Max(x => x.LastUpdate);
+            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated);
+            return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<Delineation> DelineationReconciliationReportGridJsonData()
+        {
+            var gridSpec = new MisalignedDelineationGridSpec();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [HttpGet]
@@ -144,7 +166,7 @@ namespace Neptune.Web.Controllers
 
                 var delineation =
                     new Delineation(geom2771, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID,
-                        DateTime.Now) {DelineationGeometry4326 = geom4326};
+                        DateTime.Now, false) {DelineationGeometry4326 = geom4326};
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
             }
 
@@ -245,6 +267,40 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
                 viewModel);
         }
+
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult CheckForDiscrepancies()
+        {
+            return ViewCheckForDiscrepancies(new ConfirmDialogFormViewModel());
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult CheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewCheckForDiscrepancies(viewModel);
+            }
+
+            BackgroundJob.Schedule(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(), TimeSpan.FromSeconds(1));
+            //SetMessageForDisplay("The Land Use Blocks were successfully added to the staging area. The staged Land Use Blocks will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
+
+            SetMessageForDisplay($"Successfully updated Delineations with discrepancies");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewCheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to check for discrepancies between ALL centralized and distributed delineations and the most recent Regional Sub-basin Layer?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+
     }
 
     public class ChangeDelineationStatusViewModel

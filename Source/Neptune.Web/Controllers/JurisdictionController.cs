@@ -19,17 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Jurisdiction;
-using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using Detail = Neptune.Web.Views.Jurisdiction.Detail;
 using DetailViewData = Neptune.Web.Views.Jurisdiction.DetailViewData;
 using Index = Neptune.Web.Views.Jurisdiction.Index;

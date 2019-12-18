@@ -68,8 +68,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string HRURefreshUrl { get; }
 
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
+        public string MapServiceUrl { get; }
 
-        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData)
+        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
+            TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
+            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
@@ -102,9 +105,11 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
+            MapServiceUrl = mapServiceUrl;
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
             DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";
+            DelineationHasDiscrepancy = TreatmentBMP.Delineation?.HasDiscrepancies ?? false;
             DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
                                                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
 
@@ -118,5 +123,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(
                     x => x.RefreshHRUCharacteristics(treatmentBMP));
         }
+
+        public bool DelineationHasDiscrepancy { get; set; }
     }
 }
