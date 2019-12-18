@@ -66,13 +66,12 @@ namespace Neptune.Web.ScheduledJobs
                 () => ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitRefreshScheduledBackgroundJob(),
                 MakeDailyUtcCronJobStringFromLocalTime(22, 30), recurringJobIds);
 
+            AddRecurringJob(DelineationDiscrepancyCheckerBackgroundJob.JobName,
+                () => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(),
+                MakeDailyUtcCronJobStringFromLocalTime(1, 30), recurringJobIds);
+
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);
-        }
-
-        public static void RunLandUseBlockUploadBackgroundJob(int personID)
-        {
-            ScheduledBackgroundJobLaunchHelper.RunLandUseBlockUploadBackgroundJob(personID);
         }
 
         private static void AddRecurringJob(string jobName, Expression<Action> methodCallExpression,

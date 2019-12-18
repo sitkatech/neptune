@@ -11,6 +11,7 @@ namespace Neptune.Web.Views.Delineation
     {
         public MisalignedDelineationGridSpec()
         {
+            Add("", x => x.GetDetailUrlForGrid(), 60, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMP.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.DelineationType.ToGridHeaderString(), x => x.DelineationType.DelineationTypeDisplayName, 130, DhtmlxGridColumnFilterType.SelectFilterStrict);

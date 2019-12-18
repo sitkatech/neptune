@@ -35,6 +35,8 @@ using System;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
+using Hangfire;
+using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Controllers
 {
@@ -71,7 +73,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationReconciliationReport);
             var networkCatchmentsLastUpdated = HttpRequestStorage.DatabaseEntities.NetworkCatchments.Max(x => x.LastUpdate);
-            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated, new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 1, 30, 0));
+            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated);
             return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
         }
 
@@ -265,6 +267,40 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
                 viewModel);
         }
+
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult CheckForDiscrepancies()
+        {
+            return ViewCheckForDiscrepancies(new ConfirmDialogFormViewModel());
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult CheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewCheckForDiscrepancies(viewModel);
+            }
+
+            BackgroundJob.Schedule(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(), TimeSpan.FromSeconds(1));
+            //SetMessageForDisplay("The Land Use Blocks were successfully added to the staging area. The staged Land Use Blocks will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
+
+            SetMessageForDisplay($"Successfully updated Delineations with discrepancies");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewCheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to check for discrepancies between ALL centralized and distributed delineations and the most recent Regional Sub-basin Layer?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+
     }
 
     public class ChangeDelineationStatusViewModel
