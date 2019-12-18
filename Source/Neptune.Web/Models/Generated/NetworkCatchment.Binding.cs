@@ -126,6 +126,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
+        [ForeignKey("OCSurveyDownstreamCatchmentID")]
         public virtual NetworkCatchment OCSurveyDownstreamCatchment { get; set; }
 
         public static class FieldLengths
