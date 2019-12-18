@@ -32,14 +32,9 @@ using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
-using LtInfo.Common.DhtmlWrappers;
-using Neptune.Web.Views.TreatmentBMP;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
-using TreatmentBMPAssessmentSummary = Neptune.Web.Models.TreatmentBMPAssessmentSummary;
 
 namespace Neptune.Web.Controllers
 {
@@ -76,16 +71,16 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationReconciliationReport);
             var networkCatchmentsLastUpdated = HttpRequestStorage.DatabaseEntities.NetworkCatchments.Max(x => x.LastUpdate);
-            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated);
+            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated, new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 1, 30, 0));
             return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<vTreatmentBMPWithMisalignedDistributedDelineation> DelineationReconciliationReportGridJsonData()
+        public GridJsonNetJObjectResult<Delineation> DelineationReconciliationReportGridJsonData()
         {
-            var gridSpec = new MisalignedDistributedDelineationGridSpec();
-            var vMostRecentTreatmentBMPAssessments = HttpRequestStorage.DatabaseEntities.vTreatmentBMPWithMisalignedDistributedDelineations.ToList().OrderBy(x => x.TreatmentBMPName).ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPWithMisalignedDistributedDelineation>(vMostRecentTreatmentBMPAssessments, gridSpec);
+            var gridSpec = new MisalignedDelineationGridSpec();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
@@ -169,7 +164,7 @@ namespace Neptune.Web.Controllers
 
                 var delineation =
                     new Delineation(geom2771, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID,
-                        DateTime.Now) {DelineationGeometry4326 = geom4326};
+                        DateTime.Now, false) {DelineationGeometry4326 = geom4326};
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
             }
 

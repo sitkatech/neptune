@@ -11,22 +11,24 @@ namespace Neptune.Web.Views.Delineation
     {
         public string GridDataUrl { get; }
         public string GridName { get; }
-        public MisalignedDistributedDelineationGridSpec GridSpec { get; }
+        public MisalignedDelineationGridSpec GridSpec { get; }
 
-        public DelineationReconciliationReportViewData(Person currentPerson, Models.NeptunePage neptunePage, DateTime? networkCatchmentsLastUpdated) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public DelineationReconciliationReportViewData(Person currentPerson, Models.NeptunePage neptunePage, DateTime? networkCatchmentsLastUpdated, DateTime? discrepanciesLastUpdated) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            NetworkCatchmentsLastUpdated = networkCatchmentsLastUpdated.HasValue ? networkCatchmentsLastUpdated.ToStringDate() : "n/a";
+            DiscrepanciesLastUpdated = discrepanciesLastUpdated.HasValue ? discrepanciesLastUpdated.ToStringDateTime() : "n/a";
+            NetworkCatchmentsLastUpdated = networkCatchmentsLastUpdated.HasValue ? networkCatchmentsLastUpdated.ToStringDateTime() : "n/a";
             EntityName = Models.FieldDefinition.Delineation.FieldDefinitionDisplayName;
             PageTitle = "Delineation Reconciliation";
 
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
 
-            GridSpec = new MisalignedDistributedDelineationGridSpec() { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
+            GridSpec = new MisalignedDelineationGridSpec() { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
             GridName = "misalignedTreatmentBMPsGrid";
             GridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationReconciliationReportGridJsonData());
         }
 
         public bool HasManagePermission { get; }
         public string NetworkCatchmentsLastUpdated { get; }
+        public string DiscrepanciesLastUpdated { get; }
     }
 }

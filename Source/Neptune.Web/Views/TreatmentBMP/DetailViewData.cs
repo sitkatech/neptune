@@ -109,6 +109,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
             DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";
+            DelineationHasDiscrepancy = TreatmentBMP.Delineation?.HasDiscrepancies ?? false;
             DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
                                                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
 
@@ -122,5 +123,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(
                     x => x.RefreshHRUCharacteristics(treatmentBMP));
         }
+
+        public bool DelineationHasDiscrepancy { get; set; }
     }
 }
