@@ -62,8 +62,8 @@ namespace Neptune.Web.Models
         public double CalculateParcelAcreageTotal()
         {
             return
-                this
-                    .WaterQualityManagementPlanBoundary.Area.GetValueOrDefault() * DbSpatialHelper.SquareMetersToAcres;
+                (this
+                    .WaterQualityManagementPlanBoundary?.Area.GetValueOrDefault() ?? 0) * DbSpatialHelper.SquareMetersToAcres;
         }
 
         public string GetLatestOandMVerificationDate()
