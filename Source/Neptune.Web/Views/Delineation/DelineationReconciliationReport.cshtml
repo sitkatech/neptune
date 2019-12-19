@@ -28,7 +28,16 @@
                 Treatment BMPs with Discrepancies with the most recent Regional Sub-basin Layer
             </div>
             <div class="panel-body">
-                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:600px", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:400px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Treatment BMPs that are overlapping
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.OverlappingTreatmentBMPsGridSpec, ViewDataTyped.OverlappingTreatmentBMPsGridName, ViewDataTyped.OverlappingTreatmentBMPsGridDataUrl, "height:400px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
     </div>

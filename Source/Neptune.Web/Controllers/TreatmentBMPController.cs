@@ -695,7 +695,7 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshHRUCharacteristics(treatmentBMP, viewModel);
             }
 
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(treatmentBMP);
+            HRUHelper.RetrieveAndSaveHRUCharacteristics(treatmentBMP, x => x.TreatmentBMPID = treatmentBMP.TreatmentBMPID);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {treatmentBMP.TreatmentBMPName}");
             return new ModalDialogFormJsonResult();
         }

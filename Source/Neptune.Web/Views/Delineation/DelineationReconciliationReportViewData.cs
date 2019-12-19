@@ -13,6 +13,10 @@ namespace Neptune.Web.Views.Delineation
         public string GridName { get; }
         public MisalignedDelineationGridSpec GridSpec { get; }
 
+        public string OverlappingTreatmentBMPsGridDataUrl { get; }
+        public string OverlappingTreatmentBMPsGridName { get; }
+        public DelineationOverlapsDelineationGridSpec OverlappingTreatmentBMPsGridSpec { get; }
+
         public DelineationReconciliationReportViewData(Person currentPerson, Models.NeptunePage neptunePage, DateTime? networkCatchmentsLastUpdated) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             NetworkCatchmentsLastUpdated = networkCatchmentsLastUpdated.HasValue ? networkCatchmentsLastUpdated.ToStringDateTime() : "n/a";
@@ -23,7 +27,10 @@ namespace Neptune.Web.Views.Delineation
 
             GridSpec = new MisalignedDelineationGridSpec() { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
             GridName = "misalignedTreatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationReconciliationReportGridJsonData());
+            GridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationsMisalignedWithNetworkCatchmentsGridJsonData());
+            OverlappingTreatmentBMPsGridSpec = new DelineationOverlapsDelineationGridSpec() { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
+            OverlappingTreatmentBMPsGridName = "overlappingTreatmentBMPsGrid";
+            OverlappingTreatmentBMPsGridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationsOverlappingEachOtherGridJsonData());
             CheckForDiscrepanciesUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.CheckForDiscrepancies());
         }
 

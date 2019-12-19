@@ -1,0 +1,12 @@
+create table dbo.HRUCharacteristicLandUseCode
+(
+	HRUCharacteristicLandUseCodeID int not null constraint PK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeID primary key,
+	HRUCharacteristicLandUseCodeName varchar(100) not null constraint AK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeName unique,
+	HRUCharacteristicLandUseCodeDisplayName varchar(100) not null constraint AK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeDisplayName unique
+)
+GO
+
+
+alter table dbo.HRUCharacteristic add HRUCharacteristicLandUseCodeID int not null constraint FK_HRUCharacteristic_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeID foreign key references dbo.HRUCharacteristicLandUseCode(HRUCharacteristicLandUseCodeID)
+
+alter table dbo.HRUCharacteristic drop column LSPCLandUseDescription

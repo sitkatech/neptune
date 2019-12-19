@@ -78,10 +78,19 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<Delineation> DelineationReconciliationReportGridJsonData()
+        public GridJsonNetJObjectResult<Delineation> DelineationsMisalignedWithNetworkCatchmentsGridJsonData()
         {
             var gridSpec = new MisalignedDelineationGridSpec();
             var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<Delineation> DelineationsOverlappingEachOtherGridJsonData()
+        {
+            var gridSpec = new DelineationOverlapsDelineationGridSpec();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.DelineationOverlaps.Any()).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -287,9 +296,7 @@ namespace Neptune.Web.Controllers
             }
 
             BackgroundJob.Schedule(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(), TimeSpan.FromSeconds(1));
-            //SetMessageForDisplay("The Land Use Blocks were successfully added to the staging area. The staged Land Use Blocks will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
-
-            SetMessageForDisplay($"Successfully updated Delineations with discrepancies");
+            SetMessageForDisplay("The job to check BMP delineation discrepancies and overlaps has been queued. Please check back in a few minutes to see the new results.");
             return new ModalDialogFormJsonResult();
         }
 
