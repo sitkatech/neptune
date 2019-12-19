@@ -315,6 +315,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
                     return googleChartType;
 
+                case "HRUCharacteristicLandUseCode":
+                    var hRUCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(hRUCharacteristicLandUseCode, "HRUCharacteristicLandUseCode", primaryKey);
+                    return hRUCharacteristicLandUseCode;
+
                 case "HRUCharacteristic":
                     return HRUCharacteristics.GetHRUCharacteristic(primaryKey);
 

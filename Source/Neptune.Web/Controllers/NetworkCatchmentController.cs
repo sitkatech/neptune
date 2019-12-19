@@ -74,7 +74,7 @@ namespace Neptune.Web.Controllers
         public ActionResult RefreshHRUCharacteristics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(networkCatchment);
+            HRUHelper.RetrieveAndSaveHRUCharacteristics(networkCatchment, x => x.NetworkCatchmentID = networkCatchment.NetworkCatchmentID);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {networkCatchment.Watershed} {networkCatchment.DrainID}: {networkCatchment.NetworkCatchmentID}");
 
             return Redirect(

@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("HRUCharacteristic", schema);
             HasKey(x => x.HRUCharacteristicID);
             Property(x => x.HRUCharacteristicID).HasColumnName(@"HRUCharacteristicID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.LSPCLandUseDescription).HasColumnName(@"LSPCLandUseDescription").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.HydrologicSoilGroup).HasColumnName(@"HydrologicSoilGroup").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(5);
             Property(x => x.SlopePercentage).HasColumnName(@"SlopePercentage").HasColumnType("int").IsRequired();
             Property(x => x.ImperviousAcres).HasColumnName(@"ImperviousAcres").HasColumnType("float").IsRequired();
@@ -25,6 +24,7 @@ namespace Neptune.Web.Models
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
             Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsOptional();
             Property(x => x.Area).HasColumnName(@"Area").HasColumnType("float").IsRequired();
+            Property(x => x.HRUCharacteristicLandUseCodeID).HasColumnName(@"HRUCharacteristicLandUseCodeID").HasColumnType("int").IsRequired();
 
             // Foreign keys
             HasOptional(a => a.TreatmentBMP).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID

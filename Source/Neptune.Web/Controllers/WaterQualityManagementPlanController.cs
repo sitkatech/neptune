@@ -126,7 +126,7 @@ namespace Neptune.Web.Controllers
         public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan);
+            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
             return Redirect(

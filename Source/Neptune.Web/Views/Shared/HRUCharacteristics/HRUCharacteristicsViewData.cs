@@ -14,8 +14,8 @@ namespace Neptune.Web.Views.Shared.HRUCharacteristics
             EntityWithHRUCharacteristics = entityWithHRUCharacteristics;
 
             HRUCharacteristicsSummaries = EntityWithHRUCharacteristics.HRUCharacteristics
-                .GroupBy(x => x.LSPCLandUseDescription).Select(x => new HRUCharacteristicsSummarySimple()
-                    { Area = x.Sum(y => y.Area).ToString("N2"), ImperviousCover = x.Sum(y => y.ImperviousAcres).ToString("N2"), LandUse = x.Key })
+                .GroupBy(x => x.HRUCharacteristicLandUseCode).Select(x => new HRUCharacteristicsSummarySimple()
+                    { Area = x.Sum(y => y.Area).ToString("N2"), ImperviousCover = x.Sum(y => y.ImperviousAcres).ToString("N2"), LandUse = x.Key.HRUCharacteristicLandUseCodeDisplayName })
                 .ToList();
 
             HRUCharacteristicsTotal = new HRUCharacteristicsSummarySimple
