@@ -1,5 +1,6 @@
 ﻿@using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.Delineation.DelineationReconciliationReport
@@ -14,9 +15,12 @@
     <div style="display: inline-block; vertical-align: middle; margin-right: 4px" class="text-right">
         <i>Network Catchments last updated on: @ViewDataTyped.NetworkCatchmentsLastUpdated</i><br />
     </div>
-    <div style="display: inline-block; vertical-align: top">
-        @ModalDialogFormHelper.ModalDialogFormLink("Check for Discrepancies", ViewDataTyped.CheckForDiscrepanciesUrl, "Check for Discrepancies between Delineations and Regional Sub-basin layers", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
-    </div>
+    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+    {
+        <div style="display: inline-block; vertical-align: top">
+            @ModalDialogFormHelper.ModalDialogFormLink("Check for Discrepancies", ViewDataTyped.CheckForDiscrepanciesUrl, "Check for Discrepancies between Delineations and Regional Sub-basin layers", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+        </div>
+    }
 }
 
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}

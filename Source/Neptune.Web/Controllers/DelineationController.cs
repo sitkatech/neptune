@@ -81,7 +81,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Delineation> DelineationsMisalignedWithNetworkCatchmentsGridJsonData()
         {
             var gridSpec = new MisalignedDelineationGridSpec();
-            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -90,7 +90,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Delineation> DelineationsOverlappingEachOtherGridJsonData()
         {
             var gridSpec = new DelineationOverlapsDelineationGridSpec();
-            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.DelineationOverlaps.Any()).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.DelineationOverlaps.Any()).ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
             return gridJsonNetJObjectResult;
         }
