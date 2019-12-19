@@ -15,7 +15,7 @@ values
 (11, 'OSAGIR', 'Open Space - Irrigated Agriculture'),
 (12, 'OSAGNI', 'Open Space - Non-Irrigated Agriculture'),
 (13, 'OSDEV', 'Open Space - Low Density Development'),
-(14, 'OSIRR', 'Open Space - Irrigated Landscaping'),
+(14, 'OSIRR', 'Open Space - Irrigated Recreation'),
 (15, 'OSLOW', 'Open Space - Low Canopy Vegetation'),
 (16, 'OSFOR', 'Open Space - Forest'),
 (17, 'OSWET', 'Open Space - Wetlands'),

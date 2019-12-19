@@ -5,22 +5,22 @@
 <table class="table table-responsive" style="text-align:center">
     <thead>
         <tr>
-            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.LandUse)</th>
-            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.Area) <strong>(ac)</strong></th>
-            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.ImperviousArea)</th>
+            <th style="text-align: left">@Html.LabelWithSugarFor(FieldDefinition.LandUse)</th>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.Area) (ac)</th>
+            <th style="text-align:center">@Html.LabelWithSugarFor(FieldDefinition.ImperviousArea) (ac)</th>
         </tr>
     </thead>
     <tbody>
-    @foreach(var summary in ViewDataTyped.HRUCharacteristicsSummaries)
+    @foreach(var summary in ViewDataTyped.HRUCharacteristicsSummaries.OrderBy(x => x.LandUse))
     {
         <tr>
-            <td>@summary.LandUse</td>
+            <td style="text-align: left">@summary.LandUse</td>
             <td>@summary.Area</td>
             <td>@summary.ImperviousCover</td>
         </tr>
     }
     <tr style="font-weight: bold">
-        <td>@ViewDataTyped.HRUCharacteristicsTotal.LandUse</td>
+        <td style="text-align: left">@ViewDataTyped.HRUCharacteristicsTotal.LandUse</td>
         <td>@ViewDataTyped.HRUCharacteristicsTotal.Area</td>
         <td>@ViewDataTyped.HRUCharacteristicsTotal.ImperviousCover</td>
     </tr>

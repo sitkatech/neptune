@@ -264,7 +264,7 @@ namespace Neptune.Web.Models
     public partial class HRUCharacteristicLandUseCodeOSIRR : HRUCharacteristicLandUseCode
     {
         private HRUCharacteristicLandUseCodeOSIRR(int hRUCharacteristicLandUseCodeID, string hRUCharacteristicLandUseCodeName, string hRUCharacteristicLandUseCodeDisplayName) : base(hRUCharacteristicLandUseCodeID, hRUCharacteristicLandUseCodeName, hRUCharacteristicLandUseCodeDisplayName) {}
-        public static readonly HRUCharacteristicLandUseCodeOSIRR Instance = new HRUCharacteristicLandUseCodeOSIRR(14, @"OSIRR", @"Open Space - Irrigated Landscaping");
+        public static readonly HRUCharacteristicLandUseCodeOSIRR Instance = new HRUCharacteristicLandUseCodeOSIRR(14, @"OSIRR", @"Open Space - Irrigated Recreation");
     }
 
     public partial class HRUCharacteristicLandUseCodeOSLOW : HRUCharacteristicLandUseCode
