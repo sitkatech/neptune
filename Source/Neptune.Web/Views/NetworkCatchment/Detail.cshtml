@@ -18,6 +18,8 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.Shared.HRUCharacteristics
@@ -30,15 +32,6 @@
  @{ MapJavascriptIncludes.RenderPartialView(Html); }
 }
 @section RightOfPageTitle{
-    <div class="pull-right">
-
-        @if (ViewDataTyped.NetworkCatchment.CatchmentGeometry != null && ViewDataTyped.CurrentPerson.IsAdministrator())
-        {
-            <div style="display: inline-block; vertical-align: top;">
-                <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>
-            </div>
-        }
-    </div>
 }
 
 <div class="row">
@@ -82,6 +75,9 @@
 
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
+                    <div class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh").ToString(), ViewDataTyped.HRURefreshUrl, "Refresh HRU Statistics", new List<string>(), ViewDataTyped.NetworkCatchment.CatchmentGeometry != null && ViewDataTyped.CurrentPerson.IsAdministrator())
+                    </div>
                     Land Use Statistics
                 </div>
                 <div class="panel-body">

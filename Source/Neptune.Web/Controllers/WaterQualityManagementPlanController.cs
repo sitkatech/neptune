@@ -123,16 +123,34 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        public PartialViewResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
-            SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
-
-            return Redirect(
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlanPrimaryKey)));
+            return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, new ConfirmDialogFormViewModel());
         }
 
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, viewModel);
+            }
+
+            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
+            SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanID}");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshHRUCharacteristics(WaterQualityManagementPlan waterQualityManagementPlan, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for WQMP '{waterQualityManagementPlan.WaterQualityManagementPlanName}'?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
 
         #region CRUD Water Quality Management Plan
         [HttpGet]

@@ -18,6 +18,7 @@ using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Neptune.Web.Views.Shared;
 using Index = Neptune.Web.Views.NetworkCatchment.Index;
 using IndexViewData = Neptune.Web.Views.NetworkCatchment.IndexViewData;
 
@@ -71,15 +72,36 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public ActionResult RefreshHRUCharacteristics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        public PartialViewResult RefreshHRUCharacteristics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+            return ViewRefreshHRUCharacteristics(networkCatchment, new ConfirmDialogFormViewModel());
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshHRUCharacteristics(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshHRUCharacteristics(networkCatchment, viewModel);
+            }
+
             HRUHelper.RetrieveAndSaveHRUCharacteristics(networkCatchment, x => x.NetworkCatchmentID = networkCatchment.NetworkCatchmentID);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {networkCatchment.Watershed} {networkCatchment.DrainID}: {networkCatchment.NetworkCatchmentID}");
-
-            return Redirect(
-                SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x => x.Detail(networkCatchmentPrimaryKey)));
+            return new ModalDialogFormJsonResult();
         }
+
+        private PartialViewResult ViewRefreshHRUCharacteristics(NetworkCatchment networkCatchment, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for {networkCatchment.Watershed} {networkCatchment.DrainID}: {networkCatchment.NetworkCatchmentID}?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Detail(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
