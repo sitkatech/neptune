@@ -82,6 +82,10 @@
     <Compile Include="Models\Generated\Delineation.Binding.cs" />
     <Compile Include="Models\Generated\Delineation.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\DelineationConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\DelineationOverlap.Binding.cs" />
+    <Compile Include="Models\Generated\DelineationOverlap.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\DelineationOverlapConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\DelineationOverlapPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DelineationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DelineationStaging.Binding.cs" />
     <Compile Include="Models\Generated\DelineationStaging.DatabaseContextExtensions.cs" />
@@ -447,6 +451,7 @@
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
     <Compile Include="ScheduledJobs\DelineationDiscrepancyCheckerBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\NetworkCatchmentRefreshScheduledBackgroundJob.cs" />
+    <Compile Include="Views\Delineation\DelineationOverlapsDelineationGridSpec.cs" />
     <Compile Include="Views\Delineation\DelineationReconciliationReport.cs" />
     <Compile Include="Views\Delineation\DelineationReconciliationReportViewData.cs" />
     <Compile Include="Views\Delineation\MisalignedDelineationGridSpec.cs" />
