@@ -19,10 +19,10 @@ namespace Neptune.Web.Views.Delineation
             Add(Models.FieldDefinition.Area.ToGridHeaderString("Area (ac)"), x => x.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres, 100);
             Add("Date of Last Delineation Modification", x => x.DateLastModified, 130);
             Add("Date of Last Delineation Verification", x => x.DateLastVerified, 130);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName(), 150);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
             Add(Models.FieldDefinition.Area.ToGridHeaderString("Area of Overlap (ac)"), x => x.DelineationOverlaps.Sum(y => y.OverlappingGeometry.Area) * DbSpatialHelper.SquareMetersToAcres, 120);
-            Add("Overlapping Delineations", x => new HtmlString(string.Join(", ", x.DelineationOverlaps.Select(y =>
-                UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(y.Delineation.TreatmentBMPID), y.Delineation.TreatmentBMP.TreatmentBMPName)))), 240, DhtmlxGridColumnFilterType.Html);
+            Add("Overlapping Delineations", x => new HtmlString(string.Join(", ", x.DelineationOverlaps.OrderBy(y => y.OverlappingDelineation.TreatmentBMP.TreatmentBMPName).Select(y =>
+                UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(y.Delineation.TreatmentBMPID), y.OverlappingDelineation.TreatmentBMP.TreatmentBMPName)))), 240, DhtmlxGridColumnFilterType.Html);
         }
     }
 }

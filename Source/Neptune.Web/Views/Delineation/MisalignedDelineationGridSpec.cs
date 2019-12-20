@@ -18,7 +18,7 @@ namespace Neptune.Web.Views.Delineation
             Add(Models.FieldDefinition.Area.ToGridHeaderString("Area (ac)"), x => x.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres, 100);
             Add("Date of Last Delineation Modification", x => x.DateLastModified, 160);
             Add("Date of Last Delineation Verification", x => x.DateLastVerified, 160);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName(), 150);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
         }
     }
 }

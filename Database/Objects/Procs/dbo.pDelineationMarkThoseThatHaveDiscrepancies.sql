@@ -7,6 +7,14 @@ GO
 Create Procedure dbo.pDelineationMarkThoseThatHaveDiscrepancies
 as
 
+-- re-running job so first set all to not have discrepancies
+update d
+set d.HasDiscrepancies = 0
+from dbo.Delineation d
+join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
+join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
+where tbt.DelineationShouldBeReconciled = 1
+
 -- Distributed delineations can only intersect one Network Catchment; flag those that have more than 1
 update d
 set d.HasDiscrepancies = 1
