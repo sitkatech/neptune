@@ -146,7 +146,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 delineationErrors.Add(new HtmlString("It is overlapping with the following Treatment BMP(s): " +
                                                      string.Join(", ",
                                                          treatmentBMP.Delineation.DelineationOverlaps.Select(x =>
-                                                             x.Delineation.TreatmentBMP.GetDisplayNameAsUrl()))));
+                                                             x.OverlappingDelineation.TreatmentBMP.GetDisplayNameAsUrl()))));
             }
 
             return delineationErrors;
