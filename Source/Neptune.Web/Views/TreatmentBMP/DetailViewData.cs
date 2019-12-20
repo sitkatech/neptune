@@ -19,6 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -70,6 +73,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
         public string MapServiceUrl { get; }
 
+        public List<HtmlString> DelineationErrors { get; }
+
+
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl)
@@ -109,7 +115,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
             DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";
-            DelineationHasDiscrepancy = TreatmentBMP.Delineation?.HasDiscrepancies ?? false;
+
+            DelineationErrors = CheckForDelineationErrors(treatmentBMP);
+
             DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
                                                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
 
@@ -124,6 +132,24 @@ namespace Neptune.Web.Views.TreatmentBMP
                     x => x.RefreshHRUCharacteristics(treatmentBMP));
         }
 
-        public bool DelineationHasDiscrepancy { get; set; }
+        private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)
+        {
+            var delineationErrors = new List<HtmlString>();
+            var delineationHasDiscrepancies = TreatmentBMP.Delineation?.HasDiscrepancies ?? false;
+            if (delineationHasDiscrepancies)
+            {
+                delineationErrors.Add(new HtmlString("It is not consistent with the most recent Regional Sub-basin Layer."));
+            }
+
+            if (treatmentBMP.Delineation != null && treatmentBMP.Delineation.DelineationOverlaps.Any())
+            {
+                delineationErrors.Add(new HtmlString("It is overlapping with the following Treatment BMP(s): " +
+                                                     string.Join(", ",
+                                                         treatmentBMP.Delineation.DelineationOverlaps.Select(x =>
+                                                             x.Delineation.TreatmentBMP.GetDisplayNameAsUrl()))));
+            }
+
+            return delineationErrors;
+        }
     }
 }

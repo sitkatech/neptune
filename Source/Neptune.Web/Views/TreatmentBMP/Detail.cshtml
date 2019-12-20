@@ -98,11 +98,20 @@
     }
 }
 
-@if (ViewDataTyped.DelineationHasDiscrepancy)
+@if (ViewDataTyped.DelineationErrors.Any())
 {
-<div class="alert alert-info">
-    This BMP delineation may have errors - It is not consistent with the most recent Regional Sub-basin Layer.
-</div>
+    <div class="alert alert-info">
+        <div class="pull-right">
+            <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
+        </div>
+        This BMP delineation may have errors:
+        <ul>
+            @foreach (var delineationError in ViewDataTyped.DelineationErrors)
+            {
+                <li>@delineationError</li>
+            }
+        </ul>
+    </div>
 }
 <div class="row">
     <div class="col-xs-12 col-sm-6">
