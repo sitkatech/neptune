@@ -45,11 +45,11 @@ join (
 	from dbo.Delineation d
 	join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 	join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
-	join dbo.NetworkCatchment nc on d.DelineationGeometry.STIntersects(nc.CatchmentGeometry) = 1
+	join dbo.NetworkCatchment nc on d.DelineationGeometry.STIntersection(nc.CatchmentGeometry).STArea() > 400
 	where d.DelineationTypeID = 1 and tbt.DelineationShouldBeReconciled = 1
 	group by d.TreatmentBMPID
 ) a on d.TreatmentBMPID = a.TreatmentBMPID
-where d.DelineationTypeID = 1 and d.DelineationGeometry.STDifference(a.NetworkCatchmentsIntesectedByDelineationGeometry).STArea() > 400
+where d.DelineationTypeID = 1 and d.DelineationGeometry.STSymDifference(a.NetworkCatchmentsIntesectedByDelineationGeometry).STArea() > 400
 
 
 truncate table dbo.DelineationOverlap;
@@ -72,7 +72,7 @@ from
 	-- again, intentionally having this in an inner query; it is much faster to have it stintersects both sets and remove self intersections after
 	select d1.DelineationID, d2.DelineationID as OverlappingDelineationID, d1.DelineationGeometry.STIntersection(d2.DelineationGeometry) as OverlappingGeometry
 	from distributedBMPs d1, distributedBMPs d2
-	where d1.DelineationGeometry.STIntersects(d2.DelineationGeometry) = 1
+	where d1.DelineationGeometry.STIntersection(d2.DelineationGeometry).STArea() > 400
 ) a
 where a.DelineationID != a.OverlappingDelineationID and OverlappingGeometry.STArea() > 0
 
