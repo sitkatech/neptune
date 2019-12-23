@@ -159,6 +159,7 @@ namespace Neptune.Web.Controllers
                     treatmentBMPDelineation.DelineationTypeID =
                         delineationType.DelineationTypeID;
                     treatmentBMPDelineation.IsVerified = false;
+                    treatmentBMPDelineation.DateLastModified = DateTime.Now;
                 }
                 else
                 {
