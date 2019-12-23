@@ -7,6 +7,9 @@ GO
 Create Procedure dbo.pDelineationMarkThoseThatHaveDiscrepancies
 as
 
+declare @toleranceInSquareMeters int
+select @toleranceInSquareMeters = 400
+
 -- re-running job so first set all to not have discrepancies
 update d
 set d.HasDiscrepancies = 0
@@ -36,7 +39,7 @@ from
 join dbo.Delineation d on a.TreatmentBMPID = d.TreatmentBMPID
 
 
--- Centralized delineations need to fully contain all the Network Catchments they intersect; flag those that have a tolerance of greater than 400 sq ft
+-- Centralized delineations need to fully contain all the Network Catchments they intersect; flag those that have a tolerance of greater than 400 sq meters (0.1 acre)
 update d
 set d.HasDiscrepancies = 1
 from dbo.Delineation d
@@ -45,11 +48,11 @@ join (
 	from dbo.Delineation d
 	join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 	join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
-	join dbo.NetworkCatchment nc on d.DelineationGeometry.STIntersection(nc.CatchmentGeometry).STArea() > 400
+	join dbo.NetworkCatchment nc on d.DelineationGeometry.STIntersection(nc.CatchmentGeometry).STArea() > @toleranceInSquareMeters
 	where d.DelineationTypeID = 1 and tbt.DelineationShouldBeReconciled = 1
 	group by d.TreatmentBMPID
 ) a on d.TreatmentBMPID = a.TreatmentBMPID
-where d.DelineationTypeID = 1 and d.DelineationGeometry.STSymDifference(a.NetworkCatchmentsIntesectedByDelineationGeometry).STArea() > 400
+where d.DelineationTypeID = 1 and d.DelineationGeometry.STSymDifference(a.NetworkCatchmentsIntesectedByDelineationGeometry).STArea() > @toleranceInSquareMeters
 
 
 truncate table dbo.DelineationOverlap;
@@ -72,7 +75,7 @@ from
 	-- again, intentionally having this in an inner query; it is much faster to have it stintersects both sets and remove self intersections after
 	select d1.DelineationID, d2.DelineationID as OverlappingDelineationID, d1.DelineationGeometry.STIntersection(d2.DelineationGeometry) as OverlappingGeometry
 	from distributedBMPs d1, distributedBMPs d2
-	where d1.DelineationGeometry.STIntersection(d2.DelineationGeometry).STArea() > 400
+	where d1.DelineationGeometry.STIntersection(d2.DelineationGeometry).STArea() > (@toleranceInSquareMeters / 2) -- tolerance here is even less, .05 acre
 ) a
 where a.DelineationID != a.OverlappingDelineationID and OverlappingGeometry.STArea() > 0
 
