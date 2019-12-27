@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -277,6 +277,8 @@
     <Compile Include="Models\Generated\QuickBMPPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Role.Binding.cs" />
     <Compile Include="Models\Generated\RolePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\RoutingConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\RoutingConfigurationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\SizingBasisType.Binding.cs" />
     <Compile Include="Models\Generated\SizingBasisTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\SourceControlBMP.Binding.cs" />
@@ -311,6 +313,8 @@
     <Compile Include="Models\Generated\SupportRequestLogPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestType.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TimeOfConcentration.Binding.cs" />
+    <Compile Include="Models\Generated\TimeOfConcentrationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideo.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideo.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TrainingVideoConfiguration.Binding.cs" />
@@ -360,10 +364,20 @@
     <Compile Include="Models\Generated\TreatmentBMPImagePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPLifespanType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPLifespanTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPModelingAttribute.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPModelingAttribute.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPModelingAttributeConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPModelingAttributePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPModelingType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPModelingTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservation.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservation.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservationConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPOperationMonth.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPOperationMonth.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPOperationMonthConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPOperationMonthPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPType.DatabaseContextExtensions.cs" />
@@ -377,6 +391,8 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypeConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\UnderlyingHydrologicSoilGroup.Binding.cs" />
+    <Compile Include="Models\Generated\UnderlyingHydrologicSoilGroupPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\vDroolMetric.Binding.cs" />
     <Compile Include="Models\Generated\vDroolMetricConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vGeoServerWaterQualityManagementPlan.Binding.cs" />
@@ -510,6 +526,9 @@
     <Compile Include="Views\Shared\HRUCharacteristics\HRUCharacteristics.cs" />
     <Compile Include="Views\Shared\HRUCharacteristics\HRUCharacteristicsViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPType.cs" />
+    <Compile Include="Views\TreatmentBMP\EditModelingAttributes.cs" />
+    <Compile Include="Views\TreatmentBMP\EditModelingAttributesViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\EditModelingAttributesViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\EditLocationViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPTypeViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ConvertTreatmentBMPTypeViewModel.cs" />
@@ -1918,6 +1937,7 @@
     <Content Include="Views\NetworkCatchment\Grid.cshtml" />
     <Content Include="Views\Shared\HRUCharacteristics\HRUCharacteristics.cshtml" />
     <Content Include="Views\Delineation\DelineationReconciliationReport.cshtml" />
+    <Content Include="Views\TreatmentBMP\EditModelingAttributes.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using MoreLinq;
 using Neptune.Web.Areas.Trash.Controllers;

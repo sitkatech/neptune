@@ -599,6 +599,43 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPEditFeature]
+        public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new EditModelingAttributesViewModel(treatmentBMP.TreatmentBMPModelingAttribute);
+            return ViewEditModelingAttributes(viewModel, treatmentBMP);
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
+            EditModelingAttributesViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditModelingAttributes(viewModel, treatmentBMP);
+            }
+
+            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
+            if (treatmentBMPModelingAttribute == null)
+            {
+                treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
+            }
+            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
+            SetMessageForDisplay("Modeling Attributes successfully saved.");
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
+        }
+
+        private ViewResult ViewEditModelingAttributes(EditModelingAttributesViewModel viewModel, TreatmentBMP treatmentBMP)
+        {
+            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP);
+            return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditModelingAttributesViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [TreatmentBMPEditFeature]
         public ViewResult EditLocation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;

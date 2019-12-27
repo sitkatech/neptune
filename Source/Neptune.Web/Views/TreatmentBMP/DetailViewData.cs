@@ -19,8 +19,10 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
@@ -74,7 +76,35 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string MapServiceUrl { get; }
 
         public List<HtmlString> DelineationErrors { get; }
-
+        public Models.FieldDefinition FieldDefinitionForAverageDivertedFlowrate { get; }
+        public Models.FieldDefinition FieldDefinitionForAverageTreatmentFlowrate { get; }
+        public Models.FieldDefinition FieldDefinitionForDesignDryWeatherTreatmentCapacity { get; }
+        public Models.FieldDefinition FieldDefinitionForDesignLowFlowDiversionCapacity { get; }
+        public Models.FieldDefinition FieldDefinitionForDesignMediaFiltrationRate { get; }
+        public Models.FieldDefinition FieldDefinitionForDesignResidenceTimeforPermanentPool { get; }
+        public Models.FieldDefinition FieldDefinitionForDiversionRate { get; }
+        public Models.FieldDefinition FieldDefinitionForDrawdownTimeforWQDetentionVolume { get; }
+        public Models.FieldDefinition FieldDefinitionForEffectiveFootprint { get; }
+        public Models.FieldDefinition FieldDefinitionForEffectiveRetentionDepth { get; }
+        public Models.FieldDefinition FieldDefinitionForInfiltrationDischargeRate { get; }
+        public Models.FieldDefinition FieldDefinitionForInfiltrationSurfaceArea { get; }
+        public Models.FieldDefinition FieldDefinitionForMediaBedFootprint { get; }
+        public Models.FieldDefinition FieldDefinitionForMonthsofOperation { get; }
+        public Models.FieldDefinition FieldDefinitionForPermanentPoolorWetlandVolume { get; }
+        public Models.FieldDefinition FieldDefinitionForRoutingConfiguration { get; }
+        public Models.FieldDefinition FieldDefinitionForStorageVolumeBelowLowestOutletElevation { get; }
+        public Models.FieldDefinition FieldDefinitionForSummerHarvestedWaterDemand { get; }
+        public Models.FieldDefinition FieldDefinitionForTimeofConcentration { get; }
+        public Models.FieldDefinition FieldDefinitionForTotalDrawdownTime { get; }
+        public Models.FieldDefinition FieldDefinitionForTotalEffectiveBMPVolume { get; }
+        public Models.FieldDefinition FieldDefinitionForTotalEffectiveDrywellBMPVolume { get; }
+        public Models.FieldDefinition FieldDefinitionForTreatmentRate { get; }
+        public Models.FieldDefinition FieldDefinitionForUnderlyingHydrologicSoilGroupHSG { get; }
+        public Models.FieldDefinition FieldDefinitionForUnderlyingInfiltrationRate { get; }
+        public Models.FieldDefinition FieldDefinitionForUpstreamBMP { get; }
+        public Models.FieldDefinition FieldDefinitionForWaterQualityDetentionVolume { get; }
+        public Models.FieldDefinition FieldDefinitionForWettedFootprint { get; }
+        public Models.FieldDefinition FieldDefinitionForWinterHarvestedWaterDemand { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
@@ -103,7 +133,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
             NewFundingSourcesUrl = SitkaRoute<FundingEventController>.BuildUrlFromExpression(x => x.NewFundingEvent(treatmentBMP));
-            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.PerformanceAndModelingAttributes));
+            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditModelingAttributes(treatmentBMP));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
 
             LocationEditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditLocation(treatmentBMP));
@@ -130,6 +160,36 @@ namespace Neptune.Web.Views.TreatmentBMP
             HRURefreshUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(
                     x => x.RefreshHRUCharacteristics(treatmentBMP));
+
+            FieldDefinitionForAverageDivertedFlowrate = Models.FieldDefinition.AverageDivertedFlowrate;
+            FieldDefinitionForAverageTreatmentFlowrate = Models.FieldDefinition.AverageTreatmentFlowrate;
+            FieldDefinitionForDesignDryWeatherTreatmentCapacity = Models.FieldDefinition.DesignDryWeatherTreatmentCapacity;
+            FieldDefinitionForDesignLowFlowDiversionCapacity = Models.FieldDefinition.DesignLowFlowDiversionCapacity;
+            FieldDefinitionForDesignMediaFiltrationRate = Models.FieldDefinition.DesignMediaFiltrationRate;
+            FieldDefinitionForDesignResidenceTimeforPermanentPool = Models.FieldDefinition.DesignResidenceTimeforPermanentPool;
+            FieldDefinitionForDiversionRate = Models.FieldDefinition.DiversionRate;
+            FieldDefinitionForDrawdownTimeforWQDetentionVolume = Models.FieldDefinition.DrawdownTimeforWQDetentionVolume;
+            FieldDefinitionForEffectiveFootprint = Models.FieldDefinition.EffectiveFootprint;
+            FieldDefinitionForEffectiveRetentionDepth = Models.FieldDefinition.EffectiveRetentionDepth;
+            FieldDefinitionForInfiltrationDischargeRate = Models.FieldDefinition.InfiltrationDischargeRate;
+            FieldDefinitionForInfiltrationSurfaceArea = Models.FieldDefinition.InfiltrationSurfaceArea;
+            FieldDefinitionForMediaBedFootprint = Models.FieldDefinition.MediaBedFootprint;
+            FieldDefinitionForMonthsofOperation = Models.FieldDefinition.MonthsofOperation;
+            FieldDefinitionForPermanentPoolorWetlandVolume = Models.FieldDefinition.PermanentPoolorWetlandVolume;
+            FieldDefinitionForRoutingConfiguration = Models.FieldDefinition.RoutingConfiguration;
+            FieldDefinitionForStorageVolumeBelowLowestOutletElevation = Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation;
+            FieldDefinitionForSummerHarvestedWaterDemand = Models.FieldDefinition.SummerHarvestedWaterDemand;
+            FieldDefinitionForTimeofConcentration = Models.FieldDefinition.TimeofConcentration;
+            FieldDefinitionForTotalDrawdownTime = Models.FieldDefinition.TotalDrawdownTime;
+            FieldDefinitionForTotalEffectiveBMPVolume = Models.FieldDefinition.TotalEffectiveBMPVolume;
+            FieldDefinitionForTotalEffectiveDrywellBMPVolume = Models.FieldDefinition.TotalEffectiveDrywellBMPVolume;
+            FieldDefinitionForTreatmentRate = Models.FieldDefinition.TreatmentRate;
+            FieldDefinitionForUnderlyingHydrologicSoilGroupHSG = Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG;
+            FieldDefinitionForUnderlyingInfiltrationRate = Models.FieldDefinition.UnderlyingInfiltrationRate;
+            FieldDefinitionForUpstreamBMP = Models.FieldDefinition.UpstreamBMP;
+            FieldDefinitionForWaterQualityDetentionVolume = Models.FieldDefinition.WaterQualityDetentionVolume;
+            FieldDefinitionForWettedFootprint = Models.FieldDefinition.WettedFootprint;
+            FieldDefinitionForWinterHarvestedWaterDemand = Models.FieldDefinition.WinterHarvestedWaterDemand;
         }
 
         private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)

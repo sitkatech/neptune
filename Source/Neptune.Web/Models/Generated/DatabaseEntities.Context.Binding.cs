@@ -93,7 +93,9 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new TreatmentBMPBenchmarkAndThresholdConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPDocumentConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPImageConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPModelingAttributeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPObservationConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPOperationMonthConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeAssessmentObservationTypeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeCustomAttributeTypeConfiguration());
@@ -174,7 +176,9 @@ namespace Neptune.Web.Models
         public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual DbSet<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
         public virtual DbSet<TreatmentBMPImage> TreatmentBMPImages { get; set; }
+        public virtual DbSet<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributes { get; set; }
         public virtual DbSet<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
+        public virtual DbSet<TreatmentBMPOperationMonth> TreatmentBMPOperationMonths { get; set; }
         public virtual DbSet<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual DbSet<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
         public virtual DbSet<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
@@ -490,6 +494,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(role, "Role", primaryKey);
                     return role;
 
+                case "RoutingConfiguration":
+                    var routingConfiguration = RoutingConfiguration.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(routingConfiguration, "RoutingConfiguration", primaryKey);
+                    return routingConfiguration;
+
                 case "SizingBasisType":
                     var sizingBasisType = SizingBasisType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(sizingBasisType, "SizingBasisType", primaryKey);
@@ -525,6 +534,11 @@ namespace Neptune.Web.Models
                     var supportRequestType = SupportRequestType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(supportRequestType, "SupportRequestType", primaryKey);
                     return supportRequestType;
+
+                case "TimeOfConcentration":
+                    var timeOfConcentration = TimeOfConcentration.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(timeOfConcentration, "TimeOfConcentration", primaryKey);
+                    return timeOfConcentration;
 
                 case "TrainingVideo":
                     return TrainingVideos.GetTrainingVideo(primaryKey);
@@ -571,8 +585,19 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(treatmentBMPLifespanType, "TreatmentBMPLifespanType", primaryKey);
                     return treatmentBMPLifespanType;
 
+                case "TreatmentBMPModelingAttribute":
+                    return TreatmentBMPModelingAttributes.GetTreatmentBMPModelingAttribute(primaryKey);
+
+                case "TreatmentBMPModelingType":
+                    var treatmentBMPModelingType = TreatmentBMPModelingType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPModelingType, "TreatmentBMPModelingType", primaryKey);
+                    return treatmentBMPModelingType;
+
                 case "TreatmentBMPObservation":
                     return TreatmentBMPObservations.GetTreatmentBMPObservation(primaryKey);
+
+                case "TreatmentBMPOperationMonth":
+                    return TreatmentBMPOperationMonths.GetTreatmentBMPOperationMonth(primaryKey);
 
                 case "TreatmentBMP":
                     return TreatmentBMPs.GetTreatmentBMP(primaryKey);
@@ -585,6 +610,11 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMPType":
                     return TreatmentBMPTypes.GetTreatmentBMPType(primaryKey);
+
+                case "UnderlyingHydrologicSoilGroup":
+                    var underlyingHydrologicSoilGroup = UnderlyingHydrologicSoilGroup.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(underlyingHydrologicSoilGroup, "UnderlyingHydrologicSoilGroup", primaryKey);
+                    return underlyingHydrologicSoilGroup;
 
                 case "WaterQualityManagementPlanDevelopmentType":
                     var waterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
