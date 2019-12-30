@@ -622,6 +622,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPModelingAttribute == null)
             {
                 treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.Add(treatmentBMPModelingAttribute);
             }
 
             var allTreatmentBMPOperationMonths = HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.Local;
