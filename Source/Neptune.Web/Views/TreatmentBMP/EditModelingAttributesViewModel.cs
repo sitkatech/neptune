@@ -162,11 +162,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
         }
 
-        public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson,
+        public void UpdateModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute,
+            Person currentPerson,
             List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths,
             ObservableCollection<TreatmentBMPOperationMonth> allTreatmentBMPOperationMonths)
         {
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
             //treatmentBMPModelingAttribute.UpstreamTreatmentBMPID = UpstreamTreatmentBMPID;
             treatmentBMPModelingAttribute.TotalEffectiveBMPVolume = TotalEffectiveBMPVolume;
             treatmentBMPModelingAttribute.AverageDivertedFlowrate = AverageDivertedFlowrate;
@@ -200,7 +200,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             var postedMonthsOfOperation = new List<TreatmentBMPOperationMonth>();
             if (MonthsofOperation != null && MonthsofOperation.Any())
             {
-                postedMonthsOfOperation = MonthsofOperation.Select(x => new TreatmentBMPOperationMonth(treatmentBMP.TreatmentBMPID, x)).ToList();
+                postedMonthsOfOperation = MonthsofOperation.Select(x => new TreatmentBMPOperationMonth(treatmentBMPModelingAttribute.TreatmentBMPID, x)).ToList();
             }
 
             treatmentBMPOperationMonths.Merge(postedMonthsOfOperation, allTreatmentBMPOperationMonths, (x, y) => x.OperationMonth == y.OperationMonth);

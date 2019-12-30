@@ -602,8 +602,7 @@ namespace Neptune.Web.Controllers
         public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
-            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute.TreatmentBMP);
+            var viewModel = new EditModelingAttributesViewModel(treatmentBMP);
             return ViewEditModelingAttributes(viewModel, treatmentBMP);
         }
 
@@ -627,7 +626,7 @@ namespace Neptune.Web.Controllers
 
             var allTreatmentBMPOperationMonths = HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.Local;
             var treatmentBMPOperationMonths = treatmentBMP.TreatmentBMPOperationMonths.ToList();
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson, treatmentBMPOperationMonths, allTreatmentBMPOperationMonths);
+            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson, treatmentBMPOperationMonths, allTreatmentBMPOperationMonths);
             SetMessageForDisplay("Modeling Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
@@ -648,7 +647,6 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var viewModel = new EditLocationViewModel(treatmentBMP);
-
             return ViewEditLocation(treatmentBMP, viewModel);
         }
 
