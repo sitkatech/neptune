@@ -467,6 +467,8 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Models\TreatmentBMPModelingAttribute.cs" />
+    <Compile Include="Models\TreatmentBMPOperationMonth.cs" />
     <Compile Include="ScheduledJobs\DelineationDiscrepancyCheckerBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\NetworkCatchmentRefreshScheduledBackgroundJob.cs" />
     <Compile Include="Views\Delineation\DelineationOverlapsDelineationGridSpec.cs" />

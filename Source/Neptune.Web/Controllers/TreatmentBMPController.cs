@@ -602,7 +602,8 @@ namespace Neptune.Web.Controllers
         public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new EditModelingAttributesViewModel(treatmentBMP.TreatmentBMPModelingAttribute);
+            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
+            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute.TreatmentBMP);
             return ViewEditModelingAttributes(viewModel, treatmentBMP);
         }
 
@@ -623,14 +624,21 @@ namespace Neptune.Web.Controllers
             {
                 treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
             }
-            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
+
+            var allTreatmentBMPOperationMonths = HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.Local;
+            var treatmentBMPOperationMonths = treatmentBMP.TreatmentBMPOperationMonths.ToList();
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, treatmentBMPOperationMonths, allTreatmentBMPOperationMonths);
             SetMessageForDisplay("Modeling Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
         private ViewResult ViewEditModelingAttributes(EditModelingAttributesViewModel viewModel, TreatmentBMP treatmentBMP)
         {
-            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP);
+            var routingConfigurations = RoutingConfiguration.All.OrderBy(x => x.RoutingConfigurationDisplayName);
+            var timeOfConcentrations = TimeOfConcentration.All.OrderBy(x => x.TimeOfConcentrationID);
+            var underlyingHydrologicSoilGroups = UnderlyingHydrologicSoilGroup.All.OrderBy(x => x.UnderlyingHydrologicSoilGroupID);
+            var monthsOfOperation = Enumerable.Range(1, 12);
+            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation);
             return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditModelingAttributesViewModel>(viewData, viewModel);
         }
 
