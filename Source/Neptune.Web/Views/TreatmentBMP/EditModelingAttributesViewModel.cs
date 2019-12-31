@@ -121,9 +121,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
         }
 
-        public EditModelingAttributesViewModel(Models.TreatmentBMP treatmentBMP)
+        public EditModelingAttributesViewModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute, List<int> treatmentBMPOperationMonths)
         {
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
             if (treatmentBMPModelingAttribute != null)
             {
                 //UpstreamTreatmentBMPID = treatmentBMPModelingAttribute.UpstreamTreatmentBMPID;
@@ -154,12 +153,8 @@ namespace Neptune.Web.Views.TreatmentBMP
                 WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume;
                 WettedFootprint = treatmentBMPModelingAttribute.WettedFootprint;
                 WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand;
-
-                if (treatmentBMP.TreatmentBMPOperationMonths.Any())
-                {
-                    MonthsofOperation = treatmentBMP.TreatmentBMPOperationMonths.Select(x => x.OperationMonth).ToList();
-                }
             }
+            MonthsofOperation = treatmentBMPOperationMonths;
         }
 
         public void UpdateModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute,

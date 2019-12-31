@@ -602,7 +602,25 @@ namespace Neptune.Web.Controllers
         public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new EditModelingAttributesViewModel(treatmentBMP);
+            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
+            List<int> treatmentBMPOperationMonths;
+            if (treatmentBMPModelingAttribute == null)
+            {
+                treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP)
+                {
+                    // defaults for a brand new record; note, we probably should only set these for the given type, but it doesn't really matter too much since we are using it to prepopulate, and if a certain type does not have a property it won't show on the editor and therefore be considered null when saving
+                    UnderlyingHydrologicSoilGroupID = 4, RoutingConfigurationID = 1, TimeOfConcentrationID = 1
+                };
+                treatmentBMPOperationMonths = Enumerable.Range(4, 7).ToList();
+            }
+            else
+            {
+                treatmentBMPOperationMonths = treatmentBMP.TreatmentBMPOperationMonths.Any()
+                    ? treatmentBMP.TreatmentBMPOperationMonths.Select(x => x.OperationMonth).ToList()
+                    : new List<int>();
+            }
+
+            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMPOperationMonths);
             return ViewEditModelingAttributes(viewModel, treatmentBMP);
         }
 

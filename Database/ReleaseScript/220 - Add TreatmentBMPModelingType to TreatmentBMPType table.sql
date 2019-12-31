@@ -31,7 +31,8 @@ create table dbo.TreatmentBMPOperationMonth
 (
 	TreatmentBMPOperationMonthID int not null identity(1,1) constraint PK_TreatmentBMPOperationMonth_TreatmentBMPOperationMonthID primary key,
 	TreatmentBMPID int not null constraint FK_TreatmentBMPOperationMonth_TreatmentBMP_TreatmentBMPID foreign key references dbo.TreatmentBMP(TreatmentBMPID),
-	OperationMonth int not null constraint CK_TreatmentBMPOperationMonth_Between1and12 check (OperationMonth between 1 and 12)
+	OperationMonth int not null constraint CK_TreatmentBMPOperationMonth_Between1and12 check (OperationMonth between 1 and 12),
+	constraint AK_TreatmentBMPOperationMonth_TreatmentBMPID_OperationMonth unique(TreatmentBMPID, OperationMonth)
 )
 
 create table dbo.TreatmentBMPModelingAttribute

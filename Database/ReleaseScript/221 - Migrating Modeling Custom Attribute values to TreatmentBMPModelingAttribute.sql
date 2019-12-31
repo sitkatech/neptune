@@ -463,6 +463,39 @@ and tbmt.TreatmentBMPModelingTypeDisplayName in
 )
 
 
+-- underlying hydrological soil group to D as a default for those that do not have months of operation specified
+insert into dbo.TreatmentBMPOperationMonth(TreatmentBMPID, OperationMonth)
+select a.TreatmentBMPID, m.OperationMonth
+from
+(
+	select tbma.TreatmentBMPID
+	from dbo.TreatmentBMPModelingAttribute tbma
+	join dbo.TreatmentBMP tb on tbma.TreatmentBMPID = tb.TreatmentBMPID
+	join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
+	where tbt.TreatmentBMPModelingTypeID in (14, 7)
+	and tbma.TreatmentBMPID not in
+	(
+		select distinct TreatmentBMPID
+		from dbo.TreatmentBMPOperationMonth
+	)
+) a
+cross join
+( 
+select 4 as OperationMonth
+union all 
+select 5 as OperationMonth
+union all 
+select 6 as OperationMonth
+union all 
+select 7 as OperationMonth
+union all 
+select 8 as OperationMonth
+union all 
+select 9 as OperationMonth
+union all 
+select 10 as OperationMonth
+) m
+
 
 -- Estimated Diverted Flow
 update tma
@@ -709,3 +742,56 @@ alter table dbo.TreatmentBMPModelingAttribute drop column AverageSurfaceOutletDi
 update dbo.CustomAttributeType
 set CustomAttributeTypePurposeID = 2
 where CustomAttributeTypePurposeID = 1
+
+-- defaulting to Online and 5 minutes
+update tbma
+set RoutingConfigurationID = 1, TimeOfConcentrationID = 1
+from dbo.TreatmentBMPModelingAttribute tbma
+join dbo.TreatmentBMP tb on tbma.TreatmentBMPID = tb.TreatmentBMPID
+join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
+where tbt.TreatmentBMPModelingTypeID in (
+1
+, 2
+, 3
+, 4
+, 5
+, 6
+, 8
+, 9
+, 10
+, 12
+, 13
+, 15
+, 18
+, 19
+, 20
+, 21
+, 22
+)
+
+-- time of concentration default to 5 mins
+update tbma
+set TimeOfConcentrationID = 1
+from dbo.TreatmentBMPModelingAttribute tbma
+join dbo.TreatmentBMP tb on tbma.TreatmentBMPID = tb.TreatmentBMPID
+join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
+where tbt.TreatmentBMPModelingTypeID in (
+11
+, 16
+, 17
+)
+
+-- underlying hydrological soil group to D
+update tbma
+set UnderlyingHydrologicSoilGroupID = 4
+from dbo.TreatmentBMPModelingAttribute tbma
+join dbo.TreatmentBMP tb on tbma.TreatmentBMPID = tb.TreatmentBMPID
+join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
+where tbt.TreatmentBMPModelingTypeID in (
+1
+, 6
+, 9
+, 10
+, 20
+, 21
+)
