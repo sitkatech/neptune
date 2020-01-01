@@ -25,6 +25,18 @@
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.TreatmentBMP.EditModelingAttributes
 
+@section JavascriptAndStylesContent
+{
+    <script src="@Url.Content("~/Content/autonumeric.min.js")"></script>
+
+    <script>
+        var decimal;
+        jQuery(document).ready(function () {
+            decimal = AutoNumeric.multiple('.numericAttribute', {allowDecimalPadding: false});
+        });
+    </script>
+}
+
 <div class="row">
     <div class="col-xs-12">
         <div class="validationError">
@@ -62,7 +74,7 @@
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -75,20 +87,20 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="number" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.StorageVolumeBelowLowestOutletElevation)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.StorageVolumeBelowLowestOutletElevation)" aria-describedby="attributeUnit" type="number" value="@Model.StorageVolumeBelowLowestOutletElevation" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.StorageVolumeBelowLowestOutletElevation)" aria-describedby="attributeUnit" type="text" value="@Model.StorageVolumeBelowLowestOutletElevation" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.MediaBedFootprint)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.MediaBedFootprint)" aria-describedby="attributeUnit" type="number" value="@Model.MediaBedFootprint" /><span class="input-group-addon" id="attributeUnit">square feet</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.MediaBedFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.MediaBedFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -96,7 +108,7 @@
                                             @Html.LabelWithSugarFor(x => x.DesignMediaFiltrationRate)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DesignMediaFiltrationRate)" aria-describedby="attributeUnit" type="number" value="@Model.DesignMediaFiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignMediaFiltrationRate)" aria-describedby="attributeUnit" type="text" value="@Model.DesignMediaFiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -121,7 +133,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -133,14 +145,14 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="number" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.InfiltrationSurfaceArea)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.InfiltrationSurfaceArea)" aria-describedby="attributeUnit" type="number" value="@Model.InfiltrationSurfaceArea" /><span class="input-group-addon" id="attributeUnit">square feet</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.InfiltrationSurfaceArea)" aria-describedby="attributeUnit" type="text" value="@Model.InfiltrationSurfaceArea" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -148,7 +160,7 @@
                                             @Html.LabelWithSugarFor(x => x.UnderlyingInfiltrationRate)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.UnderlyingInfiltrationRate)" aria-describedby="attributeUnit" type="number" value="@Model.UnderlyingInfiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.UnderlyingInfiltrationRate)" aria-describedby="attributeUnit" type="text" value="@Model.UnderlyingInfiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
                                         </div>
                                     </div>
                                     break;
@@ -164,7 +176,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -176,14 +188,14 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="number" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.MediaBedFootprint)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.MediaBedFootprint)" aria-describedby="attributeUnit" type="number" value="@Model.MediaBedFootprint" /><span class="input-group-addon" id="attributeUnit">square feet</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.MediaBedFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.MediaBedFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -191,7 +203,7 @@
                                             @Html.LabelWithSugarFor(x => x.DesignMediaFiltrationRate)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DesignMediaFiltrationRate)" aria-describedby="attributeUnit" type="number" value="@Model.DesignMediaFiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignMediaFiltrationRate)" aria-describedby="attributeUnit" type="text" value="@Model.DesignMediaFiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
                                         </div>
                                     </div>
                                     break;
@@ -206,7 +218,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -218,19 +230,19 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="number" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.WinterHarvestedWaterDemand)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.WinterHarvestedWaterDemand)" aria-describedby="attributeUnit" type="number" value="@Model.WinterHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WinterHarvestedWaterDemand)" aria-describedby="attributeUnit" type="text" value="@Model.WinterHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.SummerHarvestedWaterDemand)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.SummerHarvestedWaterDemand)" aria-describedby="attributeUnit" type="number" value="@Model.SummerHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.SummerHarvestedWaterDemand)" aria-describedby="attributeUnit" type="text" value="@Model.SummerHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
                                     </div>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
@@ -245,7 +257,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -257,39 +269,39 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.PermanentPoolorWetlandVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.PermanentPoolorWetlandVolume)" aria-describedby="attributeUnit" type="number" value="@Model.PermanentPoolorWetlandVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.PermanentPoolorWetlandVolume)" aria-describedby="attributeUnit" type="text" value="@Model.PermanentPoolorWetlandVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DesignResidenceTimeforPermanentPool)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DesignResidenceTimeforPermanentPool)" aria-describedby="attributeUnit" type="number" value="@Model.DesignResidenceTimeforPermanentPool" /><span class="input-group-addon" id="attributeUnit">days</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignResidenceTimeforPermanentPool)" aria-describedby="attributeUnit" type="text" value="@Model.DesignResidenceTimeforPermanentPool" /><span class="input-group-addon" id="attributeUnit">days</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.WaterQualityDetentionVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.WaterQualityDetentionVolume)" aria-describedby="attributeUnit" type="number" value="@Model.WaterQualityDetentionVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WaterQualityDetentionVolume)" aria-describedby="attributeUnit" type="text" value="@Model.WaterQualityDetentionVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DrawdownTimeforWQDetentionVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DrawdownTimeforWQDetentionVolume)" aria-describedby="attributeUnit" type="number" value="@Model.DrawdownTimeforWQDetentionVolume" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DrawdownTimeforWQDetentionVolume)" aria-describedby="attributeUnit" type="text" value="@Model.DrawdownTimeforWQDetentionVolume" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.WinterHarvestedWaterDemand)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.WinterHarvestedWaterDemand)" aria-describedby="attributeUnit" type="number" value="@Model.WinterHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WinterHarvestedWaterDemand)" aria-describedby="attributeUnit" type="text" value="@Model.WinterHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.SummerHarvestedWaterDemand)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.SummerHarvestedWaterDemand)" aria-describedby="attributeUnit" type="number" value="@Model.SummerHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.SummerHarvestedWaterDemand)" aria-describedby="attributeUnit" type="text" value="@Model.SummerHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
                                     </div>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
@@ -307,7 +319,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -321,25 +333,25 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="number" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.StorageVolumeBelowLowestOutletElevation)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.StorageVolumeBelowLowestOutletElevation)" aria-describedby="attributeUnit" type="number" value="@Model.StorageVolumeBelowLowestOutletElevation" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.StorageVolumeBelowLowestOutletElevation)" aria-describedby="attributeUnit" type="text" value="@Model.StorageVolumeBelowLowestOutletElevation" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.EffectiveFootprint)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.EffectiveFootprint)" aria-describedby="attributeUnit" type="number" value="@Model.EffectiveFootprint" /><span class="input-group-addon" id="attributeUnit">square feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.EffectiveFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.EffectiveFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalDrawdownTime)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalDrawdownTime)" aria-describedby="attributeUnit" type="number" value="@Model.TotalDrawdownTime" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalDrawdownTime)" aria-describedby="attributeUnit" type="text" value="@Model.TotalDrawdownTime" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -355,13 +367,13 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DesignDryWeatherTreatmentCapacity)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DesignDryWeatherTreatmentCapacity)" aria-describedby="attributeUnit" type="number" value="@Model.DesignDryWeatherTreatmentCapacity" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignDryWeatherTreatmentCapacity)" aria-describedby="attributeUnit" type="text" value="@Model.DesignDryWeatherTreatmentCapacity" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.AverageTreatmentFlowrate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.AverageTreatmentFlowrate)" aria-describedby="attributeUnit" type="number" value="@Model.AverageTreatmentFlowrate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.AverageTreatmentFlowrate)" aria-describedby="attributeUnit" type="text" value="@Model.AverageTreatmentFlowrate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -383,7 +395,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -395,14 +407,14 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveDrywellBMPVolume)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TotalEffectiveDrywellBMPVolume)" aria-describedby="attributeUnit" type="number" value="@Model.TotalEffectiveDrywellBMPVolume" /><span class="input-group-addon" id="attributeUnit">cubic feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveDrywellBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveDrywellBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.InfiltrationDischargeRate)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.InfiltrationDischargeRate)" aria-describedby="attributeUnit" type="number" value="@Model.InfiltrationDischargeRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.InfiltrationDischargeRate)" aria-describedby="attributeUnit" type="text" value="@Model.InfiltrationDischargeRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
                                         </div>
                                     </div>
                                     break;
@@ -414,7 +426,7 @@
                                             @Html.LabelWithSugarFor(x => x.TreatmentRate)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TreatmentRate)" aria-describedby="attributeUnit" type="number" value="@Model.TreatmentRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TreatmentRate)" aria-describedby="attributeUnit" type="text" value="@Model.TreatmentRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -430,14 +442,14 @@
                                             @Html.LabelWithSugarFor(x => x.DesignLowFlowDiversionCapacity)
                                         </label>
                                         <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DesignLowFlowDiversionCapacity)" aria-describedby="attributeUnit" type="number" value="@Model.DesignLowFlowDiversionCapacity" /><span class="input-group-addon" id="attributeUnit">gpd</span></div>
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignLowFlowDiversionCapacity)" aria-describedby="attributeUnit" type="text" value="@Model.DesignLowFlowDiversionCapacity" /><span class="input-group-addon" id="attributeUnit">gpd</span></div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.AverageDivertedFlowrate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.AverageDivertedFlowrate)" aria-describedby="attributeUnit" type="number" value="@Model.AverageDivertedFlowrate" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.AverageDivertedFlowrate)" aria-describedby="attributeUnit" type="text" value="@Model.AverageDivertedFlowrate" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -460,7 +472,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.DiversionRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="number" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -472,19 +484,19 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TreatmentRate)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.TreatmentRate)" aria-describedby="attributeUnit" type="number" value="@Model.TreatmentRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TreatmentRate)" aria-describedby="attributeUnit" type="text" value="@Model.TreatmentRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.WettedFootprint)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.WettedFootprint)" aria-describedby="attributeUnit" type="number" value="@Model.WettedFootprint" /><span class="input-group-addon" id="attributeUnit">square feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WettedFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.WettedFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.EffectiveRetentionDepth)
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control" name="@Html.NameFor(m => m.EffectiveRetentionDepth)" aria-describedby="attributeUnit" type="number" value="@Model.EffectiveRetentionDepth" /><span class="input-group-addon" id="attributeUnit">feet</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.EffectiveRetentionDepth)" aria-describedby="attributeUnit" type="text" value="@Model.EffectiveRetentionDepth" /><span class="input-group-addon" id="attributeUnit">ft</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">

@@ -72,7 +72,9 @@ and cat.CustomAttributeTypeName in
 )
 and tbmt.TreatmentBMPModelingTypeDisplayName in
 (
-'Bioinfiltration (bioretention with raised underdrain)'
+'Bioinfiltration (bioretention with raised underdrain)',
+'Bioretention with Underdrain and Impervious Liner',
+'Sand Filters'
 )
 
 update tma
@@ -573,7 +575,7 @@ GO
 
 -- Effective Retention Depth (surface and pores)
 update tma
-set tma.EffectiveRetentionDepth = replace(cav.AttributeValue, ',', '')
+set tma.EffectiveRetentionDepth = case when replace(cav.AttributeValue, ',', '') is not null then replace(cav.AttributeValue, ',', '') / 12.0 else null end
 from dbo.CustomAttribute ca
 join dbo.CustomAttributeType cat on ca.CustomAttributeTypeID = cat.CustomAttributeTypeID
 join dbo.TreatmentBMPType tbt on ca.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID

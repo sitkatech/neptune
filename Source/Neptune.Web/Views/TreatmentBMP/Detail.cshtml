@@ -265,49 +265,49 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForStorageVolumeBelowLowestOutletElevation)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.StorageVolumeBelowLowestOutletElevation, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMediaBedFootprint)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} square feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.MediaBedFootprint.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.MediaBedFootprint, "sq ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignMediaFiltrationRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} in/hr", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DesignMediaFiltrationRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignMediaFiltrationRate, "in/hr")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingHydrologicSoilGroupHSG)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.BioretentionwithnoUnderdrain:
@@ -319,37 +319,37 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForInfiltrationSurfaceArea)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} square feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.InfiltrationSurfaceArea.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.InfiltrationSurfaceArea, "sq ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingInfiltrationRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} in/hr", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingInfiltrationRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.UnderlyingInfiltrationRate, "in/hr")</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.BioretentionwithUnderdrainandImperviousLiner:
@@ -358,37 +358,37 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMediaBedFootprint)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} square feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.MediaBedFootprint.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.MediaBedFootprint, "sq ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignMediaFiltrationRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} in/hr", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DesignMediaFiltrationRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignMediaFiltrationRate, "in/hr")</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.CisternsforHarvestandUse:
@@ -396,37 +396,37 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWinterHarvestedWaterDemand)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} gpd", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.WinterHarvestedWaterDemand.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WinterHarvestedWaterDemand, "gpd")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForSummerHarvestedWaterDemand)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} gpd", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.SummerHarvestedWaterDemand.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.SummerHarvestedWaterDemand, "gpd")</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
@@ -435,55 +435,55 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPermanentPoolorWetlandVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.PermanentPoolorWetlandVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.PermanentPoolorWetlandVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignResidenceTimeforPermanentPool)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} days", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignResidenceTimeforPermanentPool, "days")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWaterQualityDetentionVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.WaterQualityDetentionVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WaterQualityDetentionVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDrawdownTimeforWQDetentionVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} hours", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DrawdownTimeforWQDetentionVolume, "hours")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWinterHarvestedWaterDemand)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} gpd", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.WinterHarvestedWaterDemand.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WinterHarvestedWaterDemand, "gpd")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForSummerHarvestedWaterDemand)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} gpd", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.SummerHarvestedWaterDemand.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.SummerHarvestedWaterDemand, "gpd")</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
@@ -493,49 +493,49 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForStorageVolumeBelowLowestOutletElevation)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.StorageVolumeBelowLowestOutletElevation, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForEffectiveFootprint)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} square feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.EffectiveFootprint.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.EffectiveFootprint, "sq ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalDrawdownTime)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} hours", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalDrawdownTime.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalDrawdownTime, "hours")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingHydrologicSoilGroupHSG)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
@@ -543,19 +543,19 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignDryWeatherTreatmentCapacity)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignDryWeatherTreatmentCapacity, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForAverageTreatmentFlowrate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.AverageTreatmentFlowrate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.AverageTreatmentFlowrate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMonthsofOperation)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(string.Join(", ", ViewDataTyped.TreatmentBMP.TreatmentBMPOperationMonths.OrderBy(x => x.OperationMonth).Select(x => CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(x.OperationMonth))))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayMonthsOfOperation()</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.Drywell:
@@ -563,31 +563,31 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveDrywellBMPVolume)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cubic feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveDrywellBMPVolume.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveDrywellBMPVolume, "cu ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForInfiltrationDischargeRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.InfiltrationDischargeRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.InfiltrationDischargeRate, "cfs")</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
@@ -597,13 +597,13 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTreatmentRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TreatmentRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TreatmentRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
@@ -611,19 +611,19 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignLowFlowDiversionCapacity)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} gpd", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignLowFlowDiversionCapacity, "gpd")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForAverageDivertedFlowrate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} gpd", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.AverageDivertedFlowrate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.AverageDivertedFlowrate, "gpd")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMonthsofOperation)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(string.Join(", ", ViewDataTyped.TreatmentBMP.TreatmentBMPOperationMonths.OrderBy(x => x.OperationMonth).Select(x => CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(x.OperationMonth))))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayMonthsOfOperation()</td>
                                     </tr>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
@@ -632,49 +632,45 @@
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.DiversionRate.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTreatmentRate)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} cfs", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TreatmentRate.ToGroupedNumeric()))</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null ? string.Format("{0} mins", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName) : string.Empty)</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TreatmentRate, "cfs")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWettedFootprint)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} square feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.WettedFootprint.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WettedFootprint, " sq ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForEffectiveRetentionDepth)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute == null ? string.Empty : string.Format("{0} feet", ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.EffectiveRetentionDepth.ToGroupedNumeric()))</td>
+                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.EffectiveRetentionDepth, " ft")</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingHydrologicSoilGroupHSG)
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupDisplayName : string.Empty)</td>
+                                        <td class="text-right">
+                                            @ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()
+                                        </td>
                                     </tr>
                                     break;
                             }

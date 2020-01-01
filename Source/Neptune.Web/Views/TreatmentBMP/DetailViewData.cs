@@ -21,9 +21,11 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -210,6 +212,42 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             return delineationErrors;
+        }
+
+        public string DisplayModelingAttributeValue(Func<TreatmentBMPModelingAttribute, double?> modelAttributeValueFunc, string units)
+        {
+            if (TreatmentBMP.TreatmentBMPModelingAttribute == null)
+            {
+                return null;
+            }
+
+            var modelAttributeValue = modelAttributeValueFunc.Invoke(TreatmentBMP.TreatmentBMPModelingAttribute);
+            return modelAttributeValue == null ? string.Empty : $"{modelAttributeValue.ToGroupedNumeric()} {units}";
+        }
+
+        public string DisplayUnderlyingHydrologicSoilGroup()
+        {
+            return TreatmentBMP.TreatmentBMPModelingAttribute != null && TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup != null
+                ? TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupDisplayName : null;
+        }
+
+        public string DisplayRoutingConfiguration()
+        {
+            return TreatmentBMP.TreatmentBMPModelingAttribute != null && TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration != null
+                ? TreatmentBMP.TreatmentBMPModelingAttribute.RoutingConfiguration.RoutingConfigurationDisplayName : null;
+        }
+
+        public string DisplayTimeOfConcentration()
+        {
+            return TreatmentBMP.TreatmentBMPModelingAttribute != null && TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration != null
+                    ? $"{TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration.TimeOfConcentrationDisplayName} mins" : null;
+        }
+
+        public string DisplayMonthsOfOperation()
+        {
+            return string.Join(", ",
+                TreatmentBMP.TreatmentBMPOperationMonths.OrderBy(x => x.OperationMonth).Select(x =>
+                    CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(x.OperationMonth)));
         }
     }
 }
