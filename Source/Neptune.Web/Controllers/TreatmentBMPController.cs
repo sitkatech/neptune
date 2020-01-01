@@ -620,7 +620,7 @@ namespace Neptune.Web.Controllers
                     : new List<int>();
             }
 
-            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMPOperationMonths);
+            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMPOperationMonths, treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID);
             return ViewEditModelingAttributes(viewModel, treatmentBMP);
         }
 

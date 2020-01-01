@@ -47,6 +47,8 @@
 
 @using (Html.BeginForm())
 {
+    @* this is needed to validate which modeling fields are required for a treatment bmp*@
+    @Html.HiddenFor(x => x.TreatmentBMPModelingTypeID)
     <div class="formPage">
         <div class="row">
             <div class="col-xs-12">

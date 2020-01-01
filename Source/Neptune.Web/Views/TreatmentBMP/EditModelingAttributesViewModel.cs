@@ -21,18 +21,20 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditModelingAttributesViewModel : FormViewModel
+    public class EditModelingAttributesViewModel : FormViewModel, IValidatableObject
     {
         [FieldDefinitionDisplay(FieldDefinitionEnum.AverageDivertedFlowrate)]
         public double? AverageDivertedFlowrate { get; set; }
-        
+
         [FieldDefinitionDisplay(FieldDefinitionEnum.AverageTreatmentFlowrate)]
         public double? AverageTreatmentFlowrate { get; set; }
 
@@ -117,12 +119,15 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsofOperation)]
         public List<int> MonthsofOperation { get; set; }
 
+        public int? TreatmentBMPModelingTypeID { get; set; }
+
         public EditModelingAttributesViewModel()
         {
         }
 
-        public EditModelingAttributesViewModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute, List<int> treatmentBMPOperationMonths)
+        public EditModelingAttributesViewModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute, List<int> treatmentBMPOperationMonths, int? treatmentBMPModelingTypeID)
         {
+            TreatmentBMPModelingTypeID = treatmentBMPModelingTypeID;
             if (treatmentBMPModelingAttribute != null)
             {
                 //UpstreamTreatmentBMPID = treatmentBMPModelingAttribute.UpstreamTreatmentBMPID;
@@ -199,6 +204,147 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             treatmentBMPOperationMonths.Merge(postedMonthsOfOperation, allTreatmentBMPOperationMonths, (x, y) => x.OperationMonth == y.OperationMonth);
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var validationResults = new List<ValidationResult>();
+
+            if (TreatmentBMPModelingTypeID.HasValue)
+            {
+                var treatmentBMPModelingTypeEnum = TreatmentBMPModelingType
+                    .AllLookupDictionary[TreatmentBMPModelingTypeID.Value].ToEnum;
+                switch (treatmentBMPModelingTypeEnum)
+                {
+                    case TreatmentBMPModelingTypeEnum.Bioinfiltrationbioretentionwithraisedunderdrain:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
+                            StorageVolumeBelowLowestOutletElevation);
+                        ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
+                        ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
+                            DesignMediaFiltrationRate);
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionwithnoUnderdrain:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
+                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        ValidateFieldIsRequired(validationResults, "Infiltration Surface Area",
+                            InfiltrationSurfaceArea);
+                        ValidateFieldIsRequired(validationResults, "Underlying Infiltration Rate",
+                            UnderlyingInfiltrationRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionwithUnderdrainandImperviousLiner:
+                    case TreatmentBMPModelingTypeEnum.SandFilters:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
+                        ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
+                            DesignMediaFiltrationRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.CisternsforHarvestandUse:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        ValidateFieldIsRequired(validationResults, "Winter Harvested Water Demand",
+                            WinterHarvestedWaterDemand);
+                        ValidateFieldIsRequired(validationResults, "Summer Harvested Water Demand",
+                            SummerHarvestedWaterDemand);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
+                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Permanent Pool or Wetland Volume",
+                            PermanentPoolorWetlandVolume);
+                        ValidateFieldIsRequired(validationResults, "Water Quality Detention Volume",
+                            WaterQualityDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Drawdown Time for Water Quality Detention Volume",
+                            DrawdownTimeforWQDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Winter Harvested Water Demand",
+                            WinterHarvestedWaterDemand);
+                        ValidateFieldIsRequired(validationResults, "Summer Harvested Water Demand",
+                            SummerHarvestedWaterDemand);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
+                            StorageVolumeBelowLowestOutletElevation);
+                        ValidateFieldIsRequired(validationResults, "Effective Footprint", EffectiveFootprint);
+                        ValidateFieldIsRequired(validationResults, "Total Drawdown Time", TotalDrawdownTime);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                        ValidateFieldIsRequired(validationResults, "Design Dry Weather Treatment Capacity",
+                            DesignDryWeatherTreatmentCapacity);
+                        ValidateFieldIsRequired(validationResults, "Average Treatment Flowrate",
+                            AverageTreatmentFlowrate);
+                        ValidateFieldIsRequired(validationResults, "Months of Operation", MonthsofOperation);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.Drywell:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Total Effective Drywell BMP Volume",
+                            TotalEffectiveDrywellBMPVolume);
+                        ValidateFieldIsRequired(validationResults, "InfiltrationDischargeRate",
+                            InfiltrationDischargeRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                        ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                        ValidateFieldIsRequired(validationResults, "Months of Operation", MonthsofOperation);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
+                        ValidateDiversionRate(validationResults);
+                        ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
+                        ValidateFieldIsRequired(validationResults, "Wetted Footprint", WettedFootprint);
+                        ValidateFieldIsRequired(validationResults, "Effective Retention Depth",
+                            EffectiveRetentionDepth);
+                        break;
+                }
+            }
+
+            return validationResults;
+        }
+
+        private void ValidateDiversionRate(List<ValidationResult> validationResults)
+        {
+            if (RoutingConfigurationID == (int) RoutingConfigurationEnum.Offline)
+            {
+                if (DiversionRate == null)
+                {
+                    validationResults.Add(
+                        new ValidationResult("Diversion Rate is required when Routing Configuration is 'Offline'"));
+                }
+            }
+        }
+
+        private static void ValidateFieldIsRequired(List<ValidationResult> validationResults, string fieldName, object valueToCheck)
+        {
+            if (valueToCheck == null)
+            {
+                validationResults.Add(new ValidationResult($"{fieldName} is required"));
+            }
         }
     }
 }
