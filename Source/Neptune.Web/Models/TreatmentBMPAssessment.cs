@@ -73,8 +73,8 @@ namespace Neptune.Web.Models
 
         public bool IsObservationComplete(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x =>
-                x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+            var treatmentBMPObservation = TreatmentBMPObservations.FirstOrDefault(x =>
+                x.TreatmentBMPAssessmentObservationTypeID ==
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             return treatmentBMPObservation != null;

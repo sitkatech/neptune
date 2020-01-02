@@ -26,11 +26,14 @@ namespace Neptune.Web.Controllers
         {
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
             var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments
-                .Include(x=>x.FieldVisit.PerformedByPerson)
-                .Include(x=>x.TreatmentBMP).Include(x=>x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x=>x.TreatmentBMPType).Include(x=>x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
-                .Include(x=>x.TreatmentBMPObservations)
-                .ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson))
+                .Include(x => x.FieldVisit.PerformedByPerson)
+                .Include(x => x.TreatmentBMP)
+                .Include(x => x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds)
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
+                .Include(x => x.TreatmentBMPObservations)
+                .Include(x => x.TreatmentBMPObservations.Select(y => y.TreatmentBMPAssessmentObservationType))
+                .ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson))
                 .OrderByDescending(x => x.GetAssessmentDate()).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);

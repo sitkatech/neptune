@@ -139,12 +139,12 @@ namespace Neptune.Web.Models
                 : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
         }
 
-        public bool RequiredAttributeDoesNotHaveValue(FieldVisit fieldVisit)
+        public bool RequiredAttributeDoesNotHaveValue()
         {
             return TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
                 x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
                 CustomAttributeTypePurpose.Maintenance &&
-                !x.CustomAttributeType.IsCompleteForTreatmentBMP(fieldVisit.TreatmentBMP)
+                !x.CustomAttributeType.IsCompleteForTreatmentBMP(this)
             );
         }
 

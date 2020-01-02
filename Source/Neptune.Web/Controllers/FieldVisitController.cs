@@ -19,12 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using System.Data.Entity;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -37,7 +31,12 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
-using Z.EntityFramework.Plus;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Globalization;
+using System.Linq;
+using System.Web.Mvc;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -90,9 +89,16 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits
-                .Include(x=>x.MaintenanceRecords)
-                .Include(x => x.TreatmentBMP).Include(x => x.TreatmentBMP.TreatmentBMPType).Include(x=>x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x=>x.TreatmentBMP.CustomAttributes)
-                .ToList().Where(x=> x.TreatmentBMP.CanView(currentPerson));
+                .Include(x => x.MaintenanceRecords)
+                .Include(x => x.TreatmentBMP)
+                .Include(x => x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds)
+                .Include(x => x.TreatmentBMP.TreatmentBMPType)
+                .Include(x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
+                .Include(x => x.TreatmentBMP.CustomAttributes)
+                .Include(x => x.TreatmentBMP.CustomAttributes.Select(y => y.CustomAttributeType))
+                .Include(x => x.TreatmentBMP.CustomAttributes.Select(y => y.CustomAttributeValues))
+                .Include(x => x.TreatmentBMPAssessments)
+                .ToList().Where(x => x.TreatmentBMP.CanView(currentPerson));
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
                 : fieldVisits).ToList();
@@ -285,7 +291,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
         {
-            var missingRequiredAttributes = fieldVisit.TreatmentBMP.RequiredAttributeDoesNotHaveValue(fieldVisit);
+            var missingRequiredAttributes = fieldVisit.TreatmentBMP.RequiredAttributeDoesNotHaveValue();
             var editAttributesViewData = new EditAttributesViewData(CurrentPerson, fieldVisit, true, missingRequiredAttributes);
             var viewData = new AttributesViewData(CurrentPerson, fieldVisit, editAttributesViewData);
             return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
