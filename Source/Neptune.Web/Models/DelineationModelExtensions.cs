@@ -40,7 +40,7 @@ namespace Neptune.Web.Models
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometry != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.DelineationGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.DelineationGeometry);
                 feature.Properties.Add("DelineationID", x.DelineationID);
                 feature.Properties.Add("Name", x.DelineationID);
                 feature.Properties.Add("FeatureWeight", 1);
@@ -57,7 +57,7 @@ namespace Neptune.Web.Models
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometry != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.DelineationGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.DelineationGeometry);
                 feature.Properties.Add("DelineationID", x.DelineationID);
                 feature.Properties.Add("Name", x.DelineationID);
                 feature.Properties.Add("FeatureWeight", 1);

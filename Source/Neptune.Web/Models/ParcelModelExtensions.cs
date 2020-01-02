@@ -28,14 +28,14 @@ namespace Neptune.Web.Models
             new FeatureCollection(parcels.Select(MakeFeatureWithRelevantProperties).ToList());
 
         public static Feature MakeFeatureWithRelevantProperties(this Parcel parcel) =>
-            DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(parcel.ParcelGeometry);
+            DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(parcel.ParcelGeometry);
 
         public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<Parcel> parcels)
         {
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(parcels.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.ParcelGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.ParcelGeometry);
                 var trashCaptureStatusType = x.GetTrashCaptureStatusType();
                 feature.Properties.Add("Number", x.ParcelNumber);
                 feature.Properties.Add("FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap());

@@ -32,8 +32,12 @@ namespace LtInfo.Common.GeoJson
         public const string POLYGON_EMPTY = "POLYGON EMPTY";
 
 
-
-        public static Feature FromDbGeometryWithReprojectionChecc(DbGeometry inp) 
+        /// <summary>
+        /// Converts to GeoJSON after reprojecting to 4326 if necessary.
+        /// </summary>
+        /// <param name="inp"></param>
+        /// <returns></returns>
+        public static Feature FromDbGeometryWithReprojectionCheck(DbGeometry inp) 
         {
             // this is going TO the browser, so it needs to be transformed from 2771 to 4326 if it's not already
             if (inp.CoordinateSystemId != CoordinateSystemHelper.WGS_1984_SRID)
@@ -62,7 +66,13 @@ namespace LtInfo.Common.GeoJson
                     throw new NotImplementedException();
             }
         }
-        public static Feature FromDbGeometryNoReprojecc(DbGeometry inp) // only use NoReprojecc if you're ABSOLUTELY sure that you're sending web-appropriate cooooooooooords
+
+        /// <summary>
+        /// Used to create GeoJSON from a source object already in 4326
+        /// </summary>
+        /// <param name="inp"></param>
+        /// <returns></returns>
+        public static Feature FromDbGeometryNoReproject(DbGeometry inp) // only use NoReproject if you're sure that you're sending 4326
         {
             switch (inp.SpatialTypeName)
             {
@@ -92,7 +102,9 @@ namespace LtInfo.Common.GeoJson
             {
                 throw new ArgumentException();
             }
-            var coordinates = new GeographicPosition(inp.YCoordinate.Value, inp.XCoordinate.Value, null);
+
+            var coordinates = new GeographicPosition(inp.YCoordinate.GetValueOrDefault(), // due to the throw above, this will never default
+                inp.XCoordinate.GetValueOrDefault(), null);
             var point = new Point(coordinates);
             return point;
         }
@@ -107,7 +119,8 @@ namespace LtInfo.Common.GeoJson
             var coordinates = new List<GeographicPosition>();
             for (var i = 1; i <= inp.PointCount; i++)
             {
-                coordinates.Add(new GeographicPosition(inp.PointAt(i).YCoordinate.Value, inp.PointAt(i).XCoordinate.Value, null));
+                coordinates.Add(new GeographicPosition(inp.PointAt(i).YCoordinate.GetValueOrDefault(), // due to the throw above, this will never default
+                    inp.PointAt(i).XCoordinate.GetValueOrDefault(), null));
             }
             var lineString = new LineString(coordinates);
             return lineString;

@@ -125,7 +125,7 @@ namespace Neptune.Web.Models
         {
             var featureCollection = new FeatureCollection();
 
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(ovta.GetAreaViaTransect());
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(ovta.GetAreaViaTransect());
 
             featureCollection.Features.Add(feature);
             return featureCollection;
@@ -181,7 +181,7 @@ namespace Neptune.Web.Models
                     return null;
                 }
 
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry());
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry());
                 featureCollection.Features.AddRange(new List<Feature> { feature });
 
                 transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
@@ -217,7 +217,7 @@ namespace Neptune.Web.Models
                         // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
                         dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
                     }
-                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry);
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
                     geoJsonFeatureCollection.Features.Add(feature);
                 }
             }

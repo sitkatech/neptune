@@ -9,16 +9,14 @@ using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Neptune.Web.Views.NetworkCatchment;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Neptune.Web.Views.Shared;
 using Index = Neptune.Web.Views.NetworkCatchment.Index;
 using IndexViewData = Neptune.Web.Views.NetworkCatchment.IndexViewData;
 
@@ -58,13 +56,11 @@ namespace Neptune.Web.Controllers
                 .Where(x => networkCatchmentIDs.Contains(x.NetworkCatchmentID)).Select(x => x.CatchmentGeometry)
                 .ToList().UnionListGeometries();
 
-            var asText = unionOfUpstreamNetworkCatchments.AsText();
-            var networkCatchments = unionOfUpstreamNetworkCatchments.ExteriorRing.AsText().Replace("LINESTRING", "POLYGON").Replace("(", "((").Replace(")", "))");
-
-            var dbGeometry = DbGeometry.FromText(networkCatchments, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
+            var dbGeometry = unionOfUpstreamNetworkCatchments.Buffer(0);
 
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
             featureCollection.Features.Add(feature);
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
@@ -114,7 +110,7 @@ namespace Neptune.Web.Controllers
 
             var networkCatchmentCatchmentGeometry4326 = networkCatchment.CatchmentGeometry4326;
 
-            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReprojecc(networkCatchmentCatchmentGeometry4326);
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(networkCatchmentCatchmentGeometry4326);
             var geoJsonFeatureCollection = new FeatureCollection(new List<Feature> {geoJson});
             var layerGeoJson = new LayerGeoJson("Catchment Boundary", geoJsonFeatureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
             var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBox(networkCatchmentCatchmentGeometry4326));

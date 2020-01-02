@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using LtInfo.Common.GeoJson;
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using LtInfo.Common.GeoJson;
 
 namespace Neptune.Web.Models
 {
@@ -19,7 +19,7 @@ namespace Neptune.Web.Models
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(DbGeometry.FromText(""));
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(DbGeometry.FromText(""));
                 
                 feature.Properties.Add("FeatureWeight", 1);
                 feature.Properties.Add("FillPolygon", true);

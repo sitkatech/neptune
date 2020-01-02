@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DesignByContract;
@@ -26,6 +27,7 @@ using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
 using Neptune.Web.Views.Shared;
@@ -35,8 +37,6 @@ using System;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
-using Hangfire;
-using Neptune.Web.ScheduledJobs;
 
 namespace Neptune.Web.Controllers
 {
@@ -107,7 +107,7 @@ namespace Neptune.Web.Controllers
                 return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
             }
 
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(treatmentBMP.Delineation.DelineationGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.Delineation.DelineationGeometry);
             feature.Properties.Add("Area", treatmentBMP.GetDelineationAreaString());
             feature.Properties.Add("DelineationType",
                 treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");

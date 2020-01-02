@@ -19,11 +19,10 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using LtInfo.Common;
 using LtInfo.Common.GeoJson;
 using LtInfo.Common.Views;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Models
 {
@@ -56,7 +55,7 @@ namespace Neptune.Web.Models
 
         private static GeoJSON.Net.Feature.Feature MakeFeatureWithRelevantProperties(StormwaterJurisdiction stormwaterJurisdiction)
         {
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
             feature.Properties.Add("State", stormwaterJurisdiction.StateProvince.StateProvinceAbbreviation);
             feature.Properties.Add("County/City", stormwaterJurisdiction.Organization.OrganizationName);
             feature.Properties.Add("StormwaterJurisdictionID", stormwaterJurisdiction.StormwaterJurisdictionID);

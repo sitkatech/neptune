@@ -19,9 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Data.Entity.Spatial;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.GeoJson;
+using System.Data.Entity.Spatial;
 
 namespace Neptune.Web.Models
 {
@@ -36,7 +36,7 @@ namespace Neptune.Web.Models
         public StormwaterSearchMapSummaryData(string mapSummaryUrl, DbGeometry geometry, double? latitude, double? longitude, int entityID)
         {
             MapSummaryUrl = mapSummaryUrl;
-            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(geometry);
+            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geometry);
             Latitude = latitude;
             Longitude = longitude;
             EntityID = entityID;
