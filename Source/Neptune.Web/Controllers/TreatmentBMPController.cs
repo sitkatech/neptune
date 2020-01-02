@@ -109,6 +109,7 @@ namespace Neptune.Web.Controllers
                 .Include(x => x.TreatmentBMPAssessments)
                 .Include(x => x.TreatmentBMPAssessments.Select(y => y.FieldVisit))
                 .Include(x => x.WaterQualityManagementPlan)
+                .Include(x => x.Delineations)
                 .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
