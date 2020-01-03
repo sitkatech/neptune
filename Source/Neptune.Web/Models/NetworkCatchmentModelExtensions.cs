@@ -30,16 +30,22 @@ namespace Neptune.Web.Models
         {
             var idList = new List<int>();
 
-            var lookingAt = networkCatchment.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment;
+            var lookingAt = networkCatchment.GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment();
             while (lookingAt.Any())
             {
                 var ints = lookingAt.Select(x => x.NetworkCatchmentID);
                 idList.AddRange(ints);
                 lookingAt = lookingAt.SelectMany(x =>
-                    x.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment).ToList();
+                    x.GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment()).ToList();
             }
 
             return idList;
+        }
+
+        public static List<NetworkCatchment> GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment(
+            this NetworkCatchment networkCatchment)
+        {
+            return HttpRequestStorage.DatabaseEntities.NetworkCatchments.Where(x=>x.OCSurveyDownstreamCatchmentID == networkCatchment.OCSurveyCatchmentID).ToList()
         }
 
         public static FeatureCollection TraceBackboneDownstream(this Neighborhood networkCatchment)

@@ -56,10 +56,7 @@ namespace Neptune.Web.Controllers
                 .Where(x => networkCatchmentIDs.Contains(x.NetworkCatchmentID)).Select(x => x.CatchmentGeometry)
                 .ToList().UnionListGeometries();
 
-            var asText = unionOfUpstreamNetworkCatchments.AsText();
-            var networkCatchments = unionOfUpstreamNetworkCatchments.ExteriorRing.AsText().Replace("LINESTRING", "POLYGON").Replace("(", "((").Replace(")", "))");
-
-            var dbGeometry = DbGeometry.FromText(networkCatchments, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+            var dbGeometry = unionOfUpstreamNetworkCatchments.Buffer(0);
 
             var featureCollection = new FeatureCollection();
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(dbGeometry);
