@@ -45,7 +45,8 @@ namespace Neptune.Web.Models
         public static List<NetworkCatchment> GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment(
             this NetworkCatchment networkCatchment)
         {
-            return HttpRequestStorage.DatabaseEntities.NetworkCatchments.Where(x=>x.OCSurveyDownstreamCatchmentID == networkCatchment.OCSurveyCatchmentID).ToList()
+            return HttpRequestStorage.DatabaseEntities.NetworkCatchments
+                .Where(x => x.OCSurveyDownstreamCatchmentID == networkCatchment.OCSurveyCatchmentID).ToList();
         }
 
         public static FeatureCollection TraceBackboneDownstream(this Neighborhood networkCatchment)

@@ -318,6 +318,7 @@ NeptuneMaps.DelineationMap.prototype.unthinDelineationVertices = function () {
 }
 
 NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function (drawModeOptions, tolerance) {
+
     if (!this.delineationFeatureSavedForReset) {
         return;
     }
@@ -327,7 +328,8 @@ NeptuneMaps.DelineationMap.prototype.thinDelineationVertices = function (drawMod
 
     this.editableFeatureGroup.clearLayers();
 
-    var downsampledDelineationFeature = downsampleGeoJsonFeature(this.delineationFeatureSavedForReset, tolerance);
+    var downsampledDelineationFeature = turf.flatten(downsampleGeoJsonFeature(this.delineationFeatureSavedForReset, tolerance));
+
     L.geoJSON(downsampledDelineationFeature,
         {
             onEachFeature: function (feature, layer) {
@@ -350,17 +352,52 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
     this.drawControl = new L.Control.Draw(drawOptions);
     this.map.addControl(this.drawControl);
 
-    var delineationFeature;
-    var downsampledDelineationFeature;
+    //// special case for multipart geometries coming back from Network Catchment Trace
+    //if (this.networkTraceDelineationFeatureCollection) {
 
-    if (this.selectedBMPDelineationLayer) {
-        this.delineationFeatureSavedForReset = this.selectedBMPDelineationLayer.getLayers()[0].feature;
-    }
+    //    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+    //        this.map.removeLayer(this.selectedBMPDelineationLayer);
+    //    }
 
+    //    L.geoJSON(this.networkTraceDelineationFeatureCollection,
+    //        {
+    //            onEachFeature: function (feature, layer) {
+    //                if (layer.getLayers) {
+    //                    layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+    //                } else {
+    //                    editableFeatureGroup.addLayer(layer);
+    //                }
+    //            }
+    //        });
+
+    //}
+
+    //else
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
 
-        L.geoJSON(this.selectedBMPDelineationLayer.getLayers()[0].feature,
+        var selectedBMPDelineationLayers = this.selectedBMPDelineationLayer.getLayers();
+
+        var geoJsonForEdit;
+        if (selectedBMPDelineationLayers.length > 1) {
+            geoJsonForEdit =
+            {
+                "type":
+                    "FeatureCollection",
+                "features":
+                    _.map(this.selectedBMPDelineationLayer.getLayers(), function(layer) { return layer.feature; })
+            };
+        } else {
+            geoJsonForEdit = selectedBMPDelineationLayers[0].feature;
+        }
+
+        this.delineationFeatureSavedForReset = geoJsonForEdit;
+
+        if (geoJsonForEdit.geometry && geoJsonForEdit.geometry.type === "MultiPolygon") {
+            geoJsonForEdit = turf.flatten(geoJsonForEdit);
+        }
+
+        L.geoJSON(geoJsonForEdit,
             {
                 onEachFeature: function (feature, layer) {
                     if (layer.getLayers) {
@@ -429,6 +466,7 @@ NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function () {
     this.drawControl = null;
     this.editableFeatureGroup = null;
     this.delineationFeatureSavedForReset = null;
+    this.networkTraceDelineationFeatureCollection = null;
 };
 
 NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
@@ -468,14 +506,21 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
         persistableFeatureJson = this.selectedBMPDelineationLayer.getLayers()[0].feature;
     }
 
+    var wkts;
 
-    var wkt;
     if (persistableFeatureJson.type === "Feature") {
-        wkt = Terraformer.WKT.convert(persistableFeatureJson.geometry);
+        wkts = [Terraformer.WKT.convert(persistableFeatureJson.geometry)];
     } else if (persistableFeatureJson.features.length == 1) {
-        wkt = Terraformer.WKT.convert(persistableFeatureJson.features[0].geometry);
+        wkts = [Terraformer.WKT.convert(persistableFeatureJson.features[0].geometry)];
+    } else if (persistableFeatureJson.features.length > 1) {
+
+        wkts = _.map(persistableFeatureJson.features,
+            function(feature) {
+                return Terraformer.WKT.convert(feature.geometry);
+            });
+
     } else {
-        wkt = Terraformer.WKT.convert({ type: "Polygon" });
+        wkts = [Terraformer.WKT.convert({ type: "Polygon" })];
     }
 
     var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
@@ -485,7 +530,7 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     var self = this;
     return jQuery.ajax({
         url: delineationUrl,
-        data: { "WellKnownText": wkt, "DelineationType": this.delineationType },
+        data: { "WellKnownText": wkts, "DelineationType": this.delineationType },
         type: 'POST'
     }).then(function (response) {
         self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
@@ -658,13 +703,15 @@ NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = funct
     });
 };
 
-NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (geoJson) {
+NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (geoJsonFeatureCollection) {
     if (this.selectedBMPDelineationLayer) {
         this.selectedBMPDelineationLayer.remove();
         this.selectedBMPDelineationLayer = null;
     }
 
-    this.selectedBMPDelineationLayer = L.geoJSON(geoJson,
+    this.networkTraceDelineationFeatureCollection = geoJsonFeatureCollection;
+
+    this.selectedBMPDelineationLayer = L.geoJSON(geoJsonFeatureCollection,
         {
             style: function (feature) {
                 return {
