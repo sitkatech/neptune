@@ -63,7 +63,7 @@ namespace Neptune.Web.Controllers
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
             featureCollection.Features.Add(feature);
 
-            return Content(JObject.FromObject(feature).ToString(Formatting.None));
+            return Content(JObject.FromObject(featureCollection).ToString(Formatting.None));
         }
 
         [HttpGet]

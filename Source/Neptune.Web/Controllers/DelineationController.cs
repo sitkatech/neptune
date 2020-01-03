@@ -34,6 +34,7 @@ using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
@@ -124,10 +125,25 @@ namespace Neptune.Web.Controllers
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             ForTreatmentBMPViewModel viewModel)
         {
-            var geom4326 = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
-                ? null
-                : DbGeometry.FromText(viewModel.WellKnownText, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry()
-                    .MakeValid().ToDbGeometry().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+            DbGeometry geom4326;
+
+            if (viewModel.WellKnownText.Count == 1)
+            {
+                geom4326 = viewModel.WellKnownText[0] == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
+                    ? null
+                    : DbGeometry.FromText(viewModel.WellKnownText[0], CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry()
+                        .MakeValid().ToDbGeometry().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+            }
+            else
+            {
+                geom4326 = viewModel.WellKnownText
+                    .Select(x =>
+                        DbGeometry.FromText(x, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry().MakeValid()
+                            .ToDbGeometry().FixSrid(CoordinateSystemHelper.WGS_1984_SRID)).ToList()
+                    .UnionListGeometries();
+            }
+
+           
 
             DbGeometry geom2771 = null;
 
@@ -318,7 +334,7 @@ namespace Neptune.Web.Controllers
 
     public class ForTreatmentBMPViewModel
     {
-        public string WellKnownText { get; set; }
+        public List<string> WellKnownText { get; set; }
         public string DelineationType { get; set; }
     }
 
