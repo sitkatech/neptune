@@ -59,11 +59,9 @@ namespace Neptune.Web.Controllers
             // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
             var dbGeometry = unionOfUpstreamNetworkCatchments.Buffer(0);
 
-            var featureCollection = new FeatureCollection();
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
-            featureCollection.Features.Add(feature);
 
-            return Content(JObject.FromObject(featureCollection).ToString(Formatting.None));
+            return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
 
         [HttpGet]
