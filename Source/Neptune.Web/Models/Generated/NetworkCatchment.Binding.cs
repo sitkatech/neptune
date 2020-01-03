@@ -118,7 +118,6 @@ namespace Neptune.Web.Models
         public string Watershed { get; set; }
         public DbGeometry CatchmentGeometry { get; set; }
         public int OCSurveyCatchmentID { get; set; }
-        [ForeignKey(nameof(OCSurveyDownstreamCatchment))]
         public int? OCSurveyDownstreamCatchmentID { get; set; }
         public DbGeometry CatchmentGeometry4326 { get; set; }
         public DateTime? LastUpdate { get; set; }
@@ -126,9 +125,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
 
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
-        [InverseProperty(nameof(OCSurveyDownstreamCatchment))]
         public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
-        [ForeignKey(nameof(OCSurveyDownstreamCatchmentID))]
         public virtual NetworkCatchment OCSurveyDownstreamCatchment { get; set; }
 
         public static class FieldLengths
