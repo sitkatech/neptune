@@ -60,6 +60,8 @@ var STRATEGY_AUTODEM = "AutoDEM";
 var STRATEGY_NETWORK_TRACE = "NetworkTrace";
 var STRATEGY_MANUAL = "Manual";
 
+var LEAFLET_TO_GEO_JSON_PRECISION = 14;
+
 /* Prototype members */
 
 /* Initialization methods and assorted convenience methods 
@@ -157,7 +159,7 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
 };
 
 NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function () {
-    return this.lastSelected.toGeoJSON().features[0];
+    return this.lastSelected.toGeoJSON(LEAFLET_TO_GEO_JSON_PRECISION).features[0];
 };
 
 
@@ -352,28 +354,9 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
     this.drawControl = new L.Control.Draw(drawOptions);
     this.map.addControl(this.drawControl);
 
-    //// special case for multipart geometries coming back from Network Catchment Trace
-    //if (this.networkTraceDelineationFeatureCollection) {
-
-    //    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-    //        this.map.removeLayer(this.selectedBMPDelineationLayer);
-    //    }
-
-    //    L.geoJSON(this.networkTraceDelineationFeatureCollection,
-    //        {
-    //            onEachFeature: function (feature, layer) {
-    //                if (layer.getLayers) {
-    //                    layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-    //                } else {
-    //                    editableFeatureGroup.addLayer(layer);
-    //                }
-    //            }
-    //        });
-
-    //}
-
-    //else
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+        debugger;
+
         this.map.removeLayer(this.selectedBMPDelineationLayer);
 
         var selectedBMPDelineationLayers = this.selectedBMPDelineationLayer.getLayers();
@@ -501,7 +484,8 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     // had better be only one feature
     var persistableFeatureJson;
     if (this.editableFeatureGroup.persist) {
-        persistableFeatureJson = this.editableFeatureGroup.toGeoJSON();
+        // using precision of 14 to avoid accidentally creating invalid geometries
+        persistableFeatureJson = this.editableFeatureGroup.toGeoJSON(LEAFLET_TO_GEO_JSON_PRECISION);
     } else {
         persistableFeatureJson = this.selectedBMPDelineationLayer.getLayers()[0].feature;
     }
@@ -645,18 +629,12 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.treatmentBMPLayer.off("click");
     this.displayLoading();
 
-
     var someWfsParams = {
         cql_filter: 'intersects(CatchmentGeometry, POINT(' + latLng.lat + ' ' + latLng.lng + '))'
     };
     var wfsAjax = this.selectFeatureByWfs("OCStormwater:NetworkCatchments", someWfsParams);
 
     var self = this;
-var wmsAjax=    this.getFeatureInfo(
-        "OCStormwater:NetworkCatchments",
-        [latLng.lng, latLng.lat]
-    );
-    
     
     wfsAjax.then(function (response) {
             if (response.features[0]) {
