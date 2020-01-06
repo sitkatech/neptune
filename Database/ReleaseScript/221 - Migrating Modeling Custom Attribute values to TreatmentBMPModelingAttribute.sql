@@ -511,7 +511,7 @@ join dbo.CustomAttributeValue cav on ca.CustomAttributeID = cav.CustomAttributeI
 where len(cav.AttributeValue) > 0 
 and cat.CustomAttributeTypeName in
 (
-'Estimated Diverted Flow'
+'Treatment Flowrate'
 )
 and tbmt.TreatmentBMPModelingTypeDisplayName in
 (

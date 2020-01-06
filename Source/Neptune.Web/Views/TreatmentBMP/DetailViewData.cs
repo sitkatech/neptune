@@ -107,6 +107,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForWaterQualityDetentionVolume { get; }
         public Models.FieldDefinition FieldDefinitionForWettedFootprint { get; }
         public Models.FieldDefinition FieldDefinitionForWinterHarvestedWaterDemand { get; }
+        public bool HasModelingAttributes { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
@@ -162,6 +163,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             HRURefreshUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(
                     x => x.RefreshHRUCharacteristics(treatmentBMP));
+
+            HasModelingAttributes = TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null;
 
             FieldDefinitionForAverageDivertedFlowrate = Models.FieldDefinition.AverageDivertedFlowrate;
             FieldDefinitionForAverageTreatmentFlowrate = Models.FieldDefinition.AverageTreatmentFlowrate;

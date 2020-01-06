@@ -290,11 +290,10 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Total Drawdown Time", TotalDrawdownTime);
                         break;
                     case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
-                        ValidateFieldIsRequired(validationResults, "Design Dry Weather Treatment Capacity",
-                            DesignDryWeatherTreatmentCapacity);
-                        ValidateFieldIsRequired(validationResults, "Average Treatment Flowrate",
-                            AverageTreatmentFlowrate);
-                        ValidateFieldIsRequired(validationResults, "Months of Operation", MonthsofOperation);
+                        if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)
+                        {
+                            validationResults.Add(new ValidationResult("At least one of either Design Dry Weather Treatment Capacity or Average Treatment Flowrate is required"));
+                        }
                         break;
                     case TreatmentBMPModelingTypeEnum.Drywell:
                         ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
@@ -310,7 +309,10 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
                         break;
                     case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
-                        ValidateFieldIsRequired(validationResults, "Months of Operation", MonthsofOperation);
+                        if (!DesignLowFlowDiversionCapacity.HasValue && !AverageDivertedFlowrate.HasValue)
+                        {
+                            validationResults.Add(new ValidationResult("At least one of either Design Low Flow Diversion Capacity or Average Diverted Flowrate is required"));
+                        }
                         break;
                     case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                     case TreatmentBMPModelingTypeEnum.VegetatedSwale:
