@@ -77,7 +77,7 @@ VALUES
 (73, N'ImperviousArea', N'Impervious Area', N'', 1),
 (74, N'GrossArea', N'Gross Area', N'', 1),
 (75, N'LandUseStatistics', N'Land Use Statistics', N'', 1),
-(76, N'NetworkCatchment', N'Network Catchment', N'', 1),
+(76, N'RegionalSubbasin', N'Regional Subbasin', N'', 1),
 (77, 'Average Diverted Flowrate', 'Average Diverted Flowrate', 'Average actual diverted flowrate over the months of operation.', 1),
 (78, 'Average Treatment Flowrate', 'Average Treatment Flowrate', 'Average actual treated flowrate over the months of operation.', 1),
 (79, 'Design Dry Weather Treatment Capacity', 'Design Dry Weather Treatment Capacity', 'Flow treatment capacity of the BMP.', 1),

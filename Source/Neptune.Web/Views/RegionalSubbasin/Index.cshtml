@@ -3,31 +3,31 @@
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@inherits Neptune.Web.Views.NetworkCatchment.Index
+@inherits Neptune.Web.Views.RegionalSubbasin.Index
 
 @section JavascriptAndStylesContent
 {
     @{MapJavascriptIncludes.RenderPartialView(Html);}
     <script type="text/javascript">
-        var networkCatchmentMap;
+        var regionalSubbasinMap;
         var selectedFeature;
         jQuery(function() {
             var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
             var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
-            var networkCatchmentLayerName = @Html.Raw(ViewDataTyped.NetworkCatchmentLayerName.ToJS());
+            var regionalSubbasinLayerName = @Html.Raw(ViewDataTyped.RegionalSubbasinLayerName.ToJS());
 
-            networkCatchmentMap = new NeptuneMaps.Map(mapInitJson, "Terrain", geoserverUrl);
+            regionalSubbasinMap = new NeptuneMaps.Map(mapInitJson, "Terrain", geoserverUrl);
 
-            networkCatchmentMap.wmsParams = networkCatchmentMap.createWmsParamsWithLayerName(networkCatchmentLayerName);
-            networkCatchmentMap.wfsParams = networkCatchmentMap.createWfsParamsWithLayerName(networkCatchmentLayerName);
+            regionalSubbasinMap.wmsParams = regionalSubbasinMap.createWmsParamsWithLayerName(regionalSubbasinLayerName);
+            regionalSubbasinMap.wfsParams = regionalSubbasinMap.createWfsParamsWithLayerName(regionalSubbasinLayerName);
 
 
-            var networkCatchmentLayer =
-                networkCatchmentMap.addWmsLayer(networkCatchmentLayerName,
-                    "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
+            var regionalSubbasinLayer =
+                regionalSubbasinMap.addWmsLayer(regionalSubbasinLayerName,
+                    "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
                     { styles: "network_catchment_wide"}, false);
 
-            networkCatchmentMap.map.on('click', selectCatchment);
+            regionalSubbasinMap.map.on('click', selectCatchment);
         });
 
         var selectCatchment = function(evt) {
@@ -39,13 +39,13 @@
 
         var selectCatchmentByWFS = function(customParams, latlng) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty(selectedFeature)) {
-                networkCatchmentMap.map.removeLayer(selectedFeature);
-                networkCatchmentMap.layerControl.removeLayer(selectedFeature);
+                regionalSubbasinMap.map.removeLayer(selectedFeature);
+                regionalSubbasinMap.layerControl.removeLayer(selectedFeature);
             }
                 
-            var parameters = L.Util.extend(networkCatchmentMap.wfsParams, customParams);
+            var parameters = L.Util.extend(regionalSubbasinMap.wfsParams, customParams);
             SitkaAjax.ajax({
-                    url: networkCatchmentMap.geoserverUrlOWS + L.Util.getParamString(parameters),
+                    url: regionalSubbasinMap.geoserverUrlOWS + L.Util.getParamString(parameters),
                     dataType: 'json',
                     jsonpCallback: 'getJson'
                 },
@@ -60,8 +60,8 @@
                         var content = '<dl>' +
                             '<dt>Catchment ID and Detail Link</dt>' +
                             '<dd>' +
-                            "<a href='/NetworkCatchment/Detail/" +
-                            properties.NetworkCatchmentID +
+                            "<a href='/RegionalSubbasin/Detail/" +
+                            properties.RegionalSubbasinID +
                             "'>" +
                             properties.OCSurveyCatchmentID +
                             "</a>" +
@@ -83,7 +83,7 @@
                         var popup = L.popup()
                             .setLatLng(latlng)
                             .setContent(content)
-                            .openOn(networkCatchmentMap.map);
+                            .openOn(regionalSubbasinMap.map);
                     }
                 });
         };

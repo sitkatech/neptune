@@ -15,9 +15,9 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
-    class NetworkCatchmentRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
+    class RegionalSubbasinRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
-        public NetworkCatchmentRefreshScheduledBackgroundJob(int currentPersonPersonID)
+        public RegionalSubbasinRefreshScheduledBackgroundJob(int currentPersonPersonID)
         {
             PersonID = currentPersonPersonID;
         }
@@ -33,12 +33,12 @@ namespace Neptune.Web.ScheduledJobs
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person)
         {
-            dbContext.NetworkCatchmentStagings.DeleteNetworkCatchmentStaging(dbContext.NetworkCatchmentStagings.ToList());
+            dbContext.RegionalSubbasinStagings.DeleteRegionalSubbasinStaging(dbContext.RegionalSubbasinStagings.ToList());
             dbContext.SaveChanges(person);
             
-            var newNetworkCatchmentFeatureCollection = RetrieveFeatureCollectionFromArcServer();
-            ThrowIfCatchIdnNotUnique(newNetworkCatchmentFeatureCollection);
-            StageFeatureCollection(newNetworkCatchmentFeatureCollection);
+            var newRegionalSubbasinFeatureCollection = RetrieveFeatureCollectionFromArcServer();
+            ThrowIfCatchIdnNotUnique(newRegionalSubbasinFeatureCollection);
+            StageFeatureCollection(newRegionalSubbasinFeatureCollection);
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
         }
@@ -47,15 +47,15 @@ namespace Neptune.Web.ScheduledJobs
         {
             // MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
             dbContext.Database.CommandTimeout = 30000;
-            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateNetworkCatchmentLiveFromStaging");
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
 
             // unfortunately, now we have to create the catchment geometries in 4326, since SQL isn't capable of doing this.
-            dbContext.NetworkCatchments.Load();
-            foreach (var networkCatchment in dbContext.NetworkCatchments)
+            dbContext.RegionalSubbasins.Load();
+            foreach (var regionalSubbasin in dbContext.RegionalSubbasins)
             {
-                networkCatchment.CatchmentGeometry4326 =
+                regionalSubbasin.CatchmentGeometry4326 =
                     CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(
-                        networkCatchment.CatchmentGeometry);
+                        regionalSubbasin.CatchmentGeometry);
             }
 
 
@@ -66,42 +66,42 @@ namespace Neptune.Web.ScheduledJobs
         private static void ThrowIfDownstreamInvalid(DatabaseEntities dbContext)
         {
             // this is done against the staged feature collection because it's easier to implement in LINQ than against the raw JSON response
-            var ocSurveyCatchmentIDs = dbContext.NetworkCatchmentStagings.Select(x => x.OCSurveyCatchmentID).ToList();
+            var ocSurveyCatchmentIDs = dbContext.RegionalSubbasinStagings.Select(x => x.OCSurveyCatchmentID).ToList();
 
             dbContext.Database.CommandTimeout = 30000;
-            var stagedNetworkCatchmentsWithBrokenDownstreamRel = dbContext.NetworkCatchmentStagings.Where(x =>
+            var stagedRegionalSubbasinsWithBrokenDownstreamRel = dbContext.RegionalSubbasinStagings.Where(x =>
                     x.OCSurveyDownstreamCatchmentID != 0 && !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID))
                 .ToList();
 
-            if (stagedNetworkCatchmentsWithBrokenDownstreamRel.Any())
+            if (stagedRegionalSubbasinsWithBrokenDownstreamRel.Any())
             {
                 throw new RemoteServiceException(
-                    $"The Network Catchment service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedNetworkCatchmentsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
+                    $"The Regional Subbasin service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedRegionalSubbasinsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
             }
         }
 
-        private static void StageFeatureCollection(FeatureCollection newNetworkCatchmentFeatureCollection)
+        private static void StageFeatureCollection(FeatureCollection newRegionalSubbasinFeatureCollection)
         {
-            var jsonFeatureCollection = JsonConvert.SerializeObject(newNetworkCatchmentFeatureCollection);
+            var jsonFeatureCollection = JsonConvert.SerializeObject(newRegionalSubbasinFeatureCollection);
 
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
             ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
-                NeptuneWebConfiguration.DatabaseConnectionString, "NetworkCatchmentStaging",
+                NeptuneWebConfiguration.DatabaseConnectionString, "RegionalSubbasinStaging",
                 "CatchIDN as OCSurveyCatchmentID, DwnCatchIDN as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
-        private static void ThrowIfCatchIdnNotUnique(FeatureCollection newNetworkCatchmentFeatureCollection)
+        private static void ThrowIfCatchIdnNotUnique(FeatureCollection newRegionalSubbasinFeatureCollection)
         {
-            var catchIdnsThatAreNotUnique = newNetworkCatchmentFeatureCollection.Features
+            var catchIdnsThatAreNotUnique = newRegionalSubbasinFeatureCollection.Features
                 .GroupBy(x => x.Properties["CatchIDN"]).Where(x => x.Count() > 1).Select(x => int.Parse(x.Key.ToString()))
                 .ToList();
 
             if (catchIdnsThatAreNotUnique.Any())
             {
                 throw new RemoteServiceException(
-                    $"The Network Catchment service returned an invalid collection. The following Catchment IDs are duplicated:\n{string.Join(", ", catchIdnsThatAreNotUnique)}");
+                    $"The Regional Subbasin service returned an invalid collection. The following Catchment IDs are duplicated:\n{string.Join(", ", catchIdnsThatAreNotUnique)}");
             }
         }
 
@@ -151,7 +151,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (TaskCanceledException tce)
                     {
                         throw new RemoteServiceException(
-                            $"The Network Catchment service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            $"The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             tce);
                     }
 
@@ -163,7 +163,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (JsonReaderException jre)
                     {
                         throw new RemoteServiceException(
-                            $"The Network Catchment service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            $"The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             jre);
                     }
 

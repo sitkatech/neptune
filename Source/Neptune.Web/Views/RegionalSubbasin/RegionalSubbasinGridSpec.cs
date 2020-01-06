@@ -29,11 +29,11 @@ using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 
-namespace Neptune.Web.Views.NetworkCatchment
+namespace Neptune.Web.Views.RegionalSubbasin
 {
-    public class NetworkCatchmentGridSpec : GridSpec<Models.NetworkCatchment>
+    public class RegionalSubbasinGridSpec : GridSpec<Models.RegionalSubbasin>
     {
-        public NetworkCatchmentGridSpec()
+        public RegionalSubbasinGridSpec()
         {
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
 

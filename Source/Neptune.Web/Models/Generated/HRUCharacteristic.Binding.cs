@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID, int? networkCatchmentID, double area, int hRUCharacteristicLandUseCodeID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, double area, int hRUCharacteristicLandUseCodeID) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
@@ -39,7 +39,7 @@ namespace Neptune.Web.Models
             this.LastUpdated = lastUpdated;
             this.TreatmentBMPID = treatmentBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
-            this.NetworkCatchmentID = networkCatchmentID;
+            this.RegionalSubbasinID = regionalSubbasinID;
             this.Area = area;
             this.HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCodeID;
         }
@@ -123,7 +123,7 @@ namespace Neptune.Web.Models
         public DateTime LastUpdated { get; set; }
         public int? TreatmentBMPID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
-        public int? NetworkCatchmentID { get; set; }
+        public int? RegionalSubbasinID { get; set; }
         public double Area { get; set; }
         public int HRUCharacteristicLandUseCodeID { get; set; }
         [NotMapped]
@@ -131,7 +131,7 @@ namespace Neptune.Web.Models
 
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        public virtual NetworkCatchment NetworkCatchment { get; set; }
+        public virtual RegionalSubbasin RegionalSubbasin { get; set; }
         public HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode { get { return HRUCharacteristicLandUseCode.AllLookupDictionary[HRUCharacteristicLandUseCodeID]; } }
 
         public static class FieldLengths

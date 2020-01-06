@@ -9,51 +9,51 @@ using System.Web;
 
 namespace Neptune.Web.Models
 {
-    public static class NetworkCatchmentModelExtensions
+    public static class RegionalSubbasinModelExtensions
     {
         private static readonly UrlTemplate<int> DetailUrlTemplate =
-            new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(c =>
+            new UrlTemplate<int>(SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(c =>
                 c.Detail(UrlTemplate.Parameter1Int)));
 
-        public static string GetDetailUrl(this NetworkCatchment networkCatchment)
+        public static string GetDetailUrl(this RegionalSubbasin regionalSubbasin)
         {
-            return DetailUrlTemplate.ParameterReplace(networkCatchment.NetworkCatchmentID);
+            return DetailUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID);
         }
 
-        public static HtmlString GetDisplayNameAsUrl(this NetworkCatchment networkCatchment)
+        public static HtmlString GetDisplayNameAsUrl(this RegionalSubbasin regionalSubbasin)
         {
 
-            return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(networkCatchment.NetworkCatchmentID)}'>{networkCatchment.Watershed} - {networkCatchment.DrainID}</a>"); 
+            return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID)}'>{regionalSubbasin.Watershed} - {regionalSubbasin.DrainID}</a>"); 
         }
 
-        public static List<int> TraceUpstreamCatchmentsReturnIDList(this NetworkCatchment networkCatchment)
+        public static List<int> TraceUpstreamCatchmentsReturnIDList(this RegionalSubbasin regionalSubbasin)
         {
             var idList = new List<int>();
 
-            var lookingAt = networkCatchment.GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment();
+            var lookingAt = regionalSubbasin.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment();
             while (lookingAt.Any())
             {
-                var ints = lookingAt.Select(x => x.NetworkCatchmentID);
+                var ints = lookingAt.Select(x => x.RegionalSubbasinID);
                 idList.AddRange(ints);
                 lookingAt = lookingAt.SelectMany(x =>
-                    x.GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment()).ToList();
+                    x.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment()).ToList();
             }
 
             return idList;
         }
 
-        public static List<NetworkCatchment> GetNetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment(
-            this NetworkCatchment networkCatchment)
+        public static List<RegionalSubbasin> GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(
+            this RegionalSubbasin regionalSubbasin)
         {
-            return HttpRequestStorage.DatabaseEntities.NetworkCatchments
-                .Where(x => x.OCSurveyDownstreamCatchmentID == networkCatchment.OCSurveyCatchmentID).ToList();
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+                .Where(x => x.OCSurveyDownstreamCatchmentID == regionalSubbasin.OCSurveyCatchmentID).ToList();
         }
 
-        public static FeatureCollection TraceBackboneDownstream(this Neighborhood networkCatchment)
+        public static FeatureCollection TraceBackboneDownstream(this Neighborhood regionalSubbasin)
         {
             var backboneDownstream = new List<BackboneSegment>();
 
-            var lookingAt = networkCatchment.BackboneSegments;
+            var lookingAt = regionalSubbasin.BackboneSegments;
 
             while (lookingAt.Any())
             {
@@ -73,11 +73,11 @@ namespace Neptune.Web.Models
             return featureCollection;
         }
 
-        public static FeatureCollection GetStormshedViaBackboneTrace(this Neighborhood networkCatchment)
+        public static FeatureCollection GetStormshedViaBackboneTrace(this Neighborhood regionalSubbasin)
         {
             var backboneAccumulated = new List<BackboneSegment>();
 
-            var startingPoint = networkCatchment.BackboneSegments;
+            var startingPoint = regionalSubbasin.BackboneSegments;
 
             var lookingAt = startingPoint.Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).ToList();
 
@@ -97,10 +97,10 @@ namespace Neptune.Web.Models
                 lookingAt = upFromHere.Union(downFromHere).ToList();
             }
 
-            var networkCatchmentsInStormshed = backboneAccumulated.Select(x=>x.Neighborhood).Distinct();
+            var regionalSubbasinsInStormshed = backboneAccumulated.Select(x=>x.Neighborhood).Distinct();
 
             var featureCollection = new FeatureCollection();
-            featureCollection.Features.AddRange(networkCatchmentsInStormshed.Select(x =>
+            featureCollection.Features.AddRange(regionalSubbasinsInStormshed.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.NeighborhoodGeometry);
                 feature.Properties.Add("NeighborhoodID", x.NeighborhoodID);

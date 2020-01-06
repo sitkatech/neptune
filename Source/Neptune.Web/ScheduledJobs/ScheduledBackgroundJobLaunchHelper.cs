@@ -14,10 +14,10 @@
             landUseBlockUploadBackgroundJob.RunJob();
         }
 
-        public static void RunNetworkCatchmentRefreshBackgroundJob(int personID)
+        public static void RunRegionalSubbasinRefreshBackgroundJob(int personID)
         {
-            var networkCatchmentRefreshScheduledBackgroundJob = new NetworkCatchmentRefreshScheduledBackgroundJob(personID);
-            networkCatchmentRefreshScheduledBackgroundJob.RunJob();
+            var regionalSubbasinRefreshScheduledBackgroundJob = new RegionalSubbasinRefreshScheduledBackgroundJob(personID);
+            regionalSubbasinRefreshScheduledBackgroundJob.RunJob();
         }
 
         public static void RunDelineationDiscrepancyCheckerJob()

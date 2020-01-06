@@ -1,10 +1,10 @@
-drop procedure if exists dbo.pUpdateNetworkCatchmentLiveFromStaging
+drop procedure if exists dbo.pUpdateRegionalSubbasinLiveFromStaging
 GO
 
-Create Procedure dbo.pUpdateNetworkCatchmentLiveFromStaging
+Create Procedure dbo.pUpdateRegionalSubbasinLiveFromStaging
 As
 
-Merge NetworkCatchment t Using NetworkCatchmentStaging s
+Merge RegionalSubbasin t Using RegionalSubbasinStaging s
 	on (t.OCSurveyCatchmentID = s.OCSurveyCatchmentID)
 When Matched
 	Then Update set

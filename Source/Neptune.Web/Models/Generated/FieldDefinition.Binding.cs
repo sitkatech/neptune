@@ -92,7 +92,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionImperviousArea ImperviousArea = FieldDefinitionImperviousArea.Instance;
         public static readonly FieldDefinitionGrossArea GrossArea = FieldDefinitionGrossArea.Instance;
         public static readonly FieldDefinitionLandUseStatistics LandUseStatistics = FieldDefinitionLandUseStatistics.Instance;
-        public static readonly FieldDefinitionNetworkCatchment NetworkCatchment = FieldDefinitionNetworkCatchment.Instance;
+        public static readonly FieldDefinitionRegionalSubbasin RegionalSubbasin = FieldDefinitionRegionalSubbasin.Instance;
         public static readonly FieldDefinitionAverageDivertedFlowrate AverageDivertedFlowrate = FieldDefinitionAverageDivertedFlowrate.Instance;
         public static readonly FieldDefinitionAverageTreatmentFlowrate AverageTreatmentFlowrate = FieldDefinitionAverageTreatmentFlowrate.Instance;
         public static readonly FieldDefinitionDesignDryWeatherTreatmentCapacity DesignDryWeatherTreatmentCapacity = FieldDefinitionDesignDryWeatherTreatmentCapacity.Instance;
@@ -131,7 +131,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, NetworkCatchment, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeforPermanentPool, DiversionRate, DrawdownTimeforWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsofOperation, PermanentPoolorWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeofConcentration, TotalDrawdownTime, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeforPermanentPool, DiversionRate, DrawdownTimeforWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsofOperation, PermanentPoolorWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeofConcentration, TotalDrawdownTime, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -317,8 +317,6 @@ namespace Neptune.Web.Models
                     return MinimumValueOfEachObservation;
                 case FieldDefinitionEnum.MonthsofOperation:
                     return MonthsofOperation;
-                case FieldDefinitionEnum.NetworkCatchment:
-                    return NetworkCatchment;
                 case FieldDefinitionEnum.ObservationCollectionMethod:
                     return ObservationCollectionMethod;
                 case FieldDefinitionEnum.ObservationScore:
@@ -355,6 +353,8 @@ namespace Neptune.Web.Models
                     return PropertiesToObserve;
                 case FieldDefinitionEnum.ReceivesSystemCommunications:
                     return ReceivesSystemCommunications;
+                case FieldDefinitionEnum.RegionalSubbasin:
+                    return RegionalSubbasin;
                 case FieldDefinitionEnum.RequiredFieldVisitsPerYear:
                     return RequiredFieldVisitsPerYear;
                 case FieldDefinitionEnum.RequiredLifespanOfInstallation:
@@ -501,7 +501,7 @@ namespace Neptune.Web.Models
         ImperviousArea = 73,
         GrossArea = 74,
         LandUseStatistics = 75,
-        NetworkCatchment = 76,
+        RegionalSubbasin = 76,
         AverageDivertedFlowrate = 77,
         AverageTreatmentFlowrate = 78,
         DesignDryWeatherTreatmentCapacity = 79,
@@ -977,10 +977,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionLandUseStatistics Instance = new FieldDefinitionLandUseStatistics(75, @"LandUseStatistics", @"Land Use Statistics", @"", true);
     }
 
-    public partial class FieldDefinitionNetworkCatchment : FieldDefinition
+    public partial class FieldDefinitionRegionalSubbasin : FieldDefinition
     {
-        private FieldDefinitionNetworkCatchment(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionNetworkCatchment Instance = new FieldDefinitionNetworkCatchment(76, @"NetworkCatchment", @"Network Catchment", @"", true);
+        private FieldDefinitionRegionalSubbasin(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionRegionalSubbasin Instance = new FieldDefinitionRegionalSubbasin(76, @"RegionalSubbasin", @"Regional Subbasin", @"", true);
     }
 
     public partial class FieldDefinitionAverageDivertedFlowrate : FieldDefinition

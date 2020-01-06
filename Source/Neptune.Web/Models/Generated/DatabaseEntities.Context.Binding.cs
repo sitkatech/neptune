@@ -61,8 +61,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
-            modelBuilder.Configurations.Add(new NetworkCatchmentConfiguration());
-            modelBuilder.Configurations.Add(new NetworkCatchmentStagingConfiguration());
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentAreaConfiguration());
@@ -75,6 +73,8 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
+            modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
+            modelBuilder.Configurations.Add(new RegionalSubbasinStagingConfiguration());
             modelBuilder.Configurations.Add(new SourceControlBMPConfiguration());
             modelBuilder.Configurations.Add(new SourceControlBMPAttributeConfiguration());
             modelBuilder.Configurations.Add(new SourceControlBMPAttributeCategoryConfiguration());
@@ -145,8 +145,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
-        public virtual DbSet<NetworkCatchment> NetworkCatchments { get; set; }
-        public virtual DbSet<NetworkCatchmentStaging> NetworkCatchmentStagings { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
@@ -159,6 +157,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
+        public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
+        public virtual DbSet<RegionalSubbasinStaging> RegionalSubbasinStagings { get; set; }
         public virtual DbSet<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get; set; }
         public virtual DbSet<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
         public virtual DbSet<SourceControlBMP> SourceControlBMPs { get; set; }
@@ -387,12 +387,6 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(neptunePageType, "NeptunePageType", primaryKey);
                     return neptunePageType;
 
-                case "NetworkCatchment":
-                    return NetworkCatchments.GetNetworkCatchment(primaryKey);
-
-                case "NetworkCatchmentStaging":
-                    return NetworkCatchmentStagings.GetNetworkCatchmentStaging(primaryKey);
-
                 case "Notification":
                     return Notifications.GetNotification(primaryKey);
 
@@ -488,6 +482,12 @@ namespace Neptune.Web.Models
 
                 case "QuickBMP":
                     return QuickBMPs.GetQuickBMP(primaryKey);
+
+                case "RegionalSubbasin":
+                    return RegionalSubbasins.GetRegionalSubbasin(primaryKey);
+
+                case "RegionalSubbasinStaging":
+                    return RegionalSubbasinStagings.GetRegionalSubbasinStaging(primaryKey);
 
                 case "Role":
                     var role = Role.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

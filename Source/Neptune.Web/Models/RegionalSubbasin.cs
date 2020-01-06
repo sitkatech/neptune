@@ -5,7 +5,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public partial class NetworkCatchment: IHaveHRUCharacteristics, IAuditableEntity
+    public partial class RegionalSubbasin: IHaveHRUCharacteristics, IAuditableEntity
     {
         public DbGeometry GetCatchmentGeometry()
         {
@@ -14,13 +14,13 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString()
         {
-            return $"{Watershed} {DrainID}: {NetworkCatchmentID}";
+            return $"{Watershed} {DrainID}: {RegionalSubbasinID}";
             
         }
 
-        public NetworkCatchment GetOCSurveyDownstreamCatchment()
+        public RegionalSubbasin GetOCSurveyDownstreamCatchment()
         {
-            return HttpRequestStorage.DatabaseEntities.NetworkCatchments.Single(x =>
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Single(x =>
                 x.OCSurveyCatchmentID == OCSurveyDownstreamCatchmentID);
         }
     }

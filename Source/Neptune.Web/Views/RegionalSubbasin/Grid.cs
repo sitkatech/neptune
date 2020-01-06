@@ -1,6 +1,6 @@
 ﻿using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.NetworkCatchment
+namespace Neptune.Web.Views.RegionalSubbasin
 {
     public abstract class Grid : TypedWebViewPage<GridViewData>
     {

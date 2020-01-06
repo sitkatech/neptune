@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[NetworkCatchmentStaging]
+//  Source Table: [dbo].[RegionalSubbasinStaging]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[NetworkCatchmentStaging] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[NetworkCatchmentStaging]")]
-    public partial class NetworkCatchmentStaging : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[RegionalSubbasinStaging] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[RegionalSubbasinStaging]")]
+    public partial class RegionalSubbasinStaging : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected NetworkCatchmentStaging()
+        protected RegionalSubbasinStaging()
         {
 
         }
@@ -30,9 +30,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchmentStaging(int networkCatchmentStagingID, string drainID, string watershed, DbGeometry catchmentGeometry, int? oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID) : this()
+        public RegionalSubbasinStaging(int regionalSubbasinStagingID, string drainID, string watershed, DbGeometry catchmentGeometry, int? oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID) : this()
         {
-            this.NetworkCatchmentStagingID = networkCatchmentStagingID;
+            this.RegionalSubbasinStagingID = regionalSubbasinStagingID;
             this.DrainID = drainID;
             this.Watershed = watershed;
             this.CatchmentGeometry = catchmentGeometry;
@@ -45,9 +45,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static NetworkCatchmentStaging CreateNewBlank()
+        public static RegionalSubbasinStaging CreateNewBlank()
         {
-            return new NetworkCatchmentStaging();
+            return new RegionalSubbasinStaging();
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(NetworkCatchmentStaging).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasinStaging).Name};
 
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.NetworkCatchmentStagings.Remove(this);
+            dbContext.RegionalSubbasinStagings.Remove(this);
         }
         
         /// <summary>
@@ -83,14 +83,14 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int NetworkCatchmentStagingID { get; set; }
+        public int RegionalSubbasinStagingID { get; set; }
         public string DrainID { get; set; }
         public string Watershed { get; set; }
         public DbGeometry CatchmentGeometry { get; set; }
         public int? OCSurveyCatchmentID { get; set; }
         public int? OCSurveyDownstreamCatchmentID { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return NetworkCatchmentStagingID; } set { NetworkCatchmentStagingID = value; } }
+        public int PrimaryKey { get { return RegionalSubbasinStagingID; } set { RegionalSubbasinStagingID = value; } }
 
 
 

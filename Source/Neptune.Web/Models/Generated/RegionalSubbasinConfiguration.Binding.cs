@@ -1,21 +1,21 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[NetworkCatchment]
+//  Source Table: [dbo].[RegionalSubbasin]
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Neptune.Web.Models
 {
-    public class NetworkCatchmentConfiguration : EntityTypeConfiguration<NetworkCatchment>
+    public class RegionalSubbasinConfiguration : EntityTypeConfiguration<RegionalSubbasin>
     {
-        public NetworkCatchmentConfiguration() : this("dbo"){}
+        public RegionalSubbasinConfiguration() : this("dbo"){}
 
-        public NetworkCatchmentConfiguration(string schema)
+        public RegionalSubbasinConfiguration(string schema)
         {
-            ToTable("NetworkCatchment", schema);
-            HasKey(x => x.NetworkCatchmentID);
-            Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            ToTable("RegionalSubbasin", schema);
+            HasKey(x => x.RegionalSubbasinID);
+            Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.DrainID).HasColumnName(@"DrainID").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(10);
             Property(x => x.Watershed).HasColumnName(@"Watershed").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.CatchmentGeometry).HasColumnName(@"CatchmentGeometry").HasColumnType("geometry").IsRequired();
@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
             Property(x => x.LastUpdate).HasColumnName(@"LastUpdate").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
-            HasOptional(a => a.OCSurveyDownstreamCatchment).WithMany(b => b.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment).HasForeignKey(c => c.OCSurveyDownstreamCatchmentID).WillCascadeOnDelete(false); // FK_NetworkCatchment_NetworkCatchment_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID
+            HasOptional(a => a.OCSurveyDownstreamCatchment).WithMany(b => b.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment).HasForeignKey(c => c.OCSurveyDownstreamCatchmentID).WillCascadeOnDelete(false); // FK_RegionalSubbasin_RegionalSubbasin_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID
         }
     }
 }

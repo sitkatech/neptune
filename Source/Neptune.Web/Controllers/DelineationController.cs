@@ -73,13 +73,13 @@ namespace Neptune.Web.Controllers
         public ViewResult DelineationReconciliationReport()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationReconciliationReport);
-            var networkCatchmentsLastUpdated = HttpRequestStorage.DatabaseEntities.NetworkCatchments.Max(x => x.LastUpdate);
-            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, networkCatchmentsLastUpdated);
+            var regionalSubbasinsLastUpdated = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Max(x => x.LastUpdate);
+            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, regionalSubbasinsLastUpdated);
             return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<Delineation> DelineationsMisalignedWithNetworkCatchmentsGridJsonData()
+        public GridJsonNetJObjectResult<Delineation> DelineationsMisalignedWithRegionalSubbasinsGridJsonData()
         {
             var gridSpec = new MisalignedDelineationGridSpec();
             var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();

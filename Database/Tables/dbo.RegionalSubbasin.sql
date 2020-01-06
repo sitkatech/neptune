@@ -2,8 +2,8 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[NetworkCatchment](
-	[NetworkCatchmentID] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].[RegionalSubbasin](
+	[RegionalSubbasinID] [int] IDENTITY(1,1) NOT NULL,
 	[DrainID] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[Watershed] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[CatchmentGeometry] [geometry] NOT NULL,
@@ -11,26 +11,26 @@ CREATE TABLE [dbo].[NetworkCatchment](
 	[OCSurveyDownstreamCatchmentID] [int] NULL,
 	[CatchmentGeometry4326] [geometry] NULL,
 	[LastUpdate] [datetime] NULL,
- CONSTRAINT [PK_NetworkCatchment_NetworkCatchmentID] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_RegionalSubbasin_RegionalSubbasinID] PRIMARY KEY CLUSTERED 
 (
-	[NetworkCatchmentID] ASC
+	[RegionalSubbasinID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_NetworkCatchment_OCSurveyCatchmentID] UNIQUE NONCLUSTERED 
+ CONSTRAINT [AK_RegionalSubbasin_OCSurveyCatchmentID] UNIQUE NONCLUSTERED 
 (
 	[OCSurveyCatchmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-CREATE NONCLUSTERED INDEX [IX_NetworkCatchment_OCSurveyDownstreamCatchmentID] ON [dbo].[NetworkCatchment]
+CREATE NONCLUSTERED INDEX [IX_RegionalSubbasin_OCSurveyDownstreamCatchmentID] ON [dbo].[RegionalSubbasin]
 (
 	[OCSurveyDownstreamCatchmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[NetworkCatchment]  WITH CHECK ADD  CONSTRAINT [FK_NetworkCatchment_NetworkCatchment_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID] FOREIGN KEY([OCSurveyDownstreamCatchmentID])
-REFERENCES [dbo].[NetworkCatchment] ([OCSurveyCatchmentID])
+ALTER TABLE [dbo].[RegionalSubbasin]  WITH CHECK ADD  CONSTRAINT [FK_RegionalSubbasin_RegionalSubbasin_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID] FOREIGN KEY([OCSurveyDownstreamCatchmentID])
+REFERENCES [dbo].[RegionalSubbasin] ([OCSurveyCatchmentID])
 GO
-ALTER TABLE [dbo].[NetworkCatchment] CHECK CONSTRAINT [FK_NetworkCatchment_NetworkCatchment_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID]
+ALTER TABLE [dbo].[RegionalSubbasin] CHECK CONSTRAINT [FK_RegionalSubbasin_RegionalSubbasin_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID]
 GO
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON
@@ -41,7 +41,7 @@ SET ANSI_WARNINGS ON
 SET NUMERIC_ROUNDABORT OFF
 
 GO
-CREATE SPATIAL INDEX [SPATIAL_NetworkCatchment_CatchmentGeometry] ON [dbo].[NetworkCatchment]
+CREATE SPATIAL INDEX [SPATIAL_RegionalSubbasin_CatchmentGeometry] ON [dbo].[RegionalSubbasin]
 (
 	[CatchmentGeometry]
 )USING  GEOMETRY_AUTO_GRID 

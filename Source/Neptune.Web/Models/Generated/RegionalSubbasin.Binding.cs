@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[NetworkCatchment]
+//  Source Table: [dbo].[RegionalSubbasin]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,25 +15,25 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[NetworkCatchment] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[NetworkCatchment]")]
-    public partial class NetworkCatchment : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[RegionalSubbasin] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[RegionalSubbasin]")]
+    public partial class RegionalSubbasin : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected NetworkCatchment()
+        protected RegionalSubbasin()
         {
             this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
-            this.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<NetworkCatchment>();
+            this.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<RegionalSubbasin>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326, DateTime? lastUpdate) : this()
+        public RegionalSubbasin(int regionalSubbasinID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326, DateTime? lastUpdate) : this()
         {
-            this.NetworkCatchmentID = networkCatchmentID;
+            this.RegionalSubbasinID = regionalSubbasinID;
             this.DrainID = drainID;
             this.Watershed = watershed;
             this.CatchmentGeometry = catchmentGeometry;
@@ -46,10 +46,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(DbGeometry catchmentGeometry, int oCSurveyCatchmentID) : this()
+        public RegionalSubbasin(DbGeometry catchmentGeometry, int oCSurveyCatchmentID) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.NetworkCatchmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.RegionalSubbasinID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.CatchmentGeometry = catchmentGeometry;
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
@@ -59,9 +59,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static NetworkCatchment CreateNewBlank()
+        public static RegionalSubbasin CreateNewBlank()
         {
-            return new NetworkCatchment(default(DbGeometry), default(int));
+            return new RegionalSubbasin(default(DbGeometry), default(int));
         }
 
         /// <summary>
@@ -70,13 +70,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return HRUCharacteristics.Any() || NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
+            return HRUCharacteristics.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(NetworkCatchment).Name, typeof(HRUCharacteristic).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(HRUCharacteristic).Name};
 
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.NetworkCatchments.Remove(this);
+            dbContext.RegionalSubbasins.Remove(this);
         }
         
         /// <summary>
@@ -106,14 +106,14 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
+            foreach(var x in RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
             {
                 x.DeleteFull(dbContext);
             }
         }
 
         [Key]
-        public int NetworkCatchmentID { get; set; }
+        public int RegionalSubbasinID { get; set; }
         public string DrainID { get; set; }
         public string Watershed { get; set; }
         public DbGeometry CatchmentGeometry { get; set; }
@@ -122,11 +122,11 @@ namespace Neptune.Web.Models
         public DbGeometry CatchmentGeometry4326 { get; set; }
         public DateTime? LastUpdate { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
+        public int PrimaryKey { get { return RegionalSubbasinID; } set { RegionalSubbasinID = value; } }
 
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
-        public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
-        public virtual NetworkCatchment OCSurveyDownstreamCatchment { get; set; }
+        public virtual ICollection<RegionalSubbasin> RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
+        public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
 
         public static class FieldLengths
         {

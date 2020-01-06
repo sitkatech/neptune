@@ -17,9 +17,9 @@ namespace Neptune.Web.Views.Delineation
         public string OverlappingTreatmentBMPsGridName { get; }
         public DelineationOverlapsDelineationGridSpec OverlappingTreatmentBMPsGridSpec { get; }
 
-        public DelineationReconciliationReportViewData(Person currentPerson, Models.NeptunePage neptunePage, DateTime? networkCatchmentsLastUpdated) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public DelineationReconciliationReportViewData(Person currentPerson, Models.NeptunePage neptunePage, DateTime? regionalSubbasinsLastUpdated) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            NetworkCatchmentsLastUpdated = networkCatchmentsLastUpdated.HasValue ? networkCatchmentsLastUpdated.ToStringDateTime() : "n/a";
+            RegionalSubbasinsLastUpdated = regionalSubbasinsLastUpdated.HasValue ? regionalSubbasinsLastUpdated.ToStringDateTime() : "n/a";
             EntityName = Models.FieldDefinition.Delineation.FieldDefinitionDisplayName;
             PageTitle = "Delineation Reconciliation";
 
@@ -27,7 +27,7 @@ namespace Neptune.Web.Views.Delineation
 
             GridSpec = new MisalignedDelineationGridSpec() { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
             GridName = "misalignedTreatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationsMisalignedWithNetworkCatchmentsGridJsonData());
+            GridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationsMisalignedWithRegionalSubbasinsGridJsonData());
             OverlappingTreatmentBMPsGridSpec = new DelineationOverlapsDelineationGridSpec() { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
             OverlappingTreatmentBMPsGridName = "overlappingTreatmentBMPsGrid";
             OverlappingTreatmentBMPsGridDataUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(j => j.DelineationsOverlappingEachOtherGridJsonData());
@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.Delineation
         }
 
         public bool HasManagePermission { get; }
-        public string NetworkCatchmentsLastUpdated { get; }
+        public string RegionalSubbasinsLastUpdated { get; }
         public string CheckForDiscrepanciesUrl { get; }
     }
 }
