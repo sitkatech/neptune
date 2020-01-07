@@ -420,50 +420,54 @@ and tbmt.TreatmentBMPModelingTypeDisplayName in
 )
 
 insert into dbo.TreatmentBMPOperationMonth(TreatmentBMPID, OperationMonth)
-select ca.TreatmentBMPID, om.OperationMonth
-from dbo.CustomAttribute ca
-join dbo.CustomAttributeType cat on ca.CustomAttributeTypeID = cat.CustomAttributeTypeID
-join dbo.TreatmentBMPType tbt on ca.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
-join dbo.TreatmentBMPModelingType tbmt on tbt.TreatmentBMPModelingTypeID = tbmt.TreatmentBMPModelingTypeID
-join dbo.TreatmentBMPModelingAttribute tma on ca.TreatmentBMPID = tma.TreatmentBMPID
-join dbo.CustomAttributeValue cav on ca.CustomAttributeID = cav.CustomAttributeID
-cross join
+select a.TreatmentBMPID, a.OperationMonth
+from
 (
-	select 1 as OperationMonth
-	union all
-	select 2 as OperationMonth
-	union all
-	select 3 as OperationMonth
-	union all
-	select 4 as OperationMonth
-	union all
-	select 5 as OperationMonth
-	union all
-	select 6 as OperationMonth
-	union all
-	select 7 as OperationMonth
-	union all
-	select 8 as OperationMonth
-	union all
-	select 9 as OperationMonth
-	union all
-	select 10 as OperationMonth
-	union all
-	select 11 as OperationMonth
-	union all
-	select 12 as OperationMonth
-) om
-where cav.AttributeValue = 'Year Round'
-and cat.CustomAttributeTypeName in
-(
-'Months of Operation'
-)
-and tbmt.TreatmentBMPModelingTypeDisplayName in
-(
-'Low Flow Diversions'
-, 'Dry Weather Treatment Systems'
-)
-
+	select ca.TreatmentBMPID, om.OperationMonth
+	from dbo.CustomAttribute ca
+	join dbo.CustomAttributeType cat on ca.CustomAttributeTypeID = cat.CustomAttributeTypeID
+	join dbo.TreatmentBMPType tbt on ca.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
+	join dbo.TreatmentBMPModelingType tbmt on tbt.TreatmentBMPModelingTypeID = tbmt.TreatmentBMPModelingTypeID
+	join dbo.TreatmentBMPModelingAttribute tma on ca.TreatmentBMPID = tma.TreatmentBMPID
+	join dbo.CustomAttributeValue cav on ca.CustomAttributeID = cav.CustomAttributeID
+	cross join
+	(
+		select 1 as OperationMonth
+		union all
+		select 2 as OperationMonth
+		union all
+		select 3 as OperationMonth
+		union all
+		select 4 as OperationMonth
+		union all
+		select 5 as OperationMonth
+		union all
+		select 6 as OperationMonth
+		union all
+		select 7 as OperationMonth
+		union all
+		select 8 as OperationMonth
+		union all
+		select 9 as OperationMonth
+		union all
+		select 10 as OperationMonth
+		union all
+		select 11 as OperationMonth
+		union all
+		select 12 as OperationMonth
+	) om
+	where cav.AttributeValue = 'Year Round'
+	and cat.CustomAttributeTypeName in
+	(
+	'Months of Operation'
+	)
+	and tbmt.TreatmentBMPModelingTypeDisplayName in
+	(
+	'Low Flow Diversions'
+	, 'Dry Weather Treatment Systems'
+	)
+) a left join dbo.TreatmentBMPOperationMonth tbm on a.TreatmentBMPID = tbm.TreatmentBMPID and a.OperationMonth = tbm.OperationMonth
+where tbm.TreatmentBMPOperationMonthID is null
 
 -- underlying hydrological soil group to D as a default for those that do not have months of operation specified
 insert into dbo.TreatmentBMPOperationMonth(TreatmentBMPID, OperationMonth)
