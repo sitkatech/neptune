@@ -4,7 +4,7 @@ GO
 Create Procedure dbo.pUpdateRegionalSubbasinLiveFromStaging
 As
 
-Merge RegionalSubbasin t Using RegionalSubbasinStaging s
+Merge dbo.RegionalSubbasin t Using dbo.RegionalSubbasinStaging s
 	on (t.OCSurveyCatchmentID = s.OCSurveyCatchmentID)
 When Matched
 	Then Update set

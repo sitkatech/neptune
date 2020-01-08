@@ -25,7 +25,7 @@
             var regionalSubbasinLayer =
                 regionalSubbasinMap.addWmsLayer(regionalSubbasinLayerName,
                     "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                    { styles: "network_catchment_wide"}, false);
+                    { styles: "regional_subbasin_wide"}, false);
 
             regionalSubbasinMap.map.on('click', selectCatchment);
         });

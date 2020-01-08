@@ -27,3 +27,13 @@ CREATE SPATIAL INDEX SPATIAL_RegionalSubbasin_CatchmentGeometry ON dbo.RegionalS
 WITH (BOUNDING_BOX =(-119, 33, -117, 34), 
 CELLS_PER_OBJECT = 8)
 GO
+
+
+
+update dbo.geometry_columns
+set f_table_name = 'RegionalSubbasinStaging'
+where f_table_name = 'NetworkCatchmentStaging'
+
+update dbo.geometry_columns
+set f_table_name = 'RegionalSubbasin'
+where f_table_name = 'NetworkCatchment'
