@@ -121,7 +121,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
         {
             if (treatmentBMP.Delineation != null &&
-                WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+                WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
             {
                 return treatmentBMP.Delineation.DelineationGeometry.Intersection(WaterQualityManagementPlan
                     .WaterQualityManagementPlanBoundary).Area * DbSpatialHelper.SquareMetersToAcres;
