@@ -254,13 +254,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUpstreamBMP)
-                                </td>
-                                <td class="text-right">@(ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute != null && ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UpstreamTreatmentBMP != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPModelingAttribute.UpstreamTreatmentBMP.GetDisplayNameAsUrl() : new HtmlString(string.Empty))</td>
-                            </tr>
-
                             @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                             {
                                 case TreatmentBMPModelingTypeEnum.Bioinfiltrationbioretentionwithraisedunderdrain:
