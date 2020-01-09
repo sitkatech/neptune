@@ -55,6 +55,7 @@
                                     ng-model="ObservationTypeCollectionMethodID"
                                     ng-change="updateCollectionMethod()"
                                     ng-required="true">
+                                <option value="" disabled selected>--Choose One--</option>
                                 <option ng-repeat="observationTypeCollectionMethod in AngularViewData.ObservationTypeCollectionMethods"
                                         ng-selected="AngularModel.ObservationTypeCollectionMethodID == observationTypeCollectionMethod.ID"
                                         title="{{observationTypeCollectionMethod.Definition}}"
@@ -75,11 +76,11 @@
                                 @Html.LabelWithSugarFor(m => m.ObservationThresholdTypeID)
                             </div>
                             <div class="col-sm-9">
-                                <select style="width: auto" ng-model="AngularModel.ObservationThresholdTypeID"
+                                <select style="width: auto"
                                         name="@Html.NameFor(m => m.ObservationThresholdTypeID)"
                                         class="form-control"
                                         ng-required="true">
-                                    <option value="null"></option>
+                                    <option value="" disabled selected>--Choose One--</option>
                                     <option ng-repeat="type in filteredThresholdTypes()"
                                             ng-selected="AngularModel.ObservationThresholdTypeID == type.ID"
                                             ng-bind="type.DisplayName"
@@ -93,11 +94,11 @@
                                 @Html.LabelWithSugarFor(m => m.ObservationTargetTypeID)
                             </div>
                             <div class="col-sm-9">
-                                <select style="width: auto" ng-model="AngularModel.ObservationTargetTypeID"
+                                <select style="width: auto"
                                         name="@Html.NameFor(m => m.ObservationTargetTypeID)"
                                         class="form-control"
                                         ng-required="true">
-                                    <option value="null"></option>
+                                    <option value="" disabled selected>--Choose One--</option>
                                     <option ng-repeat="type in filteredTargetTypes()"
                                             ng-selected="AngularModel.ObservationTargetTypeID == type.ID"
                                             ng-bind="type.DisplayName"

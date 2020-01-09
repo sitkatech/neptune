@@ -54,15 +54,11 @@
     };
 
     $scope.updateCollectionMethod = function() {
-        var observationCollectionMethod =
-            $scope.getObservationCollectionMethod($scope.ObservationTypeCollectionMethodID);
+        var observationCollectionMethod = $scope.getObservationCollectionMethod($scope.ObservationTypeCollectionMethodID);
         $scope.ObservationTypeCollectionMethodSelected = observationCollectionMethod;
-
 
         if ($scope.selectedCollectionMethodIsDiscrete()) {
             $scope.TreatmentBMPAssessmentObservationTypeSchema = newDiscreteObservationTypeSchema;
-        } else if ($scope.selectedCollectionMethodIsRate()) {
-            $scope.TreatmentBMPAssessmentObservationTypeSchema = newRateObservationTypeSchema;
         } else if ($scope.selectedCollectionMethodIsPassFail()) {
             $scope.TreatmentBMPAssessmentObservationTypeSchema = newPassFailObservationTypeSchema;
         } else if ($scope.selectedCollectionMethodIsPercentage()) {
@@ -203,15 +199,5 @@
                     jQuery(".previewModalContent :input[type='submit']").prop("disabled", true);
                 }
             });
-    };
-
-    $scope.disableObservationType = function() {
-        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.TreatmentBMPAssessmentObservationTypeName),
-            thresholdTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationThresholdTypeID),
-            targetTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTargetTypeID),
-            collectionMethodIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeCollectionMethodSelected),
-            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema);
-
-        return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
     };
 });
