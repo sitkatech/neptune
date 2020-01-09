@@ -9,6 +9,9 @@ namespace Neptune.Web.Models
         public int QuickTreatmentBMPTypeID { get; set; }
         public string QuickBMPTypeName { get; set; }
         public string QuickBMPNote { get; set; }
+        public decimal? PercentOfSiteTreated { get; set; }
+        public decimal? PercentCaptured { get; set; }
+        public decimal? PercentRetained { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder
@@ -24,6 +27,9 @@ namespace Neptune.Web.Models
             QuickTreatmentBMPTypeID = quickBMP.TreatmentBMPTypeID;
             QuickBMPTypeName = quickBMP.TreatmentBMPType.TreatmentBMPTypeName;
             QuickBMPNote = quickBMP.QuickBMPNote;
+            PercentOfSiteTreated = quickBMP.PercentOfSiteTreated;
+            PercentCaptured = quickBMP.PercentCaptured;
+            PercentRetained = quickBMP.PercentRetained;
         }
     }
 }

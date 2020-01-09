@@ -25,7 +25,7 @@
             });
         };
 
-        $scope.ifAnyTreatmentkBMPSimple = function(treatmentBmpIDs) {
+        $scope.ifAnyTreatmentBMPSimple = function(treatmentBmpIDs) {
             if (treatmentBmpIDs && treatmentBmpIDs.length > 0) {
                 return true;
             }
@@ -47,7 +47,10 @@
                 DisplayName : "",
                 QuickBMPTypeName: null,
                 QuickBMPNote: "",
-                QuickTreatmentBMPTypeID: 0
+                QuickTreatmentBMPTypeID: 0,
+                PercentOfSiteTreated: null,
+                PercentCaptured: null,
+                PercentRetained: null
             };
             return newQuickBMP;
         };
@@ -56,13 +59,16 @@
             Sitka.Methods.removeFromJsonArray(quickBmps, rowToDelete);
         };
 
-        $scope.ifAnyQuickBMPSimple = function (quickBmpSimples) {
+        $scope.ifAnyQuickBMPSimple = function(quickBmpSimples) {
             if (quickBmpSimples && quickBmpSimples.length > 0) {
                 return true;
             }
             return false;
-        }
+        };
 
+        $scope.isTreatmentBMPTypeSelected = function (treatmentBmpType, quickBmp) {
+            return treatmentBmpType.TreatmentBMPTypeID === quickBmp.QuickTreatmentBMPTypeID;
+        };
 
         $scope.orderSourceControlBMPsByAttributeCategory = _.sortBy(_.groupBy($scope.AngularModel.SourceControlBMPSimples, 'SourceControlBMPAttributeCategoryName'), [function (o) { return o.SourceControlBMPAttributeID; }]);
 

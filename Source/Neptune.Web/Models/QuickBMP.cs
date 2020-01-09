@@ -1,6 +1,4 @@
 ﻿using LtInfo.Common.Models;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
-using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
 {
@@ -14,6 +12,9 @@ namespace Neptune.Web.Models
             QuickBMPName = quickBMPSimple.DisplayName;
             TreatmentBMPTypeID = quickBMPSimple.QuickTreatmentBMPTypeID;
             QuickBMPNote = quickBMPSimple.QuickBMPNote;
+            PercentOfSiteTreated = quickBMPSimple.PercentOfSiteTreated;
+            PercentCaptured= quickBMPSimple.PercentCaptured;
+            PercentRetained = quickBMPSimple.PercentRetained;
         }
 
 

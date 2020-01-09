@@ -98,20 +98,20 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionDesignDryWeatherTreatmentCapacity DesignDryWeatherTreatmentCapacity = FieldDefinitionDesignDryWeatherTreatmentCapacity.Instance;
         public static readonly FieldDefinitionDesignLowFlowDiversionCapacity DesignLowFlowDiversionCapacity = FieldDefinitionDesignLowFlowDiversionCapacity.Instance;
         public static readonly FieldDefinitionDesignMediaFiltrationRate DesignMediaFiltrationRate = FieldDefinitionDesignMediaFiltrationRate.Instance;
-        public static readonly FieldDefinitionDesignResidenceTimeforPermanentPool DesignResidenceTimeforPermanentPool = FieldDefinitionDesignResidenceTimeforPermanentPool.Instance;
+        public static readonly FieldDefinitionDesignResidenceTimeForPermanentPool DesignResidenceTimeForPermanentPool = FieldDefinitionDesignResidenceTimeForPermanentPool.Instance;
         public static readonly FieldDefinitionDiversionRate DiversionRate = FieldDefinitionDiversionRate.Instance;
-        public static readonly FieldDefinitionDrawdownTimeforWQDetentionVolume DrawdownTimeforWQDetentionVolume = FieldDefinitionDrawdownTimeforWQDetentionVolume.Instance;
+        public static readonly FieldDefinitionDrawdownTimeForWQDetentionVolume DrawdownTimeForWQDetentionVolume = FieldDefinitionDrawdownTimeForWQDetentionVolume.Instance;
         public static readonly FieldDefinitionEffectiveFootprint EffectiveFootprint = FieldDefinitionEffectiveFootprint.Instance;
         public static readonly FieldDefinitionEffectiveRetentionDepth EffectiveRetentionDepth = FieldDefinitionEffectiveRetentionDepth.Instance;
         public static readonly FieldDefinitionInfiltrationDischargeRate InfiltrationDischargeRate = FieldDefinitionInfiltrationDischargeRate.Instance;
         public static readonly FieldDefinitionInfiltrationSurfaceArea InfiltrationSurfaceArea = FieldDefinitionInfiltrationSurfaceArea.Instance;
         public static readonly FieldDefinitionMediaBedFootprint MediaBedFootprint = FieldDefinitionMediaBedFootprint.Instance;
-        public static readonly FieldDefinitionMonthsofOperation MonthsofOperation = FieldDefinitionMonthsofOperation.Instance;
-        public static readonly FieldDefinitionPermanentPoolorWetlandVolume PermanentPoolorWetlandVolume = FieldDefinitionPermanentPoolorWetlandVolume.Instance;
+        public static readonly FieldDefinitionMonthsOfOperation MonthsOfOperation = FieldDefinitionMonthsOfOperation.Instance;
+        public static readonly FieldDefinitionPermanentPoolOrWetlandVolume PermanentPoolOrWetlandVolume = FieldDefinitionPermanentPoolOrWetlandVolume.Instance;
         public static readonly FieldDefinitionRoutingConfiguration RoutingConfiguration = FieldDefinitionRoutingConfiguration.Instance;
         public static readonly FieldDefinitionStorageVolumeBelowLowestOutletElevation StorageVolumeBelowLowestOutletElevation = FieldDefinitionStorageVolumeBelowLowestOutletElevation.Instance;
         public static readonly FieldDefinitionSummerHarvestedWaterDemand SummerHarvestedWaterDemand = FieldDefinitionSummerHarvestedWaterDemand.Instance;
-        public static readonly FieldDefinitionTimeofConcentration TimeofConcentration = FieldDefinitionTimeofConcentration.Instance;
+        public static readonly FieldDefinitionTimeOfConcentration TimeOfConcentration = FieldDefinitionTimeOfConcentration.Instance;
         public static readonly FieldDefinitionTotalDrawdownTime TotalDrawdownTime = FieldDefinitionTotalDrawdownTime.Instance;
         public static readonly FieldDefinitionTotalEffectiveBMPVolume TotalEffectiveBMPVolume = FieldDefinitionTotalEffectiveBMPVolume.Instance;
         public static readonly FieldDefinitionTotalEffectiveDrywellBMPVolume TotalEffectiveDrywellBMPVolume = FieldDefinitionTotalEffectiveDrywellBMPVolume.Instance;
@@ -122,6 +122,9 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionWaterQualityDetentionVolume WaterQualityDetentionVolume = FieldDefinitionWaterQualityDetentionVolume.Instance;
         public static readonly FieldDefinitionWettedFootprint WettedFootprint = FieldDefinitionWettedFootprint.Instance;
         public static readonly FieldDefinitionWinterHarvestedWaterDemand WinterHarvestedWaterDemand = FieldDefinitionWinterHarvestedWaterDemand.Instance;
+        public static readonly FieldDefinitionPercentOfSiteTreated PercentOfSiteTreated = FieldDefinitionPercentOfSiteTreated.Instance;
+        public static readonly FieldDefinitionPercentCaptured PercentCaptured = FieldDefinitionPercentCaptured.Instance;
+        public static readonly FieldDefinitionPercentRetained PercentRetained = FieldDefinitionPercentRetained.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -131,7 +134,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeforPermanentPool, DiversionRate, DrawdownTimeforWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsofOperation, PermanentPoolorWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeofConcentration, TotalDrawdownTime, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOfOperation, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, TotalDrawdownTime, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -255,12 +258,12 @@ namespace Neptune.Web.Models
                     return DesignLowFlowDiversionCapacity;
                 case FieldDefinitionEnum.DesignMediaFiltrationRate:
                     return DesignMediaFiltrationRate;
-                case FieldDefinitionEnum.DesignResidenceTimeforPermanentPool:
-                    return DesignResidenceTimeforPermanentPool;
+                case FieldDefinitionEnum.DesignResidenceTimeForPermanentPool:
+                    return DesignResidenceTimeForPermanentPool;
                 case FieldDefinitionEnum.DiversionRate:
                     return DiversionRate;
-                case FieldDefinitionEnum.DrawdownTimeforWQDetentionVolume:
-                    return DrawdownTimeforWQDetentionVolume;
+                case FieldDefinitionEnum.DrawdownTimeForWQDetentionVolume:
+                    return DrawdownTimeForWQDetentionVolume;
                 case FieldDefinitionEnum.EffectiveFootprint:
                     return EffectiveFootprint;
                 case FieldDefinitionEnum.EffectiveRetentionDepth:
@@ -315,8 +318,8 @@ namespace Neptune.Web.Models
                     return MinimumNumberOfObservations;
                 case FieldDefinitionEnum.MinimumValueOfEachObservation:
                     return MinimumValueOfEachObservation;
-                case FieldDefinitionEnum.MonthsofOperation:
-                    return MonthsofOperation;
+                case FieldDefinitionEnum.MonthsOfOperation:
+                    return MonthsOfOperation;
                 case FieldDefinitionEnum.ObservationCollectionMethod:
                     return ObservationCollectionMethod;
                 case FieldDefinitionEnum.ObservationScore:
@@ -337,8 +340,14 @@ namespace Neptune.Web.Models
                     return Parcel;
                 case FieldDefinitionEnum.Password:
                     return Password;
-                case FieldDefinitionEnum.PermanentPoolorWetlandVolume:
-                    return PermanentPoolorWetlandVolume;
+                case FieldDefinitionEnum.PercentCaptured:
+                    return PercentCaptured;
+                case FieldDefinitionEnum.PercentOfSiteTreated:
+                    return PercentOfSiteTreated;
+                case FieldDefinitionEnum.PercentRetained:
+                    return PercentRetained;
+                case FieldDefinitionEnum.PermanentPoolOrWetlandVolume:
+                    return PermanentPoolOrWetlandVolume;
                 case FieldDefinitionEnum.PhotoCaption:
                     return PhotoCaption;
                 case FieldDefinitionEnum.PhotoCredit:
@@ -373,20 +382,18 @@ namespace Neptune.Web.Models
                     return SummerHarvestedWaterDemand;
                 case FieldDefinitionEnum.TargetLoadReduction:
                     return TargetLoadReduction;
-                case FieldDefinitionEnum.TimeofConcentration:
-                    return TimeofConcentration;
+                case FieldDefinitionEnum.TimeOfConcentration:
+                    return TimeOfConcentration;
+                case FieldDefinitionEnum.TotalAchieved:
+                    return TotalAchieved;
                 case FieldDefinitionEnum.TotalDrawdownTime:
                     return TotalDrawdownTime;
                 case FieldDefinitionEnum.TotalEffectiveBMPVolume:
                     return TotalEffectiveBMPVolume;
                 case FieldDefinitionEnum.TotalEffectiveDrywellBMPVolume:
                     return TotalEffectiveDrywellBMPVolume;
-                case FieldDefinitionEnum.TotalAchieved:
-                    return TotalAchieved;
                 case FieldDefinitionEnum.TrashCaptureStatus:
                     return TrashCaptureStatus;
-                case FieldDefinitionEnum.TreatmentRate:
-                    return TreatmentRate;
                 case FieldDefinitionEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case FieldDefinitionEnum.TreatmentBMPAssessmentObservationType:
@@ -395,6 +402,8 @@ namespace Neptune.Web.Models
                     return TreatmentBMPDesignDepth;
                 case FieldDefinitionEnum.TreatmentBMPType:
                     return TreatmentBMPType;
+                case FieldDefinitionEnum.TreatmentRate:
+                    return TreatmentRate;
                 case FieldDefinitionEnum.UnderlyingHydrologicSoilGroupHSG:
                     return UnderlyingHydrologicSoilGroupHSG;
                 case FieldDefinitionEnum.UnderlyingInfiltrationRate:
@@ -507,20 +516,20 @@ namespace Neptune.Web.Models
         DesignDryWeatherTreatmentCapacity = 79,
         DesignLowFlowDiversionCapacity = 80,
         DesignMediaFiltrationRate = 81,
-        DesignResidenceTimeforPermanentPool = 82,
+        DesignResidenceTimeForPermanentPool = 82,
         DiversionRate = 83,
-        DrawdownTimeforWQDetentionVolume = 84,
+        DrawdownTimeForWQDetentionVolume = 84,
         EffectiveFootprint = 85,
         EffectiveRetentionDepth = 86,
         InfiltrationDischargeRate = 87,
         InfiltrationSurfaceArea = 88,
         MediaBedFootprint = 89,
-        MonthsofOperation = 90,
-        PermanentPoolorWetlandVolume = 91,
+        MonthsOfOperation = 90,
+        PermanentPoolOrWetlandVolume = 91,
         RoutingConfiguration = 92,
         StorageVolumeBelowLowestOutletElevation = 93,
         SummerHarvestedWaterDemand = 94,
-        TimeofConcentration = 95,
+        TimeOfConcentration = 95,
         TotalDrawdownTime = 96,
         TotalEffectiveBMPVolume = 97,
         TotalEffectiveDrywellBMPVolume = 98,
@@ -530,7 +539,10 @@ namespace Neptune.Web.Models
         UpstreamBMP = 102,
         WaterQualityDetentionVolume = 103,
         WettedFootprint = 104,
-        WinterHarvestedWaterDemand = 105
+        WinterHarvestedWaterDemand = 105,
+        PercentOfSiteTreated = 106,
+        PercentCaptured = 107,
+        PercentRetained = 108
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -986,174 +998,192 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionAverageDivertedFlowrate : FieldDefinition
     {
         private FieldDefinitionAverageDivertedFlowrate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionAverageDivertedFlowrate Instance = new FieldDefinitionAverageDivertedFlowrate(77, @"Average Diverted Flowrate", @"Average Diverted Flowrate", @"Average actual diverted flowrate over the months of operation.", true);
+        public static readonly FieldDefinitionAverageDivertedFlowrate Instance = new FieldDefinitionAverageDivertedFlowrate(77, @"AverageDivertedFlowrate", @"Average Diverted Flowrate", @"Average actual diverted flowrate over the months of operation.", true);
     }
 
     public partial class FieldDefinitionAverageTreatmentFlowrate : FieldDefinition
     {
         private FieldDefinitionAverageTreatmentFlowrate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionAverageTreatmentFlowrate Instance = new FieldDefinitionAverageTreatmentFlowrate(78, @"Average Treatment Flowrate", @"Average Treatment Flowrate", @"Average actual treated flowrate over the months of operation.", true);
+        public static readonly FieldDefinitionAverageTreatmentFlowrate Instance = new FieldDefinitionAverageTreatmentFlowrate(78, @"AverageTreatmentFlowrate", @"Average Treatment Flowrate", @"Average actual treated flowrate over the months of operation.", true);
     }
 
     public partial class FieldDefinitionDesignDryWeatherTreatmentCapacity : FieldDefinition
     {
         private FieldDefinitionDesignDryWeatherTreatmentCapacity(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionDesignDryWeatherTreatmentCapacity Instance = new FieldDefinitionDesignDryWeatherTreatmentCapacity(79, @"Design Dry Weather Treatment Capacity", @"Design Dry Weather Treatment Capacity", @"Flow treatment capacity of the BMP.", true);
+        public static readonly FieldDefinitionDesignDryWeatherTreatmentCapacity Instance = new FieldDefinitionDesignDryWeatherTreatmentCapacity(79, @"DesignDryWeatherTreatmentCapacity", @"Design Dry Weather Treatment Capacity", @"Flow treatment capacity of the BMP.", true);
     }
 
     public partial class FieldDefinitionDesignLowFlowDiversionCapacity : FieldDefinition
     {
         private FieldDefinitionDesignLowFlowDiversionCapacity(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionDesignLowFlowDiversionCapacity Instance = new FieldDefinitionDesignLowFlowDiversionCapacity(80, @"Design Low Flow Diversion Capacity", @"Design Low Flow Diversion Capacity", @"The physical capacity of the low flow diversion or the maximum permitted flow.", true);
+        public static readonly FieldDefinitionDesignLowFlowDiversionCapacity Instance = new FieldDefinitionDesignLowFlowDiversionCapacity(80, @"DesignLowFlowDiversionCapacity", @"Design Low Flow Diversion Capacity", @"The physical capacity of the low flow diversion or the maximum permitted flow.", true);
     }
 
     public partial class FieldDefinitionDesignMediaFiltrationRate : FieldDefinition
     {
         private FieldDefinitionDesignMediaFiltrationRate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionDesignMediaFiltrationRate Instance = new FieldDefinitionDesignMediaFiltrationRate(81, @"Design Media Filtration Rate", @"Design Media Filtration Rate", @"Design filtration rate through the media bed. This may be controlled by the media permeability or by an outlet control on the underdrain system.", true);
+        public static readonly FieldDefinitionDesignMediaFiltrationRate Instance = new FieldDefinitionDesignMediaFiltrationRate(81, @"DesignMediaFiltrationRate", @"Design Media Filtration Rate", @"Design filtration rate through the media bed. This may be controlled by the media permeability or by an outlet control on the underdrain system.", true);
     }
 
-    public partial class FieldDefinitionDesignResidenceTimeforPermanentPool : FieldDefinition
+    public partial class FieldDefinitionDesignResidenceTimeForPermanentPool : FieldDefinition
     {
-        private FieldDefinitionDesignResidenceTimeforPermanentPool(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionDesignResidenceTimeforPermanentPool Instance = new FieldDefinitionDesignResidenceTimeforPermanentPool(82, @"Design Residence Time for Permanent Pool", @"Design Residence Time for Permanent Pool", @"Amount of residence time needed to meet full level of treatment for water that is stored in the permanent pool.", true);
+        private FieldDefinitionDesignResidenceTimeForPermanentPool(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDesignResidenceTimeForPermanentPool Instance = new FieldDefinitionDesignResidenceTimeForPermanentPool(82, @"DesignResidenceTimeForPermanentPool", @"Design Residence Time for Permanent Pool", @"Amount of residence time needed to meet full level of treatment for water that is stored in the permanent pool.", true);
     }
 
     public partial class FieldDefinitionDiversionRate : FieldDefinition
     {
         private FieldDefinitionDiversionRate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionDiversionRate Instance = new FieldDefinitionDiversionRate(83, @"Diversion Rate", @"Diversion Rate", @"Flowrate diverted into the BMP.", true);
+        public static readonly FieldDefinitionDiversionRate Instance = new FieldDefinitionDiversionRate(83, @"DiversionRate", @"Diversion Rate", @"Flowrate diverted into the BMP.", true);
     }
 
-    public partial class FieldDefinitionDrawdownTimeforWQDetentionVolume : FieldDefinition
+    public partial class FieldDefinitionDrawdownTimeForWQDetentionVolume : FieldDefinition
     {
-        private FieldDefinitionDrawdownTimeforWQDetentionVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionDrawdownTimeforWQDetentionVolume Instance = new FieldDefinitionDrawdownTimeforWQDetentionVolume(84, @"Drawdown Time for WQ Detention Volume", @"Drawdown Time for WQ Detention Volume", @"Time for water quality surcharge volume to draw down after the end of a storm if there is no further inflow.", true);
+        private FieldDefinitionDrawdownTimeForWQDetentionVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDrawdownTimeForWQDetentionVolume Instance = new FieldDefinitionDrawdownTimeForWQDetentionVolume(84, @"DrawdownTimeForWQDetentionVolume", @"Drawdown Time for WQ Detention Volume", @"Time for water quality surcharge volume to draw down after the end of a storm if there is no further inflow.", true);
     }
 
     public partial class FieldDefinitionEffectiveFootprint : FieldDefinition
     {
         private FieldDefinitionEffectiveFootprint(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionEffectiveFootprint Instance = new FieldDefinitionEffectiveFootprint(85, @"Effective Footprint", @"Effective Footprint", @"The footprint of the BMP that is effective for filtration or infiltration. Unless other information is available, this can be estimated as the wetted footprint when BMP is half full.", true);
+        public static readonly FieldDefinitionEffectiveFootprint Instance = new FieldDefinitionEffectiveFootprint(85, @"EffectiveFootprint", @"Effective Footprint", @"The footprint of the BMP that is effective for filtration or infiltration. Unless other information is available, this can be estimated as the wetted footprint when BMP is half full.", true);
     }
 
     public partial class FieldDefinitionEffectiveRetentionDepth : FieldDefinition
     {
         private FieldDefinitionEffectiveRetentionDepth(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionEffectiveRetentionDepth Instance = new FieldDefinitionEffectiveRetentionDepth(86, @"Effective Retention Depth", @"Effective Retention Depth", @"Depth of water stored in shallow surface depression or media/rock sump for infiltration to occur.", true);
+        public static readonly FieldDefinitionEffectiveRetentionDepth Instance = new FieldDefinitionEffectiveRetentionDepth(86, @"EffectiveRetentionDepth", @"Effective Retention Depth", @"Depth of water stored in shallow surface depression or media/rock sump for infiltration to occur.", true);
     }
 
     public partial class FieldDefinitionInfiltrationDischargeRate : FieldDefinition
     {
         private FieldDefinitionInfiltrationDischargeRate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionInfiltrationDischargeRate Instance = new FieldDefinitionInfiltrationDischargeRate(87, @"Infiltration Discharge Rate", @"Infiltration Discharge Rate", @"Design or tested infiltration flowrate of the drywell. This is specified in cubic feet per section, rather than inches per hour.", true);
+        public static readonly FieldDefinitionInfiltrationDischargeRate Instance = new FieldDefinitionInfiltrationDischargeRate(87, @"InfiltrationDischargeRate", @"Infiltration Discharge Rate", @"Design or tested infiltration flowrate of the drywell. This is specified in cubic feet per section, rather than inches per hour.", true);
     }
 
     public partial class FieldDefinitionInfiltrationSurfaceArea : FieldDefinition
     {
         private FieldDefinitionInfiltrationSurfaceArea(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionInfiltrationSurfaceArea Instance = new FieldDefinitionInfiltrationSurfaceArea(88, @"Infiltration Surface Area", @"Infiltration Surface Area", @"Surface area through which infiltration can occur in the system. If infiltration will occur into the sidewalls of a BMP, it is appropriate to include half of the sidewall area as as part of the infiltration surface area.", true);
+        public static readonly FieldDefinitionInfiltrationSurfaceArea Instance = new FieldDefinitionInfiltrationSurfaceArea(88, @"InfiltrationSurfaceArea", @"Infiltration Surface Area", @"Surface area through which infiltration can occur in the system. If infiltration will occur into the sidewalls of a BMP, it is appropriate to include half of the sidewall area as as part of the infiltration surface area.", true);
     }
 
     public partial class FieldDefinitionMediaBedFootprint : FieldDefinition
     {
         private FieldDefinitionMediaBedFootprint(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionMediaBedFootprint Instance = new FieldDefinitionMediaBedFootprint(89, @"Media Bed Footprint", @"Media Bed Footprint", @"Surface area of the media bed of the BMP.", true);
+        public static readonly FieldDefinitionMediaBedFootprint Instance = new FieldDefinitionMediaBedFootprint(89, @"MediaBedFootprint", @"Media Bed Footprint", @"Surface area of the media bed of the BMP.", true);
     }
 
-    public partial class FieldDefinitionMonthsofOperation : FieldDefinition
+    public partial class FieldDefinitionMonthsOfOperation : FieldDefinition
     {
-        private FieldDefinitionMonthsofOperation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionMonthsofOperation Instance = new FieldDefinitionMonthsofOperation(90, @"Months of Operation", @"Months of Operation", @"This defines the months that the facility is operational.", true);
+        private FieldDefinitionMonthsOfOperation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMonthsOfOperation Instance = new FieldDefinitionMonthsOfOperation(90, @"MonthsOfOperation", @"Months of Operation", @"This defines the months that the facility is operational.", true);
     }
 
-    public partial class FieldDefinitionPermanentPoolorWetlandVolume : FieldDefinition
+    public partial class FieldDefinitionPermanentPoolOrWetlandVolume : FieldDefinition
     {
-        private FieldDefinitionPermanentPoolorWetlandVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionPermanentPoolorWetlandVolume Instance = new FieldDefinitionPermanentPoolorWetlandVolume(91, @"Permanent Pool or Wetland Volume", @"Permanent Pool or Wetland Volume", @"Volume of water below the lowest surface outlet. Serves as a wetland or permanent pool. Water may be harvested from this pool. ", true);
+        private FieldDefinitionPermanentPoolOrWetlandVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionPermanentPoolOrWetlandVolume Instance = new FieldDefinitionPermanentPoolOrWetlandVolume(91, @"PermanentPoolOrWetlandVolume", @"Permanent Pool or Wetland Volume", @"Volume of water below the lowest surface outlet. Serves as a wetland or permanent pool. Water may be harvested from this pool. ", true);
     }
 
     public partial class FieldDefinitionRoutingConfiguration : FieldDefinition
     {
         private FieldDefinitionRoutingConfiguration(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionRoutingConfiguration Instance = new FieldDefinitionRoutingConfiguration(92, @"Routing Configuration", @"Routing Configuration", @"This specifies whether the BMP receives all flow from the drainage area (online), or if there is a diversion structure that limits the flow into the BMP (offline).", true);
+        public static readonly FieldDefinitionRoutingConfiguration Instance = new FieldDefinitionRoutingConfiguration(92, @"RoutingConfiguration", @"Routing Configuration", @"This specifies whether the BMP receives all flow from the drainage area (online), or if there is a diversion structure that limits the flow into the BMP (offline).", true);
     }
 
     public partial class FieldDefinitionStorageVolumeBelowLowestOutletElevation : FieldDefinition
     {
         private FieldDefinitionStorageVolumeBelowLowestOutletElevation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionStorageVolumeBelowLowestOutletElevation Instance = new FieldDefinitionStorageVolumeBelowLowestOutletElevation(93, @"Storage Volume Below Lowest Outlet Elevation", @"Storage Volume Below Lowest Outlet Elevation", @"The volume of water stored below the lowest outlet (e.g., underdrain, orifice) of the system.", true);
+        public static readonly FieldDefinitionStorageVolumeBelowLowestOutletElevation Instance = new FieldDefinitionStorageVolumeBelowLowestOutletElevation(93, @"StorageVolumeBelowLowestOutletElevation", @"Storage Volume Below Lowest Outlet Elevation", @"The volume of water stored below the lowest outlet (e.g., underdrain, orifice) of the system.", true);
     }
 
     public partial class FieldDefinitionSummerHarvestedWaterDemand : FieldDefinition
     {
         private FieldDefinitionSummerHarvestedWaterDemand(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionSummerHarvestedWaterDemand Instance = new FieldDefinitionSummerHarvestedWaterDemand(94, @"Summer Harvested Water Demand", @"Summer Harvested Water Demand", @"Average daily harvested water demand from May through October.", true);
+        public static readonly FieldDefinitionSummerHarvestedWaterDemand Instance = new FieldDefinitionSummerHarvestedWaterDemand(94, @"SummerHarvestedWaterDemand", @"Summer Harvested Water Demand", @"Average daily harvested water demand from May through October.", true);
     }
 
-    public partial class FieldDefinitionTimeofConcentration : FieldDefinition
+    public partial class FieldDefinitionTimeOfConcentration : FieldDefinition
     {
-        private FieldDefinitionTimeofConcentration(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTimeofConcentration Instance = new FieldDefinitionTimeofConcentration(95, @"Time of Concentration", @"Time of Concentration", @"The time required for the entire drainage to begin contributing runoff to the BMP. This value must be less than 60 minutes. See TGD guidance.", true);
+        private FieldDefinitionTimeOfConcentration(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionTimeOfConcentration Instance = new FieldDefinitionTimeOfConcentration(95, @"TimeOfConcentration", @"Time of Concentration", @"The time required for the entire drainage to begin contributing runoff to the BMP. This value must be less than 60 minutes. See TGD guidance.", true);
     }
 
     public partial class FieldDefinitionTotalDrawdownTime : FieldDefinition
     {
         private FieldDefinitionTotalDrawdownTime(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTotalDrawdownTime Instance = new FieldDefinitionTotalDrawdownTime(96, @"Total Drawdown Time", @"Total Drawdown Time", @"Time for the basin to fully draw own after the end of a storm if there is no further inflow.", true);
+        public static readonly FieldDefinitionTotalDrawdownTime Instance = new FieldDefinitionTotalDrawdownTime(96, @"TotalDrawdownTime", @"Total Drawdown Time", @"Time for the basin to fully draw own after the end of a storm if there is no further inflow.", true);
     }
 
     public partial class FieldDefinitionTotalEffectiveBMPVolume : FieldDefinition
     {
         private FieldDefinitionTotalEffectiveBMPVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTotalEffectiveBMPVolume Instance = new FieldDefinitionTotalEffectiveBMPVolume(97, @"Total Effective BMP Volume", @"Total Effective BMP Volume", @"The volume of the BMP available for water quality purposes. This includes ponding volume and the available pore volume in media layers and/or in gravel storage layers. It does not include flow control volumes or other volume that is not designed for water quality purposes. ", true);
+        public static readonly FieldDefinitionTotalEffectiveBMPVolume Instance = new FieldDefinitionTotalEffectiveBMPVolume(97, @"TotalEffectiveBMPVolume", @"Total Effective BMP Volume", @"The volume of the BMP available for water quality purposes. This includes ponding volume and the available pore volume in media layers and/or in gravel storage layers. It does not include flow control volumes or other volume that is not designed for water quality purposes. ", true);
     }
 
     public partial class FieldDefinitionTotalEffectiveDrywellBMPVolume : FieldDefinition
     {
         private FieldDefinitionTotalEffectiveDrywellBMPVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTotalEffectiveDrywellBMPVolume Instance = new FieldDefinitionTotalEffectiveDrywellBMPVolume(98, @"Total Effective Drywell BMP Volume", @"Total Effective Drywell BMP Volume", @"The volume of the BMP available for water quality purposes. This includes the volume in any pre-treatment chamber as well as the volume in the well itself.", true);
+        public static readonly FieldDefinitionTotalEffectiveDrywellBMPVolume Instance = new FieldDefinitionTotalEffectiveDrywellBMPVolume(98, @"TotalEffectiveDrywellBMPVolume", @"Total Effective Drywell BMP Volume", @"The volume of the BMP available for water quality purposes. This includes the volume in any pre-treatment chamber as well as the volume in the well itself.", true);
     }
 
     public partial class FieldDefinitionTreatmentRate : FieldDefinition
     {
         private FieldDefinitionTreatmentRate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTreatmentRate Instance = new FieldDefinitionTreatmentRate(99, @"Treatment Rate", @"Treatment Rate", @"The flowrate at which the BMP can provide treatment of runoff.", true);
+        public static readonly FieldDefinitionTreatmentRate Instance = new FieldDefinitionTreatmentRate(99, @"TreatmentRate", @"Treatment Rate", @"The flowrate at which the BMP can provide treatment of runoff.", true);
     }
 
     public partial class FieldDefinitionUnderlyingHydrologicSoilGroupHSG : FieldDefinition
     {
         private FieldDefinitionUnderlyingHydrologicSoilGroupHSG(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionUnderlyingHydrologicSoilGroupHSG Instance = new FieldDefinitionUnderlyingHydrologicSoilGroupHSG(100, @"Underlying Hydrologic Soil Group (HSG)", @"Underlying Hydrologic Soil Group (HSG)", @"Choose the soil group that best represents the soils underlying the BMP. This is used to estimate a default infiltration rate (A = XX, B = XX, C=XX, D=XX)", true);
+        public static readonly FieldDefinitionUnderlyingHydrologicSoilGroupHSG Instance = new FieldDefinitionUnderlyingHydrologicSoilGroupHSG(100, @"UnderlyingHydrologicSoilGroupHSG", @"Underlying Hydrologic Soil Group (HSG)", @"Choose the soil group that best represents the soils underlying the BMP. This is used to estimate a default infiltration rate (A = XX, B = XX, C=XX, D=XX)", true);
     }
 
     public partial class FieldDefinitionUnderlyingInfiltrationRate : FieldDefinition
     {
         private FieldDefinitionUnderlyingInfiltrationRate(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionUnderlyingInfiltrationRate Instance = new FieldDefinitionUnderlyingInfiltrationRate(101, @"Underlying Infiltration Rate", @"Underlying Infiltration Rate", @"The underlying infiltration rate below the BMP. This refers to the underlying soil, not engineered media.", true);
+        public static readonly FieldDefinitionUnderlyingInfiltrationRate Instance = new FieldDefinitionUnderlyingInfiltrationRate(101, @"UnderlyingInfiltrationRate", @"Underlying Infiltration Rate", @"The underlying infiltration rate below the BMP. This refers to the underlying soil, not engineered media.", true);
     }
 
     public partial class FieldDefinitionUpstreamBMP : FieldDefinition
     {
         private FieldDefinitionUpstreamBMP(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionUpstreamBMP Instance = new FieldDefinitionUpstreamBMP(102, @"Upstream BMP", @"Upstream BMP", @"Assign a delineation to the BMP through the normal delineation options.<br /><br />OR<br /><br />Indicate that the BMP receives flow from an upstream BMP.", true);
+        public static readonly FieldDefinitionUpstreamBMP Instance = new FieldDefinitionUpstreamBMP(102, @"UpstreamBMP", @"Upstream BMP", @"Assign a delineation to the BMP through the normal delineation options.<br /><br />OR<br /><br />Indicate that the BMP receives flow from an upstream BMP.", true);
     }
 
     public partial class FieldDefinitionWaterQualityDetentionVolume : FieldDefinition
     {
         private FieldDefinitionWaterQualityDetentionVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionWaterQualityDetentionVolume Instance = new FieldDefinitionWaterQualityDetentionVolume(103, @"Water Quality Detention Volume", @"Water Quality Detention Volume", @"Volume of water above the surface outlet that provides a water quality detention function; surcharges during storms and drains after storms.  Do not include volume intended for peak flow control.", true);
+        public static readonly FieldDefinitionWaterQualityDetentionVolume Instance = new FieldDefinitionWaterQualityDetentionVolume(103, @"WaterQualityDetentionVolume", @"Water Quality Detention Volume", @"Volume of water above the surface outlet that provides a water quality detention function; surcharges during storms and drains after storms.  Do not include volume intended for peak flow control.", true);
     }
 
     public partial class FieldDefinitionWettedFootprint : FieldDefinition
     {
         private FieldDefinitionWettedFootprint(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionWettedFootprint Instance = new FieldDefinitionWettedFootprint(104, @"Wetted Footprint", @"Wetted Footprint", @"Wetted footprint when BMP is half full.", true);
+        public static readonly FieldDefinitionWettedFootprint Instance = new FieldDefinitionWettedFootprint(104, @"WettedFootprint", @"Wetted Footprint", @"Wetted footprint when BMP is half full.", true);
     }
 
     public partial class FieldDefinitionWinterHarvestedWaterDemand : FieldDefinition
     {
         private FieldDefinitionWinterHarvestedWaterDemand(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionWinterHarvestedWaterDemand Instance = new FieldDefinitionWinterHarvestedWaterDemand(105, @"Winter Harvested Water Demand", @"Winter Harvested Water Demand", @"Average daily harvested water demand from November through April. This should be averaged to account for any shutdowns during wet weather and reduction in demand during the winter season.", true);
+        public static readonly FieldDefinitionWinterHarvestedWaterDemand Instance = new FieldDefinitionWinterHarvestedWaterDemand(105, @"WinterHarvestedWaterDemand", @"Winter Harvested Water Demand", @"Average daily harvested water demand from November through April. This should be averaged to account for any shutdowns during wet weather and reduction in demand during the winter season.", true);
+    }
+
+    public partial class FieldDefinitionPercentOfSiteTreated : FieldDefinition
+    {
+        private FieldDefinitionPercentOfSiteTreated(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionPercentOfSiteTreated Instance = new FieldDefinitionPercentOfSiteTreated(106, @"PercentOfSiteTreated", @"Percent of Site Treated", @"", true);
+    }
+
+    public partial class FieldDefinitionPercentCaptured : FieldDefinition
+    {
+        private FieldDefinitionPercentCaptured(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionPercentCaptured Instance = new FieldDefinitionPercentCaptured(107, @"PercentCaptured", @"Percent Captured", @"", true);
+    }
+
+    public partial class FieldDefinitionPercentRetained : FieldDefinition
+    {
+        private FieldDefinitionPercentRetained(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionPercentRetained Instance = new FieldDefinitionPercentRetained(108, @"PercentRetained", @"Percent Retained", @"", true);
     }
 }

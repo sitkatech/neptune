@@ -1,4 +1,5 @@
-﻿@using Neptune.Web.Models
+﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
 @using Neptune.Web.Views.WaterQualityManagementPlan
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -10,7 +11,7 @@
 {
     <script type="text/javascript" src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpTreatmentBmpsController.js")"></script>
     <script type="text/javascript">
-        jQuery(function() {
+        jQuery(function () {
             angular.module("NeptuneApp").factory("angularModelAndViewData",
                 function() {
                     return {
@@ -97,7 +98,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" ng-if="ifAnyTreatmentkBMPSimple(AngularModel.TreatmentBmpIDs) == true">
+                        <div class="row" ng-if="ifAnyTreatmentBMPSimple(AngularModel.TreatmentBmpIDs) == true">
                             <div class="col-xs-12">
                                 <table class="table table-condensed">
                                     <thead>
@@ -129,16 +130,13 @@
             </div>
         </div>
 
-
-
-
-
         <div class="row row-group">
             <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Other Structural BMPs</h5>
-                        <p>Describe any other structural BMPs associated with this WQMP. This does not add records to the detailed Inventory.</p>
+                        <p>Describe any other structural BMPs associated with this WQMP. This does not add records to the detailed Inventory.
+                            The percent of site, percent captured, and percent retained values will be used by the Modeling Module when determining load and volume reduction credit.</p>
                     </div>
                     <div class="panel-collapse" style="padding: 21px 15px">
                         <div class="row" ng-if="ifAnyQuickBMPSimple(AngularModel.QuickBmpSimples) == false">
@@ -155,23 +153,26 @@
                                             <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Name <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
                                             <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Type <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
                                             <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Note</th>
+                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
                                         </tr>
                                         <tr ng-repeat="quickBmp in AngularModel.QuickBmpSimples">
-                                            <td style="border:none">
+                                            <td style="border: none">
+                                                <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPID).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickBMPID}}" />
                                                 <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBmpSimples, quickBmp)" style="cursor: pointer"></span>
                                             </td>
                                             <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input class="form-control" ng-model="quickBmp.DisplayName" value="{{quickBmp.DisplayName}}" />
+                                                <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].DisplayName).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.DisplayName" value="{{quickBmp.DisplayName}}" />
                                             </td>
                                             <td style="text-align: right; padding-right: 17px; border:none">
-                                                <select ng-model="quickBmp.QuickTreatmentBMPTypeID"
-                                                        class="selectpicker"
-                                                        data-live-search="true"
-                                                        data-container="body"
-                                                        data-width="100%" selectpicker
-                                                        title="Select a Treatment BMP Type">
-                                                    <option value="" disabled selected>Select a Treatment BMP Type</option>
-                                                    <option ng-selected="{{treatmentType.TreatmentBMPTypeID == quickBmp.QuickTreatmentBMPTypeID}}"
+                                                <select name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickTreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
+                                                    class="selectpicker"
+                                                    data-live-search="true"
+                                                    data-container="body"
+                                                    data-width="100%" selectpicker
+                                                    title="Select a Treatment BMP Type">
+                                                    <option ng-selected="isTreatmentBMPTypeSelected(treatmentType, quickBmp)"
                                                             ng-repeat="treatmentType in AngularViewData.TreatmentBMPTypes"
                                                             value="{{treatmentType.TreatmentBMPTypeID}}">
                                                         {{treatmentType.TreatmentBMPTypeName}}
@@ -179,17 +180,20 @@
                                                 </select>
                                             </td>
                                             <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input class="form-control" ng-model="quickBmp.QuickBMPNote" value="{{quickBmp.QuickBMPNote}}" />
+                                                <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote" />
+                                            </td>
+                                            <td style="text-align: right; padding-right: 17px; border:none">
+                                                <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.PercentOfSiteTreated" />
+                                            </td>
+                                            <td style="text-align: right; padding-right: 17px; border:none">
+                                                <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.PercentCaptured" />
+                                            </td>
+                                            <td style="text-align: right; padding-right: 17px; border:none">
+                                                <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.PercentRetained" />
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div ng-repeat="quickBmp in AngularModel.QuickBmpSimples">
-                                    <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPID).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickBMPID}}" />
-                                    <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].DisplayName).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.DisplayName}}" />
-                                    <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickTreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickTreatmentBMPTypeID}}" />
-                                    <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickBMPNote}}" />
-                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -205,9 +209,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <div class="row row-group row-spacing">
             <div class="col-xs-12">

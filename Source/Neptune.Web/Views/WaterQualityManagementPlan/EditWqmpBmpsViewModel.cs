@@ -47,7 +47,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var quickBMPsInDatabase = HttpRequestStorage.DatabaseEntities.QuickBMPs.Local;
             var quickBMPsToUpdate = quickBMPSimples != null ? quickBMPSimples.Select(x => new QuickBMP(x, waterQualityManagementPlan.WaterQualityManagementPlanID)).ToList() : new List<QuickBMP>();
 
-
             waterQualityManagementPlan.QuickBMPs.ToList().Merge(quickBMPsToUpdate, quickBMPsInDatabase,
                 (x, y) => x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID &&
                           x.QuickBMPID == y.QuickBMPID, (x, y) =>
@@ -55,6 +54,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     x.QuickBMPName = y.QuickBMPName;
                     x.QuickBMPNote = y.QuickBMPNote;
                     x.TreatmentBMPTypeID = y.TreatmentBMPTypeID;
+                    x.PercentOfSiteTreated = y.PercentOfSiteTreated;
+                    x.PercentCaptured = y.PercentCaptured;
+                    x.PercentRetained = y.PercentRetained;
                 });
 
 

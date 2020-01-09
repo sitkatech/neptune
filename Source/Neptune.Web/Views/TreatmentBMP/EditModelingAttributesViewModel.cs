@@ -47,13 +47,13 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.DesignMediaFiltrationRate)]
         public double? DesignMediaFiltrationRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DesignResidenceTimeforPermanentPool)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.DesignResidenceTimeForPermanentPool)]
         public double? DesignResidenceTimeforPermanentPool { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.DiversionRate)]
         public double? DiversionRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DrawdownTimeforWQDetentionVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.DrawdownTimeForWQDetentionVolume)]
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.EffectiveFootprint)]
@@ -71,7 +71,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.MediaBedFootprint)]
         public double? MediaBedFootprint { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.PermanentPoolorWetlandVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.PermanentPoolOrWetlandVolume)]
         public double? PermanentPoolorWetlandVolume { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.RoutingConfiguration)]
@@ -83,7 +83,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.SummerHarvestedWaterDemand)]
         public double? SummerHarvestedWaterDemand { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TimeofConcentration)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.TimeOfConcentration)]
         public int? TimeOfConcentrationID { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.TotalDrawdownTime)]
@@ -116,7 +116,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.UpstreamBMP)]
         public int? UpstreamTreatmentBMPID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsofOperation)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOfOperation)]
         public List<int> MonthsofOperation { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }

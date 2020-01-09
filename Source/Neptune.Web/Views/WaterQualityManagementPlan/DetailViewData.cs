@@ -37,6 +37,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string HRURefreshUrl { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
 
+        public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
+
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
@@ -107,6 +111,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HRURefreshUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x =>
                     x.RefreshHRUCharacteristics(waterQualityManagementPlan));
+
+            FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
+            FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
+            FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
         }
     }
 }

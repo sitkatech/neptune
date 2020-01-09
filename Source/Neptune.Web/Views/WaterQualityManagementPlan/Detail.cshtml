@@ -300,38 +300,29 @@
                 }
             </div>
             <div class="panel-body">
-                <h4>Structural Treatment and Hydromodification BMPs</h4>
+                <h4>Structural BMPs in Detailed Inventory</h4>
                 <div>
-                    @if (ViewDataTyped.QuickBMPs.Any() || ViewDataTyped.TreatmentBMPs.Any())
+                    @if (ViewDataTyped.TreatmentBMPs.Any())
                     {
                         <div style="padding: 0 16px">
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th style="white-space: nowrap; border-top: none"> Name</th>
-                                        <th style="white-space: nowrap; border-top: none"> Type</th>
-                                        <th style="white-space: nowrap; border-top: none"> Notes</th>
-                                        <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Detailed Inventory Record?</label></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                     {
-                                        <tr>
-                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td>@treatmentBMP.Notes</td>
-                                            <td> Yes</td>
-                                        </tr>
-                                    }
-                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                                    {
-                                        <tr>
-                                            <td>@quickBMP.QuickBMPName</td>
-                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td>@quickBMP.QuickBMPNote</td>
-                                            <td> No</td>
-                                        </tr>
+                                    <tr>
+                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                        <td>@treatmentBMP.Notes</td>
+                                        <td> Yes</td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
@@ -339,11 +330,51 @@
                     }
                     else
                     {
-                        <p class="systemText">No Structural Treatment and Hydromodification BMPs have been selected.</p>
+                        <p class="systemText">No Structural BMPs in Detailed Inventory have been selected.</p>
                     }
                 </div>
 
-                <h4 style="margin-top:64px">Source Control BMPs</h4>
+                <h4 style="margin-top:32px">Other Structural BMPs</h4>
+                <div>
+                    @if (ViewDataTyped.QuickBMPs.Any())
+                    {
+                        <div style="padding: 0 16px">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Detailed Inventory Record?</label></th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
+                                    {
+                                    <tr>
+                                        <td>@quickBMP.QuickBMPName</td>
+                                        <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                        <td>@quickBMP.QuickBMPNote</td>
+                                        <td> No</td>
+                                        <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0} %", quickBMP.PercentOfSiteTreated) : "")</td>
+                                        <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0} %", quickBMP.PercentCaptured) : "")</td>
+                                        <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0} %", quickBMP.PercentRetained) : "")</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                    <p class="systemText">No Other Structural BMPs have been selected.</p>
+                    }
+                </div>
+
+                <h4 style="margin-top:32px">Source Control BMPs</h4>
                 @if (ViewDataTyped.SourceControlBMPs.Any())
                 {
                     <div style="padding: 0 16px">
