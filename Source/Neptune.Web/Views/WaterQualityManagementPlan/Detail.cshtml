@@ -308,10 +308,11 @@
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Detailed Inventory Record?</label></th>
+                                        <th style="white-space: nowrap; border-top: none">Name</th>
+                                        <th style="white-space: nowrap; border-top: none">Type</th>
+                                        <th style="white-space: nowrap; border-top: none">Notes</th>
+                                        <th style="white-space: nowrap; border-top: none">Detailed Inventory Record?</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">Area within WQMP (ac)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -321,7 +322,8 @@
                                         <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
                                         <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                         <td>@treatmentBMP.Notes</td>
-                                        <td> Yes</td>
+                                        <td>Yes</td>
+                                        <td style="text-align: right">@ViewDataTyped.CalculateAreaWithinWQMP(treatmentBMP).ToGroupedNumeric()</td>
                                     </tr>
                                     }
                                 </tbody>
@@ -345,7 +347,6 @@
                                         <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
                                         <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
                                         <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Detailed Inventory Record?</label></th>
                                         <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
                                         <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
                                         <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
@@ -358,7 +359,6 @@
                                         <td>@quickBMP.QuickBMPName</td>
                                         <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                         <td>@quickBMP.QuickBMPNote</td>
-                                        <td> No</td>
                                         <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0} %", quickBMP.PercentOfSiteTreated) : "")</td>
                                         <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0} %", quickBMP.PercentCaptured) : "")</td>
                                         <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0} %", quickBMP.PercentRetained) : "")</td>

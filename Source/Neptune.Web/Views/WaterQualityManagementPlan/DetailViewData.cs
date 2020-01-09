@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using LtInfo.Common.DbSpatial;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
@@ -115,6 +116,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
+        }
+
+        public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
+        {
+            if (treatmentBMP.Delineation != null &&
+                WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+            {
+                return treatmentBMP.Delineation.DelineationGeometry.Intersection(WaterQualityManagementPlan
+                    .WaterQualityManagementPlanBoundary).Area * DbSpatialHelper.SquareMetersToAcres;
+            }
+
+            return null;
         }
     }
 }
