@@ -25,7 +25,8 @@ angular.module("NeptuneApp").controller("PercentageCollectionMethodController", 
     $scope.initializeWithEmptyRows = function () {
         var newObservationData = {
             SingleValueObservations: []
-        }
+        };
+
         for (var i = 0; i < $scope.AngularViewData.PropertiesToObserve.length; i++) {
             newObservationData.SingleValueObservations.push({
                 PropertyObserved: $scope.AngularViewData.PropertiesToObserve[i].DisplayName,
