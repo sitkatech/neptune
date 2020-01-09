@@ -90,24 +90,45 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 validationResults.Add(new ValidationResult($"\"{quickBmpWithDuplicateName}\" has already been used Under Other Strucural BMPs. Make sure that all names are unique."));
             }
 
-            foreach (var quickBMPSimple in QuickBmpSimples ?? new List<QuickBMPSimple>())
+            var quickBmpSimples = QuickBmpSimples ?? new List<QuickBMPSimple>();
+            foreach (var quickBMPSimple in quickBmpSimples)
             {
-                var quickBMPNoteCharacterLength = quickBMPSimple?.QuickBMPNote?.Length;
+                var quickBMPNoteCharacterLength = quickBMPSimple.QuickBMPNote?.Length;
                 if (quickBMPNoteCharacterLength != null && quickBMPNoteCharacterLength > quickBMPNoteMaxCharacterLength)
                 {
                     validationResults.Add(new ValidationResult($"\"{quickBMPSimple?.DisplayName}\"'s note is too long. Notes have a maximum of {quickBMPNoteMaxCharacterLength} characters and is {quickBMPNoteCharacterLength - quickBMPNoteMaxCharacterLength} over the limit."));
 
                 }
 
-                if (quickBMPSimple?.DisplayName == null)
+                if (quickBMPSimple.DisplayName == null)
                 {
                     validationResults.Add(new ValidationResult("An Other Structural BMP is missing a name."));
                 }
 
-                if (quickBMPSimple?.QuickTreatmentBMPTypeID <= 0)
+                if (quickBMPSimple.QuickTreatmentBMPTypeID <= 0)
                 {
                     validationResults.Add(new ValidationResult("An Other Structural BMP is missing a Treatment Type."));
                 }
+            }
+
+            if (quickBmpSimples.Any(x => x.PercentOfSiteTreated < 0 || x.PercentOfSiteTreated > 100))
+            {
+                validationResults.Add(new ValidationResult("Percent of Site Treated in Other Structural BMPs needs to be between 0 and 100."));
+            }
+
+            if (quickBmpSimples.Any(x => x.PercentCaptured < 0 || x.PercentCaptured > 100))
+            {
+                validationResults.Add(new ValidationResult("Percent Captured in Other Structural BMPs needs to be between 0 and 100."));
+            }
+
+            if (quickBmpSimples.Any(x => x.PercentRetained < 0 || x.PercentRetained > 100))
+            {
+                validationResults.Add(new ValidationResult("Percent Retained in Other Structural BMPs needs to be between 0 and 100."));
+            }
+
+            if (quickBmpSimples.Any(x => x.PercentOfSiteTreated.HasValue) && quickBmpSimples.Sum(x => x.PercentOfSiteTreated) != 100)
+            {
+                validationResults.Add(new ValidationResult("Percent of Site Treated across all Other Structural BMPs must add up to 100."));
             }
 
             foreach (var sourceControlBMP in SourceControlBMPSimples)

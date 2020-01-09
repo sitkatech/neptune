@@ -148,51 +148,64 @@
                             <div class="col-xs-12">
                                 <table class="dialogFormLayout table table-condensed">
                                     <tbody>
-                                        <tr>
-                                            <th style="width: 30px; border-top:none; border-bottom: 2px solid #ddd;">  </th>
-                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Name <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
-                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Type <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
-                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Note</th>
-                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
-                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
-                                            <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
-                                        </tr>
-                                        <tr ng-repeat="quickBmp in AngularModel.QuickBmpSimples">
-                                            <td style="border: none">
-                                                <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPID).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickBMPID}}" />
-                                                <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBmpSimples, quickBmp)" style="cursor: pointer"></span>
-                                            </td>
-                                            <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].DisplayName).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.DisplayName" value="{{quickBmp.DisplayName}}" />
-                                            </td>
-                                            <td style="text-align: right; padding-right: 17px; border:none">
-                                                <select name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickTreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
+                                    <tr>
+                                        <th style="width: 30px; border-top:none; border-bottom: 2px solid #ddd;">  </th>
+                                        <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Name <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
+                                        <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Type <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
+                                        <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;"> Note</th>
+                                        <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                                        <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                                        <th style="white-space: nowrap; border-top:none; border-bottom: 2px solid #ddd;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                                    </tr>
+                                    <tr ng-repeat="quickBmp in AngularModel.QuickBmpSimples">
+                                        <td style="border: none">
+                                            <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPID).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickBMPID}}" />
+                                            <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBmpSimples, quickBmp)" style="cursor: pointer"></span>
+                                        </td>
+                                        <td style="text-align: right; padding-right: 17px; border:none">
+                                            <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].DisplayName).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.DisplayName" value="{{quickBmp.DisplayName}}" />
+                                        </td>
+                                        <td style="text-align: right; padding-right: 17px; border:none">
+                                            <select name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickTreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
                                                     class="selectpicker"
                                                     data-live-search="true"
                                                     data-container="body"
                                                     data-width="100%" selectpicker
                                                     title="Select a Treatment BMP Type">
-                                                    <option ng-selected="isTreatmentBMPTypeSelected(treatmentType, quickBmp)"
-                                                            ng-repeat="treatmentType in AngularViewData.TreatmentBMPTypes"
-                                                            value="{{treatmentType.TreatmentBMPTypeID}}">
-                                                        {{treatmentType.TreatmentBMPTypeName}}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote" />
-                                            </td>
-                                            <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.PercentOfSiteTreated" />
-                                            </td>
-                                            <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.PercentCaptured" />
-                                            </td>
-                                            <td style="text-align: right; padding-right: 17px; border:none">
-                                                <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.PercentRetained" />
-                                            </td>
-                                        </tr>
+                                                <option ng-selected="isTreatmentBMPTypeSelected(treatmentType, quickBmp)"
+                                                        ng-repeat="treatmentType in AngularViewData.TreatmentBMPTypes"
+                                                        value="{{treatmentType.TreatmentBMPTypeID}}">
+                                                    {{treatmentType.TreatmentBMPTypeName}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: right; padding-right: 17px; border:none">
+                                            <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote" />
+                                        </td>
+                                        <td style="text-align: right; padding-right: 17px; border:none">
+                                            <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max ="100" ng-model="quickBmp.PercentOfSiteTreated" />
+                                        </td>
+                                        <td style="text-align: right; padding-right: 17px; border:none">
+                                            <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max ="100" ng-model="quickBmp.PercentCaptured" />
+                                        </td>
+                                        <td style="text-align: right; padding-right: 17px; border:none">
+                                            <input type="number" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max ="100" ng-model="quickBmp.PercentRetained" />
+                                        </td>
+                                    </tr>
                                     </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="4" style="text-align: right">
+                                            Total
+                                        </td>
+                                        <td class="text-center" style="font-weight: bold">
+                                            {{calculateTotalPercent()}}%
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    </tfoot>
+
                                 </table>
                             </div>
                         </div>
@@ -251,8 +264,7 @@
                     </div>
                 </div>
                 <div ng-repeat="sourceControlSimple in AngularModel.SourceControlBMPSimples">
-                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeName).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeName
-                           }}" />
+                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeName).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeName}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPID}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeID}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeCategoryID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeCategoryID}}" />
