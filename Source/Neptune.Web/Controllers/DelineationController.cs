@@ -319,7 +319,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewCheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to check for discrepancies between ALL centralized and distributed delineations and the most recent Regional Sub-basin Layer?<br /><br />This can take a little while to run.";
+            var confirmMessage = $"Are you sure you want to check for discrepancies between ALL centralized and distributed delineations and the most recent Regional Subbasin Layer?<br /><br />This can take a little while to run.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

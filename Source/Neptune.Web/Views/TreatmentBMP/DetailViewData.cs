@@ -203,7 +203,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             var delineationHasDiscrepancies = TreatmentBMP.Delineation?.HasDiscrepancies ?? false;
             if (delineationHasDiscrepancies)
             {
-                delineationErrors.Add(new HtmlString("It is not consistent with the most recent Regional Sub-basin Layer."));
+                delineationErrors.Add(new HtmlString("It is not consistent with the most recent Regional Subbasin Layer."));
             }
 
             if (treatmentBMP.Delineation != null && treatmentBMP.Delineation.DelineationOverlaps.Any())
