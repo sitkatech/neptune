@@ -57,8 +57,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public ViewResult FindABMP()
         {
-            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
-                .Where(x => x.CanView(CurrentPerson)).ToList();
+            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
             var jurisdictionLayerGeoJson =
@@ -77,8 +76,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var treatmentBmpsCurrentUserCanSee = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
-                .Where(x => x.CanView(CurrentPerson)).ToList();
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanManage();
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount =
                 treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
@@ -138,7 +136,7 @@ namespace Neptune.Web.Controllers
             out GridSpec<TreatmentBMPAssessmentSummary> gridSpec, Person currentPerson)
         {
             gridSpec = new TreatmentBMPAssessmentSummaryGridSpec();
-            var stormwaterJurisdictionIDsCurrentUserCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit()
+            var stormwaterJurisdictionIDsCurrentUserCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView()
                 .Select(y => y.StormwaterJurisdictionID).ToList();
 
             var vMostRecentTreatmentBMPAssessments =
@@ -242,10 +240,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID)
                 ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID)
                 : null;
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions
-                .ToList()
-                .Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x))
-                .ToList();
+            var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
@@ -313,10 +308,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID)
                 ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID)
                 : null;
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions
-                .ToList()
-                .Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x))
-                .ToList();
+            var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans

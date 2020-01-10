@@ -82,12 +82,7 @@ namespace Neptune.Web.Controllers
         private List<TreatmentBMP> GetJurisdictionTreatmentBMPsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction)
         {
             gridSpec = new TreatmentBMPGridSpec(currentPerson, false, false);
-            return
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
-                    .Where(x => x.CanView(CurrentPerson))
-                    .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID)
-                    .ToList();
+            return currentPerson.GetTreatmentBmpsPersonCanManage().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
         }
-
     }
 }

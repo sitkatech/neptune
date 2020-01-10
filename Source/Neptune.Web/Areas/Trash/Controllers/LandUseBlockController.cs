@@ -56,10 +56,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private List<LandUseBlock> GetLandUseBlocksAndGridSpec(out LandUseBlockGridSpec gridSpec)
         {
             gridSpec = new LandUseBlockGridSpec();
-
-            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x=>x.StormwaterJurisdictionID).ToList();
-
-            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x=>x.StormwaterJurisdictionID).ToList();
+            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
         }
     }
 }

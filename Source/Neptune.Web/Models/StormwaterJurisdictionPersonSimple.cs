@@ -39,8 +39,7 @@ namespace Neptune.Web.Models
             StormwaterJurisdictionPersonID = stormwaterJurisdictionPerson.StormwaterJurisdictionPersonID;
             PersonID = stormwaterJurisdictionPerson.PersonID;
             StormwaterJurisdictionID = stormwaterJurisdictionPerson.StormwaterJurisdictionID;
-            CurrentPersonCanRemove =
-                currentPerson.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionPerson.StormwaterJurisdiction);
+            CurrentPersonCanRemove = currentPerson.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionPerson.StormwaterJurisdictionID);
         }
     }
 }

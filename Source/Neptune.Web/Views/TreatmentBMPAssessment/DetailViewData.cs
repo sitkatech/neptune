@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
-            CurrentPersonCanManage = CurrentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction);
+            CurrentPersonCanManage = CurrentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdictionID);
             ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
             EditBenchmarkAndThresholdUrl =
                 SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x =>

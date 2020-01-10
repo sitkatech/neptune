@@ -31,7 +31,7 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(y=>y.StormwaterJurisdictionID).Contains(x.StormwaterJurisdictionID)).ToList();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(y=>y.StormwaterJurisdictionID).Contains(x.StormwaterJurisdictionID)).ToList();
 
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
@@ -45,7 +45,7 @@ namespace Neptune.Web.Controllers
                 .WaterQualityManagementPlanVerifies
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
-                .ThenByDescending(x => x.LastEditedDate).ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(y => y.StormwaterJurisdictionID).Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID)).ToList();
+                .ThenByDescending(x => x.LastEditedDate).ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(y => y.StormwaterJurisdictionID).Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID)).ToList();
 
             var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);

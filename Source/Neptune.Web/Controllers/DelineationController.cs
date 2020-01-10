@@ -35,6 +35,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
@@ -59,11 +60,9 @@ namespace Neptune.Web.Controllers
             }
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
-
-            var delineationMapInitJson = new DelineationMapInitJson("delineationMap",
-                CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
-            var bulkUploadTreatmentBMPDelineationsUrl =
-                SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.Delineations).ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", treatmentBMPs, CurrentPerson.GetBoundingBox());
+            var bulkUploadTreatmentBMPDelineationsUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }

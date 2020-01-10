@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Linq;
 using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Views;
 
 namespace Neptune.Web.Models
@@ -31,13 +30,13 @@ namespace Neptune.Web.Models
     {
         public bool CanEdit(Person currentPerson)
         {
-            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
             return canManageStormwaterJurisdiction;
         }
 
         public bool CanDelete(Person currentPerson)
         {
-            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
             return canManageStormwaterJurisdiction;
         }
 

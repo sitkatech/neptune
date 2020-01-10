@@ -22,7 +22,7 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, FundingEvent contextModelObject)
         {
-            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdiction);
+            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdictionID);
             if (!canManageStormwaterJurisdiction)
             {
                 return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");

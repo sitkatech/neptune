@@ -41,7 +41,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta, Person currentPerson) : this(ovta)
         {
-            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
             if (stormwaterJurisdictionsPersonCanEdit.Count() == 1)
             {
                 StormwaterJurisdiction =

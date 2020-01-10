@@ -100,14 +100,19 @@ namespace Neptune.Web.Models
             return $"{NeptuneWebConfiguration.KeystoneUserProfileUrl}{person.PersonGuid}";
         }
 
-        public static bool IsAssignedToStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
+        public static bool IsAssignedToStormwaterJurisdiction(this Person person, int stormwaterJurisdictionID)
         {
-            return person.IsAdministrator() || person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
+            return person.IsAdministrator() || person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID);
         }
 
         public static bool IsManagerOrAdmin(this Person person)
         {
             return person.Role == Role.Admin || person.Role == Role.JurisdictionManager || person.Role == Role.SitkaAdmin;
+        }
+
+        public static bool IsJurisdictionEditorOrManagerOrAdmin(this Person person)
+        {
+            return person.Role == Role.Admin || person.Role == Role.JurisdictionManager || person.Role == Role.SitkaAdmin || person.Role == Role.JurisdictionEditor;
         }
 
         /// <summary>
@@ -139,19 +144,34 @@ namespace Neptune.Web.Models
 
         public static bool CanManageStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
         {
-            var isAdministrator = person.IsAdministrator();
-            var isStormwaterJurisdictionManager = person.Role == Role.JurisdictionManager;
-            var isPartOfStormwaterJurisdiction = person.StormwaterJurisdictionPeople.Any(x =>
-                x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
-            return isAdministrator || (isStormwaterJurisdictionManager && isPartOfStormwaterJurisdiction);
+            var stormwaterJurisdictionsPersonCanView = person.GetStormwaterJurisdictionsPersonCanView();
+            return stormwaterJurisdictionsPersonCanView.Any(x =>
+                       x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID) &&
+                   person.IsManagerOrAdmin();
         }
 
         public static bool CanEditStormwaterJurisdiction(this Person person,
             StormwaterJurisdiction stormwaterJurisdiction)
         {
-            return person.CanManageStormwaterJurisdiction(stormwaterJurisdiction) ||
-                   (person.IsAssignedToStormwaterJurisdiction(stormwaterJurisdiction) &&
-                    person.Role == Role.JurisdictionEditor);
+            var stormwaterJurisdictionsPersonCanView = person.GetStormwaterJurisdictionsPersonCanView();
+            return stormwaterJurisdictionsPersonCanView.Any(x =>
+                       x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID) &&
+                   person.IsJurisdictionEditorOrManagerOrAdmin();
+        }
+
+        public static List<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanView(this Person person)
+        {
+            return GetStormwaterJurisdictionsPersonCanViewWithContext(person, HttpRequestStorage.DatabaseEntities).ToList();
+        }
+
+        public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanViewWithContext(this Person person, DatabaseEntities dbContext)
+        {
+            if (person.IsAdministrator())
+            {
+                return dbContext.StormwaterJurisdictions;
+            }
+
+            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
         }
 
         /// <summary>
@@ -163,28 +183,9 @@ namespace Neptune.Web.Models
             return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
 
-        public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanEdit(this Person person)
-        {
-            if (person.Role == Role.SitkaAdmin || person.Role == Role.Admin)
-            {
-                return HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions;
-            }
-
-            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
-        }
-        public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanEditWithContext(this Person person, DatabaseEntities dbContext)
-        {
-            if (person.Role == Role.SitkaAdmin || person.Role == Role.Admin)
-            {
-                return dbContext.StormwaterJurisdictions;
-            }
-
-            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
-        }
-
         public static BoundingBox GetBoundingBox(this Person person)
         {
-            var stormwaterJurisdictionsPersonCanEdit = person.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var stormwaterJurisdictionsPersonCanEdit = person.GetStormwaterJurisdictionsPersonCanView().ToList();
             var boundingBox = stormwaterJurisdictionsPersonCanEdit.Any()
                 ? new BoundingBox(stormwaterJurisdictionsPersonCanEdit
                     .Select(x => x.StormwaterJurisdictionGeometry))
@@ -203,13 +204,13 @@ namespace Neptune.Web.Models
         {
             return currentPerson.IsAdministrator()
                 ? ""
-                : $"StormwaterJurisdictionID IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
+                : $"StormwaterJurisdictionID IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => x.StormwaterJurisdictionID))})";
         }
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson)
         {
             return currentPerson.IsAdministrator()
                 ? ""
-                : $"StormwaterJurisdictionID NOT IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
+                : $"StormwaterJurisdictionID NOT IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => x.StormwaterJurisdictionID))})";
         }
 
         public static HtmlString GetDroolToolRoleDisplayNameAsUrl(this Person person)
