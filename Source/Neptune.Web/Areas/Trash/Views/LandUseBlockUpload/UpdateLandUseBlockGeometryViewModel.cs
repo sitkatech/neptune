@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Web;
 
 namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
@@ -29,10 +28,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
         {
             var currentPerson = HttpRequestStorage.DatabaseEntities.People.Find(PersonID);
 
-            HttpRequestStorage.DatabaseEntities.LandUseBlockStagings.DeleteLandUseBlockStaging(currentPerson
-                .LandUseBlockStagingsWhereYouAreTheUploadedByPerson);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
+            HttpRequestStorage.DatabaseEntities.pLandUseBlockStagingDeleteByPersonID(currentPerson.PersonID);
             var errors = new List<ValidationResult>();
 
             FileResource.ValidateFileSize(FileResourceData, errors, GeneralUtility.NameOf(() => FileResourceData));
