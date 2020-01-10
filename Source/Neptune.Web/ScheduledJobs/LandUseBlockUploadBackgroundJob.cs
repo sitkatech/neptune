@@ -251,7 +251,7 @@ namespace Neptune.Web.ScheduledJobs
                     SitkaSmtpClient.Send(mailMessage);
                 }
 
-                DbContext.LandUseBlockStagings.DeleteLandUseBlockStaging(landUseBlockStagings);
+                DbContext.pLandUseBlockStagingDeleteByPersonID(PersonID);
             }
             catch (Exception)
             {
