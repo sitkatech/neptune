@@ -19,10 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Data.Entity.Spatial;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.GeoJson;
-using Neptune.Web.Models;
+using System.Data.Entity.Spatial;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -37,7 +36,7 @@ namespace Neptune.Web.Views.Shared
         public SearchMapSummaryData(string mapSummaryUrl, DbGeometry geometry, double? latitude, double? longitude, int entityID)
         {
             MapSummaryUrl = mapSummaryUrl;
-            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(geometry);
+            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geometry);
             Latitude = latitude;
             Longitude = longitude;
             EntityID = entityID;

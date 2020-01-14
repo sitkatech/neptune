@@ -21,8 +21,33 @@ Source code is available upon request via <support@sitkatech.com>.
 var NeptuneMaps = {};
 
 /* ====== Main Map ====== */
-NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, customOptions) {
+NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, customOptions) {
     var self = this;
+
+    this.geoserverUrlOWS = geoserverUrl;
+
+    this.wmsLayers = {};
+
+    // todo: rename to baseWmsParams to make intent explicit
+    this.wmsParams = {
+        service: "WMS",
+        transparent: true,
+        version: "1.1.1",
+        format: "image/png",
+        info_format: "application/json",
+        tiled: true
+        //        tilesorigin: [this.map.getBounds().getSouthWest().lng, this.map.getBounds().getSouthWest().lat]
+    };
+
+    // todo: rename to baseWfsParams to make intent explicit
+    this.wfsParams = {
+        service: "WFS",
+        version: "2.0",
+        request: "GetFeature",
+        outputFormat: "application/json",
+        SrsName: "EPSG:4326"
+    };
+
     this.MapDivId = mapInitJson.MapDivID;
     var tileOptions = {
         maxNativeZoom: 18,
@@ -79,6 +104,19 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, customOptions) {
         streetLayerGroup.addTo(this.map);
     }
 
+    // initialize the layer control
+    var collapsed = false;
+    if (this.customOptions.collapseLayerControl) {
+        collapsed = true;
+    }
+
+    var layerControlOptions = {
+        collapsed: collapsed
+    };
+    this.layerControl = new BetterLayerControl(baseLayers, overlayLayers, layerControlOptions);
+    this.layerControl.addTo(this.map);
+
+
     // add vector layers
     this.vectorLayers = [];
     this.vectorLayerGroups = [];
@@ -90,7 +128,7 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, customOptions) {
                 this.addVectorLayer(currentLayer, overlayLayers);
                 break;
             case "Wms":
-                this.addWmsLayer(currentLayer, overlayLayers);
+                this.addWmsLayer("OCStormwater:" + currentLayer.LayerName, currentLayer.LayerName);
                 break;
             default:
                 console.error("Invalid LayerType " + currentLayer.LayerType + " not added to map layers.");
@@ -151,36 +189,96 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
     this.vectorLayerGroups.push(layerGroup);
 };
 
-NeptuneMaps.Map.prototype.addWmsLayer = function (currentLayer, overlayLayers) {
-    var layerGroup = new L.LayerGroup(),
-        wmsParams = L.Util.extend(this.wmsParams, { layers: currentLayer.MapServerLayerName }),
-        wmsLayer = L.tileLayer.wms(currentLayer.MapServerUrl, wmsParams).addTo(layerGroup);
+//NeptuneMaps.Map.prototype.addWmsLayer = function (currentLayer, overlayLayers) {
+//    var layerGroup = new L.LayerGroup();
+//    var wmsParams = L.Util.extend(this.wmsParams, { layers: currentLayer.MapServerLayerName });
+//    var wmsLayer = L.tileLayer.wms(currentLayer.MapServerUrl, wmsParams).addTo(layerGroup);
 
-    if (currentLayer.LayerInitialVisibility === 1) {
-        layerGroup.addTo(this.map);
-    }
+//    if (currentLayer.LayerInitialVisibility === 1) {
+//        layerGroup.addTo(this.map);
+//    }
 
-    overlayLayers[currentLayer.LayerName] = layerGroup;
-    this.vectorLayers.push(wmsLayer);
+//    overlayLayers[currentLayer.LayerName] = layerGroup;
+//    this.vectorLayers.push(wmsLayer);
+//};
+
+NeptuneMaps.Map.prototype.addWmsLayer = function (layerName, layerControlLabelHtml, params, hide) {
+    var wmsParams = this.createWmsParamsWithLayerName(layerName);
+
+    if (params) { L.Util.extend(wmsParams, params); }
+
+    var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
+
+    this.addLayerToLayerControl(wmsLayer, layerControlLabelHtml, hide);
+
+    return wmsLayer;
 };
 
-NeptuneMaps.Map.prototype.wmsParams = {
-    service: "WMS",
-    transparent: true,
-    version: "1.1.1",
-    format: "image/png",
-    info_format: "application/json",
-    tiled: true
+NeptuneMaps.Map.prototype.createWmsParamsWithLayerName = function (layerName) {
+    var customParams = {
+        layers: layerName
+    };
+
+    // deep-copy the base params and extend them by the customParams;
+    // doing it this way ensures that the base params are left alone so future WMS layers aren't called with those params
+    var wmsParams = jQuery.extend({}, this.wmsParams);
+    L.Util.extend(wmsParams, customParams);
+
+    return wmsParams;
 };
 
-NeptuneMaps.Map.prototype.wfsParams = {
-    service: "WFS",
-    version: "2.0",
-    request: "GetFeature",
-    outputFormat: "application/json",
-    SrsName: "EPSG:4326"
+NeptuneMaps.Map.prototype.createWfsParamsWithLayerName = function (layerName) {
+    var customParams = {
+        typeName: layerName
+    };
+
+    var wfsParams = jQuery.extend({}, this.wfsParams);
+    L.Util.extend(wfsParams, customParams);
+    return wfsParams;
 };
 
+
+
+NeptuneMaps.Map.prototype.selectFeatureByWfs = function (layerName, params) {
+    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), params);
+    return jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+        type: "GET"
+    });
+};
+
+NeptuneMaps.Map.prototype.getFeatureInfo = function (layerName, xy) {
+
+    var x1 = xy[0];
+    var y1 = xy[1];
+    var x2 = x1 + 0.0001;
+    var y2 = y1 + 0.0001;
+
+    var bbox = [x1, y1, x2, y2].join(",");
+
+
+    var params = {
+        service: "WMS",
+        transparent: true,
+        version: "1.1.1",
+        request: "GetFeatureInfo",
+        info_format: "application/json",
+        tiled: true,
+        QUERY_LAYERS: layerName,
+        layers: layerName,
+        X: 50,
+        Y: 50,
+        SRS: 'EPSG:4326',
+        WIDTH: 101,
+        HEIGHT: 101,
+        BBOX: bbox
+    };
+
+    return jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(params),
+        type: "GET"
+    });
+};
 
 var BetterLayerControl = L.Control.Layers.extend(
     {
@@ -196,13 +294,6 @@ NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, ove
         collapsed = true;
     }
 
-    var layerControlOptions = {
-        collapsed: collapsed
-    };
-
-    this.layerControl = new BetterLayerControl(baseLayers, overlayLayers, layerControlOptions);
-
-    this.layerControl.addTo(this.map);
     if (!collapsed)
     {
         var leafletControlLayersSelector = ".leaflet-control-layers";
@@ -277,61 +368,6 @@ NeptuneMaps.Map.prototype.removeClickEventHandler = function() {
     this.map.off("click");
 };
 
-NeptuneMaps.Map.prototype.getFeatureInfo = function (e)
-{
-    var self = this,
-        latlng = e.latlng,
-        html = "<div>";
-
-    html += this.formatLayerProperty("Latitude", L.Util.formatNum(latlng.lat, 4));
-    html += this.formatLayerProperty("Longitude", L.Util.formatNum(latlng.lng, 4));
-
-    var match = _(this.vectorLayers)
-        .filter(function (layer) {
-            return typeof layer.eachLayer !== "undefined" && self.map.hasLayer(layer);
-        })
-        .map(function (currentLayer) {
-            return leafletPip.pointInLayer(latlng, currentLayer, true);
-        })
-        .flatten()
-        .value();
-
-    var propertiesGroupedByKey = _(match)
-        .map(function (x) {
-            return _.keys(x.feature.properties);
-        })
-        .flatten()
-        .uniq()
-        .map(function (x) {
-            return {
-                key: x,
-                values: _(match)
-                    .map(function (y) {
-                        return y.feature.properties[x];
-                    })
-                    .filter()
-                    .value()
-            };
-        })
-        .value();
-
-    // if there's overlap, add some content to the popup: the layer name
-    // and a table of attributes
-    for (var i = 0; i < propertiesGroupedByKey.length; i++) {
-        var group = propertiesGroupedByKey[i];
-        if (group.key !== "Short Name") {
-            var key = group.values.length > 1
-                    ? group.key + "s" // pluralized
-                    : group.key,
-                value = group.values.join(", ");
-            html += this.formatLayerProperty(key, value);
-        }
-    }
-
-    html += "</div>";
-
-    this.map.openPopup(L.popup({minWidth: 200, maxWidth: 350}).setLatLng(latlng).setContent(html).openOn(this.map));   
-};
 
 NeptuneMaps.Map.prototype.clickThroughFeature = function(e) {
     var self = this,

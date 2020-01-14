@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 
@@ -59,7 +59,9 @@ namespace Neptune.Web.Models
 
         public double CalculateParcelAcreageTotal()
         {
-            return this.WaterQualityManagementPlanParcels.Select(x => x.Parcel).Sum(x => x.ParcelAreaInAcres);
+            return
+                (this
+                    .WaterQualityManagementPlanBoundary?.Area.GetValueOrDefault() ?? 0) * DbSpatialHelper.SquareMetersToAcres;
         }
 
         public string GetLatestOandMVerificationDate()

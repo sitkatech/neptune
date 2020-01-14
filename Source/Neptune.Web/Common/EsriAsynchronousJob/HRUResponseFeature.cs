@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using LtInfo.Common;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
 
@@ -11,31 +13,11 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         [JsonProperty("geometry")]
         public EsriPolygonGeometry Geometry { get; set; }
 
-        // todo: overload
-        public HRUCharacteristic ToHRUCharacteristic(IHaveHRUCharacteristics iHaveHRUCharacteristics)
+        public HRUCharacteristic ToHRUCharacteristic()
         {
-            if (iHaveHRUCharacteristics is TreatmentBMP)
-            {
-                return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
-                    {TreatmentBMPID = iHaveHRUCharacteristics.PrimaryKey};
-            } else if (iHaveHRUCharacteristics is WaterQualityManagementPlan)
-
-            {
-                return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
-                    { WaterQualityManagementPlanID = iHaveHRUCharacteristics.PrimaryKey };
-            }
-            else if (iHaveHRUCharacteristics is NetworkCatchment)
-            {
-                return new HRUCharacteristic(Attributes.LSPCLandUseDescription,
-                        Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now)
-                    { NetworkCatchmentID = iHaveHRUCharacteristics.PrimaryKey };
-            }
-            {
-                throw new NotImplementedException(
-                    "Tried to add HRU characteristics to an entity that hasn't fully implemented them yet.");
-            }
+            var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.HRUCharacteristicLandUseCodeName == Attributes.LSPCLandUseDescription);
+            var hruCharacteristic = new HRUCharacteristic(Attributes.HydrologicSoilGroup, Attributes.SlopePercentage, Attributes.ImperviousAcres, DateTime.Now, Attributes.Area / CoordinateSystemHelper.SquareFeetToAcresDivisor, hruCharacteristicLandUseCode);
+            return hruCharacteristic;
         }
     }
 }

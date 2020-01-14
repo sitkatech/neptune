@@ -37,9 +37,11 @@ namespace Neptune.Web.Models
                 "The Custom Attribute Type is not valid for this Treatment BMP");
 
             var customAttribute = treatmentBMP.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
-
-            return customAttribute?.CustomAttributeValues?.Any(x => !string.IsNullOrWhiteSpace(x.AttributeValue)) ??
-                   false;
+            if (customAttribute == null)
+            {
+                return false;
+            }
+            return customAttribute.CustomAttributeValues.Any(x => !string.IsNullOrWhiteSpace(x.AttributeValue));
         }
     }
 }

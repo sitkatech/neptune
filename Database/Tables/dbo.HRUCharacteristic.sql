@@ -4,14 +4,15 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[HRUCharacteristic](
 	[HRUCharacteristicID] [int] IDENTITY(1,1) NOT NULL,
-	[LSPCLandUseDescription] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[HydrologicSoilGroup] [varchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SlopePercentage] [int] NOT NULL,
 	[ImperviousAcres] [float] NOT NULL,
 	[LastUpdated] [datetime] NOT NULL,
 	[TreatmentBMPID] [int] NULL,
 	[WaterQualityManagementPlanID] [int] NULL,
-	[NetworkCatchmentID] [int] NULL,
+	[RegionalSubbasinID] [int] NULL,
+	[Area] [float] NOT NULL,
+	[HRUCharacteristicLandUseCodeID] [int] NOT NULL,
  CONSTRAINT [PK_HRUCharacteristic_HRUCharacteristicID] PRIMARY KEY CLUSTERED 
 (
 	[HRUCharacteristicID] ASC
@@ -19,10 +20,15 @@ CREATE TABLE [dbo].[HRUCharacteristic](
 ) ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_NetworkCatchment_NetworkCatchmentID] FOREIGN KEY([NetworkCatchmentID])
-REFERENCES [dbo].[NetworkCatchment] ([NetworkCatchmentID])
+ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeID] FOREIGN KEY([HRUCharacteristicLandUseCodeID])
+REFERENCES [dbo].[HRUCharacteristicLandUseCode] ([HRUCharacteristicLandUseCodeID])
 GO
-ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_NetworkCatchment_NetworkCatchmentID]
+ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeID]
+GO
+ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_RegionalSubbasin_RegionalSubbasinID] FOREIGN KEY([RegionalSubbasinID])
+REFERENCES [dbo].[RegionalSubbasin] ([RegionalSubbasinID])
+GO
+ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_RegionalSubbasin_RegionalSubbasinID]
 GO
 ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
@@ -38,6 +44,6 @@ ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [CK_HRUCharact
 GO
 ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [CK_HRUCharacteristic_SlopePercentageIsAPercentage]
 GO
-ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [CK_HRUCharacteristic_XorForeignKeys] CHECK  (([TreatmentBMPID] IS NOT NULL AND [WaterQualityManagementPlanID] IS NULL AND [NetworkCatchmentID] IS NULL OR [TreatmentBMPID] IS NULL AND [WaterQualityManagementPlanID] IS NOT NULL AND [NetworkCatchmentID] IS NULL OR [TreatmentBMPID] IS NULL AND [WaterQualityManagementPlanID] IS NULL AND [NetworkCatchmentID] IS NOT NULL))
+ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [CK_HRUCharacteristic_XorForeignKeys] CHECK  (([TreatmentBMPID] IS NOT NULL AND [WaterQualityManagementPlanID] IS NULL AND [RegionalSubbasinID] IS NULL OR [TreatmentBMPID] IS NULL AND [WaterQualityManagementPlanID] IS NOT NULL AND [RegionalSubbasinID] IS NULL OR [TreatmentBMPID] IS NULL AND [WaterQualityManagementPlanID] IS NULL AND [RegionalSubbasinID] IS NOT NULL))
 GO
 ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [CK_HRUCharacteristic_XorForeignKeys]

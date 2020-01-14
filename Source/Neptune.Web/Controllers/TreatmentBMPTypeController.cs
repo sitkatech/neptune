@@ -47,7 +47,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData()
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
-            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList().OrderBy(x => x.TreatmentBMPTypeName).ToList();
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -70,7 +70,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel, null);
             }
-            var treatmentBMPType = new TreatmentBMPType(viewModel.TreatmentBMPTypeName, viewModel.TreatmentBMPTypeDescription);
+            var treatmentBMPType = new TreatmentBMPType(viewModel.TreatmentBMPTypeName, viewModel.TreatmentBMPTypeDescription, true);
             HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Add(treatmentBMPType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
@@ -84,7 +84,7 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeAssessmentObservationTypes, allTreatmentBMPTypeAssessmentObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeCustomAttributeTypes);
            
-            SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} succesfully created.");
+            SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} successfully created.");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(c => c.Detail(treatmentBMPType.PrimaryKey)));
         }

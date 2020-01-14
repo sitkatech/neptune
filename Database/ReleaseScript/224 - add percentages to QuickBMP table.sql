@@ -1,0 +1,1 @@
+alter table dbo.QuickBMP add PercentOfSiteTreated decimal(5,2) null, PercentCaptured decimal(5,2) null, PercentRetained decimal(5,2) null

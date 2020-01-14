@@ -19,10 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
@@ -30,10 +26,14 @@ using LtInfo.Common.GdalOgr;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Models
 {
-   public static class TreatmentBMPModelExtensions
+    public static class TreatmentBMPModelExtensions
     {
         public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int), NeptuneWebConfiguration.CanonicalHostNameRoot));
         public static string GetDetailUrl(this TreatmentBMP treatmentBMP)
@@ -122,7 +122,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
                 feature.Properties.Add("Name", x.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
@@ -141,7 +141,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
                 var trashCaptureStatusType = x.TrashCaptureStatusType;
                 
                 feature.Properties.Add("Name", x.TreatmentBMPName);
@@ -181,7 +181,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(treatmentBMP.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.LocationPoint);
                 feature.Properties.Add("Name", treatmentBMP.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
@@ -200,7 +200,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
                 AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
                 return feature;
             }));
@@ -218,7 +218,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(treatmentBMP.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.LocationPoint);
                 AddAllCommonPropertiesToTreatmentBMPFeature(feature, treatmentBMP);
                 foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
                 {

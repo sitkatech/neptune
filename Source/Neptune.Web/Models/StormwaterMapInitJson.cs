@@ -19,13 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using GeoJSON.Net.Feature;
+using LtInfo.Common.DesignByContract;
+using LtInfo.Common.GeoJson;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using GeoJSON.Net.Feature;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.GeoJson;
 
 namespace Neptune.Web.Models
 {
@@ -87,7 +87,7 @@ namespace Neptune.Web.Models
         {
             Check.Require(treatmentBMP.Delineation?.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(treatmentBMP.Delineation?.DelineationGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.Delineation?.DelineationGeometry);
             featureCollection.Features.Add(feature);
 
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };

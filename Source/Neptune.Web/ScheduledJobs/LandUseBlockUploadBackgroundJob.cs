@@ -42,7 +42,7 @@ namespace Neptune.Web.ScheduledJobs
                 var landUseBlockStagings = person.LandUseBlockStagingsWhereYouAreTheUploadedByPerson;
                 var stormwaterJurisdictions = DbContext.StormwaterJurisdictions.ToList();
                 var stormwaterJurisdictionsPersonCanEdit =
-                    person.GetStormwaterJurisdictionsPersonCanEditWithContext(DbContext).ToList();
+                    person.GetStormwaterJurisdictionsPersonCanViewWithContext(DbContext).ToList();
 
                 var allowedStormwaterJurisdictionNames = string.Join(", ",
                     stormwaterJurisdictions.Select(x => x.Organization.OrganizationName).ToList());

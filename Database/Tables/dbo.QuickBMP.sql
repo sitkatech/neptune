@@ -8,6 +8,9 @@ CREATE TABLE [dbo].[QuickBMP](
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[QuickBMPName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[QuickBMPNote] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[PercentOfSiteTreated] [decimal](5, 2) NULL,
+	[PercentCaptured] [decimal](5, 2) NULL,
+	[PercentRetained] [decimal](5, 2) NULL,
  CONSTRAINT [PK_QuickBMP_QuickBMPID] PRIMARY KEY CLUSTERED 
 (
 	[QuickBMPID] ASC

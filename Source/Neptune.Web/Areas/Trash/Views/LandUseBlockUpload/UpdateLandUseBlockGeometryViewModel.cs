@@ -119,7 +119,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
         public void UpdateModel(Person currentPerson)
         {
             BackgroundJob.Schedule(() =>
-                ScheduledBackgroundJobBootstrapper.RunLandUseBlockUploadBackgroundJob(currentPerson.PersonID), TimeSpan.FromSeconds(30));
+                ScheduledBackgroundJobLaunchHelper.RunLandUseBlockUploadBackgroundJob(currentPerson.PersonID), TimeSpan.FromSeconds(30));
         }
     }
 }

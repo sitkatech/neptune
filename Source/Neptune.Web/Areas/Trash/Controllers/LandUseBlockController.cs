@@ -39,8 +39,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LandUseBlock);
-            var landUseBlockBulkUploadUrl =
-                SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(x => x.UpdateLandUseBlockGeometry());
+            var landUseBlockBulkUploadUrl = SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(x => x.UpdateLandUseBlockGeometry());
             var viewData = new IndexViewData(CurrentPerson, neptunePage, landUseBlockBulkUploadUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
@@ -56,10 +55,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private List<LandUseBlock> GetLandUseBlocksAndGridSpec(out LandUseBlockGridSpec gridSpec)
         {
             gridSpec = new LandUseBlockGridSpec();
-
-            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x=>x.StormwaterJurisdictionID).ToList();
-
-            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x=>x.StormwaterJurisdictionID).ToList();
+            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
         }
     }
 }

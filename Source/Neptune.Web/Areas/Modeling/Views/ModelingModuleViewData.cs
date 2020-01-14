@@ -44,8 +44,8 @@ namespace Neptune.Web.Areas.Modeling.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(c => c.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(c => c.Index()), currentPerson, "HRU Characteristics", "Group4"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NetworkCatchmentController>(c => c.Index()), currentPerson, "Network Catchments", "Group4"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NetworkCatchmentController>(c => c.Grid()), currentPerson, "Network Catchment Grid", "Group4"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(c => c.Index()), currentPerson, "Regional Subbasins", "Group4"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(c => c.Grid()), currentPerson, "Regional Subbasin Grid", "Group4"));
             return manageMenu;
         }
     }

@@ -24,13 +24,14 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Delineation()
         {
-
+            this.DelineationOverlaps = new HashSet<DelineationOverlap>();
+            this.DelineationOverlapsWhereYouAreTheOverlappingDelineation = new HashSet<DelineationOverlap>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID, DateTime dateLastModified, DbGeometry delineationGeometry4326) : this()
+        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID, int treatmentBMPID, DateTime dateLastModified, DbGeometry delineationGeometry4326, bool hasDiscrepancies) : this()
         {
             this.DelineationID = delineationID;
             this.DelineationGeometry = delineationGeometry;
@@ -41,12 +42,13 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMPID;
             this.DateLastModified = dateLastModified;
             this.DelineationGeometry4326 = delineationGeometry4326;
+            this.HasDiscrepancies = hasDiscrepancies;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, int treatmentBMPID, DateTime dateLastModified) : this()
+        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, int treatmentBMPID, DateTime dateLastModified, bool hasDiscrepancies) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -56,12 +58,13 @@ namespace Neptune.Web.Models
             this.IsVerified = isVerified;
             this.TreatmentBMPID = treatmentBMPID;
             this.DateLastModified = dateLastModified;
+            this.HasDiscrepancies = hasDiscrepancies;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified, TreatmentBMP treatmentBMP, DateTime dateLastModified) : this()
+        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified, TreatmentBMP treatmentBMP, DateTime dateLastModified, bool hasDiscrepancies) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -71,6 +74,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             this.DateLastModified = dateLastModified;
+            this.HasDiscrepancies = hasDiscrepancies;
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static Delineation CreateNewBlank(DelineationType delineationType, TreatmentBMP treatmentBMP)
         {
-            return new Delineation(default(DbGeometry), delineationType, default(bool), treatmentBMP, default(DateTime));
+            return new Delineation(default(DbGeometry), delineationType, default(bool), treatmentBMP, default(DateTime), default(bool));
         }
 
         /// <summary>
@@ -87,13 +91,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name};
 
 
         /// <summary>
@@ -109,8 +113,24 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in DelineationOverlaps.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in DelineationOverlapsWhereYouAreTheOverlappingDelineation.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -123,9 +143,12 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
         public DateTime DateLastModified { get; set; }
         public DbGeometry DelineationGeometry4326 { get; set; }
+        public bool HasDiscrepancies { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 
+        public virtual ICollection<DelineationOverlap> DelineationOverlaps { get; set; }
+        public virtual ICollection<DelineationOverlap> DelineationOverlapsWhereYouAreTheOverlappingDelineation { get; set; }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
         public virtual Person VerifiedByPerson { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

@@ -30,41 +30,57 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID, int? networkCatchmentID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, double area, int hRUCharacteristicLandUseCodeID) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
-            this.LSPCLandUseDescription = lSPCLandUseDescription;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
             this.SlopePercentage = slopePercentage;
             this.ImperviousAcres = imperviousAcres;
             this.LastUpdated = lastUpdated;
             this.TreatmentBMPID = treatmentBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
-            this.NetworkCatchmentID = networkCatchmentID;
+            this.RegionalSubbasinID = regionalSubbasinID;
+            this.Area = area;
+            this.HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCodeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(string lSPCLandUseDescription, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated) : this()
+        public HRUCharacteristic(string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.HRUCharacteristicID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.LSPCLandUseDescription = lSPCLandUseDescription;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
             this.SlopePercentage = slopePercentage;
             this.ImperviousAcres = imperviousAcres;
             this.LastUpdated = lastUpdated;
+            this.Area = area;
+            this.HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCodeID;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
+        /// </summary>
+        public HRUCharacteristic(string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.HRUCharacteristicID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.HydrologicSoilGroup = hydrologicSoilGroup;
+            this.SlopePercentage = slopePercentage;
+            this.ImperviousAcres = imperviousAcres;
+            this.LastUpdated = lastUpdated;
+            this.Area = area;
+            this.HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID;
+        }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static HRUCharacteristic CreateNewBlank()
+        public static HRUCharacteristic CreateNewBlank(HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode)
         {
-            return new HRUCharacteristic(default(string), default(string), default(int), default(double), default(DateTime));
+            return new HRUCharacteristic(default(string), default(int), default(double), default(DateTime), default(double), hRUCharacteristicLandUseCode);
         }
 
         /// <summary>
@@ -101,24 +117,25 @@ namespace Neptune.Web.Models
 
         [Key]
         public int HRUCharacteristicID { get; set; }
-        public string LSPCLandUseDescription { get; set; }
         public string HydrologicSoilGroup { get; set; }
         public int SlopePercentage { get; set; }
         public double ImperviousAcres { get; set; }
         public DateTime LastUpdated { get; set; }
         public int? TreatmentBMPID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
-        public int? NetworkCatchmentID { get; set; }
+        public int? RegionalSubbasinID { get; set; }
+        public double Area { get; set; }
+        public int HRUCharacteristicLandUseCodeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HRUCharacteristicID; } set { HRUCharacteristicID = value; } }
 
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        public virtual NetworkCatchment NetworkCatchment { get; set; }
+        public virtual RegionalSubbasin RegionalSubbasin { get; set; }
+        public HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode { get { return HRUCharacteristicLandUseCode.AllLookupDictionary[HRUCharacteristicLandUseCodeID]; } }
 
         public static class FieldLengths
         {
-            public const int LSPCLandUseDescription = 100;
             public const int HydrologicSoilGroup = 5;
         }
     }

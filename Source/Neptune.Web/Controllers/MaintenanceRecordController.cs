@@ -33,8 +33,12 @@ namespace Neptune.Web.Controllers
         {
             var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
             var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords
-                .Include(x=>x.FieldVisit).Include(x=>x.FieldVisit.PerformedByPerson.Organization).Include(x=>x.TreatmentBMP).Include(x=>x.MaintenanceRecordObservations).Include(x=>x.MaintenanceRecordObservations.Select(y=>y.MaintenanceRecordObservationValues))
-                .ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson)).ToList();
+                .Include(x => x.FieldVisit).Include(x => x.FieldVisit.PerformedByPerson.Organization)
+                .Include(x => x.TreatmentBMP)
+                .Include(x => x.TreatmentBMP.TreatmentBMPType)
+                .Include(x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x => x.MaintenanceRecordObservations).Include(x =>
+                    x.MaintenanceRecordObservations.Select(y => y.MaintenanceRecordObservationValues))
+                .ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).ToList();
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes);
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);

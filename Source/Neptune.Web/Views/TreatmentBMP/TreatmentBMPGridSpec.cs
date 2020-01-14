@@ -23,8 +23,6 @@ using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,14 +36,19 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             if (showDelete)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x =>
+                {
+                    var userHasDeletePermission = x.CanDelete(currentPerson);
+                    return DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
+                            userHasDeletePermission, userHasDeletePermission);
+                }, 30, DhtmlxGridColumnFilterType.None);
             }
             if (showEdit)
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.CanEdit(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             }
 
-            Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(y => y.Detail(x.PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170);
             Add("Owner Organization", x => x.OwnerOrganization.GetDisplayNameAsUrl(), 170);

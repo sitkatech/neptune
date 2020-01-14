@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetDetailUrlForGrid(this Delineation delineation)
         {
-            return new HtmlString($"<a href={GetDetailUrl(delineation)} class='gridButton'>View</a>");
+            return UrlTemplate.MakeHrefString(GetDetailUrl(delineation), "View", new Dictionary<string, string>{{"class", "gridButton"}});
         }
 
         public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Delineation> delineationGeometryStagings)
@@ -40,7 +40,7 @@ namespace Neptune.Web.Models
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometry != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.DelineationGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.DelineationGeometry);
                 feature.Properties.Add("DelineationID", x.DelineationID);
                 feature.Properties.Add("Name", x.DelineationID);
                 feature.Properties.Add("FeatureWeight", 1);
@@ -57,7 +57,7 @@ namespace Neptune.Web.Models
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometry != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(x.DelineationGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.DelineationGeometry);
                 feature.Properties.Add("DelineationID", x.DelineationID);
                 feature.Properties.Add("Name", x.DelineationID);
                 feature.Properties.Add("FeatureWeight", 1);

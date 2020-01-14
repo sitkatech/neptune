@@ -2,7 +2,7 @@
     .directive('percentageCollectionMethod',
         function() {
             var object = {
-                restrict: 'EA',                
+                restrict: 'EA',
                 scope: {
                     observationTypeId: '@',
                     measurementUnitLabelAndUnit: '@',

@@ -25,6 +25,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using LtInfo.Common.GdalOgr;
 using Microsoft.SqlServer.Types;
+using NetTopologySuite.Geometries;
 
 namespace LtInfo.Common.DbSpatial
 {
@@ -106,30 +107,43 @@ namespace LtInfo.Common.DbSpatial
 
         public static DbGeometry UnionListGeometries(this IList<DbGeometry> inputGeometries)
         {
-            // all geometries have to have the same SRS or the union isn't defined anyway, so just grab the first one
-            var coordinateSystemId = inputGeometries.First().CoordinateSystemId;
+            if (inputGeometries.Count == 0)
+            {
+                return null;
+            }
 
-            NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
+            DbGeometry union;
 
-            var internalGeometries = inputGeometries.Select(x => reader.Read(x.AsBinary())).ToList();
+            try
+            {
 
-            var geometry = NetTopologySuite.Operation.Union.CascadedPolygonUnion.Union(internalGeometries);
+                // all geometries have to have the same SRS or the union isn't defined anyway, so just grab the first one
+                var coordinateSystemId = inputGeometries.First().CoordinateSystemId;
 
-            var union = DbGeometry.FromBinary(geometry.AsBinary(), coordinateSystemId);
-            //if (inputGeometries.Count == 0)
-            //{
-            //    return null;
-            //}
+                NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
 
-            //DbGeometry union = inputGeometries.First();
+                var internalGeometries = inputGeometries.Select(x => x.Buffer(0)).Select(x => reader.Read(x.AsBinary()))
+                    .ToList();
 
-            //for (var i = 1; i < inputGeometries.Count; i++)
-            //{
-            //    var temp = union.Union(inputGeometries[i]);
-            //    union = temp;
-            //}
+                var geometry = NetTopologySuite.Operation.Union.CascadedPolygonUnion.Union(internalGeometries);
 
-            return union;
+                union = DbGeometry.FromBinary(geometry.AsBinary(), coordinateSystemId);
+                return union;
+            }
+            catch (TopologyException)
+            {
+                // fall back on the iterative union 
+
+                union = inputGeometries.First();
+
+                for (var i = 1; i < inputGeometries.Count; i++)
+                {
+                    var temp = union.Union(inputGeometries[i]);
+                    union = temp;
+                }
+
+                return union;
+            }
         }
     }
 }

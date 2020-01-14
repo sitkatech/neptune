@@ -30,13 +30,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public QuickBMP(int quickBMPID, int waterQualityManagementPlanID, int treatmentBMPTypeID, string quickBMPName, string quickBMPNote) : this()
+        public QuickBMP(int quickBMPID, int waterQualityManagementPlanID, int treatmentBMPTypeID, string quickBMPName, string quickBMPNote, decimal? percentOfSiteTreated, decimal? percentCaptured, decimal? percentRetained) : this()
         {
             this.QuickBMPID = quickBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.QuickBMPName = quickBMPName;
             this.QuickBMPNote = quickBMPNote;
+            this.PercentOfSiteTreated = percentOfSiteTreated;
+            this.PercentCaptured = percentCaptured;
+            this.PercentRetained = percentRetained;
         }
 
         /// <summary>
@@ -125,6 +128,9 @@ namespace Neptune.Web.Models
         public int TreatmentBMPTypeID { get; set; }
         public string QuickBMPName { get; set; }
         public string QuickBMPNote { get; set; }
+        public decimal? PercentOfSiteTreated { get; set; }
+        public decimal? PercentCaptured { get; set; }
+        public decimal? PercentRetained { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return QuickBMPID; } set { QuickBMPID = value; } }
 

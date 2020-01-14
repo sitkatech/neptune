@@ -47,27 +47,21 @@
         PassingScoreLabel: null,
         FailingScoreLabel: null
     };
-    
+
 
     $scope.getObservationCollectionMethod = function(idToFind) {
-        return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods,"ID",idToFind);
-     }
-    
-    $scope.updateCollectionMethod = function () {
+        return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods, "ID", idToFind);
+    };
+
+    $scope.updateCollectionMethod = function() {
         var observationCollectionMethod = $scope.getObservationCollectionMethod($scope.ObservationTypeCollectionMethodID);
         $scope.ObservationTypeCollectionMethodSelected = observationCollectionMethod;
 
-
         if ($scope.selectedCollectionMethodIsDiscrete()) {
             $scope.TreatmentBMPAssessmentObservationTypeSchema = newDiscreteObservationTypeSchema;
-        }
-        else if ($scope.selectedCollectionMethodIsRate()) {
-            $scope.TreatmentBMPAssessmentObservationTypeSchema = newRateObservationTypeSchema;
-        }
-        else if ($scope.selectedCollectionMethodIsPassFail()) {
+        } else if ($scope.selectedCollectionMethodIsPassFail()) {
             $scope.TreatmentBMPAssessmentObservationTypeSchema = newPassFailObservationTypeSchema;
-        }
-        else if ($scope.selectedCollectionMethodIsPercentage()) {
+        } else if ($scope.selectedCollectionMethodIsPercentage()) {
             $scope.TreatmentBMPAssessmentObservationTypeSchema = newPercentageObservationTypeSchema;
         } else {
             $scope.TreatmentBMPAssessmentObservationTypeSchema = {};
@@ -76,81 +70,88 @@
         if ($scope.TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve.length == 0) {
             $scope.addInput();
         }
-        
-    }
+    };
 
     $scope.selectedCollectionMethodHasBenchmarkAndThresholds = function() {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
             $scope.ObservationTypeCollectionMethodSelected.HasBenchmarkAndThresholds;
-    }
+    };
 
-    $scope.selectedCollectionMethodIsDiscrete = function () {
+    $scope.selectedCollectionMethodIsDiscrete = function() {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.DiscreteObservationTypeCollectionMethodID;
-    }
+            $scope.ObservationTypeCollectionMethodSelected.ID ===
+            $scope.AngularViewData.DiscreteObservationTypeCollectionMethodID;
+    };
 
-    $scope.selectedCollectionMethodIsPassFail = function () {
+    $scope.selectedCollectionMethodIsPassFail = function() {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.PassFailObservationTypeCollectionMethodID;
-    }
+            $scope.ObservationTypeCollectionMethodSelected.ID ===
+            $scope.AngularViewData.PassFailObservationTypeCollectionMethodID;
+    };
 
-    $scope.selectedCollectionMethodIsPercentage = function () {
+    $scope.selectedCollectionMethodIsPercentage = function() {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.PercentageObservationTypeCollectionMethodID;
-    }
+            $scope.ObservationTypeCollectionMethodSelected.ID ===
+            $scope.AngularViewData.PercentageObservationTypeCollectionMethodID;
+    };
 
     $scope.filteredTargetTypes = function() {
-        var compatibleTargetTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(function (f) {            
+        var compatibleTargetTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(function(f) {
             return f.ObservationTypeCollectionMethodID == $scope.ObservationTypeCollectionMethodSelected.ID;
         }).value().map(function(f) {
             return f.ObservationTargetTypeID;
-            });
+        });
 
-        return _($scope.AngularViewData.ObservationTargetTypes).filter(function (f) {
+        return _($scope.AngularViewData.ObservationTargetTypes).filter(function(f) {
             return _.includes(compatibleTargetTypeIDs, f.ID);
         }).value();
-    }
+    };
 
-    $scope.filteredThresholdTypes = function () {
-        var compatibleThresholdTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(function (f) {
-            return f.ObservationTypeCollectionMethodID == $scope.ObservationTypeCollectionMethodSelected.ID;
-        }).value().map(function (f) {
+    $scope.filteredThresholdTypes = function() {
+        var compatibleThresholdTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(
+            function(f) {
+                return f.ObservationTypeCollectionMethodID == $scope.ObservationTypeCollectionMethodSelected.ID;
+            }).value().map(function(f) {
             return f.ObservationThresholdTypeID;
         });
 
-        return _($scope.AngularViewData.ObservationThresholdTypes).filter(function (f) {
+        return _($scope.AngularViewData.ObservationThresholdTypes).filter(function(f) {
             return _.includes(compatibleThresholdTypeIDs, f.ID);
         }).value();
-    }
+    };
 
 
-    $scope.addInput = function () {
+    $scope.addInput = function() {
         $scope.TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve.push("");
-    }
+    };
 
-    $scope.removeInput = function (index) {
+    $scope.removeInput = function(index) {
         $scope.TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve.splice(index, 1);
-    }
+    };
 
-    $scope.submit = function () {
-        $scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema = JSON.stringify($scope.TreatmentBMPAssessmentObservationTypeSchema);
-    }
+    $scope.submit = function() {
+        $scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema =
+            JSON.stringify($scope.TreatmentBMPAssessmentObservationTypeSchema);
+    };
 
-    $scope.populateDefaults = function () {
+    $scope.populateDefaults = function() {
         var temp = jQuery.extend({}, $scope.TreatmentBMPAssessmentObservationTypeSchema);
-        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.AssessmentDescription)) {
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema
+            .AssessmentDescription)) {
             temp.AssessmentDescription = "Custom Assessment Instructions will be displayed here.";
         }
-        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.BenchmarkDescription)) {
+        if (Sitka.Methods.isUndefinedNullOrEmpty(
+            $scope.TreatmentBMPAssessmentObservationTypeSchema.BenchmarkDescription)) {
             temp.BenchmarkDescription = "Benchmark Instructions";
         }
-        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.ThresholdDescription)) {
+        if (Sitka.Methods.isUndefinedNullOrEmpty(
+            $scope.TreatmentBMPAssessmentObservationTypeSchema.ThresholdDescription)) {
             temp.ThresholdDescription = "Threshold Instructions";
         }
 
         $scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema = JSON.stringify(temp);
 
-    }
+    };
 
     $scope.TreatmentBMPAssessmentObservationTypeSchema = JSON.parse($scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema);
     $scope.ObservationTypeCollectionMethodSelected = $scope.AngularModel.ObservationTypeCollectionMethodID != null
@@ -198,15 +199,5 @@
                     jQuery(".previewModalContent :input[type='submit']").prop("disabled", true);
                 }
             });
-    };
-
-    $scope.disableObservationType = function() {
-        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.TreatmentBMPAssessmentObservationTypeName),
-            thresholdTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationThresholdTypeID),
-            targetTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTargetTypeID),
-            collectionMethodIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeCollectionMethodSelected),
-            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema);
-
-        return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
     };
 });

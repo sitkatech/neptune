@@ -50,7 +50,7 @@
     <add key="ParcelMapServiceUrl" value="${parcel-map-service-url}"/>
     <add key="MapServiceLayerNameParcel" value="${map-service-layer-name-parcel}"/>
     <add key="MapServiceLayerNameLandUseBlock" value="${map-service-layer-name-landuseblock}"/>
-    <add key="MapServiceLayerNameNetworkCatchment" value="${map-service-layer-name-networkcatchment}"/>
+    <add key="MapServiceLayerNameRegionalSubbasin" value="${map-service-layer-name-regionalsubbasin}"/>
     <add key="aspnet:MaxJsonDeserializerMembers" value="150000" />
     <add key="AutoDelineateServiceUrl" value="${auto-delineate-service-url}"/>
     <add key="HRUServiceBaseUrl" value="${hru-service-base-url}"/>

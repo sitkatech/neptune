@@ -35,7 +35,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             gridSpec = new TrashGeneratingUnitGridSpec();
 
-            var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID).ToList();
+            var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => x.StormwaterJurisdictionID).ToList();
 
             return HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
                 .Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID))

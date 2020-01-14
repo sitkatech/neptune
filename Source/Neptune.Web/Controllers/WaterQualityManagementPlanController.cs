@@ -8,6 +8,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 
 namespace Neptune.Web.Controllers
@@ -30,7 +31,7 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(y=>y.StormwaterJurisdictionID).Contains(x.StormwaterJurisdictionID)).ToList();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(y=>y.StormwaterJurisdictionID).Contains(x.StormwaterJurisdictionID)).ToList();
 
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
@@ -44,7 +45,7 @@ namespace Neptune.Web.Controllers
                 .WaterQualityManagementPlanVerifies
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
-                .ThenByDescending(x => x.LastEditedDate).ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(y => y.StormwaterJurisdictionID).Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID)).ToList();
+                .ThenByDescending(x => x.LastEditedDate).ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(y => y.StormwaterJurisdictionID).Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID)).ToList();
 
             var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);
@@ -101,7 +102,10 @@ namespace Neptune.Web.Controllers
             x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
                 waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
+                waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
+                waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
+                waterQualityManagementPlanVerifyTreatmentBMP, new HRUCharacteristicsViewData(waterQualityManagementPlan));
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -119,14 +123,34 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        public PartialViewResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan);
-            return Redirect(
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlanPrimaryKey)));
+            return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, new ConfirmDialogFormViewModel());
         }
 
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, viewModel);
+            }
+
+            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
+            SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshHRUCharacteristics(WaterQualityManagementPlan waterQualityManagementPlan, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for WQMP '{waterQualityManagementPlan.WaterQualityManagementPlanName}'?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
 
         #region CRUD Water Quality Management Plan
         [HttpGet]
@@ -311,9 +335,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
         {
-            var layerGeoJsons = MapInitJsonHelpers.GetParcelMapLayers(LayerInitialVisibility.Show)
-                .ToList();
-            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox());
+            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), BoundingBox.MakeNewDefaultBoundingBox());
             var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
         }

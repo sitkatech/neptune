@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using ApprovalUtilities.Utilities;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
@@ -9,9 +11,9 @@ using Newtonsoft.Json;
 
 namespace Neptune.Web.Common
 {
-    static internal class HRUHelper
+    public static class HRUHelper
     {
-        public static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics)
+        public static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics, Func<HRUCharacteristic, int?> primaryKeySetterAction)
         {
             Check.Assert(iHaveHRUCharacteristics.GetCatchmentGeometry() != null, "Entity must have a catchment geometry to calculate HRU Characteristics.");
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
@@ -33,8 +35,12 @@ namespace Neptune.Web.Common
             var hruCharacteristics =
                 esriAsynchronousJobRunner
                     .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(serializeObject).Value
-                    .Features.Select(x => x.ToHRUCharacteristic(iHaveHRUCharacteristics));
-
+                    .Features.Select(x =>
+                    {
+                        var hruCharacteristic = x.ToHRUCharacteristic();
+                        primaryKeySetterAction.Invoke(hruCharacteristic);
+                        return hruCharacteristic;
+                    });
             iHaveHRUCharacteristics.HRUCharacteristics.AddAll(hruCharacteristics);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
         }
@@ -43,9 +49,6 @@ namespace Neptune.Web.Common
         {
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
-
-                //Features = new List<HRURequestFeature> { new HRURequestFeature(iHaveHRUCharacteristics) },
-
                 Features = iHaveHRUCharacteristics.GetHRURequestFeatures().ToList(),
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",

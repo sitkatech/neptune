@@ -33,15 +33,16 @@ namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic{
         {
             Add("Type of HRU Entity",
                 x => x.TreatmentBMP != null ? "Treatment BMP" :
-                    (x.WaterQualityManagementPlan != null ? "Water Quality Management Plan" : "Network Catchment"), 150,
+                    (x.WaterQualityManagementPlan != null ? "Water Quality Management Plan" : "Regional Subbasin"), 150,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("LSPC Land Use Description", x => x.LSPCLandUseDescription.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("LSPC Land Use Description", x => x.HRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Soil Group", x => x.HydrologicSoilGroup.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Slope Percentage", x => x.SlopePercentage, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
             Add("Impervious Acres", x => x.ImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal);
+            Add("Total Acres", x => x.Area, 100, DhtmlxGridColumnFormatType.Decimal);
             Add("Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
             Add("Water Quality Management Plan", x => x.WaterQualityManagementPlan?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
-            Add("Network Catchment", x => x.NetworkCatchment?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
+            Add("Regional Subbasin", x => x.RegionalSubbasin?.GetDisplayNameAsUrl() ?? new HtmlString("N/A"), 250, DhtmlxGridColumnFilterType.Text);
             Add("Last Updated", x => x.LastUpdated, 150, DhtmlxGridColumnFormatType.DateTime);
         }
     }

@@ -18,6 +18,8 @@ namespace Neptune.Web.Models
             Property(x => x.TreatmentBMPTypeID).HasColumnName(@"TreatmentBMPTypeID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.TreatmentBMPTypeName).HasColumnName(@"TreatmentBMPTypeName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.TreatmentBMPTypeDescription).HasColumnName(@"TreatmentBMPTypeDescription").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(1000);
+            Property(x => x.DelineationShouldBeReconciled).HasColumnName(@"DelineationShouldBeReconciled").HasColumnType("bit").IsRequired();
+            Property(x => x.TreatmentBMPModelingTypeID).HasColumnName(@"TreatmentBMPModelingTypeID").HasColumnType("int").IsOptional();
 
             // Foreign keys
 

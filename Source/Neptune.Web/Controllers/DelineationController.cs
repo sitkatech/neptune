@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DesignByContract;
@@ -26,6 +27,7 @@ using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
 using Neptune.Web.Views.Shared;
@@ -33,6 +35,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
@@ -57,13 +60,39 @@ namespace Neptune.Web.Controllers
             }
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
-
-            var delineationMapInitJson = new DelineationMapInitJson("delineationMap",
-                CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
-            var bulkUploadTreatmentBMPDelineationsUrl =
-                SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.Delineations).ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", treatmentBMPs, CurrentPerson.GetBoundingBox());
+            var bulkUploadTreatmentBMPDelineationsUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult DelineationReconciliationReport()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationReconciliationReport);
+            var regionalSubbasinsLastUpdated = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Max(x => x.LastUpdate);
+            var viewData = new DelineationReconciliationReportViewData(CurrentPerson, neptunePage, regionalSubbasinsLastUpdated);
+            return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<Delineation> DelineationsMisalignedWithRegionalSubbasinsGridJsonData()
+        {
+            var gridSpec = new MisalignedDelineationGridSpec();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.HasDiscrepancies).ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<Delineation> DelineationsOverlappingEachOtherGridJsonData()
+        {
+            var gridSpec = new DelineationOverlapsDelineationGridSpec();
+            var delineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.DelineationOverlaps.Any()).ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Delineation>(delineations, gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [HttpGet]
@@ -78,7 +107,7 @@ namespace Neptune.Web.Controllers
                 return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
             }
 
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(treatmentBMP.Delineation.DelineationGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.Delineation.DelineationGeometry);
             feature.Properties.Add("Area", treatmentBMP.GetDelineationAreaString());
             feature.Properties.Add("DelineationType",
                 treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");
@@ -145,6 +174,7 @@ namespace Neptune.Web.Controllers
                     treatmentBMPDelineation.DelineationTypeID =
                         delineationType.DelineationTypeID;
                     treatmentBMPDelineation.IsVerified = false;
+                    treatmentBMPDelineation.DateLastModified = DateTime.Now;
                 }
                 else
                 {
@@ -161,7 +191,7 @@ namespace Neptune.Web.Controllers
 
                 var delineation =
                     new Delineation(geom2771, delineationType.DelineationTypeID, false, treatmentBMP.TreatmentBMPID,
-                        DateTime.Now) {DelineationGeometry4326 = geom4326};
+                        DateTime.Now, false) {DelineationGeometry4326 = geom4326};
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
             }
 
@@ -262,6 +292,38 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
                 viewModel);
         }
+
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult CheckForDiscrepancies()
+        {
+            return ViewCheckForDiscrepancies(new ConfirmDialogFormViewModel());
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult CheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewCheckForDiscrepancies(viewModel);
+            }
+
+            BackgroundJob.Schedule(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(), TimeSpan.FromSeconds(1));
+            SetMessageForDisplay("The job to check BMP delineation discrepancies and overlaps has been queued. Please check back in a few minutes to see the new results.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewCheckForDiscrepancies(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to check for discrepancies between ALL centralized and distributed delineations and the most recent Regional Subbasin Layer?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+
     }
 
     public class ChangeDelineationStatusViewModel

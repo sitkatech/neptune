@@ -6,6 +6,7 @@
 @using Neptune.Web.Models
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.HRUCharacteristics
 @using Neptune.Web.Views.WaterQualityManagementPlan
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -56,12 +57,6 @@
                         <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
                     }
                 </div>
-                @if(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && ViewDataTyped.CurrentPerson.IsAdministrator())
-                {
-                    <div style="display: inline-block; vertical-align: top;">
-                        <a class="btn btn-neptune" href="@ViewDataTyped.HRURefreshUrl">Refresh HRU Characteristics</a>
-                    </div>
-                }
             </div>
         </div>
     </div>
@@ -231,20 +226,47 @@
         </div>
     </div>
     <div class="col-xs-12 col-sm-6">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Locations
+        <div class="row">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Locations
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">Add Parcels</a>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Add Treatment BMPs</a>
+                    </div>
+                    <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
+                    <div class="row" style="margin-top: 12px;">
+                        <label class="col-sm-5 control-label">Calculated Parcel Area:</label>
+                        <div class="col-sm-7">@ViewDataTyped.CalculatedParcelArea</div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div>
-                    <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">Add Parcels</a>
-                    <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Add Treatment BMPs</a>
+        </div>
+        <div class="row">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    <div class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh").ToString(), ViewDataTyped.HRURefreshUrl, "Refresh HRU Statistics", new List<string>(), ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && ViewDataTyped.CurrentPerson.IsAdministrator())
+                    </div>
+                    Land Use Statistics
                 </div>
-                <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
-                <div class="row" style="margin-top: 12px;">
-                    <label class="col-sm-5 control-label">Calculated Parcel Area:</label>
-                    <div class="col-sm-7">@ViewDataTyped.CalculatedParcelArea</div>
+                <div class="panel-body">
+                    @if (ViewDataTyped.WaterQualityManagementPlan.HRUCharacteristics.Any() && ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() != null)
+                    {
+                        HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
+                    }
+                    else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
+                    {
+                        <p class="systemText">No treatment area is provided for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">treatment area is provided</a>.</p>
+                    }
+                    else
+                    {
+                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()</p>
+                    }
                 </div>
+
             </div>
         </div>
     </div>
@@ -278,38 +300,31 @@
                 }
             </div>
             <div class="panel-body">
-                <h4>Structural Treatment and Hydromodification BMPs</h4>
+                <h4>Structural BMPs in Detailed Inventory</h4>
                 <div>
-                    @if (ViewDataTyped.QuickBMPs.Any() || ViewDataTyped.TreatmentBMPs.Any())
+                    @if (ViewDataTyped.TreatmentBMPs.Any())
                     {
                         <div style="padding: 0 16px">
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th style="white-space: nowrap; border-top: none"> Name</th>
-                                        <th style="white-space: nowrap; border-top: none"> Type</th>
-                                        <th style="white-space: nowrap; border-top: none"> Notes</th>
-                                        <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
+                                        <th style="white-space: nowrap; border-top: none">Detailed Inventory Record?</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                     {
-                                        <tr>
-                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td>@treatmentBMP.Notes</td>
-                                            <td> Yes</td>
-                                        </tr>
-                                    }
-                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                                    {
-                                        <tr>
-                                            <td>@quickBMP.QuickBMPName</td>
-                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td>@quickBMP.QuickBMPNote</td>
-                                            <td> No</td>
-                                        </tr>
+                                    <tr>
+                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                        <td>@treatmentBMP.Notes</td>
+                                        <td>Yes</td>
+                                        <td style="text-align: right">@ViewDataTyped.CalculateAreaWithinWQMP(treatmentBMP).ToGroupedNumeric()</td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
@@ -317,11 +332,49 @@
                     }
                     else
                     {
-                        <p class="systemText">No Structural Treatment and Hydromodification BMPs have been selected.</p>
+                        <p class="systemText">No Structural BMPs in Detailed Inventory have been selected.</p>
                     }
                 </div>
 
-                <h4 style="margin-top:64px">Source Control BMPs</h4>
+                <h4 style="margin-top:32px">Other Structural BMPs</h4>
+                <div>
+                    @if (ViewDataTyped.QuickBMPs.Any())
+                    {
+                        <div style="padding: 0 16px">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
+                                    {
+                                    <tr>
+                                        <td>@quickBMP.QuickBMPName</td>
+                                        <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                        <td>@quickBMP.QuickBMPNote</td>
+                                        <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0} %", quickBMP.PercentOfSiteTreated) : "")</td>
+                                        <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0} %", quickBMP.PercentCaptured) : "")</td>
+                                        <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0} %", quickBMP.PercentRetained) : "")</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                    <p class="systemText">No Other Structural BMPs have been selected.</p>
+                    }
+                </div>
+
+                <h4 style="margin-top:32px">Source Control BMPs</h4>
                 @if (ViewDataTyped.SourceControlBMPs.Any())
                 {
                     <div style="padding: 0 16px">

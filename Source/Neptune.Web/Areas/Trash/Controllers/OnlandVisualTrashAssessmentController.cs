@@ -174,7 +174,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewInitiateOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             InitiateOVTAViewModel viewModel)
         {
-            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
 
             // do not offer a drop-down menu if the user can only edit one jurisdiction
             var defaultJurisdiction = stormwaterJurisdictionsPersonCanEdit.Count == 1

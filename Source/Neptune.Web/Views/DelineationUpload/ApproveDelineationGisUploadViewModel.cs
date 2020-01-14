@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.DelineationUpload
 
                 treatmentBMP.Delineation = new Models.Delineation(
                     delineationStaging.DelineationStagingGeometry,
-                    DelineationType.Distributed.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now)
+                    DelineationType.Distributed.DelineationTypeID, false, treatmentBMP.TreatmentBMPID, DateTime.Now, false)
                 {
                     VerifiedByPersonID = currentPerson.PersonID,
                     DateLastVerified = DateTime.Now,

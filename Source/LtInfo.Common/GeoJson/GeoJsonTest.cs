@@ -18,6 +18,12 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using ApprovalTests;
+using ApprovalTests.Reporters;
+using GeoJSON.Net.Feature;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Diagnostics;
@@ -25,12 +31,6 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
-using ApprovalTests;
-using ApprovalTests.Reporters;
-using GeoJSON.Net.Feature;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using NUnit.Framework;
 
 namespace LtInfo.Common.GeoJson
 {
@@ -74,7 +74,7 @@ namespace LtInfo.Common.GeoJson
             _testGeospatialObjects.ForEach(c =>
             {
                 var geom = DbGeometry.FromText(c.Geometry);
-                var f = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionChecc(geom);
+                var f = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geom);
                 f.Id = c.ID.ToString(CultureInfo.InvariantCulture);
                 f.Properties.Add("Name", c.Name);
                 fc.Features.Add(f);

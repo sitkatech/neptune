@@ -22,9 +22,7 @@ namespace Neptune.Web.Views.FieldVisit
             if (treatmentBMPAssessment != null)
             {
                 TreatmentBMPAssessment = treatmentBMPAssessment;
-                CurrentPersonCanManage =
-                    currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP
-                        .StormwaterJurisdiction);
+                CurrentPersonCanManage = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdictionID);
                 ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
                 EditBenchmarkAndThresholdUrl =
                     SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x =>

@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[Delineation](
 	[TreatmentBMPID] [int] NOT NULL,
 	[DateLastModified] [datetime] NOT NULL,
 	[DelineationGeometry4326] [geometry] NULL,
+	[HasDiscrepancies] [bit] NOT NULL,
  CONSTRAINT [PK_Delineation_DelineationID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationID] ASC

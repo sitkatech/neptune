@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using LtInfo.Common.DbSpatial;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -32,11 +34,20 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
         public string CalculatedParcelArea {  get; }
 
+        public string TrashCaptureEffectiveness { get; }
+        public string HRURefreshUrl { get; }
+        public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
+
+        public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
+        public Models.FieldDefinition FieldDefinitionForAreaWithinWQMP { get; }
+
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
-            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
+            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs, HRUCharacteristicsViewData hruCharacteristicsViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -78,6 +89,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifies = waterQualityManagementPlanVerifies;
             WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBmPs;
             WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBmPs;
+            HRUCharacteristicsViewData = hruCharacteristicsViewData;
 
             TreatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
             QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
@@ -91,7 +103,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             // TODO: Never compare floating-point values to zero. We should establish an application-wide error tolerance and use that instead of the direct comparison
             CalculatedParcelArea = calculatedParcelAcres != 0
-                ? $"{Math.Round(calculatedParcelAcres, 1).ToString(CultureInfo.InvariantCulture)} acres"
+                ? $"{Math.Round(calculatedParcelAcres, 2).ToString(CultureInfo.InvariantCulture)} acres"
                 : "No parcels have been associated with this WQMP";
 
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
@@ -101,9 +113,23 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HRURefreshUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x =>
                     x.RefreshHRUCharacteristics(waterQualityManagementPlan));
+
+            FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
+            FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
+            FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
+            FieldDefinitionForAreaWithinWQMP = Models.FieldDefinition.AreaWithinWQMP;
         }
 
-        public string TrashCaptureEffectiveness { get; }
-        public string HRURefreshUrl { get; }
+        public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
+        {
+            if (treatmentBMP.Delineation != null &&
+                WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
+            {
+                return treatmentBMP.Delineation.DelineationGeometry.Intersection(WaterQualityManagementPlan
+                    .WaterQualityManagementPlanBoundary).Area * DbSpatialHelper.SquareMetersToAcres;
+            }
+
+            return null;
+        }
     }
 }

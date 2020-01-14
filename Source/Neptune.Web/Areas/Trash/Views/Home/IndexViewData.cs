@@ -46,7 +46,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             AreaBasedMapInitJson = areaBasedMapInitJson;
             LoadBasedMapInitJson = loadBasedMapInitJson;
 
-            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
             StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
             NegativeStormwaterJurisdictionCQLFilter = currentPerson.GetNegativeStormwaterJurisdictionCqlFilter();
             JurisdictionSelectList = stormwaterJurisdictionsPersonCanEdit.OrderBy(x => x.GetOrganizationDisplayName()).ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());

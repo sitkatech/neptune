@@ -1,10 +1,10 @@
-﻿/* Extension of GeoServerMap with functionality for the Delineation Workflow
+﻿/* Extension of Neptune.Map with functionality for the Delineation Workflow
  * Leaflet controls (JS) in DelineationMapControls.js
  * Leaflet controls (HTML Templates) in DelineationMapTemplate.cshtml
  */
 
 NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl, config) {
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
+    NeptuneMaps.Map.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
     configureProj4Defs();
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
@@ -13,15 +13,15 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 
     this.addDelineationWmsLayers();
 
-    // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
-    var networkCatchmentPane = this.map.createPane("networkCatchmentPane");
-    networkCatchmentPane.style.zIndex = 10000;
+    // ensure that wms layers fetched through the Neptune.Map interface are always above all other layers
+    var regionalSubbasinPane = this.map.createPane("regionalSubbasinPane");
+    regionalSubbasinPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
 
-    var networkCatchmentLayer =
-        this.addWmsLayer("OCStormwater:NetworkCatchments",
-            "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
-            { pane: "networkCatchmentPane" }, true);
+    var regionalSubbasinLayer =
+        this.addWmsLayer("OCStormwater:RegionalSubbasins",
+            "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
+            { pane: "regionalSubbasinPane" }, true);
 
     var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
     var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
@@ -30,7 +30,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
         {
             styles: "parcel"
         }, true);
-    networkCatchmentLayer.bringToFront();
+    regionalSubbasinLayer.bringToFront();
 
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
@@ -42,7 +42,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.hookupDeselectOnClick();
 };
 
-NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
 
 /* Constants */
 
@@ -608,7 +608,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 };
 
 /* "Trace-Delineate Mode"
- * Map is locked down while the ajax calls for the network catchment trace are run.
+ * Map is locked down while the ajax calls for the regional subbasin trace are run.
  *
  * After a failed return, the failure is reported and the UI unblocked.
  * After a successful return, the map is put into Draw Catchment Mode for the user to revise or accept the trace-delineation.
@@ -632,13 +632,13 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     var someWfsParams = {
         cql_filter: 'intersects(CatchmentGeometry, POINT(' + latLng.lat + ' ' + latLng.lng + '))'
     };
-    var wfsAjax = this.selectFeatureByWfs("OCStormwater:NetworkCatchments", someWfsParams);
+    var wfsAjax = this.selectFeatureByWfs("OCStormwater:RegionalSubbasins", someWfsParams);
 
     var self = this;
     
     wfsAjax.then(function (response) {
             if (response.features[0]) {
-                return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
+                return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.RegionalSubbasinID);
             } else {
                 return jQuery.Deferred(function (deferred) {
                     return deferred.reject();
@@ -664,7 +664,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
             window.alert(
-                "There was an error retrieving the delineation from the Network Catchment Trace. Please try again. If the issue persists, please contact Support.");
+                "There was an error retrieving the delineation from the Regional Subbasin Trace. Please try again. If the issue persists, please contact Support.");
         }).always(function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
@@ -672,8 +672,8 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (networkCatchmentID) {
-    var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(networkCatchmentID);
+NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (regionalSubbasinID) {
+    var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(regionalSubbasinID);
 
     return jQuery.ajax({
         url: url,

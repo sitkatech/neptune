@@ -10,6 +10,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular ViewDataForAngular { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
+        public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
 
         public EditWqmpBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
@@ -18,7 +21,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
             PageTitle = "Edit WQMP BMPs";
-
+            FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
+            FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
+            FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
 
             var treatmentBMPSimples = waterQualityManagementPlan.StormwaterJurisdiction.TreatmentBMPs
                 .Where(x => x.WaterQualityManagementPlanID == null ||
@@ -31,6 +36,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
+
 
         public class EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular
         {

@@ -1,6 +1,6 @@
 ﻿namespace Neptune.Web.ScheduledJobs
 {
-    public class ScheduledBackgroundJobLaunchHelper
+    public static class ScheduledBackgroundJobLaunchHelper
     {
         public static void RunTrashGeneratingUnitRefreshScheduledBackgroundJob()
         {
@@ -14,10 +14,16 @@
             landUseBlockUploadBackgroundJob.RunJob();
         }
 
-        public static void RunNetworkCatchmentRefreshBackgroundJob(int currentPersonPersonID)
+        public static void RunRegionalSubbasinRefreshBackgroundJob(int personID)
         {
-            var networkCatchmentRefreshScheduledBackgroundJob = new NetworkCatchmentRefreshScheduledBackgroundJob(currentPersonPersonID);
-            networkCatchmentRefreshScheduledBackgroundJob.RunJob();
+            var regionalSubbasinRefreshScheduledBackgroundJob = new RegionalSubbasinRefreshScheduledBackgroundJob(personID);
+            regionalSubbasinRefreshScheduledBackgroundJob.RunJob();
+        }
+
+        public static void RunDelineationDiscrepancyCheckerJob()
+        {
+            var delineationDiscrepancyCheckerBackgroundJob = new DelineationDiscrepancyCheckerBackgroundJob();
+            delineationDiscrepancyCheckerBackgroundJob.RunJob();
         }
     }
 }

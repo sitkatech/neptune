@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -15,26 +14,6 @@ namespace Neptune.Web.Models
             var geoJsonForJurisdictions = StormwaterJurisdiction.ToGeoJsonFeatureCollection(jurisdictions);
             layerGeoJsons.Add(new LayerGeoJson(CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0m, LayerInitialVisibility.Hide));
             return layerGeoJsons;
-        }
-
-        public static IEnumerable<LayerGeoJson> GetParcelMapLayers(LayerInitialVisibility layerInitialVisibility)
-        {
-            if (!string.IsNullOrWhiteSpace(NeptuneWebConfiguration.ParcelMapServiceUrl))
-            {
-                yield return ParcelModelExtensions.GetParcelWmsLayerGeoJson("#dddddd", 0.1m, layerInitialVisibility);
-            }
-            else
-            {
-                var parcels = HttpRequestStorage.DatabaseEntities.Parcels.ToList();
-                if (parcels.Any())
-                {
-                    yield return new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
-                        parcels.ToGeoJsonFeatureCollection(),
-                        "#dddddd",
-                        0.1m,
-                        layerInitialVisibility);
-                }
-            }
         }
     }
 }

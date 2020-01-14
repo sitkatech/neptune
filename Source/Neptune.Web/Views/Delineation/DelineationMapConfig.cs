@@ -19,7 +19,7 @@ namespace Neptune.Web.Views.Delineation
         {
             JurisdictionCQLFilter = jurisdictionCQLFilter;
 
-            CatchmentTraceUrlTemplate = new UrlTemplate<int>(SitkaRoute<NetworkCatchmentController>.BuildUrlFromExpression(x => x.UpstreamDelineation(UrlTemplate.Parameter1Int))).UrlTemplateString;
+            CatchmentTraceUrlTemplate = new UrlTemplate<int>(SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(x => x.UpstreamDelineation(UrlTemplate.Parameter1Int))).UrlTemplateString;
             DeleteDelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(x => x.MapDelete(UrlTemplate.Parameter1Int))).UrlTemplateString;
             ChangeDelineationStatusUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(x=>x.ChangeDelineationStatus(UrlTemplate.Parameter1Int))).UrlTemplateString;
             TreatmentBMPDelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(x=>x.ForTreatmentBMP(UrlTemplate.Parameter1Int))).UrlTemplateString;

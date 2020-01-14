@@ -47,4 +47,5 @@ values
 (43, 'LandUseBlock', 'Land Use Block', 2),
 (44, 'ExportAssessmentGeospatialData', 'Export Assessment Geospatial Data', 2),
 (45, 'HRUCharacteristics', 'HRU Characteristics', 2),
-(46, 'NetworkCatchments', 'Network Catchments', 2)
+(46, 'RegionalSubbasins', 'Regional Subbasins', 2),
+(47, 'DelineationReconciliationReport', 'Delineation Reconciliation Report', 2)

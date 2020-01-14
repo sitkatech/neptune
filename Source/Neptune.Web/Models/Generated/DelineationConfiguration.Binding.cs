@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
             Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsRequired();
             Property(x => x.DateLastModified).HasColumnName(@"DateLastModified").HasColumnType("datetime").IsRequired();
             Property(x => x.DelineationGeometry4326).HasColumnName(@"DelineationGeometry4326").HasColumnType("geometry").IsOptional();
+            Property(x => x.HasDiscrepancies).HasColumnName(@"HasDiscrepancies").HasColumnType("bit").IsRequired();
 
             // Foreign keys
             HasOptional(a => a.VerifiedByPerson).WithMany(b => b.DelineationsWhereYouAreTheVerifiedByPerson).HasForeignKey(c => c.VerifiedByPersonID).WillCascadeOnDelete(false); // FK_Delineation_Person_VerifiedByPersonID_PersonID

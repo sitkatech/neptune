@@ -19,17 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System.Collections.Generic;
+using System.Web;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -84,7 +81,7 @@ namespace Neptune.Web.Views.FieldVisit
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Inventory Updated?", x => new HtmlString(x.InventoryUpdated ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Required Attributes Entered?", x => new HtmlString((!x.TreatmentBMP.RequiredAttributeDoesNotHaveValue(x)).ToYesNo()), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Required Attributes Entered?", x => new HtmlString((!x.TreatmentBMP.RequiredAttributeDoesNotHaveValue()).ToYesNo()), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
             Add("Initial Assessment?",
                 x =>
                 {
