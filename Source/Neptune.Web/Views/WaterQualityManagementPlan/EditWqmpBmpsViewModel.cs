@@ -128,7 +128,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             if (quickBmpSimples.Any(x => x.PercentOfSiteTreated.HasValue) && quickBmpSimples.Sum(x => x.PercentOfSiteTreated) != 100)
             {
-                validationResults.Add(new ValidationResult("Percent of Site Treated across all Other Structural BMPs must add up to 100."));
+                validationResults.Add(new ValidationResult("The percent of site captured exceeds 100 percent, please correct any errors before saving."));
             }
 
             foreach (var sourceControlBMP in SourceControlBMPSimples)

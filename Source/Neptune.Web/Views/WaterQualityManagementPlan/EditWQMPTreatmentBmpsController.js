@@ -73,13 +73,13 @@
         $scope.orderSourceControlBMPsByAttributeCategory = _.sortBy(_.groupBy($scope.AngularModel.SourceControlBMPSimples, 'SourceControlBMPAttributeCategoryName'), [function (o) { return o.SourceControlBMPAttributeID; }]);
 
 
-        $scope.calculateTotalPercent = function () {
+        $scope.calculateRemainingPercent = function () {
             var sum = _.reduce($scope.AngularModel.QuickBmpSimples,
                 function (sum, n) {
                     var toAdd = n.PercentOfSiteTreated == null ? 0 : n.PercentOfSiteTreated;
                     return sum + toAdd;
                 },
                 0);
-            return Math.round(sum * 100) / 100;
+            return Math.round((100 - sum) * 100) / 100;
         };
     });

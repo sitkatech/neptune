@@ -109,4 +109,5 @@ VALUES
 (105, 'WinterHarvestedWaterDemand', 'Winter Harvested Water Demand', 'Average daily harvested water demand from November through April. This should be averaged to account for any shutdowns during wet weather and reduction in demand during the winter season.', 1),
 (106, 'PercentOfSiteTreated', 'Percent of Site Treated', '', 1),
 (107, 'PercentCaptured', 'Percent Captured', '', 1),
-(108, 'PercentRetained', 'Percent Retained', '', 1)
+(108, 'PercentRetained', 'Percent Retained', '', 1),
+(109, 'AreaWithinWQMP', 'Area within WQMP', '', 1)

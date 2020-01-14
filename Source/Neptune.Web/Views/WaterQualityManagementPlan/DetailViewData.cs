@@ -41,6 +41,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
         public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
         public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
+        public Models.FieldDefinition FieldDefinitionForAreaWithinWQMP { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
@@ -116,6 +117,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
+            FieldDefinitionForAreaWithinWQMP = Models.FieldDefinition.AreaWithinWQMP;
         }
 
         public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)

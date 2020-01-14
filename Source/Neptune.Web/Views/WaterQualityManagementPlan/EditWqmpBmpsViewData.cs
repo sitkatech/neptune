@@ -25,7 +25,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
 
-
             var treatmentBMPSimples = waterQualityManagementPlan.StormwaterJurisdiction.TreatmentBMPs
                 .Where(x => x.WaterQualityManagementPlanID == null ||
                             x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID)
@@ -37,6 +36,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
+
 
         public class EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular
         {
