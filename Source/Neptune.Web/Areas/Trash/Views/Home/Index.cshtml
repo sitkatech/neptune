@@ -24,7 +24,6 @@
             if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
                 jQuery("#warnInternetExplorer").show();
             }
-            window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl, config);
             jQuery('.selectpicker').selectpicker("val", [1, 2]);
             jQuery('#trashCaptureStatusTypeDropdown').change();
         });
