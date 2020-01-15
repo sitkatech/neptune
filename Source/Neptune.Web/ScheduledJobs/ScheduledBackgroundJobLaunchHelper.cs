@@ -20,6 +20,18 @@
             regionalSubbasinRefreshScheduledBackgroundJob.RunJob();
         }
 
+        public static void RunLSPCBasinRefreshBackgroundJob(int personID)
+        {
+            var lspcBasinRefreshScheduledBackgroundJob = new LSPCBasinRefreshScheduledBackgroundJob(personID);
+            lspcBasinRefreshScheduledBackgroundJob.RunJob();
+        }
+
+        public static void RunPrecipitationZoneRefreshBackgroundJob(int personID)
+        {
+            var precipitationZoneRefreshScheduledBackgroundJob = new PrecipitationZoneRefreshScheduledBackgroundJob(personID);
+            precipitationZoneRefreshScheduledBackgroundJob.RunJob();
+        }
+
         public static void RunDelineationDiscrepancyCheckerJob()
         {
             var delineationDiscrepancyCheckerBackgroundJob = new DelineationDiscrepancyCheckerBackgroundJob();

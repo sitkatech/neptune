@@ -100,12 +100,7 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Detail(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
-            //HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Load();
-
-            var regionalSubbasin = //regionalSubbasinPrimaryKey.EntityObject;
-
-            HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Find(regionalSubbasinPrimaryKey.PrimaryKeyValue);
-
+            var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
             var regionalSubbasinCatchmentGeometry4326 = regionalSubbasin.CatchmentGeometry4326;
 
             var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(regionalSubbasinCatchmentGeometry4326);
@@ -122,16 +117,31 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public ActionResult RefreshFromOCSurvey()
+        public PartialViewResult RefreshFromOCSurvey()
         {
-            //return Content(RegionalSubbasinRefreshScheduledBackgroundJob.RunRefresh(HttpRequestStorage.DatabaseEntities));
-
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(CurrentPerson.PersonID));
-
-            SetMessageForDisplay("Regional Subbasin refresh will run in the background.");
-            return Redirect(SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(x => x.Grid()));
+            return ViewRefreshFromOCSurvey(new ConfirmDialogFormViewModel());
         }
 
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshFromOCSurvey(viewModel);
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(CurrentPerson.PersonID));
+            SetMessageForDisplay("Regional Subbasins refresh will run in the background.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the Regional Subbasins layer from OC Survey?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
 
         [NeptuneAdminFeature]
         public ViewResult Grid()
@@ -143,17 +153,10 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<RegionalSubbasin> RegionalSubbasinGridJsonData()
         {
-            // ReSharper disable once InconsistentNaming
-            List<RegionalSubbasin> regionalSubbasins = GetRegionalSubbasinsAndGridSpec(out var gridSpec);
+            var gridSpec = new RegionalSubbasinGridSpec();
+            var regionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<RegionalSubbasin>(regionalSubbasins, gridSpec);
             return gridJsonNetJObjectResult;
-        }
-
-        private List<RegionalSubbasin> GetRegionalSubbasinsAndGridSpec(out RegionalSubbasinGridSpec gridSpec)
-        {
-            gridSpec = new RegionalSubbasinGridSpec();
-
-            return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.ToList();
         }
     }
 }

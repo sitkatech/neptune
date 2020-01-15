@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[Watershed]
+//  Source Table: [dbo].[LSPCBasin]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[Watershed] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[Watershed]")]
-    public partial class Watershed : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[LSPCBasin] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[LSPCBasin]")]
+    public partial class LSPCBasin : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected Watershed()
+        protected LSPCBasin()
         {
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -30,22 +30,36 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Watershed(int watershedID, DbGeometry watershedGeometry, string watershedName, DbGeometry watershedGeometry4326) : this()
+        public LSPCBasin(int lSPCBasinID, int lSPCBasinKey, string lSPCBasinName, DbGeometry lSPCBasinGeometry, DateTime lastUpdate) : this()
         {
-            this.WatershedID = watershedID;
-            this.WatershedGeometry = watershedGeometry;
-            this.WatershedName = watershedName;
-            this.WatershedGeometry4326 = watershedGeometry4326;
+            this.LSPCBasinID = lSPCBasinID;
+            this.LSPCBasinKey = lSPCBasinKey;
+            this.LSPCBasinName = lSPCBasinName;
+            this.LSPCBasinGeometry = lSPCBasinGeometry;
+            this.LastUpdate = lastUpdate;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public LSPCBasin(int lSPCBasinKey, string lSPCBasinName, DbGeometry lSPCBasinGeometry, DateTime lastUpdate) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.LSPCBasinID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.LSPCBasinKey = lSPCBasinKey;
+            this.LSPCBasinName = lSPCBasinName;
+            this.LSPCBasinGeometry = lSPCBasinGeometry;
+            this.LastUpdate = lastUpdate;
+        }
 
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static Watershed CreateNewBlank()
+        public static LSPCBasin CreateNewBlank()
         {
-            return new Watershed();
+            return new LSPCBasin(default(int), default(string), default(DbGeometry), default(DateTime));
         }
 
         /// <summary>
@@ -60,7 +74,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Watershed).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasin).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -68,7 +82,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.Watersheds.Remove(this);
+            dbContext.LSPCBasins.Remove(this);
         }
         
         /// <summary>
@@ -92,18 +106,19 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int WatershedID { get; set; }
-        public DbGeometry WatershedGeometry { get; set; }
-        public string WatershedName { get; set; }
-        public DbGeometry WatershedGeometry4326 { get; set; }
+        public int LSPCBasinID { get; set; }
+        public int LSPCBasinKey { get; set; }
+        public string LSPCBasinName { get; set; }
+        public DbGeometry LSPCBasinGeometry { get; set; }
+        public DateTime LastUpdate { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return WatershedID; } set { WatershedID = value; } }
+        public int PrimaryKey { get { return LSPCBasinID; } set { LSPCBasinID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
 
         public static class FieldLengths
         {
-            public const int WatershedName = 50;
+            public const int LSPCBasinName = 100;
         }
     }
 }

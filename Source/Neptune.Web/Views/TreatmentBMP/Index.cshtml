@@ -20,8 +20,8 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.ModalDialog
 @inherits Neptune.Web.Views.TreatmentBMP.Index
 @section JavascriptAndStylesContent
 {
@@ -31,15 +31,25 @@
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.HasEditPermissions)
-    {
-        <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
-    }
-    @if (ViewDataTyped.HasAdminPermissions)
-    {        <a class="btn btn-neptune" href="@ViewDataTyped.BulkBMPUploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Bulk Upload Treatment BMP</a>
-    }
-    <button class="btn btn-neptune" onclick="createDownloadConfirmDialog()"><span class="glyphicon glyphicon-map-marker" style="margin-right: 5px;"></span>Export Inventory to GIS</button>
-
+    <div class="dropdown">
+        <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
+            Actions
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labeledby="actionsDropdown" style="list-style: none; background: #fff;">
+            @if (ViewDataTyped.HasEditPermissions)
+            {
+                <li><a href="@ViewDataTyped.NewUrl">Add Treatment BMP</a></li>
+            }
+            @if (ViewDataTyped.HasAdminPermissions)
+            {        
+                <li><a href="@ViewDataTyped.BulkBMPUploadUrl">Bulk Upload Treatment BMP</a></li>
+                <li>@ModalDialogFormHelper.ModalDialogFormLink("Refresh LSPC Basins", ViewDataTyped.RefreshLSPCBasinsUrl, "Refresh LSPC Basin layer from OC Survey", 400, "Continue", "Cancel", null, null, null)</li>
+                <li>@ModalDialogFormHelper.ModalDialogFormLink("Refresh Precipitation Zones", ViewDataTyped.RefreshPrecipitationZonesUrl, "Refresh Precipitation Zones layer from OC Survey", 400, "Continue", "Cancel", null, null, null)</li>
+            }
+            <li><a href="javascript:createDownloadConfirmDialog()">Export Inventory to GIS</a></li>
+        </ul>
+    </div>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
