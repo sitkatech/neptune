@@ -97,6 +97,10 @@
     <Compile Include="Models\Generated\DelineationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DroolToolRole.Binding.cs" />
     <Compile Include="Models\Generated\DroolToolRolePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\DroolToolWatershed.Binding.cs" />
+    <Compile Include="Models\Generated\DroolToolWatershed.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\DroolToolWatershedConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\DroolToolWatershedPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinition.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinitionData.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinitionData.DatabaseContextExtensions.cs" />
