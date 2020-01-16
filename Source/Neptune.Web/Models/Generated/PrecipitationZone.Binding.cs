@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[Watershed]
+//  Source Table: [dbo].[PrecipitationZone]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[Watershed] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[Watershed]")]
-    public partial class Watershed : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[PrecipitationZone] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[PrecipitationZone]")]
+    public partial class PrecipitationZone : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected Watershed()
+        protected PrecipitationZone()
         {
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -30,22 +30,36 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Watershed(int watershedID, DbGeometry watershedGeometry, string watershedName, DbGeometry watershedGeometry4326) : this()
+        public PrecipitationZone(int precipitationZoneID, int precipitationZoneKey, double designStormwaterDepthInInches, DbGeometry precipitationZoneGeometry, DateTime lastUpdate) : this()
         {
-            this.WatershedID = watershedID;
-            this.WatershedGeometry = watershedGeometry;
-            this.WatershedName = watershedName;
-            this.WatershedGeometry4326 = watershedGeometry4326;
+            this.PrecipitationZoneID = precipitationZoneID;
+            this.PrecipitationZoneKey = precipitationZoneKey;
+            this.DesignStormwaterDepthInInches = designStormwaterDepthInInches;
+            this.PrecipitationZoneGeometry = precipitationZoneGeometry;
+            this.LastUpdate = lastUpdate;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public PrecipitationZone(int precipitationZoneKey, double designStormwaterDepthInInches, DbGeometry precipitationZoneGeometry, DateTime lastUpdate) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.PrecipitationZoneID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.PrecipitationZoneKey = precipitationZoneKey;
+            this.DesignStormwaterDepthInInches = designStormwaterDepthInInches;
+            this.PrecipitationZoneGeometry = precipitationZoneGeometry;
+            this.LastUpdate = lastUpdate;
+        }
 
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static Watershed CreateNewBlank()
+        public static PrecipitationZone CreateNewBlank()
         {
-            return new Watershed();
+            return new PrecipitationZone(default(int), default(double), default(DbGeometry), default(DateTime));
         }
 
         /// <summary>
@@ -60,7 +74,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Watershed).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(PrecipitationZone).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -68,7 +82,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.Watersheds.Remove(this);
+            dbContext.PrecipitationZones.Remove(this);
         }
         
         /// <summary>
@@ -92,18 +106,19 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int WatershedID { get; set; }
-        public DbGeometry WatershedGeometry { get; set; }
-        public string WatershedName { get; set; }
-        public DbGeometry WatershedGeometry4326 { get; set; }
+        public int PrecipitationZoneID { get; set; }
+        public int PrecipitationZoneKey { get; set; }
+        public double DesignStormwaterDepthInInches { get; set; }
+        public DbGeometry PrecipitationZoneGeometry { get; set; }
+        public DateTime LastUpdate { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return WatershedID; } set { WatershedID = value; } }
+        public int PrimaryKey { get { return PrecipitationZoneID; } set { PrecipitationZoneID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
 
         public static class FieldLengths
         {
-            public const int WatershedName = 50;
+
         }
     }
 }

@@ -44,7 +44,6 @@ namespace Neptune.Web.ScheduledJobs
             {
                 // kill the old TGUs
                 DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
-                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
 
                 // a GDAL command pulls the shapefile into the database.
                 var ogr2OgrCommandLineRunner =
@@ -53,9 +52,17 @@ namespace Neptune.Web.ScheduledJobs
                 ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile2771(layerName, outputPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
 
-                // repeat but with 4326
-
-                
+            }
+            catch (Ogr2OgrCommandLineException e)
+            {
+                Logger.Error("TGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
+                throw;
+            }
+            
+            // repeat but with 4326
+            try
+            {
+                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
                 var ogr2OgrCommandLineRunner4326 =
                     new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.WGS_1984_SRID, 3.6e+6);
 
@@ -64,7 +71,7 @@ namespace Neptune.Web.ScheduledJobs
             }
             catch (Ogr2OgrCommandLineException e)
             {
-                Logger.Error("TGU loading via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
+                Logger.Error("TGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
                 throw;
             }
         }

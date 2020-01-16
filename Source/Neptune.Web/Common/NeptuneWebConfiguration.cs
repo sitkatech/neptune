@@ -58,9 +58,9 @@ namespace Neptune.Web.Common
 
         public static readonly string AutoDelineateServiceUrl = SitkaConfiguration.GetOptionalAppSetting("AutoDelineateServiceUrl");
         public static readonly string HRUServiceBaseUrl = SitkaConfiguration.GetOptionalAppSetting("HRUServiceBaseUrl");
-
-        public static readonly string RegionalSubbasinServiceUrl =
-            SitkaConfiguration.GetRequiredAppSetting("RegionalSubbasinServiceUrl");
+        public static readonly string LSPCBasinServiceUrl = SitkaConfiguration.GetOptionalAppSetting("LSPCBasinServiceUrl");
+        public static readonly string PrecipitationZoneServiceUrl = SitkaConfiguration.GetOptionalAppSetting("PrecipitationZoneServiceUrl");
+        public static readonly string RegionalSubbasinServiceUrl = SitkaConfiguration.GetRequiredAppSetting("RegionalSubbasinServiceUrl");
 
         public static readonly string PathToPyqgisTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisTestScript");
         public static readonly string PyqgisTestWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PyqgisTestWorkingDirectory");

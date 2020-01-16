@@ -41,6 +41,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
+using Hangfire;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
@@ -761,6 +763,62 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewRefreshHRUCharacteristics(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
         {
             var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for Treatment BMP '{treatmentBMP.TreatmentBMPName}'?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult RefreshLSPCBasinsFromOCSurvey()
+        {
+            return ViewRefreshLSPCBasinsFromOCSurvey(new ConfirmDialogFormViewModel());
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshLSPCBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshLSPCBasinsFromOCSurvey(viewModel);
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLSPCBasinRefreshBackgroundJob(CurrentPerson.PersonID));
+            SetMessageForDisplay("LSPC Basins refresh will run in the background.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshLSPCBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the LSPC Basins layer from OC Survey?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult RefreshPrecipitationZonesFromOCSurvey()
+        {
+            return ViewRefreshPrecipitationZonesFromOCSurvey(new ConfirmDialogFormViewModel());
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshPrecipitationZonesFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshPrecipitationZonesFromOCSurvey(viewModel);
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunPrecipitationZoneRefreshBackgroundJob(CurrentPerson.PersonID));
+            SetMessageForDisplay("Precipitation Zones refresh will run in the background.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshPrecipitationZonesFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to refresh the Precipitation Zones layer from OC Survey?<br /><br />This can take a little while to run.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

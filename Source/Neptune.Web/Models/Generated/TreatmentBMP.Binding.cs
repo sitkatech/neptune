@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int sizingBasisTypeID, int? trashCaptureEffectiveness, DbGeometry locationPoint4326) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int sizingBasisTypeID, int? trashCaptureEffectiveness, DbGeometry locationPoint4326, int? watershedID, int? lSPCBasinID, int? precipitationZoneID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -67,6 +67,9 @@ namespace Neptune.Web.Models
             this.SizingBasisTypeID = sizingBasisTypeID;
             this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
             this.LocationPoint4326 = locationPoint4326;
+            this.WatershedID = watershedID;
+            this.LSPCBasinID = lSPCBasinID;
+            this.PrecipitationZoneID = precipitationZoneID;
         }
 
         /// <summary>
@@ -247,6 +250,9 @@ namespace Neptune.Web.Models
         public int SizingBasisTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public DbGeometry LocationPoint4326 { get; set; }
+        public int? WatershedID { get; set; }
+        public int? LSPCBasinID { get; set; }
+        public int? PrecipitationZoneID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
@@ -276,6 +282,9 @@ namespace Neptune.Web.Models
         public virtual Person InventoryVerifiedByPerson { get; set; }
         public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
         public SizingBasisType SizingBasisType { get { return SizingBasisType.AllLookupDictionary[SizingBasisTypeID]; } }
+        public virtual Watershed Watershed { get; set; }
+        public virtual LSPCBasin LSPCBasin { get; set; }
+        public virtual PrecipitationZone PrecipitationZone { get; set; }
 
         public static class FieldLengths
         {

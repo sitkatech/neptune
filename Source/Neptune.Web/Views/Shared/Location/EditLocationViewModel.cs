@@ -21,9 +21,11 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.FieldVisit;
 
@@ -54,9 +56,14 @@ namespace Neptune.Web.Views.Shared.Location
             // this is coming FROM the browser, so it has to be reprojected to CA State Plane
             var locationPoint4326 = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(),
                 TreatmentBMPPointY.GetValueOrDefault(), CoordinateSystemHelper.WGS_1984_SRID);
-            treatmentBMP.LocationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(
-                locationPoint4326);
+            var locationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
+            treatmentBMP.LocationPoint = locationPoint;
             treatmentBMP.LocationPoint4326 = locationPoint4326;
+
+            // associate watershed, lspc basin, precipitation zone
+            treatmentBMP.Watershed = HttpRequestStorage.DatabaseEntities.Watersheds.FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry));
+            treatmentBMP.LSPCBasin = HttpRequestStorage.DatabaseEntities.LSPCBasins.FirstOrDefault(x => locationPoint.Intersects(x.LSPCBasinGeometry));
+            treatmentBMP.PrecipitationZone = HttpRequestStorage.DatabaseEntities.PrecipitationZones.FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry));
         }
 
     }

@@ -20,6 +20,8 @@ namespace Neptune.Web.Models
             Property(x => x.WatershedName).HasColumnName(@"WatershedName").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(50);
             Property(x => x.WatershedGeometry4326).HasColumnName(@"WatershedGeometry4326").HasColumnType("geometry").IsOptional();
 
+            // Foreign keys
+
         }
     }
 }

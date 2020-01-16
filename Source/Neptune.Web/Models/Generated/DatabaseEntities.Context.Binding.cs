@@ -54,6 +54,8 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockStagingConfiguration());
+            modelBuilder.Configurations.Add(new LSPCBasinConfiguration());
+            modelBuilder.Configurations.Add(new LSPCBasinStagingConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
@@ -72,6 +74,8 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
+            modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
+            modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinStagingConfiguration());
@@ -138,6 +142,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
+        public virtual DbSet<LSPCBasin> LSPCBasins { get; set; }
+        public virtual DbSet<LSPCBasinStaging> LSPCBasinStagings { get; set; }
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
@@ -156,6 +162,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
+        public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
         public virtual DbSet<RegionalSubbasinStaging> RegionalSubbasinStagings { get; set; }
@@ -341,6 +349,12 @@ namespace Neptune.Web.Models
                 case "LandUseBlockStaging":
                     return LandUseBlockStagings.GetLandUseBlockStaging(primaryKey);
 
+                case "LSPCBasin":
+                    return LSPCBasins.GetLSPCBasin(primaryKey);
+
+                case "LSPCBasinStaging":
+                    return LSPCBasinStagings.GetLSPCBasinStaging(primaryKey);
+
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
 
@@ -464,6 +478,12 @@ namespace Neptune.Web.Models
                     var permitType = PermitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(permitType, "PermitType", primaryKey);
                     return permitType;
+
+                case "PrecipitationZone":
+                    return PrecipitationZones.GetPrecipitationZone(primaryKey);
+
+                case "PrecipitationZoneStaging":
+                    return PrecipitationZoneStagings.GetPrecipitationZoneStaging(primaryKey);
 
                 case "PreliminarySourceIdentificationCategory":
                     var preliminarySourceIdentificationCategory = PreliminarySourceIdentificationCategory.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
