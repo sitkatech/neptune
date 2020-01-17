@@ -4,7 +4,6 @@ using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
 using Newtonsoft.Json;
-
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -51,14 +50,18 @@ namespace Neptune.Web.ScheduledJobs
 
             // unfortunately, now we have to create the catchment geometries in 4326, since SQL isn't capable of doing this.
             dbContext.RegionalSubbasins.Load();
+            dbContext.Watersheds.Load();
             foreach (var regionalSubbasin in dbContext.RegionalSubbasins)
             {
-                regionalSubbasin.CatchmentGeometry4326 =
-                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(
-                        regionalSubbasin.CatchmentGeometry);
+                regionalSubbasin.CatchmentGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(regionalSubbasin.CatchmentGeometry);
             }
 
-
+            // Watershed table is made up from the dissolves/ aggregation of the Regional Subbasins feature layer, so we need to update it when Regional Subbasins are updated
+            foreach (var watershed in dbContext.Watersheds)
+            {
+                watershed.WatershedGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(watershed.WatershedGeometry);
+            }
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pTreatmentBMPUpdateWatershed");
 
             dbContext.SaveChanges(person);
         }

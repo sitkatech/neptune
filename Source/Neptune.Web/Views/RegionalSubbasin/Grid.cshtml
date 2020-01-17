@@ -22,6 +22,7 @@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.ModalDialog
 @inherits Neptune.Web.Views.RegionalSubbasin.Grid
 @section JavascriptAndStylesContent
 {
@@ -31,9 +32,8 @@
 {
     @if (ViewDataTyped.HasAdminPermissions)
     {
-        <a class="btn btn-neptune" href="@ViewDataTyped.RefreshUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh") Refresh From OC Survey</a>
+        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Refresh From OC Survey", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")), ViewDataTyped.RefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
     }
-
 }
 
     <div class="row">

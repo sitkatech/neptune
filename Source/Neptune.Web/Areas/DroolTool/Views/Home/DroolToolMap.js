@@ -606,9 +606,9 @@ NeptuneMaps.DroolToolMap.prototype.initializeOverlays = function () {
             false);
 
     this.watershedLayer =
-        this.addWmsLayer("OCStormwater:Watersheds",
+        this.addWmsLayer("OCStormwater:DroolToolWatersheds",
             "<span><img src='/Content/img/legendImages/backbone.png' height='12px' style='margin-bottom:3px;' /> Watersheds</span>",
-            { pane: "droolToolOverlayPane", styles: "watershed" },
+            { pane: "droolToolOverlayPane", styles: "drooltoolwatershed" },
             false);
 
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",

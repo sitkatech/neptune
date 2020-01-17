@@ -42,4 +42,36 @@ When not matched by Target
 	)
 When Not Matched by Source
 	Then Delete;
+
+
+-- Watershed table is made up from the dissolves/aggregation of the Regional Subbasins feature layer.
+-- clear out any watershed associations
+update dbo.TreatmentBMP
+set WatershedID = null
+
+
+select Watershed as WatershedName, geometry::UnionAggregate(CatchmentGeometry) as WatershedGeometry, geometry::UnionAggregate(CatchmentGeometry4326) as WatershedGeometry4326
+into #WatershedStaging
+from dbo.RegionalSubbasin rs
+group by Watershed
+order by Watershed
+
+Merge dbo.Watershed t Using #WatershedStaging s
+	on (t.WatershedName = s.WatershedName)
+When Matched
+	Then Update set
+		t.WatershedGeometry = s.WatershedGeometry,
+		t.WatershedGeometry4326 = null
+When not matched by Target
+	Then insert (
+		WatershedName,
+		WatershedGeometry
+	)
+	values (
+		s.WatershedName,
+		s.WatershedGeometry
+	)
+When Not Matched by Source
+	Then Delete;
+
 GO
