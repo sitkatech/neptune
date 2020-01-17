@@ -45,6 +45,11 @@ When Not Matched by Source
 
 
 -- Watershed table is made up from the dissolves/aggregation of the Regional Subbasins feature layer.
+-- clear out any watershed associations
+update dbo.TreatmentBMP
+set WatershedID = null
+
+
 select Watershed as WatershedName, geometry::UnionAggregate(CatchmentGeometry) as WatershedGeometry, geometry::UnionAggregate(CatchmentGeometry4326) as WatershedGeometry4326
 into #WatershedStaging
 from dbo.RegionalSubbasin rs
