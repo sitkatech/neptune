@@ -216,7 +216,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                     .AllLookupDictionary[TreatmentBMPModelingTypeID.Value].ToEnum;
                 switch (treatmentBMPModelingTypeEnum)
                 {
-                    case TreatmentBMPModelingTypeEnum.Bioinfiltrationbioretentionwithraisedunderdrain:
+                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                         ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
                         ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
@@ -228,7 +228,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                             DesignMediaFiltrationRate);
                         ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
                         break;
-                    case TreatmentBMPModelingTypeEnum.BioretentionwithnoUnderdrain:
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
                     case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
                     case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
                     case TreatmentBMPModelingTypeEnum.PermeablePavement:
@@ -242,7 +242,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Underlying Infiltration Rate",
                             UnderlyingInfiltrationRate);
                         break;
-                    case TreatmentBMPModelingTypeEnum.BioretentionwithUnderdrainandImperviousLiner:
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                     case TreatmentBMPModelingTypeEnum.SandFilters:
                         ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
                         ValidateDiversionRate(validationResults);
@@ -252,7 +252,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
                             DesignMediaFiltrationRate);
                         break;
-                    case TreatmentBMPModelingTypeEnum.CisternsforHarvestandUse:
+                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                         ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
                         ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
