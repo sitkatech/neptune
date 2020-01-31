@@ -66,6 +66,8 @@ namespace Neptune.Web.Common
         public static readonly string PyqgisTestWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PyqgisTestWorkingDirectory");
         public static string PathToPyqgisLauncher = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisLauncher");
 
+        public static string NereidUrl = SitkaConfiguration.GetOptionalAppSetting("NereidUrl");
+
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 
         public static readonly NeptuneEnvironment NeptuneEnvironment = NeptuneEnvironment.MakeNeptuneEnvironment(SitkaConfiguration.GetRequiredAppSetting("NeptuneEnvironment"));

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Threading;
-using Newtonsoft.Json;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
@@ -106,7 +105,6 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         }
     }
 
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class EsriAsynchronousJobOutputParameter<T>
     {
         [JsonProperty("paramName")]

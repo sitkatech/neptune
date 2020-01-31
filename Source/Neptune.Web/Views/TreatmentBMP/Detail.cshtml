@@ -256,7 +256,7 @@
                         <tbody>
                             @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                             {
-                                case TreatmentBMPModelingTypeEnum.Bioinfiltrationbioretentionwithraisedunderdrain:
+                                case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
@@ -306,7 +306,7 @@
                                         <td class="text-right">@ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()</td>
                                     </tr>
                                     break;
-                                case TreatmentBMPModelingTypeEnum.BioretentionwithnoUnderdrain:
+                                case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
                                 case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
                                 case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
                                 case TreatmentBMPModelingTypeEnum.PermeablePavement:
@@ -348,7 +348,7 @@
                                         <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.UnderlyingInfiltrationRate, "in/hr")</td>
                                     </tr>
                                     break;
-                                case TreatmentBMPModelingTypeEnum.BioretentionwithUnderdrainandImperviousLiner:
+                                case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                                 case TreatmentBMPModelingTypeEnum.SandFilters:
                                     <tr>
                                         <td>
@@ -387,7 +387,7 @@
                                         <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignMediaFiltrationRate, "in/hr")</td>
                                     </tr>
                                     break;
-                                case TreatmentBMPModelingTypeEnum.CisternsforHarvestandUse:
+                                case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)

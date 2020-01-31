@@ -64,7 +64,7 @@
 
                             @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                             {
-                                case TreatmentBMPModelingTypeEnum.Bioinfiltrationbioretentionwithraisedunderdrain:
+                                case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
@@ -124,7 +124,7 @@
                                         <div class="col-sm-8">@Html.DropDownListFor(x => x.UnderlyingHydrologicSoilGroupID, ViewDataTyped.UnderlyingHydrologicSoilGroups, new { @class = "form-control" })</div>
                                     </div>
                                     break;
-                                case TreatmentBMPModelingTypeEnum.BioretentionwithnoUnderdrain:
+                                case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
                                 case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
                                 case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
                                 case TreatmentBMPModelingTypeEnum.PermeablePavement:
@@ -173,7 +173,7 @@
                                         </div>
                                     </div>
                                     break;
-                                case TreatmentBMPModelingTypeEnum.BioretentionwithUnderdrainandImperviousLiner:
+                                case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                                 case TreatmentBMPModelingTypeEnum.SandFilters:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
@@ -219,7 +219,7 @@
                                         </div>
                                     </div>
                                     break;
-                                case TreatmentBMPModelingTypeEnum.CisternsforHarvestandUse:
+                                case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
