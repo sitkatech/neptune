@@ -82,7 +82,10 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     executing = false;
                     networkValidatorResult = JsonConvert.DeserializeObject<NetworkValidatorResult>(stringResponse);
                 }
-                Thread.Sleep(1000);
+                else
+                {
+                    Thread.Sleep(1000);
+                }
             }
 
             return Json(networkValidatorResult, JsonRequestBehavior.AllowGet);
