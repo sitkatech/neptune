@@ -23,4 +23,7 @@ insert into dbo.FileResourceMimeType (FileResourceMimeTypeID, FileResourceMimeTy
 (13, 'application/vnd.ms-excel', 'Excel (XLS)', 'Excel (XLS)', '/Content/img/MimeTypeIcons/excel_20x20.png', '/Content/img/MimeTypeIcons/excel_48x48.png'),
 (14, 'application/msword', 'Word (DOC)', 'Word (DOC)', '/Content/img/MimeTypeIcons/word_20x20.png', '/Content/img/MimeTypeIcons/word_48x48.png'),
 --
-(16, 'text/css', 'CSS', 'CSS', null, null)
+(16, 'text/css', 'CSS', 'CSS', null, null),
+-- ZIP
+(17, 'application/x-zip-compressed', 'ZIP', 'ZIP', null, null)
+
