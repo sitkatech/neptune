@@ -61,6 +61,7 @@
     <add key="PathToPyqgisTestScript" value="${path-to-pyqgis-test-script}"/>
     <add key="PyqgisTestWorkingDirectory" value="${pyqgis-test-working-directory}"/>
     <add key="PathToPyqgisLauncher" value="${path-to-pyqgis-launcher}"/>
+    <add key="NereidUrl" value ="${nereid-url}"/>
 
   </appSettings>
   <system.net>
@@ -100,6 +101,11 @@
     <modules runAllManagedModulesForAllRequests="true">
     </modules>
     <httpErrors existingResponse="PassThrough"/>
+    <security>
+        <requestFiltering>
+            <requestLimits maxAllowedContentLength="65000000" />
+        </requestFiltering>
+    </security>
     <staticContent>
       <!-- As of 07/20/2015 these are the correct mime types for font files. In the future these may be included with IIS 8 or above or may need to be tweaked to match W3C recommendations. -MF, RL -->
       <remove fileExtension=".eot"/>

@@ -2,10 +2,10 @@ delete from dbo.TreatmentBMPModelingType
 
 insert into dbo.TreatmentBMPModelingType(TreatmentBMPModelingTypeID, TreatmentBMPModelingTypeName, TreatmentBMPModelingTypeDisplayName)
 values
-(1, 'Bioinfiltration (bioretention with raised underdrain)', 'Bioinfiltration (bioretention with raised underdrain)'),
-(2, 'Bioretention with no Underdrain', 'Bioretention with no Underdrain'),
-(3, 'Bioretention with Underdrain and Impervious Liner', 'Bioretention with Underdrain and Impervious Liner'),
-(4, 'Cisterns for Harvest and Use', 'Cisterns for Harvest and Use'),
+(1, 'Bioinfiltration (Bioretention With Raised Underdrain)', 'Bioinfiltration (bioretention with raised underdrain)'),
+(2, 'Bioretention With No Underdrain', 'Bioretention with no Underdrain'),
+(3, 'Bioretention With Underdrain And Impervious Liner', 'Bioretention with Underdrain and Impervious Liner'),
+(4, 'Cisterns For Harvest And Use', 'Cisterns for Harvest and Use'),
 (5, 'Constructed Wetland', 'Constructed Wetland'),
 (6, 'Dry Extended Detention Basin', 'Dry Extended Detention Basin'),
 (7, 'Dry Weather Treatment Systems', 'Dry Weather Treatment Systems'),

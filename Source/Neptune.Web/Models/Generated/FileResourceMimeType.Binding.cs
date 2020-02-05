@@ -34,6 +34,7 @@ namespace Neptune.Web.Models
         public static readonly FileResourceMimeTypeWordDOC WordDOC = FileResourceMimeTypeWordDOC.Instance;
         public static readonly FileResourceMimeTypexExcelXLSX xExcelXLSX = FileResourceMimeTypexExcelXLSX.Instance;
         public static readonly FileResourceMimeTypeCSS CSS = FileResourceMimeTypeCSS.Instance;
+        public static readonly FileResourceMimeTypeZIP ZIP = FileResourceMimeTypeZIP.Instance;
 
         public static readonly List<FileResourceMimeType> All;
         public static readonly ReadOnlyDictionary<int, FileResourceMimeType> AllLookupDictionary;
@@ -43,7 +44,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FileResourceMimeType()
         {
-            All = new List<FileResourceMimeType> { PDF, WordDOCX, ExcelXLSX, XPNG, PNG, TIFF, BMP, GIF, JPEG, PJPEG, PowerpointPPTX, PowerpointPPT, ExcelXLS, WordDOC, xExcelXLSX, CSS };
+            All = new List<FileResourceMimeType> { PDF, WordDOCX, ExcelXLSX, XPNG, PNG, TIFF, BMP, GIF, JPEG, PJPEG, PowerpointPPTX, PowerpointPPT, ExcelXLS, WordDOC, xExcelXLSX, CSS, ZIP };
             AllLookupDictionary = new ReadOnlyDictionary<int, FileResourceMimeType>(All.ToDictionary(x => x.FileResourceMimeTypeID));
         }
 
@@ -151,6 +152,8 @@ namespace Neptune.Web.Models
                     return xExcelXLSX;
                 case FileResourceMimeTypeEnum.XPNG:
                     return XPNG;
+                case FileResourceMimeTypeEnum.ZIP:
+                    return ZIP;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -174,7 +177,8 @@ namespace Neptune.Web.Models
         ExcelXLS = 13,
         WordDOC = 14,
         xExcelXLSX = 15,
-        CSS = 16
+        CSS = 16,
+        ZIP = 17
     }
 
     public partial class FileResourceMimeTypePDF : FileResourceMimeType
@@ -271,5 +275,11 @@ namespace Neptune.Web.Models
     {
         private FileResourceMimeTypeCSS(int fileResourceMimeTypeID, string fileResourceMimeTypeName, string fileResourceMimeTypeDisplayName, string fileResourceMimeTypeContentTypeName, string fileResourceMimeTypeIconSmallFilename, string fileResourceMimeTypeIconNormalFilename) : base(fileResourceMimeTypeID, fileResourceMimeTypeName, fileResourceMimeTypeDisplayName, fileResourceMimeTypeContentTypeName, fileResourceMimeTypeIconSmallFilename, fileResourceMimeTypeIconNormalFilename) {}
         public static readonly FileResourceMimeTypeCSS Instance = new FileResourceMimeTypeCSS(16, @"CSS", @"CSS", @"text/css", null, null);
+    }
+
+    public partial class FileResourceMimeTypeZIP : FileResourceMimeType
+    {
+        private FileResourceMimeTypeZIP(int fileResourceMimeTypeID, string fileResourceMimeTypeName, string fileResourceMimeTypeDisplayName, string fileResourceMimeTypeContentTypeName, string fileResourceMimeTypeIconSmallFilename, string fileResourceMimeTypeIconNormalFilename) : base(fileResourceMimeTypeID, fileResourceMimeTypeName, fileResourceMimeTypeDisplayName, fileResourceMimeTypeContentTypeName, fileResourceMimeTypeIconSmallFilename, fileResourceMimeTypeIconNormalFilename) {}
+        public static readonly FileResourceMimeTypeZIP Instance = new FileResourceMimeTypeZIP(17, @"ZIP", @"ZIP", @"application/x-zip-compressed", null, null);
     }
 }

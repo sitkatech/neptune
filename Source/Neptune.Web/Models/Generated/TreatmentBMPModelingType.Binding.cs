@@ -18,10 +18,10 @@ namespace Neptune.Web.Models
 {
     public abstract partial class TreatmentBMPModelingType : IHavePrimaryKey
     {
-        public static readonly TreatmentBMPModelingTypeBioinfiltrationbioretentionwithraisedunderdrain Bioinfiltrationbioretentionwithraisedunderdrain = TreatmentBMPModelingTypeBioinfiltrationbioretentionwithraisedunderdrain.Instance;
-        public static readonly TreatmentBMPModelingTypeBioretentionwithnoUnderdrain BioretentionwithnoUnderdrain = TreatmentBMPModelingTypeBioretentionwithnoUnderdrain.Instance;
-        public static readonly TreatmentBMPModelingTypeBioretentionwithUnderdrainandImperviousLiner BioretentionwithUnderdrainandImperviousLiner = TreatmentBMPModelingTypeBioretentionwithUnderdrainandImperviousLiner.Instance;
-        public static readonly TreatmentBMPModelingTypeCisternsforHarvestandUse CisternsforHarvestandUse = TreatmentBMPModelingTypeCisternsforHarvestandUse.Instance;
+        public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain BioinfiltrationBioretentionWithRaisedUnderdrain = TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain.Instance;
+        public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain BioretentionWithNoUnderdrain = TreatmentBMPModelingTypeBioretentionWithNoUnderdrain.Instance;
+        public static readonly TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner BioretentionWithUnderdrainAndImperviousLiner = TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner.Instance;
+        public static readonly TreatmentBMPModelingTypeCisternsForHarvestAndUse CisternsForHarvestAndUse = TreatmentBMPModelingTypeCisternsForHarvestAndUse.Instance;
         public static readonly TreatmentBMPModelingTypeConstructedWetland ConstructedWetland = TreatmentBMPModelingTypeConstructedWetland.Instance;
         public static readonly TreatmentBMPModelingTypeDryExtendedDetentionBasin DryExtendedDetentionBasin = TreatmentBMPModelingTypeDryExtendedDetentionBasin.Instance;
         public static readonly TreatmentBMPModelingTypeDryWeatherTreatmentSystems DryWeatherTreatmentSystems = TreatmentBMPModelingTypeDryWeatherTreatmentSystems.Instance;
@@ -49,7 +49,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static TreatmentBMPModelingType()
         {
-            All = new List<TreatmentBMPModelingType> { Bioinfiltrationbioretentionwithraisedunderdrain, BioretentionwithnoUnderdrain, BioretentionwithUnderdrainandImperviousLiner, CisternsforHarvestandUse, ConstructedWetland, DryExtendedDetentionBasin, DryWeatherTreatmentSystems, Drywell, FlowDurationControlBasin, FlowDurationControlTank, HydrodynamicSeparator, InfiltrationBasin, InfiltrationTrench, LowFlowDiversions, PermeablePavement, ProprietaryBiotreatment, ProprietaryTreatmentControl, SandFilters, UndergroundInfiltration, VegetatedFilterStrip, VegetatedSwale, WetDetentionBasin };
+            All = new List<TreatmentBMPModelingType> { BioinfiltrationBioretentionWithRaisedUnderdrain, BioretentionWithNoUnderdrain, BioretentionWithUnderdrainAndImperviousLiner, CisternsForHarvestAndUse, ConstructedWetland, DryExtendedDetentionBasin, DryWeatherTreatmentSystems, Drywell, FlowDurationControlBasin, FlowDurationControlTank, HydrodynamicSeparator, InfiltrationBasin, InfiltrationTrench, LowFlowDiversions, PermeablePavement, ProprietaryBiotreatment, ProprietaryTreatmentControl, SandFilters, UndergroundInfiltration, VegetatedFilterStrip, VegetatedSwale, WetDetentionBasin };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPModelingType>(All.ToDictionary(x => x.TreatmentBMPModelingTypeID));
         }
 
@@ -119,14 +119,14 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case TreatmentBMPModelingTypeEnum.Bioinfiltrationbioretentionwithraisedunderdrain:
-                    return Bioinfiltrationbioretentionwithraisedunderdrain;
-                case TreatmentBMPModelingTypeEnum.BioretentionwithnoUnderdrain:
-                    return BioretentionwithnoUnderdrain;
-                case TreatmentBMPModelingTypeEnum.BioretentionwithUnderdrainandImperviousLiner:
-                    return BioretentionwithUnderdrainandImperviousLiner;
-                case TreatmentBMPModelingTypeEnum.CisternsforHarvestandUse:
-                    return CisternsforHarvestandUse;
+                case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                    return BioinfiltrationBioretentionWithRaisedUnderdrain;
+                case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+                    return BioretentionWithNoUnderdrain;
+                case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+                    return BioretentionWithUnderdrainAndImperviousLiner;
+                case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
+                    return CisternsForHarvestAndUse;
                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                     return ConstructedWetland;
                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
@@ -171,10 +171,10 @@ namespace Neptune.Web.Models
 
     public enum TreatmentBMPModelingTypeEnum
     {
-        Bioinfiltrationbioretentionwithraisedunderdrain = 1,
-        BioretentionwithnoUnderdrain = 2,
-        BioretentionwithUnderdrainandImperviousLiner = 3,
-        CisternsforHarvestandUse = 4,
+        BioinfiltrationBioretentionWithRaisedUnderdrain = 1,
+        BioretentionWithNoUnderdrain = 2,
+        BioretentionWithUnderdrainAndImperviousLiner = 3,
+        CisternsForHarvestAndUse = 4,
         ConstructedWetland = 5,
         DryExtendedDetentionBasin = 6,
         DryWeatherTreatmentSystems = 7,
@@ -195,28 +195,28 @@ namespace Neptune.Web.Models
         WetDetentionBasin = 22
     }
 
-    public partial class TreatmentBMPModelingTypeBioinfiltrationbioretentionwithraisedunderdrain : TreatmentBMPModelingType
+    public partial class TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain : TreatmentBMPModelingType
     {
-        private TreatmentBMPModelingTypeBioinfiltrationbioretentionwithraisedunderdrain(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeBioinfiltrationbioretentionwithraisedunderdrain Instance = new TreatmentBMPModelingTypeBioinfiltrationbioretentionwithraisedunderdrain(1, @"Bioinfiltration (bioretention with raised underdrain)", @"Bioinfiltration (bioretention with raised underdrain)");
+        private TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
+        public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain Instance = new TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain(1, @"Bioinfiltration (Bioretention With Raised Underdrain)", @"Bioinfiltration (bioretention with raised underdrain)");
     }
 
-    public partial class TreatmentBMPModelingTypeBioretentionwithnoUnderdrain : TreatmentBMPModelingType
+    public partial class TreatmentBMPModelingTypeBioretentionWithNoUnderdrain : TreatmentBMPModelingType
     {
-        private TreatmentBMPModelingTypeBioretentionwithnoUnderdrain(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeBioretentionwithnoUnderdrain Instance = new TreatmentBMPModelingTypeBioretentionwithnoUnderdrain(2, @"Bioretention with no Underdrain", @"Bioretention with no Underdrain");
+        private TreatmentBMPModelingTypeBioretentionWithNoUnderdrain(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
+        public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain Instance = new TreatmentBMPModelingTypeBioretentionWithNoUnderdrain(2, @"Bioretention With No Underdrain", @"Bioretention with no Underdrain");
     }
 
-    public partial class TreatmentBMPModelingTypeBioretentionwithUnderdrainandImperviousLiner : TreatmentBMPModelingType
+    public partial class TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner : TreatmentBMPModelingType
     {
-        private TreatmentBMPModelingTypeBioretentionwithUnderdrainandImperviousLiner(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeBioretentionwithUnderdrainandImperviousLiner Instance = new TreatmentBMPModelingTypeBioretentionwithUnderdrainandImperviousLiner(3, @"Bioretention with Underdrain and Impervious Liner", @"Bioretention with Underdrain and Impervious Liner");
+        private TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
+        public static readonly TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner Instance = new TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner(3, @"Bioretention With Underdrain And Impervious Liner", @"Bioretention with Underdrain and Impervious Liner");
     }
 
-    public partial class TreatmentBMPModelingTypeCisternsforHarvestandUse : TreatmentBMPModelingType
+    public partial class TreatmentBMPModelingTypeCisternsForHarvestAndUse : TreatmentBMPModelingType
     {
-        private TreatmentBMPModelingTypeCisternsforHarvestandUse(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeCisternsforHarvestandUse Instance = new TreatmentBMPModelingTypeCisternsforHarvestandUse(4, @"Cisterns for Harvest and Use", @"Cisterns for Harvest and Use");
+        private TreatmentBMPModelingTypeCisternsForHarvestAndUse(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
+        public static readonly TreatmentBMPModelingTypeCisternsForHarvestAndUse Instance = new TreatmentBMPModelingTypeCisternsForHarvestAndUse(4, @"Cisterns For Harvest And Use", @"Cisterns for Harvest and Use");
     }
 
     public partial class TreatmentBMPModelingTypeConstructedWetland : TreatmentBMPModelingType
