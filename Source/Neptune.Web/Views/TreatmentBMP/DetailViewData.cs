@@ -107,6 +107,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForWaterQualityDetentionVolume { get; }
         public Models.FieldDefinition FieldDefinitionForWettedFootprint { get; }
         public Models.FieldDefinition FieldDefinitionForWinterHarvestedWaterDemand { get; }
+        public Models.FieldDefinition FieldDefinitionForWatershed { get; }
+        public Models.FieldDefinition FieldDefinitionForDesignStormwaterDepth { get; }
         public bool HasModelingAttributes { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
@@ -195,6 +197,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForWaterQualityDetentionVolume = Models.FieldDefinition.WaterQualityDetentionVolume;
             FieldDefinitionForWettedFootprint = Models.FieldDefinition.WettedFootprint;
             FieldDefinitionForWinterHarvestedWaterDemand = Models.FieldDefinition.WinterHarvestedWaterDemand;
+            FieldDefinitionForWatershed = Models.FieldDefinition.Watershed;
+            FieldDefinitionForDesignStormwaterDepth = Models.FieldDefinition.DesignStormwaterDepth;
         }
 
         private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)
