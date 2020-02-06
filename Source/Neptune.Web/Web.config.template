@@ -59,7 +59,7 @@
     <add key="PrecipitationZoneServiceUrl" value="${precipitation-zone-service-url}"/>
     <add key="NominatimAPIKey" value="${nominatim-key}"/>
     <add key="PathToPyqgisTestScript" value="${path-to-pyqgis-test-script}"/>
-    <add key="PyqgisTestWorkingDirectory" value="${pyqgis-test-working-directory}"/>
+    <add key="PyqgisWorkingDirectory" value="${pyqgis-working-directory}"/>
     <add key="PathToPyqgisLauncher" value="${path-to-pyqgis-launcher}"/>
     <add key="NereidUrl" value ="${nereid-url}"/>
 

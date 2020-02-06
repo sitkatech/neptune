@@ -63,7 +63,7 @@ namespace Neptune.Web.Common
         public static readonly string RegionalSubbasinServiceUrl = SitkaConfiguration.GetRequiredAppSetting("RegionalSubbasinServiceUrl");
 
         public static readonly string PathToPyqgisTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisTestScript");
-        public static readonly string PyqgisTestWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PyqgisTestWorkingDirectory");
+        public static readonly string PyqgisWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PyqgisWorkingDirectory");
         public static string PathToPyqgisLauncher = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisLauncher");
 
         public static string NereidUrl = SitkaConfiguration.GetOptionalAppSetting("NereidUrl");
