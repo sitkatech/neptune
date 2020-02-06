@@ -1,2 +1,0 @@
-Create Nonclustered Index IX_NetworkCatchment_OCSurveyDownstreamCatchmentID
-On dbo.NetworkCatchment(OCSurveyDownstreamCatchmentID)
