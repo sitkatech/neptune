@@ -31,6 +31,8 @@ namespace Neptune.Web
             SitkaLogger.RegisterLogger(new NeptuneLogger());
             CookiePrefixToExcludeFromEmailLogging = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_";
 
+            SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
+
             // this needs to match the Area Name declared in the Areas folder
 
             // create the default routes for the app and the areas
