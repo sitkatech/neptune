@@ -37,7 +37,7 @@ namespace Neptune.Web.ScheduledJobs
             {
                 Logger.Error("TGU Geoprocessing failed. Output:");
                 Logger.Error(processUtilityResult.StdOutAndStdErr);
-                return;
+                throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             }
 
             try

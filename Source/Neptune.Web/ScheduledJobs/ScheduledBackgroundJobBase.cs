@@ -66,6 +66,6 @@ namespace Neptune.Web.ScheduledJobs
         /// <summary>
         /// Jobs can fill this in with whatever they need to run. This is called by <see cref="RunJob"/> which handles other miscellaneous stuff
         /// </summary>
-        protected abstract void RunJobImplementation();
+        protected abstract void RunJobImplementation(); 
     }
 }

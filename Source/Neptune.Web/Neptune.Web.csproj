@@ -163,6 +163,10 @@
     <Compile Include="Models\Generated\LandUseBlockStaging.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\LandUseBlockStagingConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\LandUseBlockStagingPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnit.Binding.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnit.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnitConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnitPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\LSPCBasin.Binding.cs" />
     <Compile Include="Models\Generated\LSPCBasin.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\LSPCBasinConfiguration.Binding.cs" />
@@ -497,6 +501,8 @@
     <Compile Include="Models\TreatmentBMPOperationMonth.cs" />
     <Compile Include="Models\Watershed.cs" />
     <Compile Include="ScheduledJobs\DelineationDiscrepancyCheckerBackgroundJob.cs" />
+    <Compile Include="ScheduledJobs\GeoprocessingException.cs" />
+    <Compile Include="ScheduledJobs\LoadGeneratingUnitRefreshScheduledBackgrounDJob.cs" />
     <Compile Include="ScheduledJobs\LSPCBasinRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\PrecipitationZoneRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\RegionalSubbasinRefreshScheduledBackgroundJob.cs" />

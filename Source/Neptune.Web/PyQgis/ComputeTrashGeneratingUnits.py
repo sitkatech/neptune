@@ -33,6 +33,10 @@ from processing.core.Processing import Processing
 
 import argparse
 
+from pyqgis_utils import (
+    duplicateLayer
+)
+
 JOIN_PREFIX = "Joined_"
 CONNSTRING_BASE = "CONNSTRING ERROR"
 OUTPUT_PATH = "OUTPUT PATH ERROR"
@@ -56,24 +60,6 @@ def parseArguments():
     if "True" in CONNSTRING_BASE:
             CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
 
-# Create an exact duplicate of the input layer.
-# Needed because the processing framework cannot actually operate with the same layer as multiple inputs to an algorithm
-# This is infuriating if you've ever used the QGIS GUI, where it looks like you can set the same layer for more than one input
-# One concludes, after much trial and error, that the processing framework is actually operating on two separate copies of the layer behind the scenes.
-def duplicateLayer(qgs_vector_layer, duplicate_layer_name):
-    # fixme: we might never use layer types other than polygon, but we might want this parameterized in the future
-    layer_dupe = QgsVectorLayer("MultiPolygon?crs=epsg:2771", duplicate_layer_name, "memory")
-
-    mem_layer_data = layer_dupe.dataProvider()
-
-    feats = [feat for feat in qgs_vector_layer.getFeatures()]
-    attr = qgs_vector_layer.dataProvider().fields().toList()
-    mem_layer_data.addAttributes(attr)
-    layer_dupe.updateFields()
-    mem_layer_data.addFeatures(feats)
-
-    return layer_dupe
-
 def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data = target.dataProvider()
     source_layer_data = source.dataProvider()
@@ -81,8 +67,6 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     attr = source_layer_data.fields().toList()
     target_layer_data.addAttributes(attr)
     target.updateFields()
-
-
 
 class Flatten:
     
@@ -418,7 +402,6 @@ if __name__ == '__main__':
 
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
 
-    ## TODO: overlay will be the ovta_delineation_wqmp_layer
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     tgu_res = processing.run("native:union", {
         'INPUT': land_use_block_layer,
