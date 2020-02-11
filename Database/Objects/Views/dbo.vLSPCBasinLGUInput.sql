@@ -4,7 +4,7 @@ GO
 Create view dbo.vLSPCBasinLGUInput
 as
 Select
-	LSPCBasinID,
+	LSPCBasinID as LSPCID,
 	LSPCBasinGeometry
 From dbo.LSPCBasin
 GO

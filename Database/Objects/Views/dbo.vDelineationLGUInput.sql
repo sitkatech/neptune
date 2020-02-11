@@ -4,7 +4,7 @@ GO
 Create view dbo.vDelineationLGUInput
 as
 Select
-	DelineationID,
+	DelineationID as DelinID,
 	DelineationGeometry
 from dbo.Delineation
 Where DelineationTypeID = 2

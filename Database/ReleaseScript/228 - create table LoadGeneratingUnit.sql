@@ -1,5 +1,5 @@
 Create table dbo.LoadGeneratingUnit(
-LoadGeneratingUnitID int not null constraint PK_LoadGeneratingUnit_LoadGeneratingUnitID primary key,
+LoadGeneratingUnitID int not null identity(1,1) constraint PK_LoadGeneratingUnit_LoadGeneratingUnitID primary key,
 LoadGeneratingUnitGeometry geometry not null,
 LSPCBasinID int null constraint FK_LoadGeneratingUnit_LSPCBasin_LSPCBasinID foreign key references dbo.LSPCBasin(LSPCBasinID),
 RegionalSubbasinID int null constraint FK_LoadGeneratingUnit_RegionalSubbasin_RegionalSubbasinID foreign key references dbo.RegionalSubbasin(RegionalSubbasinID),

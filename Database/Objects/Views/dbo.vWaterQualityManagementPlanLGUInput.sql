@@ -4,7 +4,7 @@ GO
 Create view dbo.vWaterQualityManagementPlanLGUInput
 as 
 Select 
-	WaterQualityManagementPlanID,
+	WaterQualityManagementPlanID as WQMPID,
 	WaterQualityManagementPlanBoundary
 from dbo.WaterQualityManagementPlan
 Where WaterQualityManagementPlanBoundary is not null

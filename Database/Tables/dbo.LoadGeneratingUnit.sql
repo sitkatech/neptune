@@ -3,7 +3,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[LoadGeneratingUnit](
-	[LoadGeneratingUnitID] [int] NOT NULL,
+	[LoadGeneratingUnitID] [int] IDENTITY(1,1) NOT NULL,
 	[LoadGeneratingUnitGeometry] [geometry] NOT NULL,
 	[LSPCBasinID] [int] NULL,
 	[RegionalSubbasinID] [int] NULL,

@@ -4,7 +4,7 @@ GO
 Create view dbo.vRegionalSubbasinLGUInput
 as
 Select
-	RegionalSubbasinID,
+	RegionalSubbasinID as RSBID,
 	CatchmentGeometry
 From dbo.RegionalSubbasin
 GO

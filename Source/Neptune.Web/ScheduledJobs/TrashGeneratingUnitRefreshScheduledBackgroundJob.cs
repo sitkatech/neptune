@@ -78,7 +78,6 @@ namespace Neptune.Web.ScheduledJobs
     }
 }
 
-// No reason for this code to live in 
 public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
 {
     public Ogr2OgrCommandLineRunnerForTGU(string pathToOgr2OgrExecutable, int coordinateSystemId, double totalMilliseconds) : base(pathToOgr2OgrExecutable, coordinateSystemId, totalMilliseconds)
@@ -109,7 +108,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "MSSQLSpatial",
             databaseConnectionString,
             outputPath,
-            "-t_srs",
+            "-a_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
             "dbo.TrashGeneratingUnit"

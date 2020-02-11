@@ -15,7 +15,7 @@ namespace Neptune.Web.Models
         {
             ToTable("LoadGeneratingUnit", schema);
             HasKey(x => x.LoadGeneratingUnitID);
-            Property(x => x.LoadGeneratingUnitID).HasColumnName(@"LoadGeneratingUnitID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            Property(x => x.LoadGeneratingUnitID).HasColumnName(@"LoadGeneratingUnitID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.LoadGeneratingUnitGeometry).HasColumnName(@"LoadGeneratingUnitGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.LSPCBasinID).HasColumnName(@"LSPCBasinID").HasColumnType("int").IsOptional();
             Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
