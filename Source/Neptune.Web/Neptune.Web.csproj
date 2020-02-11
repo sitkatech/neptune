@@ -506,6 +506,7 @@
     <Compile Include="ScheduledJobs\LSPCBasinRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\PrecipitationZoneRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\RegionalSubbasinRefreshScheduledBackgroundJob.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Views\Delineation\DelineationOverlapsDelineationGridSpec.cs" />
     <Compile Include="Views\Delineation\DelineationReconciliationReport.cs" />
     <Compile Include="Views\Delineation\DelineationReconciliationReportViewData.cs" />
@@ -1648,6 +1649,19 @@
     <None Include="Service References\KeystoneDataService\KeystoneData2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\Delineation\DelineationMap.AutoDelineate.js" />
     <Content Include="Views\Delineation\DelineationMap.css">
       <DependentUpon>DelineationMap.less</DependentUpon>
@@ -2082,7 +2096,9 @@
     <Reference Include="Microsoft.Owin.Security.OpenIdConnect, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\Microsoft.Owin.Security.OpenIdConnect.3.1.0\lib\net45\Microsoft.Owin.Security.OpenIdConnect.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Mvc, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
