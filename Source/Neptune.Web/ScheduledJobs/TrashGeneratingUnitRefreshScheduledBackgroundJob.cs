@@ -108,7 +108,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "MSSQLSpatial",
             databaseConnectionString,
             outputPath,
-            "-a_srs",
+            "-t_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
             "dbo.TrashGeneratingUnit"
