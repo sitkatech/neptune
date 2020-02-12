@@ -23,6 +23,8 @@ from qgis.core import (
 from qgis.analysis import QgsNativeAlgorithms
 
 print ("imported Qgis")
+# See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
+QgsApplication.setPrefixPath('C:\\OSGEO4W64\\apps\\qgis', True)
 
 # Append the path where processing plugin can be found
 sys.path.append('C:\\OSGeo4W64\\apps\\qgis\\python\\plugins')
@@ -292,8 +294,6 @@ class Flatten:
 if __name__ == '__main__':
     parseArguments()
     
-    # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-    QgsApplication.setPrefixPath('C:\\OSGEO4W64\\apps\\qgis', True)
     #qgs = QgsApplication([], False, "")
     qgs = QgsApplication([], False, 'C:\\Sitka\\Neptune\\QGis', "server")
 
