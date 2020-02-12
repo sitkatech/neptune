@@ -11,12 +11,6 @@ namespace Neptune.Web.SqlServerTypes
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr LoadLibrary(string libname);
-        
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool FreeLibrary(IntPtr hModule);
-
-        private static IntPtr _msvcrPtr = IntPtr.Zero;
-        private static IntPtr _spatialPtr = IntPtr.Zero;
 
         /// <summary>
         /// Loads the required native assemblies for the current architecture (x86 or x64)
@@ -27,33 +21,15 @@ namespace Neptune.Web.SqlServerTypes
         /// </param>
         public static void LoadNativeAssemblies(string rootApplicationPath)
         {
-            if (_msvcrPtr != IntPtr.Zero || _spatialPtr != IntPtr.Zero)
-                throw new Exception("LoadNativeAssemblies already called.");
-
             var nativeBinaryPath = IntPtr.Size > 4
                 ? Path.Combine(rootApplicationPath, @"SqlServerTypes\x64\")
                 : Path.Combine(rootApplicationPath, @"SqlServerTypes\x86\");
 
-            _msvcrPtr = LoadNativeAssembly(nativeBinaryPath, "msvcr120.dll");
-            _spatialPtr = LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial140.dll");
-
-            AppDomain.CurrentDomain.DomainUnload += (sender, e) =>
-            {
-                if (_msvcrPtr != IntPtr.Zero)
-                {
-                    FreeLibrary(_msvcrPtr);
-                    _msvcrPtr = IntPtr.Zero;
-                }
-
-                if (_spatialPtr != IntPtr.Zero)
-                {
-                    FreeLibrary(_spatialPtr);
-                    _spatialPtr = IntPtr.Zero;
-                }
-            };
+            LoadNativeAssembly(nativeBinaryPath, "msvcr120.dll");
+            LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial140.dll");
         }
 
-        private static IntPtr LoadNativeAssembly(string nativeBinaryPath, string assemblyName)
+        private static void LoadNativeAssembly(string nativeBinaryPath, string assemblyName)
         {
             var path = Path.Combine(nativeBinaryPath, assemblyName);
             var ptr = LoadLibrary(path);
@@ -64,8 +40,6 @@ namespace Neptune.Web.SqlServerTypes
                     assemblyName,
                     Marshal.GetLastWin32Error()));
             }
-
-            return ptr;
         }
     }
 }
