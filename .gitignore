@@ -26,3 +26,5 @@
 *.received.txt
 /Source/Neptune.Web/PyQgis/__pycache__
 Source/Neptune.Web/PyQgis/.vscode/
+
+/Source/_ReSharper.Caches
