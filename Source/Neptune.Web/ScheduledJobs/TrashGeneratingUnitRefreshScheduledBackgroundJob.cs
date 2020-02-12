@@ -40,6 +40,9 @@ namespace Neptune.Web.ScheduledJobs
                 throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             }
 
+            Logger.Info("QGIS output:");
+            Logger.Info(processUtilityResult.StdOutAndStdErr);
+
             try
             {
                 // kill the old TGUs
