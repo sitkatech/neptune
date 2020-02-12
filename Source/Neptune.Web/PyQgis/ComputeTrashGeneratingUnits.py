@@ -25,7 +25,7 @@ from qgis.analysis import QgsNativeAlgorithms
 print ("imported Qgis")
 
 # Append the path where processing plugin can be found
-sys.path.append(r'C:\OSGeo4W64\apps\qgis\python\plugins')
+sys.path.append('C:\\OSGeo4W64\\apps\\qgis\\python\\plugins')
 
 import processing
 from processing.tools import dataobjects
@@ -282,6 +282,7 @@ class Flatten:
             self.working_layer.deleteFeature(featToDelete.id())
 
     def addFeatureToIntersectLayer(self, feature_id):
+        ## todo: I think this method is unused?
         for featToAppend in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
             self.intersect_layer.addFeature(featToAppend)    
 
@@ -289,9 +290,9 @@ if __name__ == '__main__':
     parseArguments()
     
     # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-    QgsApplication.setPrefixPath(r'C:\OSGEO4W64\apps\qgis', True)
+    QgsApplication.setPrefixPath('C:\\OSGEO4W64\\apps\\qgis', True)
     #qgs = QgsApplication([], False, "")
-    qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "server")
+    qgs = QgsApplication([], False, 'C:\\Sitka\\Neptune\\QGis', "server")
 
     qgs.initQgis()
         
