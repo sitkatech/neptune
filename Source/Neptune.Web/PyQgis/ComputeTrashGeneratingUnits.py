@@ -34,12 +34,15 @@ from processing.core.Processing import Processing
 import argparse
 
 from pyqgis_utils import (
-    duplicateLayer
+    duplicateLayer,
+    raiseIfLayerInvalid,
+    QgisError
 )
 
 JOIN_PREFIX = "Joined_"
 CONNSTRING_BASE = "CONNSTRING ERROR"
 OUTPUT_PATH = "OUTPUT PATH ERROR"
+
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
@@ -320,10 +323,7 @@ if __name__ == '__main__':
     connstring_delineation = CONNSTRING_BASE + "tables=dbo.vDelineationTGUInput"
     delineation_layer = QgsVectorLayer(connstring_delineation, "Delineations", "ogr")
     
-    if not delineation_layer.isValid():
-        print("Layer failed to load!")
-    else:
-        print("Loaded Delineation layer!")
+    raiseIfLayerInvalid(delineation_layer)
 
     # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we use the buffer-0 trick to smooth those out.
     debuffer = processing.run("native:buffer", {
