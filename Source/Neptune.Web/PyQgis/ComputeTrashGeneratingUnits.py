@@ -348,10 +348,7 @@ if __name__ == '__main__':
     connstring_ovta = CONNSTRING_BASE + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
     ovta_layer = QgsVectorLayer(connstring_ovta, "OVTAs", "ogr")
 
-    if not ovta_layer.isValid():
-        print("OVTA Layer failed to Load!")
-    else:
-        print("Loaded OVTA Layer")
+    raiseIfLayerInvalid(ovta_layer)
 
     print("Flattening OVTAs...\n")
     flatten_ovtas = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
@@ -361,10 +358,7 @@ if __name__ == '__main__':
     connstring_wqmp = CONNSTRING_BASE + "tables=dbo.vWaterQualityManagementPlanTGUInput"
     wqmp_layer = QgsVectorLayer(connstring_wqmp, "WQMPs", "ogr")
 
-    if not wqmp_layer.isValid():
-        print("WQMP Layer failed to Load!")
-    else:
-        print("Loaded WQMP Layer!")
+    raiseIfLayerInvalid(wqmp_layer)
 
     print("Flattening WQMPs...\n")
     flatten_wqmps = Flatten(wqmp_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
@@ -396,10 +390,7 @@ if __name__ == '__main__':
     connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.vLandUseBlockTGUInput"
     land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
 
-    if not land_use_block_layer.isValid():
-        print("Land Use Block Layer failed to Load!")
-    else:
-        print("Loaded Land Use Block Layer")
+    raiseIfLayerInvalid(land_use_block_layer)
 
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
 
