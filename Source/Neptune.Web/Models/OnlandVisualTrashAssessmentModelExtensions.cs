@@ -41,9 +41,7 @@ namespace Neptune.Web.Models
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
         public static HtmlString GetDetailUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
         {
-            if (new OnlandVisualTrashAssessmentViewFeature().HasPermission(currentPerson, onlandVisualTrashAssessment)
-                    .HasPermission && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
-                OnlandVisualTrashAssessmentStatus.Complete)
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete)
             {
                 return new HtmlString(
                     $"<a class='gridButton' href='{DetailUrlTemplate.ParameterReplace(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)}'>View</a>");

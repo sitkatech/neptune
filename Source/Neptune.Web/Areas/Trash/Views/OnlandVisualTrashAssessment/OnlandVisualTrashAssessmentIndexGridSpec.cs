@@ -12,9 +12,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OnlandVisualTrashAssessmentIndexGridSpec : GridSpec<Models.OnlandVisualTrashAssessment>
     {
-        public OnlandVisualTrashAssessmentIndexGridSpec(Person currentPerson, bool showDelete, bool showEdit, bool showName)
+        public OnlandVisualTrashAssessmentIndexGridSpec(Person currentPerson, bool showDelete, bool showEdit, bool showName, bool userCanView)
         {
-            Add(string.Empty, x => x.GetDetailUrlForGrid(currentPerson), 40, DhtmlxGridColumnFilterType.None);
+            if (userCanView)
+            {
+                Add(string.Empty, x => x.GetDetailUrlForGrid(currentPerson), 40, DhtmlxGridColumnFilterType.None);
+            }
 
             if (showDelete)
             {
