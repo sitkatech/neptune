@@ -58,7 +58,6 @@ def parseArguments():
     if "True" in CONNSTRING_BASE:
             CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
 
-
 def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
     params = {
         'INPUT': inputLayer,
@@ -79,6 +78,20 @@ def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=
         unionResult = processing.run("native:union", params)
     
     return unionResult['OUTPUT']
+
+def clip(inputLayer, overlayLayer, memoryOutputName, context=None):
+    params = {
+        'INPUT': inputLayer,
+        'OVERLAY': overlayLayer,
+        'OUTPUT': 'memory:'+memoryOutputName
+    }
+
+    if context is not None:
+        clipResult = processing.run("native:clip", params, context = context)
+    else: 
+        clipResult = processing.run("native:clip", params)
+    
+    return clipResult['OUTPUT']
 
 def bufferZero(inputLayer, memoryOutputName, context=None):
     params = {
@@ -130,13 +143,18 @@ if __name__ == '__main__':
     delineationLayer = bufferZero(delineationLayer, "Delineations", context=PROCESSING_CONTEXT)
     wqmpLayer = bufferZero(wqmpLayer, "WQMPs", context=PROCESSING_CONTEXT)
 
-    lspc_rsb = union(lspcLayer, regionalSubbasinLayer, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
+    # At present time, we're only concerned with the area covered by LSPC basins. 
+    regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, lspcLayer, "RSBClipped")
+    delineationLayerClipped = clip(delineationLayer, lspcLayer, "RSBClipped")
+    wqmpLayerClipped = clip(wqmpLayer, lspcLayer, "RSBClipped")
+
+    lspc_rsb = union(lspcLayer, regionalSubbasinLayerClipped, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb)
     lspc_rsb = bufferZero(lspc_rsb, "LSPC-RSB", context=PROCESSING_CONTEXT)
 
-    lspc_rsb_wqmp = union(lspc_rsb, wqmpLayer, memoryOutputName="lspc_rsb_wqmp", context=PROCESSING_CONTEXT)
+    lspc_rsb_wqmp = union(lspc_rsb, wqmpLayerClipped, memoryOutputName="lspc_rsb_wqmp", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb_delineation)
     lspc_rsb_wqmp = bufferZero(lspc_rsb_wqmp, "LSPC-RSB-D", context=PROCESSING_CONTEXT)
 
-    masterOverlay = union(lspc_rsb_wqmp, delineationLayer, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
+    masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(masterOverlay)
