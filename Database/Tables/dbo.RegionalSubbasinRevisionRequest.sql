@@ -4,6 +4,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[RegionalSubbasinRevisionRequest](
 	[RegionalSubbasinRevisionRequestID] [int] IDENTITY(1,1) NOT NULL,
+	[TreatmentBMPID] [int] NOT NULL,
 	[RequestPersonID] [int] NOT NULL,
 	[RegionalSubbasinRevisionRequestStatusID] [int] NOT NULL,
 	[RequestDate] [datetime] NOT NULL,
@@ -31,3 +32,8 @@ ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT 
 REFERENCES [dbo].[RegionalSubbasinRevisionRequestStatus] ([RegionalSubbasinRevisionRequestStatusID])
 GO
 ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [FK_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestStatus_RegionalSubbasinRevisionRequestStatusID]
+GO
+ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT [PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID]

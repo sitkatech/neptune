@@ -16,6 +16,7 @@ namespace Neptune.Web.Models
             ToTable("RegionalSubbasinRevisionRequest", schema);
             HasKey(x => x.RegionalSubbasinRevisionRequestID);
             Property(x => x.RegionalSubbasinRevisionRequestID).HasColumnName(@"RegionalSubbasinRevisionRequestID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsRequired();
             Property(x => x.RequestPersonID).HasColumnName(@"RequestPersonID").HasColumnType("int").IsRequired();
             Property(x => x.RegionalSubbasinRevisionRequestStatusID).HasColumnName(@"RegionalSubbasinRevisionRequestStatusID").HasColumnType("int").IsRequired();
             Property(x => x.RequestDate).HasColumnName(@"RequestDate").HasColumnType("datetime").IsRequired();
@@ -24,6 +25,7 @@ namespace Neptune.Web.Models
             Property(x => x.Notes).HasColumnName(@"Notes").HasColumnType("varchar").IsOptional();
 
             // Foreign keys
+            HasRequired(a => a.TreatmentBMP).WithMany(b => b.RegionalSubbasinRevisionRequests).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID
             HasRequired(a => a.RequestPerson).WithMany(b => b.RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson).HasForeignKey(c => c.RequestPersonID).WillCascadeOnDelete(false); // FK_RegionalSubbasinRevisionRequest_Person_RequestPersonID_PersonID
             HasRequired(a => a.ClosedByPerson).WithMany(b => b.RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson).HasForeignKey(c => c.ClosedByPersonID).WillCascadeOnDelete(false); // FK_RegionalSubbasinRevisionRequest_Person_ClosedByPersonID_PersonID
         }

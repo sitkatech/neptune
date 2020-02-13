@@ -6,6 +6,8 @@ RegionalSubbasinRevisionRequestStatusDisplayName varchar(20) not null constraint
 
 Create table dbo.RegionalSubbasinRevisionRequest (
 RegionalSubbasinRevisionRequestID int not null identity(1,1) constraint PK_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestID primary key,
+TreatmentBMPID int not null constraint PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID
+	foreign key references dbo.TreatmentBMP(TreatmentBMPID),
 RequestPersonID int not null constraint FK_RegionalSubbasinRevisionRequest_Person_RequestPersonID_PersonID
 	foreign key references dbo.Person(PersonID),
 RegionalSubbasinRevisionRequestStatusID int not null constraint FK_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestStatus_RegionalSubbasinRevisionRequestStatusID

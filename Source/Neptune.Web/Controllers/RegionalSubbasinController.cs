@@ -181,13 +181,42 @@ Please review it, make revisions, and close it at your earliest convenience. <a 
             // Create Notification
             var mailMessage = new MailMessage { From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
 
-            // Reply-To Header
-            mailMessage.ReplyToList.Add(requestPersonEmail);
+            mailMessage.CC.Add(requestPersonEmail);
 
-            // TO field
             foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveRSBRevisionRequests())
             {
                 mailMessage.To.Add(revisionRequestPeople.Email);
+            }
+
+            SitkaSmtpClient.Send(mailMessage);
+        }
+        private void SendRSBRevisionRequestClosedEmail(Models.Person closingPerson, Models.RegionalSubbasinRevisionRequest request)
+        {
+        
+            var subject = $"A Regional Subbasin Revision Request was closed";
+            var firstName = closingPerson.FirstName;
+            var lastName = closingPerson.LastName;
+            var organizationName = closingPerson.Organization.OrganizationName;
+            var bmpName = request.TreatmentBMP.TreatmentBMPName;
+            var bigTodo = "big TODO";
+            string requestPersonEmail = closingPerson.Email;
+            var message = $@"
+<div style='font-size: 12px; font-family: Arial'>
+<strong>{subject}</strong><br />
+<br />
+The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {firstName} {lastName} ({organizationName}). <a href='{bigTodo}'>Revise the delineation for BMP {bmpName} on the Delineation map</a>. 
+
+ <div>Thanks for keeping the Regional Subbasin Network up to date within the Orange County Stormwater Tools.</div>
+</div>
+";
+            // Create Notification
+            var mailMessage = new MailMessage { From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
+            
+            mailMessage.To.Add(request.RequestPerson.Email);
+
+            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveRSBRevisionRequests())
+            {
+                mailMessage.CC.Add(revisionRequestPeople.Email);
             }
 
             SitkaSmtpClient.Send(mailMessage);
