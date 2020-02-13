@@ -18,12 +18,12 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using LtInfo.Common.Models;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Neptune.Web.Models;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.User
 {
@@ -39,6 +39,10 @@ namespace Neptune.Web.Views.User
         [Required]
         [DisplayName("Drool Tool Role")]
         public int? DroolToolRoleID { get; set; }
+
+        [Required]
+        [DisplayName("Should Receive RSB Revision Requests?")]
+        public bool ShouldReceiveRSBRevisionRequests { get; set; }
 
         [Required]
         [DisplayName("Should Receive System Communications?")]
@@ -57,15 +61,17 @@ namespace Neptune.Web.Views.User
             RoleID = person.RoleID;
             DroolToolRoleID = person.DroolToolRoleID;
             ShouldReceiveSystemCommunications = person.ReceiveSupportEmails;
+            ShouldReceiveRSBRevisionRequests = person.ReceiveRSBRevisionRequestEmails;
         }
 
         public void UpdateModel(Person person, Person currentPerson)
         {
-            person.RoleID = RoleID.Value;
-            person.DroolToolRoleID = DroolToolRoleID.Value;
+            person.RoleID = RoleID.GetValueOrDefault();  // will never default due to RequiredAttribute
+            person.DroolToolRoleID = DroolToolRoleID.GetValueOrDefault();
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
+            person.ReceiveRSBRevisionRequestEmails = ShouldReceiveRSBRevisionRequests;
 
-            var assignedRole = Models.Role.AllLookupDictionary[RoleID.Value];
+            var assignedRole = Models.Role.AllLookupDictionary[RoleID.GetValueOrDefault()];
             if (assignedRole == Models.Role.Admin || assignedRole == Models.Role.SitkaAdmin)
             {
                 HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson(

@@ -80,6 +80,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
+            modelBuilder.Configurations.Add(new RegionalSubbasinRevisionRequestConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinStagingConfiguration());
             modelBuilder.Configurations.Add(new SourceControlBMPConfiguration());
             modelBuilder.Configurations.Add(new SourceControlBMPAttributeConfiguration());
@@ -169,6 +170,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
+        public virtual DbSet<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
         public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
         public virtual DbSet<RegionalSubbasinStaging> RegionalSubbasinStagings { get; set; }
         public virtual DbSet<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get; set; }
@@ -512,6 +514,14 @@ namespace Neptune.Web.Models
 
                 case "QuickBMP":
                     return QuickBMPs.GetQuickBMP(primaryKey);
+
+                case "RegionalSubbasinRevisionRequest":
+                    return RegionalSubbasinRevisionRequests.GetRegionalSubbasinRevisionRequest(primaryKey);
+
+                case "RegionalSubbasinRevisionRequestStatus":
+                    var regionalSubbasinRevisionRequestStatus = RegionalSubbasinRevisionRequestStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(regionalSubbasinRevisionRequestStatus, "RegionalSubbasinRevisionRequestStatus", primaryKey);
+                    return regionalSubbasinRevisionRequestStatus;
 
                 case "RegionalSubbasin":
                     return RegionalSubbasins.GetRegionalSubbasin(primaryKey);

@@ -1,7 +1,7 @@
 ﻿using GeoJSON.Net.Feature;
 using Hangfire;
-using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
+using LtInfo.Common.Email;
 using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -14,8 +14,8 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Data.Entity.Spatial;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Mvc;
 using Index = Neptune.Web.Views.RegionalSubbasin.Index;
 using IndexViewData = Neptune.Web.Views.RegionalSubbasin.IndexViewData;
@@ -157,6 +157,40 @@ namespace Neptune.Web.Controllers
             var regionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<RegionalSubbasin>(regionalSubbasins, gridSpec);
             return gridJsonNetJObjectResult;
+        }
+
+        private void SendRSBRevisionRequestSubmittedEmail(Models.Person requestPerson, Models.TreatmentBMP requestBMP)
+        {
+            var subject = $"A new Regional Subbasin Revision Request was submitted";
+            var firstName = requestPerson.FirstName;
+            var lastName = requestPerson.LastName;
+            var organizationName = requestPerson.Organization.OrganizationName;
+            var bmpName = requestBMP.TreatmentBMPName;
+            var bigTodo = "big TODO";
+            string requestPersonEmail = requestPerson.Email;
+            var message = $@"
+<div style='font-size: 12px; font-family: Arial'>
+<strong>{subject}</strong><br />
+<br />
+A new Regional Subbasin Revision Request was just submitted by {firstName} {lastName} ({organizationName}) for BMP {bmpName}.
+Please review it, make revisions, and close it at your earliest convenience. <a href='{bigTodo}'>View this Request</a>
+
+<div>You received this email because you are assigned to receive Regional Subbasin Revision Request notifications within the Orange County Stormwater Tools. </div>.
+</div>
+";
+            // Create Notification
+            var mailMessage = new MailMessage { From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
+
+            // Reply-To Header
+            mailMessage.ReplyToList.Add(requestPersonEmail);
+
+            // TO field
+            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveRSBRevisionRequests())
+            {
+                mailMessage.To.Add(revisionRequestPeople.Email);
+            }
+
+            SitkaSmtpClient.Send(mailMessage);
         }
     }
 }

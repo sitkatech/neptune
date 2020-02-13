@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -297,6 +297,12 @@
     <Compile Include="Models\Generated\RegionalSubbasin.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\RegionalSubbasinConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\RegionalSubbasinPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\RegionalSubbasinRevisionRequest.Binding.cs" />
+    <Compile Include="Models\Generated\RegionalSubbasinRevisionRequest.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\RegionalSubbasinRevisionRequestConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\RegionalSubbasinRevisionRequestPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\RegionalSubbasinRevisionRequestStatus.Binding.cs" />
+    <Compile Include="Models\Generated\RegionalSubbasinRevisionRequestStatusPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\RegionalSubbasinStaging.Binding.cs" />
     <Compile Include="Models\Generated\RegionalSubbasinStaging.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\RegionalSubbasinStagingConfiguration.Binding.cs" />

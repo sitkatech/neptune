@@ -33,6 +33,8 @@ namespace Neptune.Web.Models
             this.Notifications = new HashSet<Notification>();
             this.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson = new HashSet<OnlandVisualTrashAssessment>();
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
+            this.RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson = new HashSet<RegionalSubbasinRevisionRequest>();
+            this.RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson = new HashSet<RegionalSubbasinRevisionRequest>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.SupportRequestLogsWhereYouAreTheRequestPerson = new HashSet<SupportRequestLog>();
             this.TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson = new HashSet<TrashGeneratingUnitAdjustment>();
@@ -120,13 +122,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || DelineationsWhereYouAreTheVerifiedByPerson.Any() || DelineationStagingsWhereYouAreTheUploadedByPerson.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || LandUseBlockStagingsWhereYouAreTheUploadedByPerson.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
+            return AuditLogs.Any() || DelineationsWhereYouAreTheVerifiedByPerson.Any() || DelineationStagingsWhereYouAreTheUploadedByPerson.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || LandUseBlockStagingsWhereYouAreTheUploadedByPerson.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson.Any() || RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -196,6 +198,16 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in StormwaterJurisdictionPeople.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -251,6 +263,8 @@ namespace Neptune.Web.Models
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }
+        public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson { get; set; }
+        public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<SupportRequestLog> SupportRequestLogsWhereYouAreTheRequestPerson { get; set; }
         public virtual ICollection<TrashGeneratingUnitAdjustment> TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson { get; set; }

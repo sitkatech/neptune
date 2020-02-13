@@ -138,7 +138,7 @@ namespace Neptune.Web.Models
                 -1,
                 false,
                 null,
-                null);
+                null, false);
             return anonymousSitkaUser;
         }
 
