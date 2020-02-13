@@ -18,6 +18,7 @@ CREATE TABLE [dbo].[Person](
 	[ReceiveSupportEmails] [bit] NOT NULL,
 	[LoginName] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[DroolToolRoleID] [int] NULL,
+	[ReceiveRSBRevisionRequestEmails] [bit] NOT NULL,
  CONSTRAINT [PK_Person_PersonID] PRIMARY KEY CLUSTERED 
 (
 	[PersonID] ASC

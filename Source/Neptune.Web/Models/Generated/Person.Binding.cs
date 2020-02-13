@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Person(int personID, Guid personGuid, string firstName, string lastName, string email, string phone, int roleID, DateTime createDate, DateTime? updateDate, DateTime? lastActivityDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName, int? droolToolRoleID) : this()
+        public Person(int personID, Guid personGuid, string firstName, string lastName, string email, string phone, int roleID, DateTime createDate, DateTime? updateDate, DateTime? lastActivityDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName, int? droolToolRoleID, bool receiveRSBRevisionRequestEmails) : this()
         {
             this.PersonID = personID;
             this.PersonGuid = personGuid;
@@ -60,12 +60,13 @@ namespace Neptune.Web.Models
             this.ReceiveSupportEmails = receiveSupportEmails;
             this.LoginName = loginName;
             this.DroolToolRoleID = droolToolRoleID;
+            this.ReceiveRSBRevisionRequestEmails = receiveRSBRevisionRequestEmails;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Person(Guid personGuid, string firstName, string lastName, string email, int roleID, DateTime createDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName) : this()
+        public Person(Guid personGuid, string firstName, string lastName, string email, int roleID, DateTime createDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName, bool receiveRSBRevisionRequestEmails) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.PersonID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -80,12 +81,13 @@ namespace Neptune.Web.Models
             this.OrganizationID = organizationID;
             this.ReceiveSupportEmails = receiveSupportEmails;
             this.LoginName = loginName;
+            this.ReceiveRSBRevisionRequestEmails = receiveRSBRevisionRequestEmails;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public Person(Guid personGuid, string firstName, string lastName, string email, Role role, DateTime createDate, bool isActive, Organization organization, bool receiveSupportEmails, string loginName) : this()
+        public Person(Guid personGuid, string firstName, string lastName, string email, Role role, DateTime createDate, bool isActive, Organization organization, bool receiveSupportEmails, string loginName, bool receiveRSBRevisionRequestEmails) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.PersonID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -101,6 +103,7 @@ namespace Neptune.Web.Models
             organization.People.Add(this);
             this.ReceiveSupportEmails = receiveSupportEmails;
             this.LoginName = loginName;
+            this.ReceiveRSBRevisionRequestEmails = receiveRSBRevisionRequestEmails;
         }
 
         /// <summary>
@@ -108,7 +111,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static Person CreateNewBlank(Role role, Organization organization)
         {
-            return new Person(default(Guid), default(string), default(string), default(string), role, default(DateTime), default(bool), organization, default(bool), default(string));
+            return new Person(default(Guid), default(string), default(string), default(string), role, default(DateTime), default(bool), organization, default(bool), default(string), default(bool));
         }
 
         /// <summary>
@@ -235,6 +238,7 @@ namespace Neptune.Web.Models
         public bool ReceiveSupportEmails { get; set; }
         public string LoginName { get; set; }
         public int? DroolToolRoleID { get; set; }
+        public bool ReceiveRSBRevisionRequestEmails { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return PersonID; } set { PersonID = value; } }
 
