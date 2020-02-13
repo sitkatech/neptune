@@ -341,7 +341,12 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         var self = this;
         this.parentElement.querySelectorAll("[name='flowOption']").forEach(function (el) {
-            L.DomEvent.on(el, 'click', function () { self.displayDelineationOptionsForFlowOption(this.value); });
+            L.DomEvent.on(el, 'click', function () {
+                // deselect any previouslyly selected delineation option and disable the delineation button so they have to select again to proceed.
+                self.parentElement.querySelectorAll("[name='delineationOption']").forEach(function (el) { el.checked = false; });
+                self.disableDelineationButton();
+                self.displayDelineationOptionsForFlowOption(this.value);            // will enable the delineation button if they selected centralized
+            });
         });
         this.parentElement.querySelectorAll("[name='delineationOption']").forEach(function (el) {
             L.DomEvent.on(el, 'click', function () { self.enableDelineationButton(); });
@@ -392,11 +397,13 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
             this.getTrackedElement("delineateOptionTrace").hidden = true;
         } else if (flowOption === "Centralized") {
+            this.enableDelineationButton();
+
             this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
             this.getTrackedElement("delineationTypeOptions").hidden = false;
 
             this.getTrackedElement("delineateOptionTrace").hidden = false;
-            this.getTrackedElement("delineationOptionDraw").hidden = false;
+            this.getTrackedElement("delineationOptionDraw").hidden = true;
 
             this.getTrackedElement("delineationOptionAuto").hidden = true;
         }
@@ -418,16 +425,17 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
                 window.delineationMap.launchAutoDelineateMode();
             }
         } else if (flowOption === "Centralized") {
-            if (delineationOption === "traceDelineate") {
-                window.delineationMap.launchTraceDelineateMode();
-            } else if (delineationOption === "drawDelineate") {
-                window.delineationMap.launchDrawCatchmentMode(drawModeOptions);
-            }
+            // 2/13/2020 Centralized BMPs' catchments are no longer editable by the user. They must conform to Regional Subbasins.
+            window.delineationMap.launchTraceDelineateMode();
         }
     },
 
     enableDelineationButton: function() {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
+    },
+
+    disableDelineationButton: function() {
+        this.getTrackedElement("continueDelineationButton").setAttribute("disabled", "disabled");
     },
 
     preselectDelineationType: function(type) {

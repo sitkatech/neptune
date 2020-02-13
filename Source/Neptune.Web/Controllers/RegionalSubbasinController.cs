@@ -72,7 +72,6 @@ namespace Neptune.Web.Controllers
             return ViewRefreshHRUCharacteristics(regionalSubbasin, new ConfirmDialogFormViewModel());
         }
 
-
         [HttpPost]
         [NeptuneAdminFeature]
         public ActionResult RefreshHRUCharacteristics(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey, ConfirmDialogFormViewModel viewModel)
@@ -94,7 +93,6 @@ namespace Neptune.Web.Controllers
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
-
 
         [HttpGet]
         [NeptuneAdminFeature]
