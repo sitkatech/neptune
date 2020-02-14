@@ -15,14 +15,16 @@ namespace Neptune.Web.Controllers
         [TreatmentBMPEditFeature]
         public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
             var viewModel = new NewViewModel();
 
-            return ViewNew(viewModel);
+            return ViewNew(viewModel, treatmentBMP);
         }
 
-        private ViewResult ViewNew(NewViewModel viewModel)
+        private ViewResult ViewNew(NewViewModel viewModel, TreatmentBMP treatmentBMP)
         {
-            var viewData = new NewViewData(CurrentPerson);
+            var viewData = new NewViewData(CurrentPerson, treatmentBMP);
 
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
@@ -30,9 +32,11 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)
         {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
             if (!ModelState.IsValid)
             {
-                return ViewNew(viewModel);
+                return ViewNew(viewModel, treatmentBMP);
             }
 
             throw new NotImplementedException();

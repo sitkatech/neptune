@@ -72,7 +72,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
-        this.getTrackedElement("delineationArea").innerHTML = "-";
+        //this.getTrackedElement("delineationArea").innerHTML = "-";
         this.getTrackedElement("delineationButton").innerHTML = "Edit";
 
         if (treatmentBMPFeature.properties.DelineationURL) {
@@ -251,6 +251,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
     showCentralizedDelineationControls: function () {
         this.isEditingCentralizedDelineation = true;
+        this.showRequestRevisionButton();
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationVertexThinningButton").classList.add("hiddenControlElement");
         this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
@@ -263,7 +264,11 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     reportDelineationArea: function (properties) {
-        this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
+        if (properties.Area !== "-") {
+            this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
+        } else {
+            this.getTrackedElement("delineationArea").innerHTML = properties.Area;
+        }
         this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
     },
 
@@ -296,11 +301,15 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     showRequestRevisionButton: function(href) {
         this.getTrackedElement("requestRevisionButton").classList.remove("hiddenControlElement");
         this.getTrackedElement("requestRevisionButton").href = href;
+        this.getTrackedElement("requestRevisionDuringEditButton").classList.remove("hiddenControlElement");
+        this.getTrackedElement("requestRevisionDuringEditButton").href = href;
     },
 
     hideRequestRevisionButton: function() {
         this.getTrackedElement("requestRevisionButton").classList.add("hiddenControlElement");
-        this.getTrackedElement("requestRevisionButton").removeAttribue("href");
+        this.getTrackedElement("requestRevisionButton").removeAttribute("href");
+        this.getTrackedElement("requestRevisionDuringEditButton").classList.add("hiddenControlElement");
+        this.getTrackedElement("requestRevisionDuringEditButton").removeAttribute("href");
     },
 
     thin: function (tolerance) {

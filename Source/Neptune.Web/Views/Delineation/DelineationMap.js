@@ -569,7 +569,6 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
 
 NeptuneMaps.DelineationMap.prototype.persistTracedCatchment = function () {
     // had better be only one feature
-    debugger;
     var persistableFeatureJson = this.selectedBMPDelineationLayer.toGeoJSON(LEAFLET_TO_GEO_JSON_PRECISION);
 
     var wkts;
@@ -880,7 +879,8 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     }
 
     if (!bmpFeature.properties["DelineationURL"]) {
-
+        this.selectedAssetControl.reportDelineationArea({ Area: "-", DelineationType: "No delineation provided" });
+        this.selectedAssetControl.hideRequestRevisionButton();
         return jQuery.Deferred().resolve();
     }
 
@@ -903,7 +903,6 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         }
 
         if (response.properties.DelineationType === DELINEATION_CENTRALIZED) {
-            debugger;
             var requestRevisionUrl =
                 new Sitka.UrlTemplate(self.config.NewRegionalSubbasinRevisionRequestUrlTemplate).ParameterReplace(bmpFeature.properties.TreatmentBMPID);
             self.selectedAssetControl.showRequestRevisionButton(requestRevisionUrl);

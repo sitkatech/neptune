@@ -5,8 +5,13 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
 {
     public class NewViewData : NeptuneViewData
     {
-        public NewViewData(Person currentPerson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public Models.TreatmentBMP TreatmentBMP { get; }
+
+        public NewViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            TreatmentBMP = treatmentBMP;
+            EntityName = "Regional Subbasin";
+            PageTitle = "Revision";
         }
     }
 }
