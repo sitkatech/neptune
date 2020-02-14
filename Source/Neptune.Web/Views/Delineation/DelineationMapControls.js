@@ -79,6 +79,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
             this.getTrackedElement("delineationStatus").style.display = "initial";
             this.getTrackedElement("deleteDelineationButton").style.display = "initial";
+
         } else {
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
             this.getTrackedElement("delineationStatus").style.display = "none";
@@ -270,6 +271,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationArea").innerHTML = "-";
         this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
         this.getTrackedElement("deleteDelineationButton").style.display = "none";
+        this.hideRequestRevisionButton();
         this.getTrackedElement("delineationStatus").style.display = "none";
     },
 
@@ -289,6 +291,14 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
     showDelineationButtons: function() {
         this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
+    },
+
+    showRequestRevisionButton: function() {
+        this.getTrackedElement("requestRevisionButton").classList.remove("hiddenControlElement");
+    },
+
+    hideRequestRevisionButton: function() {
+        this.getTrackedElement("requestRevisionButton").classList.add("hiddenControlElement");
     },
 
     thin: function (tolerance) {

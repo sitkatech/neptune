@@ -25,7 +25,7 @@ label.group {
   font-weight: normal;
 }
 .hiddenControlElement {
-  display: none;
+  display: none !important;
 }
 /* weird gross hack to allow centered controls by overriding bottom-right control placement */
 .leaflet-bottom.leaflet-right {

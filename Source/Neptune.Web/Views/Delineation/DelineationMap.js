@@ -900,6 +900,12 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         if (response.type !== "Feature") {
             delineationErrorAlert();
         }
+
+        if (response.properties.DelineationType === DELINEATION_CENTRALIZED) {
+            self.selectedAssetControl.showRequestRevisionButton();
+        } else {
+            self.selectedAssetControl.hideRequestRevisionButton();
+        }
         self.addBMPDelineationLayer(response);
 
         self.selectedAssetControl.reportDelineationArea(response.properties);
