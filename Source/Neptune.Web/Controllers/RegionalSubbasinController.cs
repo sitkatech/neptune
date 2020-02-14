@@ -45,9 +45,12 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ContentResult UpstreamDelineation(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        public ContentResult UpstreamDelineation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
+            var regionalSubbasin = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Single(x=>x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
+
             var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
 
             regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);

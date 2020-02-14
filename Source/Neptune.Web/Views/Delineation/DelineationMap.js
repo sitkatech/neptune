@@ -162,6 +162,11 @@ NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function () {
     return this.lastSelected.toGeoJSON(LEAFLET_TO_GEO_JSON_PRECISION).features[0];
 };
 
+NeptuneMaps.DelineationMap.prototype.getSelectedBMPID = function() {
+    // precision doesn't matter here since this method is only for getting the ID
+    return this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
+};
+
 
 /* Methods for turning on or off the pop-up that begins the delineation workflow
  */
@@ -623,57 +628,44 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.beginDelineationControl.remove();
     this.beginDelineationControl = null;
 
-    var latLng = this.lastSelected.getLayers()[0].getLatLng();
+    var selectedBMPID = this.getSelectedBMPID();
 
     this.disableUserInteraction();
     this.treatmentBMPLayer.off("click");
     this.displayLoading();
 
-    var someWfsParams = {
-        cql_filter: 'intersects(CatchmentGeometry, POINT(' + latLng.lat + ' ' + latLng.lng + '))'
-    };
-    var wfsAjax = this.selectFeatureByWfs("OCStormwater:RegionalSubbasins", someWfsParams);
-
     var self = this;
-    
-    wfsAjax.then(function (response) {
-            if (response.features[0]) {
-                return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.RegionalSubbasinID);
-            } else {
-                return jQuery.Deferred(function (deferred) {
-                    return deferred.reject();
-                });
-            }
-        }).then(function (response) {
-            var geoJson = JSON.parse(response);
-            self.processAndShowTraceDelineation(geoJson);
-            self.removeLoading();
-            self.enableUserInteraction();
 
-            var drawModeOptions = {
-                tolerance: TOLERANCE_CENTRALIZED,
-                delineationType: DELINEATION_CENTRALIZED,
-                delineationStrategy: STRATEGY_NETWORK_TRACE
-            };
+    this.retrieveDelineationFromNetworkTrace(selectedBMPID).then(function (response) {
+        var geoJson = JSON.parse(response);
+        self.processAndShowTraceDelineation(geoJson);
+        self.removeLoading();
+        self.enableUserInteraction();
 
-            self.launchDrawCatchmentMode(drawModeOptions);
-        }).fail(function () {
-            self.selectedAssetControl.enableDelineationButton();
-            self.removeLoading();
-            self.enableUserInteraction();
-            self.hookupSelectTreatmentBMPOnClick();
-            self.hookupDeselectOnClick();
-            window.alert(
-                "There was an error retrieving the delineation from the Regional Subbasin Trace. Please try again. If the issue persists, please contact Support.");
-        }).always(function () {
-            self.selectedAssetControl.enableDelineationButton();
-            self.removeLoading();
-            self.enableUserInteraction();
-        });
+        var drawModeOptions = {
+            tolerance: TOLERANCE_CENTRALIZED,
+            delineationType: DELINEATION_CENTRALIZED,
+            delineationStrategy: STRATEGY_NETWORK_TRACE
+        };
+
+        self.launchDrawCatchmentMode(drawModeOptions);
+    }).fail(function () {
+        self.selectedAssetControl.enableDelineationButton();
+        self.removeLoading();
+        self.enableUserInteraction();
+        self.hookupSelectTreatmentBMPOnClick();
+        self.hookupDeselectOnClick();
+        window.alert(
+            "There was an error retrieving the delineation from the Regional Subbasin Trace. Please try again. If the issue persists, please contact Support.");
+    }).always(function () {
+        self.selectedAssetControl.enableDelineationButton();
+        self.removeLoading();
+        self.enableUserInteraction();
+    });
 };
 
-NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (regionalSubbasinID) {
-    var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(regionalSubbasinID);
+NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (treatmentBMPID) {
+    var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(treatmentBMPID);
 
     return jQuery.ajax({
         url: url,
