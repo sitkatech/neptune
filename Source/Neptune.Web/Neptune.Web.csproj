@@ -1985,6 +1985,7 @@
     <Content Include="Views\Shared\HRUCharacteristics\HRUCharacteristics.cshtml" />
     <Content Include="Views\Delineation\DelineationReconciliationReport.cshtml" />
     <Content Include="Views\TreatmentBMP\EditModelingAttributes.cshtml" />
+    <Content Include="Views\RegionalSubbasinRevisionRequest\New.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

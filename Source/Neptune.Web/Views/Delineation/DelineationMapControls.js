@@ -293,12 +293,14 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
     },
 
-    showRequestRevisionButton: function() {
+    showRequestRevisionButton: function(href) {
         this.getTrackedElement("requestRevisionButton").classList.remove("hiddenControlElement");
+        this.getTrackedElement("requestRevisionButton").href = href;
     },
 
     hideRequestRevisionButton: function() {
         this.getTrackedElement("requestRevisionButton").classList.add("hiddenControlElement");
+        this.getTrackedElement("requestRevisionButton").removeAttribue("href");
     },
 
     thin: function (tolerance) {

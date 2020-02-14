@@ -14,6 +14,7 @@ namespace Neptune.Web.Views.Delineation
         public string ChangeDelineationStatusUrlTemplate { get; }
         public string TreatmentBMPDelineationUrlTemplate { get; }
         public string TreatmentBMPLocationUrlTemplate { get; }
+        public string NewRegionalSubbasinRevisionRequestUrlTemplate { get; }
 
         public DelineationMapConfig(string jurisdictionCQLFilter)
         {
@@ -26,7 +27,7 @@ namespace Neptune.Web.Views.Delineation
             TreatmentBMPLocationUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditLocationFromDelineationMap(UrlTemplate.Parameter1Int))).UrlTemplateString;
             AutoDelineateBaseUrl =
                 "https://ocgis.com/arcpub/rest/services/Flood/OCPWGlobalStormwaterDelineationServiceSurfaceOnly/GPServer/Global%20Surface%20Delineation/";
+            NewRegionalSubbasinRevisionRequestUrlTemplate = new UrlTemplate<int>(SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x=>x.New(UrlTemplate.Parameter1Int))).UrlTemplateString;
         }
-        
     }
 }

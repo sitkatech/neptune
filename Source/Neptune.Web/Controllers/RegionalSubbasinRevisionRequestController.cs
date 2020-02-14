@@ -1,14 +1,18 @@
-﻿using LtInfo.Common.Email;
+﻿using System;
+using LtInfo.Common.Email;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.RegionalSubbasinRevisionRequest;
 using System.Net.Mail;
 using System.Web.Mvc;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {
     public class RegionalSubbasinRevisionRequestController : NeptuneBaseController
     {
+        [HttpGet]
+        [TreatmentBMPEditFeature]
         public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var viewModel = new NewViewModel();
@@ -21,6 +25,18 @@ namespace Neptune.Web.Controllers
             var viewData = new NewViewData(CurrentPerson);
 
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewNew(viewModel);
+            }
+
+            throw new NotImplementedException();
+            // TODO
         }
 
 

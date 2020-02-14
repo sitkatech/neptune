@@ -8,6 +8,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     configureProj4Defs();
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
+    console.log(config);
     this.mapInitJson = mapInitJson;
     this.initializeTreatmentBMPClusteredLayer();
 
@@ -902,7 +903,10 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         }
 
         if (response.properties.DelineationType === DELINEATION_CENTRALIZED) {
-            self.selectedAssetControl.showRequestRevisionButton();
+            debugger;
+            var requestRevisionUrl =
+                new Sitka.UrlTemplate(self.config.NewRegionalSubbasinRevisionRequestUrlTemplate).ParameterReplace(bmpFeature.properties.TreatmentBMPID);
+            self.selectedAssetControl.showRequestRevisionButton(requestRevisionUrl);
         } else {
             self.selectedAssetControl.hideRequestRevisionButton();
         }
