@@ -42,17 +42,17 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         L.DomEvent.on(this.getTrackedElement("saveLocationButton"),
             "click",
-            function(e) {
+            function (e) {
                 this.exitEditLocationMode(true);
             }.bind(this));
 
         L.DomEvent.on(this.getTrackedElement("cancelLocationButton"),
             "click",
-            function(e) {
+            function (e) {
                 this.exitEditLocationMode(false);
             }.bind(this));
 
-        
+
     },
 
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
@@ -156,7 +156,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this._beginDelineationHandler = null;
         }
 
-        this._editBMPLocationHandler = function(e) {
+        this._editBMPLocationHandler = function (e) {
             self.launchEditLocationMode();
             window.delineationMap.launchEditLocationMode();
             e.stopPropagation();
@@ -165,7 +165,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         L.DomEvent.on(editLocationButton, "click", this._editBMPLocationHandler);
     },
 
-    launchEditLocationMode: function() {
+    launchEditLocationMode: function () {
         this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
 
@@ -222,7 +222,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             });
             this.slider.on("slideStop",
                 function (sliderValue) {
-                    this.thin( sliderValue);
+                    this.thin(sliderValue);
                 }.bind(this));
         }
 
@@ -236,7 +236,24 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
-        window.delineationMap.exitDrawCatchmentMode(save);
+
+        // handle the centralized case separately since it doesn't involve drawing anymore
+        if (this.isEditingCentralizedDelineation) {
+            window.delineationMap.exitTraceMode(save);
+            this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
+            this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
+            this.isEditingCentralizedDelineation = false;
+        } else {
+            window.delineationMap.exitDrawCatchmentMode(save);
+        }
+    },
+
+    showCentralizedDelineationControls: function () {
+        this.isEditingCentralizedDelineation = true;
+        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
+        this.getTrackedElement("delineationVertexThinningButton").classList.add("hiddenControlElement");
+        this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
+        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
     },
 
     reset: function () {

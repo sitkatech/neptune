@@ -485,6 +485,40 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
     this.map.setZoom(this.restoreZoom);
 };
 
+NeptuneMaps.DelineationMap.prototype.exitTraceMode = function (save) {
+    if (!save) {
+        // todo: the logic here can be cleaned up a bit.
+        if (this.selectedBMPDelineationLayer && !this.selectedBMPDelineationLayer.isUnsavedDelineation) {
+            this.map.addLayer(this.selectedBMPDelineationLayer);
+        } else {
+            if (this.selectedBMPDelineationLayer) {
+                this.map.removeLayer(this.selectedBMPDelineationLayer);
+                this.selectedBMPDelineationLayer = null;
+            }
+            // either the selected BMP's delineation didn't exist or it should no longer
+            this.selectedBMPDelineationLayer = null;
+        }
+    } else {
+        // this is where to set the UI back to showing "Provisional" instead of "Verified"
+        this.selectedAssetControl.flipVerifyButton(false);
+        this.selectedAssetControl.showVerifyButton();
+
+        this.treatmentBMPLayerLookup.get(this.getSelectedBMPFeature().properties.TreatmentBMPID).feature.properties.DelineationType = this.delineationType;
+
+        // returns a promise but there's no need to actually do anything with it
+        // todo: make this be to exist.
+        this.persistTracedCatchment();
+    }
+
+    // todo: I think this is technically a race-condition.
+    this.retrieveAndShowBMPDelineation(this.getSelectedBMPFeature());
+
+    this.hookupSelectTreatmentBMPOnClick();
+    this.hookupDeselectOnClick();
+
+    this.map.setZoom(this.restoreZoom);
+};
+
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     // had better be only one feature
     var persistableFeatureJson;
@@ -494,6 +528,48 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     } else {
         persistableFeatureJson = this.selectedBMPDelineationLayer.getLayers()[0].feature;
     }
+
+    var wkts;
+
+    if (persistableFeatureJson.type === "Feature") {
+        wkts = [Terraformer.WKT.convert(persistableFeatureJson.geometry)];
+    } else if (persistableFeatureJson.features.length == 1) {
+        wkts = [Terraformer.WKT.convert(persistableFeatureJson.features[0].geometry)];
+    } else if (persistableFeatureJson.features.length > 1) {
+
+        wkts = _.map(persistableFeatureJson.features,
+            function(feature) {
+                return Terraformer.WKT.convert(feature.geometry);
+            });
+
+    } else {
+        wkts = [Terraformer.WKT.convert({ type: "Polygon" })];
+    }
+
+    var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
+    var delineationUrl =
+        new Sitka.UrlTemplate(this.config.TreatmentBMPDelineationUrlTemplate).ParameterReplace(treatmentBMPID);
+
+    var self = this;
+    return jQuery.ajax({
+        url: delineationUrl,
+        data: { "WellKnownText": wkts, "DelineationType": this.delineationType },
+        type: 'POST'
+    }).then(function (response) {
+        self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
+        self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationID = response.delineationID;
+        self.retrieveAndShowBMPDelineation(self.getSelectedBMPFeature());
+        self.cacheBustDelineationWmsLayers();
+    }).fail(function () {
+        alert(
+            "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
+    });
+};
+
+NeptuneMaps.DelineationMap.prototype.persistTracedCatchment = function () {
+    // had better be only one feature
+    debugger;
+    var persistableFeatureJson = this.selectedBMPDelineationLayer.toGeoJSON(LEAFLET_TO_GEO_JSON_PRECISION);
 
     var wkts;
 
@@ -620,6 +696,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
  */
 
 NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
+    
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
         this.selectedBMPDelineationLayer = null;
@@ -634,6 +711,8 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.treatmentBMPLayer.off("click");
     this.displayLoading();
 
+    this.selectedAssetControl.showCentralizedDelineationControls();
+
     var self = this;
 
     this.retrieveDelineationFromNetworkTrace(selectedBMPID).then(function (response) {
@@ -642,13 +721,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         self.removeLoading();
         self.enableUserInteraction();
 
-        var drawModeOptions = {
-            tolerance: TOLERANCE_CENTRALIZED,
-            delineationType: DELINEATION_CENTRALIZED,
-            delineationStrategy: STRATEGY_NETWORK_TRACE
-        };
-
-        self.launchDrawCatchmentMode(drawModeOptions);
     }).fail(function () {
         self.selectedAssetControl.enableDelineationButton();
         self.removeLoading();
