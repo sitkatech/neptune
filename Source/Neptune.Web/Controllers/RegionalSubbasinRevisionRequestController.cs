@@ -60,7 +60,7 @@ namespace Neptune.Web.Controllers
             }
 
             var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry().MakeValid().ToDbGeometry());
-            var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
+            var unionListGeometries = dbGeometrys.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
 
             var regionalSubbasinRevisionRequest = new RegionalSubbasinRevisionRequest(treatmentBMPPrimaryKey.PrimaryKeyValue, unionListGeometries, CurrentPerson.PersonID,
                 RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID, DateTime.Now);
@@ -70,6 +70,7 @@ namespace Neptune.Web.Controllers
 
             SendRSBRevisionRequestSubmittedEmail(CurrentPerson, treatmentBMP);
 
+            SetMessageForDisplay("Successfully submitted the Regional Subbasin Revision Request");
             // TODO - redirect to the request page instead of back to the delineation map
             return Redirect(treatmentBMP.GetDelineationMapUrl());
         }

@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-sm-12 buttonsContainer">
                     <hr />
-                    <button type="button" class="btn btn-neptune" onclick="handleSubmit()">Submit Request</button>
+                    <button type="button" class="btn btn-neptune" onclick="confirmSubmit()">Submit Request</button>
                     <a class="btn btn-neptune" href="@ViewDataTyped.TreatmentBMP.GetDelineationMapUrl()">Cancel</a>
                 </div>
 
@@ -78,7 +78,34 @@
 </form>
 
 <script>
-    var handleSubmit = function () {
+    var confirmSubmit = function () {
+        var alertHtml =
+            "<div class='modal neptune-modal' style='width: 500px; margin:auto;'>" +
+                "<div class='modal-dialog neptune-modal-dialog'>" +
+                "<div class='modal-content'>" +
+                "<div class='modal-header'>" +
+                "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
+                "<span class='modal-title'>Delete Delineation</span>" +
+                "</div>" +
+                "<div class='modal-body'><p>Are you sure you would like to submit this revision to" +
+        "the Regional Subbasin layer? " +
+            "This will send an email notification to an administrator" +
+        "at OC Survey to review and update the layer. You can " +
+        "check for status updates in the Regional Subbasin "+
+        "Revision Grid " + "?</p></div>" +
+                "<div class='modal-footer'>" +
+                "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
+                "<button type='button' class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='doSubmit()' data-dismiss='modal'>Continue</a>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+            "</div>";
+        var alertDiv = jQuery(alertHtml);
+        alertDiv.modal({ keyboard: true });
+        alertDiv.draggable({ handle: ".modal-header" });
+    }
+
+    var doSubmit = function() {
         jQuery("#revisionRequestForm").submit();
     }
 

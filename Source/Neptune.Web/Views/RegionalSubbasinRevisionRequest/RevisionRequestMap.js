@@ -3,7 +3,7 @@
         position: 'topleft',
         draw: {
             polyline: false,
-            polygon: true,
+            polygon: false,
             circle: false, // Turns off this drawing tool
             rectangle: false,
             marker: false
@@ -14,7 +14,7 @@
                 maintainColor: true,
                 opacity: 0.3
             },
-            remove: true
+            remove: false
         }
     };
     return options;
@@ -27,6 +27,9 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
 
         revisionRequestMap = new NeptuneMaps.Map(mapInitJson, "Terrain", geoServerUrl, {});
         revisionRequestMap.map.setMaxZoom(24);
+
+        addReferenceLayers(revisionRequestMap);
+
         revisionRequestMap.editableFeatureGroup = new L.FeatureGroup();
 
         var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection,
@@ -47,19 +50,8 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         revisionRequestMap.map.addControl(drawControl);
         revisionRequestMap.map.addLayer(revisionRequestMap.editableFeatureGroup);
         revisionRequestMap.layerControl.addOverlay(revisionRequestMap.editableFeatureGroup,
-            "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
+            "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Requested Revision</span>");
 
-        revisionRequestMap.map.on('draw:created',
-            function (e) {
-                var layer = e.layer;
-                revisionRequestMap.editableFeatureGroup.addLayer(layer);
-                var leafletId = layer._leaflet_id;
-                revisionRequestMap.editableFeatureGroup._layers[leafletId].feature = new Object();
-                revisionRequestMap.editableFeatureGroup._layers[leafletId].feature.properties = new Object();
-                revisionRequestMap.editableFeatureGroup._layers[leafletId].feature.type = "Feature";
-                var feature = revisionRequestMap.editableFeatureGroup._layers[leafletId].feature;
-                updateFeatureCollectionJson();
-            });
         revisionRequestMap.map.on('draw:edited',
             function (e) {
                 updateFeatureCollectionJson();
@@ -193,4 +185,57 @@ var detectKinksAndReject = function (geoJson) {
     // if they make it out here, their geometry is vanilla
     jQuery("button[type='submit']").removeAttr("disabled");
     jQuery("#kinkDanger").css("display", "none");
+};
+
+var addReferenceLayers = function(revisionMap) {
+    addDelineationWmsLayers(revisionMap);
+
+    // ensure that wms layers fetched through the Neptune.Map interface are always above all other layers
+    var regionalSubbasinPane = revisionMap.map.createPane("regionalSubbasinPane");
+    regionalSubbasinPane.style.zIndex = 10000;
+    revisionMap.map.getPane("markerPane").style.zIndex = 10001;
+
+    var regionalSubbasinLayer =
+        revisionMap.addWmsLayer("OCStormwater:RegionalSubbasins",
+            "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
+            { pane: "regionalSubbasinPane" }, false);
+
+    var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
+    var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
+    revisionMap.addWmsLayer("OCStormwater:Parcels",
+        parcelsLabel,
+        {
+            styles: "parcel"
+        }, true);
+    regionalSubbasinLayer.bringToFront();
+
+    revisionMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
+
+    L.control.watermark({ position: 'bottomleft' }).addTo(revisionMap.map);
+};
+
+var addDelineationWmsLayers = function(revisionMap) {
+
+    var verifiedLegendUrl = '/Content/img/legendImages/delineationVerified.png';
+    var verifiedLabel = "<span>Delineations (Verified) </br><img src='" + verifiedLegendUrl + "'/></span>";
+    revisionMap.verifiedLayer = revisionMap.addWmsLayer("OCStormwater:Delineations",
+        verifiedLabel,
+        {
+            styles: "delineation",
+            cql_filter: "DelineationStatus = 'Verified'",
+            maxZoom: 22
+        },
+        false);
+
+    var provisionalLegendUrl = '/Content/img/legendImages/delineationProvisional.png';
+    var provisionalLabel = "<span>Delineations (Provisional) </br><img src='" + provisionalLegendUrl + "'/></span>";
+    this.provisionalLayer = revisionMap.addWmsLayer("OCStormwater:Delineations",
+        provisionalLabel,
+        {
+            styles: "delineation",
+            cql_filter: "DelineationStatus = 'Provisional'",
+            maxZoom: 22
+        },
+        true);
 };
