@@ -44,7 +44,7 @@ namespace Neptune.Web.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new RegionalSubbasinRevisionRequestGridSpec();
-            return HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.Where(x => x.CanView(CurrentPerson)).ToList();
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
         [HttpGet]
@@ -204,6 +204,9 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
     {
         public IndexViewData(Person currentPerson, RegionalSubbasinRevisionRequestGridSpec gridSpec) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
+
+            EntityName = "Regional Subbasin Revision Requests";
+            PageTitle = "Index";
             GridSpec = gridSpec;
             HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             GridName = "rsbRevisionRequestsGrid";

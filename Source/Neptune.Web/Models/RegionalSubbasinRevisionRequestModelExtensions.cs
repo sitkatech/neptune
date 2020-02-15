@@ -18,7 +18,9 @@ namespace Neptune.Web.Models
 
         public static bool CanView(this RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest, Person currentPerson)
         {
-            throw new NotImplementedException();
+            // TODO
+
+            return true;
         }
     }
 }
