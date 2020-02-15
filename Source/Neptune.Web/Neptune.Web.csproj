@@ -1992,6 +1992,7 @@
     <Content Include="Views\TreatmentBMP\EditModelingAttributes.cshtml" />
     <Content Include="Views\RegionalSubbasinRevisionRequest\New.cshtml" />
     <Content Include="Views\RegionalSubbasinRevisionRequest\Detail.cshtml" />
+    <Content Include="Views\RegionalSubbasinRevisionRequest\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

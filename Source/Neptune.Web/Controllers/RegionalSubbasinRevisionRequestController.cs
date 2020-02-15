@@ -13,11 +13,40 @@ using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Mail;
 using System.Web.Mvc;
+using LtInfo.Common.DhtmlWrappers;
+using LtInfo.Common.Mvc;
+using LtInfo.Common.MvcResults;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Controllers
 {
     public class RegionalSubbasinRevisionRequestController : NeptuneBaseController
     {
+
+        [NeptuneViewFeature]
+        public ViewResult Index()
+        {
+            var viewData = new IndexViewData(CurrentPerson, new RegionalSubbasinRevisionRequestGridSpec());
+            return RazorView<Index, IndexViewData>(viewData);
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequestGridJsonData()
+        {
+            // ReSharper disable once InconsistentNaming
+            var regionalSubbasinRevisionRequests = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<RegionalSubbasinRevisionRequest>(regionalSubbasinRevisionRequests, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        private List<RegionalSubbasinRevisionRequest> GetTreatmentBmpsAndGridSpec(out RegionalSubbasinRevisionRequestGridSpec gridSpec, Person currentPerson)
+        {
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            gridSpec = new RegionalSubbasinRevisionRequestGridSpec();
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.Where(x => x.CanView(CurrentPerson)).ToList();
+        }
+
         [HttpGet]
         [TreatmentBMPEditFeature]
         public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
@@ -166,5 +195,34 @@ The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {fir
 
             SitkaSmtpClient.Send(mailMessage);
         }
+    }
+}
+
+namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
+{
+    public class IndexViewData : NeptuneViewData
+    {
+        public IndexViewData(Person currentPerson, RegionalSubbasinRevisionRequestGridSpec gridSpec) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        {
+            GridSpec = gridSpec;
+            HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+            GridName = "rsbRevisionRequestsGrid";
+            GridDataUrl =
+                SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>
+                    x.RegionalSubbasinRevisionRequestGridJsonData());
+        }
+
+        public bool HasAdminPermissions { get; }
+        public RegionalSubbasinRevisionRequestGridSpec GridSpec { get; }
+        public string GridName { get; }
+        public string GridDataUrl { get;  }
+    }
+
+    public abstract class Index : TypedWebViewPage<IndexViewData>
+    {
+    }
+
+    public class RegionalSubbasinRevisionRequestGridSpec : GridSpec<Models.RegionalSubbasinRevisionRequest>
+    {
     }
 }

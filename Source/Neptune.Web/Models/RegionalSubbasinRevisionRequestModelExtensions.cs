@@ -1,4 +1,5 @@
-﻿using LtInfo.Common;
+﻿using System;
+using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 
@@ -13,6 +14,11 @@ namespace Neptune.Web.Models
         public static string GetDetailUrl(this RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest)
         {
             return DetailUrlTemplate.ParameterReplace(regionalSubbasinRevisionRequest.TreatmentBMPID);
+        }
+
+        public static bool CanView(this RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest, Person currentPerson)
+        {
+            throw new NotImplementedException();
         }
     }
 }
