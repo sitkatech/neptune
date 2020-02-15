@@ -13,6 +13,7 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using Index = Neptune.Web.Views.RegionalSubbasin.Index;
@@ -45,20 +46,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public ContentResult UpstreamDelineation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-
-            var regionalSubbasin = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Single(x=>x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
-
-            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
-
-            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
-
-            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
-                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry)
-                .ToList().UnionListGeometries();
-
-            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
-            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
+            var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry();
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
 

@@ -28,6 +28,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 
@@ -255,6 +256,25 @@ namespace Neptune.Web.Models
         public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
         {
             return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
+        }
+
+        public static DbGeometry GetCentralizedDelineationGeometry(this TreatmentBMP treatmentBMP)
+        {
+            var regionalSubbasin =
+                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Single(x =>
+                    x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
+
+            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
+
+            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
+
+            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry)
+                .ToList().UnionListGeometries();
+
+            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
+            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
+            return dbGeometry;
         }
     }
 }

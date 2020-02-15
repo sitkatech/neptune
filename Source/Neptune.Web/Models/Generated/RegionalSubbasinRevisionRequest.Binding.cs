@@ -30,10 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public RegionalSubbasinRevisionRequest(int regionalSubbasinRevisionRequestID, int treatmentBMPID, int requestPersonID, int regionalSubbasinRevisionRequestStatusID, DateTime requestDate, int closedByPersonID, DateTime? closedDate, string notes) : this()
+        public RegionalSubbasinRevisionRequest(int regionalSubbasinRevisionRequestID, int treatmentBMPID, DbGeometry regionalSubbasinRevisionRequestGeometry, int requestPersonID, int regionalSubbasinRevisionRequestStatusID, DateTime requestDate, int? closedByPersonID, DateTime? closedDate, string notes) : this()
         {
             this.RegionalSubbasinRevisionRequestID = regionalSubbasinRevisionRequestID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.RegionalSubbasinRevisionRequestGeometry = regionalSubbasinRevisionRequestGeometry;
             this.RequestPersonID = requestPersonID;
             this.RegionalSubbasinRevisionRequestStatusID = regionalSubbasinRevisionRequestStatusID;
             this.RequestDate = requestDate;
@@ -45,44 +46,42 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public RegionalSubbasinRevisionRequest(int treatmentBMPID, int requestPersonID, int regionalSubbasinRevisionRequestStatusID, DateTime requestDate, int closedByPersonID) : this()
+        public RegionalSubbasinRevisionRequest(int treatmentBMPID, DbGeometry regionalSubbasinRevisionRequestGeometry, int requestPersonID, int regionalSubbasinRevisionRequestStatusID, DateTime requestDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.RegionalSubbasinRevisionRequestID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
+            this.RegionalSubbasinRevisionRequestGeometry = regionalSubbasinRevisionRequestGeometry;
             this.RequestPersonID = requestPersonID;
             this.RegionalSubbasinRevisionRequestStatusID = regionalSubbasinRevisionRequestStatusID;
             this.RequestDate = requestDate;
-            this.ClosedByPersonID = closedByPersonID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public RegionalSubbasinRevisionRequest(TreatmentBMP treatmentBMP, Person requestPerson, RegionalSubbasinRevisionRequestStatus regionalSubbasinRevisionRequestStatus, DateTime requestDate, Person closedByPerson) : this()
+        public RegionalSubbasinRevisionRequest(TreatmentBMP treatmentBMP, DbGeometry regionalSubbasinRevisionRequestGeometry, Person requestPerson, RegionalSubbasinRevisionRequestStatus regionalSubbasinRevisionRequestStatus, DateTime requestDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.RegionalSubbasinRevisionRequestID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.RegionalSubbasinRevisionRequests.Add(this);
+            this.RegionalSubbasinRevisionRequestGeometry = regionalSubbasinRevisionRequestGeometry;
             this.RequestPersonID = requestPerson.PersonID;
             this.RequestPerson = requestPerson;
             requestPerson.RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson.Add(this);
             this.RegionalSubbasinRevisionRequestStatusID = regionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusID;
             this.RequestDate = requestDate;
-            this.ClosedByPersonID = closedByPerson.PersonID;
-            this.ClosedByPerson = closedByPerson;
-            closedByPerson.RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static RegionalSubbasinRevisionRequest CreateNewBlank(TreatmentBMP treatmentBMP, Person requestPerson, RegionalSubbasinRevisionRequestStatus regionalSubbasinRevisionRequestStatus, Person closedByPerson)
+        public static RegionalSubbasinRevisionRequest CreateNewBlank(TreatmentBMP treatmentBMP, Person requestPerson, RegionalSubbasinRevisionRequestStatus regionalSubbasinRevisionRequestStatus)
         {
-            return new RegionalSubbasinRevisionRequest(treatmentBMP, requestPerson, regionalSubbasinRevisionRequestStatus, default(DateTime), closedByPerson);
+            return new RegionalSubbasinRevisionRequest(treatmentBMP, default(DbGeometry), requestPerson, regionalSubbasinRevisionRequestStatus, default(DateTime));
         }
 
         /// <summary>
@@ -120,10 +119,11 @@ namespace Neptune.Web.Models
         [Key]
         public int RegionalSubbasinRevisionRequestID { get; set; }
         public int TreatmentBMPID { get; set; }
+        public DbGeometry RegionalSubbasinRevisionRequestGeometry { get; set; }
         public int RequestPersonID { get; set; }
         public int RegionalSubbasinRevisionRequestStatusID { get; set; }
         public DateTime RequestDate { get; set; }
-        public int ClosedByPersonID { get; set; }
+        public int? ClosedByPersonID { get; set; }
         public DateTime? ClosedDate { get; set; }
         public string Notes { get; set; }
         [NotMapped]

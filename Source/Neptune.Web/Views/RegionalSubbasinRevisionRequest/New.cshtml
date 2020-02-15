@@ -1,13 +1,21 @@
-﻿@using Neptune.Web.Models
+﻿@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.RegionalSubbasinRevisionRequest.New
 
 @section JavascriptAndStylesContent
 {
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
+    <script src="@Url.Content("~/Views/RegionalSubbasinRevisionRequest/RevisionRequestMap.js")"></script>
     <style>
         @@media screen and (max-width: 991px) {
             .bmpDetailsContainerLargeScreens {
                 display: none;
             }
+
             .buttonsContainer {
                 text-align: right;
             }
@@ -20,47 +28,70 @@
         }
     </style>
 }
+<form id="revisionRequestForm" action="@ViewDataTyped.SubmitUrl" method="post">
+    <div class="row">
+        <div class="col-sm-12">
+            This interactive map enables users to propose changes to the Regional Subbasins network in order to refine Centralized BMP delineations. After a revision
+            request is submitted OC Survey will be notified and respond to the request. Drag the vertices on the map to identify the requested revisions to the
+            delineation and then press submit to request a revision.
+        </div>
+    </div>
+    <div class="row bmpDetailsContainerSmallScreens">
+        <div class="col-sm-12">
+            <hr />
+            <h4>
+                Selected BMP
+            </h4>
+            <span><strong>Name: </strong><a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</a></span><br />
+            <span><strong>Type: </strong>@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-sm-12">
+            <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 450px; margin: 0"></div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="row">
+                <div class="col-md-12 bmpDetailsContainerLargeScreens">
+                    <h4>
+                        Selected BMP
+                    </h4> <hr />
+                    <span><strong>Name: </strong><a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</a></span><br />
+                    <span><strong>Type: </strong>@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <hr />
+                </div>
+                <div class="col-md-12">
+                    <strong>Request Notes</strong> <br />
+                    @Html.TextAreaFor(x => x.Notes, 4, 0, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-12 buttonsContainer">
+                    <hr />
+                    <button type="button" class="btn btn-neptune" onclick="handleSubmit()">Submit Request</button>
+                    <a class="btn btn-neptune" href="@ViewDataTyped.TreatmentBMP.GetDelineationMapUrl()">Cancel</a>
+                </div>
 
-<div class="row">
-    <div class="col-sm-12">
-        This interactive map enables users to propose changes to the Regional Subbasins network in order to refine Centralized BMP delineations. After a revision
-        request is submitted OC Survey will be notified and respond to the request. Drag the vertices on the map to identify the requested revisions to the
-        delineation and then press submit to request a revision.
-    </div>
-</div>
-<div class="row bmpDetailsContainerSmallScreens">
-    <div class="col-sm-12">
-        <hr />
-        <h4>
-            Selected BMP
-        </h4>
-        <span><strong>Name: </strong><a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</a></span><br />
-        <span><strong>Type: </strong>@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <hr />
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8 col-sm-12">
-        Where Map Will Go
-    </div>
-    <div class="col-md-4 col-sm-12">
-        <div class="row">
-            <div class="col-md-12 bmpDetailsContainerLargeScreens">
-                <h4>
-                    Selected BMP
-                </h4> <hr />
-                <span><strong>Name: </strong><a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</a></span><br />
-                <span><strong>Type: </strong>@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <hr />
             </div>
-            <div class="col-md-12">
-                <strong>Request Notes</strong> <br />
-                @Html.TextAreaFor(x => x.Notes, 4, 0, new { @class = "form-control" })
-            </div>
-            <div class="col-sm-12 buttonsContainer">
-                <hr />
-                <button type="submit" class="btn btn-neptune">Submit Request</button>
-                <a class="btn btn-neptune" href="@ViewDataTyped.TreatmentBMP.GetDelineationMapUrl()">Cancel</a>
-            </div>
+        </div>
+        <div id="@ViewDataTyped.MapFormID">
 
         </div>
     </div>
-</div>
+</form>
+
+<script>
+    var handleSubmit = function () {
+        jQuery("#revisionRequestForm").submit();
+    }
+
+    var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+    var editableFeatureJsonObject =
+        @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson.CentralizedDelineationLayerGeoJson).ToString(Formatting.None));
+    var saveButtonID = "@ModalDialogFormHelper.SaveButtonID";
+
+    var updateFeatureCollectionJson = createUpdateFeatureCollectionJsonFunctionAsClosure(
+        "@Html.NameFor(m=>m.WktAndAnnotations[0].Wkt)",
+        "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",
+        "@ViewDataTyped.MapFormID");
+
+    var geoServerUrl = "@ViewDataTyped.GeoServerUrl";
+    buildMapOnDocumentReady(mapInitJson, editableFeatureJsonObject, saveButtonID,geoServerUrl);
+</script>

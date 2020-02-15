@@ -5,10 +5,11 @@ GO
 CREATE TABLE [dbo].[RegionalSubbasinRevisionRequest](
 	[RegionalSubbasinRevisionRequestID] [int] IDENTITY(1,1) NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
+	[RegionalSubbasinRevisionRequestGeometry] [geometry] NOT NULL,
 	[RequestPersonID] [int] NOT NULL,
 	[RegionalSubbasinRevisionRequestStatusID] [int] NOT NULL,
 	[RequestDate] [datetime] NOT NULL,
-	[ClosedByPersonID] [int] NOT NULL,
+	[ClosedByPersonID] [int] NULL,
 	[ClosedDate] [datetime] NULL,
 	[Notes] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestID] PRIMARY KEY CLUSTERED 

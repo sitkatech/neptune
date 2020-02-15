@@ -1,11 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
+using System.Linq;
 using LtInfo.Common.Email;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.RegionalSubbasinRevisionRequest;
 using System.Net.Mail;
 using System.Web.Mvc;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using GeoJSON.Net.Feature;
+using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
+using LtInfo.Common.GeoJson;
 using Neptune.Web.Security;
+using Neptune.Web.Views.Delineation;
 
 namespace Neptune.Web.Controllers
 {
@@ -24,12 +33,23 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewNew(NewViewModel viewModel, TreatmentBMP treatmentBMP)
         {
-            var viewData = new NewViewData(CurrentPerson, treatmentBMP);
+            var geometry = treatmentBMP.GetCentralizedDelineationGeometry();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geometry);
+
+            var layerGeoJson = new LayerGeoJson("centralizedDelineationLayer",
+                new FeatureCollection(new List<Feature>{feature}), "#ffff00", .5m, LayerInitialVisibility.Show);
+
+            var mapInitJson = new RegionalSubbasinRevisionRequestMapInitJson("revisionRequestMap",
+                MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>(),
+                new BoundingBox(new List<DbGeometry> {geometry}), layerGeoJson);
+
+            var viewData = new NewViewData(CurrentPerson, treatmentBMP, mapInitJson);
 
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -39,8 +59,19 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel, treatmentBMP);
             }
 
-            throw new NotImplementedException();
-            // TODO
+            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry().MakeValid().ToDbGeometry());
+            var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
+
+            var regionalSubbasinRevisionRequest = new RegionalSubbasinRevisionRequest(treatmentBMPPrimaryKey.PrimaryKeyValue, unionListGeometries, CurrentPerson.PersonID,
+                RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID, DateTime.Now);
+
+            HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.Add(regionalSubbasinRevisionRequest);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            SendRSBRevisionRequestSubmittedEmail(CurrentPerson, treatmentBMP);
+
+            // TODO - redirect to the request page instead of back to the delineation map
+            return Redirect(treatmentBMP.GetDelineationMapUrl());
         }
 
 
