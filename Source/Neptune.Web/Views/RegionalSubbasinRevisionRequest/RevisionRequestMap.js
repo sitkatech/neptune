@@ -226,7 +226,7 @@ var addDelineationWmsLayers = function(revisionMap) {
             cql_filter: "DelineationStatus = 'Verified'",
             maxZoom: 22
         },
-        false);
+        true);
 
     var provisionalLegendUrl = '/Content/img/legendImages/delineationProvisional.png';
     var provisionalLabel = "<span>Delineations (Provisional) </br><img src='" + provisionalLegendUrl + "'/></span>";
