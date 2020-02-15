@@ -122,6 +122,20 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
     });
 };
 
+var buildReadOnlyMapOnDocumentReady = function(mapInitJson, geoServerUrl) {
+    revisionRequestMap = new NeptuneMaps.Map(mapInitJson, "Terrain", geoServerUrl, {});
+    revisionRequestMap.map.setMaxZoom(24);
+
+    addReferenceLayers(revisionRequestMap);
+
+    var layerGroup = L.geoJson(mapInitJson.CentralizedDelineationLayerGeoJson.GeoJsonFeatureCollection,
+        {
+            
+        });
+
+    layerGroup.addTo(revisionRequestMap.map);
+};
+
 NeptuneMaps.Map.prototype.getTextAreaId = function (featureId) { return "textareaFor" + featureId; };
 
 

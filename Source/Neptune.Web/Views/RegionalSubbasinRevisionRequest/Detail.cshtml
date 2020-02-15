@@ -1,0 +1,75 @@
+﻿@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.RegionalSubbasinRevisionRequest.Detail
+
+@section JavascriptAndStylesContent
+{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
+    <script src="@Url.Content("~/Views/RegionalSubbasinRevisionRequest/RevisionRequestMap.js")"></script>
+    <style>
+        @@media screen and (max-width: 991px) {
+            .buttonsContainer {
+                text-align: right;
+            }
+        }
+
+    </style>
+}
+<form id="revisionRequestForm" action="@ViewDataTyped.SubmitUrl" method="post">
+    <div class="row">
+        <div class="col-sm-12">
+            This interactive map enables users to propose changes to the Regional Subbasins network in order to refine Centralized BMP delineations. After a revision
+            request is submitted OC Survey will be notified and respond to the request. Drag the vertices on the map to identify the requested revisions to the
+            delineation and then press submit to request a revision.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-12 col-md-push-8">
+            <div class="row">
+                <div class="col-md-12 col-sm-6">
+                    <h4>
+                        BMP
+                    </h4>
+                    <span><strong>Name: </strong><a href="@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPName</a></span><br />
+                    <span><strong>Type: </strong>@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <br/>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.Notes))
+                {
+                    <div class="col-md-12 col-sm-6">
+                        <h4>Request Details</h4>
+                        <strong>Request Notes</strong> <br/>
+                        @ViewDataTyped.RegionalSubbasinRevisionRequest.Notes <br/>
+                        <strong>Submited Date: </strong>
+                        @ViewDataTyped.RegionalSubbasinRevisionRequest.RequestDate.ToShortDateString() <br/>
+                        <strong>Status: </strong>
+                        @ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName
+
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12 col-md-pull-4">
+            <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 450px; margin: 0; margin-top: 10px;"></div>
+        </div>
+    </div>
+    <div class="row text-right">
+        <div class="col-sm-12 buttonsContainer">
+            <hr />
+            <button type="button" class="btn btn-neptune">Close Request</button>
+            <a class="btn btn-neptune" href="todo">Download Revised Delineation</a>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+
+    var geoServerUrl = "@ViewDataTyped.GeoServerUrl";
+    buildReadOnlyMapOnDocumentReady(mapInitJson, geoServerUrl);
+</script>
