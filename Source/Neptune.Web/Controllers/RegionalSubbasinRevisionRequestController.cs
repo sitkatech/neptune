@@ -9,14 +9,14 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.RegionalSubbasinRevisionRequest;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Mail;
 using System.Web.Mvc;
-using LtInfo.Common.DhtmlWrappers;
+using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
-using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Controllers
 {
@@ -35,16 +35,20 @@ namespace Neptune.Web.Controllers
         {
             // ReSharper disable once InconsistentNaming
             var regionalSubbasinRevisionRequests = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<RegionalSubbasinRevisionRequest>(regionalSubbasinRevisionRequests, gridSpec);
+            var gridJsonNetJObjectResult =
+                new GridJsonNetJObjectResult<RegionalSubbasinRevisionRequest>(regionalSubbasinRevisionRequests,
+                    gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<RegionalSubbasinRevisionRequest> GetTreatmentBmpsAndGridSpec(out RegionalSubbasinRevisionRequestGridSpec gridSpec, Person currentPerson)
+        private List<RegionalSubbasinRevisionRequest> GetTreatmentBmpsAndGridSpec(
+            out RegionalSubbasinRevisionRequestGridSpec gridSpec, Person currentPerson)
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new RegionalSubbasinRevisionRequestGridSpec();
-            return HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.ToList()
+                .Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
         [HttpGet]
@@ -64,11 +68,11 @@ namespace Neptune.Web.Controllers
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geometry);
 
             var layerGeoJson = new LayerGeoJson("centralizedDelineationLayer",
-                new FeatureCollection(new List<Feature>{feature}), "#ffff00", .5m, LayerInitialVisibility.Show);
+                new FeatureCollection(new List<Feature> { feature }), "#ffff00", .5m, LayerInitialVisibility.Show);
 
             var mapInitJson = new RegionalSubbasinRevisionRequestMapInitJson("revisionRequestMap",
                 MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>(),
-                new BoundingBox(new List<DbGeometry> {geometry}), layerGeoJson);
+                new BoundingBox(new List<DbGeometry> { geometry }), layerGeoJson);
 
             var viewData = new NewViewData(CurrentPerson, treatmentBMP, mapInitJson);
 
@@ -76,6 +80,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
+        [TreatmentBMPEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)
         {
@@ -86,11 +91,16 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel, treatmentBMP);
             }
 
-            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry().MakeValid().ToDbGeometry());
-            var unionListGeometries = dbGeometrys.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+            var dbGeometrys = viewModel.WktAndAnnotations.Select(x =>
+                DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.WGS_1984_SRID).ToSqlGeometry().MakeValid()
+                    .ToDbGeometry());
+            var unionListGeometries =
+                dbGeometrys.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
 
-            var regionalSubbasinRevisionRequest = new RegionalSubbasinRevisionRequest(treatmentBMPPrimaryKey.PrimaryKeyValue, unionListGeometries, CurrentPerson.PersonID,
-                RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID, DateTime.Now) {Notes = viewModel.Notes};
+            var regionalSubbasinRevisionRequest = new RegionalSubbasinRevisionRequest(
+                    treatmentBMPPrimaryKey.PrimaryKeyValue, unionListGeometries, CurrentPerson.PersonID,
+                    RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID, DateTime.Now)
+            { Notes = viewModel.Notes };
 
             HttpRequestStorage.DatabaseEntities.RegionalSubbasinRevisionRequests.Add(regionalSubbasinRevisionRequest);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -98,7 +108,7 @@ namespace Neptune.Web.Controllers
             SendRSBRevisionRequestSubmittedEmail(CurrentPerson, treatmentBMP, regionalSubbasinRevisionRequest);
 
             SetMessageForDisplay("Successfully submitted the Regional Subbasin Revision Request");
-            
+
             return RedirectToAction(
                 new SitkaRoute<RegionalSubbasinRevisionRequestController>(
                     x => x.Detail(regionalSubbasinRevisionRequest)));
@@ -110,8 +120,6 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(RegionalSubbasinRevisionRequestPrimaryKey regionalSubbasinRevisionRequestPrimaryKey)
         {
             var treatmentBMP = regionalSubbasinRevisionRequestPrimaryKey.EntityObject;
-
-            var viewModel = new NewViewModel();
 
             return ViewDetail(treatmentBMP);
         }
@@ -133,8 +141,63 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
+        [HttpGet]
+        [RegionalSubbasinRevisionRequestCloseFeature]
+        public PartialViewResult Close(
+            RegionalSubbasinRevisionRequestPrimaryKey regionalSubbasinRevisionRequestPrimaryKey)
+        {
+            var viewModel = new CloseViewModel();
 
-        private static void SendRSBRevisionRequestSubmittedEmail(Models.Person requestPerson, Models.TreatmentBMP requestBMP, RegionalSubbasinRevisionRequest request)
+            return ViewClose(viewModel);
+        }
+
+        private PartialViewResult ViewClose(CloseViewModel viewModel)
+        {
+
+            return RazorPartialView<Close, CloseViewData, CloseViewModel>(new CloseViewData(), viewModel);
+        }
+
+        [HttpPost]
+        [RegionalSubbasinRevisionRequestCloseFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Close(RegionalSubbasinRevisionRequestPrimaryKey regionalSubbasinRevisionRequestPrimaryKey,
+            CloseViewModel viewModel)
+        {
+            var regionalSubbasinRevisionRequest = regionalSubbasinRevisionRequestPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewClose(viewModel);
+            }
+
+            regionalSubbasinRevisionRequest.CloseNotes = viewModel.CloseNotes;
+            regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatusID =
+                RegionalSubbasinRevisionRequestStatus.Closed.RegionalSubbasinRevisionRequestStatusID;
+
+            SetMessageForDisplay("Successfully closed the Regional Subbasin Revision Request");
+
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>
+                    x.Detail(regionalSubbasinRevisionRequestPrimaryKey)));
+        }
+
+        [HttpGet]
+        [RegionalSubbasinRevisionRequestDownloadFeature]
+        public FileResult Download(RegionalSubbasinRevisionRequestPrimaryKey regionalSubbasinRevisionRequestPrimaryKey)
+        {
+            var geometry = regionalSubbasinRevisionRequestPrimaryKey.EntityObject
+                .RegionalSubbasinRevisionRequestGeometry;
+
+            // TODO projecc to 2230
+
+            // TODO: stream to a file like so:
+            //return File(stream.ToArray(), generator.ContentType, string.Format("{0}.xlsx", gridName));
+            throw new NotImplementedException();
+        }
+
+
+        private static void SendRSBRevisionRequestSubmittedEmail(Models.Person requestPerson,
+            Models.TreatmentBMP requestBMP, RegionalSubbasinRevisionRequest request)
         {
             var subject = $"A new Regional Subbasin Revision Request was submitted";
             var firstName = requestPerson.FirstName;
@@ -154,18 +217,27 @@ Please review it, make revisions, and close it at your earliest convenience. <a 
 </div>
 ";
             // Create Notification
-            var mailMessage = new MailMessage { From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
 
             mailMessage.CC.Add(requestPersonEmail);
 
-            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveRSBRevisionRequests())
+            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People
+                .GetPeopleWhoReceiveRSBRevisionRequests())
             {
                 mailMessage.To.Add(revisionRequestPeople.Email);
             }
 
             SitkaSmtpClient.Send(mailMessage);
         }
-        private static void SendRSBRevisionRequestClosedEmail(Models.Person closingPerson, Models.RegionalSubbasinRevisionRequest request)
+
+        private static void SendRSBRevisionRequestClosedEmail(Models.Person closingPerson,
+            Models.RegionalSubbasinRevisionRequest request)
         {
 
             var subject = $"A Regional Subbasin Revision Request was closed";
@@ -184,11 +256,18 @@ The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {fir
 </div>
 ";
             // Create Notification
-            var mailMessage = new MailMessage { From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
 
             mailMessage.To.Add(request.RequestPerson.Email);
 
-            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveRSBRevisionRequests())
+            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People
+                .GetPeopleWhoReceiveRSBRevisionRequests())
             {
                 mailMessage.CC.Add(revisionRequestPeople.Email);
             }
@@ -197,35 +276,20 @@ The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {fir
         }
     }
 }
-
 namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
 {
-    public class IndexViewData : NeptuneViewData
+    public class CloseViewData : NeptuneUserControlViewData
     {
-        public IndexViewData(Person currentPerson, RegionalSubbasinRevisionRequestGridSpec gridSpec) : base(currentPerson, NeptuneArea.OCStormwaterTools)
-        {
 
-            EntityName = "Regional Subbasin Revision Requests";
-            PageTitle = "Index";
-            GridSpec = gridSpec;
-            HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            GridName = "rsbRevisionRequestsGrid";
-            GridDataUrl =
-                SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>
-                    x.RegionalSubbasinRevisionRequestGridJsonData());
-        }
-
-        public bool HasAdminPermissions { get; }
-        public RegionalSubbasinRevisionRequestGridSpec GridSpec { get; }
-        public string GridName { get; }
-        public string GridDataUrl { get;  }
     }
 
-    public abstract class Index : TypedWebViewPage<IndexViewData>
+    public class CloseViewModel: FormViewModel
     {
+        public string CloseNotes { get; set; }
     }
 
-    public class RegionalSubbasinRevisionRequestGridSpec : GridSpec<Models.RegionalSubbasinRevisionRequest>
+    public abstract class Close : TypedWebPartialViewPage<CloseViewData, CloseViewModel>
     {
+
     }
 }

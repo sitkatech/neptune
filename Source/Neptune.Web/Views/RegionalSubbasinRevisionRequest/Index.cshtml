@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.DhtmlWrappers
@@ -33,7 +34,7 @@
 {
             @if (ViewDataTyped.HasAdminPermissions)
             {        
-               <!--Where the refresh subbasins buttom will go-->
+                @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Refresh From OC Survey", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")), ViewDataTyped.RefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
             }
 }
 

@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.ModalDialog
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
@@ -41,13 +42,17 @@
                 {
                     <div class="col-md-12 col-sm-6">
                         <h4>Request Details</h4>
-                        <strong>Request Notes</strong> <br/>
+                        <strong>Request Notes:</strong> <br/>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.Notes <br/>
-                        <strong>Submited Date: </strong>
+                        <strong>Submitted Date: </strong>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RequestDate.ToShortDateString() <br/>
                         <strong>Status: </strong>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName
-
+                        @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Closed)
+                        {
+                            <br/><strong>Close Notes:</strong><br/>
+                            <text>@ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes</text>
+                        }
                     </div>
                 }
 
@@ -60,7 +65,7 @@
     <div class="row text-right">
         <div class="col-sm-12 buttonsContainer">
             <hr />
-            <button type="button" class="btn btn-neptune">Close Request</button>
+            @ModalDialogFormHelper.ModalDialogFormLink("Close Request", ViewDataTyped.CloseUrl, "Close RSB Revision Request", new List<string>{"btn btn-neptune"}, ViewDataTyped.CurrentPersonCanClose)
             <a class="btn btn-neptune" href="todo">Download Revised Delineation</a>
         </div>
     </div>

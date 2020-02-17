@@ -499,6 +499,10 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Security\RegionalSubbasinRevisionRequestDownloadFeature.cs" />
+    <Compile Include="Views\RegionalSubbasinRevisionRequest\Index.cs" />
+    <Compile Include="Views\RegionalSubbasinRevisionRequest\IndexViewData.cs" />
+    <Compile Include="Views\RegionalSubbasinRevisionRequest\RegionalSubbasinRevisionRequestGridSpec.cs" />
     <Compile Include="Models\RegionalSubbasinRevisionRequestModelExtensions.cs" />
     <Compile Include="Security\RegionalSubbasinRevisionRequestViewFeature.cs" />
     <Compile Include="Views\RegionalSubbasinRevisionRequest\Detail.cs" />
@@ -1993,6 +1997,7 @@
     <Content Include="Views\RegionalSubbasinRevisionRequest\New.cshtml" />
     <Content Include="Views\RegionalSubbasinRevisionRequest\Detail.cshtml" />
     <Content Include="Views\RegionalSubbasinRevisionRequest\Index.cshtml" />
+    <Content Include="Views\RegionalSubbasinRevisionRequest\Close.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

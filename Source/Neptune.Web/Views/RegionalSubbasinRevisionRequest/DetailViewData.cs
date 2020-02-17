@@ -1,6 +1,7 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
 {
@@ -11,6 +12,8 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
         public RegionalSubbasinRevisionRequestMapInitJson MapInitJson { get; }
         public string GeoServerUrl { get; }
         public string MapFormID { get; }
+        public string CloseUrl { get; }
+        public bool CurrentPersonCanClose { get; set; }
 
         public DetailViewData(Person currentPerson, Models.RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest, RegionalSubbasinRevisionRequestMapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
@@ -22,6 +25,11 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
                 SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x => x.Detail(regionalSubbasinRevisionRequest));
             EntityName = "Regional Subbasin";
             PageTitle = "Revision";
+            CloseUrl = SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>
+                x.Close(regionalSubbasinRevisionRequest));
+            CurrentPersonCanClose =
+                new RegionalSubbasinRevisionRequestCloseFeature().HasPermission(currentPerson,
+                    regionalSubbasinRevisionRequest).HasPermission;
         }
     }
 }

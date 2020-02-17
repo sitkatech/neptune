@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[RegionalSubbasinRevisionRequest](
 	[ClosedByPersonID] [int] NULL,
 	[ClosedDate] [datetime] NULL,
 	[Notes] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[CloseNotes] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestID] PRIMARY KEY CLUSTERED 
 (
 	[RegionalSubbasinRevisionRequestID] ASC

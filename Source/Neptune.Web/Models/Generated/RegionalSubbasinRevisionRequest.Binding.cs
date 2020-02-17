@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public RegionalSubbasinRevisionRequest(int regionalSubbasinRevisionRequestID, int treatmentBMPID, DbGeometry regionalSubbasinRevisionRequestGeometry, int requestPersonID, int regionalSubbasinRevisionRequestStatusID, DateTime requestDate, int? closedByPersonID, DateTime? closedDate, string notes) : this()
+        public RegionalSubbasinRevisionRequest(int regionalSubbasinRevisionRequestID, int treatmentBMPID, DbGeometry regionalSubbasinRevisionRequestGeometry, int requestPersonID, int regionalSubbasinRevisionRequestStatusID, DateTime requestDate, int? closedByPersonID, DateTime? closedDate, string notes, string closeNotes) : this()
         {
             this.RegionalSubbasinRevisionRequestID = regionalSubbasinRevisionRequestID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -41,6 +41,7 @@ namespace Neptune.Web.Models
             this.ClosedByPersonID = closedByPersonID;
             this.ClosedDate = closedDate;
             this.Notes = notes;
+            this.CloseNotes = closeNotes;
         }
 
         /// <summary>
@@ -126,6 +127,7 @@ namespace Neptune.Web.Models
         public int? ClosedByPersonID { get; set; }
         public DateTime? ClosedDate { get; set; }
         public string Notes { get; set; }
+        public string CloseNotes { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return RegionalSubbasinRevisionRequestID; } set { RegionalSubbasinRevisionRequestID = value; } }
 

@@ -17,5 +17,6 @@ RequestDate datetime not null,
 ClosedByPersonID int null constraint FK_RegionalSubbasinRevisionRequest_Person_ClosedByPersonID_PersonID
 	foreign key references dbo.Person(PersonID),
 ClosedDate datetime null,
-Notes varchar(max) null
+Notes varchar(max) null,
+CloseNotes varchar(max) null
 )

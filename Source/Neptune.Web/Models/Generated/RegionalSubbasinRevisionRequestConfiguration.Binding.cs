@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
             Property(x => x.ClosedByPersonID).HasColumnName(@"ClosedByPersonID").HasColumnType("int").IsOptional();
             Property(x => x.ClosedDate).HasColumnName(@"ClosedDate").HasColumnType("datetime").IsOptional();
             Property(x => x.Notes).HasColumnName(@"Notes").HasColumnType("varchar").IsOptional();
+            Property(x => x.CloseNotes).HasColumnName(@"CloseNotes").HasColumnType("varchar").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMP).WithMany(b => b.RegionalSubbasinRevisionRequests).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID
