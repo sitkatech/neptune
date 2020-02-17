@@ -110,6 +110,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForWatershed { get; }
         public Models.FieldDefinition FieldDefinitionForDesignStormwaterDepth { get; }
         public bool HasModelingAttributes { get; }
+        public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; set; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,

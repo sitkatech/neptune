@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Web.Mvc;
+using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -87,6 +88,8 @@ namespace Neptune.Web.Controllers
         public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var openRequest = treatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x => x.RegionalSubbasinRevisionRequestStatusID == RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID);
+            Check.Assert(openRequest == null, "You cannot open a new revision request for this BMP because there is already an open revision request.");
 
             if (!ModelState.IsValid)
             {

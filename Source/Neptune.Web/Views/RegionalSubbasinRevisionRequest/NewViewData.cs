@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -13,6 +14,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
         public RegionalSubbasinRevisionRequestMapInitJson MapInitJson { get; }
         public string GeoServerUrl { get; }
         public string MapFormID { get; }
+        public Models.RegionalSubbasinRevisionRequest ExistingOpenRequest { get; set; }
 
         public NewViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, RegionalSubbasinRevisionRequestMapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
@@ -24,6 +26,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
                 SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
             EntityName = "Regional Subbasin";
             PageTitle = "Revision";
+            ExistingOpenRequest = treatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x => x.RegionalSubbasinRevisionRequestStatusID == RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID);
         }
     }
 

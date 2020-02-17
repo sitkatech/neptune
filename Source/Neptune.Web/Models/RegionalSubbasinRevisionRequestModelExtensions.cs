@@ -13,7 +13,7 @@ namespace Neptune.Web.Models
 
         public static string GetDetailUrl(this RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest)
         {
-            return DetailUrlTemplate.ParameterReplace(regionalSubbasinRevisionRequest.TreatmentBMPID);
+            return DetailUrlTemplate.ParameterReplace(regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestID);
         }
 
         public static bool CanView(this RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest, Person currentPerson)
