@@ -13,10 +13,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Controllers
 {
@@ -174,7 +176,9 @@ namespace Neptune.Web.Controllers
             regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatusID =
                 RegionalSubbasinRevisionRequestStatus.Closed.RegionalSubbasinRevisionRequestStatusID;
 
-            SetMessageForDisplay("Successfully closed the Regional Subbasin Revision Request");
+            SendRSBRevisionRequestClosedEmail(CurrentPerson, regionalSubbasinRevisionRequest);
+
+                SetMessageForDisplay("Successfully closed the Regional Subbasin Revision Request");
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>
@@ -188,11 +192,16 @@ namespace Neptune.Web.Controllers
             var geometry = regionalSubbasinRevisionRequestPrimaryKey.EntityObject
                 .RegionalSubbasinRevisionRequestGeometry;
 
-            // TODO projecc to 2230
+            var reprojectedGeometry = CoordinateSystemHelper.ProjectWebMercatorTo2230(geometry);
 
-            // TODO: stream to a file like so:
-            //return File(stream.ToArray(), generator.ContentType, string.Format("{0}.xlsx", gridName));
-            throw new NotImplementedException();
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(reprojectedGeometry);
+
+            var serializedGeoJson = JsonConvert.SerializeObject(geoJson);
+
+            var bytes = Encoding.ASCII.GetBytes(serializedGeoJson);
+
+            return File(bytes, "application/json",
+                $"{regionalSubbasinRevisionRequestPrimaryKey.EntityObject.TreatmentBMP.TreatmentBMPName}_RevisionRequest.json");
         }
 
 

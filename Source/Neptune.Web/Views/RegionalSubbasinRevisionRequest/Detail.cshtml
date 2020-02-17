@@ -17,7 +17,6 @@
                 text-align: right;
             }
         }
-
     </style>
 }
 <form id="revisionRequestForm" action="@ViewDataTyped.SubmitUrl" method="post">
@@ -36,21 +35,21 @@
                         BMP
                     </h4>
                     <span><strong>Name: </strong><a href="@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPName</a></span><br />
-                    <span><strong>Type: </strong>@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <br/>
+                    <span><strong>Type: </strong>@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <br />
                 </div>
                 @if (!string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.Notes))
                 {
                     <div class="col-md-12 col-sm-6">
                         <h4>Request Details</h4>
-                        <strong>Request Notes:</strong> <br/>
-                        @ViewDataTyped.RegionalSubbasinRevisionRequest.Notes <br/>
+                        <strong>Request Notes:</strong> <br />
+                        @ViewDataTyped.RegionalSubbasinRevisionRequest.Notes <br />
                         <strong>Submitted Date: </strong>
-                        @ViewDataTyped.RegionalSubbasinRevisionRequest.RequestDate.ToShortDateString() <br/>
+                        @ViewDataTyped.RegionalSubbasinRevisionRequest.RequestDate.ToShortDateString() <br />
                         <strong>Status: </strong>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName
                         @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Closed)
                         {
-                            <br/><strong>Close Notes:</strong><br/>
+                            <br /><strong>Close Notes:</strong><br />
                             <text>@ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes</text>
                         }
                     </div>
@@ -65,8 +64,14 @@
     <div class="row text-right">
         <div class="col-sm-12 buttonsContainer">
             <hr />
-            @ModalDialogFormHelper.ModalDialogFormLink("Close Request", ViewDataTyped.CloseUrl, "Close RSB Revision Request", new List<string>{"btn btn-neptune"}, ViewDataTyped.CurrentPersonCanClose)
-            <a class="btn btn-neptune" href="todo">Download Revised Delineation</a>
+            @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus != RegionalSubbasinRevisionRequestStatus.Closed)
+            {
+                @ModalDialogFormHelper.ModalDialogFormLink("Close Request", ViewDataTyped.CloseUrl, "Close RSB Revision Request", new List<string> { "btn btn-neptune" }, ViewDataTyped.CurrentPersonCanClose)
+            }
+            @if (ViewDataTyped.HasAdminPermissions)
+            {
+                <a class="btn btn-neptune" href="@ViewDataTyped.DownloadUrl" target="_blank">Download Revised Delineation</a>
+            }
         </div>
     </div>
 </form>
