@@ -1677,6 +1677,7 @@
     <Content Include="Views\Delineation\DelineationMap.min.js">
       <DependentUpon>DelineationMap.js</DependentUpon>
     </Content>
+    <Content Include="Views\Delineation\DelineationMapController.js" />
     <Content Include="Views\Delineation\DelineationMapControls.js" />
     <Content Include="Views\Delineation\DelineationMapControls.min.js">
       <DependentUpon>DelineationMapControls.js</DependentUpon>

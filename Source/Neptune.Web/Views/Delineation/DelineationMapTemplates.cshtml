@@ -1,51 +1,7 @@
 ﻿@inherits Neptune.Web.Views.Delineation.DelineationMapTemplates
 
 <template id="selectedAssetControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="selectedAssetControl">
-        <h5>Selected BMP</h5>
-        <span id="noAssetSelected" class="systemText">Select an asset on the map to see options</span>
-        <div id="selectedBmpInfo" class="hiddenControlElement">
-            <strong>Name: </strong> <a id="selectedBMPDetailLink" target="_blank"></a> <br />
-            <strong>Type: </strong><span id="selectedBMPType"></span><br />
-            <hr>
-            <h5>Selected Delineation</h5>
-            <strong>Type: </strong> <span id="delineationType"></span><br />
-            <strong>Area: </strong><span id="delineationArea">-</span> <br />
-            <div id="delineationStatus">
-                <strong>Status: </strong>
-                <input id="verifyDelineationButton" type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100"/>
-            </div>
-            
-            <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper">
-                <button class="btn btn-sm btn-neptune" id="delineationButton" type="button">Edit</button>
-                <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;"><span class="glyphicon glyphicon-trash"></span></button>
-                <a class="hiddenControlElement" id="requestRevisionButton" href="todo"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
-            </div>
-            
-            <div style="margin-top: 5px;" id="editLocationButtonWrapper">
-                <hr/>
-                <button class="btn btn-sm btn-neptune" id="editLocationButton" type="button">Edit Location</button>
-            </div>
-            
-            <div class="hiddenControlElement" id="editLocationModeButtonsWrapper">
-                <hr />
-                <p>Click the map to set a new location for this BMP.</p>
-                <button class="btn btn-sm btn-neptune" id="saveLocationButton" type="button">Save Location</button>
-                <button class="btn btn-sm btn-neptune" id="cancelLocationButton" type="button">Cancel</button>
-            </div>
-
-            <div class="hiddenControlElement" id="saveCancelAndThinButtonsWrapper">
-                <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button">Save</button>
-                <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button">Cancel</button>
-                <a class="hiddenControlElement" id="requestRevisionDuringEditButton" href="todo"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
-                <button class="btn btn-sm btn-neptune" id="delineationVertexThinningButton" type="button">Thin</button>
-
-                <span style="width: 90%; display: none;" id="vertexControlContainer">
-                    <input id="vertexControl" data-slider-id="vertexControlSlider" type="text" />
-                </span>
-            </div>
-        </div>
-    </div>
+    
 </template>
 
 

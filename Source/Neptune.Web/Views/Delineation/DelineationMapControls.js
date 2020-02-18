@@ -16,8 +16,20 @@ var stopClickPropagation = function (parentElement) {
         });
 };
 
-L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
+L.Control.DelineationMapSelectedAsset = L.Control.extend({
     templateID: "selectedAssetControlTemplate",
+
+    onAdd: function(map) {
+        var parentElement = L.DomUtil.create('div');
+        this.parentElement = parentElement;
+        parentElement.id = "selectedAssetControlContainer";
+        return parentElement;
+    },
+
+    getTrackedElement: function (id) {
+        // todo: might not be a bad idea to memoize
+        return this.parentElement.querySelector("#" + id);
+    },
 
     initializeControlInstance: function (map) {
         stopClickPropagation(this.parentElement);
@@ -57,38 +69,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
         this.treatmentBMPFeature = treatmentBMPFeature;
-        this.registerDelineationButtonHandler(treatmentBMPFeature);
         this.registerDeleteButtonHandler(treatmentBMPFeature);
-        this.registerEditLocationButtonHandler(treatmentBMPFeature);
-
-        var detailLink = this.getTrackedElement("selectedBMPDetailLink");
-        var href =
-            "/TreatmentBMP/Detail/" + treatmentBMPFeature.properties.TreatmentBMPID;
-        detailLink.href = href;
-        detailLink.innerHTML = treatmentBMPFeature.properties.Name;
-
-        var newWindowIcon = L.DomUtil.create("span", "glyphicon glyphicon-new-window");
-        detailLink.append(newWindowIcon);
-
-        this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
-
-        //this.getTrackedElement("delineationArea").innerHTML = "-";
-        this.getTrackedElement("delineationButton").innerHTML = "Edit";
-
-        if (treatmentBMPFeature.properties.DelineationURL) {
-            this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
-            this.getTrackedElement("delineationStatus").style.display = "initial";
-            this.getTrackedElement("deleteDelineationButton").style.display = "initial";
-
-        } else {
-            this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
-            this.getTrackedElement("delineationStatus").style.display = "none";
-            this.getTrackedElement("deleteDelineationButton").style.display = "none";
-        }
-
-        this.getTrackedElement("selectedBmpInfo").classList.remove("hiddenControlElement");
-        this.getTrackedElement("noAssetSelected").classList.add("hiddenControlElement");
-
+        
         $('#verifyDelineationButton').bootstrapToggle({
             // note that bootstrapToggle is broken and you have supply class names that don't quite make sense to make it work
             onstyle: 'btn btn-neptune btn-sm',
@@ -113,22 +95,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     registerDelineationButtonHandler: function (treatmentBMPFeature) {
-        var self = this;
-        var delineationButton = this.getTrackedElement("delineationButton");
-        if (this._beginDelineationHandler) {
-            L.DomEvent.off(delineationButton, "click", this._beginDelineationHandler);
-            this._beginDelineationHandler = null;
-        }
-
-        this._beginDelineationHandler = function (e) {
-            window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
-            self.disableDelineationButton();
-            e.stopPropagation();
-        };
-
-        L.DomEvent.on(delineationButton,
-            "click", this._beginDelineationHandler
-        );
+        console.log("No-op");
+        console.trace();
     },
 
     registerDeleteButtonHandler: function (treatmentBMPFeature) {
@@ -149,34 +117,23 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     registerEditLocationButtonHandler: function (treatmentBMPFeature) {
-        var self = this;
-        var editLocationButton = this.getTrackedElement("editLocationButton");
-
-        if (this._editBMPLocationHandler) {
-            L.DomEvent.off(editLocationButton, "click", this._beginDelineationHandler);
-            this._beginDelineationHandler = null;
-        }
-
-        this._editBMPLocationHandler = function (e) {
-            self.launchEditLocationMode();
-            window.delineationMap.launchEditLocationMode();
-            e.stopPropagation();
-        };
-
-        L.DomEvent.on(editLocationButton, "click", this._editBMPLocationHandler);
+        console.log("No-op");
+        console.trace();
     },
 
     launchEditLocationMode: function () {
-        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
-        this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
+        //this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
+        //this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
 
-        this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
+        //this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
 
-        jQuery(this.getTrackedElement("delineationButton")).off("click");
+        //jQuery(this.getTrackedElement("delineationButton")).off("click");
+        console.log("No-op");
+        console.trace();
     },
 
     exitEditLocationMode: function (save) {
-        this.registerDelineationButtonHandler(this.treatmentBMPFeature);
+        //this.registerDelineationButtonHandler(this.treatmentBMPFeature);
 
         // note that we don't bring back the edit/delete delineation buttons here; the save Promise will do that as a completion action
 

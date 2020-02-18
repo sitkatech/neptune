@@ -8,7 +8,6 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     configureProj4Defs();
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
-    console.log(config);
     this.mapInitJson = mapInitJson;
     this.initializeTreatmentBMPClusteredLayer();
 
@@ -37,10 +36,6 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
 
     L.control.watermark({ position: 'bottomleft' }).addTo(this.map);
-    this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
-    this.selectedAssetControl.addTo(this.map);
-
-    this.hookupDeselectOnClick();
 };
 
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
@@ -67,6 +62,16 @@ var LEAFLET_TO_GEO_JSON_PRECISION = 14;
 
 /* Initialization methods and assorted convenience methods 
  */
+
+NeptuneMaps.DelineationMap.prototype.buildSelectedAssetControl = function () {
+    this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
+    this.selectedAssetControl.addTo(this.map);
+
+    var selectedAssetControlElement = document.querySelector("#selectedAssetControl");
+
+    this.selectedAssetControl.parentElement.append(selectedAssetControlElement);
+    this.selectedAssetControl.initializeControlInstance();
+};
 
 NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
 
@@ -123,7 +128,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 
     var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
     this.layerControl.addOverlay(this.markerClusterGroup, legendSpan);
-    this.hookupSelectTreatmentBMPOnClick();
+    //this.hookupSelectTreatmentBMPOnClick();
 };
 
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
@@ -172,7 +177,9 @@ NeptuneMaps.DelineationMap.prototype.getSelectedBMPID = function() {
 /* Methods for turning on or off the pop-up that begins the delineation workflow
  */
 
-NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function (treatmentBMPFeature) {
+NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function () {
+    var treatmentBMPFeature = this.getSelectedBMPFeature();
+
     if (this.beginDelineationControl) {
         return; // misplaced call
     }
@@ -920,10 +927,9 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
 NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
     var delineationID = this.getSelectedBMPFeature().properties.DelineationID;
-    var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
 
-    console.log("No damn good reason for me to be here!");
     var url = new Sitka.UrlTemplate(this.config.ChangeDelineationStatusUrlTemplate).ParameterReplace(delineationID);
+    var self = this;
 
     jQuery.ajax({
         url: url,
@@ -945,7 +951,7 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verifie
     });
 };
 
-NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) {
+NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function(latlng, ngScope) {
     var jurisdictionCQLFilter = this.config.JurisdictionCQLFilter;
     if (!Sitka.Methods.isUndefinedNullOrEmpty(jurisdictionCQLFilter)) {
         jurisdictionCQLFilter += " AND ";
@@ -978,6 +984,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
             var treatmentBMPID = delineation.properties.TreatmentBMPID;
             var layer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             if (layer) {
+                ngScope.delineationMapState.selectedTreatmentBMPFeature = layer.feature;
                 self.setSelectedFeature(layer.feature);
                 self.retrieveAndShowBMPDelineation(layer.feature).then(function (response) {
                     var delineationStatus;
@@ -989,6 +996,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
                     }
                     self.selectedAssetControl.treatmentBMP(layer.feature, delineationStatus);
                 });
+                ngScope.$apply();
             }
         }
     });
@@ -996,26 +1004,29 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
 
 /* helper methods to restore UI interactions after a blocking mode returns */
 
-NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function () {
+NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function (ngScope) {
     var self = this;
-
     this.map.on('click',
         function (e) {
             if (!window.freeze) {
+                ngScope.delineationMapState.selectedTreatmentBMPFeature = null;
                 self.deselect();
                 self.removeBMPDelineationLayer();
                 self.selectedAssetControl.reset();
+                ngScope.$apply();
             }
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function () {
+NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function (ngScope) {
     var self = this;
 
     this.treatmentBMPLayer.on("click",
         function (e) {
             if (!window.freeze) {
                 self.setSelectedFeature(e.layer.feature);
+                console.log(e.layer.feature);
+                ngScope.delineationMapState.selectedTreatmentBMPFeature = e.layer.feature;
                 self.retrieveAndShowBMPDelineation(e.layer.feature).then(function (response) {
                     var delineationStatus;
                     if (self.selectedBMPDelineationLayer) {
@@ -1026,17 +1037,21 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
                     }
                     self.selectedAssetControl.treatmentBMP(e.layer.feature, delineationStatus);
                 });
-            }
-        });
-
-    this.map.on("click",
-        function (e) {
-            if (!window.freeze) {
-                self.selectBMPByDelineation(e.latlng);
+                ngScope.$apply();
             }
         });
 
 };
+
+NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPByDelineation = function(ngScope) {
+    var self = this;
+    this.map.on("click",
+        function (e) {
+            if (!window.freeze) {
+                self.selectBMPByDelineation(e.latlng, ngScope);
+            }
+        });
+}
 
 NeptuneMaps.DelineationMap.prototype.displayLoading = function () {
     this.frosty = new L.LeafletLoading();

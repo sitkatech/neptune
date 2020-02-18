@@ -27,6 +27,7 @@
     <script type="text/javascript" src="@Url.Content("~/Views/Delineation/DelineationMap.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Views/Delineation/DelineationMap.AutoDelineate.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/bootstrap-toggle/bootstrap-toggle.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Views/Delineation/DelineationMapController.js")"></script>
 
 }
 
@@ -41,10 +42,59 @@
 
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
 
-<div class="row">
+
+<div class="row" ng-app="NeptuneApp" ng-controller="DelineationMapController">
     <div class="col-sm-12">
         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 700px;"></div>
         <p class="systemText text-danger" id="warnInternetExplorer" style="display: none;">Your browser might not support all features of this map. Please switch to Google Chrome or Mozilla Firefox for the best experience.</p>
+    </div>
+
+    <div style="display: none;"> 
+        <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="selectedAssetControl">
+            <h5>Selected BMP</h5>
+            <span id="noAssetSelected" class="systemText" ng-show="!delineationMapState.selectedTreatmentBMPFeature">Select an asset on the map to see options</span>
+            <div id="selectedBmpInfo" ng-show="delineationMapState.selectedTreatmentBMPFeature">
+                <strong>Name: </strong> <a id="selectedBMPDetailLink" target="_blank" ng-href="/TreatmentBMP/Detail/{{treatmentBMPID()}}">{{treatmentBMPName()}}<span class="glyphicon glyphicon-new-window"></span></a><br />
+                <strong>Type: </strong><span id="selectedBMPType">{{treatmentBMPType()}}</span><br />
+                <hr>
+                <h5>Selected Delineation</h5>
+                <strong>Type: </strong> <span id="delineationType"></span><br />
+                <strong>Area: </strong><span id="delineationArea">-</span> <br />
+                <div id="delineationStatus">
+                    <strong>Status: </strong>
+                    <input id="verifyDelineationButton" type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100" />
+                </div>
+
+                <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode">
+                    <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation($event); $event.stopPropagation();" ng-disabled="delineationMapState.isInDelineationMode">Edit</button>
+                    <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;"><span class="glyphicon glyphicon-trash"></span></button>
+                    <a class="hiddenControlElement" id="requestRevisionButton" href="todo"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
+                </div>
+
+                <div style="margin-top: 5px;" id="editLocationButtonWrapper" ng-hide="delineationMapState.isInDelineationMode || delineationMapState.isInEditLocationMode">
+                    <hr />
+                    <button class="btn btn-sm btn-neptune" id="editLocationButton" type="button" ng-click="beginEditTreatmentBMPLocation($event)">Edit Location</button>
+                </div>
+
+                <div class="hiddenControlElement" id="editLocationModeButtonsWrapper" ng-hide="!delineationMapState.isInEditLocationMode">
+                    <hr />
+                    <p>Click the map to set a new location for this BMP.</p>
+                    <button class="btn btn-sm btn-neptune" id="saveLocationButton" type="button">Save Location</button>
+                    <button class="btn btn-sm btn-neptune" id="cancelLocationButton" type="button">Cancel</button>
+                </div>
+
+                <div class="hiddenControlElement" id="saveCancelAndThinButtonsWrapper">
+                    <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button">Save</button>
+                    <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button">Cancel</button>
+                    <a class="hiddenControlElement" id="requestRevisionDuringEditButton" href="todo"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
+                    <button class="btn btn-sm btn-neptune" id="delineationVertexThinningButton" type="button">Thin</button>
+
+                    <span style="width: 90%; display: none;" id="vertexControlContainer">
+                        <input id="vertexControl" data-slider-id="vertexControlSlider" type="text" />
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -60,7 +110,6 @@
         if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
             jQuery("#warnInternetExplorer").show();
         }
-        window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl, config);
 
         if (@ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS()) {
             @* ReSharper disable once PossibleNullReferenceException *@
