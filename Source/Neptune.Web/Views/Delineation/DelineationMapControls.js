@@ -19,7 +19,7 @@ var stopClickPropagation = function (parentElement) {
 L.Control.DelineationMapSelectedAsset = L.Control.extend({
     templateID: "selectedAssetControlTemplate",
 
-    onAdd: function(map) {
+    onAdd: function (map) {
         var parentElement = L.DomUtil.create('div');
         this.parentElement = parentElement;
         parentElement.id = "selectedAssetControlContainer";
@@ -34,43 +34,28 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     initializeControlInstance: function (map) {
         stopClickPropagation(this.parentElement);
 
-        L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
-            "click",
-            function (e) {
-                this.exitDrawCatchmentMode(false);
-            }.bind(this));
+        //L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
+        //    "click",
+        //    function (e) {
+        //        this.exitDrawCatchmentMode(false);
+        //    }.bind(this));
 
-        L.DomEvent.on(this.getTrackedElement("saveDelineationButton"),
-            "click",
-            function (e) {
-                this.exitDrawCatchmentMode(true);
-            }.bind(this));
+        //L.DomEvent.on(this.getTrackedElement("saveDelineationButton"),
+        //    "click",
+        //    function (e) {
+        //        this.exitDrawCatchmentMode(true);
+        //    }.bind(this));
 
         L.DomEvent.on(this.getTrackedElement("delineationVertexThinningButton"),
             "click",
             function (e) {
                 this.thinButtonHandler();
             }.bind(this));
-
-        L.DomEvent.on(this.getTrackedElement("saveLocationButton"),
-            "click",
-            function (e) {
-                this.exitEditLocationMode(true);
-            }.bind(this));
-
-        L.DomEvent.on(this.getTrackedElement("cancelLocationButton"),
-            "click",
-            function (e) {
-                this.exitEditLocationMode(false);
-            }.bind(this));
-
-
     },
 
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
         this.treatmentBMPFeature = treatmentBMPFeature;
-        this.registerDeleteButtonHandler(treatmentBMPFeature);
-        
+
         $('#verifyDelineationButton').bootstrapToggle({
             // note that bootstrapToggle is broken and you have supply class names that don't quite make sense to make it work
             onstyle: 'btn btn-neptune btn-sm',
@@ -92,55 +77,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
                 self.changeDelineationStatus(jQuery(this).prop("checked"));
             }
         });
-    },
-
-    registerDelineationButtonHandler: function (treatmentBMPFeature) {
-        console.log("No-op");
-        console.trace();
-    },
-
-    registerDeleteButtonHandler: function (treatmentBMPFeature) {
-
-        var deleteButton = this.getTrackedElement("deleteDelineationButton");
-        if (this._deleteDelineationHandler) {
-            L.DomEvent.off(deleteButton, "click", this._deleteDelineationHandler);
-            this._deleteDelineationHandler = null;
-        }
-
-        this._deleteDelineationHandler = function (e) {
-            window.delineationMap.deleteDelineation(treatmentBMPFeature);
-        };
-
-        L.DomEvent.on(deleteButton,
-            "click", this._deleteDelineationHandler
-        );
-    },
-
-    registerEditLocationButtonHandler: function (treatmentBMPFeature) {
-        console.log("No-op");
-        console.trace();
-    },
-
-    launchEditLocationMode: function () {
-        //this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
-        //this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
-
-        //this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
-
-        //jQuery(this.getTrackedElement("delineationButton")).off("click");
-        console.log("No-op");
-        console.trace();
-    },
-
-    exitEditLocationMode: function (save) {
-        //this.registerDelineationButtonHandler(this.treatmentBMPFeature);
-
-        // note that we don't bring back the edit/delete delineation buttons here; the save Promise will do that as a completion action
-
-        this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
-        this.getTrackedElement("editLocationModeButtonsWrapper").classList.add("hiddenControlElement");
-
-        window.delineationMap.exitEditLocationMode(save);
     },
 
     launchDrawCatchmentMode: function (drawModeOptions) {
@@ -188,53 +124,34 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     exitDrawCatchmentMode: function (save) {
-        // see above
-        this.drawModeOptions = null;
+        //// see above
+        //this.drawModeOptions = null;
 
-        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
-        this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
-        this.enableDelineationButton();
+        //this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
+        //this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
+        //this.enableDelineationButton();
 
-        // handle the centralized case separately since it doesn't involve drawing anymore
-        if (this.isEditingCentralizedDelineation) {
-            window.delineationMap.exitTraceMode(save);
-            this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
-            this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
-            this.isEditingCentralizedDelineation = false;
-        } else {
-            window.delineationMap.exitDrawCatchmentMode(save);
-        }
+        //// handle the centralized case separately since it doesn't involve drawing anymore
+        //if (this.isEditingCentralizedDelineation) {
+        //    window.delineationMap.exitTraceMode(save);
+        //    this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
+        //    this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
+        //    this.isEditingCentralizedDelineation = false;
+        //} else {
+        //    window.delineationMap.exitDrawCatchmentMode(save);
+        //}
+        console.log("noop");
+        console.trace();
     },
 
     showCentralizedDelineationControls: function () {
-        this.isEditingCentralizedDelineation = true;
-        this.showRequestRevisionButton();
-        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
-        this.getTrackedElement("delineationVertexThinningButton").classList.add("hiddenControlElement");
-        this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
-        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
-    },
-
-    reset: function () {
-        this.getTrackedElement("selectedBmpInfo").classList.add("hiddenControlElement");
-        this.getTrackedElement("noAssetSelected").classList.remove("hiddenControlElement");
-    },
-
-    reportDelineationArea: function (properties) {
-        if (properties.Area !== "-") {
-            this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
-        } else {
-            this.getTrackedElement("delineationArea").innerHTML = properties.Area;
-        }
-        this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
-    },
-
-    clearDelineationDetails: function () {
-        this.getTrackedElement("delineationArea").innerHTML = "-";
-        this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
-        this.getTrackedElement("deleteDelineationButton").style.display = "none";
-        this.hideRequestRevisionButton();
-        this.getTrackedElement("delineationStatus").style.display = "none";
+        //this.isEditingCentralizedDelineation = true;
+        //this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
+        //this.getTrackedElement("delineationVertexThinningButton").classList.add("hiddenControlElement");
+        //this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
+        //this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
+        console.log("noop");
+        console.trace();
     },
 
     disableDelineationButton: function () {
@@ -251,22 +168,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this.getTrackedElement("delineationButton").removeAttribute("disabled");
     },
 
-    showDelineationButtons: function() {
+    showDelineationButtons: function () {
         this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
-    },
-
-    showRequestRevisionButton: function(href) {
-        this.getTrackedElement("requestRevisionButton").classList.remove("hiddenControlElement");
-        this.getTrackedElement("requestRevisionButton").href = href;
-        this.getTrackedElement("requestRevisionDuringEditButton").classList.remove("hiddenControlElement");
-        this.getTrackedElement("requestRevisionDuringEditButton").href = href;
-    },
-
-    hideRequestRevisionButton: function() {
-        this.getTrackedElement("requestRevisionButton").classList.add("hiddenControlElement");
-        this.getTrackedElement("requestRevisionButton").removeAttribute("href");
-        this.getTrackedElement("requestRevisionDuringEditButton").classList.add("hiddenControlElement");
-        this.getTrackedElement("requestRevisionDuringEditButton").removeAttribute("href");
     },
 
     thin: function (tolerance) {
@@ -425,15 +328,15 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         }
     },
 
-    enableDelineationButton: function() {
+    enableDelineationButton: function () {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
     },
 
-    disableDelineationButton: function() {
+    disableDelineationButton: function () {
         this.getTrackedElement("continueDelineationButton").setAttribute("disabled", "disabled");
     },
 
-    preselectDelineationType: function(type) {
+    preselectDelineationType: function (type) {
         jQuery("input[name='flowOption'][value='" + type + "']").prop("checked", true);
     }
 });

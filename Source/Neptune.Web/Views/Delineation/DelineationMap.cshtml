@@ -58,38 +58,38 @@
                 <strong>Type: </strong><span id="selectedBMPType">{{treatmentBMPType()}}</span><br />
                 <hr>
                 <h5>Selected Delineation</h5>
-                <strong>Type: </strong> <span id="delineationType"></span><br />
-                <strong>Area: </strong><span id="delineationArea">-</span> <br />
-                <div id="delineationStatus">
+                <strong>Type: </strong> <span id="delineationType">{{delineationType()}}</span><br />
+                <strong>Area: </strong><span id="delineationArea">{{delineationArea()}}</span> <br />
+                <div id="delineationStatus" ng-show="hasDelineation()">
                     <strong>Status: </strong>
                     <input id="verifyDelineationButton" type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100" />
                 </div>
 
                 <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode">
-                    <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation($event); $event.stopPropagation();" ng-disabled="delineationMapState.isInDelineationMode">Edit</button>
-                    <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;"><span class="glyphicon glyphicon-trash"></span></button>
-                    <a class="hiddenControlElement" id="requestRevisionButton" href="todo"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
+                    <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation(); $event.stopPropagation();" ng-hide="delineationMapState.isInDelineationMode">Edit</button>
+                    <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;" ng-show="hasDelineation()" ng-click="deleteDelineation(); $event.stopPropagation()"><span class="glyphicon glyphicon-trash"></span></button>
+                    <a id="requestRevisionButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="showRequestRevisionButton()"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
                 </div>
 
                 <div style="margin-top: 5px;" id="editLocationButtonWrapper" ng-hide="delineationMapState.isInDelineationMode || delineationMapState.isInEditLocationMode">
                     <hr />
-                    <button class="btn btn-sm btn-neptune" id="editLocationButton" type="button" ng-click="beginEditTreatmentBMPLocation($event)">Edit Location</button>
+                    <button class="btn btn-sm btn-neptune" id="editLocationButton" type="button" ng-click="beginEditTreatmentBMPLocation(); $event.stopPropagation();">Edit Location</button>
                 </div>
 
-                <div class="hiddenControlElement" id="editLocationModeButtonsWrapper" ng-hide="!delineationMapState.isInEditLocationMode">
+                <div id="editLocationModeButtonsWrapper" ng-hide="!delineationMapState.isInEditLocationMode">
                     <hr />
                     <p>Click the map to set a new location for this BMP.</p>
-                    <button class="btn btn-sm btn-neptune" id="saveLocationButton" type="button">Save Location</button>
-                    <button class="btn btn-sm btn-neptune" id="cancelLocationButton" type="button">Cancel</button>
+                    <button class="btn btn-sm btn-neptune" id="saveLocationButton" type="button" ng-click="saveLocationEdit()">Save Location</button>
+                    <button class="btn btn-sm btn-neptune" id="cancelLocationButton" type="button" ng-click="cancelLocationEdit()">Cancel</button>
                 </div>
 
-                <div class="hiddenControlElement" id="saveCancelAndThinButtonsWrapper">
-                    <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button">Save</button>
-                    <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button">Cancel</button>
-                    <a class="hiddenControlElement" id="requestRevisionDuringEditButton" href="todo"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
-                    <button class="btn btn-sm btn-neptune" id="delineationVertexThinningButton" type="button">Thin</button>
+                <div id="saveCancelAndThinButtonsWrapper" ng-show="delineationMapState.isInDelineationMode && delineationMapState.isEditedDelineationPresent">
+                    <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button" ng-click="saveDelineation()">Save</button>
+                    <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button" ng-click="cancelDelineation()">Cancel</button>
+                    <a id="requestRevisionDuringEditButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="delineationMapState.isEditingCentralizedDelineation"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
+                    <button class="btn btn-sm btn-neptune" id="delineationVertexThinningButton" type="button" ng-show="!delineationMapState.isEditingCentralizedDelineation">Thin</button>
 
-                    <span style="width: 90%; display: none;" id="vertexControlContainer">
+                    <span style="width: 90%; display: none;" id="vertexControlContainer" ng-show="delineationMapState.isInThinningMode">
                         <input id="vertexControl" data-slider-id="vertexControlSlider" type="text" />
                     </span>
                 </div>
