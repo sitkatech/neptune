@@ -1,15 +1,32 @@
 ﻿angular.module("NeptuneApp").factory("DelineationMapService",
     function ($rootScope) {
         var delineationMapServiceInstance = {};
+
         delineationMapServiceInstance.setDelineation = function (delineationFeature) {
             console.log(delineationFeature);
             this.delineationFeature = delineationFeature;
         };
+
         delineationMapServiceInstance.getDelineation = function () {
             return this.delineationFeature;
         };
+
         delineationMapServiceInstance.broadcastDelineationMapState = function (delineationMapState) {
             $rootScope.$broadcast("neptune:delineationMapStateChange", delineationMapState);
+        };
+
+        delineationMapServiceInstance.resetDelineationMapEditingState = function (delineationMapState) {
+            $rootScope.$broadcast("neptune:delineationMapStateChange", {
+                isInDelineationMode: false,
+                isEditedDelineationPresent: false,
+
+                isInEditLocationMode: false,
+
+                isEditingCentralizedDelineation: false,
+
+                isInThinningMode: false
+            });
+
         };
         return delineationMapServiceInstance;
     });
@@ -36,10 +53,12 @@ angular.module("NeptuneApp")
             window.delineationMap = delineationMap;
             $scope.delineationMap = delineationMap;
 
+
+
             delineationMap.buildSelectedAssetControl();
-            delineationMap.hookupSelectTreatmentBMPOnClick($scope);
-            delineationMap.hookupDeselectOnClick($scope);
-            delineationMap.hookupSelectTreatmentBMPByDelineation($scope);
+            if (isInitialiTreatmentBMPProvided) {
+                delineationMap.preselectTreatmentBMP(initialTreatmentBMPID);
+            }
         });
 
         // UI element handlers
@@ -151,6 +170,11 @@ angular.module("NeptuneApp")
                 this.delineationMapState.selectedTreatmentBMPFeature.properties.DelineationType ===
                 DELINEATION_CENTRALIZED;
         };
+
+        $scope.showDeleteButton = function () {
+            return this.hasDelineation() &&
+                !(this.delineationMapState.isInDelineationMode || this.delineationMapState.isInEditLocationMode);
+        }
 
         // listeners
         $scope.$on("neptune:delineationMapStateChange",

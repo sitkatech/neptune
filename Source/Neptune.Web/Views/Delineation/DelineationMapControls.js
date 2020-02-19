@@ -33,19 +33,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
 
     initializeControlInstance: function (map) {
         stopClickPropagation(this.parentElement);
-
-        //L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
-        //    "click",
-        //    function (e) {
-        //        this.exitDrawCatchmentMode(false);
-        //    }.bind(this));
-
-        //L.DomEvent.on(this.getTrackedElement("saveDelineationButton"),
-        //    "click",
-        //    function (e) {
-        //        this.exitDrawCatchmentMode(true);
-        //    }.bind(this));
-
         L.DomEvent.on(this.getTrackedElement("delineationVertexThinningButton"),
             "click",
             function (e) {
@@ -82,11 +69,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     launchDrawCatchmentMode: function (drawModeOptions) {
         // okay to persist state because this control mode is ephemeral: see below for where it dies
         this.drawModeOptions = drawModeOptions;
-
-        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
-        this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
-
-
+        
         this.getTrackedElement("vertexControlContainer").style.display = "none";
         this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Thin";
 
@@ -123,37 +106,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this.slider.setValue(TOLERANCE_DISTRIBUTED);
     },
 
-    exitDrawCatchmentMode: function (save) {
-        //// see above
-        //this.drawModeOptions = null;
-
-        //this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
-        //this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
-        //this.enableDelineationButton();
-
-        //// handle the centralized case separately since it doesn't involve drawing anymore
-        //if (this.isEditingCentralizedDelineation) {
-        //    window.delineationMap.exitTraceMode(save);
-        //    this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
-        //    this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
-        //    this.isEditingCentralizedDelineation = false;
-        //} else {
-        //    window.delineationMap.exitDrawCatchmentMode(save);
-        //}
-        console.log("noop");
-        console.trace();
-    },
-
-    showCentralizedDelineationControls: function () {
-        //this.isEditingCentralizedDelineation = true;
-        //this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
-        //this.getTrackedElement("delineationVertexThinningButton").classList.add("hiddenControlElement");
-        //this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
-        //this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
-        console.log("noop");
-        console.trace();
-    },
-
     disableDelineationButton: function () {
         if (!this.getTrackedElement("delineationButton")) {
             return; //misplaced call
@@ -169,7 +121,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     showDelineationButtons: function () {
-        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
+        console.log("noop");
+        console.trace();
     },
 
     thin: function (tolerance) {

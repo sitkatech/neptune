@@ -67,7 +67,7 @@
 
                 <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode">
                     <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation(); $event.stopPropagation();" ng-hide="delineationMapState.isInDelineationMode">Edit</button>
-                    <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;" ng-show="hasDelineation()" ng-click="deleteDelineation(); $event.stopPropagation()"><span class="glyphicon glyphicon-trash"></span></button>
+                    <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;" ng-show="showDeleteButton()" ng-click="deleteDelineation(); $event.stopPropagation()"><span class="glyphicon glyphicon-trash"></span></button>
                     <a id="requestRevisionButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="showRequestRevisionButton()"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
                 </div>
 
@@ -104,16 +104,13 @@
     var config = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationMapConfig).ToString(Formatting.None));
 
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
+    var isInitialiTreatmentBMPProvided = @ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS();
+    var initialTreatmentBMPID = @ViewDataTyped.InitialTreatmentBMPID;
 
 
     jQuery(function () {
         if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
             jQuery("#warnInternetExplorer").show();
-        }
-
-        if (@ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS()) {
-            @* ReSharper disable once PossibleNullReferenceException *@
-            window.delineationMap.preselectTreatmentBMP(@ViewDataTyped.InitialTreatmentBMPID);
         }
     });
 </script>
