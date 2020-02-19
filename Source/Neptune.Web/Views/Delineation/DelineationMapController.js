@@ -3,7 +3,6 @@
         var delineationMapServiceInstance = {};
 
         delineationMapServiceInstance.setDelineation = function (delineationFeature) {
-            console.log(delineationFeature);
             this.delineationFeature = delineationFeature;
         };
 
@@ -11,12 +10,15 @@
             return this.delineationFeature;
         };
 
-        delineationMapServiceInstance.broadcastDelineationMapState = function (delineationMapState) {
+        delineationMapServiceInstance.broadcastDelineationMapState = function (delineationMapState, noApply) {
+            if (noApply) {
+                delineationMapState.noApply = noApply;
+            }
             $rootScope.$broadcast("neptune:delineationMapStateChange", delineationMapState);
         };
 
-        delineationMapServiceInstance.resetDelineationMapEditingState = function (delineationMapState) {
-            $rootScope.$broadcast("neptune:delineationMapStateChange", {
+        delineationMapServiceInstance.resetDelineationMapEditingState = function (noApply) {
+            var stateData = {
                 isInDelineationMode: false,
                 isEditedDelineationPresent: false,
 
@@ -25,7 +27,12 @@
                 isEditingCentralizedDelineation: false,
 
                 isInThinningMode: false
-            });
+            };
+            if (noApply) {
+                stateData.noApply = noApply;
+            }
+
+            $rootScope.$broadcast("neptune:delineationMapStateChange", stateData);
 
         };
         return delineationMapServiceInstance;
@@ -106,6 +113,11 @@ angular.module("NeptuneApp")
             }
         };
 
+        $scope.thinDelineation = function () {
+            this.delineationMapState.isInThinningMode = true;
+            $scope.delineationMap.selectedAssetControl.thinButtonHandler();
+        };
+
         // UI element data-getters
         $scope.treatmentBMPName = function () {
             if (!this.delineationMapState.selectedTreatmentBMPFeature) {
@@ -171,16 +183,19 @@ angular.module("NeptuneApp")
                 DELINEATION_CENTRALIZED;
         };
 
-        $scope.showDeleteButton = function () {
+        $scope.showDeleteButton = function() {
             return this.hasDelineation() &&
                 !(this.delineationMapState.isInDelineationMode || this.delineationMapState.isInEditLocationMode);
-        }
+        };
 
         // listeners
         $scope.$on("neptune:delineationMapStateChange",
             function (event, data) {
+                
                 Object.assign($scope.delineationMapState, data);
-                $scope.$apply();
+                if (!data.noApply) {
+                    $scope.$apply();
+                }
             });
     });
 

@@ -75,7 +75,6 @@ NeptuneMaps.DelineationMap.prototype.buildSelectedAssetControl = function () {
     var selectedAssetControlElement = document.querySelector("#selectedAssetControl");
 
     this.selectedAssetControl.parentElement.append(selectedAssetControlElement);
-    this.selectedAssetControl.initializeControlInstance();
 };
 
 NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
@@ -133,7 +132,6 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 
     var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
     this.layerControl.addOverlay(this.markerClusterGroup, legendSpan);
-    //this.hookupSelectTreatmentBMPOnClick();
 };
 
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
@@ -153,6 +151,7 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         } else {
             delineationStatus = "None";
         }
+        self.delineationMapService.broadcastDelineationMapState({ selectedTreatmentBMPFeature: layer.feature });
         self.selectedAssetControl.treatmentBMP(layer.feature, delineationStatus);
 
         return jQuery.Deferred().resolve();
@@ -210,8 +209,6 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
  */
 
 NeptuneMaps.DelineationMap.prototype.launchEditLocationMode = function () {
-    //this.treatmentBMPLayer.off("click");
-    //this.map.off("click");
     this.disableSelectOnClick();
     this.enableEditLocationOnClick();
 
@@ -264,10 +261,7 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
         var movedLayer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
         this.setSelectedFeature(movedLayer.feature);
     }
-    
-    //this.map.off("click");
-    //this.hookupDeselectOnClick();
-    //this.hookupSelectTreatmentBMPOnClick();
+
     this.disableSelectOnClick();
     this.disableEditLocationOnClick();
     this.enableSelectOnClick();
@@ -277,7 +271,7 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
  * This is the bread and butter of the delineation workflows.
  * When in this mode, the user is given access to a Leaflet.Draw control pointed at this.selectedBMPDelineationLayer.
  * This mode is activated when the user chooses the draw option from the Begin Delineation Control or as the terminus
- * of the other delineation paths.
+ * of most other delineation paths.
  * drawModeOptions is a
  * {
  *   tolerance: number,
@@ -288,7 +282,7 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
 
 NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function (drawModeOptions) {
     drawModeOptions.newDelineation = !this.selectedBMPDelineationLayer;
-
+    this.disableEditLocationOnClick();
     if (this.beginDelineationControl) {
         this.beginDelineationControl.remove();
         this.beginDelineationControl = null;
@@ -477,7 +471,8 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
     this.enableUserInteraction();
     this.enableSelectOnClick();
 
-    this.delineationMapService.resetDelineationMapEditingState();
+    var noApply = true;
+    this.delineationMapService.resetDelineationMapEditingState(noApply);
 };
 
 NeptuneMaps.DelineationMap.prototype.exitTraceMode = function (save) {
@@ -841,7 +836,7 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
  */
 
 
-// callback lets us $apply()
+// todo: instead of using a callback to $apply(), use the delineationMapService
 NeptuneMaps.DelineationMap.prototype.deleteDelineation = function (afterDeleteCallback) {
     var treatmentBMPFeature = this.getSelectedBMPFeature();
 

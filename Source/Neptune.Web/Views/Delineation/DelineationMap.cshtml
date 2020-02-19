@@ -87,7 +87,7 @@
                     <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button" ng-click="saveDelineation()">Save</button>
                     <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button" ng-click="cancelDelineation()">Cancel</button>
                     <a id="requestRevisionDuringEditButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="delineationMapState.isEditingCentralizedDelineation"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
-                    <button class="btn btn-sm btn-neptune" id="delineationVertexThinningButton" type="button" ng-show="!delineationMapState.isEditingCentralizedDelineation">Thin</button>
+                    <button class="btn btn-sm btn-neptune" id="delineationVertexThinningButton" type="button" ng-click="thinDelineation(); $event.stopPropagation();" ng-show="!delineationMapState.isEditingCentralizedDelineation">Thin</button>
 
                     <span style="width: 90%; display: none;" id="vertexControlContainer" ng-show="delineationMapState.isInThinningMode">
                         <input id="vertexControl" data-slider-id="vertexControlSlider" type="text" />

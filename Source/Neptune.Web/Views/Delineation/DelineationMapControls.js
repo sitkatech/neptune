@@ -23,21 +23,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         var parentElement = L.DomUtil.create('div');
         this.parentElement = parentElement;
         parentElement.id = "selectedAssetControlContainer";
+        stopClickPropagation(this.parentElement);
         return parentElement;
     },
 
     getTrackedElement: function (id) {
         // todo: might not be a bad idea to memoize
         return this.parentElement.querySelector("#" + id);
-    },
-
-    initializeControlInstance: function (map) {
-        stopClickPropagation(this.parentElement);
-        L.DomEvent.on(this.getTrackedElement("delineationVertexThinningButton"),
-            "click",
-            function (e) {
-                this.thinButtonHandler();
-            }.bind(this));
     },
 
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
