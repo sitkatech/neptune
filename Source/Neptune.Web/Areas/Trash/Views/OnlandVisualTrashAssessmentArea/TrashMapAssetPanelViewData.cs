@@ -13,7 +13,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         {
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
             UserHasViewDetailsPermission =
-                currentPerson.CanEditStormwaterJurisdiction(onlandVisualTrashAssessmentArea.StormwaterJurisdiction);
+                currentPerson.CanEditStormwaterJurisdiction(onlandVisualTrashAssessmentArea.StormwaterJurisdictionID);
             ScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null
                 ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
                     .OnlandVisualTrashAssessmentScoreDisplayName

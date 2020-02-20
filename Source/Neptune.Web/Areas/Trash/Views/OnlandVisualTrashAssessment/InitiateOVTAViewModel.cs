@@ -32,28 +32,28 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         }
 
-        public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta)
+        public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            StormwaterJurisdiction = ovta?.StormwaterJurisdiction != null ? new StormwaterJurisdictionSimple(ovta.StormwaterJurisdiction) : null;
-            OnlandVisualTrashAssessmentAreaID = ovta?.OnlandVisualTrashAssessmentAreaID;
-            AssessingNewArea = ovta?.AssessingNewArea ?? false;
+            StormwaterJurisdiction = onlandVisualTrashAssessment?.StormwaterJurisdiction != null ? new StormwaterJurisdictionSimple(onlandVisualTrashAssessment.StormwaterJurisdiction) : null;
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment?.OnlandVisualTrashAssessmentAreaID;
+            AssessingNewArea = onlandVisualTrashAssessment?.AssessingNewArea ?? false;
         }
 
-        public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta, Person currentPerson) : this(ovta)
+        public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson) : this(onlandVisualTrashAssessment)
         {
             var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
-            if (stormwaterJurisdictionsPersonCanEdit.Count() == 1)
+            if (stormwaterJurisdictionsPersonCanEdit.Count == 1)
             {
                 StormwaterJurisdiction =
                     new StormwaterJurisdictionSimple(stormwaterJurisdictionsPersonCanEdit.Single());
             }
         }
 
-        public void UpdateModel(Models.OnlandVisualTrashAssessment ovta)
+        public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            Check.Require(ModelObjectHelpers.IsRealPrimaryKeyValue(ovta.OnlandVisualTrashAssessmentID));
+            Check.Require(ModelObjectHelpers.IsRealPrimaryKeyValue(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID));
 
-            ovta.StormwaterJurisdictionID = StormwaterJurisdiction?.StormwaterJurisdictionID;
+            onlandVisualTrashAssessment.StormwaterJurisdictionID = StormwaterJurisdiction.StormwaterJurisdictionID;
 
             if (OnlandVisualTrashAssessmentAreaID.HasValue)
             {
@@ -63,23 +63,23 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 // ensure the area to which this assessment is assigned ends up with only one transect-backing assessment
                 if (transectBackingAssessment != null)
                 {
-                    if (transectBackingAssessment.OnlandVisualTrashAssessmentID != ovta.OnlandVisualTrashAssessmentID)
+                    if (transectBackingAssessment.OnlandVisualTrashAssessmentID != onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)
                     {
-                        ovta.IsTransectBackingAssessment = false;
+                        onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
                     }
                 }
                 else
                 {
-                    ovta.IsTransectBackingAssessment = true;
+                    onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
                 }
             }
             else
             {
-                ovta.IsTransectBackingAssessment = false;
+                onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
             }
 
-            ovta.OnlandVisualTrashAssessmentAreaID = OnlandVisualTrashAssessmentAreaID;
-            ovta.AssessingNewArea = AssessingNewArea;
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID = OnlandVisualTrashAssessmentAreaID;
+            onlandVisualTrashAssessment.AssessingNewArea = AssessingNewArea;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

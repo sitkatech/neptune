@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[CreatedDate] [datetime] NOT NULL,
 	[OnlandVisualTrashAssessmentAreaID] [int] NULL,
 	[Notes] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[StormwaterJurisdictionID] [int] NULL,
+	[StormwaterJurisdictionID] [int] NOT NULL,
 	[AssessingNewArea] [bit] NULL,
 	[OnlandVisualTrashAssessmentStatusID] [int] NOT NULL,
 	[DraftGeometry] [geometry] NULL,

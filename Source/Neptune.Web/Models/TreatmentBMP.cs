@@ -150,7 +150,7 @@ namespace Neptune.Web.Models
 
         public void MarkInventoryAsProvisionalIfNonManager(Person person)
         {
-            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(StormwaterJurisdiction);
+            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(StormwaterJurisdictionID);
             if (!isAssignedToStormwaterJurisdiction)
             {
                 InventoryIsVerified = false;

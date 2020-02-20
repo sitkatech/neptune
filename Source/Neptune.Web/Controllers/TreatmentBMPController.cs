@@ -125,27 +125,14 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary> TreatmentBMPAssessmentSummaryGridJsonData()
         {
-            var vMostRecentTreatmentBMPAssessments =
-                GetTreatmentBMPAssessmentSummariesAndGridSpec(out GridSpec<TreatmentBMPAssessmentSummary> gridSpec,
-                    CurrentPerson);
-            var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary>(vMostRecentTreatmentBMPAssessments,
-                    gridSpec);
-            return gridJsonNetJObjectResult;
-        }
+            var gridSpec = new TreatmentBMPAssessmentSummaryGridSpec();
+            var stormwaterJurisdictionIDsCurrentUserCanEdit = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
 
-        private List<TreatmentBMPAssessmentSummary> GetTreatmentBMPAssessmentSummariesAndGridSpec(
-            out GridSpec<TreatmentBMPAssessmentSummary> gridSpec, Person currentPerson)
-        {
-            gridSpec = new TreatmentBMPAssessmentSummaryGridSpec();
-            var stormwaterJurisdictionIDsCurrentUserCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView()
-                .Select(y => y.StormwaterJurisdictionID).ToList();
-
-            var vMostRecentTreatmentBMPAssessments =
+            var vMostRecentTreatmentBMPAssessments1 =
                 HttpRequestStorage.DatabaseEntities.vMostRecentTreatmentBMPAssessments.Where(x =>
                     stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
             var vMostRecentTreatmentBMPAssessmentIDs =
-                vMostRecentTreatmentBMPAssessments.Select(y => y.LastAssessmentID).ToList();
+                vMostRecentTreatmentBMPAssessments1.Select(y => y.LastAssessmentID).ToList();
 
             var treatmentBMPObservations = HttpRequestStorage.DatabaseEntities.TreatmentBMPObservations.OrderBy(x=>x.TreatmentBMPAssessment.TreatmentBMPID).ThenBy(x=>x.TreatmentBMPTypeAssessmentObservationType.SortOrder).Where(x =>
                 vMostRecentTreatmentBMPAssessmentIDs
@@ -172,12 +159,16 @@ namespace Neptune.Web.Controllers
                 };
             });
 
-            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
+            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments1.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
                 x => x.LastAssessmentID,
                 y => y.TreatmentBMPAssessmentID,
                 (x,y) => new TreatmentBMPAssessmentSummary {AssessmentSummary = x, Notes = string.Join("; ", y.Select(z=>z.Notes).OrderBy(z=>z))});
-
-            return treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
+            var vMostRecentTreatmentBMPAssessments =
+                treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
+            var gridJsonNetJObjectResult =
+                new GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary>(vMostRecentTreatmentBMPAssessments,
+                    gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [TreatmentBMPViewFeature]

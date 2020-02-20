@@ -25,21 +25,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic> TrashGeneratingUnitGridJsonData()
         {
-            // ReSharper disable once InconsistentNaming
-            List<vTrashGeneratingUnitLoadStatistic> treatmentBMPs = GetTrashGeneratingUnitsAndGridSpec(out var gridSpec);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic>(treatmentBMPs, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<vTrashGeneratingUnitLoadStatistic> GetTrashGeneratingUnitsAndGridSpec(out TrashGeneratingUnitGridSpec gridSpec)
-        {
-            gridSpec = new TrashGeneratingUnitGridSpec();
-
-            var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => x.StormwaterJurisdictionID).ToList();
-
-            return HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
+            var gridSpec = new TrashGeneratingUnitGridSpec();
+            var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            List<vTrashGeneratingUnitLoadStatistic> treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
                 .Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.LastUpdateDate).ToList();
+            return new GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic>(treatmentBMPs, gridSpec);
         }
 
         [HttpGet]

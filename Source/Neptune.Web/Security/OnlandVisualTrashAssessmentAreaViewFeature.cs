@@ -22,10 +22,9 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessmentArea contextModelObject)
         {
-            var stormwaterJurisdiction = contextModelObject.StormwaterJurisdiction;
-            if (!person.CanEditStormwaterJurisdiction(stormwaterJurisdiction))
+            if (!person.CanEditStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID))
             {
-                return new PermissionCheckResult($"You do not have permission to view or manage OVTA Areas for {stormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You do not have permission to view or manage OVTA Areas for {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
             return new PermissionCheckResult();
         }

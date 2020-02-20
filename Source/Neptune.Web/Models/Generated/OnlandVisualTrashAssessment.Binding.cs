@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName, string draftAreaDescription, bool isTransectBackingAssessment, bool isProgressAssessment) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName, string draftAreaDescription, bool isTransectBackingAssessment, bool isProgressAssessment) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
@@ -55,13 +55,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int createdByPersonID, DateTime createdDate, int onlandVisualTrashAssessmentStatusID, bool isTransectBackingAssessment, bool isProgressAssessment) : this()
+        public OnlandVisualTrashAssessment(int createdByPersonID, DateTime createdDate, int stormwaterJurisdictionID, int onlandVisualTrashAssessmentStatusID, bool isTransectBackingAssessment, bool isProgressAssessment) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.OnlandVisualTrashAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.CreatedByPersonID = createdByPersonID;
             this.CreatedDate = createdDate;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessmentStatusID;
             this.IsTransectBackingAssessment = isTransectBackingAssessment;
             this.IsProgressAssessment = isProgressAssessment;
@@ -70,7 +71,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public OnlandVisualTrashAssessment(Person createdByPerson, DateTime createdDate, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus, bool isTransectBackingAssessment, bool isProgressAssessment) : this()
+        public OnlandVisualTrashAssessment(Person createdByPerson, DateTime createdDate, StormwaterJurisdiction stormwaterJurisdiction, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus, bool isTransectBackingAssessment, bool isProgressAssessment) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.OnlandVisualTrashAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -78,6 +79,9 @@ namespace Neptune.Web.Models
             this.CreatedByPerson = createdByPerson;
             createdByPerson.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Add(this);
             this.CreatedDate = createdDate;
+            this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
+            this.StormwaterJurisdiction = stormwaterJurisdiction;
+            stormwaterJurisdiction.OnlandVisualTrashAssessments.Add(this);
             this.OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusID;
             this.IsTransectBackingAssessment = isTransectBackingAssessment;
             this.IsProgressAssessment = isProgressAssessment;
@@ -86,9 +90,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static OnlandVisualTrashAssessment CreateNewBlank(Person createdByPerson, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus)
+        public static OnlandVisualTrashAssessment CreateNewBlank(Person createdByPerson, StormwaterJurisdiction stormwaterJurisdiction, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus)
         {
-            return new OnlandVisualTrashAssessment(createdByPerson, default(DateTime), onlandVisualTrashAssessmentStatus, default(bool), default(bool));
+            return new OnlandVisualTrashAssessment(createdByPerson, default(DateTime), stormwaterJurisdiction, onlandVisualTrashAssessmentStatus, default(bool), default(bool));
         }
 
         /// <summary>
@@ -150,7 +154,7 @@ namespace Neptune.Web.Models
         public DateTime CreatedDate { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         public string Notes { get; set; }
-        public int? StormwaterJurisdictionID { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
         public bool? AssessingNewArea { get; set; }
         public int OnlandVisualTrashAssessmentStatusID { get; set; }
         public DbGeometry DraftGeometry { get; set; }

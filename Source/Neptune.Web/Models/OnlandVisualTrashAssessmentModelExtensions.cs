@@ -63,7 +63,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetEditUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
         {
-            var userCanEdit = new OnlandVisualTrashAssessmentEditStausFeature()
+            var userCanEdit = new OnlandVisualTrashAssessmentEditStatusFeature()
                 .HasPermission(currentPerson, onlandVisualTrashAssessment)
                 .HasPermission;
             if (!userCanEdit) return new HtmlString(Empty);

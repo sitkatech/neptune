@@ -36,7 +36,6 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string ScoreDescriptionsUrl { get; }
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
-        public bool CurrentOrNetChangeLoadingBool { get; }
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
@@ -50,7 +49,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
             NegativeStormwaterJurisdictionCQLFilter = currentPerson.GetNegativeStormwaterJurisdictionCqlFilter();
             JurisdictionSelectList = stormwaterJurisdictionsPersonCanEdit.OrderBy(x => x.GetOrganizationDisplayName()).ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());
-            var showDropdown = stormwaterJurisdictionsPersonCanEdit.Count() > 1;
+            var showDropdown = stormwaterJurisdictionsPersonCanEdit.Count > 1;
 
             ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson, areaBasedMapInitJson, loadBasedMapInitJson,
                 treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter, showDropdown, NegativeStormwaterJurisdictionCQLFilter);

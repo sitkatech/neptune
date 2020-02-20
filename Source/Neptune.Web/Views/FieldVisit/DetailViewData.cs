@@ -60,9 +60,9 @@ namespace Neptune.Web.Views.FieldVisit
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanManageStormwaterJurisdiction =
-                currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+                currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             CanEditStormwaterJurisdiction =
-                currentPerson.CanEditStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+                currentPerson.CanEditStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
             MarkAsProvisionalUrl =

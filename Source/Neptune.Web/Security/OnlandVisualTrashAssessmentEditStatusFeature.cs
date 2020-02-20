@@ -4,11 +4,11 @@ using Neptune.Web.Models;
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("Allows Viewing an OVTA")]
-    public class OnlandVisualTrashAssessmentEditStausFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<OnlandVisualTrashAssessment>
+    public class OnlandVisualTrashAssessmentEditStatusFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<OnlandVisualTrashAssessment>
     {
         private readonly NeptuneFeatureWithContextImpl<OnlandVisualTrashAssessment> _lakeTahoeInfoFeatureWithContextImpl;
 
-        public OnlandVisualTrashAssessmentEditStausFeature()
+        public OnlandVisualTrashAssessmentEditStatusFeature()
             : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor})
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<OnlandVisualTrashAssessment>(this);
@@ -22,13 +22,7 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessment contextModelObject)
         {
-            var stormwaterJurisdiction = contextModelObject.StormwaterJurisdiction;
-
-            if (stormwaterJurisdiction != null && !person.CanEditStormwaterJurisdiction(stormwaterJurisdiction))
-            {
-                return new PermissionCheckResult($"You do not have permission to view or manage OVTAs for {stormwaterJurisdiction.GetOrganizationDisplayName()}");
-            }
-            return new PermissionCheckResult();
+            return new OnlandVisualTrashAssessmentViewFeature().HasPermission(person, contextModelObject);
         }
     }
 }

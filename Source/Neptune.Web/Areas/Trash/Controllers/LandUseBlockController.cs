@@ -25,7 +25,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -47,16 +46,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [JurisdictionEditFeature]
         public GridJsonNetJObjectResult<LandUseBlock> LandUseBlockGridJsonData()
         {
-            var treatmentBMPs = GetLandUseBlocksAndGridSpec(out var gridSpec);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<LandUseBlock>(treatmentBMPs, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<LandUseBlock> GetLandUseBlocksAndGridSpec(out LandUseBlockGridSpec gridSpec)
-        {
-            gridSpec = new LandUseBlockGridSpec();
-            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x=>x.StormwaterJurisdictionID).ToList();
-            return HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridSpec = new LandUseBlockGridSpec();
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.LandUseBlocks.Include(x=>x.TrashGeneratingUnits).Where(x => stormwaterJurisdictionsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            return new GridJsonNetJObjectResult<LandUseBlock>(treatmentBMPs, gridSpec);
         }
     }
 }

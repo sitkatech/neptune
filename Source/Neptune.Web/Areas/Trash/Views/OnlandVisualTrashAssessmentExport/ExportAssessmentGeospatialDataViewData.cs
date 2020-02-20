@@ -1,5 +1,4 @@
-﻿using System;
-using Neptune.Web.Areas.Trash.Controllers;
+﻿using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using System.Collections.Generic;

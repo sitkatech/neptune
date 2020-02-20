@@ -41,7 +41,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var returnToEditUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                     x.EditStatusToAllowEdit(onlandVisualTrashAssessment));
-            var userHasPermissionToReturnToEdit = new OnlandVisualTrashAssessmentEditStausFeature().HasPermission(CurrentPerson, onlandVisualTrashAssessment).HasPermission;
+            var userHasPermissionToReturnToEdit = new OnlandVisualTrashAssessmentEditStatusFeature().HasPermission(CurrentPerson, onlandVisualTrashAssessment).HasPermission;
             return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, onlandVisualTrashAssessment, new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations, NeptuneWebConfiguration.ParcelMapServiceUrl), returnToEditUrl, userHasPermissionToReturnToEdit));
         }
 
@@ -69,8 +69,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson, showDelete);
             var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
-                .Where(x => x.StormwaterJurisdiction == null ||
-                            CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction))
+                .Where(x => CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.GetLastAssessmentDate());
             return new GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea>(onlandVisualTrashAssessmentAreas.ToList(), gridSpec);
         }
@@ -100,21 +99,15 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             var userCanView = new OnlandVisualTrashAssessmentViewFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false, userCanView);
-
-            // if Stormwater Jurisdiction is null, it means the OVTA workflow was started but no data was saved, so it's okay to allow the record to be visible/editable
-            // a future release will rearrange the OVTA workflow so records are not created in a jurisdiction-less state
             return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList()
-                .Where(x => x.StormwaterJurisdiction == null ||
-                            CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction))
+                .Where(x => CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.CompletedDate).ThenBy(x => x.OnlandVisualTrashAssessmentArea == null)
                 .ThenBy(x => x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName).ToList();
         }
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ViewResult
-            Instructions(
-                int? ovtaID) // route "overloaded" so we can handle revisiting and starting anew with the same route.
+        public ViewResult Instructions(int? ovtaID) // route "overloaded" so we can handle revisiting and starting anew with the same route.
         {
             var viewModel = new InstructionsViewModel();
 
@@ -149,8 +142,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult InitiateOVTA(int? onlandVisualTrashAssessmentPrimaryKey,
-            InitiateOVTAViewModel viewModel)
+        public ActionResult InitiateOVTA(int? onlandVisualTrashAssessmentPrimaryKey, InitiateOVTAViewModel viewModel)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.HasValue
                 ? HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(
@@ -163,7 +155,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             if (onlandVisualTrashAssessment == null)
             {
-                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress, false, false);
+                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson.PersonID, DateTime.Now, viewModel.StormwaterJurisdiction.StormwaterJurisdictionID, OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID, false, false);
                 HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
@@ -183,9 +175,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 ? stormwaterJurisdictionsPersonCanEdit.Single()
                 : null;
 
-            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
-                .ToList()
-                .Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdiction)).ToList();
+            var onlandVisualTrashAssessmentAreas = stormwaterJurisdictionsPersonCanEdit.SelectMany(x => x.OnlandVisualTrashAssessmentAreas).ToList();
 
             var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap",
                 onlandVisualTrashAssessmentAreas.MakeAssessmentAreasLayerGeoJson());
@@ -399,7 +389,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentEditStausFeature]
+        [OnlandVisualTrashAssessmentEditStatusFeature]
         public PartialViewResult EditStatusToAllowEdit(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
@@ -420,7 +410,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentEditStausFeature]
+        [OnlandVisualTrashAssessmentEditStatusFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditStatusToAllowEdit(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ConfirmDialogFormViewModel viewModel)

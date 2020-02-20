@@ -288,12 +288,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewNewAssessment(onlandVisualTrashAssessmentArea, viewModel);
             }
 
-            var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now,
+            var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, onlandVisualTrashAssessmentArea.StormwaterJurisdiction,
                 OnlandVisualTrashAssessmentStatus.InProgress, false, false)
             {
                 OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
-                AssessingNewArea = false,
-                StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID
+                AssessingNewArea = false
             };
 
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);

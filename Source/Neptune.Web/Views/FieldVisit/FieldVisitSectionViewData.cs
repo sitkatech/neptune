@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.FieldVisit
             SubEntityUrl = fieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
 
-            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
 
             SectionHeader = fieldVisitSection.SectionHeader;
