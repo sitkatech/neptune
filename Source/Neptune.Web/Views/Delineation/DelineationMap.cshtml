@@ -20,6 +20,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css" />
 
     <link rel="stylesheet" href="@Url.Content("~/Content/JQuery/jquery.toast.min.css")" />
+    <script>
+        window.mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        window.dmConfig = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationMapConfig).ToString(Formatting.None));
+
+        window.geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
+        window.isInitialiTreatmentBMPProvided = @ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS();
+
+
+
+        jQuery(function () {
+            if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
+                jQuery("#warnInternetExplorer").show();
+            }
+        });
+    </script>
+    
+    @if(ViewDataTyped.IsInitialTreatmentBMPProvided)
+    {
+        <script>
+            window.initialTreatmentBMPID = @ViewDataTyped.InitialTreatmentBMPID;
+        </script>
+    }
     <script src="@Url.Content("~/Content/JQuery/jquery.toast.min.js")" type="text/javascript"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/spinjs/spin.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/leaflet/leaflet.spin/leaflet.spin.min.js")"></script>
@@ -99,18 +121,3 @@
 </div>
 
 @{ DelineationMapTemplates.RenderPartialView(Html);}
-<script>
-    var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-    var config = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationMapConfig).ToString(Formatting.None));
-
-    var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
-    var isInitialiTreatmentBMPProvided = @ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS();
-    var initialTreatmentBMPID = @ViewDataTyped.InitialTreatmentBMPID;
-
-
-    jQuery(function () {
-        if (jQuery("<template></template>")[0] instanceof HTMLUnknownElement) {
-            jQuery("#warnInternetExplorer").show();
-        }
-    });
-</script>

@@ -179,7 +179,6 @@ NeptuneMaps.DelineationMap.prototype.hookupBringMarkerToFrontOnZoomEnd = functio
         });
     this.markerClusterGroup.on("animationend",
         function () {
-            debugger;
             if(self.lastSelectedMarker) {
                 self.lastSelectedMarker._bringToFront();
             }
@@ -969,7 +968,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function(latlng) {
     };
     var self = this;
     this.getFeatureInfo("OCStormwater:Delineations", [latlng.lng, latlng.lat]).then(function (response) {
-        if (response.totalFeatures === 0) {
+        if (response.totalFeatures === 0 || (response.features && response.features.length ===0)) {
             return; // no one cares
         }
         var delineation = response.features[0];
@@ -1072,7 +1071,7 @@ NeptuneMaps.DelineationMap.prototype.enableEditLocationOnClick = function () {
 NeptuneMaps.DelineationMap.prototype.hookupEditLocationOnclick = function() {
     var self = this;
     this.map.on("click",
-        function (e) {
+        function(e) {
             if (!(window.freeze || self.editLocationOnClickDisabled)) {
 
                 var latlng = e.latlng;
@@ -1084,7 +1083,8 @@ NeptuneMaps.DelineationMap.prototype.hookupEditLocationOnclick = function() {
                 };
             }
         });
-}
+    this.disableEditLocationOnClick();
+};
 
 NeptuneMaps.DelineationMap.prototype.displayLoading = function () {
     this.frosty = new L.LeafletLoading();

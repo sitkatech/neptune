@@ -60,15 +60,15 @@ angular.module("NeptuneApp")
         };
 
         angular.element(document).ready(function () {
-            var delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl, config, DelineationMapService);
+            var delineationMap = new NeptuneMaps.DelineationMap(window.mapInitJson, "Terrain", window.geoserverUrl, window.dmConfig, DelineationMapService);
             window.delineationMap = delineationMap;
             $scope.delineationMap = delineationMap;
 
 
 
             delineationMap.buildSelectedAssetControl();
-            if (isInitialiTreatmentBMPProvided) {
-                delineationMap.preselectTreatmentBMP(initialTreatmentBMPID);
+            if (window.isInitialiTreatmentBMPProvided) {
+                delineationMap.preselectTreatmentBMP(window.initialTreatmentBMPID);
             }
         });
 
