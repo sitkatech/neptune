@@ -35,6 +35,10 @@
             $rootScope.$broadcast("neptune:delineationMapStateChange", stateData);
 
         };
+
+        delineationMapServiceInstance.adjustZoom = function(zoomData) {
+            $rootScope.$broadcast("neptune:pleaseAdjustZoom", zoomData);
+        };
         return delineationMapServiceInstance;
     });
 
@@ -188,6 +192,11 @@ angular.module("NeptuneApp")
                 !(this.delineationMapState.isInDelineationMode || this.delineationMapState.isInEditLocationMode);
         };
 
+        $scope.showMoreActions = function() {
+            return this.showDeleteButton() ||
+                (delineationMapState.isInDelineationMode || delineationMapState.isInEditLocationMode);
+        }
+
         // listeners
         $scope.$on("neptune:delineationMapStateChange",
             function (event, data) {
@@ -197,5 +206,9 @@ angular.module("NeptuneApp")
                     $scope.$apply();
                 }
             });
-    });
 
+        $scope.$on("neptune:pleaseAdjustZoom",
+            function(event, data) {
+                $scope.delineationMap.adjustZoom(data);
+            });
+    });

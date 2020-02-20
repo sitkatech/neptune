@@ -41,6 +41,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();
     this.hookupSelectTreatmentBMPByDelineation();
+    this.hookupBringMarkerToFrontOnZoomEnd();
 };
 
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
@@ -148,10 +149,12 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         if (self.selectedBMPDelineationLayer) {
             delineationStatus = self.selectedBMPDelineationLayer.getLayers()[0].feature.properties
                 .DelineationStatus;
+            self.delineationMapService.adjustZoom(self.selectedBMPDelineationLayer);
         } else {
             delineationStatus = "None";
         }
         self.delineationMapService.broadcastDelineationMapState({ selectedTreatmentBMPFeature: layer.feature });
+        
         self.selectedAssetControl.treatmentBMP(layer.feature, delineationStatus);
 
         return jQuery.Deferred().resolve();
@@ -160,6 +163,27 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         // don't set the selected layer until after the zoommies are done
         setTimeout(function () { self.setSelectedFeature(layer.feature); }, 500);
     });
+};
+
+NeptuneMaps.DelineationMap.prototype.adjustZoom = function (zoomData) {
+    this.map.fitBounds(zoomData.getBounds());
+};
+
+NeptuneMaps.DelineationMap.prototype.hookupBringMarkerToFrontOnZoomEnd = function() {
+    var self = this;
+    this.map.on("zoomend",
+        function () {
+            if(self.lastSelectedMarker) {
+                self.lastSelectedMarker._bringToFront();
+            }
+        });
+    this.markerClusterGroup.on("animationend",
+        function () {
+            debugger;
+            if(self.lastSelectedMarker) {
+                self.lastSelectedMarker._bringToFront();
+            }
+        });
 };
 
 NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function () {
@@ -196,8 +220,6 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 
     this.beginDelineationControl.remove();
     this.beginDelineationControl = null;
-
-    this.selectedAssetControl.enableDelineationButton();
 
     this.enableSelectOnClick();
     this.delineationMapService.resetDelineationMapEditingState();
@@ -286,6 +308,10 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function (drawMod
     if (this.beginDelineationControl) {
         this.beginDelineationControl.remove();
         this.beginDelineationControl = null;
+    }
+
+    if (this.selectedBMPDelineationLayer) {
+        this.delineationMapService.adjustZoom(this.selectedBMPDelineationLayer);
     }
 
     this.selectedAssetControl.launchDrawCatchmentMode(drawModeOptions);
@@ -707,7 +733,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         self.enableUserInteraction();
 
     }).fail(function () {
-        self.selectedAssetControl.enableDelineationButton();
         self.removeLoading();
         self.enableUserInteraction();
         this.enableSelectOnClick();
@@ -715,7 +740,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         window.alert(
             "There was an error retrieving the delineation from the Regional Subbasin Trace. Please try again. If the issue persists, please contact Support.");
     }).always(function () {
-        self.selectedAssetControl.enableDelineationButton();
         self.removeLoading();
         self.enableUserInteraction();
     });

@@ -28,7 +28,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     getTrackedElement: function (id) {
-        // todo: might not be a bad idea to memoize
         return this.parentElement.querySelector("#" + id);
     },
 
@@ -96,25 +95,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         }
 
         this.slider.setValue(TOLERANCE_DISTRIBUTED);
-    },
-
-    disableDelineationButton: function () {
-        if (!this.getTrackedElement("delineationButton")) {
-            return; //misplaced call
-        }
-        this.getTrackedElement("delineationButton").disabled = "disabled";
-    },
-
-    enableDelineationButton: function () {
-        if (!this.getTrackedElement("delineationButton")) {
-            return; //misplaced call
-        }
-        this.getTrackedElement("delineationButton").removeAttribute("disabled");
-    },
-
-    showDelineationButtons: function () {
-        console.log("noop");
-        console.trace();
     },
 
     thin: function (tolerance) {
