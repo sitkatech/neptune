@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
@@ -22,11 +23,17 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessment contextModelObject)
         {
-            if (!person.CanEditStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID))
+            if (!HasPermissionByPerson(person))
             {
-                return new PermissionCheckResult($"You do not have permission to view or manage OVTAs for {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult("Person does not have permission by role.");
             }
-            return new PermissionCheckResult();
+
+            if (person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID))
+            {
+                return new PermissionCheckResult();
+            }
+
+            return new PermissionCheckResult($"You do not have permission to view or manage OVTAs for {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
         }
     }
 }

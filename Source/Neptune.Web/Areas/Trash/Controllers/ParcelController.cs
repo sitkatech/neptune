@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
@@ -18,7 +17,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class ParcelController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public PartialViewResult TrashMapAssetPanel(ParcelPrimaryKey parcelPrimaryKey)
         {
             var parcel = parcelPrimaryKey.EntityObject;
@@ -27,14 +26,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ContentResult Union()
         {
             return Content("");
         }
 
         [HttpPost]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ContentResult Union(UnionOfParcelsViewModel viewModel)
         {
             var unionOfParcels = HttpRequestStorage.DatabaseEntities.Parcels

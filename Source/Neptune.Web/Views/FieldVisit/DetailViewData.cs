@@ -61,8 +61,7 @@ namespace Neptune.Web.Views.FieldVisit
 
             CanManageStormwaterJurisdiction =
                 currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
-            CanEditStormwaterJurisdiction =
-                currentPerson.CanEditStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
+            CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
             MarkAsProvisionalUrl =

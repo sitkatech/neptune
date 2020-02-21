@@ -149,17 +149,7 @@ namespace Neptune.Web.Models
                 return false;
             }
 
-            return person.GetStormwaterJurisdictionIDsPersonCanView().Contains(stormwaterJurisdictionID);
-        }
-
-        public static bool CanEditStormwaterJurisdiction(this Person person, int stormwaterJurisdictionID)
-        {
-            if (!person.IsJurisdictionEditorOrManagerOrAdmin())
-            {
-                return false;
-            }
-
-            return person.GetStormwaterJurisdictionIDsPersonCanView().Contains(stormwaterJurisdictionID);
+            return person.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionID);
         }
 
         public static List<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanView(this Person person)
@@ -220,15 +210,24 @@ namespace Neptune.Web.Models
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson)
         {
-            return currentPerson.IsAdministrator()
-                ? ""
-                : $"StormwaterJurisdictionID IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionIDsPersonCanView())})";
+            return GetStormwaterJurisdictionCqlFilter(currentPerson, currentPerson.GetStormwaterJurisdictionIDsPersonCanView());
         }
-        public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson)
+        public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson, IEnumerable<int> stormwaterJurisdictionIDs)
         {
             return currentPerson.IsAdministrator()
-                ? ""
-                : $"StormwaterJurisdictionID NOT IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionIDsPersonCanView())})";
+                ? string.Empty
+                : $"StormwaterJurisdictionID IN ({string.Join(",", stormwaterJurisdictionIDs)})";
+        }
+
+        public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson)
+        {
+            return GetStormwaterJurisdictionCqlFilter(currentPerson, currentPerson.GetStormwaterJurisdictionIDsPersonCanView());
+        }
+        public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson, IEnumerable<int> stormwaterJurisdictionIDs)
+        {
+            return currentPerson.IsAdministrator()
+                ? string.Empty
+                : $"StormwaterJurisdictionID NOT IN ({string.Join(",", stormwaterJurisdictionIDs)})";
         }
 
         public static HtmlString GetDroolToolRoleDisplayNameAsUrl(this Person person)

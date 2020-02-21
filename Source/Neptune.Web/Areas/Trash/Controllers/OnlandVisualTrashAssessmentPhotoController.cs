@@ -18,7 +18,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         // these endpoints are more API-like than we usually do--they support AJAX manipulation of OVTA Photos from the OVTA workflow.
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ContentResult StageObservationPhoto(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
@@ -28,7 +28,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public const string ErrorPageReportPath = "~/Views/Shared/PerformanceMeasureControls/PerformanceMeasureReportedValuesSummary.cshtml";
 
         [HttpPost]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ActionResult StageObservationPhoto(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ObservationPhotoStagingSimple opss)
@@ -66,14 +66,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ActionResult DeleteObservationPhoto()
         {
             return Content("");
         }
 
         [HttpPost]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ActionResult DeleteObservationPhoto(DeleteObservationPhotoSimple dopss)
         {
             if (dopss.IsStagedPhoto)

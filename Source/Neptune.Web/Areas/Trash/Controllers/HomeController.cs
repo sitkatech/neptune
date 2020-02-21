@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
@@ -16,7 +15,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class HomeController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ViewResult Index()
         {
             var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
@@ -33,8 +32,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox) { LayerControlClass = "load-based-map-layer-control" };
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
             var viewData = new IndexViewData(CurrentPerson, neptunePage, ovtaBasedMapInitJson, areaBasedMapInitJson,
-                loadBasedMapInitJson, treatmentBmps, TrashCaptureStatusType.All, parcels);
+                loadBasedMapInitJson, treatmentBmps, TrashCaptureStatusType.All, parcels, stormwaterJurisdictionsPersonCanView);
 
             return RazorView<Index, IndexViewData>(viewData);
         }

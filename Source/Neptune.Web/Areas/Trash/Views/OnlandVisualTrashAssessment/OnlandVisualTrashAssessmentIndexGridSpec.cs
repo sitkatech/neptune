@@ -5,33 +5,26 @@ using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OnlandVisualTrashAssessmentIndexGridSpec : GridSpec<Models.OnlandVisualTrashAssessment>
     {
-        public OnlandVisualTrashAssessmentIndexGridSpec(Person currentPerson, bool showDelete, bool showEdit, bool showName, bool userCanView)
+        public OnlandVisualTrashAssessmentIndexGridSpec(Person currentPerson, bool showName)
         {
-            Add(string.Empty, x => userCanView ? x.GetDetailUrlForGrid(currentPerson) : new HtmlString(""), 40, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => x.GetDetailUrlForGrid(currentPerson), 40, DhtmlxGridColumnFilterType.None);
 
-            if (showDelete)
+            if (currentPerson.IsManagerOrAdmin())
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new OnlandVisualTrashAssessmentDeleteFeature().HasPermission(currentPerson, x).HasPermission, true), 25, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, true), 25, DhtmlxGridColumnFilterType.None);
             }
-            if (showEdit)
-            {
-               Add(string.Empty, x =>  x.GetEditUrlForGrid(currentPerson), 80, DhtmlxGridColumnFilterType.None);
-            }
-
-            Add(string.Empty, x => (x.OnlandVisualTrashAssessmentArea != null
+            Add(string.Empty, x =>  x.GetEditUrlForGrid(currentPerson), 80, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => x.OnlandVisualTrashAssessmentArea != null
                 ? DhtmlxGridHtmlHelpers.MakeModalDialogLink(
                     BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area").ToString(),
-                    x.OnlandVisualTrashAssessmentArea.GetBeginOVTAUrl(), 500, "Begin OVTA",
-                    new OnlandVisualTrashAssessmentAreaViewFeature()
-                        .HasPermission(currentPerson, x.OnlandVisualTrashAssessmentArea).HasPermission, "Begin", "Cancel",
+                    x.OnlandVisualTrashAssessmentArea.GetBeginOVTAUrl(), 500, "Begin OVTA", true, "Begin", "Cancel",
                     new List<string>(), null, null)
-                : new HtmlString("")), 30, DhtmlxGridColumnFilterType.None);
+                : new HtmlString(""), 30, DhtmlxGridColumnFilterType.None);
 
             if (showName)
             {

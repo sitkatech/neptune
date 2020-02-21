@@ -499,6 +499,7 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Security\NeptuneViewAndRequiresJurisdictionsFeature.cs" />
     <Compile Include="Security\RegionalSubbasinRevisionRequestDownloadFeature.cs" />
     <Compile Include="Views\RegionalSubbasinRevisionRequest\Index.cs" />
     <Compile Include="Views\RegionalSubbasinRevisionRequest\IndexViewData.cs" />

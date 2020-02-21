@@ -31,7 +31,9 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView().Contains(x.StormwaterJurisdictionID)).ToList();
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Where(x =>
+                stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
         }
@@ -40,11 +42,13 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlanVerifications = HttpRequestStorage.DatabaseEntities
-                .WaterQualityManagementPlanVerifies
+                .WaterQualityManagementPlanVerifies.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan
+                    .StormwaterJurisdictionID))
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
-                .ThenByDescending(x => x.LastEditedDate).ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView().Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID)).ToList();
+                .ThenByDescending(x => x.LastEditedDate).ToList();
 
             var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);

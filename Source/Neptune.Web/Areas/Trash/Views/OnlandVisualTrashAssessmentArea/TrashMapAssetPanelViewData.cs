@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
@@ -12,8 +13,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public TrashMapAssetPanelViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
-            UserHasViewDetailsPermission =
-                currentPerson.CanEditStormwaterJurisdiction(onlandVisualTrashAssessmentArea.StormwaterJurisdictionID);
+            UserHasViewDetailsPermission = new OnlandVisualTrashAssessmentAreaViewFeature().HasPermission(currentPerson, onlandVisualTrashAssessmentArea).HasPermission;
             ScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null
                 ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
                     .OnlandVisualTrashAssessmentScoreDisplayName

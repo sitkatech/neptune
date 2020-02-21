@@ -46,7 +46,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson,
@@ -54,15 +54,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonData()
         {
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
-            var userCanView = new OnlandVisualTrashAssessmentViewFeature().HasPermissionByPerson(CurrentPerson);
-            var gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(CurrentPerson, showDelete, showEdit,true, userCanView);
-            var onlandVisualTrashAssessments = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList()
-                .Where(x => CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdictionID))
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(CurrentPerson,true);
+            var onlandVisualTrashAssessments = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList()
                 .OrderByDescending(x => x.CompletedDate).ThenBy(x => x.OnlandVisualTrashAssessmentArea == null)
                 .ThenBy(x => x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName).ToList();
             return new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(onlandVisualTrashAssessments, gridSpec);
@@ -71,12 +69,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreaGridData()
         {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson, showDelete);
-            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
-                .Where(x => CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdictionID))
-                .OrderByDescending(x => x.GetLastAssessmentDate());
-            return new GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea>(onlandVisualTrashAssessmentAreas.ToList(), gridSpec);
+            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList()
+                .OrderByDescending(x => x.GetLastAssessmentDate()).ToList();
+            return new GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea>(onlandVisualTrashAssessmentAreas, gridSpec);
         }
 
         [NeptuneViewFeature]
@@ -92,8 +90,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            var userCanView = new OnlandVisualTrashAssessmentViewFeature().HasPermissionByPerson(currentPerson);
-            gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false, userCanView);
+            gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, false);
             return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).OrderByDescending(x => x.CompletedDate).ToList();
         }
 

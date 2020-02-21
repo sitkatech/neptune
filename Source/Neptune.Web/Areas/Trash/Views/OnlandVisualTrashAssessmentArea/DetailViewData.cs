@@ -57,7 +57,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
             
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             var userCanView = new OnlandVisualTrashAssessmentViewFeature().HasPermissionByPerson(currentPerson);
-            GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false, userCanView)
+            GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, false)
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",

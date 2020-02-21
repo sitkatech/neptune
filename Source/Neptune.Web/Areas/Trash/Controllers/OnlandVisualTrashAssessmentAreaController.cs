@@ -218,14 +218,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         [HttpGet]
         public ContentResult FindByName()
         {
             return new ContentResult();
         }
 
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         [HttpPost]
         public JsonResult FindByName(FindAssessmentAreaByNameViewModel viewModel)
         {

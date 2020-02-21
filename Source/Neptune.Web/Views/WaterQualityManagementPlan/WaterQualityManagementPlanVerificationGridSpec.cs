@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Web;
+using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
@@ -31,8 +33,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     }, 26,
                     DhtmlxGridColumnFilterType.None);
             }
+
             Add(string.Empty,
-                x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"), 60,
+                x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View",
+                    new Dictionary<string, string> {{"class", "gridButton"}}), 60,
                 DhtmlxGridColumnFilterType.None);
             Add("WQMP Name", x => x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300);
             Add("Jurisdiction", x => x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);

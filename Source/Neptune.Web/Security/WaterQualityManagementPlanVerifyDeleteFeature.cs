@@ -18,7 +18,6 @@ namespace Neptune.Web.Security
         public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {
             return new WaterQualityManagementPlanDeleteFeature().HasPermission(person, waterQualityManagementPlanVerify.WaterQualityManagementPlan);
-
         }
 
         public void DemandPermission(Person person, WaterQualityManagementPlanVerify contextModelObject)
