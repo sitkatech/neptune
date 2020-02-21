@@ -34,6 +34,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
         this.treatmentBMPFeature = treatmentBMPFeature;
 
+        debugger;
         $('#verifyDelineationButton').bootstrapToggle({
             // note that bootstrapToggle is broken and you have supply class names that don't quite make sense to make it work
             onstyle: 'btn btn-neptune btn-sm',

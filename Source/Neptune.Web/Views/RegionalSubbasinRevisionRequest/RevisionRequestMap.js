@@ -82,27 +82,15 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
         var zoom = Math.min(revisionRequestMap.map.getZoom(), 18);
         revisionRequestMap.map.setZoom(zoom);
 
-        // leaflet.draw doesn't use a sane event scheme. It was necessary to completely rebuild deleting to make our form pattern work.
-        // cloning and replacing the node kills all event handlers
-        var el = jQuery(".leaflet-draw-edit-remove").get(0);
-        var clone = el.cloneNode(true);
-        el.parentNode.replaceChild(clone, el);
 
         revisionRequestMap.tooltip =
             jQuery.parseHTML(
                 '<ul class="leaflet-draw-actions leaflet-draw-actions-bottom" style="top: 31px; display: none;"><li class=""><a class="" href="#" title="Save changes.">Click a polygon to delete it.</a></li></ul>')
             [0];
 
-        clone.parentNode.parentNode.append(revisionRequestMap.tooltip);
 
         // then our own event handler lets us implement deletes in a way that makes literally any sense
         revisionRequestMap.deleting = false;
-        L.DomEvent.on(clone,
-            "click",
-            function () {
-                revisionRequestMap.deleting = true;
-                revisionRequestMap.tooltip.style.display = "block";
-            });
         revisionRequestMap.editableFeatureGroup.on("click",
             function (event) {
                 if (!revisionRequestMap.deleting) {
@@ -119,6 +107,7 @@ var buildMapOnDocumentReady = function (mapInitJson, editableFeatureJsonObject, 
                 revisionRequestMap.deleting = false;
             });
 
+        jQuery(".leaflet-draw-edit-edit").get(0).click();
     });
 };
 

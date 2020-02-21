@@ -68,3 +68,6 @@ div#vertexControlSlider .slider-tick.round.in-selection {
 div#vertexControlSlider .slider-selection.tick-slider-selection {
   background-image: linear-gradient(to left, #77cfdc 0px, #0099ab 100%);
 }
+#delineationStatus label.btn-primary {
+  background-color: #0099ab;
+}
