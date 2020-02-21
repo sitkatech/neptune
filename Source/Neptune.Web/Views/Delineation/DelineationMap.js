@@ -170,19 +170,19 @@ NeptuneMaps.DelineationMap.prototype.adjustZoom = function (zoomData) {
 };
 
 NeptuneMaps.DelineationMap.prototype.hookupBringMarkerToFrontOnZoomEnd = function() {
-    var self = this;
-    this.map.on("zoomend",
-        function () {
-            if(self.lastSelectedMarker) {
-                self.lastSelectedMarker._bringToFront();
-            }
-        });
-    this.markerClusterGroup.on("animationend",
-        function () {
-            if(self.lastSelectedMarker) {
-                self.lastSelectedMarker._bringToFront();
-            }
-        });
+    //var self = this;
+    //this.map.on("zoomend",
+    //    function () {
+    //        if(self.lastSelectedMarker) {
+    //            self.lastSelectedMarker._bringToFront();
+    //        }
+    //    });
+    //this.markerClusterGroup.on("animationend",
+    //    function () {
+    //        if(self.lastSelectedMarker) {
+    //            self.lastSelectedMarker._bringToFront();
+    //        }
+    //    });
 };
 
 NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function () {
