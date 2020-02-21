@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using ApprovalUtilities.Utilities;
 using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -94,6 +95,21 @@ namespace Neptune.Web.Controllers
             };
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
+
+            var treatmentBMPsWithDelineations = new List<Delineation>();
+
+            waterQualityManagementPlan.TreatmentBMPs.ForEach(x =>
+            {
+                if (x.Delineation?.DelineationGeometry != null)
+                {
+                    treatmentBMPsWithDelineations.Add(x.Delineation);
+                }
+            });
+
+            if (treatmentBMPsWithDelineations.Count > 0)
+            {
+                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(treatmentBMPsWithDelineations, false, true));
+            }
 
             var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).ToList();
