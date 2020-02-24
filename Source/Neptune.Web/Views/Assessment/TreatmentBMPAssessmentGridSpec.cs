@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.Assessment
             Add("Performed By", x => x.GetFieldVisitPerson().GetFullNameFirstLastAsUrl(), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisit.FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Assessment Type", x => x.TreatmentBMPAssessmentType.TreatmentBMPAssessmentTypeDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Status", x => x.HasCalculatedOrAlternateScore() ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Status", x => x.IsAssessmentComplete ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Score", x => x.FormattedScore(), 80, DhtmlxGridColumnFilterType.Numeric);
             foreach (var observationType in allObservationTypes)
             {

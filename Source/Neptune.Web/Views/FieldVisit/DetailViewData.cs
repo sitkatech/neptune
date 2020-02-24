@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.FieldVisit
             AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FieldVisit = fieldVisit;
-            MaintenanceRecord = FieldVisit.GetMaintenanceRecord();
+            MaintenanceRecord = FieldVisit.MaintenanceRecord;
             InitialAssessmentViewData = initialAssessmentViewData;
             PostMaintenanceAssessmentViewData = postMaintenanceAssessmentViewData;
             EntityName = "Treatment BMP Field Visits";

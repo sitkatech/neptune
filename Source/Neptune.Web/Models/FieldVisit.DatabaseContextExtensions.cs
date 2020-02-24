@@ -26,9 +26,10 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static List<FieldVisit> GetProvisionalFieldVisits(this IQueryable<FieldVisit> fieldVisits, Person currentPerson)
+        public static List<vFieldVisitDetailed> GetProvisionalFieldVisits(this IQueryable<vFieldVisitDetailed> fieldVisits, Person currentPerson)
         {
-            return fieldVisits.Where(x => x.IsFieldVisitVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).ToList();
+            var stormwaterJurisdictionIDsPersonCanView = currentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            return fieldVisits.Where(x => x.IsFieldVisitVerified == false).ToList().Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
         }
     }
 }

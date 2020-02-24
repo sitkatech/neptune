@@ -12,8 +12,6 @@ namespace Neptune.Web.Controllers
 {
     public class MaintenanceRecordController : NeptuneBaseController
     {
-        // todo: delefate the creation of the GJNJOR to a helper method
-        // todo: include before where
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> MaintenanceRecordsGridJsonData(
             TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
@@ -31,6 +29,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
         {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
             var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords
                 .Include(x => x.FieldVisit).Include(x => x.FieldVisit.PerformedByPerson.Organization)
@@ -38,7 +37,7 @@ namespace Neptune.Web.Controllers
                 .Include(x => x.TreatmentBMP.TreatmentBMPType)
                 .Include(x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x => x.MaintenanceRecordObservations).Include(x =>
                     x.MaintenanceRecordObservations.Select(y => y.MaintenanceRecordObservationValues))
-                .ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson)).ToList();
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList();
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes);
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);

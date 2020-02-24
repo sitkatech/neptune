@@ -64,11 +64,10 @@ namespace Neptune.Web.Views.MaintenanceRecord
         {
             ObjectNameSingular = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel();
             ObjectNamePlural = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
-            bool CurrentPersonCanEditOrDelete(Models.TreatmentBMP treatmentBMP) => new TreatmentBMPManageFeature().HasPermission(currentPerson, treatmentBMP).HasPermission;
 
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
-                    CurrentPersonCanEditOrDelete(x.TreatmentBMP)), 30, DhtmlxGridColumnFilterType.None);
+                    currentPerson.IsManagerOrAdmin()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"), 40, DhtmlxGridColumnFilterType.None);
 
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);

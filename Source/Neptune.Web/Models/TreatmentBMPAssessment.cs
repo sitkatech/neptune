@@ -49,25 +49,20 @@ namespace Neptune.Web.Models
         {
             return GetAssessmentDate().GetFiscalYear();
         }
-        public string AssessmentStatus()
+
+        public string GetAssessmentStatus()
         {
             var completedObservationCount =
                 TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count(IsObservationComplete);
             var totalObservationCount = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count;
-            return this.CalculateIsAssessmentComplete()
+            return IsAssessmentComplete
                 ? "Complete"
                 : $"Incomplete ({completedObservationCount} of {totalObservationCount} observations complete)";
         }
 
-        public bool HasCalculatedOrAlternateScore()
-        {
-            return this.CalculateIsAssessmentComplete();
-        }
-
         public string FormattedScore()
         {
-            var score = this.CalculateAssessmentScore();
-            return score?.ToString("0.0") ?? "-";
+            return AssessmentScore?.ToString("0.0") ?? "-";
         }
 
         public bool IsObservationComplete(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

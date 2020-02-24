@@ -10,7 +10,7 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[TreatmentBMPAssessmentTypeID] [int] NOT NULL,
 	[Notes] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[AssessmentScore] [float] NULL,
-	[IsAssessmentComplete] [bit] NULL,
+	[IsAssessmentComplete] [bit] NOT NULL,
  CONSTRAINT [PK_TreatmentBMPAssessment_TreatmentBMPAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAssessmentID] ASC

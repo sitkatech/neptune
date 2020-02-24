@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.FieldVisit
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
 
 
-            MaintenanceRecord = fieldVisit.GetMaintenanceRecord();
+            MaintenanceRecord = fieldVisit.MaintenanceRecord;
             InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
             PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&

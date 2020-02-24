@@ -23,7 +23,6 @@ using System;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
 {
@@ -31,17 +30,17 @@ namespace Neptune.Web.Models
     {
         public bool CanView(Person person)
         {
-            return new TreatmentBMPViewFeature().HasPermission(person, this).HasPermission;
+            return person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
         public bool CanEdit(Person person)
         {
-            return new TreatmentBMPEditFeature().HasPermission(person, this).HasPermission;
+            return person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
         public bool CanDelete(Person person)
         {
-            return new TreatmentBMPDeleteFeature().HasPermission(person, this).HasPermission;
+            return person.IsManagerOrAdmin() && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
         public string GetAuditDescriptionString()
@@ -80,7 +79,7 @@ namespace Neptune.Web.Models
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
         {
-            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
+            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.IsAssessmentComplete);
             return latestAssessment;
         }
 
