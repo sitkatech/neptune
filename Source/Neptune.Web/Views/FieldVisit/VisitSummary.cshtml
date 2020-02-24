@@ -69,7 +69,7 @@
 {
     <div class="row">
         <label class="col-sm-3 control-label text-right">Status</label>
-        <div class="col-sm-9">@ViewDataTyped.FieldVisit.GetInitialAssessment().AssessmentStatus()</div>
+        <div class="col-sm-9">@ViewDataTyped.FieldVisit.GetInitialAssessment().GetAssessmentStatus()</div>
     </div>
     <div class="row">
         <label class="col-sm-3 control-label text-right">Score</label>
@@ -80,13 +80,13 @@
 
 <div class="row">
     <label class="col-sm-3 control-label text-right">Maintenance Performed?</label>
-    <div class="col-sm-9">@(ViewDataTyped.FieldVisit.GetMaintenanceRecord() == null ? "No" : "Yes")</div>
+    <div class="col-sm-9">@(ViewDataTyped.FieldVisit.MaintenanceRecord == null ? "No" : "Yes")</div>
 </div>
-@if (ViewDataTyped.FieldVisit.GetMaintenanceRecord() != null)
+@if (ViewDataTyped.FieldVisit.MaintenanceRecord != null)
 {
     <div class="row">
         <label class="col-sm-3 control-label text-right">Status</label>
-        <div class="col-sm-9">@ViewDataTyped.FieldVisit.GetMaintenanceRecord().MaintenanceRecordStatus()</div>
+        <div class="col-sm-9">@ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordStatus()</div>
     </div>
 }
 <br />
@@ -99,7 +99,7 @@
 {
     <div class="row">
         <label class="col-sm-3 control-label text-right">Status</label>
-        <div class="col-sm-9">@ViewDataTyped.FieldVisit.GetPostMaintenanceAssessment().AssessmentStatus()</div>
+        <div class="col-sm-9">@ViewDataTyped.FieldVisit.GetPostMaintenanceAssessment().GetAssessmentStatus()</div>
     </div>
 
     <div class="row">

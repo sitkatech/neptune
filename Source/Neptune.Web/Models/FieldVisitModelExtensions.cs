@@ -39,11 +39,6 @@ namespace Neptune.Web.Models
             return fieldVisit.TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.PostMaintenance);
         }
 
-        public static MaintenanceRecord GetMaintenanceRecord(this FieldVisit fieldVisit)
-        {
-            return fieldVisit.MaintenanceRecords.SingleOrDefault();
-        }
-
         public static string GetEditUrl(this FieldVisit fieldVisit)
         {
             return WorkflowUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID);

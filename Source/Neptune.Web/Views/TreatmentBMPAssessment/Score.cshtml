@@ -21,7 +21,6 @@
 @using System.Web.Mvc.Html
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Models
 @using Neptune.Web.Views.TreatmentBMPAssessment
 
 @inherits Score
@@ -39,7 +38,7 @@
     <div class="col-sm-3 control-label">
         <label>Assessment Score</label>
     </div>
-    @if (ViewDataTyped.TreatmentBMPAssessment.CalculateIsAssessmentComplete())
+    @if (ViewDataTyped.TreatmentBMPAssessment.IsAssessmentComplete)
     {
         <div class="col-sm-9">
             @ViewDataTyped.TreatmentBMPAssessment.FormattedScore()

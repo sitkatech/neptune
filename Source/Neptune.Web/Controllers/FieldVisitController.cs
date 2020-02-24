@@ -33,7 +33,6 @@ using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -56,22 +55,21 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitViewFeature]
-        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
+        public GridJsonNetJObjectResult<vFieldVisitDetailed> FieldVisitGridJsonData(
             TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey?.EntityObject;
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP, true);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
         [HttpGet]
         [FieldVisitViewFeature]
-        public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
+        public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData()
         {
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null, false);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
-
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
@@ -84,21 +82,13 @@ namespace Neptune.Web.Controllers
         /// <param name="treatmentBMP"></param>
         /// <param name="detailPage"></param>
         /// <returns></returns>
-        private static List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
+        private static List<vFieldVisitDetailed> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
             TreatmentBMP treatmentBMP, bool detailPage)
         {
             gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits
-                .Include(x => x.MaintenanceRecords)
-                .Include(x => x.TreatmentBMP)
-                .Include(x => x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x => x.TreatmentBMP.TreatmentBMPType)
-                .Include(x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
-                .Include(x => x.TreatmentBMP.CustomAttributes)
-                .Include(x => x.TreatmentBMP.CustomAttributes.Select(y => y.CustomAttributeType))
-                .Include(x => x.TreatmentBMP.CustomAttributes.Select(y => y.CustomAttributeValues))
-                .Include(x => x.TreatmentBMPAssessments)
-                .ToList().Where(x => x.TreatmentBMP.CanView(currentPerson));
+            var stormwaterJurisdictionIDsPersonCanView = currentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID));
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
                 : fieldVisits).ToList();
@@ -417,7 +407,7 @@ namespace Neptune.Web.Controllers
             }
             // we are not finalizing the visit, so we are beginning the maintenance
             // if we don't already have one created now is the time
-            if (fieldVisit.GetMaintenanceRecord() == null)
+            if (fieldVisit.MaintenanceRecord == null)
             {
                 // a little awkward, but newing up the object is sufficient to add it to the EF changeset since we're using the entity-consuming constructor
                 // ReSharper disable once ObjectCreationAsStatement
@@ -435,7 +425,7 @@ namespace Neptune.Web.Controllers
         public ActionResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var maintenanceRecord = fieldVisit.GetMaintenanceRecord();
+            var maintenanceRecord = fieldVisit.MaintenanceRecord;
             // need this check to support deleting maintenance records from the edit page
             if (maintenanceRecord == null)
             {
@@ -452,7 +442,7 @@ namespace Neptune.Web.Controllers
                 .ToList();
             var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes();
             var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,
-                fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.GetMaintenanceRecord(), true,
+                fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true,
                 missingRequiredAttributes);
             var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
@@ -468,7 +458,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.GetMaintenanceRecord());
+                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
@@ -669,8 +659,8 @@ namespace Neptune.Web.Controllers
             }
 
             // cache the score and the completeness status because they are difficult to calculate en masse later.
-            treatmentBMPAssessment.CalculateAssessmentScore();
             treatmentBMPAssessment.CalculateIsAssessmentComplete();
+            treatmentBMPAssessment.CalculateAssessmentScore();
 
             if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Assessment Information successfully saved.");
@@ -731,7 +721,7 @@ namespace Neptune.Web.Controllers
 
         private static TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(FieldVisit fieldVisit, TreatmentBMPAssessmentTypeEnum bmpAssessmentTypeEnum)
         {
-            return new TreatmentBMPAssessment(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPType, fieldVisit, TreatmentBMPAssessmentType.ToType(bmpAssessmentTypeEnum));
+            return new TreatmentBMPAssessment(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPType, fieldVisit, TreatmentBMPAssessmentType.ToType(bmpAssessmentTypeEnum), false);
         }
         #endregion
 
@@ -825,7 +815,7 @@ namespace Neptune.Web.Controllers
             {
                 (fieldVisit.GetInitialAssessment() != null) ? "initial assessment" : null,
                 fieldVisit.GetPostMaintenanceAssessment() != null ? "post-maintenance assessment" : null,
-                fieldVisit.GetMaintenanceRecord() != null ? "maintenance record" : null
+                fieldVisit.MaintenanceRecord != null ? "maintenance record" : null
             };
             var entitiesConcatenated = string.Join(", ", entitiesSubstrings.Where(x => x != null));
             var lastComma = entitiesConcatenated.LastIndexOf(",",StringComparison.InvariantCulture);

@@ -348,7 +348,8 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
         {
-            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), BoundingBox.MakeNewDefaultBoundingBox());
+            var wqmpParcelGeometries = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x=>x.Parcel.ParcelGeometry4326);
+            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), new BoundingBox(wqmpParcelGeometries));
             var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
         }

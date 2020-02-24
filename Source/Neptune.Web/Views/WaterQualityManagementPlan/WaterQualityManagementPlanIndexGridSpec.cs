@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                         $"Edit {waterQualityManagementPlanLabelSingular}"),
                     true),
                 26, DhtmlxGridColumnFilterType.None);
-            Add("Name", x => x.GetDisplayNameAsUrl(), 300);
+            Add("Name", x => x.GetDisplayNameAsUrl(), 300, DhtmlxGridColumnFilterType.Text);
             Add("Jurisdiction", x => x.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
             Add("Priority", x => x.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
