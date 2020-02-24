@@ -18,7 +18,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Index());
             SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = waterQualityManagementPlan.GetDetailUrl();
