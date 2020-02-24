@@ -139,7 +139,8 @@
             {
                 layers: $scope.AngularViewData.ParcelMapServiceLayerName,
                 cql_filter: "ParcelID in (" + $scope.AngularModel.ParcelIDs.join(",") + ")",
-                styles: "parcel_yellow"
+                styles: "parcel_yellow",
+                maxZoom: 22
             },
             $scope.neptuneMap.wmsParams);
 
@@ -185,7 +186,7 @@
 
     function initializeMap() {
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson, "Hybrid", $scope.AngularViewData.MapServiceUrl);
-        $scope.neptuneMap.addWmsLayer("OCStormwater:Parcels", "All Parcels");
+        $scope.neptuneMap.addWmsLayer("OCStormwater:Parcels", "All Parcels", {maxZoom: 22});
         $scope.neptuneMap.map.on("click", onMapClick);
         $scope.neptuneMap.map.scrollWheelZoom.enable();
 
