@@ -163,7 +163,6 @@
                     if (response.features.length === 0)
                         return;
 
-                    $scope.neptuneMap.map.fitBounds(new L.geoJSON(response).getBounds());
                     if (response.features.length > 0) {
                         var calculatedParcelArea = 0;
                         for (var i = 0; i < response.features.length; ++i) {
