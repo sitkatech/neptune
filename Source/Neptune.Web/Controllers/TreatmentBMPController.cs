@@ -933,7 +933,7 @@ namespace Neptune.Web.Controllers
             bool update)
         {
             ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
-                outputShapefileName, update);
+                outputShapefileName, update, false);
         }
     }
 }

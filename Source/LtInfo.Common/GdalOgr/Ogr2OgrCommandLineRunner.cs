@@ -117,12 +117,12 @@ namespace LtInfo.Common.GdalOgr
             }
         }
 
-        public void ImportGeoJsonToFileGdb(string geoJson, string outputFilePath, string outputLayerName, bool update)
+        public void ImportGeoJsonToFileGdb(string geoJson, string outputFilePath, string outputLayerName, bool update, bool assignSrs)
         {
             using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
             {
                 File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
-                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToFileGdb(geoJsonFile.FileInfo, _gdalDataPath, _coordinateSystemId, outputFilePath, outputLayerName, update);
+                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToFileGdb(geoJsonFile.FileInfo, _gdalDataPath, _coordinateSystemId, outputFilePath, outputLayerName, update, assignSrs);
                 ExecuteOgr2OgrCommandForFileGdbWrite(commandLineArguments);
             }
         }
@@ -346,7 +346,8 @@ namespace LtInfo.Common.GdalOgr
         /// </example>
         /// </summary>
         private List<string> BuildCommandLineArgumentsForGeoJsonToFileGdb(FileInfo sourceGeoJsonFile,
-            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputLayerName, bool update)
+            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputLayerName,
+            bool update, bool assignSrs)
         {
             var commandLineArguments = new List<string>
             {
@@ -355,7 +356,7 @@ namespace LtInfo.Common.GdalOgr
                 "--config",
                 "GDAL_DATA",
                 gdalDataDirectoryInfo.FullName,
-                "-t_srs",
+                assignSrs ? "-a_srs" : "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 "-f",
                 "FileGDB",

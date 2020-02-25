@@ -11,11 +11,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -204,10 +207,31 @@ namespace Neptune.Web.Controllers
 
             var serializedGeoJson = JsonConvert.SerializeObject(geoJson);
 
-            var bytes = Encoding.ASCII.GetBytes(serializedGeoJson);
+            var outputLayerName = $"BMP_{regionalSubbasinRevisionRequestPrimaryKey.EntityObject.TreatmentBMP.TreatmentBMPID}_RevisionRequest";
 
-            return File(bytes, "application/json",
-                $"{regionalSubbasinRevisionRequestPrimaryKey.EntityObject.TreatmentBMP.TreatmentBMPName}_RevisionRequest.json");
+            using (var workingDirectory = new DisposableTempDirectory())
+            {
+                var outputPathForLayer =
+                    Path.Combine(workingDirectory.DirectoryInfo.FullName, outputLayerName);
+
+
+                var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
+                    CoordinateSystemHelper.NAD_83_CA_ZONE_VI_SRID,
+                    NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
+
+                ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(serializedGeoJson, outputPathForLayer,
+                    outputLayerName, false, true);
+
+                using (var zipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".zip"))
+                {
+                    ZipFile.CreateFromDirectory(workingDirectory.DirectoryInfo.FullName, zipFile.FileInfo.FullName);
+                    var fileStream = zipFile.FileInfo.OpenRead();
+                    var bytes = fileStream.ReadFully();
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    return File(bytes, "application/zip", $"{outputLayerName}.zip");
+                }
+            }
         }
 
 
