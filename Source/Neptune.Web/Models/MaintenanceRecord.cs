@@ -37,19 +37,18 @@ namespace Neptune.Web.Models
             return $"{completedObservationCount} of {totalObservationCount} observations provided";
         }
 
-        public string GetObservationValueWithUnitsForAttributeType(CustomAttributeType customAttributeType)
+        public string GetObservationValueForAttributeType(CustomAttributeType customAttributeType)
         {
-            if (!TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.CustomAttributeType).Contains(customAttributeType))
+            if (customAttributeType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
             {
                 return ViewUtilities.NaString;
             }
 
-            return MaintenanceRecordObservations?
-                       .SingleOrDefault(y =>
-                           y.CustomAttributeTypeID == customAttributeType.CustomAttributeTypeID &&
-                           y.MaintenanceRecordObservationValues.Any(z =>
-                               !string.IsNullOrWhiteSpace(z.ObservationValue)))?
-                       .GetObservationValueWithUnits() ?? ViewUtilities.NotProvidedString;
+            var maintenanceRecordObservation = MaintenanceRecordObservations.SingleOrDefault(y =>
+                y.CustomAttributeTypeID == customAttributeType.CustomAttributeTypeID &&
+                y.MaintenanceRecordObservationValues.Any(z =>
+                    !string.IsNullOrWhiteSpace(z.ObservationValue)));
+            return maintenanceRecordObservation?.GetObservationValueWithoutUnits() ?? ViewUtilities.NotProvidedString;
         }
 
         public string GetAuditDescriptionString()

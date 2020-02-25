@@ -72,12 +72,12 @@ namespace Neptune.Web.Models
             {
                 return new LayerGeoJson(
                     $"{organizationType.OrganizationTypeName} {FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}",
-                    new FeatureCollection(jurisdictionList.Select(jurisdiction =>
+                    new FeatureCollection(jurisdictionList.Select(x =>
                     {
-                        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(jurisdiction.StormwaterJurisdictionGeometry);
-                        feature.Properties.Add("Organization Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
-                        feature.Properties.Add("Short Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
-                        feature.Properties.Add("Target URL", jurisdiction.GetDetailUrl());
+                        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.StormwaterJurisdictionGeometry.GeometryNative);
+                        feature.Properties.Add("Organization Name", UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.Organization.OrganizationName).ToHtmlString());
+                        feature.Properties.Add("Short Name", UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.Organization.OrganizationName).ToHtmlString());
+                        feature.Properties.Add("Target URL", x.GetDetailUrl());
                         return feature;
                     }).ToList()),
                     organizationType.LegendColor, 1,

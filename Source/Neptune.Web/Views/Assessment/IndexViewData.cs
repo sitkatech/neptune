@@ -19,7 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Linq;
+using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -32,13 +32,13 @@ namespace Neptune.Web.Views.Assessment
         public readonly string BMPAssessmentGridName;
         public readonly string BMPAssessmentGridDataUrl;
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, IEnumerable<Models.TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Treatment BMP Assessments";
             PageTitle = "All Assessments";
 
-            BMPAssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson, allObservationTypes) { ObjectNameSingular = "BMP Assessment", ObjectNamePlural = "BMP Assessments", SaveFiltersInCookie = true };
+            BMPAssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson, treatmentBMPAssessmentObservationTypes) { ObjectNameSingular = "BMP Assessment", ObjectNamePlural = "BMP Assessments", SaveFiltersInCookie = true };
             BMPAssessmentGridName = "bmpAssessmentGrid";
             BMPAssessmentGridDataUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(j => j.TreatmentBMPAssessmentsGridJsonData());           
         }

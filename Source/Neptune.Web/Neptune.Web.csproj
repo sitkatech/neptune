@@ -334,6 +334,10 @@
     <Compile Include="Models\Generated\StormwaterJurisdiction.Binding.cs" />
     <Compile Include="Models\Generated\StormwaterJurisdiction.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\StormwaterJurisdictionConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionGeometry.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionGeometry.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionGeometryConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionGeometryPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\StormwaterJurisdictionPerson.Binding.cs" />
     <Compile Include="Models\Generated\StormwaterJurisdictionPerson.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\StormwaterJurisdictionPersonConfiguration.Binding.cs" />

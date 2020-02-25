@@ -26,9 +26,9 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static List<StormwaterJurisdiction> GetJurisdictionsWithGeospatialFeatures(this IQueryable<StormwaterJurisdiction> strStormwaterJurisdictions)
+        public static List<StormwaterJurisdiction> GetJurisdictionsWithGeospatialFeatures(this IQueryable<StormwaterJurisdiction> stormwaterJurisdictions)
         {
-            return strStormwaterJurisdictions.Where(x => x.StormwaterJurisdictionGeometry != null).ToList();
+            return stormwaterJurisdictions.Where(x => x.StormwaterJurisdictionGeometry != null).ToList();
         }
     }
 }

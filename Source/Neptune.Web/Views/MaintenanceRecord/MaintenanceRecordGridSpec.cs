@@ -20,51 +20,19 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.MaintenanceRecord
 {
     public class MaintenanceRecordGridSpec : GridSpec<Models.MaintenanceRecord>
     {
-        public MaintenanceRecordGridSpec(Person currentPerson, Models.TreatmentBMP treatmentBMP)
-        {
-            ObjectNameSingular = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel();
-            ObjectNamePlural = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
-            var currentPersonCanEditOrDelete = new TreatmentBMPManageFeature()
-                .HasPermission(currentPerson, treatmentBMP).HasPermission;
-
-            Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
-                    currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"),40, DhtmlxGridColumnFilterType.None);
-
-            Add("Date", x => x.GetMaintenanceRecordDate(), 150, DhtmlxGridColumnFormatType.Date);
-            Add("Performed By", x => x.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
-            Add("Entered By", x => x.GetMaintenanceRecordPerson().GetFullNameLastFirst(), 100, DhtmlxGridColumnFilterType.Text);
-            Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
-                x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
-                DhtmlxGridColumnFilterType.Text);
-            Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
-            foreach (var attributeType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x=>x.CustomAttributeType).Where(x=>x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID))
-            {
-                Add(attributeType.CustomAttributeTypeName,
-                    x => x?.MaintenanceRecordObservations?
-                        .SingleOrDefault(y => y.CustomAttributeTypeID == attributeType.CustomAttributeTypeID)?
-                        .GetObservationValueWithUnits(), 150, DhtmlxGridColumnFilterType.Text);
-            }
-        }
 
         public MaintenanceRecordGridSpec(Person currentPerson, IEnumerable<Models.CustomAttributeType> allMaintenanceAttributeTypes)
         {
-            ObjectNameSingular = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel();
-            ObjectNamePlural = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
-
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     currentPerson.IsManagerOrAdmin()), 30, DhtmlxGridColumnFilterType.None);
@@ -76,12 +44,12 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add("Performed By", x => x.GetMaintenanceRecordPerson() == null ? new HtmlString(string.Empty) : x.GetMaintenanceRecordPerson().GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType?.MaintenanceRecordTypeDisplayName ?? "Not set", 100,
-                DhtmlxGridColumnFilterType.Text);
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
-            foreach (var attributeType in allMaintenanceAttributeTypes)
+            foreach (var customAttributeType in allMaintenanceAttributeTypes)
             {
-                Add(attributeType.DisplayNameWithUnits(),
-                    x => x?.GetObservationValueWithUnitsForAttributeType(attributeType), 150, DhtmlxGridColumnFilterType.Text);
+                Add(customAttributeType.DisplayNameWithUnits(),
+                    x => x?.GetObservationValueForAttributeType(customAttributeType), 150, DhtmlxGridColumnFilterType.Text);
             }
         }
     }

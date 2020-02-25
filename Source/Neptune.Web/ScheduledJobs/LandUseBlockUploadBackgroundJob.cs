@@ -128,7 +128,7 @@ namespace Neptune.Web.ScheduledJobs
                             else
                             {
                                 var clippedGeometry = landUseBlockStaging.LandUseBlockStagingGeometry.Intersection(
-                                    stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry);
+                                    stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry.GeometryNative);
 
                                 landUseBlock.LandUseBlockGeometry = clippedGeometry;
                                 landUseBlock.LandUseBlockGeometry4326 =

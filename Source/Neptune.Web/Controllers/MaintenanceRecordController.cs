@@ -13,34 +13,22 @@ namespace Neptune.Web.Controllers
     public class MaintenanceRecordController : NeptuneBaseController
     {
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<MaintenanceRecord> MaintenanceRecordsGridJsonData(
-            TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
-        {
-            var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
-            var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, treatmentBmp);
-            var bmpMaintenanceRecords = treatmentBmp.MaintenanceRecords
-                .ToList()
-                .OrderByDescending(x => x.GetMaintenanceRecordDate()).ToList();
-            var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
-            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
-            var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords
-                .Include(x => x.FieldVisit).Include(x => x.FieldVisit.PerformedByPerson.Organization)
+            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Include(x => x.TreatmentBMPTypeCustomAttributeTypes).Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+            var maintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords
+                .Include(x => x.FieldVisit)
+                .Include(x => x.FieldVisit.PerformedByPerson)
+                .Include(x => x.FieldVisit.PerformedByPerson.Organization)
                 .Include(x => x.TreatmentBMP)
-                .Include(x => x.TreatmentBMP.TreatmentBMPType)
-                .Include(x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x => x.MaintenanceRecordObservations).Include(x =>
-                    x.MaintenanceRecordObservations.Select(y => y.MaintenanceRecordObservationValues))
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.MaintenanceRecordObservations)
+                .Include(x => x.MaintenanceRecordObservations.Select(y => y.MaintenanceRecordObservationValues))
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList();
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes);
             var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);
+                new GridJsonNetJObjectResult<MaintenanceRecord>(maintenanceRecords, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
