@@ -28,16 +28,16 @@ SELECT
 	Null as LandUseBlockID,
 	Null as PriorityLandUseTypeID,
 	Null as LandUseDescription,
-	case when UGeometry is null then sj.StormwaterJurisdictionGeometry else sj.StormwaterJurisdictionGeometry.STDifference(sq.UGeometry) end AS LandUseBlockGeometry
+	case when UGeometry is null then sj.GeometryNative else sj.GeometryNative.STDifference(sq.UGeometry) end AS LandUseBlockGeometry
 FROM
 (
   SELECT GEOMETRY::UnionAggregate(lub.LandUseBlockGeometry) AS UGeometry, sj.StormwaterJurisdictionID AS StormwaterJurisdictionID
-  FROM dbo.StormwaterJurisdiction sj
+  FROM dbo.StormwaterJurisdictionGeometry sj
   left JOIN dbo.LandUseBlock lub
-  ON sj.StormwaterJurisdictionGeometry.STIntersects(lub.LandUseBlockGeometry) = 1
+  ON sj.GeometryNative.STIntersects(lub.LandUseBlockGeometry) = 1
   GROUP BY sj.StormwaterJurisdictionID
 ) sq
- LEFT JOIN dbo.StormwaterJurisdiction sj ON sq.StormwaterJurisdictionID = sj.StormwaterJurisdictionID) s
+ LEFT JOIN dbo.StormwaterJurisdictionGeometry sj ON sq.StormwaterJurisdictionID = sj.StormwaterJurisdictionID) s
 
 print concat('End rebuild adjusted land use blocks ', convert(varchar, GetDate(), 121) )
 
@@ -47,7 +47,7 @@ print concat('Begin BCF algorithm ', convert(varchar, GetDate(), 121) )
 
 -- StormwaterJurisdiction will serve as our "Background Layer" for the Boundary/Clip phase
 declare @BackgroundLayer geometry;
-select @BackgroundLayer = geometry::UnionAggregate(StormwaterJurisdictionGeometry) from StormwaterJurisdiction;
+select @BackgroundLayer = geometry::UnionAggregate(GeometryNative) from dbo.StormwaterJurisdictionGeometry;
 --select @BackgroundLayer;
 
 print concat('Begin Boundary ', convert(varchar, GetDate(), 121) )
@@ -58,11 +58,11 @@ declare @BufferDelta decimal(11,11) = .000000001;
 Declare @BoundaryLayer geometry;
 Select @BoundaryLayer = geometry::UnionAggregate(BoundaryGeometry) from (
 
-select OnlandVisualTrashAssessmentAreaGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from vOnlandVisualTrashAssessmentAreaDated
+select OnlandVisualTrashAssessmentAreaGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from dbo.vOnlandVisualTrashAssessmentAreaDated
 union all
-Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from Delineation where Delineation.IsVerified = 1
+Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from dbo.Delineation where Delineation.IsVerified = 1
 Union all
-Select StormwaterJurisdictionGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from StormwaterJurisdiction
+Select GeometryNative.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from dbo.StormwaterJurisdictionGeometry
 ) q
 print concat('End Boundary ', convert(varchar, GetDate(), 121) )
 
@@ -112,7 +112,7 @@ print concat('Begin set jurisdiction ', convert(varchar, GetDate(), 121) )
 --set the jurisdiction ID
 Update jdo
 set jdo.JurisdictionID = sj.StormwaterJurisdictionID
-from #JurisdictionDelineationOvta jdo join StormwaterJurisdiction sj on jdo.Geom.STIntersects(sj.StormwaterJurisdictionGeometry) = 1
+from #JurisdictionDelineationOvta jdo join dbo.StormwaterJurisdiction sj on jdo.Geom.STIntersects(sj.GeometryNative) = 1
 
 print concat('End set jurisdiction ', convert(varchar, GetDate(), 121) )
 

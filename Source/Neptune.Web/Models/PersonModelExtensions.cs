@@ -196,7 +196,7 @@ namespace Neptune.Web.Models
             var stormwaterJurisdictionsPersonCanEdit = person.GetStormwaterJurisdictionsPersonCanView().ToList();
             var boundingBox = stormwaterJurisdictionsPersonCanEdit.Any()
                 ? new BoundingBox(stormwaterJurisdictionsPersonCanEdit
-                    .Select(x => x.StormwaterJurisdictionGeometry))
+                    .Select(x => x.StormwaterJurisdictionGeometry.GeometryNative))
                 : BoundingBox.MakeNewDefaultBoundingBox();
             return boundingBox;
         }

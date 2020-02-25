@@ -87,6 +87,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new SourceControlBMPAttributeCategoryConfiguration());
             modelBuilder.Configurations.Add(new StateProvinceConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
+            modelBuilder.Configurations.Add(new StormwaterJurisdictionGeometryConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
             modelBuilder.Configurations.Add(new SupportRequestLogConfiguration());
             modelBuilder.Configurations.Add(new TrainingVideoConfiguration());
@@ -178,6 +179,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
         public virtual DbSet<SourceControlBMP> SourceControlBMPs { get; set; }
         public virtual DbSet<StateProvince> StateProvinces { get; set; }
+        public virtual DbSet<StormwaterJurisdictionGeometry> StormwaterJurisdictionGeometries { get; set; }
         public virtual DbSet<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual DbSet<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         public virtual DbSet<SupportRequestLog> SupportRequestLogs { get; set; }
@@ -562,6 +564,9 @@ namespace Neptune.Web.Models
                     var stormwaterBreadCrumbEntity = StormwaterBreadCrumbEntity.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(stormwaterBreadCrumbEntity, "StormwaterBreadCrumbEntity", primaryKey);
                     return stormwaterBreadCrumbEntity;
+
+                case "StormwaterJurisdictionGeometry":
+                    return StormwaterJurisdictionGeometries.GetStormwaterJurisdictionGeometry(primaryKey);
 
                 case "StormwaterJurisdictionPerson":
                     return StormwaterJurisdictionPeople.GetStormwaterJurisdictionPerson(primaryKey);

@@ -85,14 +85,14 @@ namespace Neptune.Web.Models
             return FieldVisit.VisitDate;
         }
 
-        public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType observationType)
+        public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            if (!TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Contains(observationType))
+            if (treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.All(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
             {
                 return ViewUtilities.NaString;
             }
 
-            return TreatmentBMPObservations?.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == observationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValue() ?? ViewUtilities.NotProvidedString;
+            return TreatmentBMPObservations?.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? ViewUtilities.NotProvidedString;
         }
     }
 }

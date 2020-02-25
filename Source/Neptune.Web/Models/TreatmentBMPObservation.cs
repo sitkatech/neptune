@@ -58,9 +58,9 @@ namespace Neptune.Web.Models
             return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
         }
 
-        public string FormattedObservationValue()
+        public string FormattedObservationValueWithoutUnits(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            var observationTypeCollectionMethod = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            var observationTypeCollectionMethod = treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
             var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData).GetValueOrDefault();
 
             if (observationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail)
@@ -68,7 +68,7 @@ namespace Neptune.Web.Models
                 return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
             }
 
-            return $"{observationValue.ToString(CultureInfo.InvariantCulture)} {TreatmentBMPAssessmentObservationType.GetMeasurementUnitType().LegendDisplayName}";
+            return $"{observationValue.ToString(CultureInfo.InvariantCulture)}";
         }
 
         public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
