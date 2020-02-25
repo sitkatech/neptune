@@ -31,6 +31,7 @@ namespace Neptune.Web.Models
             this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
             this.RegionalSubbasinRevisionRequests = new HashSet<RegionalSubbasinRevisionRequest>();
+            this.TreatmentBMPsWhereYouAreTheUpstreamBMP = new HashSet<TreatmentBMP>();
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
@@ -44,7 +45,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int sizingBasisTypeID, int? trashCaptureEffectiveness, DbGeometry locationPoint4326, int? watershedID, int? lSPCBasinID, int? precipitationZoneID) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int sizingBasisTypeID, int? trashCaptureEffectiveness, DbGeometry locationPoint4326, int? watershedID, int? lSPCBasinID, int? precipitationZoneID, int? upstreamBMPID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -71,6 +72,7 @@ namespace Neptune.Web.Models
             this.WatershedID = watershedID;
             this.LSPCBasinID = lSPCBasinID;
             this.PrecipitationZoneID = precipitationZoneID;
+            this.UpstreamBMPID = upstreamBMPID;
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || HRUCharacteristics.Any() || MaintenanceRecords.Any() || RegionalSubbasinRevisionRequests.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || (TreatmentBMPModelingAttribute != null) || TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any() || TreatmentBMPOperationMonths.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
+            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || HRUCharacteristics.Any() || MaintenanceRecords.Any() || RegionalSubbasinRevisionRequests.Any() || TreatmentBMPsWhereYouAreTheUpstreamBMP.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || (TreatmentBMPModelingAttribute != null) || TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any() || TreatmentBMPOperationMonths.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -188,6 +190,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in RegionalSubbasinRevisionRequests.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in TreatmentBMPsWhereYouAreTheUpstreamBMP.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -259,6 +266,7 @@ namespace Neptune.Web.Models
         public int? WatershedID { get; set; }
         public int? LSPCBasinID { get; set; }
         public int? PrecipitationZoneID { get; set; }
+        public int? UpstreamBMPID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
@@ -271,6 +279,8 @@ namespace Neptune.Web.Models
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
+        public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheUpstreamBMP { get; set; }
+        public virtual TreatmentBMP UpstreamBMP { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
