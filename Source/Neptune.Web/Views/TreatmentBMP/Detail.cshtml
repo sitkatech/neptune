@@ -227,7 +227,10 @@
                 <hr />
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Upstream BMP</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName</div>
+                    <div class="col-sm-4">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? "Not Provided" : ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName)</div>
+                    <div class="col-xs-3">
+                            @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string>{"btn btn-neptune"}, ViewDataTyped.CanEditStormwaterJurisdiction)
+                    </div>
                 </div>
                 <hr/>
                 <div class="row">

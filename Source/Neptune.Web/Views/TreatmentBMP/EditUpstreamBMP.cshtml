@@ -3,13 +3,17 @@
     
 
 @Html.ValidationSummary()
-<div class="form-horizontal">
-    <div class="row">
-        <div class="col-sm-3 control-label">
-            @Html.LabelWithSugarFor(x => x.UpstreamBMPID)
-        </div>
-        <div class="col-sm-9">
-            @Html.DropDownListFor(x => x.UpstreamBMPID, ViewDataTyped.TreatmentBMPList, new {@class = "form-control"})
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(x => x.UpstreamBMPID)
+            </div>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(x => x.UpstreamBMPID, ViewDataTyped.TreatmentBMPList, new {@class = "form-control"})
+            </div>
         </div>
     </div>
-</div>
+}
