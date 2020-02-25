@@ -261,7 +261,7 @@ namespace Neptune.Web.Models
         public static DbGeometry GetCentralizedDelineationGeometry(this TreatmentBMP treatmentBMP)
         {
             var regionalSubbasin =
-                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Single(x =>
+                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
                     x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
 
             var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
@@ -275,6 +275,12 @@ namespace Neptune.Web.Models
             // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
             var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
             return dbGeometry;
+        }
+
+        public static RegionalSubbasin GetRegionalSubbasin(this TreatmentBMP treatmentBMP)
+        {
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
+                    x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
         }
     }
 }
