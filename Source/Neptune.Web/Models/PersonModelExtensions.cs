@@ -203,8 +203,8 @@ namespace Neptune.Web.Models
 
         public static List<TreatmentBMP> GetTreatmentBmpsPersonCanManage(this Person person)
         {
-            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
-                .Where(x => x.CanView(person)).ToList();
+            var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return treatmentBmps;
         }
 

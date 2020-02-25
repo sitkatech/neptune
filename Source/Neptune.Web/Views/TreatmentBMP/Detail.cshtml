@@ -1048,7 +1048,7 @@
         var regionalSubbasinLayer =
             map.addWmsLayer("OCStormwater:RegionalSubbasins",
                 "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                { styles: "regional_subbasin_wide"}, true);
+                { styles: "regional_subbasin_wide", maxZoom:22}, true);
 
         if (mapInitJson.DelineationLayer) {
             var delineationLayer = L.geoJSON(mapInitJson.DelineationLayer.GeoJsonFeatureCollection);
