@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
@@ -37,8 +38,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
 
             // update the cached total boundary
-            waterQualityManagementPlan.WaterQualityManagementPlanBoundary = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
+            waterQualityManagementPlan.WaterQualityManagementPlanBoundary = (ParcelIDs != null ? HttpRequestStorage.DatabaseEntities.Parcels
+                .Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList() : new List<DbGeometry>())
                 .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
     }

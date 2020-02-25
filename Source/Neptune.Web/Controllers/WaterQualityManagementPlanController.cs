@@ -95,6 +95,12 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
+            if (waterQualityManagementPlan.TreatmentBMPs.Any(x => x.Delineation != null))
+            {
+                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(
+                    waterQualityManagementPlan.TreatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation)));
+            }
+
             var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).ToList();
             var waterQualityManagementPlanVerifyDraft = waterQualityManagementPlanVerifies.SingleOrDefault(x => x.IsDraft);
