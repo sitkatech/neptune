@@ -88,28 +88,15 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> TreatmentBMPGridJsonData()
         {
-            // ReSharper disable once InconsistentNaming
-            var treatmentBMPs = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailed>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
-        }
-
-        private List<TreatmentBMP> GetTreatmentBmpsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson)
-        {
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            gridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit);
-            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x => x.MaintenanceRecords)
-                .Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPAssessments)
-                .Include(x => x.TreatmentBMPAssessments.Select(y => y.FieldVisit))
-                .Include(x => x.WaterQualityManagementPlan)
-                .Include(x => x.Delineations)
-                .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
         [NeptuneViewFeature]
