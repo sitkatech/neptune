@@ -124,7 +124,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                         x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
-                var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetJurisdictionsWithGeospatialFeatures();
+                var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionGeometries
+                    .Select(x => x.StormwaterJurisdiction).ToList();
                 JurisdictionsGeoJson = StormwaterJurisdiction.ToGeoJsonFeatureCollection(jurisdictions);
 
                 OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
