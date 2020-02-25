@@ -331,16 +331,41 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-
-            throw new NotImplementedException();
+            var viewModel = new EditUpstreamBMPViewModel(treatmentBMP);
+            
+            return ViewEditUpstreamBMP(treatmentBMP, viewModel);
         }
 
         [HttpPost]
         [TreatmentBMPEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             EditUpstreamBMPViewModel viewModel)
         {
-            throw new NotImplementedException();
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditUpstreamBMP(treatmentBMP, viewModel);
+            }
+
+            viewModel.UpdateModel(treatmentBMP);
+            //TODO:Whatever else the card says to do
+            SetMessageForDisplay("Upstream BMP successfully updated");
+            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMP)));
+        }
+
+        private PartialViewResult ViewEditUpstreamBMP(TreatmentBMP treatmentBMP, EditUpstreamBMPViewModel viewModel)
+        {
+            var treatmentBMPs = treatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs()
+                .Where(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID);
+
+            var treatmentBMPSelectList = treatmentBMPs.ToSelectListWithDisabledEmptyFirstRow(
+                    x => x.TreatmentBMPID.ToString(CultureInfo.InvariantCulture), x => x.TreatmentBMPName,
+                    "Select an Upstream BMP");
+
+            var viewData = new EditUpstreamBMPViewData(treatmentBMPSelectList);
+
+            return RazorPartialView<EditUpstreamBMP, EditUpstreamBMPViewData, EditUpstreamBMPViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -955,6 +980,7 @@ namespace Neptune.Web.Controllers
                 outputShapefileName, update, false);
         }
     }
+
 }
 
 namespace Neptune.Web.Views.TreatmentBMP
@@ -982,5 +1008,21 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.UpstreamBMPID = UpstreamBMPID;
         }
     }
+
+    public class EditUpstreamBMPViewData : NeptuneUserControlViewData
+    {
+        public IEnumerable<SelectListItem> TreatmentBMPList { get; }
+
+        public EditUpstreamBMPViewData(IEnumerable<SelectListItem> treatmentBMPSelectList)
+        {
+            TreatmentBMPList = treatmentBMPSelectList;
+        }
+    }
+
+    public abstract class EditUpstreamBMP : TypedWebPartialViewPage<EditUpstreamBMPViewData, EditUpstreamBMPViewModel>
+    {
+    }
+
+
 
 }
