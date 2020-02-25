@@ -70,19 +70,19 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> JurisdictionTreatmentBMPGridJsonData(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> JurisdictionTreatmentBMPGridJsonData(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-            TreatmentBMPGridSpec gridSpec;
-            var treatmentBMPs = GetJurisdictionTreatmentBMPsAndGridSpec(out gridSpec, CurrentPerson, stormwaterJurisdiction);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
+            var treatmentBMPs = GetJurisdictionTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson, stormwaterJurisdiction);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailed>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<TreatmentBMP> GetJurisdictionTreatmentBMPsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction)
+        private List<vTreatmentBMPDetailed> GetJurisdictionTreatmentBMPsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction)
         {
             gridSpec = new TreatmentBMPGridSpec(currentPerson, false, false);
-            return currentPerson.GetTreatmentBmpsPersonCanManage().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            return HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds.ToList()
+                .Where(x => currentPerson.IsAssignedToStormwaterJurisdiction(x.StormwaterJurisdictionID) && x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
         }
     }
 }
