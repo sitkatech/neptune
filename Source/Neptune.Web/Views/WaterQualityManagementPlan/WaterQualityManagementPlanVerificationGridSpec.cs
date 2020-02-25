@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View",
                     new Dictionary<string, string> {{"class", "gridButton"}}), 60,
                 DhtmlxGridColumnFilterType.None);
-            Add("WQMP Name", x => x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300);
+            Add("WQMP Name", x => x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300, DhtmlxGridColumnFilterType.Text);
             Add("Jurisdiction", x => x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
             Add("Last O&M Verification", x => x.LastEditedDate, 150);
             Add("Last Edited By", x => x.LastEditedByPerson.GetFullNameFirstLast(), 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
