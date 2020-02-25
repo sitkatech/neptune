@@ -37,6 +37,7 @@ using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Globalization;
 using System.IO;
@@ -170,6 +171,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [HttpGet]
         [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -322,6 +324,23 @@ namespace Neptune.Web.Controllers
                 organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All, TrashCaptureStatusType.All,
                 SizingBasisType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [TreatmentBMPEditFeature]
+        public PartialViewResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        public ActionResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
+            EditUpstreamBMPViewModel viewModel)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -936,4 +955,32 @@ namespace Neptune.Web.Controllers
                 outputShapefileName, update, false);
         }
     }
+}
+
+namespace Neptune.Web.Views.TreatmentBMP
+{
+    public class EditUpstreamBMPViewModel
+    {
+        [Required]
+        public int? UpstreamBMPID { get; set; }
+
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public EditUpstreamBMPViewModel()
+        {
+
+        }
+
+        public EditUpstreamBMPViewModel(Models.TreatmentBMP treatmentBMP)
+        {
+            UpstreamBMPID = treatmentBMP.UpstreamBMPID;
+        }
+
+        public void UpdateModel(Models.TreatmentBMP treatmentBMP)
+        {
+            treatmentBMP.UpstreamBMPID = UpstreamBMPID;
+        }
+    }
+
 }
