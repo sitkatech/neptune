@@ -25,6 +25,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
             SubmitUrl =
                 SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
             EntityName = "Regional Subbasin";
+            EntityUrl = SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = "Revision";
             ExistingOpenRequest = treatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x => x.RegionalSubbasinRevisionRequestStatusID == RegionalSubbasinRevisionRequestStatus.Open.RegionalSubbasinRevisionRequestStatusID);
         }

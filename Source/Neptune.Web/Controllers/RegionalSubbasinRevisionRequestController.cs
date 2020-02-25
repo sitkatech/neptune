@@ -178,6 +178,9 @@ namespace Neptune.Web.Controllers
             regionalSubbasinRevisionRequest.CloseNotes = viewModel.CloseNotes;
             regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatusID =
                 RegionalSubbasinRevisionRequestStatus.Closed.RegionalSubbasinRevisionRequestStatusID;
+            regionalSubbasinRevisionRequest.ClosedByPersonID = CurrentPerson.PersonID;
+            regionalSubbasinRevisionRequest.ClosedDate = DateTime.Now;
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SendRSBRevisionRequestClosedEmail(CurrentPerson, regionalSubbasinRevisionRequest);
 
@@ -257,12 +260,12 @@ Please review it, make revisions, and close it at your earliest convenience. <a 
             var lastName = closingPerson.LastName;
             var organizationName = closingPerson.Organization.OrganizationName;
             var bmpName = request.TreatmentBMP.TreatmentBMPName;
-            var requestDetailUrl = request.GetDetailUrl();
+            var delineationMapUrl = request.TreatmentBMP.GetDelineationMapUrl();
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
 <strong>{subject}</strong><br />
 <br />
-The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {firstName} {lastName} ({organizationName}). <a href='{requestDetailUrl}'>Revise the delineation for BMP {bmpName} on the Delineation map</a>. 
+The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {firstName} {lastName} ({organizationName}). <a href='{delineationMapUrl}'>Revise the delineation for BMP {bmpName} on the Delineation map</a>. 
 
  <div>Thanks for keeping the Regional Subbasin Network up to date within the Orange County Stormwater Tools.</div>
 </div>

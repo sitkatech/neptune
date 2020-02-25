@@ -18,6 +18,8 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
             Add("Date Closed", x=>x.ClosedDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Closed By", x => x.ClosedByPerson?.GetFullNameFirstLastAsUrl() ?? new HtmlString(string.Empty), 120, DhtmlxGridColumnFilterType.Text);
             Add("Notes", x=>x.Notes, 300, DhtmlxGridColumnFilterType.Text);
+            Add("Close Notes", x=>x.CloseNotes, 300, DhtmlxGridColumnFilterType.Text);
+
         }
     }
 }

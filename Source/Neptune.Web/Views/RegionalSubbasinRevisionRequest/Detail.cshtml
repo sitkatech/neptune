@@ -37,23 +37,23 @@
                     <span><strong>Name: </strong><a href="@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.GetDetailUrl()">@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPName</a></span><br />
                     <span><strong>Type: </strong>@ViewDataTyped.RegionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</span> <br />
                 </div>
-                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.Notes))
-                {
                     <div class="col-md-12 col-sm-6">
                         <h4>Request Details</h4>
+                        @if (!string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.Notes))
+                        {
                         <strong>Request Notes:</strong> <br />
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.Notes <br />
+                        }
                         <strong>Submitted Date: </strong>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RequestDate.ToShortDateString() <br />
                         <strong>Status: </strong>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName
-                        @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Closed)
+                        @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Closed && !string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes))
                         {
                             <br /><strong>Close Notes:</strong><br />
                             <text>@ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes</text>
                         }
                     </div>
-                }
 
             </div>
         </div>

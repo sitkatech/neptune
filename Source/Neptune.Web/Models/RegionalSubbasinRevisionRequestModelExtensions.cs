@@ -18,9 +18,7 @@ namespace Neptune.Web.Models
 
         public static bool CanView(this RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest, Person currentPerson)
         {
-            // TODO
-
-            return true;
+            return regionalSubbasinRevisionRequest.TreatmentBMP.CanView(currentPerson);
         }
     }
 }

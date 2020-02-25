@@ -28,6 +28,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
                 SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x => x.Detail(regionalSubbasinRevisionRequest));
             EntityName = "Regional Subbasin";
             PageTitle = "Revision";
+            EntityUrl = SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x => x.Index());
             CloseUrl = SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>
                 x.Close(regionalSubbasinRevisionRequest));
             DownloadUrl = SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(x =>

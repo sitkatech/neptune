@@ -20,16 +20,18 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using GeoJSON.Net.Feature;
+using Hangfire;
 using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.TreatmentBMP;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
@@ -41,9 +43,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
-using Hangfire;
-using Neptune.Web.ScheduledJobs;
-using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
