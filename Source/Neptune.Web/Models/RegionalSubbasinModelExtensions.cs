@@ -109,5 +109,10 @@ namespace Neptune.Web.Models
 
             return featureCollection;
         }
+
+        public IEnumerable<TreatmentBMP> GetTreatmentBMPs(this RegionalSubbasin regionalSubbasin)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
