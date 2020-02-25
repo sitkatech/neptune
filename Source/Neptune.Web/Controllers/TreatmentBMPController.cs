@@ -37,7 +37,6 @@ using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Globalization;
 using System.IO;
@@ -980,49 +979,4 @@ namespace Neptune.Web.Controllers
                 outputShapefileName, update, false);
         }
     }
-
-}
-
-namespace Neptune.Web.Views.TreatmentBMP
-{
-    public class EditUpstreamBMPViewModel
-    {
-        [Required]
-        public int? UpstreamBMPID { get; set; }
-
-        /// <summary>
-        /// Needed by ModelBinder
-        /// </summary>
-        public EditUpstreamBMPViewModel()
-        {
-
-        }
-
-        public EditUpstreamBMPViewModel(Models.TreatmentBMP treatmentBMP)
-        {
-            UpstreamBMPID = treatmentBMP.UpstreamBMPID;
-        }
-
-        public void UpdateModel(Models.TreatmentBMP treatmentBMP)
-        {
-            treatmentBMP.UpstreamBMPID = UpstreamBMPID;
-        }
-    }
-
-    public class EditUpstreamBMPViewData : NeptuneUserControlViewData
-    {
-        public IEnumerable<SelectListItem> TreatmentBMPList { get; }
-
-        public EditUpstreamBMPViewData(IEnumerable<SelectListItem> treatmentBMPSelectList)
-        {
-            TreatmentBMPList = treatmentBMPSelectList;
-        }
-    }
-
-    public abstract class EditUpstreamBMP : TypedWebPartialViewPage<EditUpstreamBMPViewData, EditUpstreamBMPViewModel>
-    {
-    }
-
-
-
 }
