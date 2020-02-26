@@ -5,6 +5,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 using System.Web;
 using GeoJSON.Net.Feature;
 
@@ -46,11 +47,17 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("Name", x.DelineationID);
                 feature.Properties.Add("FeatureWeight", 1);
                 feature.Properties.Add("FillPolygon", true);
-                feature.Properties.Add("FeatureColor", "#405d74");
+                feature.Properties.Add("FeatureColor", GetColorString("blue"));
                 feature.Properties.Add("FillOpacity", "0.2");
                 return feature;
             }));
             return featureCollection;
+        }
+
+        private static string GetColorString(string colorName)
+        {
+            var color = Color.FromName(colorName);
+            return $"#{color.R:x2}{color.G:x2}{color.B:x2}";
         }
     }
 }
