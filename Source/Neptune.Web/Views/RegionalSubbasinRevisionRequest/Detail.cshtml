@@ -48,10 +48,18 @@
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RequestDate.ToShortDateString() <br />
                         <strong>Status: </strong>
                         @ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName
-                        @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Closed && !string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes))
+                        @if (ViewDataTyped.RegionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Closed )
                         {
-                            <br /><strong>Close Notes:</strong><br />
-                            <text>@ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes</text>
+                            <br/><strong>Close Date:</strong>
+                            // ClosedDate won't be null since the status is Closed
+                            <text>@ViewDataTyped.RegionalSubbasinRevisionRequest.ClosedDate.Value.ToShortDateString()</text>
+                            if(!string.IsNullOrWhiteSpace(ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes))
+                            {
+                                <br/>
+                                <strong>Close Notes:</strong>
+                                <br/>
+                                <text>@ViewDataTyped.RegionalSubbasinRevisionRequest.CloseNotes</text>
+                            }
                         }
                     </div>
 
