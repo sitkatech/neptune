@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
         {
             Add("", x => new HtmlString(
                 $"<a class='gridButton' href='{x.GetDetailUrl()}'>View</a>"), 40, DhtmlxGridColumnFilterType.None );
-            Add("BMP Name", x => x.TreatmentBMP.TreatmentBMPName, 200, DhtmlxGridColumnFilterType.Text);
+            Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 200, DhtmlxGridColumnFilterType.Text);
             Add("Date Submitted", x=>x.RequestDate, 120,DhtmlxGridColumnFormatType.Date);
             Add("Requested By", x=>x.RequestPerson.GetFullNameFirstLastAsUrl(), 120, DhtmlxGridColumnFilterType.Text);
             Add("Status", x=>x.RegionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
