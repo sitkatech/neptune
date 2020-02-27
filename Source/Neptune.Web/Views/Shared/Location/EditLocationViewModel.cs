@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using ApprovalUtilities.Utilities;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
@@ -58,6 +59,8 @@ namespace Neptune.Web.Views.Shared.Location
             var locationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
             treatmentBMP.LocationPoint = locationPoint;
             treatmentBMP.LocationPoint4326 = locationPoint4326;
+
+            treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary();
 
             // associate watershed, lspc basin, precipitation zone
             treatmentBMP.Watershed = HttpRequestStorage.DatabaseEntities.Watersheds.FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry));
