@@ -43,6 +43,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.Web.Mvc.Resources;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -335,10 +336,32 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModel(treatmentBMP);
+
+            if (treatmentBMP.Delineation != null)
+            {
+                HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMP.Delineation);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+            }
+
             //TODO:Whatever else the card says to do
             SetMessageForDisplay("Upstream BMP successfully updated");
             return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMP)));
         }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        public ActionResult RemoveUpstreamBMP(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
+        {
+            var treatmentBMP = treatmentBmpPrimaryKey.EntityObject;
+
+            treatmentBMP.RemoveUpstreamBMP();
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            SetMessageForDisplay("Upstream BMP successfully removed");
+
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
+        }
+
 
         private PartialViewResult ViewEditUpstreamBMP(TreatmentBMP treatmentBMP, EditUpstreamBMPViewModel viewModel)
         {

@@ -147,6 +147,26 @@ angular.module("NeptuneApp")
             }
         };
 
+        $scope.upstreamBMPID = function () {
+            if (!this.delineationMapState.selectedTreatmentBMPFeature) {
+                return "";
+            } else {
+                return this.delineationMapState.selectedTreatmentBMPFeature.properties.UpstreamBMPID
+                    ? this.delineationMapState.selectedTreatmentBMPFeature.properties.UpstreamBMPID
+                    : "";
+            }
+        }
+
+        $scope.upstreamBMPName = function() {
+            if (!this.delineationMapState.selectedTreatmentBMPFeature) {
+                return "";
+            } else {
+                return this.delineationMapState.selectedTreatmentBMPFeature.properties.UpstreamBMPName
+                    ? this.delineationMapState.selectedTreatmentBMPFeature.properties.UpstreamBMPName
+                    : "";
+            }
+        }
+
         $scope.delineationType = function () {
             var delineationFeature = DelineationMapService.getDelineation();
             if (delineationFeature) {

@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using DocumentFormat.OpenXml.Wordprocessing
 @using LtInfo.Common
 @using Neptune.Web.Models
 @using Neptune.Web.Views
@@ -226,11 +227,24 @@
                 </div>
                 <hr />
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">Upstream BMP</label>
-                    <div class="col-sm-4">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? "Not Provided" : ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName)</div>
-                    <div class="col-xs-3">
-                            @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string>{"btn btn-neptune"}, ViewDataTyped.CanEditStormwaterJurisdiction)
-                    </div>
+                    <label class="col-sm-5 control-label text-right" style="margin-top:8px">Upstream BMP</label>
+                    @if (ViewDataTyped.TreatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs().Any(x => x.TreatmentBMPID != ViewDataTyped.TreatmentBMP.TreatmentBMPID))
+                    {
+                        <div class="col-sm-4" style="margin-top:8px">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new HtmlString("Not Provided") : ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl())</div>
+                        <div class="col-xs-3">
+                            @if (ViewDataTyped.TreatmentBMP.UpstreamBMP != null)
+                            {
+                                <form method="post" action="@ViewDataTyped.RemoveUpstreamBMPUrl" style="display:inline">
+                                    <button class="btn btn-sm btn-neptune" id="deleteUpstreamBMPButton" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
+                                </form>
+                            }
+                            @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-4">No BMPs within Regional Subbasin applicable</div>
+                    }
                 </div>
                 <hr/>
                 <div class="row">
@@ -787,28 +801,39 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 10px;">
-                    <div class="col-xs-5 control-label text-center">
-                        <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.DelineationType)</p>
+                @if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
+                {
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-xs-5 control-label text-center">
+                            <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.DelineationType)</p>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
+                        </div>
+                        <div class="col-xs-3 text-center">
+                            @if (ViewDataTyped.CanEditStormwaterJurisdiction)
+                            {
+                                <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Edit</a>
+                            }
+                        </div>
                     </div>
-                    <div class="col-xs-4 text-center">
-                        <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
+                    <div class="row">
+                        <div class="col-xs-5 control-label text-center">
+                            <p style="margin-top: 8px;"><label>Delineation Area (ac)</label></p>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <p style="margin-top: 8px;">@ViewDataTyped.DelineationArea</p>
+                        </div>
                     </div>
-                    <div class="col-xs-3 text-center">
-                        @if (ViewDataTyped.CanEditStormwaterJurisdiction)
-                        {
-                            <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Edit</a>
-                        }
+                }
+                else
+                {
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-xs-12 text-center">
+                            <em>No delineation may be added because this BMP has an Upstream BMP. <br/> Please remove the Upstream BMP to add a delineation.</em>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-5 control-label text-center">
-                        <p style="margin-top: 8px;"><label>Delineation Area (ac)</label></p>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                        <p style="margin-top: 8px;">@ViewDataTyped.DelineationArea</p>
-                    </div>
-                </div>
+                }
                 @if (ViewDataTyped.TreatmentBMP.Delineation != null)
                 {
                     <div class="row">

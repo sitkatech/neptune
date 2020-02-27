@@ -196,7 +196,10 @@ namespace Neptune.Web.Models
 
             foreach(var x in TreatmentBMPsWhereYouAreTheUpstreamBMP.ToList())
             {
-                x.DeleteFull(dbContext);
+                x.UpstreamBMP = null;
+                x.UpstreamBMPID = null;
+                //We shouldn't be deleting the downstream (not sure if that is the term) bmps
+                //x.DeleteFull(dbContext);
             }
 
             foreach(var x in TreatmentBMPAssessments.ToList())

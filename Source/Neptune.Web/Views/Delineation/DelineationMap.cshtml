@@ -80,17 +80,24 @@
                 <strong>Type: </strong><span id="selectedBMPType">{{treatmentBMPType()}}</span><br />
                 <hr>
                 <h5>Selected Delineation</h5>
-                <strong>Type: </strong> <span id="delineationType">{{delineationType()}}</span><br />
-                <strong>Area: </strong><span id="delineationArea">{{delineationArea()}}</span> <br />
-                <div id="delineationStatus" ng-show="hasDelineation()">
-                    <strong>Status: </strong>
-                    <input id="verifyDelineationButton" type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100" />
+                <div id="delineationInfo" ng-show="upstreamBMPID() === ''">
+                    <strong>Type: </strong> <span id="delineationType">{{delineationType()}}</span><br />
+                    <strong>Area: </strong><span id="delineationArea">{{delineationArea()}}</span> <br />
+                    <div id="delineationStatus" ng-show="hasDelineation()">
+                        <strong>Status: </strong>
+                        <input id="verifyDelineationButton" type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100" />
+                    </div>
+                    
+                    <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode">
+                        <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation(); $event.stopPropagation();" ng-hide="delineationMapState.isInDelineationMode">Edit</button>
+                        <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;" ng-show="showDeleteButton()" ng-click="deleteDelineation(); $event.stopPropagation()"><span class="glyphicon glyphicon-trash"></span></button>
+                        <a id="requestRevisionButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="showRequestRevisionButton()" style="margin-bottom: 5px;"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
+                    </div>
                 </div>
-
-                <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode">
-                    <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation(); $event.stopPropagation();" ng-hide="delineationMapState.isInDelineationMode">Edit</button>
-                    <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;" ng-show="showDeleteButton()" ng-click="deleteDelineation(); $event.stopPropagation()"><span class="glyphicon glyphicon-trash"></span></button>
-                    <a id="requestRevisionButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="showRequestRevisionButton()" style="margin-bottom: 5px;"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
+                <div id="upstreamBMPInfo" ng-show="upstreamBMPID() !== ''">
+                    <span>No delineation may be provided because this BMP has an Upstream BMP. Please remove the Upstream BMP to add a delineation.</span>
+                    <br/>
+                    <strong>Upstream BMP: </strong> <a id="upstreamBMPDetailLink" target="_blank" ng-href="/TreatmentBMP/Detail/{{upstreamBMPID()}}">{{upstreamBMPName()}}<span class="glyphicon glyphicon-new-window"></span></a>
                 </div>
 
                 <div style="margin-top: 5px;" id="editLocationButtonWrapper" ng-hide="delineationMapState.isInDelineationMode || delineationMapState.isInEditLocationMode">

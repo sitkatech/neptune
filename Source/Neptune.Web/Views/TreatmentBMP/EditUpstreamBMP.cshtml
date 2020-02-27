@@ -12,7 +12,7 @@
                 @Html.LabelWithSugarFor(x => x.UpstreamBMPID)
             </div>
             <div class="col-sm-9">
-                @Html.DropDownListFor(x => x.UpstreamBMPID, ViewDataTyped.TreatmentBMPList, new {@class = "form-control"})
+                @Html.SearchableDropDownListFor(x => x.UpstreamBMPID, ViewDataTyped.TreatmentBMPList)
             </div>
         </div>
     </div>

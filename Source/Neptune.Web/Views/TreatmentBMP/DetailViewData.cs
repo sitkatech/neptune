@@ -111,6 +111,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasModelingAttributes { get; }
         public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; }
         public string EditUpstreamBMPUrl { get; }
+        public string RemoveUpstreamBMPUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
@@ -206,6 +207,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             EditUpstreamBMPUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditUpstreamBMP(treatmentBMP));
+            RemoveUpstreamBMPUrl =
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RemoveUpstreamBMP(treatmentBMP));
         }
 
         private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)
