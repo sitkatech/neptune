@@ -203,7 +203,7 @@ namespace Neptune.Web.Controllers
 
             var reprojectedGeometry = CoordinateSystemHelper.ProjectWebMercatorTo2230(geometry);
 
-            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(reprojectedGeometry);
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(reprojectedGeometry);
 
             var serializedGeoJson = JsonConvert.SerializeObject(geoJson);
 

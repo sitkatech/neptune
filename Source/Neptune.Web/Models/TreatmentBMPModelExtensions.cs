@@ -142,7 +142,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
                 var trashCaptureStatusType = x.TrashCaptureStatusType;
                 
                 feature.Properties.Add("Name", x.TreatmentBMPName);

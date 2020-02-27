@@ -46,6 +46,11 @@ namespace Neptune.Web.Models
         {
         }
 
+        public StormwaterMapInitJson(string mapDivID, BoundingBox boundingBox, List<LayerGeoJson> layers) : base(mapDivID, DefaultZoomLevel,
+            layers, boundingBox)
+        {
+        }
+
         public StormwaterMapInitJson(string mapDivID, int zoomLevel, List<LayerGeoJson> layers, BoundingBox boundingBox) : base(mapDivID, zoomLevel, layers, boundingBox, true)
         {
         }

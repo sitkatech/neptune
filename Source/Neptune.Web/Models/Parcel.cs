@@ -21,8 +21,7 @@ namespace Neptune.Web.Models
 
         public TrashCaptureStatusType GetTrashCaptureStatusType()
         {
-            return WaterQualityManagementPlanParcels.Select(x => x.WaterQualityManagementPlan.TrashCaptureStatusType)
-                       .Distinct().OrderBy(x => x.TrashCaptureStatusTypePriority).FirstOrDefault() ??
+            return WaterQualityManagementPlanParcels.Select(x => x.WaterQualityManagementPlan.TrashCaptureStatusType).OrderBy(x => x.TrashCaptureStatusTypePriority).FirstOrDefault() ??
                    TrashCaptureStatusType.NotProvided;
         }
     }

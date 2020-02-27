@@ -39,3 +39,7 @@ ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT 
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
 GO
 ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID]
+GO
+ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT [CK_RegionalSubbasinRevisionRequest_ClosedReqMustHaveCloseDate] CHECK  ((NOT ([RegionalSubbasinRevisionRequestStatusID]=(2) AND [ClosedDate] IS NULL)))
+GO
+ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [CK_RegionalSubbasinRevisionRequest_ClosedReqMustHaveCloseDate]
