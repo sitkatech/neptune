@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.Home
@@ -10,7 +10,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
         public TrashModuleMapInitJson(string mapDivID, LayerGeoJson treatmentBMPLayerGeoJson,
             LayerGeoJson parcelLayerGeoJson, BoundingBox boundingBox)
-            : base(mapDivID, DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
+            : base(mapDivID, DefaultZoomLevel, new List<LayerGeoJson>(), 
                 boundingBox)
         {
             TreatmentBMPLayerGeoJson = treatmentBMPLayerGeoJson;
