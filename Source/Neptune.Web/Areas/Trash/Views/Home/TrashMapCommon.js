@@ -46,6 +46,9 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         "Terrain",
         $scope.AngularViewData.GeoServerUrl);
 
+    // initialize reference layers
+    $scope.neptuneMap.vectorLayerGroups[0].addTo($scope.neptuneMap.map);
+
     if (options.showTrashGeneratingUnitLoads) {
         var currentLoadLegendUrl = $scope.AngularViewData.GeoServerUrl +
             "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnitLoads&style=current_load&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
