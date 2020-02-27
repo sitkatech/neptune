@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Web;
 
 namespace Neptune.Web.Views.DelineationUpload
@@ -46,6 +47,9 @@ namespace Neptune.Web.Views.DelineationUpload
                         gdbFile,
                         Ogr2OgrCommandLineRunner.DefaultTimeOut);
 
+                    var treatmentBMP =
+                        HttpRequestStorage.DatabaseEntities.TreatmentBMPs.SingleOrDefault(x => x.TreatmentBMPName == TreatmentBMPNameField);
+
                     if (featureClassNames?.Count == 0)
                     {
                         errors.Add(new ValidationResult(
@@ -67,6 +71,12 @@ namespace Neptune.Web.Views.DelineationUpload
                         Ogr2OgrCommandLineRunner.DefaultTimeOut, featureClassName, TreatmentBMPNameField))
                     {
                         errors.Add(new ValidationResult($"The feature class in the file geodatabase does not have an attribute named {TreatmentBMPNameField}. Please double-check the attribute name you entered and try again."));
+                        return errors;
+                    }
+
+                    if (treatmentBMP?.UpstreamBMPID != null)
+                    {
+                        errors.Add(new ValidationResult($"The file contains a delineation for Treatment BMP:{TreatmentBMPNameField} has an Upstream BMP ({treatmentBMP.UpstreamBMP.TreatmentBMPName}) and may not accept a delineation. Please remove the Upstream BMP and try again."));
                         return errors;
                     }
                 }
