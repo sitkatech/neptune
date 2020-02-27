@@ -46,7 +46,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(areas.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.OnlandVisualTrashAssessmentAreaGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.OnlandVisualTrashAssessmentAreaGeometry4326);
                 feature.Properties.Add("OnlandVisualTrashAssessmentAreaID", x.OnlandVisualTrashAssessmentAreaID);
                 feature.Properties.Add("OnlandVisualTrashAssessmentAreaName", x.OnlandVisualTrashAssessmentAreaName);
                 feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdictionID);
@@ -109,7 +109,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             if (onlandVisualTrashAssessmentArea.TransectLine != null)
             {
                 var featureCollection = new FeatureCollection();
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(onlandVisualTrashAssessmentArea.TransectLine);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(onlandVisualTrashAssessmentArea.TransectLine4326);
                 featureCollection.Features.AddRange(new List<Feature> {feature});
 
                 LayerGeoJson transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
