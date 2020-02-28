@@ -18,19 +18,7 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlan waterQualityManagementPlan)
         {
-            if (!HasPermissionByPerson(person))
-            {
-                return new PermissionCheckResult("Person does not have permission by role.");
-            }
-
-            var stormwaterJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
-            if (person.Role == Role.JurisdictionManager && person.StormwaterJurisdictionPeople.All(x =>
-                    x.StormwaterJurisdictionID != stormwaterJurisdiction.StormwaterJurisdictionID))
-            {
-                return new PermissionCheckResult($"Person does not belong to the {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jusidiction.");
-            }
-
-            return new PermissionCheckResult();
+            return new WaterQualityManagementPlanManageFeature().HasPermission(person, waterQualityManagementPlan);
         }
 
         public void DemandPermission(Person person, WaterQualityManagementPlan contextModelObject)

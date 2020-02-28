@@ -79,7 +79,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 {
                     <div class="row">
                         <label class="col-sm-4 control-label text-right">Assessment Score</label>
-                        @if (ViewDataTyped.TreatmentBMPAssessment.CalculateIsAssessmentComplete())
+                        @if (ViewDataTyped.TreatmentBMPAssessment.IsAssessmentComplete)
                         {
                             <div class="col-sm-8">
                                 @ViewDataTyped.TreatmentBMPAssessment.FormattedScore()

@@ -23,9 +23,11 @@ from qgis.core import (
 from qgis.analysis import QgsNativeAlgorithms
 
 print ("imported Qgis")
+# See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
+QgsApplication.setPrefixPath('C:\\OSGEO4W64\\apps\\qgis', True)
 
 # Append the path where processing plugin can be found
-sys.path.append(r'C:\OSGeo4W64\apps\qgis\python\plugins')
+sys.path.append('C:\\OSGeo4W64\\apps\\qgis\\python\\plugins')
 
 import processing
 from processing.tools import dataobjects
@@ -33,9 +35,16 @@ from processing.core.Processing import Processing
 
 import argparse
 
+from pyqgis_utils import (
+    duplicateLayer,
+    raiseIfLayerInvalid,
+    QgisError
+)
+
 JOIN_PREFIX = "Joined_"
 CONNSTRING_BASE = "CONNSTRING ERROR"
 OUTPUT_PATH = "OUTPUT PATH ERROR"
+
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
@@ -56,24 +65,6 @@ def parseArguments():
     if "True" in CONNSTRING_BASE:
             CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
 
-# Create an exact duplicate of the input layer.
-# Needed because the processing framework cannot actually operate with the same layer as multiple inputs to an algorithm
-# This is infuriating if you've ever used the QGIS GUI, where it looks like you can set the same layer for more than one input
-# One concludes, after much trial and error, that the processing framework is actually operating on two separate copies of the layer behind the scenes.
-def duplicateLayer(qgs_vector_layer, duplicate_layer_name):
-    # fixme: we might never use layer types other than polygon, but we might want this parameterized in the future
-    layer_dupe = QgsVectorLayer("MultiPolygon?crs=epsg:2771", duplicate_layer_name, "memory")
-
-    mem_layer_data = layer_dupe.dataProvider()
-
-    feats = [feat for feat in qgs_vector_layer.getFeatures()]
-    attr = qgs_vector_layer.dataProvider().fields().toList()
-    mem_layer_data.addAttributes(attr)
-    layer_dupe.updateFields()
-    mem_layer_data.addFeatures(feats)
-
-    return layer_dupe
-
 def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data = target.dataProvider()
     source_layer_data = source.dataProvider()
@@ -81,8 +72,6 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     attr = source_layer_data.fields().toList()
     target_layer_data.addAttributes(attr)
     target.updateFields()
-
-
 
 class Flatten:
     
@@ -298,16 +287,15 @@ class Flatten:
             self.working_layer.deleteFeature(featToDelete.id())
 
     def addFeatureToIntersectLayer(self, feature_id):
+        ## todo: I think this method is unused?
         for featToAppend in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
             self.intersect_layer.addFeature(featToAppend)    
 
 if __name__ == '__main__':
     parseArguments()
     
-    # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-    QgsApplication.setPrefixPath(r'C:\OSGEO4W64\apps\qgis', True)
     #qgs = QgsApplication([], False, "")
-    qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "server")
+    qgs = QgsApplication([], False, 'C:\\Sitka\\Neptune\\QGis', "server")
 
     qgs.initQgis()
         
@@ -335,10 +323,7 @@ if __name__ == '__main__':
     connstring_delineation = CONNSTRING_BASE + "tables=dbo.vDelineationTGUInput"
     delineation_layer = QgsVectorLayer(connstring_delineation, "Delineations", "ogr")
     
-    if not delineation_layer.isValid():
-        print("Layer failed to load!")
-    else:
-        print("Loaded Delineation layer!")
+    raiseIfLayerInvalid(delineation_layer)
 
     # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we use the buffer-0 trick to smooth those out.
     debuffer = processing.run("native:buffer", {
@@ -363,10 +348,7 @@ if __name__ == '__main__':
     connstring_ovta = CONNSTRING_BASE + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
     ovta_layer = QgsVectorLayer(connstring_ovta, "OVTAs", "ogr")
 
-    if not ovta_layer.isValid():
-        print("OVTA Layer failed to Load!")
-    else:
-        print("Loaded OVTA Layer")
+    raiseIfLayerInvalid(ovta_layer)
 
     print("Flattening OVTAs...\n")
     flatten_ovtas = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
@@ -376,10 +358,7 @@ if __name__ == '__main__':
     connstring_wqmp = CONNSTRING_BASE + "tables=dbo.vWaterQualityManagementPlanTGUInput"
     wqmp_layer = QgsVectorLayer(connstring_wqmp, "WQMPs", "ogr")
 
-    if not wqmp_layer.isValid():
-        print("WQMP Layer failed to Load!")
-    else:
-        print("Loaded WQMP Layer!")
+    raiseIfLayerInvalid(wqmp_layer)
 
     print("Flattening WQMPs...\n")
     flatten_wqmps = Flatten(wqmp_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
@@ -411,14 +390,10 @@ if __name__ == '__main__':
     connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.vLandUseBlockTGUInput"
     land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
 
-    if not land_use_block_layer.isValid():
-        print("Land Use Block Layer failed to Load!")
-    else:
-        print("Loaded Land Use Block Layer")
+    raiseIfLayerInvalid(land_use_block_layer)
 
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
 
-    ## TODO: overlay will be the ovta_delineation_wqmp_layer
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     tgu_res = processing.run("native:union", {
         'INPUT': land_use_block_layer,

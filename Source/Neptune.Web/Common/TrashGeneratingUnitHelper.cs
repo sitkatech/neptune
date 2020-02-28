@@ -69,7 +69,6 @@ namespace Neptune.Web.Common
                 OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 !x.IsFullTrashCapture &&
                 // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
@@ -79,7 +78,6 @@ namespace Neptune.Web.Common
             return trashGeneratingUnits.Where(x =>
                 x.IsFullTrashCapture &&
                 // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
@@ -88,82 +86,62 @@ namespace Neptune.Web.Common
 
         public static double AlternateOVTAScoreDAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
-                OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+            return GetAlternativeOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.D);
         }
 
         public static double AlternateOVTAScoreBAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+            return GetAlternativeOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.B);
         }
 
         public static double PriorityOVTAScoreDAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+            return GetPriorityOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.D);
         }
 
         public static double PriorityOVTAScoreBAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+            return GetPriorityOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.B);
         }
 
         public static double AlternateOVTAScoreCAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+            return GetAlternativeOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.C);
         }
 
         public static double AlternateOVTAScoreAAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
+            return GetAlternativeOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.A);
         }
 
         public static double PriorityOVTAScoreCAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+            return GetPriorityOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.C);
         }
 
         public static double PriorityOVTAScoreAAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
         {
+            return GetPriorityOVTAScoreAcreageImpl(trashGeneratingUnits, OnlandVisualTrashAssessmentScore.A);
+        }
+
+        private static double GetAlternativeOVTAScoreAcreageImpl(List<TrashGeneratingUnit> trashGeneratingUnits,
+            OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore)
+        {
             return trashGeneratingUnits.Where(x =>
-                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
+                onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
-            ).GetArea();
+                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
+        }
+
+        private static double GetPriorityOVTAScoreAcreageImpl(List<TrashGeneratingUnit> trashGeneratingUnits,
+            OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore)
+        {
+            return trashGeneratingUnits.Where(x =>
+                x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
+                onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
         }
     }
 }

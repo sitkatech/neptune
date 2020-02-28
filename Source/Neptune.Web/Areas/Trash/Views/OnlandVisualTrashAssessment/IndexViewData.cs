@@ -25,7 +25,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             EntityName = $"{FieldDefinition.OnlandVisualTrashAssessment.GetFieldDefinitionLabelPluralized()}";
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, true)
+            var userCanView = new OnlandVisualTrashAssessmentViewFeature().HasPermissionByPerson(currentPerson);
+            GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, true)
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",

@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
             this.LandUseBlocks = new HashSet<LandUseBlock>();
             this.OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
             this.OnlandVisualTrashAssessmentAreas = new HashSet<OnlandVisualTrashAssessmentArea>();
+            this.StormwaterJurisdictionGeometries = new HashSet<StormwaterJurisdictionGeometry>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
             this.TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
@@ -38,33 +39,29 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public StormwaterJurisdiction(int stormwaterJurisdictionID, int organizationID, DbGeometry stormwaterJurisdictionGeometry, int stateProvinceID, bool isTransportationJurisdiction, DbGeometry stormwaterJurisdictionGeometry4326) : this()
+        public StormwaterJurisdiction(int stormwaterJurisdictionID, int organizationID, int stateProvinceID) : this()
         {
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OrganizationID = organizationID;
-            this.StormwaterJurisdictionGeometry = stormwaterJurisdictionGeometry;
             this.StateProvinceID = stateProvinceID;
-            this.IsTransportationJurisdiction = isTransportationJurisdiction;
-            this.StormwaterJurisdictionGeometry4326 = stormwaterJurisdictionGeometry4326;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public StormwaterJurisdiction(int organizationID, int stateProvinceID, bool isTransportationJurisdiction) : this()
+        public StormwaterJurisdiction(int organizationID, int stateProvinceID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.StormwaterJurisdictionID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.OrganizationID = organizationID;
             this.StateProvinceID = stateProvinceID;
-            this.IsTransportationJurisdiction = isTransportationJurisdiction;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public StormwaterJurisdiction(Organization organization, StateProvince stateProvince, bool isTransportationJurisdiction) : this()
+        public StormwaterJurisdiction(Organization organization, StateProvince stateProvince) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.StormwaterJurisdictionID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -73,7 +70,6 @@ namespace Neptune.Web.Models
             this.StateProvinceID = stateProvince.StateProvinceID;
             this.StateProvince = stateProvince;
             stateProvince.StormwaterJurisdictions.Add(this);
-            this.IsTransportationJurisdiction = isTransportationJurisdiction;
         }
 
         /// <summary>
@@ -81,7 +77,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static StormwaterJurisdiction CreateNewBlank(Organization organization, StateProvince stateProvince)
         {
-            return new StormwaterJurisdiction(organization, stateProvince, default(bool));
+            return new StormwaterJurisdiction(organization, stateProvince);
         }
 
         /// <summary>
@@ -90,13 +86,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DelineationStagings.Any() || LandUseBlocks.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || StormwaterJurisdictionPeople.Any() || TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
+            return DelineationStagings.Any() || LandUseBlocks.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || (StormwaterJurisdictionGeometry != null) || StormwaterJurisdictionPeople.Any() || TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionGeometry).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -141,6 +137,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in StormwaterJurisdictionGeometries.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in StormwaterJurisdictionPeople.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -170,10 +171,7 @@ namespace Neptune.Web.Models
         [Key]
         public int StormwaterJurisdictionID { get; set; }
         public int OrganizationID { get; set; }
-        public DbGeometry StormwaterJurisdictionGeometry { get; set; }
         public int StateProvinceID { get; set; }
-        public bool IsTransportationJurisdiction { get; set; }
-        public DbGeometry StormwaterJurisdictionGeometry4326 { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return StormwaterJurisdictionID; } set { StormwaterJurisdictionID = value; } }
 
@@ -181,6 +179,9 @@ namespace Neptune.Web.Models
         public virtual ICollection<LandUseBlock> LandUseBlocks { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
+        public virtual ICollection<StormwaterJurisdictionGeometry> StormwaterJurisdictionGeometries { get; set; }
+        [NotMapped]
+        public StormwaterJurisdictionGeometry StormwaterJurisdictionGeometry { get { return StormwaterJurisdictionGeometries.SingleOrDefault(); } set { StormwaterJurisdictionGeometries = new List<StormwaterJurisdictionGeometry>{value};} }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }

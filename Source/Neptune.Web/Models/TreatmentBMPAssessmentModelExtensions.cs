@@ -52,83 +52,68 @@ namespace Neptune.Web.Models
             return DeleteUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
         }
 
-        // attempt to read the cached assessment score; otherwise calculate it, cache it, and return it
-        public static double? CalculateAssessmentScore(this TreatmentBMPAssessment treatmentBMPAssessment)
+        public static void CalculateAssessmentScore(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
             if (!treatmentBMPAssessment.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
             {
-                return null;
+                return;
             }
 
-            if (!treatmentBMPAssessment.CalculateIsAssessmentComplete())
+            if (!treatmentBMPAssessment.IsAssessmentComplete)
             {
-                return null;
+                return;
             }
-
-            if (treatmentBMPAssessment.AssessmentScore.HasValue)
-            {
-                return Math.Round(treatmentBMPAssessment.AssessmentScore.Value, 1);
-            }
-
 
             //if any observations that override the score have a failing score, return 0
             var observationTypesThatPotentiallyOverrideScore = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing)
                 .ToList().Select(x => x.TreatmentBMPAssessmentObservationType);
 
+            double? score;
             if (observationTypesThatPotentiallyOverrideScore.Any(x =>
             {
                 var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType == x);
                 return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
             }))
             {
-                return 0;
+                score = 0;
             }
-
             //if all observations override the score and all are passing, return 5
-            if (treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+            else if (treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .All(x => x.OverrideAssessmentScoreIfFailing))
             {
-                return 5;
+                score = 5;
             }
-
-            //otherwise calculate the score
-            var score = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
-                .Where(x => !x.OverrideAssessmentScoreIfFailing)
-                .Select(x => x.TreatmentBMPAssessmentObservationType).ToList().Sum(x =>
-                {
-                    var observationScore = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).CalculateObservationScore();
-
-                    var treatmentBMPAssessmentObservationType = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).TreatmentBMPAssessmentObservationType;
-                    var observationWeight = Convert.ToDouble(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType
-                        .GetTreatmentBMPTypeObservationType(treatmentBMPAssessmentObservationType).AssessmentScoreWeight
-                        .Value);
-                    return observationScore * observationWeight;
-                });
-
-            if (score.HasValue)
+            else
             {
-                treatmentBMPAssessment.AssessmentScore = score;
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                //otherwise calculate the score
+                score = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                    .Where(x => !x.OverrideAssessmentScoreIfFailing)
+                    .Select(x => x.TreatmentBMPAssessmentObservationType).ToList().Sum(x =>
+                    {
+                        var observationScore = treatmentBMPAssessment.TreatmentBMPObservations
+                            .SingleOrDefault(y =>
+                                y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                                x.TreatmentBMPAssessmentObservationTypeID).CalculateObservationScore();
+
+                        var treatmentBMPAssessmentObservationType = treatmentBMPAssessment.TreatmentBMPObservations
+                            .SingleOrDefault(y =>
+                                y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                                x.TreatmentBMPAssessmentObservationTypeID).TreatmentBMPAssessmentObservationType;
+                        var observationWeight = Convert.ToDouble(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType
+                            .GetTreatmentBMPTypeObservationType(treatmentBMPAssessmentObservationType)
+                            .AssessmentScoreWeight
+                            .Value);
+                        return observationScore * observationWeight;
+                    });
             }
 
-            return Math.Round(score.Value, 1);
+            treatmentBMPAssessment.AssessmentScore = score;
         }
 
-        // attempt to read the assessment's cached completeness status; otherwise calculate it, cache it, and return it
-        public static bool CalculateIsAssessmentComplete(this TreatmentBMPAssessment treatmentBMPAssessment)
+        public static void CalculateIsAssessmentComplete(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            if (treatmentBMPAssessment.IsAssessmentComplete.HasValue)
-            {
-                return treatmentBMPAssessment.IsAssessmentComplete.Value;
-            }
-
-            var isAssessmentComplete = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(treatmentBMPAssessment.IsObservationComplete);
-
-            treatmentBMPAssessment.IsAssessmentComplete = isAssessmentComplete;
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            return isAssessmentComplete;
+            treatmentBMPAssessment.IsAssessmentComplete = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(treatmentBMPAssessment.IsObservationComplete);
         }
     }
 }

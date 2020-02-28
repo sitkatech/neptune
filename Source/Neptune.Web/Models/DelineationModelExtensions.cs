@@ -5,7 +5,9 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 using System.Web;
+using GeoJSON.Net.Feature;
 
 namespace Neptune.Web.Models
 {
@@ -38,35 +40,24 @@ namespace Neptune.Web.Models
         public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Delineation> delineationGeometryStagings)
         {
             var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
-            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometry != null).Select(x =>
+            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x?.DelineationGeometry != null).Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.DelineationGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.DelineationGeometry4326);
                 feature.Properties.Add("DelineationID", x.DelineationID);
                 feature.Properties.Add("Name", x.DelineationID);
                 feature.Properties.Add("FeatureWeight", 1);
                 feature.Properties.Add("FillPolygon", true);
-                feature.Properties.Add("FeatureColor", "#405d74");
+                feature.Properties.Add("FeatureColor", GetColorString("blue"));
                 feature.Properties.Add("FillOpacity", "0.2");
                 return feature;
             }));
             return featureCollection;
         }
 
-        public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<Delineation> delineationGeometryStagings)
+        private static string GetColorString(string colorName)
         {
-            var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
-            featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x.DelineationGeometry != null).Select(x =>
-            {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.DelineationGeometry);
-                feature.Properties.Add("DelineationID", x.DelineationID);
-                feature.Properties.Add("Name", x.DelineationID);
-                feature.Properties.Add("FeatureWeight", 1);
-                feature.Properties.Add("FillPolygon", true);
-                feature.Properties.Add("FillOpacity", "0.2");
-                feature.Properties.Add("FeatureColor", "#405d74");
-                return feature;
-            }));
-            return featureCollection;
+            var color = Color.FromName(colorName);
+            return $"#{color.R:x2}{color.G:x2}{color.B:x2}";
         }
     }
 }

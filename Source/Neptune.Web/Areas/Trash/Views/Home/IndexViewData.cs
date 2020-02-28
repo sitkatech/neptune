@@ -36,24 +36,25 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string ScoreDescriptionsUrl { get; }
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
-        public bool CurrentOrNetChangeLoadingBool { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson,
+            MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
-            List<Models.Parcel> parcels) : base(currentPerson, neptunePage)
+            List<Models.Parcel> parcels, List<StormwaterJurisdiction> stormwaterJurisdictions,
+            FeatureCollection geoJsonForJurisdictions) : base(currentPerson, neptunePage)
         {
             OVTABasedMapInitJson = ovtaBasedMapInitJson;
             AreaBasedMapInitJson = areaBasedMapInitJson;
             LoadBasedMapInitJson = loadBasedMapInitJson;
 
-            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
-            StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
-            NegativeStormwaterJurisdictionCQLFilter = currentPerson.GetNegativeStormwaterJurisdictionCqlFilter();
-            JurisdictionSelectList = stormwaterJurisdictionsPersonCanEdit.OrderBy(x => x.GetOrganizationDisplayName()).ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());
-            var showDropdown = stormwaterJurisdictionsPersonCanEdit.Count() > 1;
+            var stormwaterJurisdictionIDs = stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
+            StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDs);
+            NegativeStormwaterJurisdictionCQLFilter = currentPerson.GetNegativeStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDs);
+            JurisdictionSelectList = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName()).ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());
+            var showDropdown = stormwaterJurisdictions.Count > 1;
 
             ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson, areaBasedMapInitJson, loadBasedMapInitJson,
-                treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter, showDropdown, NegativeStormwaterJurisdictionCQLFilter);
+                treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter, showDropdown, NegativeStormwaterJurisdictionCQLFilter, geoJsonForJurisdictions);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
             AllOVTAsUrl =
@@ -107,7 +108,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
             public ViewDataForAngularClass(MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
                 List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels,
-                string stormwaterJurisdictionCqlFilter, bool showDropdown, string negativeStormwaterJurisdictionCqlFilter)
+                string stormwaterJurisdictionCqlFilter, bool showDropdown, string negativeStormwaterJurisdictionCqlFilter, FeatureCollection jurisdictionsGeoJson)
             {
                 OVTABasedMapInitJson = ovtaBasedMapInitJson;
                 AreaBasedMapInitJson = areaBasedMapInitJson;
@@ -125,8 +126,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                         x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
-                var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetJurisdictionsWithGeospatialFeatures();
-                JurisdictionsGeoJson = StormwaterJurisdiction.ToGeoJsonFeatureCollection(jurisdictions);
+                JurisdictionsGeoJson = jurisdictionsGeoJson;
 
                 OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                     x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;

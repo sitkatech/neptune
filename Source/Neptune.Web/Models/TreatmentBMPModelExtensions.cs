@@ -28,6 +28,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 
@@ -122,7 +123,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
                 feature.Properties.Add("Name", x.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
@@ -141,7 +142,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
                 var trashCaptureStatusType = x.TrashCaptureStatusType;
                 
                 feature.Properties.Add("Name", x.TreatmentBMPName);
@@ -181,7 +182,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(treatmentBMP.LocationPoint4326);
                 feature.Properties.Add("Name", treatmentBMP.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
@@ -200,7 +201,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
                 AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
                 return feature;
             }));
@@ -218,7 +219,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.LocationPoint);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(treatmentBMP.LocationPoint4326);
                 AddAllCommonPropertiesToTreatmentBMPFeature(feature, treatmentBMP);
                 foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
                 {
@@ -255,6 +256,31 @@ namespace Neptune.Web.Models
         public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
         {
             return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
+        }
+
+        public static DbGeometry GetCentralizedDelineationGeometry(this TreatmentBMP treatmentBMP)
+        {
+            var regionalSubbasin =
+                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
+                    x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
+
+            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
+
+            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
+
+            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry4326)
+                .ToList().UnionListGeometries();
+
+            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
+            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
+            return dbGeometry;
+        }
+
+        public static RegionalSubbasin GetRegionalSubbasin(this TreatmentBMP treatmentBMP)
+        {
+            return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
+                    x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
         }
     }
 }

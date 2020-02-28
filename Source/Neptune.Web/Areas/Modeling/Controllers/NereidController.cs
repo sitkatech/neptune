@@ -4,9 +4,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Web.Mvc;
+using Hangfire;
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -24,11 +26,19 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
+        public ContentResult TriggerLGURun()
+        {
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(CurrentPerson.PersonID));
+            return Content("LGU refresh will run in the background");
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
         public ContentResult TestNereidNetworkValidator()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
-            var graph = new NereidModels.Graph(true, new List<Node>
+            var graph = new Graph(true, new List<Node>
                 {
                     new Node("A"),
                     new Node("B")

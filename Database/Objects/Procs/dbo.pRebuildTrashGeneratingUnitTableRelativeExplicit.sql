@@ -37,14 +37,14 @@ where @SpliceBase.STIntersects(LandUseBlockGeometry) = 1
 
 
 Select 
-	StormwaterJurisdictionID,
-	OrganizationID,
-	@SpliceBase.STIntersection(StormwaterJurisdictionGeometry) as StormwaterJurisdictionGeometry,
-	StateProvinceID,
-	IsTransportationJurisdiction
+	sj.StormwaterJurisdictionID,
+	sj.OrganizationID,
+	@SpliceBase.STIntersection(sjg.GeometryNative) as StormwaterJurisdictionGeometry,
+	sj.StateProvinceID
 into #JurisdictionsRestricted
-from dbo.StormwaterJurisdiction
-where @SpliceBase.STIntersects(StormwaterJurisdictionGeometry) = 1
+from dbo.StormwaterJurisdiction sj
+join dbo.StormwaterJurisdictionGeometry sjg on sj.StormwaterJurisdictionID = sjg.StormwaterJurisdictionID
+where @SpliceBase.STIntersects(GeometryNative) = 1
 
 
 Select

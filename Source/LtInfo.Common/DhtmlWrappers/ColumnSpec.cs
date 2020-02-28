@@ -31,6 +31,8 @@ namespace LtInfo.Common.DhtmlWrappers
         public readonly string ColumnName;
         private readonly Func<T, int> _intValueFunc;
         private readonly Func<T, int?> _nullableIntValueFunc;
+        private readonly Func<T, long> _longValueFunc;
+        private readonly Func<T, long?> _nullableLongValueFunc;
         private readonly Func<T, short> _shortValueFunc;
         private readonly Func<T, short?> _nullableShortValueFunc;
         private readonly Func<T, byte> _byteValueFunc;
@@ -118,6 +120,8 @@ namespace LtInfo.Common.DhtmlWrappers
         {
             Int,
             NullableInt,
+            Long,
+            NullableLong,
             Short,
             NullableShort,
             Byte,
@@ -195,6 +199,36 @@ namespace LtInfo.Common.DhtmlWrappers
         {
             _nullableIntValueFunc = nullableIntValueFunc;
             _funcType = FuncType.NullableInt;
+        }
+
+        public ColumnSpec(string columnName, Func<T, long> longValueFunc, int gridWidth,
+            DhtmlxGridColumnDataType dhtmlxGridColumnDataType, DhtmlxGridColumnFormatType dhtmlxGridColumnFormatType,
+            DhtmlxGridColumnAlignType dhtmlxGridColumnAlignType, DhtmlxGridColumnSortType dhtmlxGridColumnSortType,
+            DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType,
+            DhtmlxGridColumnAggregationType dhtmlxGridColumnAggregationType, Func<T, string> cssClassFunction,
+            Func<T, string> titleFunction)
+            : this(
+                columnName, gridWidth, dhtmlxGridColumnDataType, dhtmlxGridColumnFormatType, dhtmlxGridColumnAlignType,
+                dhtmlxGridColumnSortType, dhtmlxGridColumnFilterType, dhtmlxGridColumnAggregationType, cssClassFunction,
+                titleFunction)
+        {
+            _longValueFunc = longValueFunc;
+            _funcType = FuncType.Long;
+        }
+
+        public ColumnSpec(string columnName, Func<T, long?> nullableLongValueFunc, int gridWidth,
+            DhtmlxGridColumnDataType dhtmlxGridColumnDataType, DhtmlxGridColumnFormatType dhtmlxGridColumnFormatType,
+            DhtmlxGridColumnAlignType dhtmlxGridColumnAlignType, DhtmlxGridColumnSortType dhtmlxGridColumnSortType,
+            DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType,
+            DhtmlxGridColumnAggregationType dhtmlxGridColumnAggregationType, Func<T, string> cssClassFunction,
+            Func<T, string> titleFunction)
+            : this(
+                columnName, gridWidth, dhtmlxGridColumnDataType, dhtmlxGridColumnFormatType, dhtmlxGridColumnAlignType,
+                dhtmlxGridColumnSortType, dhtmlxGridColumnFilterType, dhtmlxGridColumnAggregationType, cssClassFunction,
+                titleFunction)
+        {
+            _nullableLongValueFunc = nullableLongValueFunc;
+            _funcType = FuncType.NullableLong;
         }
 
         public ColumnSpec(string columnName, Func<T, short> shortValueFunc, int gridWidth,
@@ -414,6 +448,11 @@ namespace LtInfo.Common.DhtmlWrappers
                 case FuncType.NullableInt:
                     var intValue = _nullableIntValueFunc(dataObject);
                     return intValue.HasValue ? intValue.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+                case FuncType.Long:
+                    return _longValueFunc(dataObject).ToString(CultureInfo.InvariantCulture);
+                case FuncType.NullableLong:
+                    var longValue = _nullableLongValueFunc(dataObject);
+                    return longValue.HasValue ? longValue.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
                 case FuncType.DateTime:
                     return DhtmlxGridColumnFormatType == DhtmlxGridColumnFormatType.Date ? _dateTimeValueFunc(dataObject).ToStringDate() : _dateTimeValueFunc(dataObject).ToStringDateTime();
                 case FuncType.NullableDateTime:

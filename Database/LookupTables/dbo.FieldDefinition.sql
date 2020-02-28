@@ -110,4 +110,6 @@ VALUES
 (106, 'PercentOfSiteTreated', 'Percent of Site Treated', '', 1),
 (107, 'PercentCaptured', 'Percent Captured', '', 1),
 (108, 'PercentRetained', 'Percent Retained', '', 1),
-(109, 'AreaWithinWQMP', 'Area within WQMP', '', 1)
+(109, 'AreaWithinWQMP', 'Area within WQMP', '', 1),
+(110, 'Watershed', 'Watershed', '', 1),
+(111, 'DesignStormwaterDepth', 'Design Stormwater Depth', '', 1)

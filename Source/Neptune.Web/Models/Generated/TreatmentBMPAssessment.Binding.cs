@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID, string notes, double? assessmentScore, bool? isAssessmentComplete) : this()
+        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID, string notes, double? assessmentScore, bool isAssessmentComplete) : this()
         {
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -46,7 +46,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID) : this()
+        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID, bool isAssessmentComplete) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -55,12 +55,13 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.FieldVisitID = fieldVisitID;
             this.TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentTypeID;
+            this.IsAssessmentComplete = isAssessmentComplete;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit, TreatmentBMPAssessmentType treatmentBMPAssessmentType) : this()
+        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit, TreatmentBMPAssessmentType treatmentBMPAssessmentType, bool isAssessmentComplete) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -74,6 +75,7 @@ namespace Neptune.Web.Models
             this.FieldVisit = fieldVisit;
             fieldVisit.TreatmentBMPAssessments.Add(this);
             this.TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentType.TreatmentBMPAssessmentTypeID;
+            this.IsAssessmentComplete = isAssessmentComplete;
         }
 
         /// <summary>
@@ -81,7 +83,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit, TreatmentBMPAssessmentType treatmentBMPAssessmentType)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType, fieldVisit, treatmentBMPAssessmentType);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType, fieldVisit, treatmentBMPAssessmentType, default(bool));
         }
 
         /// <summary>
@@ -140,7 +142,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPAssessmentTypeID { get; set; }
         public string Notes { get; set; }
         public double? AssessmentScore { get; set; }
-        public bool? IsAssessmentComplete { get; set; }
+        public bool IsAssessmentComplete { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAssessmentID; } set { TreatmentBMPAssessmentID = value; } }
 

@@ -46,6 +46,11 @@ namespace Neptune.Web.Models
         {
         }
 
+        public StormwaterMapInitJson(string mapDivID, BoundingBox boundingBox, List<LayerGeoJson> layers) : base(mapDivID, DefaultZoomLevel,
+            layers, boundingBox)
+        {
+        }
+
         public StormwaterMapInitJson(string mapDivID, int zoomLevel, List<LayerGeoJson> layers, BoundingBox boundingBox) : base(mapDivID, zoomLevel, layers, boundingBox, true)
         {
         }
@@ -74,9 +79,9 @@ namespace Neptune.Web.Models
             return treatmentBMPLayerGeoJson;
         }
 
-        public static LayerGeoJson MakeDelineationLayerGeoJson(IEnumerable<Delineation> delineation, bool isGeneric, bool enablePopups)
+        public static LayerGeoJson MakeDelineationLayerGeoJson(IEnumerable<Delineation> delineation)
         {
-            var featureCollection = isGeneric ? delineation.ToGeoJsonFeatureCollectionGeneric() : delineation.ToGeoJsonFeatureCollection();
+            var featureCollection = delineation.ToGeoJsonFeatureCollection();
 
             var catchmentLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
             return catchmentLayerGeoJson;
@@ -87,7 +92,7 @@ namespace Neptune.Web.Models
         {
             Check.Require(treatmentBMP.Delineation?.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(treatmentBMP.Delineation?.DelineationGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(treatmentBMP.Delineation?.DelineationGeometry4326);
             featureCollection.Features.Add(feature);
 
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };

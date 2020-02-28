@@ -9,7 +9,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class TreatmentBMPController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public PartialViewResult TrashMapAssetPanel(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;

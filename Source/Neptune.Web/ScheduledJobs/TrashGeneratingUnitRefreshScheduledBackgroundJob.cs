@@ -31,14 +31,17 @@ namespace Neptune.Web.ScheduledJobs
             var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
 
             // a PyQGIS script computes the TGU layer and saves it as a shapefile
-            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisTestWorkingDirectory, outputPath);
+            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputPath);
 
             if (processUtilityResult.ReturnCode != 0)
             {
                 Logger.Error("TGU Geoprocessing failed. Output:");
                 Logger.Error(processUtilityResult.StdOutAndStdErr);
-                return;
+                throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             }
+
+            Logger.Info("QGIS output:");
+            Logger.Info(processUtilityResult.StdOutAndStdErr);
 
             try
             {
@@ -78,7 +81,6 @@ namespace Neptune.Web.ScheduledJobs
     }
 }
 
-// No reason for this code to live in 
 public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
 {
     public Ogr2OgrCommandLineRunnerForTGU(string pathToOgr2OgrExecutable, int coordinateSystemId, double totalMilliseconds) : base(pathToOgr2OgrExecutable, coordinateSystemId, totalMilliseconds)

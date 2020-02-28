@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected RegionalSubbasin()
         {
             this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
+            this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
             this.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<RegionalSubbasin>();
         }
 
@@ -70,13 +71,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return HRUCharacteristics.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
+            return HRUCharacteristics.Any() || LoadGeneratingUnits.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(HRUCharacteristic).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(HRUCharacteristic).Name, typeof(LoadGeneratingUnit).Name};
 
 
         /// <summary>
@@ -106,6 +107,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in LoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -125,6 +131,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return RegionalSubbasinID; } set { RegionalSubbasinID = value; } }
 
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
+        public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public virtual ICollection<RegionalSubbasin> RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
 

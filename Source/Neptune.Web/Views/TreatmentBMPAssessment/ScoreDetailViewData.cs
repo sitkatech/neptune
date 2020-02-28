@@ -51,9 +51,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                     .SortByOrderThenName().Select(x =>
                         new TreatmentBMPAssessmentObservationTypeSimple(x.TreatmentBMPAssessmentObservationType, treatmentBMPAssessment,
                             x.OverrideAssessmentScoreIfFailing)).ToList();
-                AssessmentIsComplete = treatmentBMPAssessment.CalculateIsAssessmentComplete();
-                AssessmentScore = treatmentBMPAssessment.CalculateIsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;
-
+                AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete;
+                AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete ? treatmentBMPAssessment.FormattedScore() : null;
             }
         }
 

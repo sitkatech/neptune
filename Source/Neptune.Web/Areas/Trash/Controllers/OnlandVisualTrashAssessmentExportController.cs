@@ -7,7 +7,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class OnlandVisualTrashAssessmentExportController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         public ViewResult ExportAssessmentGeospatialData()
         {
 

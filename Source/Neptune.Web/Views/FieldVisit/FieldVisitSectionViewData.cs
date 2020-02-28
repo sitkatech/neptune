@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.FieldVisit
             SubEntityUrl = fieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
 
-            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
 
             SectionHeader = fieldVisitSection.SectionHeader;
@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.FieldVisit
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
 
 
-            MaintenanceRecord = fieldVisit.GetMaintenanceRecord();
+            MaintenanceRecord = fieldVisit.MaintenanceRecord;
             InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
             PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&

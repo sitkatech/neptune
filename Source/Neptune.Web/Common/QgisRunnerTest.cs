@@ -34,7 +34,7 @@ namespace Neptune.Web.Common
         public void TestPyqgisLauncher()
         {
             var processUtilityResult = QgisRunner.ExecuteGenericPyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript,
-                NeptuneWebConfiguration.PyqgisTestWorkingDirectory);
+                NeptuneWebConfiguration.PyqgisWorkingDirectory);
 
             Assert.That(processUtilityResult.ReturnCode == 0);
         }
@@ -43,7 +43,7 @@ namespace Neptune.Web.Common
         public void TestProcessing()
         {
             var processUtilityResult = QgisRunner.ExecuteGenericPyqgisScript(
-                $"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}TestPyqgisProcessing.py",
+                $"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisProcessing.py",
                 @"C:\Windows\System32\");
 
             Assert.That(processUtilityResult.ReturnCode == 0);
@@ -53,7 +53,7 @@ namespace Neptune.Web.Common
         public void TestProcessing2()
         {
             var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript(
-                $"{NeptuneWebConfiguration.PyqgisTestWorkingDirectory}ComputeTrashGeneratingUnits.py",
+                $"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py",
                 @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             Assert.That(processUtilityResult.ReturnCode == 0);

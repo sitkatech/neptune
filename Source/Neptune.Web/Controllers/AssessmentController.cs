@@ -17,23 +17,27 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.Assessment);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
+            var treatmentBMPAssessmentObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList();
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBMPAssessmentObservationTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
-            var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var treatmentBMPAssessmentObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.Include(x => x.TreatmentBMPTypeAssessmentObservationTypes).ToList();
+            var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, treatmentBMPAssessmentObservationTypes);
             var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments
+                .Include(x => x.FieldVisit)
                 .Include(x => x.FieldVisit.PerformedByPerson)
                 .Include(x => x.TreatmentBMP)
-                .Include(x => x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds)
+                .Include(x => x.TreatmentBMP.StormwaterJurisdiction)
+                .Include(x => x.TreatmentBMP.StormwaterJurisdiction.Organization)
                 .Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
                 .Include(x => x.TreatmentBMPObservations)
                 .Include(x => x.TreatmentBMPObservations.Select(y => y.TreatmentBMPAssessmentObservationType))
-                .ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson))
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList()
                 .OrderByDescending(x => x.GetAssessmentDate()).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);

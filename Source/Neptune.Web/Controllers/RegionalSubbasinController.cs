@@ -1,6 +1,5 @@
 ﻿using GeoJSON.Net.Feature;
 using Hangfire;
-using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
@@ -45,21 +44,11 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ContentResult UpstreamDelineation(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        public ContentResult UpstreamDelineation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
+            var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry();
 
-            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
-
-            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
-                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry)
-                .ToList().UnionListGeometries();
-
-            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
-            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
-
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
@@ -71,7 +60,6 @@ namespace Neptune.Web.Controllers
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
             return ViewRefreshHRUCharacteristics(regionalSubbasin, new ConfirmDialogFormViewModel());
         }
-
 
         [HttpPost]
         [NeptuneAdminFeature]
@@ -95,7 +83,6 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Detail(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
@@ -103,7 +90,7 @@ namespace Neptune.Web.Controllers
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
             var regionalSubbasinCatchmentGeometry4326 = regionalSubbasin.CatchmentGeometry4326;
 
-            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(regionalSubbasinCatchmentGeometry4326);
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(regionalSubbasinCatchmentGeometry4326);
             var geoJsonFeatureCollection = new FeatureCollection(new List<Feature> {geoJson});
             var layerGeoJson = new LayerGeoJson("Catchment Boundary", geoJsonFeatureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
             var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBox(regionalSubbasinCatchmentGeometry4326));
@@ -138,7 +125,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewRefreshFromOCSurvey(ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to refresh the Regional Subbasins layer from OC Survey?<br /><br />This can take a little while to run.";
+            var confirmMessage = "Are you sure you want to refresh the Regional Subbasins layer from OC Survey?<br /><br />This can take a little while to run.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -146,8 +133,8 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Grid()
         {
-            var viewData = new Views.RegionalSubbasin.GridViewData(CurrentPerson);
-            return RazorView<Views.RegionalSubbasin.Grid, Views.RegionalSubbasin.GridViewData>(viewData);
+            var viewData = new GridViewData(CurrentPerson);
+            return RazorView<Grid, GridViewData>(viewData);
         }
 
         [NeptuneAdminFeature]

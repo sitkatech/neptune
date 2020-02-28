@@ -68,7 +68,6 @@ namespace Neptune.Web.Models
             treatmentBMPType.MaintenanceRecords.Add(this);
             this.FieldVisitID = fieldVisit.FieldVisitID;
             this.FieldVisit = fieldVisit;
-            fieldVisit.MaintenanceRecords.Add(this);
         }
 
         /// <summary>

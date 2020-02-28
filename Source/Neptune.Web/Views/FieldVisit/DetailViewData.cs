@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.FieldVisit
             AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FieldVisit = fieldVisit;
-            MaintenanceRecord = FieldVisit.GetMaintenanceRecord();
+            MaintenanceRecord = FieldVisit.MaintenanceRecord;
             InitialAssessmentViewData = initialAssessmentViewData;
             PostMaintenanceAssessmentViewData = postMaintenanceAssessmentViewData;
             EntityName = "Treatment BMP Field Visits";
@@ -60,9 +60,8 @@ namespace Neptune.Web.Views.FieldVisit
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanManageStormwaterJurisdiction =
-                currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
-            CanEditStormwaterJurisdiction =
-                currentPerson.CanEditStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+                currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
+            CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
             MarkAsProvisionalUrl =

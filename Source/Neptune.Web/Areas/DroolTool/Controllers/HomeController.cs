@@ -29,9 +29,9 @@ namespace Neptune.Web.Areas.DroolTool.Controllers
             //    Response.Cookies.Add(myCookie);
             //}
 
-            var droolToolWatersheds = HttpRequestStorage.DatabaseEntities.DroolToolWatersheds.Select(x => x.DroolToolWatershedGeometry);
+            var droolToolWatersheds = HttpRequestStorage.DatabaseEntities.DroolToolWatersheds.Select(x => x.DroolToolWatershedGeometry4326);
             var watershedCoverage = droolToolWatersheds.ToList().UnionListGeometries();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(watershedCoverage);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(watershedCoverage);
             var watershedCoverageLayerGeoJson = new LayerGeoJson("WatershedCoverage", new FeatureCollection(new List<Feature> {feature}), "#ffffff", 0,
                 LayerInitialVisibility.Hide);
             var stormwaterMapInitJson = new DroolToolMapInitJson("droolToolMap", MapInitJson.DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),

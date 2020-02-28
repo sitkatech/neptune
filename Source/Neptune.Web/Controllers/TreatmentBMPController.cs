@@ -20,16 +20,18 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using GeoJSON.Net.Feature;
+using Hangfire;
 using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.TreatmentBMP;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
@@ -41,9 +43,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
-using Hangfire;
-using Neptune.Web.ScheduledJobs;
-using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -89,28 +88,15 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> TreatmentBMPGridJsonData()
         {
-            // ReSharper disable once InconsistentNaming
-            var treatmentBMPs = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailed>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
-        }
-
-        private List<TreatmentBMP> GetTreatmentBmpsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson)
-        {
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            gridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit);
-            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x => x.MaintenanceRecords)
-                .Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPAssessments)
-                .Include(x => x.TreatmentBMPAssessments.Select(y => y.FieldVisit))
-                .Include(x => x.WaterQualityManagementPlan)
-                .Include(x => x.Delineations)
-                .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
         [NeptuneViewFeature]
@@ -125,27 +111,14 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary> TreatmentBMPAssessmentSummaryGridJsonData()
         {
-            var vMostRecentTreatmentBMPAssessments =
-                GetTreatmentBMPAssessmentSummariesAndGridSpec(out GridSpec<TreatmentBMPAssessmentSummary> gridSpec,
-                    CurrentPerson);
-            var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary>(vMostRecentTreatmentBMPAssessments,
-                    gridSpec);
-            return gridJsonNetJObjectResult;
-        }
+            var gridSpec = new TreatmentBMPAssessmentSummaryGridSpec();
+            var stormwaterJurisdictionIDsCurrentUserCanEdit = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
 
-        private List<TreatmentBMPAssessmentSummary> GetTreatmentBMPAssessmentSummariesAndGridSpec(
-            out GridSpec<TreatmentBMPAssessmentSummary> gridSpec, Person currentPerson)
-        {
-            gridSpec = new TreatmentBMPAssessmentSummaryGridSpec();
-            var stormwaterJurisdictionIDsCurrentUserCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanView()
-                .Select(y => y.StormwaterJurisdictionID).ToList();
-
-            var vMostRecentTreatmentBMPAssessments =
+            var vMostRecentTreatmentBMPAssessments1 =
                 HttpRequestStorage.DatabaseEntities.vMostRecentTreatmentBMPAssessments.Where(x =>
                     stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
             var vMostRecentTreatmentBMPAssessmentIDs =
-                vMostRecentTreatmentBMPAssessments.Select(y => y.LastAssessmentID).ToList();
+                vMostRecentTreatmentBMPAssessments1.Select(y => y.LastAssessmentID).ToList();
 
             var treatmentBMPObservations = HttpRequestStorage.DatabaseEntities.TreatmentBMPObservations.OrderBy(x=>x.TreatmentBMPAssessment.TreatmentBMPID).ThenBy(x=>x.TreatmentBMPTypeAssessmentObservationType.SortOrder).Where(x =>
                 vMostRecentTreatmentBMPAssessmentIDs
@@ -172,12 +145,16 @@ namespace Neptune.Web.Controllers
                 };
             });
 
-            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
+            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments1.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
                 x => x.LastAssessmentID,
                 y => y.TreatmentBMPAssessmentID,
                 (x,y) => new TreatmentBMPAssessmentSummary {AssessmentSummary = x, Notes = string.Join("; ", y.Select(z=>z.Notes).OrderBy(z=>z))});
-
-            return treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
+            var vMostRecentTreatmentBMPAssessments =
+                treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
+            var gridJsonNetJObjectResult =
+                new GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary>(vMostRecentTreatmentBMPAssessments,
+                    gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [TreatmentBMPViewFeature]
@@ -520,7 +497,7 @@ namespace Neptune.Web.Controllers
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
-                var reprojectedLocationPoint = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(bmp.LocationPoint);
+                var reprojectedLocationPoint = bmp.LocationPoint4326;
                 var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), reprojectedLocationPoint,
                     reprojectedLocationPoint.YCoordinate.GetValueOrDefault(),
                     reprojectedLocationPoint.XCoordinate.GetValueOrDefault(),
@@ -943,7 +920,7 @@ namespace Neptune.Web.Controllers
             bool update)
         {
             ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
-                outputShapefileName, update);
+                outputShapefileName, update, false);
         }
     }
 }

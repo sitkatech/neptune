@@ -41,9 +41,7 @@ namespace Neptune.Web.Models
 
         public string GetOrganizationDisplayName()
         {
-            return IsTransportationJurisdiction
-                ? Organization.OrganizationShortName
-                : Organization.OrganizationName;
+            return Organization.OrganizationName;
         }
 
         public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(List<StormwaterJurisdiction> stormwaterJurisdictions)
@@ -55,7 +53,7 @@ namespace Neptune.Web.Models
 
         private static GeoJSON.Net.Feature.Feature MakeFeatureWithRelevantProperties(StormwaterJurisdiction stormwaterJurisdiction)
         {
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(stormwaterJurisdiction.StormwaterJurisdictionGeometry.Geometry4326);
             feature.Properties.Add("State", stormwaterJurisdiction.StateProvince.StateProvinceAbbreviation);
             feature.Properties.Add("County/City", stormwaterJurisdiction.Organization.OrganizationName);
             feature.Properties.Add("StormwaterJurisdictionID", stormwaterJurisdiction.StormwaterJurisdictionID);

@@ -39,9 +39,5 @@ namespace Neptune.Web.Models
         {
             return DetailUrlTemplate.ParameterReplace(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
         }
-
-
-
     }
-
 }

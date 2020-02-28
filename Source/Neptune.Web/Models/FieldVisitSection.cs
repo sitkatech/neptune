@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
 
         public override bool ExpandMenu(FieldVisit fieldVisit)
         {
-            return fieldVisit.GetMaintenanceRecord() != null;
+            return fieldVisit.MaintenanceRecord != null;
         }
     }
 

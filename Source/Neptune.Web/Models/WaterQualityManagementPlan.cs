@@ -11,32 +11,34 @@ namespace Neptune.Web.Models
 {
     public partial class WaterQualityManagementPlan : IAuditableEntity, IHaveHRUCharacteristics
     {
-        private static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
-            SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                c.Detail(UrlTemplate.Parameter1Int)));
-
         public string GetAuditDescriptionString()
         {
             return $"Water Quality Management Plan \"{WaterQualityManagementPlanName}\"";
         }
+
+        private static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
+            SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.Detail(UrlTemplate.Parameter1Int)));
 
         public string GetDetailUrl()
         {
             return DetailUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
         }
 
+        private static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(
+            SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.Edit(UrlTemplate.Parameter1Int)));
         public string GetEditUrl()
         {
-            return new UrlTemplate<int>(
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.Edit(UrlTemplate.Parameter1Int))).ParameterReplace(WaterQualityManagementPlanID);
+            return EditUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
         }
 
+        private static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(
+            SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.Delete(UrlTemplate.Parameter1Int)));
         public string GetDeleteUrl()
         {
-            return new UrlTemplate<int>(
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.Delete(UrlTemplate.Parameter1Int))).ParameterReplace(WaterQualityManagementPlanID);
+            return DeleteUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
         }
 
         public HtmlString GetDisplayNameAsUrl()

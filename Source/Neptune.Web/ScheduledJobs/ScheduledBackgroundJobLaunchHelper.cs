@@ -37,5 +37,11 @@
             var delineationDiscrepancyCheckerBackgroundJob = new DelineationDiscrepancyCheckerBackgroundJob();
             delineationDiscrepancyCheckerBackgroundJob.RunJob();
         }
+
+        public static void RunLoadGeneratingUnitRefreshJob(int currentPersonPersonID)
+        {
+            var loadGeneratingUnitRefreshScheduledBackgroundJob = new LoadGeneratingUnitRefreshScheduledBackgroundJob();
+            loadGeneratingUnitRefreshScheduledBackgroundJob.RunJob();
+        }
     }
 }

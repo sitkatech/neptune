@@ -41,9 +41,7 @@ namespace Neptune.Web.Models
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
         public static HtmlString GetDetailUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
         {
-            if (new OnlandVisualTrashAssessmentViewFeature().HasPermission(currentPerson, onlandVisualTrashAssessment)
-                    .HasPermission && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
-                OnlandVisualTrashAssessmentStatus.Complete)
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete)
             {
                 return new HtmlString(
                     $"<a class='gridButton' href='{DetailUrlTemplate.ParameterReplace(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)}'>View</a>");
@@ -65,7 +63,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetEditUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
         {
-            var userCanEdit = new OnlandVisualTrashAssessmentEditStausFeature()
+            var userCanEdit = new OnlandVisualTrashAssessmentEditStatusFeature()
                 .HasPermission(currentPerson, onlandVisualTrashAssessment)
                 .HasPermission;
             if (!userCanEdit) return new HtmlString(Empty);
@@ -115,18 +113,11 @@ namespace Neptune.Web.Models
             return HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry.Intersects(transect));
         }
 
-        public static DbGeometry GetAreaViaTransect(this OnlandVisualTrashAssessment ovta)
-        {
-            var parcelGeoms = ovta.GetParcelsViaTransect().Select(x => x.ParcelGeometry).ToList();
-            return parcelGeoms.UnionListGeometries();
-        }
-
         public static FeatureCollection GetAssessmentAreaFeatureCollection(this OnlandVisualTrashAssessment ovta)
         {
             var featureCollection = new FeatureCollection();
-
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(ovta.GetAreaViaTransect());
-
+            var parcelGeoms = ovta.GetParcelsViaTransect().Select(x => x.ParcelGeometry4326).ToList();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(parcelGeoms.UnionListGeometries());
             featureCollection.Features.Add(feature);
             return featureCollection;
         }

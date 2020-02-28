@@ -38,7 +38,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
-            var fieldVisitCount = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).Count;
+            var fieldVisitCount = HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds.GetProvisionalFieldVisits(CurrentPerson).Count;
             var treatmentBMPsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson).Count;
             var bmpDelineationsCount = HttpRequestStorage.DatabaseEntities.Delineations
                 .GetProvisionalBMPDelineations(CurrentPerson).Count;
@@ -48,11 +48,11 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData(string gridName)
+        public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData(string gridName)
         {
             var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, gridName);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds.GetProvisionalFieldVisits(CurrentPerson).OrderBy(x => x.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
 

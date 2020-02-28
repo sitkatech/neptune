@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
         {
             this.DelineationOverlaps = new HashSet<DelineationOverlap>();
             this.DelineationOverlapsWhereYouAreTheOverlappingDelineation = new HashSet<DelineationOverlap>();
+            this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
         }
 
         /// <summary>
@@ -91,13 +92,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any();
+            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any() || LoadGeneratingUnits.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name, typeof(LoadGeneratingUnit).Name};
 
 
         /// <summary>
@@ -131,6 +132,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
+
+            foreach(var x in LoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -149,6 +155,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<DelineationOverlap> DelineationOverlaps { get; set; }
         public virtual ICollection<DelineationOverlap> DelineationOverlapsWhereYouAreTheOverlappingDelineation { get; set; }
+        public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
         public virtual Person VerifiedByPerson { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

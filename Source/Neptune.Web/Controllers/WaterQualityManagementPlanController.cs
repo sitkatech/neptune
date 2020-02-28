@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
@@ -31,8 +32,11 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(y=>y.StormwaterJurisdictionID).Contains(x.StormwaterJurisdictionID)).ToList();
-
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .Include(x => x.WaterQualityManagementPlanVerifies)
+                .Where(x =>
+                stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
         }
@@ -41,11 +45,13 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlanVerifications = HttpRequestStorage.DatabaseEntities
-                .WaterQualityManagementPlanVerifies
+                .WaterQualityManagementPlanVerifies.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan
+                    .StormwaterJurisdictionID))
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
-                .ThenByDescending(x => x.LastEditedDate).ToList().Where(x => CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(y => y.StormwaterJurisdictionID).Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID)).ToList();
+                .ThenByDescending(x => x.LastEditedDate).ToList();
 
             var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);
@@ -88,6 +94,12 @@ namespace Neptune.Web.Controllers
             };
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
+
+            if (waterQualityManagementPlan.TreatmentBMPs.Any(x => x.Delineation != null))
+            {
+                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(
+                    waterQualityManagementPlan.TreatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation)));
+            }
 
             var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).ToList();
@@ -335,7 +347,9 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
         {
-            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), BoundingBox.MakeNewDefaultBoundingBox());
+            var wqmpParcelGeometries =
+                waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel.ParcelGeometry4326);
+            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), new BoundingBox(wqmpParcelGeometries));
             var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
         }

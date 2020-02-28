@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
@@ -107,7 +106,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForWaterQualityDetentionVolume { get; }
         public Models.FieldDefinition FieldDefinitionForWettedFootprint { get; }
         public Models.FieldDefinition FieldDefinitionForWinterHarvestedWaterDemand { get; }
+        public Models.FieldDefinition FieldDefinitionForWatershed { get; }
+        public Models.FieldDefinition FieldDefinitionForDesignStormwaterDepth { get; }
         public bool HasModelingAttributes { get; }
+        public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; set; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
@@ -123,8 +125,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x => x.Instructions(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
-            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
-            CanEditStormwaterJurisdiction = currentPerson.CanEditStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
+            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
+            CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
@@ -195,6 +197,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForWaterQualityDetentionVolume = Models.FieldDefinition.WaterQualityDetentionVolume;
             FieldDefinitionForWettedFootprint = Models.FieldDefinition.WettedFootprint;
             FieldDefinitionForWinterHarvestedWaterDemand = Models.FieldDefinition.WinterHarvestedWaterDemand;
+            FieldDefinitionForWatershed = Models.FieldDefinition.Watershed;
+            FieldDefinitionForDesignStormwaterDepth = Models.FieldDefinition.DesignStormwaterDepth;
         }
 
         private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)

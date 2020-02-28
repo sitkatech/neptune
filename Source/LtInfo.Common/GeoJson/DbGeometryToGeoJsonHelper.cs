@@ -45,26 +45,7 @@ namespace LtInfo.Common.GeoJson
                 inp = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(inp);
             }
 
-            switch (inp.SpatialTypeName)
-            {
-                case "MultiPolygon":
-                    return new Feature(MultiPolygonFromDbGeometry(inp));
-                case "Polygon":
-                    return new Feature(PolygonFromDbGeometry(inp));
-                case "Point":
-                    return new Feature(PointFromDbGeometry(inp));
-                case "MultiPoint":
-                    return new Feature(MultiPointFromDbGeometry(inp));
-                case "MultiLineString":
-                    return new Feature(MultiLineStringFromDbGeometry(inp));
-                case "LineString":
-                    return new Feature(LineStringFromDbGeometry(inp));
-                case "GeometryCollection":
-                    SitkaLogger.Instance.LogDetailedErrorMessage("Error parsing geometry: " + inp.SpatialTypeName);
-                    throw new NotImplementedException();
-                default:
-                    throw new NotImplementedException();
-            }
+            return FromDbGeometryWithNoReproject(inp);
         }
 
         /// <summary>
@@ -72,7 +53,7 @@ namespace LtInfo.Common.GeoJson
         /// </summary>
         /// <param name="inp"></param>
         /// <returns></returns>
-        public static Feature FromDbGeometryNoReproject(DbGeometry inp) // only use NoReproject if you're sure that you're sending 4326
+        public static Feature FromDbGeometryWithNoReproject(DbGeometry inp) // only use NoReproject if you're sure that you're sending 4326
         {
             switch (inp.SpatialTypeName)
             {

@@ -32,10 +32,6 @@
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMP.Detail
 
-@functions {
-    public bool HasModelingAttributes;
-}
-
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
@@ -66,36 +62,37 @@
     </style>
 }
 
-@section RightOfPageTitle{
+@section RightOfPageTitle
+{
     @if (ViewDataTyped.CurrentPersonCanManage)
     {
         <div class="pull-right">
-            @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
-            {
-                <div style="display:inline-block">
-                    <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
-                    <span style="margin-right: 5px">Inventory has been verified</span>
-
-                    @if (ViewDataTyped.CanManageStormwaterJurisdiction)
-                    {
-                        @ModalDialogFormHelper.ModalDialogFormLink("Mark BMP Record as Provisional", ViewDataTyped.VerifiedUnverifiedUrl, "Mark BMP Record as Provisional?", 400, "Continue", "Cancel", new List<string> { "help-block", "unverify-inventory-btn" }, null, null)
-                    }
-                </div>
-            }
-            else
-            {
-                <div style="display:inline-block">
-                    <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
-                    <span style="margin-right: 5px">Inventory has not been verified</span>
-
-                    @if (ViewDataTyped.CanManageStormwaterJurisdiction)
-                    {
-                        @ModalDialogFormHelper.ModalDialogFormLink("Verify Inventory", ViewDataTyped.VerifiedUnverifiedUrl, "Verify Inventory?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
-                    }
-                </div>
-            }
-
             <div style="display: inline-block; vertical-align: top;">
+                @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
+                {
+                    <div style="text-align: center">
+                        <i class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></i>
+                        Inventory has been verified
+                    </div>
+
+                    if (ViewDataTyped.CanManageStormwaterJurisdiction)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Mark as Provisional", ViewDataTyped.VerifiedUnverifiedUrl, "Mark BMP Record as Provisional?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                }
+                else
+                {
+                    <div style="text-align: center">
+                        <i class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></i>
+                        Inventory has not been verified
+                    </div>
+
+                    if (ViewDataTyped.CanManageStormwaterJurisdiction)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Verify Inventory", ViewDataTyped.VerifiedUnverifiedUrl, "Verify Inventory?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                }
+
                 @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
             </div>
         </div>
@@ -117,6 +114,14 @@
         </ul>
     </div>
 }
+
+@if (ViewDataTyped.OpenRevisionRequest != null)
+{
+    <div class="alert alert-info">
+        There is an open <a href="@ViewDataTyped.OpenRevisionRequest.GetDetailUrl()">Regional Subbasin Revision Request</a> relating to this BMP.
+    </div>
+}
+
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -254,6 +259,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>
+                                    @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWatershed)
+                                </td>
+                                <td class="text-right">@(ViewDataTyped.TreatmentBMP.Watershed != null ? ViewDataTyped.TreatmentBMP.Watershed.WatershedName : string.Empty)</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignStormwaterDepth)
+                                </td>
+                                <td class="text-right">@(ViewDataTyped.TreatmentBMP.PrecipitationZone != null ? string.Format("{0} inches", ViewDataTyped.TreatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches) : string.Empty)</td>
+                            </tr>
                             @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                             {
                                 case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
@@ -1023,7 +1040,7 @@
         var regionalSubbasinLayer =
             map.addWmsLayer("OCStormwater:RegionalSubbasins",
                 "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                { styles: "regional_subbasin_wide"}, true);
+                { styles: "regional_subbasin_wide", maxZoom:22}, true);
 
         if (mapInitJson.DelineationLayer) {
             var delineationLayer = L.geoJSON(mapInitJson.DelineationLayer.GeoJsonFeatureCollection);

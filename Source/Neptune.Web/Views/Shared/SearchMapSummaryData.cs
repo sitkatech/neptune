@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.Shared
         public SearchMapSummaryData(string mapSummaryUrl, DbGeometry geometry, double? latitude, double? longitude, int entityID)
         {
             MapSummaryUrl = mapSummaryUrl;
-            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geometry);
+            GeometryJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(geometry);
             Latitude = latitude;
             Longitude = longitude;
             EntityID = entityID;

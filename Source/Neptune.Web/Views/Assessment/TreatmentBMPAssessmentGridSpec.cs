@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Assessment
         public TreatmentBMPAssessmentGridSpec(Person currentPerson,
             IEnumerable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
         {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, true), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
@@ -43,12 +43,12 @@ namespace Neptune.Web.Views.Assessment
             Add("Performed By", x => x.GetFieldVisitPerson().GetFullNameFirstLastAsUrl(), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisit.FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Assessment Type", x => x.TreatmentBMPAssessmentType.TreatmentBMPAssessmentTypeDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Status", x => x.HasCalculatedOrAlternateScore() ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Status", x => x.IsAssessmentComplete ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Score", x => x.FormattedScore(), 80, DhtmlxGridColumnFilterType.Numeric);
-            foreach (var observationType in allObservationTypes)
+            foreach (var treatmentBMPAssessmentObservationType in allObservationTypes)
             {
-                Add(observationType.DisplayNameWithUnits(),
-                    x => x?.CalculateObservationValueForObservationType(observationType), 150, DhtmlxGridColumnFilterType.Text);
+                Add(treatmentBMPAssessmentObservationType.DisplayNameWithUnits(),
+                    x => x?.CalculateObservationValueForObservationType(treatmentBMPAssessmentObservationType), 150, DhtmlxGridColumnFilterType.Text);
             }
         }
     }

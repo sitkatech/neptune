@@ -273,7 +273,7 @@
                                                                 <br />
                                                                 <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
                                                             </td>
-                                                            <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueWithUnitsForAttributeType(mro.CustomAttributeType)</td>
+                                                            <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueForAttributeType(mro.CustomAttributeType)</td>
                                                         </tr>
                                                     }
                                                 </tbody>
@@ -346,7 +346,7 @@
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@(ViewDataTyped.InitialAssessment.AssessmentStatus())</div>
+                                <div class="col-sm-9">@(ViewDataTyped.InitialAssessment.GetAssessmentStatus())</div>
                             </div>
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Score</label>
@@ -377,7 +377,7 @@
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@(ViewDataTyped.PostMaintenanceAssessment.AssessmentStatus())</div>
+                                <div class="col-sm-9">@(ViewDataTyped.PostMaintenanceAssessment.GetAssessmentStatus())</div>
                             </div>
 
                             <div class="row">

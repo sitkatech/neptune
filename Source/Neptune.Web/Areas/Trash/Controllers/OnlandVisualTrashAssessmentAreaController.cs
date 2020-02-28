@@ -218,14 +218,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         [HttpGet]
         public ContentResult FindByName()
         {
             return new ContentResult();
         }
 
-        [NeptuneViewFeature]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
         [HttpPost]
         public JsonResult FindByName(FindAssessmentAreaByNameViewModel viewModel)
         {
@@ -288,12 +288,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewNewAssessment(onlandVisualTrashAssessmentArea, viewModel);
             }
 
-            var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now,
+            var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, onlandVisualTrashAssessmentArea.StormwaterJurisdiction,
                 OnlandVisualTrashAssessmentStatus.InProgress, false, false)
             {
                 OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
-                AssessingNewArea = false,
-                StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID
+                AssessingNewArea = false
             };
 
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);

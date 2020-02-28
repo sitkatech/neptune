@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected LSPCBasin()
         {
+            this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -68,13 +69,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPs.Any();
+            return LoadGeneratingUnits.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasin).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -99,6 +100,11 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
+            foreach(var x in LoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in TreatmentBMPs.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -114,6 +120,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return LSPCBasinID; } set { LSPCBasinID = value; } }
 
+        public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
 
         public static class FieldLengths

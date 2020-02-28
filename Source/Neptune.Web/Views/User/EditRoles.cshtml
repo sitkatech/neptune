@@ -1,26 +1,28 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="EditRoles.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="EditRoles.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using LtInfo.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.User.EditRoles
 
 <style type="text/css">
+
     td, th {
         padding-left: 8px;
         padding-right: 8px;
@@ -32,18 +34,20 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     <div class="form-horizontal">
         <div class="form-group">
-            @Html.LabelFor(m => m.RoleID, new {@class = "col-xs-12 col-sm-3 control-label"})
+            <div class="col-xs-12 col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.RoleID)</div>
             <div class="col-xs-12 col-sm-9">
-                @Html.DropDownListFor(m => m.RoleID, ViewDataTyped.Roles, new {@class = "form-control"})
+                @Html.DropDownListFor(m => m.RoleID, ViewDataTyped.Roles, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.RoleID)
             </div>
         </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.DroolToolRoleID, new {@class = "col-xs-12 col-sm-3 control-label"})
-                <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.DroolToolRoleID)
+            </div>
+            <div class="col-xs-12 col-sm-9">
                 @if (ViewDataTyped.IsAdmin)
                 {
-                    @Html.DropDownListFor(m => m.DroolToolRoleID, ViewDataTyped.DroolToolRoles, new {@class = "form-control"})
+                    @Html.DropDownListFor(m => m.DroolToolRoleID, ViewDataTyped.DroolToolRoles, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.DroolToolRoleID)
                 }
                 else
@@ -51,10 +55,12 @@ Source code is available upon request via <support@sitkatech.com>.
                     @ViewDataTyped.CurrentDroolToolRole.DroolToolRoleDisplayName
                     @Html.HiddenFor(m => m.DroolToolRoleID)
                 }
-                </div>
             </div>
+        </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.ShouldReceiveSystemCommunications, new {@class = "col-xs-12 col-sm-3 control-label"})
+            <div class="col-xs-12 col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.ShouldReceiveSystemCommunications)
+            </div>
             <div class="col-xs-12 col-sm-9">
                 <div class="radio-inline">
                     <label>
@@ -67,6 +73,24 @@ Source code is available upon request via <support@sitkatech.com>.
                     </label>
                 </div>
                 @Html.ValidationMessageFor(m => m.ShouldReceiveSystemCommunications)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.ShouldReceiveRSBRevisionRequests)
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                <div class="radio-inline">
+                    <label>
+                        @Html.RadioButtonFor(m => m.ShouldReceiveRSBRevisionRequests, true) Yes
+                    </label>
+                </div>
+                <div class="radio-inline">
+                    <label>
+                        @Html.RadioButtonFor(m => m.ShouldReceiveRSBRevisionRequests, false) No
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(m => m.ShouldReceiveRSBRevisionRequests)
             </div>
         </div>
     </div>

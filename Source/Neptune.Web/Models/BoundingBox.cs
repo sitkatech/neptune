@@ -238,5 +238,14 @@ namespace Neptune.Web.Models
         {
             return Southwest == boxB.Southwest && Northeast == boxB.Northeast;
         }
+
+        public static BoundingBox GetBoundingBox(List<StormwaterJurisdiction> stormwaterJurisdictions)
+        {
+            var boundingBox = stormwaterJurisdictions.Any()
+                ? new BoundingBox(stormwaterJurisdictions
+                    .Select(x => x.StormwaterJurisdictionGeometry.Geometry4326))
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            return boundingBox;
+        }
     }
 }

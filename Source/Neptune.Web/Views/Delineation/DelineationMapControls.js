@@ -16,78 +16,25 @@ var stopClickPropagation = function (parentElement) {
         });
 };
 
-L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
+L.Control.DelineationMapSelectedAsset = L.Control.extend({
     templateID: "selectedAssetControlTemplate",
 
-    initializeControlInstance: function (map) {
+    onAdd: function (map) {
+        var parentElement = L.DomUtil.create('div');
+        this.parentElement = parentElement;
+        parentElement.id = "selectedAssetControlContainer";
         stopClickPropagation(this.parentElement);
+        return parentElement;
+    },
 
-        L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
-            "click",
-            function (e) {
-                this.exitDrawCatchmentMode(false);
-            }.bind(this));
-
-        L.DomEvent.on(this.getTrackedElement("saveDelineationButton"),
-            "click",
-            function (e) {
-                this.exitDrawCatchmentMode(true);
-            }.bind(this));
-
-        L.DomEvent.on(this.getTrackedElement("delineationVertexThinningButton"),
-            "click",
-            function (e) {
-                this.thinButtonHandler();
-            }.bind(this));
-
-        L.DomEvent.on(this.getTrackedElement("saveLocationButton"),
-            "click",
-            function(e) {
-                this.exitEditLocationMode(true);
-            }.bind(this));
-
-        L.DomEvent.on(this.getTrackedElement("cancelLocationButton"),
-            "click",
-            function(e) {
-                this.exitEditLocationMode(false);
-            }.bind(this));
-
-        
+    getTrackedElement: function (id) {
+        return this.parentElement.querySelector("#" + id);
     },
 
     treatmentBMP: function (treatmentBMPFeature, delineationStatus) {
         this.treatmentBMPFeature = treatmentBMPFeature;
-        this.registerDelineationButtonHandler(treatmentBMPFeature);
-        this.registerDeleteButtonHandler(treatmentBMPFeature);
-        this.registerEditLocationButtonHandler(treatmentBMPFeature);
 
-        var detailLink = this.getTrackedElement("selectedBMPDetailLink");
-        var href =
-            "/TreatmentBMP/Detail/" + treatmentBMPFeature.properties.TreatmentBMPID;
-        detailLink.href = href;
-        detailLink.innerHTML = treatmentBMPFeature.properties.Name;
-
-        var newWindowIcon = L.DomUtil.create("span", "glyphicon glyphicon-new-window");
-        detailLink.append(newWindowIcon);
-
-        this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
-
-        this.getTrackedElement("delineationArea").innerHTML = "-";
-        this.getTrackedElement("delineationButton").innerHTML = "Edit";
-
-        if (treatmentBMPFeature.properties.DelineationURL) {
-            this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
-            this.getTrackedElement("delineationStatus").style.display = "initial";
-            this.getTrackedElement("deleteDelineationButton").style.display = "initial";
-        } else {
-            this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
-            this.getTrackedElement("delineationStatus").style.display = "none";
-            this.getTrackedElement("deleteDelineationButton").style.display = "none";
-        }
-
-        this.getTrackedElement("selectedBmpInfo").classList.remove("hiddenControlElement");
-        this.getTrackedElement("noAssetSelected").classList.add("hiddenControlElement");
-
+        debugger;
         $('#verifyDelineationButton').bootstrapToggle({
             // note that bootstrapToggle is broken and you have supply class names that don't quite make sense to make it work
             onstyle: 'btn btn-neptune btn-sm',
@@ -111,88 +58,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         });
     },
 
-    registerDelineationButtonHandler: function (treatmentBMPFeature) {
-        var self = this;
-        var delineationButton = this.getTrackedElement("delineationButton");
-        if (this._beginDelineationHandler) {
-            L.DomEvent.off(delineationButton, "click", this._beginDelineationHandler);
-            this._beginDelineationHandler = null;
-        }
-
-        this._beginDelineationHandler = function (e) {
-            window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
-            self.disableDelineationButton();
-            e.stopPropagation();
-        };
-
-        L.DomEvent.on(delineationButton,
-            "click", this._beginDelineationHandler
-        );
-    },
-
-    registerDeleteButtonHandler: function (treatmentBMPFeature) {
-
-        var deleteButton = this.getTrackedElement("deleteDelineationButton");
-        if (this._deleteDelineationHandler) {
-            L.DomEvent.off(deleteButton, "click", this._deleteDelineationHandler);
-            this._deleteDelineationHandler = null;
-        }
-
-        this._deleteDelineationHandler = function (e) {
-            window.delineationMap.deleteDelineation(treatmentBMPFeature);
-        };
-
-        L.DomEvent.on(deleteButton,
-            "click", this._deleteDelineationHandler
-        );
-    },
-
-    registerEditLocationButtonHandler: function (treatmentBMPFeature) {
-        var self = this;
-        var editLocationButton = this.getTrackedElement("editLocationButton");
-
-        if (this._editBMPLocationHandler) {
-            L.DomEvent.off(editLocationButton, "click", this._beginDelineationHandler);
-            this._beginDelineationHandler = null;
-        }
-
-        this._editBMPLocationHandler = function(e) {
-            self.launchEditLocationMode();
-            window.delineationMap.launchEditLocationMode();
-            e.stopPropagation();
-        };
-
-        L.DomEvent.on(editLocationButton, "click", this._editBMPLocationHandler);
-    },
-
-    launchEditLocationMode: function() {
-        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.add("hiddenControlElement");
-        this.getTrackedElement("editLocationButtonWrapper").classList.add("hiddenControlElement");
-
-        this.getTrackedElement("editLocationModeButtonsWrapper").classList.remove("hiddenControlElement");
-
-        jQuery(this.getTrackedElement("delineationButton")).off("click");
-    },
-
-    exitEditLocationMode: function (save) {
-        this.registerDelineationButtonHandler(this.treatmentBMPFeature);
-
-        // note that we don't bring back the edit/delete delineation buttons here; the save Promise will do that as a completion action
-
-        this.getTrackedElement("editLocationButtonWrapper").classList.remove("hiddenControlElement");
-        this.getTrackedElement("editLocationModeButtonsWrapper").classList.add("hiddenControlElement");
-
-        window.delineationMap.exitEditLocationMode(save);
-    },
-
     launchDrawCatchmentMode: function (drawModeOptions) {
         // okay to persist state because this control mode is ephemeral: see below for where it dies
         this.drawModeOptions = drawModeOptions;
-
-        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
-        this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
-
-
+        
         this.getTrackedElement("vertexControlContainer").style.display = "none";
         this.getTrackedElement("delineationVertexThinningButton").innerHTML = "Thin";
 
@@ -222,56 +91,11 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             });
             this.slider.on("slideStop",
                 function (sliderValue) {
-                    this.thin( sliderValue);
+                    this.thin(sliderValue);
                 }.bind(this));
         }
 
         this.slider.setValue(TOLERANCE_DISTRIBUTED);
-    },
-
-    exitDrawCatchmentMode: function (save) {
-        // see above
-        this.drawModeOptions = null;
-
-        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
-        this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
-        this.enableDelineationButton();
-        window.delineationMap.exitDrawCatchmentMode(save);
-    },
-
-    reset: function () {
-        this.getTrackedElement("selectedBmpInfo").classList.add("hiddenControlElement");
-        this.getTrackedElement("noAssetSelected").classList.remove("hiddenControlElement");
-    },
-
-    reportDelineationArea: function (properties) {
-        this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
-        this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
-    },
-
-    clearDelineationDetails: function () {
-        this.getTrackedElement("delineationArea").innerHTML = "-";
-        this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
-        this.getTrackedElement("deleteDelineationButton").style.display = "none";
-        this.getTrackedElement("delineationStatus").style.display = "none";
-    },
-
-    disableDelineationButton: function () {
-        if (!this.getTrackedElement("delineationButton")) {
-            return; //misplaced call
-        }
-        this.getTrackedElement("delineationButton").disabled = "disabled";
-    },
-
-    enableDelineationButton: function () {
-        if (!this.getTrackedElement("delineationButton")) {
-            return; //misplaced call
-        }
-        this.getTrackedElement("delineationButton").removeAttribute("disabled");
-    },
-
-    showDelineationButtons: function() {
-        this.getTrackedElement("editOrDeleteDelineationButtonsWrapper").classList.remove("hiddenControlElement");
     },
 
     thin: function (tolerance) {
@@ -341,7 +165,12 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         var self = this;
         this.parentElement.querySelectorAll("[name='flowOption']").forEach(function (el) {
-            L.DomEvent.on(el, 'click', function () { self.displayDelineationOptionsForFlowOption(this.value); });
+            L.DomEvent.on(el, 'click', function () {
+                // deselect any previouslyly selected delineation option and disable the delineation button so they have to select again to proceed.
+                self.parentElement.querySelectorAll("[name='delineationOption']").forEach(function (el) { el.checked = false; });
+                self.disableDelineationButton();
+                self.displayDelineationOptionsForFlowOption(this.value);            // will enable the delineation button if they selected centralized
+            });
         });
         this.parentElement.querySelectorAll("[name='delineationOption']").forEach(function (el) {
             L.DomEvent.on(el, 'click', function () { self.enableDelineationButton(); });
@@ -392,11 +221,13 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
             this.getTrackedElement("delineateOptionTrace").hidden = true;
         } else if (flowOption === "Centralized") {
+            this.enableDelineationButton();
+
             this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
             this.getTrackedElement("delineationTypeOptions").hidden = false;
 
             this.getTrackedElement("delineateOptionTrace").hidden = false;
-            this.getTrackedElement("delineationOptionDraw").hidden = false;
+            this.getTrackedElement("delineationOptionDraw").hidden = true;
 
             this.getTrackedElement("delineationOptionAuto").hidden = true;
         }
@@ -418,19 +249,20 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
                 window.delineationMap.launchAutoDelineateMode();
             }
         } else if (flowOption === "Centralized") {
-            if (delineationOption === "traceDelineate") {
-                window.delineationMap.launchTraceDelineateMode();
-            } else if (delineationOption === "drawDelineate") {
-                window.delineationMap.launchDrawCatchmentMode(drawModeOptions);
-            }
+            // 2/13/2020 Centralized BMPs' catchments are no longer editable by the user. They must conform to Regional Subbasins.
+            window.delineationMap.launchTraceDelineateMode();
         }
     },
 
-    enableDelineationButton: function() {
+    enableDelineationButton: function () {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
     },
 
-    preselectDelineationType: function(type) {
+    disableDelineationButton: function () {
+        this.getTrackedElement("continueDelineationButton").setAttribute("disabled", "disabled");
+    },
+
+    preselectDelineationType: function (type) {
         jQuery("input[name='flowOption'][value='" + type + "']").prop("checked", true);
     }
 });

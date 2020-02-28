@@ -25,7 +25,7 @@ label.group {
   font-weight: normal;
 }
 .hiddenControlElement {
-  display: none;
+  display: none !important;
 }
 /* weird gross hack to allow centered controls by overriding bottom-right control placement */
 .leaflet-bottom.leaflet-right {
@@ -67,4 +67,7 @@ div#vertexControlSlider .slider-tick.round.in-selection {
 }
 div#vertexControlSlider .slider-selection.tick-slider-selection {
   background-image: linear-gradient(to left, #77cfdc 0px, #0099ab 100%);
+}
+#delineationStatus label.btn-primary {
+  background-color: #0099ab;
 }

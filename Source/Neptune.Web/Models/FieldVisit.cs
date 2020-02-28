@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Linq;
-using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
@@ -33,14 +32,9 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString() => "Field Visit deleted";
 
-        public void DetachMaintenanceRecord()
-        {
-            //MaintenanceRecordID = null;
-        }
-
         public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
         {
-            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
             if (!isAssignedToStormwaterJurisdiction)
             {
                 IsFieldVisitVerified = false;
