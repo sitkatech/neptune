@@ -1,0 +1,19 @@
+﻿@using LtInfo.Common.HtmlHelperExtensions
+@inherits Neptune.Web.Views.TreatmentBMP.EditUpstreamBMP
+    
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(x => x.UpstreamBMPID)
+            </div>
+            <div class="col-sm-9">
+                @Html.SearchableDropDownListFor(x => x.UpstreamBMPID, ViewDataTyped.TreatmentBMPList)
+            </div>
+        </div>
+    </div>
+}

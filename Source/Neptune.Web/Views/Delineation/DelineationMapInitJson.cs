@@ -16,6 +16,11 @@ namespace Neptune.Web.Views.Delineation
                 (feature, treatmentBMP) =>
                 {
                     feature.Properties.Add("TreatmentBMPType", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName);
+                    if (treatmentBMP.UpstreamBMPID != null)
+                    {
+                        feature.Properties.Add("UpstreamBMPID", treatmentBMP.UpstreamBMPID);
+                        feature.Properties.Add("UpstreamBMPName", treatmentBMP.UpstreamBMP.TreatmentBMPName);
+                    }
                     if (treatmentBMP.Delineation != null)
                     {
                         feature.Properties.Add("DelineationURL", treatmentBMP.GetDelineationUrl());

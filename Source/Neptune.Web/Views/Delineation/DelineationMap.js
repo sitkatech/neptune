@@ -37,11 +37,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
 
     L.control.watermark({ position: 'bottomleft' }).addTo(this.map);
-    this.hookupEditLocationOnclick();
-    this.hookupSelectTreatmentBMPOnClick();
-    this.hookupDeselectOnClick();
-    this.hookupSelectTreatmentBMPByDelineation();
-    this.hookupBringMarkerToFrontOnZoomEnd();
+    this.initializationsOnMapRefresh();
 };
 
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Map.prototype);
@@ -68,6 +64,14 @@ var LEAFLET_TO_GEO_JSON_PRECISION = 14;
 
 /* Initialization methods and assorted convenience methods 
  */
+
+NeptuneMaps.DelineationMap.prototype.initializationsOnMapRefresh = function () {
+    this.hookupEditLocationOnclick();
+    this.hookupSelectTreatmentBMPOnClick();
+    this.hookupDeselectOnClick();
+    this.hookupSelectTreatmentBMPByDelineation();
+    this.hookupBringMarkerToFrontOnZoomEnd();
+};
 
 NeptuneMaps.DelineationMap.prototype.buildSelectedAssetControl = function () {
     this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
@@ -265,19 +269,18 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-            self.selectedAssetControl.showDelineationButtons();
+            self.initializationsOnMapRefresh();
             toast("Successfully updated Treatment BMP location.", "success");
         }).fail(function() {
             self.initializeTreatmentBMPClusteredLayer();
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
             self.removeLoading();
-            self.selectedAssetControl.showDelineationButtons();
+            self.initializationsOnMapRefresh();
             toast("There was an error updating the Treatment BMP location.");
         });
     } else {
         // don't jump through the hoops of actually saving, nothing was changed.
-        this.selectedAssetControl.showDelineationButtons();
         this.lastSelected.remove();
         var movedLayer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
         this.setSelectedFeature(movedLayer.feature);

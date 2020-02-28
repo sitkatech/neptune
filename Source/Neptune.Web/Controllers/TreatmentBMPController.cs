@@ -157,6 +157,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [HttpGet]
         [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -312,6 +313,69 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [TreatmentBMPEditFeature]
+        public PartialViewResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new EditUpstreamBMPViewModel(treatmentBMP);
+            
+            return ViewEditUpstreamBMP(treatmentBMP, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
+            EditUpstreamBMPViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditUpstreamBMP(treatmentBMP, viewModel);
+            }
+
+            viewModel.UpdateModel(treatmentBMP);
+
+            if (treatmentBMP.Delineation != null)
+            {
+                HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMP.Delineation);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+            }
+
+            SetMessageForDisplay("Upstream BMP successfully updated");
+            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMP)));
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        public ActionResult RemoveUpstreamBMP(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
+        {
+            var treatmentBMP = treatmentBmpPrimaryKey.EntityObject;
+
+            treatmentBMP.RemoveUpstreamBMP();
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            SetMessageForDisplay("Upstream BMP successfully removed");
+
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
+        }
+
+
+        private PartialViewResult ViewEditUpstreamBMP(TreatmentBMP treatmentBMP, EditUpstreamBMPViewModel viewModel)
+        {
+            var treatmentBMPs = treatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs()
+                .Where(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID);
+
+            var treatmentBMPSelectList = treatmentBMPs.ToSelectListWithDisabledEmptyFirstRow(
+                    x => x.TreatmentBMPID.ToString(CultureInfo.InvariantCulture), x => x.TreatmentBMPName,
+                    "Select an Upstream BMP");
+
+            var viewData = new EditUpstreamBMPViewData(treatmentBMPSelectList);
+
+            return RazorPartialView<EditUpstreamBMP, EditUpstreamBMPViewData, EditUpstreamBMPViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
         [TreatmentBMPManageFeature]
         public PartialViewResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -450,6 +514,12 @@ namespace Neptune.Web.Controllers
 
             var treatmentBMPTreatmentBMPName = treatmentBMP.TreatmentBMPName;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
+
+            foreach (var downstreamBMP in treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP)
+            {
+                downstreamBMP.UpstreamBMPID = null;
+            }
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();

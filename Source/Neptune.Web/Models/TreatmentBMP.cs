@@ -176,5 +176,10 @@ namespace Neptune.Web.Models
         {
             return Delineation?.DelineationGeometry;
         }
+
+        public void RemoveUpstreamBMP()
+        { 
+            this.UpstreamBMPID = null;
+        }
     }
 }

@@ -109,7 +109,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForWatershed { get; }
         public Models.FieldDefinition FieldDefinitionForDesignStormwaterDepth { get; }
         public bool HasModelingAttributes { get; }
-        public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; set; }
+        public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; }
+        public string EditUpstreamBMPUrl { get; }
+        public string RemoveUpstreamBMPUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
@@ -199,6 +201,14 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForWinterHarvestedWaterDemand = Models.FieldDefinition.WinterHarvestedWaterDemand;
             FieldDefinitionForWatershed = Models.FieldDefinition.Watershed;
             FieldDefinitionForDesignStormwaterDepth = Models.FieldDefinition.DesignStormwaterDepth;
+
+            OpenRevisionRequest = TreatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x =>
+                x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
+
+            EditUpstreamBMPUrl =
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditUpstreamBMP(treatmentBMP));
+            RemoveUpstreamBMPUrl =
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RemoveUpstreamBMP(treatmentBMP));
         }
 
         private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)

@@ -28,6 +28,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[WatershedID] [int] NULL,
 	[LSPCBasinID] [int] NULL,
 	[PrecipitationZoneID] [int] NULL,
+	[UpstreamBMPID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -79,6 +80,11 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Tr
 REFERENCES [dbo].[TrashCaptureStatusType] ([TrashCaptureStatusTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TrashCaptureStatusType_TrashCaptureStatusTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TreatmentBMP_UpstreamBMPID_TreatmentBMPID] FOREIGN KEY([UpstreamBMPID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TreatmentBMP_UpstreamBMPID_TreatmentBMPID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeID] FOREIGN KEY([TreatmentBMPLifespanTypeID])
 REFERENCES [dbo].[TreatmentBMPLifespanType] ([TreatmentBMPLifespanTypeID])

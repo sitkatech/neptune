@@ -1,3 +1,4 @@
+using System;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GeoJson;
@@ -108,6 +109,12 @@ namespace Neptune.Web.Models
             }));
 
             return featureCollection;
+        }
+
+        public static IEnumerable<TreatmentBMP> GetTreatmentBMPs(this RegionalSubbasin regionalSubbasin)
+        {
+            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Where(x => regionalSubbasin.CatchmentGeometry.Contains(x.LocationPoint));
         }
     }
 }

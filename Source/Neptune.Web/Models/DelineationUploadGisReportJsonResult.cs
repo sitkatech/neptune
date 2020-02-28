@@ -14,7 +14,7 @@ namespace Neptune.Web.Models
         public int NumberOfDelineationNotMatchingTreatmentBMP;
         public List<string> Errors;
 
-        public static DelineationUploadGisReportJsonResult GetDelineationUpoadGisReportFromStaging(Person person,
+        public static DelineationUploadGisReportJsonResult GetDelineationUploadGisReportFromStaging(Person person,
 
             ICollection<DelineationStaging> delineationStagings)
         {

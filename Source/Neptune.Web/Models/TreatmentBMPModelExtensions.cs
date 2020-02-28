@@ -282,5 +282,29 @@ namespace Neptune.Web.Models
             return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
                     x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
         }
+
+
+        public static void UpdateUpstreamBMPReferencesIfNecessary(this TreatmentBMP treatmentBMP)
+        {
+            //If this BMP has an Upstream BMP, after the location change, can that Upstream BMP still fulfill its duty?
+            if (treatmentBMP.UpstreamBMPID != null && !treatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs().Contains(treatmentBMP.UpstreamBMP))
+            {
+                //Do we need to check ahead of time and warn them this will happen?
+                //Do we need to return a message indicating that this has changed?
+                treatmentBMP.UpstreamBMPID = null;
+            }
+
+            //If this BMP is an Upstream BMP for any other BMPs, after the location change, can this BMP still fulfill its duty?
+            if (treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP.Any())
+            {
+                treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP.ToList().ForEach(x =>
+                {
+                    if (!x.GetRegionalSubbasin().CatchmentGeometry.Contains(treatmentBMP.LocationPoint))
+                    {
+                        x.UpstreamBMPID = null;
+                    }
+                });
+            }
+        }
     }
 }

@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             Property(x => x.WatershedID).HasColumnName(@"WatershedID").HasColumnType("int").IsOptional();
             Property(x => x.LSPCBasinID).HasColumnName(@"LSPCBasinID").HasColumnType("int").IsOptional();
             Property(x => x.PrecipitationZoneID).HasColumnName(@"PrecipitationZoneID").HasColumnType("int").IsOptional();
+            Property(x => x.UpstreamBMPID).HasColumnName(@"UpstreamBMPID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMPType).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID
@@ -50,6 +51,7 @@ namespace Neptune.Web.Models
             HasOptional(a => a.Watershed).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.WatershedID).WillCascadeOnDelete(false); // FK_TreatmentBMP_Watershed_WatershedID
             HasOptional(a => a.LSPCBasin).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.LSPCBasinID).WillCascadeOnDelete(false); // FK_TreatmentBMP_LSPCBasin_LSPCBasinID
             HasOptional(a => a.PrecipitationZone).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.PrecipitationZoneID).WillCascadeOnDelete(false); // FK_TreatmentBMP_PrecipitationZone_PrecipitationZoneID
+            HasOptional(a => a.UpstreamBMP).WithMany(b => b.TreatmentBMPsWhereYouAreTheUpstreamBMP).HasForeignKey(c => c.UpstreamBMPID).WillCascadeOnDelete(false); // FK_TreatmentBMP_TreatmentBMP_UpstreamBMPID_TreatmentBMPID
         }
     }
 }
