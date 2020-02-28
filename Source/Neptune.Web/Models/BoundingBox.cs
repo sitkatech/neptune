@@ -243,7 +243,7 @@ namespace Neptune.Web.Models
         {
             var boundingBox = stormwaterJurisdictions.Any()
                 ? new BoundingBox(stormwaterJurisdictions
-                    .Select(x => x.StormwaterJurisdictionGeometry.GeometryNative))
+                    .Select(x => x.StormwaterJurisdictionGeometry.Geometry4326))
                 : BoundingBox.MakeNewDefaultBoundingBox();
             return boundingBox;
         }
