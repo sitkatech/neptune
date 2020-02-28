@@ -291,7 +291,6 @@ namespace Neptune.Web.Models
             {
                 //Do we need to check ahead of time and warn them this will happen?
                 //Do we need to return a message indicating that this has changed?
-                treatmentBMP.UpstreamBMP = null;
                 treatmentBMP.UpstreamBMPID = null;
             }
 
@@ -302,7 +301,6 @@ namespace Neptune.Web.Models
                 {
                     if (!x.GetRegionalSubbasin().CatchmentGeometry.Contains(treatmentBMP.LocationPoint))
                     {
-                        x.UpstreamBMP = null;
                         x.UpstreamBMPID = null;
                     }
                 });

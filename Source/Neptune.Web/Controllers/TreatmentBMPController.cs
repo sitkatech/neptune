@@ -517,6 +517,12 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTreatmentBMPName = treatmentBMP.TreatmentBMPName;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
 
+            foreach (var downstreamBMP in treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP)
+            {
+                downstreamBMP.UpstreamBMPID = null;
+            }
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
