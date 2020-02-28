@@ -53,6 +53,25 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModel(CurrentPerson);
 
+            var stormwaterJurisdictionID = viewModel.StormwaterJurisdictionID.GetValueOrDefault();
+            var treatmentBMPAKs = HttpRequestStorage.DatabaseEntities.DelineationStagings.Select(x => new { TreatmentBMPName = x.TreatmentBMPName, StormwaterJurisdictionID = stormwaterJurisdictionID });
+
+            var treatmentBMPsWithUpstreamBMPAlreadySet = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x =>
+                treatmentBMPAKs.Contains(new {x.TreatmentBMPName, x.StormwaterJurisdictionID})).Where(x=>x.UpstreamBMPID != null);
+
+            if (treatmentBMPsWithUpstreamBMPAlreadySet.Any())
+            {
+                var namesOfInvalidBMPs = treatmentBMPsWithUpstreamBMPAlreadySet.Select(x=> x.TreatmentBMPName);
+
+                namesOfInvalidBMPs.ToList().ForEach(x =>
+                {
+                    ModelState.AddModelError("Upstream BMP", $"Treatment BMP:{x} has an Upstream BMP and cannot accept delineations. Please either remove this Treatment BMP from your file or remove the Upstream BMP from the Treatment BMP and try again.");
+                });
+                var viewData = new UpdateDelineationGeometryViewData(CurrentPerson, null, null, CurrentPerson.GetStormwaterJurisdictionsPersonCanView());
+                return RazorPartialView<UpdateDelineationGeometryErrors, UpdateDelineationGeometryViewData,
+                    UpdateDelineationGeometryViewModel>(viewData, viewModel);
+            }
+
             return RedirectToAction(new SitkaRoute<DelineationUploadController>(c => c.ApproveDelineationGisUpload()));
         }
 
@@ -100,7 +119,7 @@ namespace Neptune.Web.Controllers
         {
             var delineationStagings = CurrentPerson.DelineationStagingsWhereYouAreTheUploadedByPerson.ToList();
 
-            var delineationUpoadGisReportFromStaging = DelineationUploadGisReportJsonResult.GetDelineationUpoadGisReportFromStaging(CurrentPerson, delineationStagings);
+            var delineationUpoadGisReportFromStaging = DelineationUploadGisReportJsonResult.GetDelineationUploadGisReportFromStaging(CurrentPerson, delineationStagings);
 
             var viewData = new ApproveDelineationGisUploadViewData(CurrentPerson, delineationUpoadGisReportFromStaging);
             return RazorPartialView<ApproveDelineationGisUpload, ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>(viewData, viewModel);
