@@ -465,7 +465,10 @@ namespace Neptune.Web.Controllers
                 customAttributesCloned.Add(customAttributeCloned);
                 foreach (var value in customAttribute.CustomAttributeValues)
                 {
+                    // ReSharper disable once UnusedVariable
+                    // (never used, but creating it with this constructor adds it to the CustomAttributeValue collection of customAttributeCloned automatically, so it's done its job)
                     var customAttributeValue = new CustomAttributeValue(customAttributeCloned, value.AttributeValue);
+                    
                 }
             }
 
@@ -513,7 +516,6 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBMPTreatmentBMPName = treatmentBMP.TreatmentBMPName;
-            var treatmentBMPDelineation = treatmentBMP.Delineation;
 
             foreach (var downstreamBMP in treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP)
             {
@@ -773,7 +775,7 @@ namespace Neptune.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                // todo error lol
+                throw new SitkaDisplayErrorException("The location update parameters were invalid.");
             }
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
@@ -837,7 +839,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewRefreshLSPCBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to refresh the LSPC Basins layer from OC Survey?<br /><br />This can take a little while to run.";
+            var confirmMessage = "Are you sure you want to refresh the LSPC Basins layer from OC Survey?<br /><br />This can take a little while to run.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -865,7 +867,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewRefreshPrecipitationZonesFromOCSurvey(ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to refresh the Precipitation Zones layer from OC Survey?<br /><br />This can take a little while to run.";
+            var confirmMessage = "Are you sure you want to refresh the Precipitation Zones layer from OC Survey?<br /><br />This can take a little while to run.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

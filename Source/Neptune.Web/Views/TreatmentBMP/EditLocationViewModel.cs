@@ -23,7 +23,7 @@ using LtInfo.Common;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditLocationViewModel : Neptune.Web.Views.Shared.Location.EditLocationViewModel
+    public class EditLocationViewModel : Shared.Location.EditLocationViewModel
     {
         /// <summary>
         /// Needed by ModelBinder

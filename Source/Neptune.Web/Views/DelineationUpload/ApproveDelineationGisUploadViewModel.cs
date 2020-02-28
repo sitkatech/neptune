@@ -1,11 +1,9 @@
-﻿using System;
-using System.Data.Entity.Spatial;
-using System.Diagnostics;
+﻿using LtInfo.Common;
 using LtInfo.Common.Models;
-using Neptune.Web.Models;
-using System.Linq;
-using LtInfo.Common;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
+using System;
+using System.Linq;
 
 namespace Neptune.Web.Views.DelineationUpload
 {
