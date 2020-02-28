@@ -27,7 +27,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             var gridSpec = new TrashGeneratingUnitGridSpec();
             var stormwaterJurisdictionIDsCurrentPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
-            List<vTrashGeneratingUnitLoadStatistic> treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTrashGeneratingUnitLoadStatistics
                 .Where(x => stormwaterJurisdictionIDsCurrentPersonCanView.Contains(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.LastUpdateDate).ToList();
             return new GridJsonNetJObjectResult<vTrashGeneratingUnitLoadStatistic>(treatmentBMPs, gridSpec);
@@ -38,7 +38,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult AcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID).ToList();
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Include(x => x.LandUseBlock).Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.LandUseBlock != null).ToList();
 
             var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
 
@@ -67,7 +67,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult OVTABasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID).ToList();
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Include(x => x.LandUseBlock).Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.LandUseBlock != null).ToList();
 
             var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.PriorityOVTAScoreAAcreage();
 
