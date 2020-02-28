@@ -19,15 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using ApprovalUtilities.Utilities;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.FieldVisit;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Neptune.Web.Views.Shared.Location
 {
