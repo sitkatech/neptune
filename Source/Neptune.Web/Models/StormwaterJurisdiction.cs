@@ -53,7 +53,7 @@ namespace Neptune.Web.Models
 
         private static GeoJSON.Net.Feature.Feature MakeFeatureWithRelevantProperties(StormwaterJurisdiction stormwaterJurisdiction)
         {
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(stormwaterJurisdiction.StormwaterJurisdictionGeometry.GeometryNative);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(stormwaterJurisdiction.StormwaterJurisdictionGeometry.Geometry4326);
             feature.Properties.Add("State", stormwaterJurisdiction.StateProvince.StateProvinceAbbreviation);
             feature.Properties.Add("County/City", stormwaterJurisdiction.Organization.OrganizationName);
             feature.Properties.Add("StormwaterJurisdictionID", stormwaterJurisdiction.StormwaterJurisdictionID);

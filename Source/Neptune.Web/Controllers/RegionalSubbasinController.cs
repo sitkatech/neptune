@@ -48,7 +48,7 @@ namespace Neptune.Web.Controllers
         {
             var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry();
 
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(dbGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
@@ -90,7 +90,7 @@ namespace Neptune.Web.Controllers
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
             var regionalSubbasinCatchmentGeometry4326 = regionalSubbasin.CatchmentGeometry4326;
 
-            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(regionalSubbasinCatchmentGeometry4326);
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(regionalSubbasinCatchmentGeometry4326);
             var geoJsonFeatureCollection = new FeatureCollection(new List<Feature> {geoJson});
             var layerGeoJson = new LayerGeoJson("Catchment Boundary", geoJsonFeatureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
             var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBox(regionalSubbasinCatchmentGeometry4326));

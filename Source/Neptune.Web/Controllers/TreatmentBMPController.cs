@@ -569,7 +569,7 @@ namespace Neptune.Web.Controllers
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
-                var reprojectedLocationPoint = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(bmp.LocationPoint);
+                var reprojectedLocationPoint = bmp.LocationPoint4326;
                 var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), reprojectedLocationPoint,
                     reprojectedLocationPoint.YCoordinate.GetValueOrDefault(),
                     reprojectedLocationPoint.XCoordinate.GetValueOrDefault(),

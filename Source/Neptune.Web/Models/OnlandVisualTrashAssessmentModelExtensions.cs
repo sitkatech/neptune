@@ -113,18 +113,11 @@ namespace Neptune.Web.Models
             return HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry.Intersects(transect));
         }
 
-        public static DbGeometry GetAreaViaTransect(this OnlandVisualTrashAssessment ovta)
-        {
-            var parcelGeoms = ovta.GetParcelsViaTransect().Select(x => x.ParcelGeometry).ToList();
-            return parcelGeoms.UnionListGeometries();
-        }
-
         public static FeatureCollection GetAssessmentAreaFeatureCollection(this OnlandVisualTrashAssessment ovta)
         {
             var featureCollection = new FeatureCollection();
-
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(ovta.GetAreaViaTransect());
-
+            var parcelGeoms = ovta.GetParcelsViaTransect().Select(x => x.ParcelGeometry4326).ToList();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(parcelGeoms.UnionListGeometries());
             featureCollection.Features.Add(feature);
             return featureCollection;
         }

@@ -983,7 +983,6 @@
     <Compile Include="Models\StormwaterJurisdictionSimple.cs" />
     <Compile Include="Models\StormwaterMapInitJson.cs" />
     <Compile Include="Models\StormwaterSearchMapInitJson.cs" />
-    <Compile Include="Models\StormwaterSearchMapSummaryData.cs" />
     <Compile Include="Models\TreatmentBMP.cs" />
     <Compile Include="Models\TreatmentBMP.DatabaseContextExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessment.cs" />

@@ -66,7 +66,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(backboneDownstream.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.BackboneSegmentGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.BackboneSegmentGeometry4326);
                 feature.Properties.Add("dummy", "dummy");
                 return feature;
             }));
@@ -103,7 +103,7 @@ namespace Neptune.Web.Models
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(regionalSubbasinsInStormshed.Select(x =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(x.NeighborhoodGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.NeighborhoodGeometry4326);
                 feature.Properties.Add("NeighborhoodID", x.NeighborhoodID);
                 return feature;
             }));

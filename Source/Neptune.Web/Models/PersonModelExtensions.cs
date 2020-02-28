@@ -191,16 +191,6 @@ namespace Neptune.Web.Models
             return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
 
-        public static BoundingBox GetBoundingBox(this Person person)
-        {
-            var stormwaterJurisdictionsPersonCanEdit = person.GetStormwaterJurisdictionsPersonCanView().ToList();
-            var boundingBox = stormwaterJurisdictionsPersonCanEdit.Any()
-                ? new BoundingBox(stormwaterJurisdictionsPersonCanEdit
-                    .Select(x => x.StormwaterJurisdictionGeometry.GeometryNative))
-                : BoundingBox.MakeNewDefaultBoundingBox();
-            return boundingBox;
-        }
-
         public static List<TreatmentBMP> GetTreatmentBmpsPersonCanManage(this Person person)
         {
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();

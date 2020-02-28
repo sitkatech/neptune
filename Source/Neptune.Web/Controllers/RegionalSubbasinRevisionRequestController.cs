@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewNew(NewViewModel viewModel, TreatmentBMP treatmentBMP)
         {
             var geometry = treatmentBMP.GetCentralizedDelineationGeometry();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(geometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(geometry);
 
             var layerGeoJson = new LayerGeoJson("centralizedDelineationLayer",
                 new FeatureCollection(new List<Feature> { feature }), "#ffff00", .5m, LayerInitialVisibility.Show);
@@ -203,7 +203,7 @@ namespace Neptune.Web.Controllers
 
             var reprojectedGeometry = CoordinateSystemHelper.ProjectWebMercatorTo2230(geometry);
 
-            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryNoReproject(reprojectedGeometry);
+            var geoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(reprojectedGeometry);
 
             var serializedGeoJson = JsonConvert.SerializeObject(geoJson);
 
