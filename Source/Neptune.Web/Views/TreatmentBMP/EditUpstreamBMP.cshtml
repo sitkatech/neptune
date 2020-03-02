@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
 @inherits Neptune.Web.Views.TreatmentBMP.EditUpstreamBMP
     
 
@@ -8,6 +9,14 @@
 {
     <div class="form-horizontal">
         <div class="row">
+            <div class="col-sm-12">
+                Indicate that the BMP receives flow from an Upstream BMP. After you save, this Treatment BMP will inherit the delineation 
+                area from the Upstream BMP for modeling purposes . If you already added a delineation for this BMP, it will be removed 
+                and replaced with the reference to the Upstream BMP.
+            </div>
+        </div>
+        <hr/>
+        <div class="row" style="margin-top:15px">
             <div class="col-sm-3 control-label">
                 @Html.LabelWithSugarFor(x => x.UpstreamBMPID)
             </div>
