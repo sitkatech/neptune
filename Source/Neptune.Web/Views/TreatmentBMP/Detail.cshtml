@@ -240,23 +240,25 @@
                 </div>
                 <hr />
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right" style="margin-top:8px">Upstream BMP</label>
+                    <label class="col-sm-5 control-label text-right" style="margin-top: 8px">
+                        @Html.LabelWithSugarFor(FieldDefinition.UpstreamBMP)
+                    </label>
                     @if (ViewDataTyped.TreatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs().Any(x => x.TreatmentBMPID != ViewDataTyped.TreatmentBMP.TreatmentBMPID))
                     {
                         <div class="col-sm-4" style="margin-top:8px">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new HtmlString("Not Provided") : ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl())</div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-3" style="margin-top:6px">
                             @if (ViewDataTyped.TreatmentBMP.UpstreamBMP != null)
                             {
                                 <form method="post" action="@ViewDataTyped.RemoveUpstreamBMPUrl" style="display:inline">
-                                    <button class="btn btn-sm btn-neptune" id="deleteUpstreamBMPButton" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
+                                    <button class="btn btn-xs btn-neptune" id="deleteUpstreamBMPButton" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
                                 </form>
                             }
-                            @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)
+                            @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-xs btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)
                         </div>
                     }
                     else
                     {
-                        <div class="col-sm-4">No BMPs within Regional Subbasin applicable</div>
+                        <div class="col-sm-7 text-muted"><em>No Inventoried BMPs within the same Regional Subbasin</em></div>
                     }
                 </div>
                 <hr/>
@@ -843,7 +845,8 @@
                 {
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-xs-12 text-center">
-                            <em>No delineation may be added because this BMP has an Upstream BMP. <br/> Please remove the Upstream BMP to add a delineation.</em>
+                            <em>No delineation may be added or edited because this BMP has an Upstream BMP. <br/> Please remove the Upstream BMP to add a delineation.</em>
+                            @(ViewDataTyped.MapInitJson.DelineationLayer != null ? new MvcHtmlString("<br/><br/><em>*Note: Currently displayed delineation is a property of the currently assigned Upstream BMP.*</em>") : null)
                         </div>
                     </div>
                 }
@@ -869,13 +872,25 @@
                 Land Use Statistics
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.TreatmentBMP.HRUCharacteristics.Any() && ViewDataTyped.TreatmentBMP.Delineation != null)
+                @if ((ViewDataTyped.TreatmentBMP.HRUCharacteristics.Any() && ViewDataTyped.TreatmentBMP.Delineation != null) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.HRUCharacteristics.Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null))
                 {
                     HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                 }
-                else if (ViewDataTyped.TreatmentBMP.Delineation == null)
+                else if (ViewDataTyped.TreatmentBMP.Delineation == null && (ViewDataTyped.TreatmentBMP.UpstreamBMP == null || ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation == null))
                 {
-                    <p class="systemText">No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.</p>
+                <p class="systemText">
+                    No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
+                    @{
+                        if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
+                        {
+                            @:<a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.
+                        }
+                        else
+                        {
+                            @:delineation is provided to the Upstream BMP or the Upstream BMP is removed.
+                        }
+                    }
+                </p>
                 }
                 else
                 {
