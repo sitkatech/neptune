@@ -100,19 +100,32 @@
     }
 }
 
-@if (ViewDataTyped.DelineationErrors.Any())
+@if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationErrors.Any())
 {
     <div class="alert alert-info">
-        <div class="pull-right">
-            <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
-        </div>
-        This BMP delineation may have errors:
-        <ul>
-            @foreach (var delineationError in ViewDataTyped.DelineationErrors)
-            {
-                <li>@delineationError</li>
-            }
-        </ul>
+        @if (ViewDataTyped.DelineationErrors.Any())
+        { 
+            <div class="pull-right">
+                <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
+            </div>
+            @:This BMP delineation may have errors:
+            <ul>
+                @foreach (var delineationError in ViewDataTyped.DelineationErrors)
+                {
+                    <li>@delineationError</li>
+                }
+            </ul>
+        }
+        @if (ViewDataTyped.ParameterizationErrors.Any())
+        {
+            @:This BMP is not fully parameterized:
+            <ul>
+                @foreach (var parameterizationError in ViewDataTyped.ParameterizationErrors)
+                {
+                    <li>@parameterizationError</li>
+                }
+            </ul>
+        }
     </div>
 }
 

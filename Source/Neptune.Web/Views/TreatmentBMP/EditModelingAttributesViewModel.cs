@@ -226,7 +226,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
                         ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
                             DesignMediaFiltrationRate);
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
                         break;
                     case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
                     case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
