@@ -865,10 +865,19 @@
                 }
                 else if (ViewDataTyped.TreatmentBMP.Delineation == null && (ViewDataTyped.TreatmentBMP.UpstreamBMP == null || ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation == null))
                 {
-                    <p class="systemText">
-                        No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a 
-                        @(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new MvcHtmlString("<a href=" + ViewDataTyped.DelineationMapUrl + ">delineation is provided</a>") : new MvcHtmlString("delineation is provided to the Upstream BMP or the Upstream BMP is removed")).
-                    </p>
+                <p class="systemText">
+                    No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
+                    @{
+                        if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
+                        {
+                            @:<a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.
+                        }
+                        else
+                        {
+                            @:delineation is provided to the Upstream BMP or the Upstream BMP is removed.
+                        }
+                    }
+                </p>
                 }
                 else
                 {
