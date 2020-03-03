@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditUpstreamBMPViewModel
     {
         [Required]
-        [DisplayName("Upstream BMP")]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.UpstreamBMP)]
         public int? UpstreamBMPID { get; set; }
 
         /// <summary>
