@@ -6,7 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Areas.Modeling.Controllers;
 using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Security;
 using HomeController = Neptune.Web.Controllers.HomeController;
+using ParcelController = Neptune.Web.Controllers.ParcelController;
+using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
 
 namespace Neptune.Web.Areas.Modeling.Views
 {
@@ -21,6 +24,7 @@ namespace Neptune.Web.Areas.Modeling.Views
         {
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
+                BuildBMPInventoryMenu(CurrentPerson),
                 LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), CurrentPerson, "Delineation Map", "Group1"),
                 BuildManageMenu(CurrentPerson)
             };
@@ -48,6 +52,30 @@ namespace Neptune.Web.Areas.Modeling.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(c => c.Grid()), currentPerson, "Regional Subbasin Grid", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinRevisionRequestController>(c => c.Index()), currentPerson, "Regional Subbasin Revision Requests", "Group4"));
             return manageMenu;
+        }
+
+        private LtInfoMenuItem BuildBMPInventoryMenu(Person currentPerson)
+        {
+            var bmpMenu = new LtInfoMenuItem("BMP Inventory");
+
+            //bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(c => c.Index()), currentPerson, "Jurisdictions", "Group1"));
+
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.FindABMP()), currentPerson, "Find a BMP", "Group1"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.ViewTreatmentBMPModelingAttributes()), currentPerson, "Modeling Parameters", "Group1"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.Index()), currentPerson, "View All BMPs", "Group1"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.TreatmentBMPAssessmentSummary()), currentPerson, "View Latest BMP Assessments", "Group2"));
+
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldVisitController>(c => c.Index()), currentPerson, "View All Field Records", "Group2"));
+            if (new WaterQualityManagementPlanViewFeature().HasPermissionByPerson(currentPerson))
+            {
+                bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group3"));
+            }
+            if (new JurisdictionManageFeature().HasPermissionByPerson(currentPerson))
+            {
+                bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(c => c.Index()), currentPerson, "Parcels", "Group3"));
+            }
+
+            return bmpMenu;
         }
     }
 }

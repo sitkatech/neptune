@@ -27,6 +27,7 @@ using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
+using DocumentFormat.OpenXml.EMMA;
 
 
 namespace Neptune.Web.Views.TreatmentBMP
@@ -83,6 +84,14 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("Last Assessed Score", x => x.AssessmentSummary.AssessmentScore.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("Last Assessment Type", x => x.AssessmentSummary.FieldVisitType, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Failure Notes", x => x.Notes, 800, DhtmlxGridColumnFilterType.Text);
+        }
+    }
+
+    public class ViewTreatmentBMPModelingAttributesGridSpec : GridSpec<Models.TreatmentBMPModelingAttribute>
+    {
+        public ViewTreatmentBMPModelingAttributesGridSpec()
+        {
+            
         }
     }
 }

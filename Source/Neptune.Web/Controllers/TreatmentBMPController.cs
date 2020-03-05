@@ -642,6 +642,32 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult ViewTreatmentBMPModelingAttributes()
+        {
+            //var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
+            //var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanManage();
+            //var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
+            //var featureClassesInExportCount =
+            //treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
+            //var bulkBMPUploadUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs());
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
+            var viewData = new ViewTreatmentBMPModelingAttributesViewData(CurrentPerson, neptunePage);
+            return RazorView<ViewTreatmentBMPModelingAttributes, ViewTreatmentBMPModelingAttributesViewData>(viewData);
+        }
+
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> TreatmentBMPModelingAttributesGridJsonData()
+        {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailed>(treatmentBMPs, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [HttpGet]
         [TreatmentBMPEditFeature]
         public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
