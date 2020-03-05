@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[TreatmentBMPType](
 	[TreatmentBMPTypeID] [int] IDENTITY(1,1) NOT NULL,
 	[TreatmentBMPTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TreatmentBMPTypeDescription] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[DelineationShouldBeReconciled] [bit] NOT NULL,
+	[IsAnalyzedInModelingModule] [bit] NOT NULL,
 	[TreatmentBMPModelingTypeID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMPType_TreatmentBMPTypeID] PRIMARY KEY CLUSTERED 
 (

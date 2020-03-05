@@ -175,7 +175,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity = DesignLowFlowDiversionCapacity;
             treatmentBMPModelingAttribute.DesignMediaFiltrationRate = DesignMediaFiltrationRate;
             treatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool = DesignResidenceTimeforPermanentPool;
-            treatmentBMPModelingAttribute.DiversionRate = DiversionRate;
+            treatmentBMPModelingAttribute.DiversionRate = null;
             treatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume = DrawdownTimeforWQDetentionVolume;
             treatmentBMPModelingAttribute.EffectiveFootprint = EffectiveFootprint;
             treatmentBMPModelingAttribute.EffectiveRetentionDepth = EffectiveRetentionDepth;
@@ -186,7 +186,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.RoutingConfigurationID = (int) RoutingConfigurationEnum.Online;
             treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation = StorageVolumeBelowLowestOutletElevation;
             treatmentBMPModelingAttribute.SummerHarvestedWaterDemand = SummerHarvestedWaterDemand;
-            treatmentBMPModelingAttribute.TimeOfConcentrationID = TimeOfConcentrationID;
+            //Because some TreatmentBMPTypes see this, but others don't, check for null and then default to 5 minutes
+            treatmentBMPModelingAttribute.TimeOfConcentrationID = TimeOfConcentrationID ?? (int) TimeOfConcentrationEnum.FiveMinutes;
             treatmentBMPModelingAttribute.TotalDrawdownTime = TotalDrawdownTime;
             treatmentBMPModelingAttribute.TotalEffectiveBMPVolume = TotalEffectiveBMPVolume;
             treatmentBMPModelingAttribute.TotalEffectiveDrywellBMPVolume = TotalEffectiveDrywellBMPVolume;
@@ -301,8 +302,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                         break;
                     case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                     case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
                         ValidateFieldIsRequired(validationResults, "Wetted Footprint", WettedFootprint);
                         ValidateFieldIsRequired(validationResults, "Effective Retention Depth",

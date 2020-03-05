@@ -243,7 +243,7 @@
                     <label class="col-sm-5 control-label text-right" style="margin-top: 8px">
                         @Html.LabelWithSugarFor(FieldDefinition.UpstreamBMP)
                     </label>
-                    @if (ViewDataTyped.TreatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs().Any(x => x.TreatmentBMPID != ViewDataTyped.TreatmentBMP.TreatmentBMPID))
+                    @if (ViewDataTyped.OtherTreatmentBmpsExistInSubbasin)
                     {
                         <div class="col-sm-4" style="margin-top:8px">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new HtmlString("Not Provided") : ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl())</div>
                         <div class="col-xs-3" style="margin-top:6px">
