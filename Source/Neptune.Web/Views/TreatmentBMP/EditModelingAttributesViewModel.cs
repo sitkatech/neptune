@@ -175,7 +175,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity = DesignLowFlowDiversionCapacity;
             treatmentBMPModelingAttribute.DesignMediaFiltrationRate = DesignMediaFiltrationRate;
             treatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool = DesignResidenceTimeforPermanentPool;
-            treatmentBMPModelingAttribute.DiversionRate = DiversionRate;
+            treatmentBMPModelingAttribute.DiversionRate = null;
             treatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume = DrawdownTimeforWQDetentionVolume;
             treatmentBMPModelingAttribute.EffectiveFootprint = EffectiveFootprint;
             treatmentBMPModelingAttribute.EffectiveRetentionDepth = EffectiveRetentionDepth;
@@ -183,10 +183,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.InfiltrationSurfaceArea = InfiltrationSurfaceArea;
             treatmentBMPModelingAttribute.MediaBedFootprint = MediaBedFootprint;
             treatmentBMPModelingAttribute.PermanentPoolorWetlandVolume = PermanentPoolorWetlandVolume;
-            treatmentBMPModelingAttribute.RoutingConfigurationID = RoutingConfigurationID;
+            treatmentBMPModelingAttribute.RoutingConfigurationID = (int) RoutingConfigurationEnum.Online;
             treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation = StorageVolumeBelowLowestOutletElevation;
             treatmentBMPModelingAttribute.SummerHarvestedWaterDemand = SummerHarvestedWaterDemand;
-            treatmentBMPModelingAttribute.TimeOfConcentrationID = TimeOfConcentrationID;
+            //Because some TreatmentBMPTypes see this, but others don't, check for null and then default to 5 minutes
+            treatmentBMPModelingAttribute.TimeOfConcentrationID = TimeOfConcentrationID ?? (int) TimeOfConcentrationEnum.FiveMinutes;
             treatmentBMPModelingAttribute.TotalDrawdownTime = TotalDrawdownTime;
             treatmentBMPModelingAttribute.TotalEffectiveBMPVolume = TotalEffectiveBMPVolume;
             treatmentBMPModelingAttribute.TotalEffectiveDrywellBMPVolume = TotalEffectiveDrywellBMPVolume;
@@ -217,8 +218,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                 switch (treatmentBMPModelingTypeEnum)
                 {
                     case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
                             TotalEffectiveBMPVolume);
                         ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
@@ -226,15 +225,12 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
                         ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
                             DesignMediaFiltrationRate);
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
                         break;
                     case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
                     case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
                     case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
                     case TreatmentBMPModelingTypeEnum.PermeablePavement:
                     case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
                             TotalEffectiveBMPVolume);
                         ValidateFieldIsRequired(validationResults, "Infiltration Surface Area",
@@ -244,8 +240,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                         break;
                     case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                     case TreatmentBMPModelingTypeEnum.SandFilters:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
                             TotalEffectiveBMPVolume);
                         ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
@@ -253,8 +247,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                             DesignMediaFiltrationRate);
                         break;
                     case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
                             TotalEffectiveBMPVolume);
                         ValidateFieldIsRequired(validationResults, "Winter Harvested Water Demand",
@@ -264,8 +256,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                         break;
                     case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                     case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Permanent Pool or Wetland Volume",
                             PermanentPoolorWetlandVolume);
                         ValidateFieldIsRequired(validationResults, "Water Quality Detention Volume",
@@ -280,8 +270,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                     case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                     case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
                     case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
                             TotalEffectiveBMPVolume);
                         ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
@@ -296,8 +284,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                         }
                         break;
                     case TreatmentBMPModelingTypeEnum.Drywell:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Total Effective Drywell BMP Volume",
                             TotalEffectiveDrywellBMPVolume);
                         ValidateFieldIsRequired(validationResults, "InfiltrationDischargeRate",
@@ -316,8 +302,6 @@ namespace Neptune.Web.Views.TreatmentBMP
                         break;
                     case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                     case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                        ValidateFieldIsRequired(validationResults, "Routing Configuration", RoutingConfigurationID);
-                        ValidateDiversionRate(validationResults);
                         ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
                         ValidateFieldIsRequired(validationResults, "Wetted Footprint", WettedFootprint);
                         ValidateFieldIsRequired(validationResults, "Effective Retention Depth",

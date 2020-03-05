@@ -67,26 +67,6 @@
                                 case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                             <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
                                         </label>
@@ -131,24 +111,6 @@
                                 case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                             <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
                                         </label>
@@ -175,24 +137,6 @@
                                     break;
                                 case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                                 case TreatmentBMPModelingTypeEnum.SandFilters:
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
-                                    </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
@@ -222,24 +166,6 @@
                                 case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
                                             <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
                                         </label>
@@ -262,24 +188,6 @@
                                     break;
                                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                                 case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
-                                    </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.PermanentPoolorWetlandVolume)
@@ -327,28 +235,6 @@
                                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
                                 case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">
-                                            @Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">
-                                            @Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })
-                                        </div>
-                                    </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
@@ -411,24 +297,6 @@
                                 case TreatmentBMPModelingTypeEnum.Drywell:
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TotalEffectiveDrywellBMPVolume)
                                             <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
                                         </label>
@@ -489,18 +357,6 @@
                                     break;
                                 case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                                 case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.RoutingConfigurationID)
-                                        </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.RoutingConfigurationID, ViewDataTyped.RoutingConfigurations, new { @class = "form-control" })</div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.DiversionRate)
-                                        </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DiversionRate)" aria-describedby="attributeUnit" type="text" value="@Model.DiversionRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
-                                    </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
