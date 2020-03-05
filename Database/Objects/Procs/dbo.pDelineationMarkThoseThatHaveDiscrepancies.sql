@@ -16,7 +16,7 @@ set d.HasDiscrepancies = 0
 from dbo.Delineation d
 join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
-where tbt.DelineationShouldBeReconciled = 1
+where tbt.IsAnalyzedInModelingModule = 1
 
 -- Distributed delineations can only intersect one Regional Subbasin; flag those that have more than 1
 update d
@@ -32,7 +32,7 @@ from
 		join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 		join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
 		join dbo.RegionalSubbasin nc on d.DelineationGeometry.STIntersects(nc.CatchmentGeometry) = 1
-		where d.DelineationTypeID = 2 and tbt.DelineationShouldBeReconciled = 1
+		where d.DelineationTypeID = 2 and tbt.IsAnalyzedInModelingModule = 1
 	) intersections
 	group by TreatmentBMPID having count(*) > 1
 ) a
@@ -49,7 +49,7 @@ join (
 	join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 	join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
 	join dbo.RegionalSubbasin nc on d.DelineationGeometry.STIntersection(nc.CatchmentGeometry).STArea() > @toleranceInSquareMeters
-	where d.DelineationTypeID = 1 and tbt.DelineationShouldBeReconciled = 1
+	where d.DelineationTypeID = 1 and tbt.IsAnalyzedInModelingModule = 1
 	group by d.TreatmentBMPID
 ) a on d.TreatmentBMPID = a.TreatmentBMPID
 where d.DelineationTypeID = 1 and d.DelineationGeometry.STSymDifference(a.RegionalSubbasinsIntesectedByDelineationGeometry).STArea() > @toleranceInSquareMeters
@@ -64,7 +64,7 @@ as
 		from dbo.Delineation d
 		join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 		join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
-		where d.DelineationTypeID = 2 and tbt.DelineationShouldBeReconciled = 1
+		where d.DelineationTypeID = 2 and tbt.IsAnalyzedInModelingModule = 1
 )
 
 

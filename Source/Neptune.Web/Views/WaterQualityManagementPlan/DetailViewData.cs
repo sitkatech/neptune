@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 
@@ -37,6 +38,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string TrashCaptureEffectiveness { get; }
         public string HRURefreshUrl { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
+        public List<HtmlString> ParameterizationErrors { get; }
 
         public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
         public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
@@ -69,6 +71,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(c =>
                     c.New(waterQualityManagementPlan));
             MapInitJson = mapInitJson;
+
+            ParameterizationErrors = CheckForParameterizationErrors(waterQualityManagementPlan);
+
             ParcelGridSpec = parcelGridSpec;
             ParcelGridName = "parcelGrid";
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
@@ -130,6 +135,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             }
 
             return null;
+        }
+
+        //There are more errors to come I believe, that's why this is producing a list
+        public List<HtmlString> CheckForParameterizationErrors(Models.WaterQualityManagementPlan waterQualityManagement)
+        {
+            var parameterizationErrors = new List<HtmlString>();
+
+            if (!waterQualityManagement.TreatmentBMPs.Any() && !waterQualityManagement.QuickBMPs.Any())
+            {
+                parameterizationErrors.Add(new HtmlString("This WQMP is not associated with any inventoried Treatment BMPs and does not have any other treatment area assigned.No load reduction will be calculated for this WQMP."));
+            }
+
+            return parameterizationErrors;
         }
     }
 }

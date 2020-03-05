@@ -22,7 +22,7 @@
         jQuery(function() {
             var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
             map = new NeptuneMaps.Map(mapInitJson);
-            
+
             map.addLayerToLayerControl(map.vectorLayers[0], "<img src='/Content/img/legendImages/parcel-wqmp.png' style='margin-bottom:2px' height='15px'>WQMP Parcels", false);
             map.addLayerToLayerControl(map.vectorLayers[1], "<img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' style='margin-bottom:-7px'>Treatment BMPs", false);
             map.vectorLayers.length > 2
@@ -67,6 +67,19 @@
         </div>
     </div>
 }
+
+@if (ViewDataTyped.ParameterizationErrors.Any())
+{
+    <div class="alert alert-info">
+        <ul>
+            @foreach (var parameterizationError in ViewDataTyped.ParameterizationErrors)
+            {
+                <li>@parameterizationError</li>
+            }
+        </ul>
+    </div>
+}
+
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -210,7 +223,7 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                    {
+                                                                        {
                                                         ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
                                                         ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
                                                         ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
@@ -324,13 +337,13 @@
                                 <tbody>
                                     @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                     {
-                                    <tr>
-                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td>@treatmentBMP.Notes</td>
-                                        <td>Yes</td>
-                                        <td style="text-align: right">@ViewDataTyped.CalculateAreaWithinWQMP(treatmentBMP).ToGroupedNumeric()</td>
-                                    </tr>
+                                        <tr>
+                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td>@treatmentBMP.Notes</td>
+                                            <td>Yes</td>
+                                            <td style="text-align: right">@ViewDataTyped.CalculateAreaWithinWQMP(treatmentBMP).ToGroupedNumeric()</td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -361,14 +374,14 @@
                                 <tbody>
                                     @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
                                     {
-                                    <tr>
-                                        <td>@quickBMP.QuickBMPName</td>
-                                        <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td>@quickBMP.QuickBMPNote</td>
-                                        <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0} %", quickBMP.PercentOfSiteTreated) : "")</td>
-                                        <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0} %", quickBMP.PercentCaptured) : "")</td>
-                                        <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0} %", quickBMP.PercentRetained) : "")</td>
-                                    </tr>
+                                        <tr>
+                                            <td>@quickBMP.QuickBMPName</td>
+                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td>@quickBMP.QuickBMPNote</td>
+                                            <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0} %", quickBMP.PercentOfSiteTreated) : "")</td>
+                                            <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0} %", quickBMP.PercentCaptured) : "")</td>
+                                            <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0} %", quickBMP.PercentRetained) : "")</td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -376,7 +389,7 @@
                     }
                     else
                     {
-                    <p class="systemText">No Other Structural BMPs have been selected.</p>
+                        <p class="systemText">No Other Structural BMPs have been selected.</p>
                     }
                 </div>
 
@@ -523,7 +536,7 @@
                                     <td>
                                         @if (waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus != null)
                                         {
-                                        <span>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</span>
+                                            <span>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</span>
                                         }
                                         else
                                         {

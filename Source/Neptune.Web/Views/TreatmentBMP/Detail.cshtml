@@ -100,19 +100,32 @@
     }
 }
 
-@if (ViewDataTyped.DelineationErrors.Any())
+@if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationErrors.Any())
 {
     <div class="alert alert-info">
-        <div class="pull-right">
-            <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
-        </div>
-        This BMP delineation may have errors:
-        <ul>
-            @foreach (var delineationError in ViewDataTyped.DelineationErrors)
-            {
-                <li>@delineationError</li>
-            }
-        </ul>
+        @if (ViewDataTyped.DelineationErrors.Any())
+        { 
+            <div class="pull-right">
+                <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
+            </div>
+            @:This BMP delineation may have errors:
+            <ul>
+                @foreach (var delineationError in ViewDataTyped.DelineationErrors)
+                {
+                    <li>@delineationError</li>
+                }
+            </ul>
+        }
+        @if (ViewDataTyped.ParameterizationErrors.Any())
+        {
+            @:This BMP is not fully parameterized:
+            <ul>
+                @foreach (var parameterizationError in ViewDataTyped.ParameterizationErrors)
+                {
+                    <li>@parameterizationError</li>
+                }
+            </ul>
+        }
     </div>
 }
 
@@ -230,7 +243,7 @@
                     <label class="col-sm-5 control-label text-right" style="margin-top: 8px">
                         @Html.LabelWithSugarFor(FieldDefinition.UpstreamBMP)
                     </label>
-                    @if (ViewDataTyped.TreatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs().Any(x => x.TreatmentBMPID != ViewDataTyped.TreatmentBMP.TreatmentBMPID))
+                    @if (ViewDataTyped.OtherTreatmentBmpsExistInSubbasin)
                     {
                         <div class="col-sm-4" style="margin-top:8px">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new HtmlString("Not Provided") : ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl())</div>
                         <div class="col-xs-3" style="margin-top:6px">
@@ -300,24 +313,6 @@
                                 case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                     <tr>
                                         <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
                                         <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
@@ -354,24 +349,6 @@
                                 case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
                                     <tr>
                                         <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
                                         <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
@@ -391,24 +368,6 @@
                                     break;
                                 case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                                 case TreatmentBMPModelingTypeEnum.SandFilters:
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
@@ -431,24 +390,6 @@
                                 case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                                     <tr>
                                         <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
                                         </td>
                                         <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
@@ -468,24 +409,6 @@
                                     break;
                                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                                 case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPermanentPoolorWetlandVolume)
@@ -526,24 +449,6 @@
                                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
                                 case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
@@ -598,24 +503,6 @@
                                 case TreatmentBMPModelingTypeEnum.Drywell:
                                     <tr>
                                         <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveDrywellBMPVolume)
                                         </td>
                                         <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveDrywellBMPVolume, "cu ft")</td>
@@ -665,18 +552,6 @@
                                     break;
                                 case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                                 case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForRoutingConfiguration)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayRoutingConfiguration()</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDiversionRate)
-                                        </td>
-                                        <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DiversionRate, "cfs")</td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
