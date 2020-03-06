@@ -656,14 +656,12 @@ namespace Neptune.Web.Controllers
             return RazorView<ViewTreatmentBMPModelingAttributes, ViewTreatmentBMPModelingAttributesViewData>(viewData);
         }
 
-        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> TreatmentBMPModelingAttributesGridJsonData()
+        public GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttributes> ViewTreatmentBMPModelingAttributesGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit);
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailed>(treatmentBMPs, gridSpec);
+            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec();
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vViewTreatmentBMPModelingAttributes.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttributes>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
