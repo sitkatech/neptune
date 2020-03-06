@@ -645,13 +645,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public ViewResult ViewTreatmentBMPModelingAttributes()
         {
-            //var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            //var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanManage();
-            //var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
-            //var featureClassesInExportCount =
-            //treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
-            //var bulkBMPUploadUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs());
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ViewTreatmentBMPModelingAttributes);
             var viewData = new ViewTreatmentBMPModelingAttributesViewData(CurrentPerson, neptunePage);
             return RazorView<ViewTreatmentBMPModelingAttributes, ViewTreatmentBMPModelingAttributesViewData>(viewData);
         }

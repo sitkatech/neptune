@@ -29,6 +29,13 @@
 
 }
 
+    <style>
+
+        .not-applicable {
+            background-color: black;
+        }
+    </style>
+
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
 <div class="row">
@@ -43,34 +50,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function createDownloadConfirmDialog()
-    {
-        var alertHtml =
-            "<div class='modal neptune-modal' style='width: 500px; margin:auto;'>" +
-                "<div class='modal-dialog neptune-modal-dialog'>" +
-                "<div class='modal-content'>" +
-                "<div class='modal-header'>" +
-                "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
-                "<span class='modal-title'>Export Inventory to GIS</span>" +
-                "</div>" +
-                "<div class='modal-body'><p>This will download the BMP Inventory to your computer as a file geodatabase. " +
-                "This will open a new tab and may take several minutes. Please do not close your browser or the new tab until the download is complete.</p>" +
-                "<p>The file geodatabase will contain @*@ViewDataTyped.FeatureClassesInExportCount*@ feature classes and a total of @*@ViewDataTyped.TreatmentBmpsInExportCount*@ BMPs.</p></div>" +
-                "<div class='modal-footer'>" +
-                "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
-                "<a class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='openDownloadUrl()' data-dismiss='modal'>Continue</a>" +
-                "</div>" +
-                "</div>" +
-                "</div>" +
-                "</div>";
-        var alertDiv = jQuery(alertHtml);
-        alertDiv.modal({ keyboard: true });
-        alertDiv.draggable({ handle: ".modal-header" });
-    }
-
-    function openDownloadUrl() {
-        window.open("@*@ViewDataTyped.DownloadBMPInventoryUrl*@");
-    }
-</script>
