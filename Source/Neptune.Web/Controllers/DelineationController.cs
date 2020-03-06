@@ -341,6 +341,6 @@ namespace Neptune.Web.Controllers
 
     public class MapDeleteViewModel
     {
-        // a formality
+        // a formality -- in order to have a post I needed a get, so I needed a ViewModel to overload the method with.
     }
 }
