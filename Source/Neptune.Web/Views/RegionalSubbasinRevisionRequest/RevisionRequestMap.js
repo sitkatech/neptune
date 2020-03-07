@@ -130,7 +130,9 @@ NeptuneMaps.Map.prototype.getTextAreaId = function (featureId) { return "textare
 
 var createUpdateFeatureCollectionJsonFunctionAsClosure = function (nameForWkt, nameForAnnotation, mapFormID) {
     return function () {
-        var geoJson = revisionRequestMap.editableFeatureGroup.toGeoJSON();
+        // NP 3/6/2020 leaflet's default decimal precision of 9 results in aliasing at resolutions unacceptable for our purposes.
+        // Decimal precision of 18 still results in some aliasing, but it's only apparent at resolutions higher than 1:1
+        var geoJson = revisionRequestMap.editableFeatureGroup.toGeoJSON(18);
         detectKinksAndReject(geoJson);
         var mapForm = jQuery("#" + mapFormID);
         mapForm.html("");

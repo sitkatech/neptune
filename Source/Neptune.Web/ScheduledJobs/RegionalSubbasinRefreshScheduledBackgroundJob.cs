@@ -92,7 +92,8 @@ namespace Neptune.Web.ScheduledJobs
             ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
                 NeptuneWebConfiguration.DatabaseConnectionString, "RegionalSubbasinStaging",
                 "CatchIDN as OCSurveyCatchmentID, DwnCatchIDN as OCSurveyDownstreamCatchmentID, DrainID as DrainID, Watershed as Watershed",
-                CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                // transform from 2230 to 2771 here to avoid precision errors introduced by asking arc to do it
+                CoordinateSystemHelper.NAD_83_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
         private static void ThrowIfCatchIdnNotUnique(FeatureCollection newRegionalSubbasinFeatureCollection)
@@ -127,7 +128,7 @@ namespace Neptune.Web.ScheduledJobs
                         outFields = "*",
                         returnGeometry = true,
                         returnTrueCurves = false,
-                        outSR = 2771,
+                        outSR = 2230,  
                         returnIdsOnly = false,
                         returnCountOnly = false,
                         returnZ = false,

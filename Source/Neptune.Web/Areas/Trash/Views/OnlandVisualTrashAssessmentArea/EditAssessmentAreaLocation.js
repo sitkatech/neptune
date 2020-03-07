@@ -291,7 +291,7 @@ NeptuneMaps.AssessmentAreaMap.prototype.createUpdateFeatureCollectionJsonFunctio
         mapForm.html("");
 
         if (this.editableFeatureGroup) {
-            var geoJson = this.editableFeatureGroup.toGeoJSON();
+            var geoJson = this.editableFeatureGroup.toGeoJSON(18);
             detectKinksAndReject(geoJson);
             for (var i = 0; i < geoJson.features.length; ++i) {
                 var currentWktName = "name=\"" + nameForWkt + "\"";
