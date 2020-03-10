@@ -128,7 +128,7 @@ namespace Neptune.Web.ScheduledJobs
                         outFields = "*",
                         returnGeometry = true,
                         returnTrueCurves = false,
-                        outSR = 2230,  
+                        outSR = 2230,
                         returnIdsOnly = false,
                         returnCountOnly = false,
                         returnZ = false,
