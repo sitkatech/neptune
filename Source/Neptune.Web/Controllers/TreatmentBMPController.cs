@@ -642,6 +642,24 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult ViewTreatmentBMPModelingAttributes()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ViewTreatmentBMPModelingAttributes);
+            var viewData = new ViewTreatmentBMPModelingAttributesViewData(CurrentPerson, neptunePage);
+            return RazorView<ViewTreatmentBMPModelingAttributes, ViewTreatmentBMPModelingAttributesViewData>(viewData);
+        }
+
+        public GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttributes> ViewTreatmentBMPModelingAttributesGridJsonData()
+        {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec();
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.vViewTreatmentBMPModelingAttributes.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttributes>(treatmentBMPs, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [HttpGet]
         [TreatmentBMPEditFeature]
         public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {

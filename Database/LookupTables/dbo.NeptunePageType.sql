@@ -48,4 +48,5 @@ values
 (44, 'ExportAssessmentGeospatialData', 'Export Assessment Geospatial Data', 2),
 (45, 'HRUCharacteristics', 'HRU Characteristics', 2),
 (46, 'RegionalSubbasins', 'Regional Subbasins', 2),
-(47, 'DelineationReconciliationReport', 'Delineation Reconciliation Report', 2)
+(47, 'DelineationReconciliationReport', 'Delineation Reconciliation Report', 2),
+(48, 'ViewTreatmentBMPModelingAttributes', 'View Treatment BMP Modeling Attributes', 2)
