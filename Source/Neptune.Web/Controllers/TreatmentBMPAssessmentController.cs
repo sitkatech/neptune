@@ -20,10 +20,12 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Web.Mvc;
+using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessment;
@@ -142,6 +144,14 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new ConfirmDialogFormViewData("Are you sure you want to delete this photo?");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        //todo: remove when runs once in PROD
+        [SitkaAdminFeature]
+        public ContentResult RefreshAssessmentScores()
+        {
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunRefreshAssessmentScoreJob(CurrentPerson.PersonID));
+            return Content("Refresh will run in the background.");
         }
     }
 }

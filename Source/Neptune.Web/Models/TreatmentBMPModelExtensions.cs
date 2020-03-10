@@ -258,6 +258,11 @@ namespace Neptune.Web.Models
             return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
         }
 
+        /// <summary>
+        /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries
+        /// </summary>
+        /// <param name="treatmentBMP"></param>
+        /// <returns></returns>
         public static DbGeometry GetCentralizedDelineationGeometry4326(this TreatmentBMP treatmentBMP)
         {
             var regionalSubbasin =
@@ -277,6 +282,11 @@ namespace Neptune.Web.Models
             return dbGeometry;
         }
 
+        /// <summary>
+        /// Performs the RSB trace for a given Treatment BMP using the EPSG 2771 representation of the regional subbasin geometries
+        /// </summary>
+        /// <param name="treatmentBMP"></param>
+        /// <returns></returns>
         public static DbGeometry GetCentralizedDelineationGeometry2771(this TreatmentBMP treatmentBMP)
         {
             var regionalSubbasin =

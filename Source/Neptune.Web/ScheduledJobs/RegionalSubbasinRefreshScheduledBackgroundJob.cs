@@ -40,11 +40,29 @@ namespace Neptune.Web.ScheduledJobs
             StageFeatureCollection(newRegionalSubbasinFeatureCollection);
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
+            RefreshCentralizedDelineations(dbContext, person);
+        }
+
+        private static void RefreshCentralizedDelineations(DatabaseEntities dbContext, Person person)
+        {
+            foreach (var delineation in dbContext.Delineations.Where(x => x.DelineationTypeID == DelineationType.Centralized.DelineationTypeID))
+            {
+                var centralizedDelineationGeometry2771 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry2771();
+                var centralizedDelineationGeometry4326 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry4326();
+
+                delineation.DelineationGeometry = centralizedDelineationGeometry2771;
+                delineation.DelineationGeometry4326 = centralizedDelineationGeometry4326;
+
+                delineation.DateLastModified = DateTime.Now;
+                delineation.MarkAsVerified(person);
+            }
+
+            dbContext.SaveChanges(person);
         }
 
         private static void MergeAndReproject(DatabaseEntities dbContext, Person person)
         {
-            // MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
+            // MergeListHelper doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
             dbContext.Database.CommandTimeout = 30000;
             dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
 
