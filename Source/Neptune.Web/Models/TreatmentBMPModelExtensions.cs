@@ -258,7 +258,7 @@ namespace Neptune.Web.Models
             return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
         }
 
-        public static DbGeometry GetCentralizedDelineationGeometry(this TreatmentBMP treatmentBMP)
+        public static DbGeometry GetCentralizedDelineationGeometry4326(this TreatmentBMP treatmentBMP)
         {
             var regionalSubbasin =
                 HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
@@ -270,6 +270,25 @@ namespace Neptune.Web.Models
 
             var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
                 .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry4326)
+                .ToList().UnionListGeometries();
+
+            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
+            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
+            return dbGeometry;
+        }
+
+        public static DbGeometry GetCentralizedDelineationGeometry2771(this TreatmentBMP treatmentBMP)
+        {
+            var regionalSubbasin =
+                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
+                    x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
+
+            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
+
+            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
+
+            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry)
                 .ToList().UnionListGeometries();
 
             // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)

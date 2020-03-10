@@ -135,7 +135,7 @@ NeptuneMaps.Map.prototype.getTextAreaId = function (featureId) { return "textare
 
 var createUpdateFeatureCollectionJsonFunctionAsClosure = function (nameForWkt, nameForAnnotation, mapFormID) {
     return function () {
-        var geoJson = assessmentAreaMap.editableFeatureGroup.toGeoJSON();
+        var geoJson = assessmentAreaMap.editableFeatureGroup.toGeoJSON(18);
         detectKinksAndReject(geoJson);
         var mapForm = jQuery("#" + mapFormID);
         mapForm.html("");

@@ -70,7 +70,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewNew(NewViewModel viewModel, TreatmentBMP treatmentBMP)
         {
-            var geometry = treatmentBMP.GetCentralizedDelineationGeometry();
+            var geometry = treatmentBMP.GetCentralizedDelineationGeometry4326();
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(geometry);
 
             var layerGeoJson = new LayerGeoJson("centralizedDelineationLayer",

@@ -58,7 +58,7 @@ var STRATEGY_AUTODEM = "AutoDEM";
 var STRATEGY_NETWORK_TRACE = "NetworkTrace";
 var STRATEGY_MANUAL = "Manual";
 
-var LEAFLET_TO_GEO_JSON_PRECISION = 14;
+var LEAFLET_TO_GEO_JSON_PRECISION = 18;
 
 /* Prototype members */
 

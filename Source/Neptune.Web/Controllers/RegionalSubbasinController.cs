@@ -46,7 +46,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public ContentResult UpstreamDelineation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry();
+            var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry4326();
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
 
