@@ -342,7 +342,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                               !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
                               !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
                               !bmpModelingAttributes.EffectiveFootprint.HasValue ||
-                              !bmpModelingAttributes.TotalDrawdownTime.HasValue))
+                              !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue))
                     {
                         parameterizationErrors.Add(modelMissingAttributes);
                     }

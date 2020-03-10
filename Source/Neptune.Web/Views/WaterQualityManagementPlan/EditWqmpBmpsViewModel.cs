@@ -111,6 +111,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 }
             }
 
+            if (quickBmpSimples.Any(x => x.PercentRetained > x.PercentCaptured))
+            {
+                validationResults.Add(new ValidationResult("Percent Captured needs to be greater than Percent Retained in Other Structural BMPs."));
+            }
+
             if (quickBmpSimples.Any(x => x.PercentOfSiteTreated < 0 || x.PercentOfSiteTreated > 100))
             {
                 validationResults.Add(new ValidationResult("Percent of Site Treated in Other Structural BMPs needs to be between 0 and 100."));

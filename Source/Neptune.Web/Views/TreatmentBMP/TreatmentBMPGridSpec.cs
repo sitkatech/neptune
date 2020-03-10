@@ -205,7 +205,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                          (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
                           (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
                            !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
+                          !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
                           !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
                           !bmpModelingAttributes.EffectiveFootprint.HasValue ||
                           !bmpModelingAttributes.TotalDrawdownTime.HasValue))
