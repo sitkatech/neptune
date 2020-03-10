@@ -43,5 +43,12 @@
             var loadGeneratingUnitRefreshScheduledBackgroundJob = new LoadGeneratingUnitRefreshScheduledBackgroundJob();
             loadGeneratingUnitRefreshScheduledBackgroundJob.RunJob();
         }
+
+        // TODO: remove this after it's run once in PROD
+        public static void RunRefreshAssessmentScoreJob(int personID)
+        {
+            var refreshAssessmentScoreJob = new RefreshAssessmentScoreJob(personID);
+            refreshAssessmentScoreJob.RunJob();
+        }
     }
 }
