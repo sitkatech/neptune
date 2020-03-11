@@ -22,6 +22,7 @@ namespace Neptune.Web.Models
         public static readonly UnderlyingHydrologicSoilGroupB B = UnderlyingHydrologicSoilGroupB.Instance;
         public static readonly UnderlyingHydrologicSoilGroupC C = UnderlyingHydrologicSoilGroupC.Instance;
         public static readonly UnderlyingHydrologicSoilGroupD D = UnderlyingHydrologicSoilGroupD.Instance;
+        public static readonly UnderlyingHydrologicSoilGroupLiner Liner = UnderlyingHydrologicSoilGroupLiner.Instance;
 
         public static readonly List<UnderlyingHydrologicSoilGroup> All;
         public static readonly ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroup> AllLookupDictionary;
@@ -31,7 +32,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static UnderlyingHydrologicSoilGroup()
         {
-            All = new List<UnderlyingHydrologicSoilGroup> { A, B, C, D };
+            All = new List<UnderlyingHydrologicSoilGroup> { A, B, C, D, Liner };
             AllLookupDictionary = new ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroup>(All.ToDictionary(x => x.UnderlyingHydrologicSoilGroupID));
         }
 
@@ -109,6 +110,8 @@ namespace Neptune.Web.Models
                     return C;
                 case UnderlyingHydrologicSoilGroupEnum.D:
                     return D;
+                case UnderlyingHydrologicSoilGroupEnum.Liner:
+                    return Liner;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -120,7 +123,8 @@ namespace Neptune.Web.Models
         A = 1,
         B = 2,
         C = 3,
-        D = 4
+        D = 4,
+        Liner = 5
     }
 
     public partial class UnderlyingHydrologicSoilGroupA : UnderlyingHydrologicSoilGroup
@@ -145,5 +149,11 @@ namespace Neptune.Web.Models
     {
         private UnderlyingHydrologicSoilGroupD(int underlyingHydrologicSoilGroupID, string underlyingHydrologicSoilGroupName, string underlyingHydrologicSoilGroupDisplayName) : base(underlyingHydrologicSoilGroupID, underlyingHydrologicSoilGroupName, underlyingHydrologicSoilGroupDisplayName) {}
         public static readonly UnderlyingHydrologicSoilGroupD Instance = new UnderlyingHydrologicSoilGroupD(4, @"D", @"D");
+    }
+
+    public partial class UnderlyingHydrologicSoilGroupLiner : UnderlyingHydrologicSoilGroup
+    {
+        private UnderlyingHydrologicSoilGroupLiner(int underlyingHydrologicSoilGroupID, string underlyingHydrologicSoilGroupName, string underlyingHydrologicSoilGroupDisplayName) : base(underlyingHydrologicSoilGroupID, underlyingHydrologicSoilGroupName, underlyingHydrologicSoilGroupDisplayName) {}
+        public static readonly UnderlyingHydrologicSoilGroupLiner Instance = new UnderlyingHydrologicSoilGroupLiner(5, @"Liner", @"Liner");
     }
 }

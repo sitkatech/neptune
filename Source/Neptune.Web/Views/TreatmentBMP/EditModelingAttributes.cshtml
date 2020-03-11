@@ -101,7 +101,7 @@
                                         <label class="col-sm-4 control-label">
                                             @Html.LabelWithSugarFor(x => x.UnderlyingHydrologicSoilGroupID)
                                         </label>
-                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.UnderlyingHydrologicSoilGroupID, ViewDataTyped.UnderlyingHydrologicSoilGroups, new { @class = "form-control" })</div>
+                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.UnderlyingHydrologicSoilGroupID, ViewDataTyped.UnderlyingHydrologicSoilGroups.Where(x => x.Value != "Liner").ToList(), new { @class = "form-control" })</div>
                                     </div>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
@@ -258,10 +258,10 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.TotalDrawdownTime)
+                                            @Html.LabelWithSugarFor(x => x.DrawdownTimeforWQDetentionVolume)
                                             <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
                                         </label>
-                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalDrawdownTime)" aria-describedby="attributeUnit" type="text" value="@Model.TotalDrawdownTime" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DrawdownTimeforWQDetentionVolume)" aria-describedby="attributeUnit" type="text" value="@Model.DrawdownTimeforWQDetentionVolume" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
