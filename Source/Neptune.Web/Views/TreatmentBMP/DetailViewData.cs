@@ -164,14 +164,14 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             DelineationErrors = CheckForDelineationErrors(treatmentBMP);
 
-            ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP);
-
             DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
                                                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
 
             TrashCaptureEffectiveness = TreatmentBMP.TrashCaptureEffectiveness == null ? "Not Provided" : TreatmentBMP.TrashCaptureEffectiveness + "%";
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
+
+            ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP);
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.ConvertTreatmentBMPType(treatmentBMP));
 
