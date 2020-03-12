@@ -45,7 +45,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Person(int personID, Guid personGuid, string firstName, string lastName, string email, string phone, int roleID, DateTime createDate, DateTime? updateDate, DateTime? lastActivityDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName, int? droolToolRoleID, bool receiveRSBRevisionRequestEmails) : this()
+        public Person(int personID, Guid personGuid, string firstName, string lastName, string email, string phone, int roleID, DateTime createDate, DateTime? updateDate, DateTime? lastActivityDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName, int? droolToolRoleID, bool receiveRSBRevisionRequestEmails, Guid? webServiceAccessToken) : this()
         {
             this.PersonID = personID;
             this.PersonGuid = personGuid;
@@ -63,6 +63,7 @@ namespace Neptune.Web.Models
             this.LoginName = loginName;
             this.DroolToolRoleID = droolToolRoleID;
             this.ReceiveRSBRevisionRequestEmails = receiveRSBRevisionRequestEmails;
+            this.WebServiceAccessToken = webServiceAccessToken;
         }
 
         /// <summary>
@@ -251,6 +252,7 @@ namespace Neptune.Web.Models
         public string LoginName { get; set; }
         public int? DroolToolRoleID { get; set; }
         public bool ReceiveRSBRevisionRequestEmails { get; set; }
+        public Guid? WebServiceAccessToken { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return PersonID; } set { PersonID = value; } }
 

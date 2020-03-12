@@ -57,6 +57,12 @@ namespace Neptune.Web.Models
             return person;
         }
 
+        public static Person GetPersonByWebServiceAccessToken(this IQueryable<Person> people, Guid webServiceAccessToken)
+        {
+            var person = people.SingleOrDefault(x => x.WebServiceAccessToken == webServiceAccessToken);
+            return person;
+        }
+
         public static List<Person> GetActivePeople(this IQueryable<Person> people)
         {
             return people.Where(x => x.IsActive).ToList().OrderBy(ht => ht.GetFullNameLastFirst()).ToList();
