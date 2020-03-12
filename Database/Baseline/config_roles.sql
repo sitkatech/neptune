@@ -25,7 +25,7 @@ from
     union select '${prod-db-batch-user}', 'U'
 	union select '${local-db-geoserver-user}', 'S'
 	union select '${qa-db-geoserver-user}', 'S'
-	union select '${prod-db-geoserver-user}', 'U'
+	union select '${prod-db-geoserver-user}', 'S'
     union select 'Sitka\H2O QA Support', 'G'
     union select 'Sitka\H2O QA Tester', 'G'
 ) a left join #accountsToCreate ac on a.AccountName = ac.AccountName
