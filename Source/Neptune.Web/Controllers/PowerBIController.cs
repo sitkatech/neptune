@@ -8,9 +8,9 @@ namespace Neptune.Web.Controllers
     public class PowerBIController : NeptuneBaseController
     {
         [HttpGet]
-        public JsonResult GetHRUCharacteristicsForPowerBI (int? treatmentBMPId = null)
+        public JsonResult GetHRUCharacteristicsForPowerBI (int? treatmentBMPID = null)
         {
-            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x => x.TreatmentBMPID == (treatmentBMPId ?? x.TreatmentBMPID)).ToList()
+            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x => x.TreatmentBMPID == (treatmentBMPID ?? x.TreatmentBMPID)).ToList()
                 .Select(x => new PowerBIHRUCharacteristics(){ 
                     HRUEntityType = x.TreatmentBMP != null ? "Treatment BMP" :
                                      (x.WaterQualityManagementPlan != null ? "Water Quality Management Plan" : "Regional Subbasin"),
