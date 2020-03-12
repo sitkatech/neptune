@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPModelingAttribute(int treatmentBMPModelingAttributeID, int treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? totalDrawdownTime, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand) : this()
+        public TreatmentBMPModelingAttribute(int treatmentBMPModelingAttributeID, int treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand) : this()
         {
             this.TreatmentBMPModelingAttributeID = treatmentBMPModelingAttributeID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -53,7 +53,7 @@ namespace Neptune.Web.Models
             this.StorageVolumeBelowLowestOutletElevation = storageVolumeBelowLowestOutletElevation;
             this.SummerHarvestedWaterDemand = summerHarvestedWaterDemand;
             this.TimeOfConcentrationID = timeOfConcentrationID;
-            this.TotalDrawdownTime = totalDrawdownTime;
+            this.DrawdownTimeForDetentionVolume = drawdownTimeForDetentionVolume;
             this.TotalEffectiveBMPVolume = totalEffectiveBMPVolume;
             this.TotalEffectiveDrywellBMPVolume = totalEffectiveDrywellBMPVolume;
             this.TreatmentRate = treatmentRate;
@@ -148,7 +148,7 @@ namespace Neptune.Web.Models
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
         public double? SummerHarvestedWaterDemand { get; set; }
         public int? TimeOfConcentrationID { get; set; }
-        public double? TotalDrawdownTime { get; set; }
+        public double? DrawdownTimeForDetentionVolume { get; set; }
         public double? TotalEffectiveBMPVolume { get; set; }
         public double? TotalEffectiveDrywellBMPVolume { get; set; }
         public double? TreatmentRate { get; set; }

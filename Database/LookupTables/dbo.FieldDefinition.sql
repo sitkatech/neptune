@@ -97,7 +97,7 @@ VALUES
 (93, 'StorageVolumeBelowLowestOutletElevation', 'Storage Volume Below Lowest Outlet Elevation', 'The volume of water stored below the lowest outlet (e.g., underdrain, orifice) of the system.', 1),
 (94, 'SummerHarvestedWaterDemand', 'Summer Harvested Water Demand', 'Average daily harvested water demand from May through October.', 1),
 (95, 'TimeOfConcentration', 'Time of Concentration', 'The time required for the entire drainage to begin contributing runoff to the BMP. This value must be less than 60 minutes. See TGD guidance.', 1),
-(96, 'TotalDrawdownTime', 'Total Drawdown Time', 'Time for the basin to fully draw own after the end of a storm if there is no further inflow.', 1),
+(96, 'DrawdownTimeForDetentionVolume', 'Drawdown Time For Detention Volume', 'Time for the basin to fully draw own after the end of a storm if there is no further inflow.', 1),
 (97, 'TotalEffectiveBMPVolume', 'Total Effective BMP Volume', 'The volume of the BMP available for water quality purposes. This includes ponding volume and the available pore volume in media layers and/or in gravel storage layers. It does not include flow control volumes or other volume that is not designed for water quality purposes. ', 1),
 (98, 'TotalEffectiveDrywellBMPVolume', 'Total Effective Drywell BMP Volume', 'The volume of the BMP available for water quality purposes. This includes the volume in any pre-treatment chamber as well as the volume in the well itself.', 1),
 (99, 'TreatmentRate', 'Treatment Rate', 'The flowrate at which the BMP can provide treatment of runoff.', 1),
@@ -112,4 +112,5 @@ VALUES
 (108, 'PercentRetained', 'Percent Retained', '', 1),
 (109, 'AreaWithinWQMP', 'Area within WQMP', '', 1),
 (110, 'Watershed', 'Watershed', '', 1),
-(111, 'DesignStormwaterDepth', 'Design Stormwater Depth', '', 1)
+(111, 'DesignStormwaterDepth', 'Design Stormwater Depth', '', 1),
+(112, 'FullyParameterized', 'Fully Parameterized?', 'Indicates whether all required attributes have been provided in order to calculate model results.', 1)
