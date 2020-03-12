@@ -10,7 +10,7 @@ namespace Neptune.Web.Controllers
     {
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult GetHRUCharacteristicsForPowerBI (int? treatmentBMPID = null)
+        public JsonResult GetHRUCharacteristicsForPowerBI (WebServiceToken webServiceToken, int? treatmentBMPID = null)
         {
             var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x => x.TreatmentBMPID == (treatmentBMPID ?? x.TreatmentBMPID)).ToList()
                 .Select(x => new PowerBIHRUCharacteristics(){ 
