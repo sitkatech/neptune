@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? totalDrawdownTime, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths) : this()
+        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
@@ -54,7 +54,7 @@ namespace Neptune.Web.Models
             this.StorageVolumeBelowLowestOutletElevation = storageVolumeBelowLowestOutletElevation;
             this.SummerHarvestedWaterDemand = summerHarvestedWaterDemand;
             this.TimeOfConcentrationID = timeOfConcentrationID;
-            this.TotalDrawdownTime = totalDrawdownTime;
+            this.DrawdownTimeForDetentionVolume = drawdownTimeForDetentionVolume;
             this.TotalEffectiveBMPVolume = totalEffectiveBMPVolume;
             this.TotalEffectiveDrywellBMPVolume = totalEffectiveDrywellBMPVolume;
             this.TreatmentRate = treatmentRate;
@@ -64,6 +64,8 @@ namespace Neptune.Web.Models
             this.WettedFootprint = wettedFootprint;
             this.WinterHarvestedWaterDemand = winterHarvestedWaterDemand;
             this.OperationMonths = operationMonths;
+            this.DesignStormwaterDepthInInches = designStormwaterDepthInInches;
+            this.WatershedName = watershedName;
         }
 
         /// <summary>
@@ -98,7 +100,7 @@ namespace Neptune.Web.Models
             this.StorageVolumeBelowLowestOutletElevation = vViewTreatmentBMPModelingAttributes.StorageVolumeBelowLowestOutletElevation;
             this.SummerHarvestedWaterDemand = vViewTreatmentBMPModelingAttributes.SummerHarvestedWaterDemand;
             this.TimeOfConcentrationID = vViewTreatmentBMPModelingAttributes.TimeOfConcentrationID;
-            this.TotalDrawdownTime = vViewTreatmentBMPModelingAttributes.TotalDrawdownTime;
+            this.DrawdownTimeForDetentionVolume = vViewTreatmentBMPModelingAttributes.DrawdownTimeForDetentionVolume;
             this.TotalEffectiveBMPVolume = vViewTreatmentBMPModelingAttributes.TotalEffectiveBMPVolume;
             this.TotalEffectiveDrywellBMPVolume = vViewTreatmentBMPModelingAttributes.TotalEffectiveDrywellBMPVolume;
             this.TreatmentRate = vViewTreatmentBMPModelingAttributes.TreatmentRate;
@@ -108,6 +110,8 @@ namespace Neptune.Web.Models
             this.WettedFootprint = vViewTreatmentBMPModelingAttributes.WettedFootprint;
             this.WinterHarvestedWaterDemand = vViewTreatmentBMPModelingAttributes.WinterHarvestedWaterDemand;
             this.OperationMonths = vViewTreatmentBMPModelingAttributes.OperationMonths;
+            this.DesignStormwaterDepthInInches = vViewTreatmentBMPModelingAttributes.DesignStormwaterDepthInInches;
+            this.WatershedName = vViewTreatmentBMPModelingAttributes.WatershedName;
             CallAfterConstructor(vViewTreatmentBMPModelingAttributes);
         }
 
@@ -140,7 +144,7 @@ namespace Neptune.Web.Models
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
         public double? SummerHarvestedWaterDemand { get; set; }
         public int? TimeOfConcentrationID { get; set; }
-        public double? TotalDrawdownTime { get; set; }
+        public double? DrawdownTimeForDetentionVolume { get; set; }
         public double? TotalEffectiveBMPVolume { get; set; }
         public double? TotalEffectiveDrywellBMPVolume { get; set; }
         public double? TreatmentRate { get; set; }
@@ -150,5 +154,7 @@ namespace Neptune.Web.Models
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
         public string OperationMonths { get; set; }
+        public double? DesignStormwaterDepthInInches { get; set; }
+        public string WatershedName { get; set; }
     }
 }

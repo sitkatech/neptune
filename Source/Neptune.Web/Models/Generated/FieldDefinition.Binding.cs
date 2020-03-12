@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionStorageVolumeBelowLowestOutletElevation StorageVolumeBelowLowestOutletElevation = FieldDefinitionStorageVolumeBelowLowestOutletElevation.Instance;
         public static readonly FieldDefinitionSummerHarvestedWaterDemand SummerHarvestedWaterDemand = FieldDefinitionSummerHarvestedWaterDemand.Instance;
         public static readonly FieldDefinitionTimeOfConcentration TimeOfConcentration = FieldDefinitionTimeOfConcentration.Instance;
-        public static readonly FieldDefinitionTotalDrawdownTime TotalDrawdownTime = FieldDefinitionTotalDrawdownTime.Instance;
+        public static readonly FieldDefinitionDrawdownTimeForDetentionVolume DrawdownTimeForDetentionVolume = FieldDefinitionDrawdownTimeForDetentionVolume.Instance;
         public static readonly FieldDefinitionTotalEffectiveBMPVolume TotalEffectiveBMPVolume = FieldDefinitionTotalEffectiveBMPVolume.Instance;
         public static readonly FieldDefinitionTotalEffectiveDrywellBMPVolume TotalEffectiveDrywellBMPVolume = FieldDefinitionTotalEffectiveDrywellBMPVolume.Instance;
         public static readonly FieldDefinitionTreatmentRate TreatmentRate = FieldDefinitionTreatmentRate.Instance;
@@ -128,6 +128,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionAreaWithinWQMP AreaWithinWQMP = FieldDefinitionAreaWithinWQMP.Instance;
         public static readonly FieldDefinitionWatershed Watershed = FieldDefinitionWatershed.Instance;
         public static readonly FieldDefinitionDesignStormwaterDepth DesignStormwaterDepth = FieldDefinitionDesignStormwaterDepth.Instance;
+        public static readonly FieldDefinitionFullyParameterized FullyParameterized = FieldDefinitionFullyParameterized.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -137,7 +138,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOfOperation, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, TotalDrawdownTime, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOfOperation, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -269,6 +270,8 @@ namespace Neptune.Web.Models
                     return DesignStormwaterDepth;
                 case FieldDefinitionEnum.DiversionRate:
                     return DiversionRate;
+                case FieldDefinitionEnum.DrawdownTimeForDetentionVolume:
+                    return DrawdownTimeForDetentionVolume;
                 case FieldDefinitionEnum.DrawdownTimeForWQDetentionVolume:
                     return DrawdownTimeForWQDetentionVolume;
                 case FieldDefinitionEnum.EffectiveFootprint:
@@ -281,6 +284,8 @@ namespace Neptune.Web.Models
                     return FieldVisit;
                 case FieldDefinitionEnum.FieldVisitStatus:
                     return FieldVisitStatus;
+                case FieldDefinitionEnum.FullyParameterized:
+                    return FullyParameterized;
                 case FieldDefinitionEnum.FundingEvent:
                     return FundingEvent;
                 case FieldDefinitionEnum.FundingSource:
@@ -393,8 +398,6 @@ namespace Neptune.Web.Models
                     return TimeOfConcentration;
                 case FieldDefinitionEnum.TotalAchieved:
                     return TotalAchieved;
-                case FieldDefinitionEnum.TotalDrawdownTime:
-                    return TotalDrawdownTime;
                 case FieldDefinitionEnum.TotalEffectiveBMPVolume:
                     return TotalEffectiveBMPVolume;
                 case FieldDefinitionEnum.TotalEffectiveDrywellBMPVolume:
@@ -539,7 +542,7 @@ namespace Neptune.Web.Models
         StorageVolumeBelowLowestOutletElevation = 93,
         SummerHarvestedWaterDemand = 94,
         TimeOfConcentration = 95,
-        TotalDrawdownTime = 96,
+        DrawdownTimeForDetentionVolume = 96,
         TotalEffectiveBMPVolume = 97,
         TotalEffectiveDrywellBMPVolume = 98,
         TreatmentRate = 99,
@@ -554,7 +557,8 @@ namespace Neptune.Web.Models
         PercentRetained = 108,
         AreaWithinWQMP = 109,
         Watershed = 110,
-        DesignStormwaterDepth = 111
+        DesignStormwaterDepth = 111,
+        FullyParameterized = 112
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -1121,10 +1125,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTimeOfConcentration Instance = new FieldDefinitionTimeOfConcentration(95, @"TimeOfConcentration", @"Time of Concentration", @"The time required for the entire drainage to begin contributing runoff to the BMP. This value must be less than 60 minutes. See TGD guidance.", true);
     }
 
-    public partial class FieldDefinitionTotalDrawdownTime : FieldDefinition
+    public partial class FieldDefinitionDrawdownTimeForDetentionVolume : FieldDefinition
     {
-        private FieldDefinitionTotalDrawdownTime(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTotalDrawdownTime Instance = new FieldDefinitionTotalDrawdownTime(96, @"TotalDrawdownTime", @"Total Drawdown Time", @"Time for the basin to fully draw own after the end of a storm if there is no further inflow.", true);
+        private FieldDefinitionDrawdownTimeForDetentionVolume(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDrawdownTimeForDetentionVolume Instance = new FieldDefinitionDrawdownTimeForDetentionVolume(96, @"DrawdownTimeForDetentionVolume", @"Drawdown Time For Detention Volume", @"Time for the basin to fully draw own after the end of a storm if there is no further inflow.", true);
     }
 
     public partial class FieldDefinitionTotalEffectiveBMPVolume : FieldDefinition
@@ -1215,5 +1219,11 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionDesignStormwaterDepth(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionDesignStormwaterDepth Instance = new FieldDefinitionDesignStormwaterDepth(111, @"DesignStormwaterDepth", @"Design Stormwater Depth", @"", true);
+    }
+
+    public partial class FieldDefinitionFullyParameterized : FieldDefinition
+    {
+        private FieldDefinitionFullyParameterized(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionFullyParameterized Instance = new FieldDefinitionFullyParameterized(112, @"FullyParameterized", @"Fully Parameterized?", @"Indicates whether all required attributes have been provided in order to calculate model results.", true);
     }
 }

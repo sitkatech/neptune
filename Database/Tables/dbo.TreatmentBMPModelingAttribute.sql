@@ -24,7 +24,7 @@ CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
 	[StorageVolumeBelowLowestOutletElevation] [float] NULL,
 	[SummerHarvestedWaterDemand] [float] NULL,
 	[TimeOfConcentrationID] [int] NULL,
-	[TotalDrawdownTime] [float] NULL,
+	[DrawdownTimeForDetentionVolume] [float] NULL,
 	[TotalEffectiveBMPVolume] [float] NULL,
 	[TotalEffectiveDrywellBMPVolume] [float] NULL,
 	[TreatmentRate] [float] NULL,
