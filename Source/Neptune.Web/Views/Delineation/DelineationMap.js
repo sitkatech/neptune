@@ -224,7 +224,9 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
     this.beginDelineationControl.remove();
     this.beginDelineationControl = null;
 
+    this.enableUserInteraction();
     this.enableSelectOnClick();
+
     this.delineationMapService.resetDelineationMapEditingState();
     window.freeze = false;
 };
@@ -648,14 +650,18 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
     promise.then(function (featureCollection) {
         var newcoords = [];
         var coordinates = featureCollection.features[0].geometry.coordinates[0];
-        var wgs = proj4("EPSG:4326");
-        var casp = proj4("EPSG:2230");
-        for (var i = 0; i < coordinates.length; i++) {
-            var newcoord = proj4(casp, wgs, coordinates[i]);
-            newcoords.push(newcoord);
-        }
 
-        featureCollection.features[0].geometry.coordinates[0] = newcoords;
+        // CRS should always be EPSG:2230 and yet...
+        if (featureCollection.crs.properties.name !== "EPSG:4326") {
+            var wgs = proj4("EPSG:4326");
+            var casp = proj4("EPSG:2230");
+            for (var i = 0; i < coordinates.length; i++) {
+                var newcoord = proj4(casp, wgs, coordinates[i]);
+                newcoords.push(newcoord);
+            }
+
+            featureCollection.features[0].geometry.coordinates[0] = newcoords;
+        }
 
         self.addBMPDelineationLayerFromDEM(featureCollection);
 
