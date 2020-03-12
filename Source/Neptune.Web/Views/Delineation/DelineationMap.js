@@ -220,7 +220,9 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
     this.beginDelineationControl.remove();
     this.beginDelineationControl = null;
 
+    this.enableUserInteraction();
     this.enableSelectOnClick();
+
     this.delineationMapService.resetDelineationMapEditingState();
     window.freeze = false;
 };
