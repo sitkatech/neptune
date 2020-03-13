@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.FieldVisit
 
             if (!detailPage)
             {
-                Add("BMP Name", x => UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
+                Add("BMP Name", x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             }
 
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);

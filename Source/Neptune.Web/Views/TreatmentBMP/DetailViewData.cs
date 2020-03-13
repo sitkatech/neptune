@@ -101,7 +101,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForStorageVolumeBelowLowestOutletElevation { get; }
         public Models.FieldDefinition FieldDefinitionForSummerHarvestedWaterDemand { get; }
         public Models.FieldDefinition FieldDefinitionForTimeofConcentration { get; }
-        public Models.FieldDefinition FieldDefinitionForTotalDrawdownTime { get; }
+        public Models.FieldDefinition FieldDefinitionForDrawdownTimeForDetentionVolume { get; }
         public Models.FieldDefinition FieldDefinitionForTotalEffectiveBMPVolume { get; }
         public Models.FieldDefinition FieldDefinitionForTotalEffectiveDrywellBMPVolume { get; }
         public Models.FieldDefinition FieldDefinitionForTreatmentRate { get; }
@@ -200,7 +200,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForStorageVolumeBelowLowestOutletElevation = Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation;
             FieldDefinitionForSummerHarvestedWaterDemand = Models.FieldDefinition.SummerHarvestedWaterDemand;
             FieldDefinitionForTimeofConcentration = Models.FieldDefinition.TimeOfConcentration;
-            FieldDefinitionForTotalDrawdownTime = Models.FieldDefinition.TotalDrawdownTime;
+            FieldDefinitionForDrawdownTimeForDetentionVolume = Models.FieldDefinition.DrawdownTimeForDetentionVolume;
             FieldDefinitionForTotalEffectiveBMPVolume = Models.FieldDefinition.TotalEffectiveBMPVolume;
             FieldDefinitionForTotalEffectiveDrywellBMPVolume = Models.FieldDefinition.TotalEffectiveDrywellBMPVolume;
             FieldDefinitionForTreatmentRate = Models.FieldDefinition.TreatmentRate;
@@ -342,7 +342,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                               !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
                               !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
                               !bmpModelingAttributes.EffectiveFootprint.HasValue ||
-                              !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue))
+                              !bmpModelingAttributes.DrawdownTimeForDetentionVolume.HasValue))
                     {
                         parameterizationErrors.Add(modelMissingAttributes);
                     }

@@ -31,6 +31,7 @@ namespace Neptune.Web.Models
             Property(x => x.LoginName).HasColumnName(@"LoginName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(128);
             Property(x => x.DroolToolRoleID).HasColumnName(@"DroolToolRoleID").HasColumnType("int").IsOptional();
             Property(x => x.ReceiveRSBRevisionRequestEmails).HasColumnName(@"ReceiveRSBRevisionRequestEmails").HasColumnType("bit").IsRequired();
+            Property(x => x.WebServiceAccessToken).HasColumnName(@"WebServiceAccessToken").HasColumnType("uniqueidentifier").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.People).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Person_Organization_OrganizationID

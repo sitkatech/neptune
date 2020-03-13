@@ -86,8 +86,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.TimeOfConcentration)]
         public int? TimeOfConcentrationID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TotalDrawdownTime)]
-        public double? TotalDrawdownTime { get; set; }
+        [FieldDefinitionDisplay(FieldDefinitionEnum.DrawdownTimeForDetentionVolume)]
+        public double? DrawdownTimeForDetentionVolume { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.TotalEffectiveBMPVolume)]
         public double? TotalEffectiveBMPVolume { get; set; }
@@ -149,7 +149,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation;
                 SummerHarvestedWaterDemand = treatmentBMPModelingAttribute.SummerHarvestedWaterDemand;
                 TimeOfConcentrationID = treatmentBMPModelingAttribute.TimeOfConcentrationID;
-                TotalDrawdownTime = treatmentBMPModelingAttribute.TotalDrawdownTime;
+                DrawdownTimeForDetentionVolume = treatmentBMPModelingAttribute.DrawdownTimeForDetentionVolume;
                 TotalEffectiveBMPVolume = treatmentBMPModelingAttribute.TotalEffectiveBMPVolume;
                 TotalEffectiveDrywellBMPVolume = treatmentBMPModelingAttribute.TotalEffectiveDrywellBMPVolume;
                 TreatmentRate = treatmentBMPModelingAttribute.TreatmentRate;
@@ -188,7 +188,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.SummerHarvestedWaterDemand = SummerHarvestedWaterDemand;
             //Because some TreatmentBMPTypes see this, but others don't, check for null and then default to 5 minutes
             treatmentBMPModelingAttribute.TimeOfConcentrationID = TimeOfConcentrationID ?? (int) TimeOfConcentrationEnum.FiveMinutes;
-            treatmentBMPModelingAttribute.TotalDrawdownTime = TotalDrawdownTime;
+            treatmentBMPModelingAttribute.DrawdownTimeForDetentionVolume = DrawdownTimeForDetentionVolume;
             treatmentBMPModelingAttribute.TotalEffectiveBMPVolume = TotalEffectiveBMPVolume;
             treatmentBMPModelingAttribute.TotalEffectiveDrywellBMPVolume = TotalEffectiveDrywellBMPVolume;
             treatmentBMPModelingAttribute.TreatmentRate = TreatmentRate;
@@ -275,7 +275,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
                             StorageVolumeBelowLowestOutletElevation);
                         ValidateFieldIsRequired(validationResults, "Effective Footprint", EffectiveFootprint);
-                        ValidateFieldIsRequired(validationResults, "Drawdown Time For Water Quality Detention Volume", DrawdownTimeforWQDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Drawdown Time For Detention Volume", DrawdownTimeForDetentionVolume);
                         break;
                     case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                         if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)
