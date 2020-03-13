@@ -54,7 +54,6 @@ namespace Neptune.Web.ScheduledJobs
                 delineation.DelineationGeometry4326 = centralizedDelineationGeometry4326;
 
                 delineation.DateLastModified = DateTime.Now;
-                delineation.MarkAsVerified(person);
             }
 
             dbContext.SaveChanges(person);
