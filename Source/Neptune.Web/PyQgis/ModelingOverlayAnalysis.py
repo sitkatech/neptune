@@ -200,7 +200,7 @@ if __name__ == '__main__':
 
     # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
     if clip_layer is not None:
-        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, context=PROCESSING_CONTEXT)
+        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
         masterOverlayClipped = clip(masterOverlay, clip_layer, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
 
     #raiseIfLayerInvalid(masterOverlay)
