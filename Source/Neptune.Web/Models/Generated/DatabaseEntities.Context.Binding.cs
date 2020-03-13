@@ -56,6 +56,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
             modelBuilder.Configurations.Add(new LandUseBlockStagingConfiguration());
             modelBuilder.Configurations.Add(new LoadGeneratingUnitConfiguration());
+            modelBuilder.Configurations.Add(new LoadGeneratingUnitRefreshAreaConfiguration());
             modelBuilder.Configurations.Add(new LSPCBasinConfiguration());
             modelBuilder.Configurations.Add(new LSPCBasinStagingConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
@@ -150,6 +151,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
+        public virtual DbSet<LoadGeneratingUnitRefreshArea> LoadGeneratingUnitRefreshAreas { get; set; }
         public virtual DbSet<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public virtual DbSet<LSPCBasin> LSPCBasins { get; set; }
         public virtual DbSet<LSPCBasinStaging> LSPCBasinStagings { get; set; }
@@ -365,6 +367,9 @@ namespace Neptune.Web.Models
 
                 case "LandUseBlockStaging":
                     return LandUseBlockStagings.GetLandUseBlockStaging(primaryKey);
+
+                case "LoadGeneratingUnitRefreshArea":
+                    return LoadGeneratingUnitRefreshAreas.GetLoadGeneratingUnitRefreshArea(primaryKey);
 
                 case "LoadGeneratingUnit":
                     return LoadGeneratingUnits.GetLoadGeneratingUnit(primaryKey);

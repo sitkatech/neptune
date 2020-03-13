@@ -1,35 +1,42 @@
-﻿using Neptune.Web.Models;
-using System;
+﻿using System;
+using JetBrains.Annotations;
+using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using System.Data.Entity.Spatial;
-using LtInfo.Common;
+using Hangfire;
 
 namespace Neptune.Web.Common
 {
-    public static class NeptuneGeometryUtilities
+    public static class ModelingEngineUtilities
     {
-        //public static DbGeometry FixSrid(this DbGeometry geometry, int srid)
-        //{
-        //    if (geometry == null)
-        //    {
-        //        return geometry;
-        //    }
-        //    var wellKnownText = geometry.ToString();
+        public static void QueueLGURefreshForArea(DbGeometry oldShape, DbGeometry newShape)
+        {
+            DbGeometry loadGeneratingUnitRefreshAreaGeometry;
 
-        //    // geometry.ToString() includes the SRID at the beginning of the string but is otherwise legal WKT
-        //    if (wellKnownText.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
-        //    {
-        //        wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
-        //    }
-        //    else if (wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture) > -1)
-        //    {
-        //        wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture));
-        //    } else if (wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture) > -1)
-        //    {
-        //        wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture));
-        //    }
+            if (oldShape == null && newShape == null)
+            {
+                throw new InvalidOperationException("At least one input to QueueLGURefreshForArea must not be null.");
+            }
 
-        //    geometry = DbGeometry.FromText(wellKnownText, srid);
-        //    return geometry;
-        //}
+            if (oldShape == null)
+            {
+                loadGeneratingUnitRefreshAreaGeometry = newShape;
+            }
+            else if (newShape == null)
+            {
+                loadGeneratingUnitRefreshAreaGeometry = oldShape;
+            }
+            else
+            {
+                loadGeneratingUnitRefreshAreaGeometry = oldShape.Union(newShape);
+            }
+
+            var loadGeneratingUnitRefreshArea = new LoadGeneratingUnitRefreshArea(loadGeneratingUnitRefreshAreaGeometry);
+
+            HttpRequestStorage.DatabaseEntities.LoadGeneratingUnitRefreshAreas.Add(loadGeneratingUnitRefreshArea);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(HttpRequestStorage.Person.PersonID, loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
+        }
     }
 }

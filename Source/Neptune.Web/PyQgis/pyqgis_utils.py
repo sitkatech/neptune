@@ -42,3 +42,8 @@ def fetchLayerFromDatabase(connectionString, spatialTableName):
     layer = QgsVectorLayer(qualifiedConnectionString, spatialTableName, "ogr")
     raiseIfLayerInvalid(layer)
     return layer
+
+def fetchLayerFromGeoJson(path, name):
+    layer = QgsVectorLayer(path, name, "ogr")
+    raiseIfLayerInvalid(layer)
+    return layer

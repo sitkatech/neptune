@@ -144,8 +144,6 @@ namespace Neptune.Web.Controllers
                     .UnionListGeometries();
             }
 
-           
-
             DbGeometry geom2771 = null;
 
             // like all POSTs from the browser, transform to State Plane 
@@ -156,6 +154,10 @@ namespace Neptune.Web.Controllers
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
+
+            // for queueing the LGU job
+            var newShape = geom2771;
+            var oldShape = treatmentBMPDelineation?.DelineationGeometry;
 
             // todo: validate on the view model, not here
             if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
@@ -181,7 +183,6 @@ namespace Neptune.Web.Controllers
                 else
                 {
                     HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
-
                 }
             }
             else
@@ -198,6 +199,11 @@ namespace Neptune.Web.Controllers
             }
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            if (!(newShape == null & oldShape == null))
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape);
+            }
 
             return Json(new {success = true, delineationID = treatmentBMP.Delineation.DelineationID});
         }

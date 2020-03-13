@@ -12,7 +12,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult Test()
         {
-            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             if (processUtilityResult.ReturnCode == 0)
             {
@@ -27,7 +27,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestNoProcessing()
         {
-            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             if (processUtilityResult.ReturnCode == 0)
             {
@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestComputeTrashGeneratingUnits()
         {
-            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
 
             if (processUtilityResult.ReturnCode == 0)
             {

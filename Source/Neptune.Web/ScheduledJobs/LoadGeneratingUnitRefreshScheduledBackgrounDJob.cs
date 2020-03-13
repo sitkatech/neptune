@@ -1,14 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GdalOgr;
+using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.ScheduledJobs
 {
     public class LoadGeneratingUnitRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
+        public int? LoadGeneratingUnitRefreshAreaID { get; }
+
+        public LoadGeneratingUnitRefreshScheduledBackgroundJob(int? loadGeneratingUnitRefreshAreaID)
+        {
+            LoadGeneratingUnitRefreshAreaID = loadGeneratingUnitRefreshAreaID;
+        }
+
         public new static string JobName => "LGU Refresh";
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
@@ -19,18 +30,42 @@ namespace Neptune.Web.ScheduledJobs
         };
         protected override void RunJobImplementation()
         {
-            LoadGeneratingUnitRefreshImpl();
+            LoadGeneratingUnitRefreshImpl(LoadGeneratingUnitRefreshAreaID);
         }
 
-        private void LoadGeneratingUnitRefreshImpl()
+        private void LoadGeneratingUnitRefreshImpl(int? loadGeneratingUnitRefreshAreaID)
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var layerName = Guid.NewGuid().ToString();
-            var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
+            var outputLayerName = Guid.NewGuid().ToString();
+            var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
+
+            var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
+
+            var additionalCommandLineArguments = new List<string> {outputLayerPath};
+            
+            if (loadGeneratingUnitRefreshAreaID != null)
+            {
+                // todo: update to handle lguRefreshAreaID
+                var loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
+                var lguInputClipFeatures = DbContext.LoadGeneratingUnits
+                    .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
+                        .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x => DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
+
+                var lguInputClipFeatureCollection = new FeatureCollection(lguInputClipFeatures);
+
+
+                //var lguInputClipGeoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
+                var lguInputClipGeoJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(lguInputClipFeatureCollection);
+
+                File.WriteAllText(clipLayerPath, lguInputClipGeoJsonString);
+                additionalCommandLineArguments.AddRange( new List<string>{
+                    "--clip", clipLayerPath
+                });
+            }
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
-            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputPath);
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
 
             if (processUtilityResult.ReturnCode != 0)
             {
@@ -39,7 +74,6 @@ namespace Neptune.Web.ScheduledJobs
                 throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             }
 
-            // todo: Slurp. 
             try
             {
                 // todo: when HRU characteristics are updated to key on LGUs, we will no longer be able to truncate
@@ -48,7 +82,7 @@ namespace Neptune.Web.ScheduledJobs
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForLGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
 
-                ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(layerName, outputPath,
+                ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
             }
             catch (Ogr2OgrCommandLineException e)

@@ -167,6 +167,10 @@
     <Compile Include="Models\Generated\LoadGeneratingUnit.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\LoadGeneratingUnitConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\LoadGeneratingUnitPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnitRefreshArea.Binding.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnitRefreshArea.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnitRefreshAreaConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\LoadGeneratingUnitRefreshAreaPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\LSPCBasin.Binding.cs" />
     <Compile Include="Models\Generated\LSPCBasin.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\LSPCBasinConfiguration.Binding.cs" />

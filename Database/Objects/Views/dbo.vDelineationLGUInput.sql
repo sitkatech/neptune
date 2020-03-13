@@ -11,6 +11,6 @@ from
 		on d.TreatmentBMPID = t.TreatmentBMPID
 	join dbo.TreatmentBMPType ttype
 		on ttype.TreatmentBMPTypeID = t.TreatmentBMPTypeID
-Where d.DelineationTypeID = 2
- and ttype.TreatmentBMPModelingTypeID is not null
+Where d.DelineationTypeID = 2  -- distributed
+ and ttype.TreatmentBMPModelingTypeID is not null  --only include modeling BMPs
 GO

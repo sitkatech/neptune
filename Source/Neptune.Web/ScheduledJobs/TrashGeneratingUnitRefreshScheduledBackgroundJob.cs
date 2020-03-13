@@ -31,7 +31,7 @@ namespace Neptune.Web.ScheduledJobs
             var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
 
             // a PyQGIS script computes the TGU layer and saves it as a shapefile
-            var processUtilityResult = QgisRunner.ExecuteTrashGeneratingUnitScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputPath);
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputPath);
 
             if (processUtilityResult.ReturnCode != 0)
             {

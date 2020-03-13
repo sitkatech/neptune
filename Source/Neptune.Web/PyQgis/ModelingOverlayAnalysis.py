@@ -31,24 +31,27 @@ from pyqgis_utils import (
     duplicateLayer,
     fetchLayerFromDatabase,
     raiseIfLayerInvalid,
-    QgisError
+    QgisError,
+    fetchLayerFromGeoJson
 )
 
 JOIN_PREFIX = "Joined_"
 CONNSTRING_BASE = "CONNSTRING ERROR"
 OUTPUT_PATH = "OUTPUT PATH ERROR"
+CLIP_PATH = None
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
     parser.add_argument('connstring', metavar='s', type=str, help='The connection string. Do not specify tables; the script will specify which table(s) it wants to look at.')
     parser.add_argument('output_path', metavar='d', type=str, help='The path to write the final output to.')
-
+    parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
 
     args = parser.parse_args()
 
     # this is easier to write than anything sane
     global CONNSTRING_BASE
     global OUTPUT_PATH
+    global CLIP_PATH
     CONNSTRING_BASE = "MSSQL:" + args.connstring
     OUTPUT_PATH = args.output_path
     print(OUTPUT_PATH)
@@ -57,6 +60,10 @@ def parseArguments():
             CONNSTRING_BASE = CONNSTRING_BASE + ";"
     if "True" in CONNSTRING_BASE:
             CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
+
+    if args.clip:
+        CLIP_PATH = args.clip
+        print(CLIP_PATH)
 
 def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
     params = {
@@ -121,7 +128,7 @@ if __name__ == '__main__':
     qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "server")
 
     qgs.initQgis()
-        
+    
     Processing.initialize()
     QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
@@ -129,9 +136,12 @@ if __name__ == '__main__':
     PROCESSING_CONTEXT = dataobjects.createContext()
     PROCESSING_CONTEXT.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
 
-
     def fetchLayer(spatialTableName):
         return fetchLayerFromDatabase(CONNSTRING_BASE, spatialTableName)
+
+    if CLIP_PATH is not None:
+        clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
+        
 
     lspcLayer = fetchLayer("vLSPCBasinLGUInput")
     regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")

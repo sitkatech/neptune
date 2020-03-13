@@ -38,9 +38,9 @@
             delineationDiscrepancyCheckerBackgroundJob.RunJob();
         }
 
-        public static void RunLoadGeneratingUnitRefreshJob(int currentPersonPersonID)
+        public static void RunLoadGeneratingUnitRefreshJob(int currentPersonID, int? loadGeneratingUnitRefreshAreaID)
         {
-            var loadGeneratingUnitRefreshScheduledBackgroundJob = new LoadGeneratingUnitRefreshScheduledBackgroundJob();
+            var loadGeneratingUnitRefreshScheduledBackgroundJob = new LoadGeneratingUnitRefreshScheduledBackgroundJob(loadGeneratingUnitRefreshAreaID);
             loadGeneratingUnitRefreshScheduledBackgroundJob.RunJob();
         }
 
