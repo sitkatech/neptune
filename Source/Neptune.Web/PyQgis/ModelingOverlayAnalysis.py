@@ -86,12 +86,18 @@ def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=
     
     return unionResult['OUTPUT']
 
-def clip(inputLayer, overlayLayer, memoryOutputName, context=None):
+def clip(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
     params = {
         'INPUT': inputLayer,
-        'OVERLAY': overlayLayer,
-        'OUTPUT': 'memory:'+memoryOutputName
+        'OVERLAY': overlayLayer
     }
+
+    if memoryOutputName is not None:
+        params['OUTPUT'] = 'memory:' + memoryOutputName
+    elif filesystemOutputPath is not None:
+        params['OUTPUT'] = filesystemOutputPath
+    else:
+        raise QgisError("No output provided for union operation")
 
     if context is not None:
         clipResult = processing.run("native:clip", params, context = context)
@@ -119,6 +125,22 @@ def bufferZero(inputLayer, memoryOutputName, context=None):
     
     return bufferZeroResult['OUTPUT']
 
+def snapGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
+    params = {
+        'INPUT':inputLayer,
+        'REFERENCE_LAYER':inputLayer,
+        'TOLERANCE':5,
+        'BEHAVIOR':1,
+        'OUTPUT':'TEMPORARY_OUTPUT'
+    }
+    
+    if context is not None:
+        snapResult = processing.run("qgis:snapgeometries", params, context = context)
+    else:
+        snapResult = processing.run("qgis:snapgeometries", params)
+
+    return snapResult['OUTPUT']
+
 if __name__ == '__main__':
     parseArguments()
     
@@ -139,24 +161,33 @@ if __name__ == '__main__':
     def fetchLayer(spatialTableName):
         return fetchLayerFromDatabase(CONNSTRING_BASE, spatialTableName)
 
+    clip_layer = None
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
         
-
     lspcLayer = fetchLayer("vLSPCBasinLGUInput")
     regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")
     delineationLayer = fetchLayer("vDelineationLGUInput")
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
 
+    # perhaps overly-aggressive application of the buffer-zero and 
     lspcLayer = bufferZero(lspcLayer, "LSPCBasins", context=PROCESSING_CONTEXT)
     regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", context=PROCESSING_CONTEXT)
+
+    delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", context=PROCESSING_CONTEXT)
     delineationLayer = bufferZero(delineationLayer, "Delineations", context=PROCESSING_CONTEXT)
-    wqmpLayer = bufferZero(wqmpLayer, "WQMPs", context=PROCESSING_CONTEXT)
+
+    wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", context=PROCESSING_CONTEXT)
+    wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
+
+    QgsVectorFileWriter.writeAsVectorFormat(delineationLayer, 'C:\\temp\\snappo.shp', "utf-8", delineationLayer.crs(), "ESRI Shapefile")
 
     # At present time, we're only concerned with the area covered by LSPC basins. 
     regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, lspcLayer, "RSBClipped")
-    delineationLayerClipped = clip(delineationLayer, lspcLayer, "RSBClipped")
-    wqmpLayerClipped = clip(wqmpLayer, lspcLayer, "RSBClipped")
+    delineationLayerClipped = clip(delineationLayer, lspcLayer, "DelineationClipped")
+    wqmpLayerClipped = clip(wqmpLayer, lspcLayer, "WQMPClipped")
+
+    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
 
     lspc_rsb = union(lspcLayer, regionalSubbasinLayerClipped, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb)
@@ -166,5 +197,10 @@ if __name__ == '__main__':
     #raiseIfLayerInvalid(lspc_rsb_delineation)
     lspc_rsb_wqmp = bufferZero(lspc_rsb_wqmp, "LSPC-RSB-D", context=PROCESSING_CONTEXT)
 
-    masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
+
+    # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
+    if clip_layer is not None:
+        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, context=PROCESSING_CONTEXT)
+        masterOverlayClipped = clip(masterOverlay, clip_layer, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
+
     #raiseIfLayerInvalid(masterOverlay)

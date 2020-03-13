@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
@@ -52,8 +53,10 @@ namespace Neptune.Web.ScheduledJobs
                     .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
                         .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x => DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
 
-                var lguInputClipFeatureCollection = new FeatureCollection(lguInputClipFeatures);
-
+                var lguInputClipFeatureCollection = new FeatureCollection(lguInputClipFeatures)
+                {
+                    CRS = new NamedCRS("EPSG:2771")
+                };
 
                 //var lguInputClipGeoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
                 var lguInputClipGeoJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(lguInputClipFeatureCollection);
@@ -90,6 +93,8 @@ namespace Neptune.Web.ScheduledJobs
                 Logger.Error("LGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
                 throw;
             }
+
+            // todo: clean up temporary files  
         }
     }
 }
