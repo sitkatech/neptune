@@ -9,6 +9,7 @@ using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -44,11 +45,14 @@ namespace Neptune.Web.ScheduledJobs
             var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
 
             var additionalCommandLineArguments = new List<string> {outputLayerPath};
-            
+
+            LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea = null;
+
             if (loadGeneratingUnitRefreshAreaID != null)
             {
                 // todo: update to handle lguRefreshAreaID
-                var loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
+                
+                loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
                 var lguInputClipFeatures = DbContext.LoadGeneratingUnits
                     .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
                         .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x => DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
@@ -79,14 +83,28 @@ namespace Neptune.Web.ScheduledJobs
 
             try
             {
-                // todo: when HRU characteristics are updated to key on LGUs, we will no longer be able to truncate
-                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.LoadGeneratingUnit");
-
+                if (loadGeneratingUnitRefreshAreaID != null)
+                {
+                    DbContext.Database.ExecuteSqlCommand(
+                        $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
+                }
+                else
+                {
+                    DbContext.Database.ExecuteSqlCommand(
+                        $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+                }
+                
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForLGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
 
                 ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
+
+                if (loadGeneratingUnitRefreshArea != null)
+                {
+                    loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
+                    DbContext.SaveChangesWithNoAuditing();
+                }
             }
             catch (Ogr2OgrCommandLineException e)
             {
@@ -94,7 +112,12 @@ namespace Neptune.Web.ScheduledJobs
                 throw;
             }
 
-            // todo: clean up temporary files  
+            // todo: clean up temporary files
+            File.Delete(outputLayerPath);
+            if (loadGeneratingUnitRefreshAreaID != null)
+            {
+                File.Delete(clipLayerPath);
+            }
         }
     }
 }

@@ -202,5 +202,7 @@ if __name__ == '__main__':
     if clip_layer is not None:
         masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
         masterOverlayClipped = clip(masterOverlay, clip_layer, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
+    else: 
+        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
 
     #raiseIfLayerInvalid(masterOverlay)
