@@ -112,11 +112,20 @@ namespace Neptune.Web.ScheduledJobs
                 throw;
             }
 
-            // todo: clean up temporary files
             File.Delete(outputLayerPath);
             if (loadGeneratingUnitRefreshAreaID != null)
             {
                 File.Delete(clipLayerPath);
+            }
+
+            //todo: test this on a delta run.
+            if (loadGeneratingUnitRefreshArea != null)
+            {
+                var loadGeneratingUnitsToRefreshHRUsOf = DbContext.LoadGeneratingUnits.Where(x =>
+                    x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
+                        .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
+
+                HRUUtilities.RetrieveAndNotSaveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf);
             }
         }
     }

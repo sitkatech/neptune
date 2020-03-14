@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshHRUCharacteristics(regionalSubbasin, viewModel);
             }
 
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(regionalSubbasin, x => x.RegionalSubbasinID = regionalSubbasin.RegionalSubbasinID);
+            HRUUtilities.RetrieveAndSaveHRUCharacteristics(regionalSubbasin, x => x.RegionalSubbasinID = regionalSubbasin.RegionalSubbasinID);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {regionalSubbasin.Watershed} {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}");
             return new ModalDialogFormJsonResult();
         }

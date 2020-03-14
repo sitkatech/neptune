@@ -152,7 +152,7 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, viewModel);
             }
 
-            HRUHelper.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
+            HRUUtilities.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
             SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
             return new ModalDialogFormJsonResult();
         }

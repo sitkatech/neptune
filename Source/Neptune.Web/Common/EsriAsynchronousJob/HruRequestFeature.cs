@@ -105,5 +105,25 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes, i);
             }
         }
+        
+        public static IEnumerable<HRURequestFeature> GetHRURequestFeatures(this IEnumerable<LoadGeneratingUnit> loadGeneratingUnits)
+        {
+            foreach (var loadGeneratingUnit in loadGeneratingUnits)
+            {
+                var baseAttributes = new HRURequestFeatureAttributes
+                {
+                    ObjectID = loadGeneratingUnit.PrimaryKey,
+                    Area = loadGeneratingUnit.LoadGeneratingUnitGeometry.Area.GetValueOrDefault(),
+                    Length = loadGeneratingUnit.LoadGeneratingUnitGeometry.Length.GetValueOrDefault(),
+                };
+
+                var catchmentGeometry = loadGeneratingUnit.LoadGeneratingUnitGeometry;
+
+                for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
+                {
+                    yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes, i);
+                }
+            }
+        }
     }
 }
