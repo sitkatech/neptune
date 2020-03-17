@@ -514,6 +514,7 @@
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
     <Compile Include="Controllers\PowerBIController.cs" />
+    <Compile Include="Models\HRUCharacteristicModelExtensions.cs" />
     <Compile Include="Models\PowerBIHRUCharacteristics.cs" />
     <Compile Include="Models\WebServiceToken.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />

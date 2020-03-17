@@ -272,7 +272,7 @@
                     Land Use Statistics
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.WaterQualityManagementPlan.HRUCharacteristics.Any() && ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() != null)
+                    @if (ViewDataTyped.WaterQualityManagementPlan.GetHRUCharacteristics().Any() && ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() != null)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                     }

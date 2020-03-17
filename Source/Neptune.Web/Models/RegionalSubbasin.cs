@@ -23,5 +23,11 @@ namespace Neptune.Web.Models
             return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.Single(x =>
                 x.OCSurveyCatchmentID == OCSurveyDownstreamCatchmentID);
         }
+
+        public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
+        {
+            return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
+                x.LoadGeneratingUnit.RegionalSubbasinID == RegionalSubbasinID);
+        }
     }
 }

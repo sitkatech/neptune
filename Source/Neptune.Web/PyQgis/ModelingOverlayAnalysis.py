@@ -180,8 +180,6 @@ if __name__ == '__main__':
     wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", context=PROCESSING_CONTEXT)
     wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
 
-    QgsVectorFileWriter.writeAsVectorFormat(delineationLayer, 'C:\\temp\\snappo.shp', "utf-8", delineationLayer.crs(), "ESRI Shapefile")
-
     # At present time, we're only concerned with the area covered by LSPC basins. 
     regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, lspcLayer, "RSBClipped")
     delineationLayerClipped = clip(delineationLayer, lspcLayer, "DelineationClipped")
@@ -201,8 +199,19 @@ if __name__ == '__main__':
     # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
     if clip_layer is not None:
         masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
-        masterOverlayClipped = clip(masterOverlay, clip_layer, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
+        masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
     else: 
-        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, filesystemOutputPath=OUTPUT_PATH, context=PROCESSING_CONTEXT)
+        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+
+    masterOverlay.startEditing()
+
+    for feat in masterOverlay.getFeatures():
+        if feat.geometry().area() < 1:
+            masterOverlay.deleteFeature(feat.id())
+    
+    masterOverlay.commitChanges()
+
+    QgsVectorFileWriter.writeAsVectorFormat(masterOverlay, OUTPUT_PATH, "utf-8", delineationLayer.crs(), "ESRI Shapefile")
+
 
     #raiseIfLayerInvalid(masterOverlay)

@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected LoadGeneratingUnit()
         {
-
+            this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
         }
 
         /// <summary>
@@ -66,13 +66,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return HRUCharacteristics.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LoadGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LoadGeneratingUnit).Name, typeof(HRUCharacteristic).Name};
 
 
         /// <summary>
@@ -88,8 +88,19 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in HRUCharacteristics.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -102,6 +113,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return LoadGeneratingUnitID; } set { LoadGeneratingUnitID = value; } }
 
+        public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual LSPCBasin LSPCBasin { get; set; }
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }
         public virtual Delineation Delineation { get; set; }

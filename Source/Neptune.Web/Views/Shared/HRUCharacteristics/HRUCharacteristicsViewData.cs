@@ -9,11 +9,11 @@ namespace Neptune.Web.Views.Shared.HRUCharacteristics
         public IHaveHRUCharacteristics EntityWithHRUCharacteristics { get; }
         public List<HRUCharacteristicsSummarySimple> HRUCharacteristicsSummaries { get; }
 
-        public HRUCharacteristicsViewData(IHaveHRUCharacteristics entityWithHRUCharacteristics)
+        public HRUCharacteristicsViewData(IHaveHRUCharacteristics entityWithHRUCharacteristics, List<HRUCharacteristic> hruCharacteristics)
         {
             EntityWithHRUCharacteristics = entityWithHRUCharacteristics;
 
-            HRUCharacteristicsSummaries = EntityWithHRUCharacteristics.HRUCharacteristics
+            HRUCharacteristicsSummaries = hruCharacteristics
                 .GroupBy(x => x.HRUCharacteristicLandUseCode).Select(x => new HRUCharacteristicsSummarySimple()
                     { Area = x.Sum(y => y.Area).ToString("N2"), ImperviousCover = x.Sum(y => y.ImperviousAcres).ToString("N2"), LandUse = x.Key.HRUCharacteristicLandUseCodeDisplayName })
                 .ToList();
@@ -21,8 +21,8 @@ namespace Neptune.Web.Views.Shared.HRUCharacteristics
             HRUCharacteristicsTotal = new HRUCharacteristicsSummarySimple
             {
                 LandUse = "Total",
-                Area = EntityWithHRUCharacteristics.HRUCharacteristics.Sum(x=>x.Area).ToString("N2"),
-                ImperviousCover = EntityWithHRUCharacteristics.HRUCharacteristics.Sum(x=>x.ImperviousAcres).ToString("N2"),
+                Area = hruCharacteristics.Sum(x=>x.Area).ToString("N2"),
+                ImperviousCover = hruCharacteristics.Sum(x=>x.ImperviousAcres).ToString("N2"),
 
             };
         }

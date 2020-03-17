@@ -20,16 +20,12 @@ namespace Neptune.Web.Models
             Property(x => x.SlopePercentage).HasColumnName(@"SlopePercentage").HasColumnType("int").IsRequired();
             Property(x => x.ImperviousAcres).HasColumnName(@"ImperviousAcres").HasColumnType("float").IsRequired();
             Property(x => x.LastUpdated).HasColumnName(@"LastUpdated").HasColumnType("datetime").IsRequired();
-            Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsOptional();
-            Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
-            Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
             Property(x => x.Area).HasColumnName(@"Area").HasColumnType("float").IsRequired();
             Property(x => x.HRUCharacteristicLandUseCodeID).HasColumnName(@"HRUCharacteristicLandUseCodeID").HasColumnType("int").IsRequired();
+            Property(x => x.LoadGeneratingUnitID).HasColumnName(@"LoadGeneratingUnitID").HasColumnType("int").IsRequired();
 
             // Foreign keys
-            HasOptional(a => a.TreatmentBMP).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID
-            HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_WaterQualityManagementPlan_WaterQualityManagementPlanID
-            HasOptional(a => a.RegionalSubbasin).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.RegionalSubbasinID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_RegionalSubbasin_RegionalSubbasinID
+            HasRequired(a => a.LoadGeneratingUnit).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.LoadGeneratingUnitID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_LoadGeneratingUnit_LoadGeneratingUnitID
         }
     }
 }

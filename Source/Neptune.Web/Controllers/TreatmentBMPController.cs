@@ -178,8 +178,9 @@ namespace Neptune.Web.Controllers
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(
                     x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
+            IHaveHRUCharacteristics entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
-                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(treatmentBMP.UpstreamBMP ?? treatmentBMP), mapServiceUrl);
+                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(entityWithHRUCharacteristics, entityWithHRUCharacteristics.GetHRUCharacteristics().ToList()), mapServiceUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -807,8 +808,12 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public PartialViewResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            return ViewRefreshHRUCharacteristics(treatmentBMP, new ConfirmDialogFormViewModel());
+
+            throw new NotImplementedException(
+                "Construction Dust: Support for direct BMP HRU update removed temporarily by refactor");
+
+            //var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            //return ViewRefreshHRUCharacteristics(treatmentBMP, new ConfirmDialogFormViewModel());
         }
 
 
@@ -822,9 +827,13 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshHRUCharacteristics(treatmentBMP, viewModel);
             }
 
-            HRUUtilities.RetrieveAndSaveHRUCharacteristics(treatmentBMP, x => x.TreatmentBMPID = treatmentBMP.TreatmentBMPID);
-            SetMessageForDisplay($"Successfully updated HRU Characteristics for {treatmentBMP.TreatmentBMPName}");
-            return new ModalDialogFormJsonResult();
+
+            throw new NotImplementedException(
+                "Construction Dust: Support for direct BMP HRU update removed temporarily by refactor");
+
+            //HRUUtilities.RetrieveAndSaveHRUCharacteristics(treatmentBMP, x => x.TreatmentBMPID = treatmentBMP.TreatmentBMPID);
+            //SetMessageForDisplay($"Successfully updated HRU Characteristics for {treatmentBMP.TreatmentBMPName}");
+            //return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewRefreshHRUCharacteristics(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)

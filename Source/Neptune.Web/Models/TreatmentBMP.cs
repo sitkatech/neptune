@@ -20,9 +20,11 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
@@ -180,6 +182,12 @@ namespace Neptune.Web.Models
         public void RemoveUpstreamBMP()
         { 
             this.UpstreamBMPID = null;
+        }
+
+        public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
+        {
+            return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
+                x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
         }
     }
 }

@@ -117,7 +117,7 @@ namespace Neptune.Web.Controllers
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
-                waterQualityManagementPlanVerifyTreatmentBMP, new HRUCharacteristicsViewData(waterQualityManagementPlan));
+                waterQualityManagementPlanVerifyTreatmentBMP, new HRUCharacteristicsViewData(waterQualityManagementPlan, ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()));
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -137,8 +137,11 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public PartialViewResult RefreshHRUCharacteristics(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, new ConfirmDialogFormViewModel());
+
+            throw new NotImplementedException(
+                "Construction Dust: Support for direct WQMP HRU update removed temporarily by refactor");
+            //var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            //return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, new ConfirmDialogFormViewModel());
         }
 
 
@@ -152,9 +155,11 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshHRUCharacteristics(waterQualityManagementPlan, viewModel);
             }
 
-            HRUUtilities.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
-            SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
-            return new ModalDialogFormJsonResult();
+            throw new NotImplementedException(
+                "Construction Dust: Support for direct WQMP HRU update removed temporarily by refactor");
+            //HRUUtilities.RetrieveAndSaveHRUCharacteristics(waterQualityManagementPlan, x => x.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID);
+            //SetMessageForDisplay($"Successfully updated HRU Characteristics for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+            //return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewRefreshHRUCharacteristics(WaterQualityManagementPlan waterQualityManagementPlan, ConfirmDialogFormViewModel viewModel)

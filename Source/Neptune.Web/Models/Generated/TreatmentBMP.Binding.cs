@@ -28,7 +28,6 @@ namespace Neptune.Web.Models
             this.Delineations = new HashSet<Delineation>();
             this.FieldVisits = new HashSet<FieldVisit>();
             this.FundingEvents = new HashSet<FundingEvent>();
-            this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
             this.RegionalSubbasinRevisionRequests = new HashSet<RegionalSubbasinRevisionRequest>();
             this.TreatmentBMPsWhereYouAreTheUpstreamBMP = new HashSet<TreatmentBMP>();
@@ -128,13 +127,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || HRUCharacteristics.Any() || MaintenanceRecords.Any() || RegionalSubbasinRevisionRequests.Any() || TreatmentBMPsWhereYouAreTheUpstreamBMP.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || (TreatmentBMPModelingAttribute != null) || TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any() || TreatmentBMPOperationMonths.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
+            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || RegionalSubbasinRevisionRequests.Any() || TreatmentBMPsWhereYouAreTheUpstreamBMP.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || (TreatmentBMPModelingAttribute != null) || TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any() || TreatmentBMPOperationMonths.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(HRUCharacteristic).Name, typeof(MaintenanceRecord).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(TreatmentBMPModelingAttribute).Name, typeof(TreatmentBMPOperationMonth).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(TreatmentBMPModelingAttribute).Name, typeof(TreatmentBMPOperationMonth).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
 
 
         /// <summary>
@@ -175,11 +174,6 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in FundingEvents.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in HRUCharacteristics.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -276,7 +270,6 @@ namespace Neptune.Web.Models
         public Delineation Delineation { get { return Delineations.SingleOrDefault(); } set { Delineations = new List<Delineation>{value};} }
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
-        public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheUpstreamBMP { get; set; }

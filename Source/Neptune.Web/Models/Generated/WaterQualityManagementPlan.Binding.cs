@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         /// </summary>
         protected WaterQualityManagementPlan()
         {
-            this.HRUCharacteristics = new HashSet<HRUCharacteristic>();
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
             this.QuickBMPs = new HashSet<QuickBMP>();
             this.SourceControlBMPs = new HashSet<SourceControlBMP>();
@@ -107,13 +106,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return HRUCharacteristics.Any() || LoadGeneratingUnits.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
+            return LoadGeneratingUnits.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(HRUCharacteristic).Name, typeof(LoadGeneratingUnit).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(LoadGeneratingUnit).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -137,11 +136,6 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteChildren(DatabaseEntities dbContext)
         {
-
-            foreach(var x in HRUCharacteristics.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
 
             foreach(var x in LoadGeneratingUnits.ToList())
             {
@@ -208,7 +202,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
-        public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }

@@ -8,7 +8,7 @@ namespace Neptune.Web.Models
     {
         DbGeometry GetCatchmentGeometry();
 
-        ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
+        IEnumerable<HRUCharacteristic> GetHRUCharacteristics();
     }
 
     public class HRUCharacteristicsSummarySimple

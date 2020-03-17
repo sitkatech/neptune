@@ -50,8 +50,6 @@ namespace Neptune.Web.ScheduledJobs
 
             if (loadGeneratingUnitRefreshAreaID != null)
             {
-                // todo: update to handle lguRefreshAreaID
-                
                 loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
                 var lguInputClipFeatures = DbContext.LoadGeneratingUnits
                     .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
@@ -118,6 +116,7 @@ namespace Neptune.Web.ScheduledJobs
                 File.Delete(clipLayerPath);
             }
 
+            
             //todo: test this on a delta run.
             if (loadGeneratingUnitRefreshArea != null)
             {
@@ -125,7 +124,9 @@ namespace Neptune.Web.ScheduledJobs
                     x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
                         .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
 
-                HRUUtilities.RetrieveAndNotSaveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf);
+                var StartTime = DateTime.Now;
+                HRUUtilities.RetrieveAndNotSaveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext);
+                var EndTime = DateTime.Now;
             }
         }
     }

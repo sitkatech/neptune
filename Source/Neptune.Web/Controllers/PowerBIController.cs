@@ -12,19 +12,19 @@ namespace Neptune.Web.Controllers
         [AllowAnonymous]
         public JsonResult GetHRUCharacteristicsForPowerBI (WebServiceToken webServiceToken, int? treatmentBMPID = null)
         {
-            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x => x.TreatmentBMPID == (treatmentBMPID ?? x.TreatmentBMPID)).ToList()
+            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x => treatmentBMPID == null || x.GetTreatmentBMP().TreatmentBMPID == treatmentBMPID ).ToList()
                 .Select(x => new PowerBIHRUCharacteristics(){ 
-                    HRUEntityType = x.TreatmentBMP != null ? "Treatment BMP" :
-                                     (x.WaterQualityManagementPlan != null ? "Water Quality Management Plan" : "Regional Subbasin"),
+                    HRUEntityType = x.GetTreatmentBMP() != null ? "Treatment BMP" :
+                                     (x.GetWaterQualityManagementPlan() != null ? "Water Quality Management Plan" : "Regional Subbasin"),
                     HydrologicSoilGroup = x.HydrologicSoilGroup,
                     ImperviousAcres = Math.Round(x.ImperviousAcres, 3),
                     LastUpdated = x.LastUpdated.ToLongDateString(),
                     LSPCLandUseDescription = x.HRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeDisplayName,
-                    RegionalSubbasin = x.RegionalSubbasin != null ? x.RegionalSubbasin.Watershed + " - " + x.RegionalSubbasin.DrainID : "N/A",
+                    RegionalSubbasin = x.GetRegionalSubbasin() != null ? x.GetRegionalSubbasin().Watershed + " - " + x.GetRegionalSubbasin().DrainID : "N/A",
                     SlopePercentage = x.SlopePercentage,
                     TotalAcres = Math.Round(x.Area, 3),
-                    TreatmentBMP = x.TreatmentBMP?.TreatmentBMPName ?? "N/A",
-                    WaterQualityManagementPlan = x.WaterQualityManagementPlan?.WaterQualityManagementPlanName ?? "N/A"
+                    TreatmentBMP = x.GetTreatmentBMP()?.TreatmentBMPName ?? "N/A",
+                    WaterQualityManagementPlan = x.GetWaterQualityManagementPlan()?.WaterQualityManagementPlanName ?? "N/A"
                 });
 
             return Json(data, JsonRequestBehavior.AllowGet);

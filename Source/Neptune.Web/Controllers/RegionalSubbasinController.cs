@@ -1,4 +1,5 @@
-﻿using GeoJSON.Net.Feature;
+﻿using System;
+using GeoJSON.Net.Feature;
 using Hangfire;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
@@ -57,8 +58,11 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public PartialViewResult RefreshHRUCharacteristics(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
-            var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            return ViewRefreshHRUCharacteristics(regionalSubbasin, new ConfirmDialogFormViewModel());
+
+            throw new NotImplementedException(
+                "Construction Dust: Support for direct RSB HRU update removed temporarily by refactor");
+            //var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
+            //return ViewRefreshHRUCharacteristics(regionalSubbasin, new ConfirmDialogFormViewModel());
         }
 
         [HttpPost]
@@ -71,9 +75,11 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshHRUCharacteristics(regionalSubbasin, viewModel);
             }
 
-            HRUUtilities.RetrieveAndSaveHRUCharacteristics(regionalSubbasin, x => x.RegionalSubbasinID = regionalSubbasin.RegionalSubbasinID);
-            SetMessageForDisplay($"Successfully updated HRU Characteristics for {regionalSubbasin.Watershed} {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}");
-            return new ModalDialogFormJsonResult();
+            throw new NotImplementedException(
+                "Construction Dust: Support for direct RSB HRU update removed temporarily by refactor");
+            //HRUUtilities.RetrieveAndSaveHRUCharacteristics(regionalSubbasin, x => x.RegionalSubbasinID = regionalSubbasin.RegionalSubbasinID);
+            //SetMessageForDisplay($"Successfully updated HRU Characteristics for {regionalSubbasin.Watershed} {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}");
+            //return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewRefreshHRUCharacteristics(RegionalSubbasin regionalSubbasin, ConfirmDialogFormViewModel viewModel)
@@ -96,10 +102,11 @@ namespace Neptune.Web.Controllers
             var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBox(regionalSubbasinCatchmentGeometry4326));
 
 
+            var hruCharacteristics = regionalSubbasin.GetHRUCharacteristics().ToList();
             return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson,
                 regionalSubbasin,
-                new HRUCharacteristicsViewData(regionalSubbasin),
-                stormwaterMapInitJson));
+                new HRUCharacteristicsViewData(regionalSubbasin, hruCharacteristics),
+                stormwaterMapInitJson, hruCharacteristics.Any()));
         }
 
         [HttpGet]

@@ -13,37 +13,38 @@ namespace Neptune.Web.Common
 {
     public static class HRUUtilities
     {
-        public static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics, Func<HRUCharacteristic, int?> primaryKeySetterAction)
-        {
-            Check.Assert(iHaveHRUCharacteristics.GetCatchmentGeometry() != null, "Entity must have a catchment geometry to calculate HRU Characteristics.");
-            var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
-            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
+        // todo: determine whether this is coming back or not
+        //public static void RetrieveAndSaveHRUCharacteristics(IHaveHRUCharacteristics iHaveHRUCharacteristics, Func<HRUCharacteristic, int?> primaryKeySetterAction)
+        //{
+        //    Check.Assert(iHaveHRUCharacteristics.GetCatchmentGeometry() != null, "Entity must have a catchment geometry to calculate HRU Characteristics.");
+        //    var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
+        //    var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
 
-            var hruRequest = GetGPRecordSetLayer(iHaveHRUCharacteristics);
+        //    var hruRequest = GetGPRecordSetLayer(iHaveHRUCharacteristics);
 
-            var serializeObject = new
-            {
-                Input_Polygons = JsonConvert.SerializeObject(hruRequest),
-                returnZ = false,
-                returnM = false,
-                returnTrueCurves = false,
-                f = "pjson"
-            };
+        //    var serializeObject = new
+        //    {
+        //        Input_Polygons = JsonConvert.SerializeObject(hruRequest),
+        //        returnZ = false,
+        //        returnM = false,
+        //        returnTrueCurves = false,
+        //        f = "pjson"
+        //    };
 
-            HttpRequestStorage.DatabaseEntities.HRUCharacteristics.DeleteHRUCharacteristic(iHaveHRUCharacteristics.HRUCharacteristics);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-            var hruCharacteristics =
-                esriAsynchronousJobRunner
-                    .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(serializeObject).Value
-                    .Features.Select(x =>
-                    {
-                        var hruCharacteristic = x.ToHRUCharacteristic();
-                        primaryKeySetterAction.Invoke(hruCharacteristic);
-                        return hruCharacteristic;
-                    });
-            iHaveHRUCharacteristics.HRUCharacteristics.AddAll(hruCharacteristics);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-        }
+        //    HttpRequestStorage.DatabaseEntities.HRUCharacteristics.DeleteHRUCharacteristic(iHaveHRUCharacteristics.GetHRUCharacteristics().ToList());
+        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    var hruCharacteristics =
+        //        esriAsynchronousJobRunner
+        //            .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(serializeObject).Value
+        //            .Features.Select(x =>
+        //            {
+        //                var hruCharacteristic = x.ToHRUCharacteristic();
+        //                primaryKeySetterAction.Invoke(hruCharacteristic);
+        //                return hruCharacteristic;
+        //            });
+        //    iHaveHRUCharacteristics.HRUCharacteristics.AddAll(hruCharacteristics);
+        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //}
 
         public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(IHaveHRUCharacteristics iHaveHRUCharacteristics)
         {
@@ -90,7 +91,8 @@ namespace Neptune.Web.Common
 
 
         // TODO: eventually this needs to save, and then it needs to be renamed to drop the word "Not" from the name
-        public static void RetrieveAndNotSaveHRUCharacteristics(IEnumerable<LoadGeneratingUnit> loadGeneratingUnits)
+        public static void RetrieveAndNotSaveHRUCharacteristics(IEnumerable<LoadGeneratingUnit> loadGeneratingUnits,
+            DatabaseEntities dbContext)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
@@ -106,19 +108,21 @@ namespace Neptune.Web.Common
                 f = "pjson"
             };
 
-            var hruCharacteristics =
+            var newHRUCharacteristics =
                 esriAsynchronousJobRunner
                     .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
                         serializeObject).Value
-                    .Features;
-            //        .Select(x =>
-            //        {
-            //            var hruCharacteristic = x.ToHRUCharacteristic();
-            //            // lol what
-            //            primaryKeySetterAction.Invoke(hruCharacteristic);
-            //            return hruCharacteristic;
-            //        });
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
+                    .Features
+                    .Select(x =>
+                    {
+                        var hruCharacteristic = x.ToHRUCharacteristic();
+                        // lol what
+                        //primaryKeySetterAction.Invoke(hruCharacteristic);
+                        return hruCharacteristic;
+                    });
+
+            dbContext.HRUCharacteristics.AddRange(newHRUCharacteristics);
+            dbContext.SaveChangesWithNoAuditing();
         }
 
         public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(

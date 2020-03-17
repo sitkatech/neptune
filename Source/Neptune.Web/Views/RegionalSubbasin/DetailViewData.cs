@@ -12,9 +12,11 @@ namespace Neptune.Web.Views.RegionalSubbasin
         public string HRURefreshUrl { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
         public StormwaterMapInitJson MapInitJson { get; }
+        public bool HasAnyHRUCharacteristics { get; }
 
-        public DetailViewData(Person currentPerson, Models.RegionalSubbasin regionalSubbasin, HRUCharacteristicsViewData hruCharacteristicsViewData, StormwaterMapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(Person currentPerson, Models.RegionalSubbasin regionalSubbasin, HRUCharacteristicsViewData hruCharacteristicsViewData, StormwaterMapInitJson mapInitJson, bool hasAnyHRUCharacteristics) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            HasAnyHRUCharacteristics = hasAnyHRUCharacteristics;
             EntityName = "Regional Subbasin";
             EntityUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = $"{regionalSubbasin.Watershed} {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}";
@@ -26,5 +28,7 @@ namespace Neptune.Web.Views.RegionalSubbasin
                 SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(x =>
                     x.RefreshHRUCharacteristics(RegionalSubbasin));
         }
+
+        
     }
 }

@@ -748,7 +748,7 @@
                 Land Use Statistics
             </div>
             <div class="panel-body">
-                @if ((ViewDataTyped.TreatmentBMP.HRUCharacteristics.Any() && ViewDataTyped.TreatmentBMP.Delineation != null) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.HRUCharacteristics.Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null))
+                @if ((ViewDataTyped.TreatmentBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.Delineation != null) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null))
                 {
                     HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                 }

@@ -1,0 +1,12 @@
+delete from dbo.HRUCharacteristic
+
+Alter Table dbo.HRUCharacteristic
+drop constraint CK_HRUCharacteristic_XorForeignKeys, FK_HRUCharacteristic_RegionalSubbasin_RegionalSubbasinID, FK_HRUCharacteristic_TreatmentBMP_TreatmentBMPID, FK_HRUCharacteristic_WaterQualityManagementPlan_WaterQualityManagementPlanID
+
+Alter Table dbo.HRUCharacteristic
+drop column TreatmentBMPID, WaterQualityManagementPlanID, RegionalSubbasinID
+
+Alter table dbo.HRUCharacteristic
+Add LoadGeneratingUnitID int not null
+	constraint FK_HRUCharacteristic_LoadGeneratingUnit_LoadGeneratingUnitID
+		foreign key references dbo.LoadGeneratingUnit(LoadGeneratingUnitID)

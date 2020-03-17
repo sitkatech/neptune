@@ -81,7 +81,7 @@
                     Land Use Statistics
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.RegionalSubbasin.HRUCharacteristics.Any())
+                    @if (ViewDataTyped.HasAnyHRUCharacteristics)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                     }
