@@ -53,7 +53,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
             while (isExecuting)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
                 var jobStatusHttpResponseMessage = HttpClient.GetAsync(jobStatusUrl).Result;
                 jobStatusResponse =
                     JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content

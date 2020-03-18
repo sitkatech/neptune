@@ -91,7 +91,7 @@ namespace Neptune.Web.Common
 
 
         // TODO: eventually this needs to save, and then it needs to be renamed to drop the word "Not" from the name
-        public static void RetrieveAndNotSaveHRUCharacteristics(IEnumerable<LoadGeneratingUnit> loadGeneratingUnits,
+        public static IEnumerable<HRUCharacteristic> RetrieveHRUCharacteristics(IEnumerable<LoadGeneratingUnit> loadGeneratingUnits,
             DatabaseEntities dbContext)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
@@ -121,9 +121,7 @@ namespace Neptune.Web.Common
                         //primaryKeySetterAction.Invoke(hruCharacteristic);
                         return hruCharacteristic;
                     });
-
-            dbContext.HRUCharacteristics.AddRange(newHRUCharacteristics);
-            dbContext.SaveChangesWithNoAuditing();
+            return newHRUCharacteristics;
         }
 
         public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(

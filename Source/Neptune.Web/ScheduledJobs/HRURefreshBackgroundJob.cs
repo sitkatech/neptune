@@ -1,7 +1,9 @@
-﻿using Neptune.Web.Common;
+﻿using System;
+using Neptune.Web.Common;
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -32,6 +34,8 @@ namespace Neptune.Web.ScheduledJobs
 
             //loadGeneratingUnitRefreshScheduledBackgroundJob.RunJob();
 
+            List<HRUCharacteristic> newHRUCharacteristics = new List<HRUCharacteristic>();
+
             foreach (var lspcBasin in DbContext.LSPCBasins)
             {
                 var lspcBasinLoadGeneratingUnits = lspcBasin.LoadGeneratingUnits.ToList();
@@ -39,9 +43,18 @@ namespace Neptune.Web.ScheduledJobs
                 var batches = lspcBasinLoadGeneratingUnits.Batch(25);
                 foreach (var batch in batches)
                 {
-                    HRUUtilities.RetrieveAndNotSaveHRUCharacteristics(batch, DbContext);
+                    var start = DateTime.Now;
+                    var batchHRUCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(batch, DbContext);
+                    var end = DateTime.Now;
+                    newHRUCharacteristics.AddRange(batchHRUCharacteristics);
+                    break;
                 }
+
+                break;
             }
+
+            DbContext.HRUCharacteristics.AddRange(newHRUCharacteristics);
+            DbContext.SaveChangesWithNoAuditing();
         }
     }
 }

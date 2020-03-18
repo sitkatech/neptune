@@ -124,9 +124,10 @@ namespace Neptune.Web.ScheduledJobs
                     x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
                         .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
 
-                var StartTime = DateTime.Now;
-                HRUUtilities.RetrieveAndNotSaveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext);
-                var EndTime = DateTime.Now;
+                var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext);
+
+                DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+                DbContext.SaveChangesWithNoAuditing();
             }
         }
     }
