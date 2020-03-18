@@ -36,6 +36,7 @@ namespace Neptune.Web.Models
             Property(x => x.StorageVolumeBelowLowestOutletElevation).HasColumnName(@"StorageVolumeBelowLowestOutletElevation").HasColumnType("float").IsOptional();
             Property(x => x.SummerHarvestedWaterDemand).HasColumnName(@"SummerHarvestedWaterDemand").HasColumnType("float").IsOptional();
             Property(x => x.TimeOfConcentrationID).HasColumnName(@"TimeOfConcentrationID").HasColumnType("int").IsOptional();
+            Property(x => x.DrawdownTimeForDetentionVolume).HasColumnName(@"DrawdownTimeForDetentionVolume").HasColumnType("float").IsOptional();
             Property(x => x.TotalEffectiveBMPVolume).HasColumnName(@"TotalEffectiveBMPVolume").HasColumnType("float").IsOptional();
             Property(x => x.TotalEffectiveDrywellBMPVolume).HasColumnName(@"TotalEffectiveDrywellBMPVolume").HasColumnType("float").IsOptional();
             Property(x => x.TreatmentRate).HasColumnName(@"TreatmentRate").HasColumnType("float").IsOptional();

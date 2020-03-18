@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBIWaterQualityManagementPlan(int primaryKey, int waterQualityManagementPlanID, string waterQualityManagementPlanName, string organizationName, string waterQualityManagementPlanStatusDisplayName, string waterQualityManagementPlanDevelopmentTypeDisplayName, string waterQualityManagementPlanLandUseDisplayName, string waterQualityManagementPlanPermitTermDisplayName, DateTime? approvalDate, DateTime? dateOfContruction, string hydromodificationAppliesDisplayName, string hydrologicSubareaName, decimal? recordedWQMPAreaInAcres, string trashCaptureStatusTypeDisplayName, int? trashCaptureEffectiveness) : this()
+        public vPowerBIWaterQualityManagementPlan(int primaryKey, int waterQualityManagementPlanID, string waterQualityManagementPlanName, string organizationName, string waterQualityManagementPlanStatusDisplayName, string waterQualityManagementPlanDevelopmentTypeDisplayName, string waterQualityManagementPlanLandUseDisplayName, string waterQualityManagementPlanPermitTermDisplayName, int? approvalDate, int? dateOfConstruction, string hydromodificationAppliesDisplayName, string hydrologicSubareaName, decimal? recordedWQMPAreaInAcres, string trashCaptureStatusTypeDisplayName, int? trashCaptureEffectiveness) : this()
         {
             this.PrimaryKey = primaryKey;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -36,7 +36,7 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanLandUseDisplayName = waterQualityManagementPlanLandUseDisplayName;
             this.WaterQualityManagementPlanPermitTermDisplayName = waterQualityManagementPlanPermitTermDisplayName;
             this.ApprovalDate = approvalDate;
-            this.DateOfContruction = dateOfContruction;
+            this.DateOfConstruction = dateOfConstruction;
             this.HydromodificationAppliesDisplayName = hydromodificationAppliesDisplayName;
             this.HydrologicSubareaName = hydrologicSubareaName;
             this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
@@ -58,7 +58,7 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanLandUseDisplayName = vPowerBIWaterQualityManagementPlan.WaterQualityManagementPlanLandUseDisplayName;
             this.WaterQualityManagementPlanPermitTermDisplayName = vPowerBIWaterQualityManagementPlan.WaterQualityManagementPlanPermitTermDisplayName;
             this.ApprovalDate = vPowerBIWaterQualityManagementPlan.ApprovalDate;
-            this.DateOfContruction = vPowerBIWaterQualityManagementPlan.DateOfContruction;
+            this.DateOfConstruction = vPowerBIWaterQualityManagementPlan.DateOfConstruction;
             this.HydromodificationAppliesDisplayName = vPowerBIWaterQualityManagementPlan.HydromodificationAppliesDisplayName;
             this.HydrologicSubareaName = vPowerBIWaterQualityManagementPlan.HydrologicSubareaName;
             this.RecordedWQMPAreaInAcres = vPowerBIWaterQualityManagementPlan.RecordedWQMPAreaInAcres;
@@ -77,8 +77,8 @@ namespace Neptune.Web.Models
         public string WaterQualityManagementPlanDevelopmentTypeDisplayName { get; set; }
         public string WaterQualityManagementPlanLandUseDisplayName { get; set; }
         public string WaterQualityManagementPlanPermitTermDisplayName { get; set; }
-        public DateTime? ApprovalDate { get; set; }
-        public DateTime? DateOfContruction { get; set; }
+        public int? ApprovalDate { get; set; }
+        public int? DateOfConstruction { get; set; }
         public string HydromodificationAppliesDisplayName { get; set; }
         public string HydrologicSubareaName { get; set; }
         public decimal? RecordedWQMPAreaInAcres { get; set; }

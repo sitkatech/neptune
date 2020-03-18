@@ -50,7 +50,8 @@ namespace Neptune.Web.Controllers
         [AllowAnonymous]
         public JsonResult WaterQualityManagementPlanAttributeSummary(WebServiceToken webServiceToken)
         {
-            var data = HttpRequestStorage.DatabaseEntities.vPowerBIWaterQualityManagementPlans.Select(x => new
+            // this to-list ought to be okay
+            var data = HttpRequestStorage.DatabaseEntities.vPowerBIWaterQualityManagementPlans.ToList().Select(x => new
             {
                 x.WaterQualityManagementPlanID,
                 Name = x.WaterQualityManagementPlanName,
@@ -59,8 +60,8 @@ namespace Neptune.Web.Controllers
                 DevelopmentType = x.WaterQualityManagementPlanDevelopmentTypeDisplayName,
                 LandUse = x.WaterQualityManagementPlanLandUseDisplayName,
                 PermitTerm = x.WaterQualityManagementPlanPermitTermDisplayName,
-                x.ApprovalDate,
-                x.DateOfContruction,
+                ApprovalDate = x.ApprovalDate,
+                DateOfConstruction = x.DateOfConstruction,
                 HydromodificationApplies = x.HydromodificationAppliesDisplayName,
                 HydrologicSubarea = x.HydrologicSubareaName,
                 x.RecordedWQMPAreaInAcres,
