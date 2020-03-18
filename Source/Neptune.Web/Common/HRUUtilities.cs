@@ -110,18 +110,29 @@ namespace Neptune.Web.Common
 
             var esriGPRecordSetLayer = esriAsynchronousJobRunner
                 .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
-                    serializeObject).Value;
-            var newHRUCharacteristics =
-                esriGPRecordSetLayer
-                    .Features
-                    .Select(x =>
-                    {
-                        var hruCharacteristic = x.ToHRUCharacteristic();
-                        // lol what
-                        //primaryKeySetterAction.Invoke(hruCharacteristic);
-                        return hruCharacteristic;
-                    });
-            return newHRUCharacteristics;
+                    serializeObject, out var rawResponse).Value;
+
+            try
+            {
+                var newHRUCharacteristics =
+                    esriGPRecordSetLayer
+                        .Features
+                        .Select(x =>
+                        {
+                            var hruCharacteristic = x.ToHRUCharacteristic();
+                            // lol what
+                            //primaryKeySetterAction.Invoke(hruCharacteristic);
+                            return hruCharacteristic;
+                        });
+                return newHRUCharacteristics;
+
+            }
+            catch (Exception ex)
+            {
+                throw new EsriAsynchronousJobUnknownErrorException(
+                    $"Esri job succeeded, but results were not usable. Content retrieved is:\n {rawResponse}", ex);
+            }
+
         }
 
         public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(

@@ -36,21 +36,20 @@ namespace Neptune.Web.ScheduledJobs
 
             List<HRUCharacteristic> newHRUCharacteristics = new List<HRUCharacteristic>();
 
+            // loop through the LSPC basins until we find LGUs without HRUs and update those guys.
             foreach (var lspcBasin in DbContext.LSPCBasins)
             {
-                var lspcBasinLoadGeneratingUnits = lspcBasin.LoadGeneratingUnits.ToList();
+                var lspcBasinLoadGeneratingUnits = lspcBasin.LoadGeneratingUnits.Where(x => !x.HRUCharacteristics.Any()).ToList();
 
-                var batches = lspcBasinLoadGeneratingUnits.Batch(25);
-                foreach (var batch in batches)
+                if (lspcBasinLoadGeneratingUnits.Any())
                 {
-                    var start = DateTime.Now;
-                    var batchHRUCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(batch, DbContext);
-                    var end = DateTime.Now;
+                    var batches = lspcBasinLoadGeneratingUnits.Batch(25);
+                    
+                    var batchHRUCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(batches.First(), DbContext);
                     newHRUCharacteristics.AddRange(batchHRUCharacteristics);
                     break;
                 }
 
-                break;
             }
 
             DbContext.HRUCharacteristics.AddRange(newHRUCharacteristics);
@@ -58,4 +57,3 @@ namespace Neptune.Web.ScheduledJobs
         }
     }
 }
- 

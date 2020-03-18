@@ -29,9 +29,9 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             ResultEndpoint = resultEndpoint;
         }
 
-        public T RunJob<T>(Object requestObject)
+        public T RunJob<T>(Object requestObject, out string responseRaw)
         {
-            var responseRaw = RunJobRaw(requestObject);
+            responseRaw = RunJobRaw(requestObject);
             return JsonConvert.DeserializeObject<T>(responseRaw);
         }
 
@@ -83,6 +83,15 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         public void Dispose()
         {
             HttpClient.Dispose();
+        }
+    }
+
+    public class EsriAsynchronousJobUnknownErrorException : Exception
+    {
+        public EsriAsynchronousJobUnknownErrorException(string message, Exception innerException) : base(message,
+            innerException)
+        {
+
         }
     }
 
