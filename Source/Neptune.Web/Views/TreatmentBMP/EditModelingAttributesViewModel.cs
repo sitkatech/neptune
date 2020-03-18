@@ -275,7 +275,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
                             StorageVolumeBelowLowestOutletElevation);
                         ValidateFieldIsRequired(validationResults, "Effective Footprint", EffectiveFootprint);
-                        ValidateFieldIsRequired(validationResults, "Drawdown Time For Detention Volume", DrawdownTimeForDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Drawdown Time For Water Quality Detention Volume", DrawdownTimeforWQDetentionVolume);
                         break;
                     case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                         if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)

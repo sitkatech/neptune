@@ -104,7 +104,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.DesignLowFlowDiversionCapacity.ToGridHeaderString("Design Low Flow Diversion Capacity (gpd)"), x => x.DesignLowFlowDiversionCapacity, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString("Design Media Filtration Rate (in/hr)"), x => x.DesignMediaFiltrationRate, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.DesignResidenceTimeForPermanentPool.ToGridHeaderString("Design Residence Time for Permanent Pool (days)"), x => x.DesignResidenceTimeforPermanentPool, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(Models.FieldDefinition.DrawdownTimeForDetentionVolume.ToGridHeaderString("Drawdown Time For Detention Volume (hours)"), x => x.DrawdownTimeForDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"), x => x.DrawdownTimeforWQDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.EffectiveFootprint.ToGridHeaderString("Effective Footprint (sq ft)"), x => x.EffectiveFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.EffectiveRetentionDepth.ToGridHeaderString("Effective Retention Depth (ft)"), x => x.EffectiveRetentionDepth, 100, DhtmlxGridColumnFormatType.Decimal);
@@ -210,8 +209,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                            !bmpModelingAttributes.DiversionRate.HasValue) ||
                           !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
                           !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                          !bmpModelingAttributes.EffectiveFootprint.HasValue ||
-                          !bmpModelingAttributes.DrawdownTimeForDetentionVolume.HasValue))
+                          !bmpModelingAttributes.EffectiveFootprint.HasValue))
                 {
                     return new HtmlString("No");
                 }
