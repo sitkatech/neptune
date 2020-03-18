@@ -200,6 +200,7 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
+            // todo: don't queue a delta LGU if this bmp is not a modeling type
             if (!(newShape == null & oldShape == null))
             {
                 ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape);
@@ -240,6 +241,8 @@ namespace Neptune.Web.Controllers
             return new ContentResult();
         }
 
+
+        // todo: this and the other delete should share some of their code
         [HttpPost]
         [TreatmentBMPEditFeature]
         public ActionResult MapDelete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, MapDeleteViewModel viewModel)
@@ -256,6 +259,9 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+
+            // todo: queue a delta LGU
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
@@ -286,6 +292,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
+            // todo: queue a delta LGU
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));

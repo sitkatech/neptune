@@ -108,10 +108,11 @@ namespace Neptune.Web.Common
                 f = "pjson"
             };
 
+            var esriGPRecordSetLayer = esriAsynchronousJobRunner
+                .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
+                    serializeObject).Value;
             var newHRUCharacteristics =
-                esriAsynchronousJobRunner
-                    .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
-                        serializeObject).Value
+                esriGPRecordSetLayer
                     .Features
                     .Select(x =>
                     {

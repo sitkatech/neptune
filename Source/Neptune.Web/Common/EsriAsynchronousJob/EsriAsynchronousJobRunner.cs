@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 
@@ -33,13 +35,15 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             return JsonConvert.DeserializeObject<T>(responseRaw);
         }
 
-
         public string RunJobRaw(Object requestObject)
         {
             var requestFormData = requestObject.ToKeyValue();
-            var requestContent = new FormUrlEncodedContent(requestFormData);
+            //var requestContent = new FormUrlEncodedContent(requestFormData);
 
-            var httpResponseMessage = HttpClient.PostAsync(PostUrl, requestContent).Result;
+            var encodedItems = requestFormData.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
+            var encodedContent = new StringContent(String.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+
+            var httpResponseMessage = HttpClient.PostAsync(PostUrl, encodedContent).Result;
             var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
             var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responseContent);
 
@@ -60,7 +64,8 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             switch (jobStatusResponse.jobStatus)
             {
                 case EsriJobStatus.esriJobSucceeded:
-                    return HttpClient.GetAsync(JobResultUrl).Result.Content.ReadAsStringAsync().Result;
+                    var resultContent = HttpClient.GetAsync(JobResultUrl).Result.Content.ReadAsStringAsync().Result;
+                    return resultContent;
                 case EsriJobStatus.esriJobCancelling:
                 case EsriJobStatus.esriJobCancelled:
                     throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);

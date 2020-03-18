@@ -32,6 +32,8 @@ namespace Neptune.Web.ScheduledJobs
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person)
         {
+            // todo: need to identify which ones have changed so that their delta LGU can be queued
+            
             dbContext.RegionalSubbasinStagings.DeleteRegionalSubbasinStaging(dbContext.RegionalSubbasinStagings.ToList());
             dbContext.SaveChanges(person);
             

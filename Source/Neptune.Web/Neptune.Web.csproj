@@ -517,6 +517,7 @@
     <Compile Include="Models\HRUCharacteristicModelExtensions.cs" />
     <Compile Include="Models\PowerBIHRUCharacteristics.cs" />
     <Compile Include="Models\WebServiceToken.cs" />
+    <Compile Include="ScheduledJobs\HRURefreshBackgroundJob.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributesViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditUpstreamBMP.cs" />

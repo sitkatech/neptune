@@ -347,6 +347,8 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModels(waterQualityManagementPlan);
             SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}."); 
 
+            // todo: queue a delta LGU
+
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }
 

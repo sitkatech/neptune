@@ -34,6 +34,14 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
+        public ContentResult TriggerHRURun()
+        {
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
+            return Content("HRU refresh will run in the background");
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
         public ContentResult TestNereidNetworkValidator()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
