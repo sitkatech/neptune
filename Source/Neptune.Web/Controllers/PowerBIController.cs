@@ -29,5 +29,46 @@ namespace Neptune.Web.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult TreatmentBMPAttributeSummary(WebServiceToken webServiceToken)
+        {
+            var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Select(x => new
+            {
+                x.TreatmentBMPID,
+                LocationLon = x.LocationPoint4326.XCoordinate,
+                LocationLat = x.LocationPoint4326.YCoordinate,
+                Watershed = x.WatershedID,
+                x.WaterQualityManagementPlanID
+            });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult WaterQualityManagementPlanAttributeSummary(WebServiceToken webServiceToken)
+        {
+            var data = HttpRequestStorage.DatabaseEntities.vPowerBIWaterQualityManagementPlans.Select(x => new
+            {
+                x.WaterQualityManagementPlanID,
+                Name = x.WaterQualityManagementPlanName,
+                Jurisdiction = x.OrganizationName,
+                Status = x.WaterQualityManagementPlanStatusDisplayName,
+                DevelopmentType = x.WaterQualityManagementPlanDevelopmentTypeDisplayName,
+                LandUse = x.WaterQualityManagementPlanLandUseDisplayName,
+                PermitTerm = x.WaterQualityManagementPlanPermitTermDisplayName,
+                x.ApprovalDate,
+                x.DateOfContruction,
+                HydromodificationApplies = x.HydromodificationAppliesDisplayName,
+                HydrologicSubarea = x.HydrologicSubareaName,
+                x.RecordedWQMPAreaInAcres,
+                TrashCaptureStatus = x.TrashCaptureStatusTypeDisplayName,
+                x.TrashCaptureEffectiveness
+            });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
     }
 }
