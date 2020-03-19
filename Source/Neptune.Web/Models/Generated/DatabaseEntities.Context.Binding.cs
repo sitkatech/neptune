@@ -126,6 +126,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vGeoServerWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
+            modelBuilder.Configurations.Add(new vPowerBILandUseStatisticConfiguration());
             modelBuilder.Configurations.Add(new vPowerBITreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
@@ -224,6 +225,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
+        public virtual DbSet<vPowerBILandUseStatistic> vPowerBILandUseStatistics { get; set; }
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }

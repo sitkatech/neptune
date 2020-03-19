@@ -108,6 +108,22 @@ namespace Neptune.Web.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult LandUseStatistics(WebServiceToken webServiceToken)
+        {
+            var data = HttpRequestStorage.DatabaseEntities.vPowerBILandUseStatistics.ToList();
+
+
+            return new JsonResult()
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+        }
     }
 
     public class TreatmentBMPForPowerBI

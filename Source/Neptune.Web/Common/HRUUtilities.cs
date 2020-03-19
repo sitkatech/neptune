@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using ApprovalUtilities.SimpleLogger;
 using ApprovalUtilities.Utilities;
+using log4net;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common.EsriAsynchronousJob;
@@ -91,8 +93,9 @@ namespace Neptune.Web.Common
 
 
         // TODO: eventually this needs to save, and then it needs to be renamed to drop the word "Not" from the name
-        public static IEnumerable<HRUCharacteristic> RetrieveHRUCharacteristics(IEnumerable<LoadGeneratingUnit> loadGeneratingUnits,
-            DatabaseEntities dbContext)
+        public static IEnumerable<HRUCharacteristic> RetrieveHRUCharacteristics(
+            List<LoadGeneratingUnit> loadGeneratingUnits,
+            DatabaseEntities dbContext, ILog logger)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
@@ -108,31 +111,34 @@ namespace Neptune.Web.Common
                 f = "pjson"
             };
 
-            var esriGPRecordSetLayer = esriAsynchronousJobRunner
-                .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
-                    serializeObject, out var rawResponse).Value;
+            var newHRUCharacteristics = new List<HRUCharacteristic>();
 
             try
             {
-                var newHRUCharacteristics =
+
+                var esriGPRecordSetLayer = esriAsynchronousJobRunner
+                .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
+                    serializeObject, out var rawResponse).Value;
+
+                newHRUCharacteristics.AddRange(
                     esriGPRecordSetLayer
                         .Features
                         .Select(x =>
                         {
                             var hruCharacteristic = x.ToHRUCharacteristic();
-                            // lol what
-                            //primaryKeySetterAction.Invoke(hruCharacteristic);
                             return hruCharacteristic;
-                        });
-                return newHRUCharacteristics;
+                        }));
 
             }
             catch (Exception ex)
             {
-                throw new EsriAsynchronousJobUnknownErrorException(
-                    $"Esri job succeeded, but results were not usable. Content retrieved is:\n {rawResponse}", ex);
+                Logger.Warning(ex.Message);
+                Logger.Warning($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
+                //throw new EsriAsynchronousJobUnknownErrorException(
+                //    $"Esri job succeeded, but results were not usable. Content retrieved is:\n {rawResponse}", ex);
             }
 
+            return newHRUCharacteristics;
         }
 
         public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(

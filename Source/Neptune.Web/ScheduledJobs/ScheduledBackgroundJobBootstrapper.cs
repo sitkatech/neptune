@@ -70,9 +70,8 @@ namespace Neptune.Web.ScheduledJobs
                 () => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(),
                 MakeDailyUtcCronJobStringFromLocalTime(1, 30), recurringJobIds);
 
-            // this guy runs every 7 minutes
             AddRecurringJob(HRURefreshBackgroundJob.JobName, () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(),
-                "0/7 * * * *", recurringJobIds);
+                MakeDailyUtcCronJobStringFromLocalTime(1, 45), recurringJobIds);
 
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);

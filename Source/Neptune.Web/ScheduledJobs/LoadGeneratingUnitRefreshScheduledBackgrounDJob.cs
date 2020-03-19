@@ -117,14 +117,13 @@ namespace Neptune.Web.ScheduledJobs
             }
 
             
-            //todo: test this on a delta run.
             if (loadGeneratingUnitRefreshArea != null)
             {
                 var loadGeneratingUnitsToRefreshHRUsOf = DbContext.LoadGeneratingUnits.Where(x =>
                     x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
                         .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
 
-                var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext);
+                var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext, Logger);
 
                 DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
                 DbContext.SaveChangesWithNoAuditing();
