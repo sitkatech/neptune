@@ -93,7 +93,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public ViewTreatmentBMPModelingAttributesGridSpec()
         {
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("BMP Name"), x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.PrimaryKey), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => CheckForParameterizationErrors((new TreatmentBMPPrimaryKey(x.PrimaryKey)).EntityObject), 120);
+            Add(Models.FieldDefinition.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => (new TreatmentBMPPrimaryKey(x.PrimaryKey)).EntityObject.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(Models.TreatmentBMPTypeModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPTypeName), 100);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170);
             Add(Models.FieldDefinition.Watershed.ToGridHeaderString("Watershed"), x => x.WatershedName, 170);
@@ -125,140 +125,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"), x => x.WinterHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => x.UpstreamBMPID != null ? UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace((int)x.UpstreamBMPID), x.UpstreamBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
 
-        }
-
-        private HtmlString CheckForParameterizationErrors(Models.TreatmentBMP treatmentBMP)
-        {
-
-            if (treatmentBMP.Delineation == null && treatmentBMP.UpstreamBMP?.Delineation == null)
-            {
-                return new HtmlString("No");
-            }
-
-            var bmpModelingType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum;
-            var bmpModelingAttributes = treatmentBMP.TreatmentBMPModelingAttribute;
-
-            if (bmpModelingAttributes != null)
-            {
-                if (bmpModelingType ==
-                    TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain && (
-                        !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                        (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                         !bmpModelingAttributes.DiversionRate.HasValue) ||
-                        !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                        !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                        !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                        !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.InfiltrationBasin ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.InfiltrationTrench ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.PermeablePavement ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.UndergroundInfiltration) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                          !bmpModelingAttributes.InfiltrationSurfaceArea.HasValue ||
-                          !bmpModelingAttributes.UnderlyingInfiltrationRate.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if ((bmpModelingType ==
-                          TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.SandFilters) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                          !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                          !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                          !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
-                          !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.ConstructedWetland ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.WetDetentionBasin) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
-                          !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
-                          !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue ||
-                          !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
-                          !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.FlowDurationControlBasin ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.FlowDurationControlTank) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
-                          !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                          !bmpModelingAttributes.EffectiveFootprint.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems &&
-                         (!bmpModelingAttributes.DesignDryWeatherTreatmentCapacity.HasValue &&
-                          !bmpModelingAttributes.AverageTreatmentFlowrate.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.Drywell &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveDrywellBMPVolume.HasValue ||
-                          !bmpModelingAttributes.InfiltrationDischargeRate.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.HydrodynamicSeparator ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl) &&
-                         !bmpModelingAttributes.TreatmentRate.HasValue)
-                {
-                    return new HtmlString("No");
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.LowFlowDiversions &&
-                         (!bmpModelingAttributes.DesignLowFlowDiversionCapacity.HasValue &&
-                          !bmpModelingAttributes.AverageDivertedFlowrate.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.VegetatedFilterStrip ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.VegetatedSwale) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TreatmentRate.HasValue ||
-                          !bmpModelingAttributes.WettedFootprint.HasValue ||
-                          !bmpModelingAttributes.EffectiveRetentionDepth.HasValue))
-                {
-                    return new HtmlString("No");
-                }
-            }
-            else
-            {
-                return new HtmlString("No");
-            }
-
-            return new HtmlString("Yes");
         }
     }
 }

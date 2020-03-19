@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
             Property(x => x.OCSurveyDownstreamCatchmentID).HasColumnName(@"OCSurveyDownstreamCatchmentID").HasColumnType("int").IsOptional();
             Property(x => x.CatchmentGeometry4326).HasColumnName(@"CatchmentGeometry4326").HasColumnType("geometry").IsOptional();
             Property(x => x.LastUpdate).HasColumnName(@"LastUpdate").HasColumnType("datetime").IsOptional();
+            Property(x => x.IsWaitingForLGURefresh).HasColumnName(@"IsWaitingForLGURefresh").HasColumnType("bit").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.OCSurveyDownstreamCatchment).WithMany(b => b.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment).HasForeignKey(c => c.OCSurveyDownstreamCatchmentID).WillCascadeOnDelete(false); // FK_RegionalSubbasin_RegionalSubbasin_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID

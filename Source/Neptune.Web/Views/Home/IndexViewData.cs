@@ -36,9 +36,6 @@ namespace Neptune.Web.Views.Home
         
         public JurisdictionsMapViewData JurisdictionsMapViewData { get; }
         public JurisdictionsMapInitJson JurisdictionsMapInitJson { get; }
-        
-        // todo: ?
-        public string FullMapUrl { get; } = string.Empty;
         public List<Models.NeptuneHomePageImage> NeptuneHomePageCarouselImages { get; }
         public LaunchPadViewData LaunchPadViewData { get; }
 

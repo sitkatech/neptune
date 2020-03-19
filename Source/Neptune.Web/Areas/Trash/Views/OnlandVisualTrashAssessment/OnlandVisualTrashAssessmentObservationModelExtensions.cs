@@ -14,7 +14,7 @@ public static class OnlandVisualTrashAssessmentObservationModelExtensions
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
             feature.Properties.Add("ObservationID", x.OnlandVisualTrashAssessmentObservationID);
             feature.Properties.Add("FeatureColor", "#FF00FF");
-            feature.Properties.Add("FeatureGlyph", "water"); // todo?????
+            feature.Properties.Add("FeatureGlyph", "water"); 
             return feature;
         }));
         return featureCollection;

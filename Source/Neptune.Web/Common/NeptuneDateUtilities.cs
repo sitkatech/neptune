@@ -28,7 +28,6 @@ namespace Neptune.Web.Common
 {
     public class NeptuneDateUtilities
     {
-        // todo: these values should be set at the config file
         public const int YearsBeyondPresentForMaximumYearForUserInput = 30;
         public const int MinimumYear = 1950;
 

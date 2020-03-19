@@ -25,11 +25,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBITreatmentBMP(int primaryKey, string treatmentBMPName, string treatmentBMPTypeName, double? locationLon, double? locationLat, string watershed, int? upstreamBMPID, string delineationType, int? waterQualityManagementPlanID, int? treatmentBMPModelingAttributeID, int? treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand) : this()
+        public vPowerBITreatmentBMP(int primaryKey, string treatmentBMPName, string treatmentBMPTypeName, string jurisdiction, double? locationLon, double? locationLat, string watershed, int? upstreamBMPID, string delineationType, int? waterQualityManagementPlanID, int? treatmentBMPModelingAttributeID, int? treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
+            this.Jurisdiction = jurisdiction;
             this.LocationLon = locationLon;
             this.LocationLat = locationLat;
             this.Watershed = watershed;
@@ -76,6 +77,7 @@ namespace Neptune.Web.Models
             this.PrimaryKey = vPowerBITreatmentBMP.PrimaryKey;
             this.TreatmentBMPName = vPowerBITreatmentBMP.TreatmentBMPName;
             this.TreatmentBMPTypeName = vPowerBITreatmentBMP.TreatmentBMPTypeName;
+            this.Jurisdiction = vPowerBITreatmentBMP.Jurisdiction;
             this.LocationLon = vPowerBITreatmentBMP.LocationLon;
             this.LocationLat = vPowerBITreatmentBMP.LocationLat;
             this.Watershed = vPowerBITreatmentBMP.Watershed;
@@ -120,6 +122,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get; set; }
         public string TreatmentBMPName { get; set; }
         public string TreatmentBMPTypeName { get; set; }
+        public string Jurisdiction { get; set; }
         public double? LocationLon { get; set; }
         public double? LocationLat { get; set; }
         public string Watershed { get; set; }

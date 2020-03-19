@@ -74,10 +74,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             {
                 customAttribute.DeleteFull(databaseEntities);
             }
-            // pre-create blank attribute values for any new custom attributes for the new bmp type 
 
             treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID.Value;
-            // todo
         }
     }
 }

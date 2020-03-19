@@ -344,10 +344,13 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModels(waterQualityManagementPlan);
-            SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}."); 
+            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
 
-            // todo: queue a delta LGU
+            viewModel.UpdateModels(waterQualityManagementPlan);
+            SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
+
+            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary);
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }

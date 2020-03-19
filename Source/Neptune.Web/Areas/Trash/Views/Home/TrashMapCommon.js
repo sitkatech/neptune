@@ -347,7 +347,6 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
 
 window.stopClickPropagation = function (parentElement) {
     L.DomEvent.on(parentElement, "mouseover", function (e) {
-        // todo: still not the best way to handle this event-pausing stuff
         window.freeze = true;
     });
 

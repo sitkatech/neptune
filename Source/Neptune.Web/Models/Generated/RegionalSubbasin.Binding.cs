@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public RegionalSubbasin(int regionalSubbasinID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326, DateTime? lastUpdate) : this()
+        public RegionalSubbasin(int regionalSubbasinID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326, DateTime? lastUpdate, bool? isWaitingForLGURefresh) : this()
         {
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DrainID = drainID;
@@ -41,6 +41,7 @@ namespace Neptune.Web.Models
             this.OCSurveyDownstreamCatchmentID = oCSurveyDownstreamCatchmentID;
             this.CatchmentGeometry4326 = catchmentGeometry4326;
             this.LastUpdate = lastUpdate;
+            this.IsWaitingForLGURefresh = isWaitingForLGURefresh;
         }
 
         /// <summary>
@@ -121,6 +122,7 @@ namespace Neptune.Web.Models
         public int? OCSurveyDownstreamCatchmentID { get; set; }
         public DbGeometry CatchmentGeometry4326 { get; set; }
         public DateTime? LastUpdate { get; set; }
+        public bool? IsWaitingForLGURefresh { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return RegionalSubbasinID; } set { RegionalSubbasinID = value; } }
 

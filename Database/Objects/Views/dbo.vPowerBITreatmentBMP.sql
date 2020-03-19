@@ -7,6 +7,7 @@ select
 	bmp.TreatmentBMPID as PrimaryKey,
 	bmp.TreatmentBMPName,
 	ty.TreatmentBMPTypeName,
+	o.OrganizationName as Jurisdiction,
 	bmp.LocationPoint4326.STX as LocationLon,
 	bmp.LocationPoint4326.STY as LocationLat,
 	w.WatershedName as Watershed,
@@ -27,4 +28,8 @@ from
 		on bmp.TreatmentBMPID = att.TreatmentBMPID
 	join dbo.TreatmentBMPType ty
 		on bmp.TreatmentBMPTypeID = ty.TreatmentBMPTypeID
+	join dbo.StormwaterJurisdiction sj
+		on bmp.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
+	join dbo.Organization o
+		on sj.OrganizationID = o.OrganizationID
 where ty.TreatmentBMPModelingTypeID is not null

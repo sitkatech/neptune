@@ -32,11 +32,35 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public JsonResult TreatmentBMPParameterizationSummary(WebServiceToken webServiceToken)
+        {
+            var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x => new
+                {
+                    x.TreatmentBMPID,
+                    x.TreatmentBMPName,
+                    x.TreatmentBMPType.TreatmentBMPTypeName,
+                    FullyParameterized = x.IsFullyParameterized() ? "Yes" : "No"
+                });
+
+            return new JsonResult()
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
         public JsonResult TreatmentBMPAttributeSummary(WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBITreatmentBMPs.Select(x => new TreatmentBMPForPowerBI
             {
                 PrimaryKey = x.PrimaryKey,
+                TreatmentBMPName = x.TreatmentBMPName,
+                Jurisdiction = x.Jurisdiction,
                 LocationLon = x.LocationLon,
                 LocationLat = x.LocationLat,
                 Watershed = x.Watershed,
@@ -165,5 +189,7 @@ namespace Neptune.Web.Controllers
         public double? WinterHarvestedWaterDemand { get; set; }
         public string DelineationType { get; set; }
         public string TreatmentBMPTypeName { get; set; }
+        public string TreatmentBMPName { get; set; }
+        public string Jurisdiction { get; set; }
     }
 }

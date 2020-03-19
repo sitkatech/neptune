@@ -126,8 +126,13 @@ namespace Neptune.Web.Controllers
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             ForTreatmentBMPViewModel viewModel)
         {
-            DbGeometry geom4326;
+            if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
+            {
+                // todo: really should return a 400 bad request
+                return Json(new {error = "Invalid Delineation Type"});
+            }
 
+            DbGeometry geom4326;
             if (viewModel.WellKnownText.Count == 1)
             {
                 geom4326 = viewModel.WellKnownText[0] == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
@@ -158,13 +163,6 @@ namespace Neptune.Web.Controllers
             // for queueing the LGU job
             var newShape = geom2771;
             var oldShape = treatmentBMPDelineation?.DelineationGeometry;
-
-            // todo: validate on the view model, not here
-            if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
-            {
-                // todo: really should return a 400 bad request
-                return Json(new {error = "Invalid Delineation Type"});
-            }
 
             var delineationType = DelineationType.ToType(delineationTypeEnum);
 
@@ -200,8 +198,7 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            // todo: don't queue a delta LGU if this bmp is not a modeling type
-            if (!(newShape == null & oldShape == null))
+            if (!(newShape == null & oldShape == null) && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
             {
                 ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape);
             }
@@ -249,6 +246,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var delineation = treatmentBMP.Delineation;
+            var geometry = delineation.DelineationGeometry;
 
             if (delineation == null)
             {
@@ -257,11 +255,9 @@ namespace Neptune.Web.Controllers
             }
 
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
-
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-
-            // todo: queue a delta LGU
+            ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null);
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
@@ -283,6 +279,7 @@ namespace Neptune.Web.Controllers
         public ActionResult Delete(DelineationPrimaryKey delineationPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var delineation = delineationPrimaryKey.EntityObject;
+            var geometry = delineation.DelineationGeometry;
             if (!ModelState.IsValid)
             {
                 return ViewDeleteDelineation(delineation, viewModel);
@@ -292,7 +289,8 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
-            // todo: queue a delta LGU
+            ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null);
+
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
