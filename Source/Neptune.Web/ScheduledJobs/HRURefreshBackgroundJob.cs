@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
 using Neptune.Web.Models;
+using Exception = System.Exception;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -18,7 +19,7 @@ namespace Neptune.Web.ScheduledJobs
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            //NeptuneEnvironmentType.Local,
+            NeptuneEnvironmentType.Local,
             NeptuneEnvironmentType.Prod,
             NeptuneEnvironmentType.Qa
         };
@@ -29,17 +30,11 @@ namespace Neptune.Web.ScheduledJobs
 
         private void HRURefreshImpl()
         {
-            // assume the LGUs are already correct
-            //var loadGeneratingUnitRefreshScheduledBackgroundJob = new LoadGeneratingUnitRefreshScheduledBackgroundJob(null);
-
-            //loadGeneratingUnitRefreshScheduledBackgroundJob.RunJob();
-
-            List<HRUCharacteristic> newHRUCharacteristics = new List<HRUCharacteristic>();
-
-            // ignore this comment for now, it's about a way that I'm not currently doing things
+            // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
+            
             // loop through the LSPC basins until we find LGUs without HRUs and update those guys.
             // also skip it if there are no RSBs present since that's a null case.
-            foreach (var lspcBasin in DbContext.LSPCBasins)
+            foreach (var lspcBasin in DbContext.LSPCBasins.ToList())
             {
                 var lspcBasinLoadGeneratingUnits = lspcBasin.LoadGeneratingUnits.Where(x => !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null) ).ToList();
 
@@ -48,16 +43,22 @@ namespace Neptune.Web.ScheduledJobs
                     var batches = lspcBasinLoadGeneratingUnits.Batch(25).ToList();
                     foreach (var batch in batches)
                     {
-                        var batchHRUCharacteristics =
-                            HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), DbContext, Logger);
-                        newHRUCharacteristics.AddRange(batchHRUCharacteristics);
+                        try
+                        {
+                            var batchHRUCharacteristics =
+                                HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), DbContext, Logger);
+
+                            DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics);
+                            DbContext.SaveChangesWithNoAuditing();
+                        }
+                        catch (Exception ex)
+                        {
+                            // this batch failed, but we don't want to give up the whole job.
+                            Logger.Warn(ex.Message);
+                        }
                     }
                 }
-
             }
-
-            DbContext.HRUCharacteristics.AddRange(newHRUCharacteristics);
-            DbContext.SaveChangesWithNoAuditing();
         }
     }
 }

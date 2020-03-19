@@ -70,6 +70,9 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 coordinates.Add(new[] { lon, lat });
             }
 
+            // need to account for interior rings
+            // need to skip geometries with exterior rings I guess
+
             rings.Add(coordinates);
 
             Geometry = new EsriPolygonGeometry
