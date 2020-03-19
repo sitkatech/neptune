@@ -34,16 +34,53 @@ namespace Neptune.Web.Controllers
         [AllowAnonymous]
         public JsonResult TreatmentBMPAttributeSummary(WebServiceToken webServiceToken)
         {
-            var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Select(x => new
+            var data = HttpRequestStorage.DatabaseEntities.vPowerBITreatmentBMPs.Select(x => new TreatmentBMPForPowerBI
             {
-                x.TreatmentBMPID,
-                LocationLon = x.LocationPoint4326.XCoordinate,
-                LocationLat = x.LocationPoint4326.YCoordinate,
-                Watershed = x.WatershedID,
-                x.WaterQualityManagementPlanID
+                PrimaryKey = x.PrimaryKey,
+                LocationLon = x.LocationLon,
+                LocationLat = x.LocationLat,
+                Watershed = x.Watershed,
+                DelineationType = x.DelineationType,
+                WaterQualityManagementPlanID = x.WaterQualityManagementPlanID,
+                TreatmentBMPModelingAttributeID = x.TreatmentBMPModelingAttributeID,
+                TreatmentBMPID = x.PrimaryKey,
+                TreatmentBMPTypeName = x.TreatmentBMPTypeName,
+                UpstreamTreatmentBMPID = x.UpstreamTreatmentBMPID,
+                AverageDivertedFlowrate = x.AverageDivertedFlowrate,
+                AverageTreatmentFlowrate = x.AverageTreatmentFlowrate,
+                DesignDryWeatherTreatmentCapacity = x.DesignDryWeatherTreatmentCapacity,
+                DesignLowFlowDiversionCapacity = x.DesignLowFlowDiversionCapacity,
+                DesignMediaFiltrationRate = x.DesignMediaFiltrationRate,
+                DesignResidenceTimeforPermanentPool = x.DesignResidenceTimeforPermanentPool,
+                DiversionRate = x.DiversionRate,
+                DrawdownTimeforWQDetentionVolume = x.DrawdownTimeforWQDetentionVolume,
+                EffectiveFootprint = x.EffectiveFootprint,
+                EffectiveRetentionDepth = x.EffectiveRetentionDepth,
+                InfiltrationDischargeRate = x.InfiltrationDischargeRate,
+                InfiltrationSurfaceArea = x.InfiltrationSurfaceArea,
+                MediaBedFootprint = x.MediaBedFootprint,
+                PermanentPoolorWetlandVolume = x.PermanentPoolorWetlandVolume,
+                RoutingConfigurationID = x.RoutingConfigurationID,
+                StorageVolumeBelowLowestOutletElevation = x.StorageVolumeBelowLowestOutletElevation,
+                SummerHarvestedWaterDemand = x.SummerHarvestedWaterDemand,
+                TimeOfConcentrationID = x.TimeOfConcentrationID,
+                DrawdownTimeForDetentionVolume = x.DrawdownTimeForDetentionVolume,
+                TotalEffectiveBMPVolume = x.TotalEffectiveBMPVolume,
+                TotalEffectiveDrywellBMPVolume = x.TotalEffectiveDrywellBMPVolume,
+                TreatmentRate = x.TreatmentRate,
+                UnderlyingHydrologicSoilGroupID = x.UnderlyingHydrologicSoilGroupID,
+                UnderlyingInfiltrationRate = x.UnderlyingInfiltrationRate,
+                WaterQualityDetentionVolume = x.WaterQualityDetentionVolume,
+                WettedFootprint = x.WettedFootprint,
+                WinterHarvestedWaterDemand = x.WinterHarvestedWaterDemand
             });
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return new JsonResult()
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
         }
 
         [HttpGet]
@@ -71,5 +108,46 @@ namespace Neptune.Web.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+    }
+
+    public class TreatmentBMPForPowerBI
+    {
+        public int PrimaryKey { get; set; }
+        public double? LocationLon { get; set; }
+        public double? LocationLat { get; set; }
+        public string Watershed { get; set; }
+        public int? WaterQualityManagementPlanID { get; set; }
+        public int? TreatmentBMPModelingAttributeID { get; set; }
+        public int TreatmentBMPID { get; set; }
+        public int? UpstreamTreatmentBMPID { get; set; }
+        public double? AverageDivertedFlowrate { get; set; }
+        public double? AverageTreatmentFlowrate { get; set; }
+        public double? DesignDryWeatherTreatmentCapacity { get; set; }
+        public double? DesignLowFlowDiversionCapacity { get; set; }
+        public double? DesignMediaFiltrationRate { get; set; }
+        public double? DesignResidenceTimeforPermanentPool { get; set; }
+        public double? DiversionRate { get; set; }
+        public double? DrawdownTimeforWQDetentionVolume { get; set; }
+        public double? EffectiveFootprint { get; set; }
+        public double? EffectiveRetentionDepth { get; set; }
+        public double? InfiltrationDischargeRate { get; set; }
+        public double? InfiltrationSurfaceArea { get; set; }
+        public double? MediaBedFootprint { get; set; }
+        public double? PermanentPoolorWetlandVolume { get; set; }
+        public int? RoutingConfigurationID { get; set; }
+        public double? StorageVolumeBelowLowestOutletElevation { get; set; }
+        public double? SummerHarvestedWaterDemand { get; set; }
+        public int? TimeOfConcentrationID { get; set; }
+        public double? DrawdownTimeForDetentionVolume { get; set; }
+        public double? TotalEffectiveBMPVolume { get; set; }
+        public double? TotalEffectiveDrywellBMPVolume { get; set; }
+        public double? TreatmentRate { get; set; }
+        public int? UnderlyingHydrologicSoilGroupID { get; set; }
+        public double? UnderlyingInfiltrationRate { get; set; }
+        public double? WaterQualityDetentionVolume { get; set; }
+        public double? WettedFootprint { get; set; }
+        public double? WinterHarvestedWaterDemand { get; set; }
+        public string DelineationType { get; set; }
+        public string TreatmentBMPTypeName { get; set; }
     }
 }
