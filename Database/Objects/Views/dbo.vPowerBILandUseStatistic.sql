@@ -15,7 +15,8 @@ select
 	w.WatershedName,
 	d.TreatmentBMPID,
 	lgu.WaterQualityManagementPlanID,
-	lgu.RegionalSubbasinID
+	lgu.RegionalSubbasinID,
+	lgu.LoadGeneratingUnitID
 from
 	dbo.HRUCharacteristic hru left join dbo.LoadGeneratingUnit lgu
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID

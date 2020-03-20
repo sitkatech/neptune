@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBILandUseStatistic(int primaryKey, int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, double area, string hRUCharacteristicLandUseCodeDisplayName, int? lSPCBasinID, string watershedName, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID) : this()
+        public vPowerBILandUseStatistic(int primaryKey, int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, double area, string hRUCharacteristicLandUseCodeDisplayName, int? lSPCBasinID, string watershedName, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? loadGeneratingUnitID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.HRUCharacteristicID = hRUCharacteristicID;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.RegionalSubbasinID = regionalSubbasinID;
+            this.LoadGeneratingUnitID = loadGeneratingUnitID;
         }
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = vPowerBILandUseStatistic.TreatmentBMPID;
             this.WaterQualityManagementPlanID = vPowerBILandUseStatistic.WaterQualityManagementPlanID;
             this.RegionalSubbasinID = vPowerBILandUseStatistic.RegionalSubbasinID;
+            this.LoadGeneratingUnitID = vPowerBILandUseStatistic.LoadGeneratingUnitID;
             CallAfterConstructor(vPowerBILandUseStatistic);
         }
 
@@ -75,5 +77,6 @@ namespace Neptune.Web.Models
         public int? TreatmentBMPID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
+        public int? LoadGeneratingUnitID { get; set; }
     }
 }

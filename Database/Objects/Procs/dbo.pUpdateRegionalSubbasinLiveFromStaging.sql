@@ -17,7 +17,12 @@ When Matched
 				else s.OCSurveyDownstreamCatchmentID
 			end,
 		t.LastUpdate = GetDate(),
-		t.CatchmentGeometry4326 = null
+		t.CatchmentGeometry4326 = null,
+		t.IsWaitingForLGURefresh = 
+			Case
+				when s.CatchmentGeometry.STAsText() <> t.CatchmentGeometry.STAsText() then 1
+				else 0
+			end
 When not matched by Target
 	Then insert (
 		DrainID,
@@ -26,7 +31,8 @@ When not matched by Target
 		OCSurveyCatchmentID,
 		OCSurveyDownstreamCatchmentID,
 		CatchmentGeometry4326,
-		LastUpdate
+		LastUpdate,
+		IsWaitingForLGURefresh
 	)
 	values (
 		s.DrainID,
@@ -38,7 +44,8 @@ When not matched by Target
 			else s.OCSurveyDownstreamCatchmentID
 		end,
 		null,
-		GetDate()
+		GetDate(),
+		1
 	)
 When Not Matched by Source
 	Then Delete;
