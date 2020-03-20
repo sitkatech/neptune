@@ -36,7 +36,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string CalculatedParcelArea {  get; }
 
         public string TrashCaptureEffectiveness { get; }
-        public string HRURefreshUrl { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
         public List<HtmlString> ParameterizationErrors { get; }
 
@@ -114,11 +113,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
                 ? "Not Provided"
                 : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
-
-            HRURefreshUrl =
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x =>
-                    x.RefreshHRUCharacteristics(waterQualityManagementPlan));
-
+            
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;

@@ -75,8 +75,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public readonly string VerifiedUnverifiedUrl;
         public string TrashCaptureEffectiveness { get; }
         public string ChangeTreatmentBMPTypeUrl { get; }
-        public string HRURefreshUrl { get; }
-
+        
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
         public string MapServiceUrl { get; }
 
@@ -174,11 +173,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP);
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.ConvertTreatmentBMPType(treatmentBMP));
-
-            HRURefreshUrl =
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(
-                    x => x.RefreshHRUCharacteristics(treatmentBMP));
-
+            
             HasModelingAttributes = TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null;
 
             FieldDefinitionForAverageDivertedFlowrate = Models.FieldDefinition.AverageDivertedFlowrate;

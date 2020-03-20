@@ -54,41 +54,7 @@ namespace Neptune.Web.Controllers
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
 
-        [HttpGet]
-        [NeptuneAdminFeature]
-        public PartialViewResult RefreshHRUCharacteristics(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
-        {
-
-            throw new NotImplementedException(
-                "Construction Dust: Support for direct RSB HRU update removed temporarily by refactor");
-            //var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            //return ViewRefreshHRUCharacteristics(regionalSubbasin, new ConfirmDialogFormViewModel());
-        }
-
-        [HttpPost]
-        [NeptuneAdminFeature]
-        public ActionResult RefreshHRUCharacteristics(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey, ConfirmDialogFormViewModel viewModel)
-        {
-            var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewRefreshHRUCharacteristics(regionalSubbasin, viewModel);
-            }
-
-            throw new NotImplementedException(
-                "Construction Dust: Support for direct RSB HRU update removed temporarily by refactor");
-            //HRUUtilities.RetrieveAndSaveHRUCharacteristics(regionalSubbasin, x => x.RegionalSubbasinID = regionalSubbasin.RegionalSubbasinID);
-            //SetMessageForDisplay($"Successfully updated HRU Characteristics for {regionalSubbasin.Watershed} {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}");
-            //return new ModalDialogFormJsonResult();
-        }
-
-        private PartialViewResult ViewRefreshHRUCharacteristics(RegionalSubbasin regionalSubbasin, ConfirmDialogFormViewModel viewModel)
-        {
-            var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for {regionalSubbasin.Watershed} {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}?<br /><br />This can take a little while to run.";
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
-            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
-        }
-
+        
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Detail(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)

@@ -806,45 +806,6 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public PartialViewResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        {
-
-            throw new NotImplementedException(
-                "Construction Dust: Support for direct BMP HRU update removed temporarily by refactor");
-
-            //var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            //return ViewRefreshHRUCharacteristics(treatmentBMP, new ConfirmDialogFormViewModel());
-        }
-
-
-        [HttpPost]
-        [NeptuneAdminFeature]
-        public ActionResult RefreshHRUCharacteristics(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
-        {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewRefreshHRUCharacteristics(treatmentBMP, viewModel);
-            }
-
-
-            throw new NotImplementedException(
-                "Construction Dust: Support for direct BMP HRU update removed temporarily by refactor");
-
-            //HRUUtilities.RetrieveAndSaveHRUCharacteristics(treatmentBMP, x => x.TreatmentBMPID = treatmentBMP.TreatmentBMPID);
-            //SetMessageForDisplay($"Successfully updated HRU Characteristics for {treatmentBMP.TreatmentBMPName}");
-            //return new ModalDialogFormJsonResult();
-        }
-
-        private PartialViewResult ViewRefreshHRUCharacteristics(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
-        {
-            var confirmMessage = $"Are you sure you want to refresh the HRU Statistics for Treatment BMP '{treatmentBMP.TreatmentBMPName}'?<br /><br />This can take a little while to run.";
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
-            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
-        }
-
-        [HttpGet]
-        [NeptuneAdminFeature]
         public PartialViewResult RefreshLSPCBasinsFromOCSurvey()
         {
             return ViewRefreshLSPCBasinsFromOCSurvey(new ConfirmDialogFormViewModel());

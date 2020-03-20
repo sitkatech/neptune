@@ -9,7 +9,6 @@ namespace Neptune.Web.Views.RegionalSubbasin
     public class DetailViewData : NeptuneViewData
     {
         public Models.RegionalSubbasin RegionalSubbasin { get; }
-        public string HRURefreshUrl { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
         public StormwaterMapInitJson MapInitJson { get; }
         public bool HasAnyHRUCharacteristics { get; }
@@ -24,9 +23,6 @@ namespace Neptune.Web.Views.RegionalSubbasin
             RegionalSubbasin = regionalSubbasin;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
             MapInitJson = mapInitJson;
-            HRURefreshUrl =
-                SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(x =>
-                    x.RefreshHRUCharacteristics(RegionalSubbasin));
         }
 
         
