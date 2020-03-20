@@ -148,6 +148,24 @@ namespace Neptune.Web.Controllers
                 MaxJsonLength = int.MaxValue
             };
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult CentralizedBMPLoadGeneratingUnitMapping(WebServiceToken webServiceToken)
+        {
+            var data = HttpRequestStorage.DatabaseEntities.vPowerBICentralizedBMPLoadGeneratingUnits.Select(x => new
+            {
+                x.LoadGeneratingUnitID,
+                x.TreatmentBMPID
+            });
+
+            return new JsonResult()
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+        }
     }
 
     public class TreatmentBMPForPowerBI
