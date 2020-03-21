@@ -35,6 +35,13 @@ namespace Neptune.Web.ScheduledJobs
             DbContext = databaseEntities;
         }
 
+        protected ScheduledBackgroundJobBase(DatabaseEntities dbContext)
+        {
+            Logger = LogManager.GetLogger(GetType());
+
+            DbContext = dbContext;
+        }
+
         /// <summary>
         /// This wraps the call to <see cref="RunJobImplementation"/> with all of the housekeeping for being a scheduled job.
         /// </summary>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
@@ -20,6 +22,11 @@ namespace Neptune.Web.ScheduledJobs
         public LoadGeneratingUnitRefreshScheduledBackgroundJob(int? loadGeneratingUnitRefreshAreaID)
         {
             LoadGeneratingUnitRefreshAreaID = loadGeneratingUnitRefreshAreaID;
+        }
+
+        public LoadGeneratingUnitRefreshScheduledBackgroundJob(DatabaseEntities dbContext) : base(dbContext)
+        {
+
         }
 
         public new static string JobName => "LGU Refresh";
@@ -129,7 +136,17 @@ namespace Neptune.Web.ScheduledJobs
                 DbContext.SaveChangesWithNoAuditing();
             }
         }
+
+        public void LoadGeneratingUnitRefreshAfterRSBRefresh(List<LoadGeneratingUnitRefreshArea> refreshAreas)
+        {
+            foreach (var refreshArea in refreshAreas)
+            {
+                LoadGeneratingUnitRefreshImpl(refreshArea.LoadGeneratingUnitRefreshAreaID);
+            }
+        }
     }
+
+    
 }
 public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
 {

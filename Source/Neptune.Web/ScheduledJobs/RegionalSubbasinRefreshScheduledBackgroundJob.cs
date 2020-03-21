@@ -32,8 +32,6 @@ namespace Neptune.Web.ScheduledJobs
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person)
         {
-            // todo: need to identify which ones have changed so that their delta LGU can be queued
-            
             dbContext.RegionalSubbasinStagings.DeleteRegionalSubbasinStaging(dbContext.RegionalSubbasinStagings.ToList());
             dbContext.SaveChanges(person);
             
@@ -43,7 +41,34 @@ namespace Neptune.Web.ScheduledJobs
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
             RefreshCentralizedDelineations(dbContext, person);
+            // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now
+            //UpdateLoadGeneratingUnits(dbContext, person);
         }
+
+        private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
+        {
+            var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
+            var loadGeneratingUnitRefreshAreas = regionalSubbasinsWaitingForRefresh.Select(x=>
+                new LoadGeneratingUnitRefreshArea(x.CatchmentGeometry)).ToList();
+
+            dbContext.LoadGeneratingUnitRefreshAreas.AddRange(loadGeneratingUnitRefreshAreas);
+            dbContext.SaveChanges(person);
+
+            var loadGeneratingUnitRefreshScheduledBackgroundJob =
+                new LoadGeneratingUnitRefreshScheduledBackgroundJob(dbContext);
+
+            loadGeneratingUnitRefreshScheduledBackgroundJob.LoadGeneratingUnitRefreshAfterRSBRefresh(
+                loadGeneratingUnitRefreshAreas);
+
+            foreach (var regionalSubbasin in regionalSubbasinsWaitingForRefresh)
+            {
+                regionalSubbasin.IsWaitingForLGURefresh = false;
+            }
+
+            dbContext.SaveChanges(person);
+
+        }
+
 
         private static void RefreshCentralizedDelineations(DatabaseEntities dbContext, Person person)
         {
