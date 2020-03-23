@@ -193,7 +193,7 @@ namespace Neptune.Web.Models
 
             if (Delineation.DelineationType == DelineationType.Centralized)
             {
-                var upstreamRegionalSubbasinIDs = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities);
+                var upstreamRegionalSubbasinIDs = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList();
                 return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
                     x.LoadGeneratingUnit.RegionalSubbasinID != null &&
                     upstreamRegionalSubbasinIDs.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
@@ -202,7 +202,7 @@ namespace Neptune.Web.Models
             else
             {
                 return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-                    x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
+                    x.LoadGeneratingUnit.Delineation!= null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
             }
         }
     }
