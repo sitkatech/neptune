@@ -9,7 +9,7 @@ namespace Neptune.Web.Models
     {
         public static TreatmentBMP GetTreatmentBMP(this HRUCharacteristic hruCharacteristic)
         {
-            return hruCharacteristic.LoadGeneratingUnit.Delineation.TreatmentBMP;
+            return hruCharacteristic.LoadGeneratingUnit.Delineation?.TreatmentBMP;
         }
 
         public static WaterQualityManagementPlan GetWaterQualityManagementPlan(this HRUCharacteristic hruCharacteristic)
