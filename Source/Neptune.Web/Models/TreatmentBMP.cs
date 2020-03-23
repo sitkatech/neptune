@@ -186,8 +186,24 @@ namespace Neptune.Web.Models
 
         public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
         {
-            return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-                x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
+            if (Delineation == null)
+            {
+                return new List<HRUCharacteristic>();
+            }
+
+            if (Delineation.DelineationType == DelineationType.Centralized)
+            {
+                var upstreamRegionalSubbasinIDs = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities);
+                return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
+                    x.LoadGeneratingUnit.RegionalSubbasinID != null &&
+                    upstreamRegionalSubbasinIDs.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
+            }
+
+            else
+            {
+                return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
+                    x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
+            }
         }
     }
 }
