@@ -44,12 +44,13 @@ namespace Neptune.Web.ScheduledJobs
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
             RefreshCentralizedDelineations(dbContext, person);
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob());
+
             if (queueLguRefresh)
             {
                 UpdateLoadGeneratingUnits(dbContext, person);
             }
-
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob());
         }
 
         private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
