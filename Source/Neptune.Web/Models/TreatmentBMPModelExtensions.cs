@@ -262,18 +262,20 @@ namespace Neptune.Web.Models
         /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries
         /// </summary>
         /// <param name="treatmentBMP"></param>
+        /// <param name="dbContext"></param>
         /// <returns></returns>
-        public static DbGeometry GetCentralizedDelineationGeometry4326(this TreatmentBMP treatmentBMP)
+        public static DbGeometry GetCentralizedDelineationGeometry4326(this TreatmentBMP treatmentBMP,
+            DatabaseEntities dbContext)
         {
             var regionalSubbasin =
-                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
+                dbContext.RegionalSubbasins.SingleOrDefault(x =>
                     x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
 
-            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
+            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(dbContext);
 
             regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
 
-            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+            var unionOfUpstreamRegionalSubbasins = dbContext.RegionalSubbasins
                 .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry4326)
                 .ToList().UnionListGeometries();
 
@@ -286,18 +288,20 @@ namespace Neptune.Web.Models
         /// Performs the RSB trace for a given Treatment BMP using the EPSG 2771 representation of the regional subbasin geometries
         /// </summary>
         /// <param name="treatmentBMP"></param>
+        /// <param name="dbContext"></param>
         /// <returns></returns>
-        public static DbGeometry GetCentralizedDelineationGeometry2771(this TreatmentBMP treatmentBMP)
+        public static DbGeometry GetCentralizedDelineationGeometry2771(this TreatmentBMP treatmentBMP,
+            DatabaseEntities dbContext)
         {
             var regionalSubbasin =
-                HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
+                dbContext.RegionalSubbasins.SingleOrDefault(x =>
                     x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
 
-            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList();
+            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(dbContext);
 
             regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
 
-            var unionOfUpstreamRegionalSubbasins = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+            var unionOfUpstreamRegionalSubbasins = dbContext.RegionalSubbasins
                 .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry)
                 .ToList().UnionListGeometries();
 

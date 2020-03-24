@@ -28,7 +28,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public ContentResult TriggerLGURun()
         {
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(CurrentPerson.PersonID, null));
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
             return Content("LGU refresh will run in the background");
         }
 

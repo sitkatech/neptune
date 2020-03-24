@@ -193,7 +193,7 @@ namespace Neptune.Web.Models
 
             if (Delineation.DelineationType == DelineationType.Centralized)
             {
-                var upstreamRegionalSubbasinIDs = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList();
+                var upstreamRegionalSubbasinIDs = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities);
                 return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
                     x.LoadGeneratingUnit.RegionalSubbasinID != null &&
                     upstreamRegionalSubbasinIDs.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));

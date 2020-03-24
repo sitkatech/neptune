@@ -40,14 +40,14 @@ namespace Neptune.Web.Controllers
         public JsonResult UpstreamCatchments(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            return Json(new {regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList()}, JsonRequestBehavior.AllowGet);
+            return Json(new {regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities) }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         [NeptuneViewFeature]
         public ContentResult UpstreamDelineation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry4326();
+            var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry4326(HttpRequestStorage.DatabaseEntities);
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
 
@@ -91,7 +91,7 @@ namespace Neptune.Web.Controllers
                 return ViewRefreshFromOCSurvey(viewModel);
             }
 
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(CurrentPerson.PersonID));
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(CurrentPerson.PersonID, false));
             SetMessageForDisplay("Regional Subbasins refresh will run in the background.");
             return new ModalDialogFormJsonResult();
         }

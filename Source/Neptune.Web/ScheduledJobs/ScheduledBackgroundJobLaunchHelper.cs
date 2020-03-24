@@ -14,9 +14,9 @@
             landUseBlockUploadBackgroundJob.RunJob();
         }
 
-        public static void RunRegionalSubbasinRefreshBackgroundJob(int personID)
+        public static void RunRegionalSubbasinRefreshBackgroundJob(int personID, bool queueLGURefresh)
         {
-            var regionalSubbasinRefreshScheduledBackgroundJob = new RegionalSubbasinRefreshScheduledBackgroundJob(personID);
+            var regionalSubbasinRefreshScheduledBackgroundJob = new RegionalSubbasinRefreshScheduledBackgroundJob(personID, queueLGURefresh);
             regionalSubbasinRefreshScheduledBackgroundJob.RunJob();
         }
 
@@ -38,7 +38,7 @@
             delineationDiscrepancyCheckerBackgroundJob.RunJob();
         }
 
-        public static void RunLoadGeneratingUnitRefreshJob(int currentPersonID, int? loadGeneratingUnitRefreshAreaID)
+        public static void RunLoadGeneratingUnitRefreshJob(int? loadGeneratingUnitRefreshAreaID)
         {
             var loadGeneratingUnitRefreshScheduledBackgroundJob = new LoadGeneratingUnitRefreshScheduledBackgroundJob(loadGeneratingUnitRefreshAreaID);
             loadGeneratingUnitRefreshScheduledBackgroundJob.RunJob();

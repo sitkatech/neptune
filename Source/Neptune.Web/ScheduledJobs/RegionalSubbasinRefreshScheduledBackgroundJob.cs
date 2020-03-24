@@ -10,62 +10,76 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using Hangfire;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
     class RegionalSubbasinRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
-        public RegionalSubbasinRefreshScheduledBackgroundJob(int currentPersonPersonID)
+        public RegionalSubbasinRefreshScheduledBackgroundJob(int currentPersonPersonID, bool queueLGURefresh)
         {
             PersonID = currentPersonPersonID;
+            QueueLGURefresh = queueLGURefresh;
         }
+
+        public bool QueueLGURefresh { get; set; }
 
         public int PersonID { get; set; }
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Local,
             NeptuneEnvironmentType.Prod,
             NeptuneEnvironmentType.Qa
         };
 
-        public static void RunRefresh(DatabaseEntities dbContext, Person person)
+        public static void RunRefresh(DatabaseEntities dbContext, Person person, bool queueLguRefresh)
         {
             dbContext.RegionalSubbasinStagings.DeleteRegionalSubbasinStaging(dbContext.RegionalSubbasinStagings.ToList());
             dbContext.SaveChanges(person);
-            
+
             var newRegionalSubbasinFeatureCollection = RetrieveFeatureCollectionFromArcServer();
             ThrowIfCatchIdnNotUnique(newRegionalSubbasinFeatureCollection);
             StageFeatureCollection(newRegionalSubbasinFeatureCollection);
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
             RefreshCentralizedDelineations(dbContext, person);
-            // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now
-            //UpdateLoadGeneratingUnits(dbContext, person);
+            if (queueLguRefresh)
+            {
+                UpdateLoadGeneratingUnits(dbContext, person);
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob());
         }
 
         private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
         {
-            var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
-            var loadGeneratingUnitRefreshAreas = regionalSubbasinsWaitingForRefresh.Select(x=>
-                new LoadGeneratingUnitRefreshArea(x.CatchmentGeometry)).ToList();
+            // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now...
+            //var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
+            //var loadGeneratingUnitRefreshAreas = regionalSubbasinsWaitingForRefresh.Select(x=>
+            //    new LoadGeneratingUnitRefreshArea(x.CatchmentGeometry)).ToList();
 
-            dbContext.LoadGeneratingUnitRefreshAreas.AddRange(loadGeneratingUnitRefreshAreas);
-            dbContext.SaveChanges(person);
+            //dbContext.LoadGeneratingUnitRefreshAreas.AddRange(loadGeneratingUnitRefreshAreas);
+            //dbContext.SaveChanges(person);
 
-            var loadGeneratingUnitRefreshScheduledBackgroundJob =
-                new LoadGeneratingUnitRefreshScheduledBackgroundJob(dbContext);
+            //var loadGeneratingUnitRefreshScheduledBackgroundJob =
+            //    new LoadGeneratingUnitRefreshScheduledBackgroundJob(dbContext);
 
-            loadGeneratingUnitRefreshScheduledBackgroundJob.LoadGeneratingUnitRefreshAfterRSBRefresh(
-                loadGeneratingUnitRefreshAreas);
+            //loadGeneratingUnitRefreshScheduledBackgroundJob.LoadGeneratingUnitRefreshAfterRSBRefresh(
+            //    loadGeneratingUnitRefreshAreas);
 
-            foreach (var regionalSubbasin in regionalSubbasinsWaitingForRefresh)
-            {
-                regionalSubbasin.IsWaitingForLGURefresh = false;
-            }
+            //foreach (var regionalSubbasin in regionalSubbasinsWaitingForRefresh)
+            //{
+            //    regionalSubbasin.IsWaitingForLGURefresh = false;
+            //}
 
-            dbContext.SaveChanges(person);
+            //dbContext.SaveChanges(person);
+
+            // Instead, just queue a total LGU update
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
+
+            // And follow it up with an HRU update
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
 
         }
 
@@ -74,8 +88,8 @@ namespace Neptune.Web.ScheduledJobs
         {
             foreach (var delineation in dbContext.Delineations.Where(x => x.DelineationTypeID == DelineationType.Centralized.DelineationTypeID))
             {
-                var centralizedDelineationGeometry2771 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry2771();
-                var centralizedDelineationGeometry4326 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry4326();
+                var centralizedDelineationGeometry2771 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry2771(dbContext);
+                var centralizedDelineationGeometry4326 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry4326(dbContext);
 
                 delineation.DelineationGeometry = centralizedDelineationGeometry2771;
                 delineation.DelineationGeometry4326 = centralizedDelineationGeometry4326;
@@ -185,11 +199,11 @@ namespace Neptune.Web.ScheduledJobs
                     };
 
                     var configurationSerialized = JsonConvert.SerializeObject(queryStringObject, Formatting.None,
-                        new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
+                        new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                     var nameValueCollection =
                         JsonConvert.DeserializeObject<Dictionary<string, string>>(configurationSerialized);
                     var queryParameters = string.Join("&",
-                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string) x.Value)}"));
+                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string)x.Value)}"));
                     var uri = $"{baseRequestUri}?{queryParameters}";
                     string response;
                     try
@@ -226,7 +240,7 @@ namespace Neptune.Web.ScheduledJobs
         protected override void RunJobImplementation()
         {
             var person = DbContext.People.Find(PersonID);
-            RunRefresh(DbContext, person);
+            RunRefresh(DbContext, person, QueueLGURefresh);
         }
     }
 

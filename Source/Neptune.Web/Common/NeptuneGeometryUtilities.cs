@@ -36,7 +36,7 @@ namespace Neptune.Web.Common
             HttpRequestStorage.DatabaseEntities.LoadGeneratingUnitRefreshAreas.Add(loadGeneratingUnitRefreshArea);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(HttpRequestStorage.Person.PersonID, loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
         }
     }
 }

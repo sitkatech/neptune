@@ -27,28 +27,30 @@ namespace Neptune.Web.Models
             return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID)}'>{regionalSubbasin.Watershed} - {regionalSubbasin.DrainID}</a>"); 
         }
 
-        public static List<int> TraceUpstreamCatchmentsReturnIDList(this RegionalSubbasin regionalSubbasin)
+        public static List<int> TraceUpstreamCatchmentsReturnIDList(this RegionalSubbasin regionalSubbasin,
+            DatabaseEntities dbContext)
         {
             var idList = new List<int>();
 
-            var lookingAt = regionalSubbasin.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment();
+            var lookingAt = regionalSubbasin.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(dbContext);
             while (lookingAt.Any())
             {
                 var ints = lookingAt.Select(x => x.RegionalSubbasinID);
                 idList.AddRange(ints);
                 lookingAt = lookingAt.SelectMany(x =>
-                    x.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment()).ToList();
+                    x.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(dbContext)).ToList();
             }
 
             return idList;
         }
 
         public static List<RegionalSubbasin> GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(
-            this RegionalSubbasin regionalSubbasin)
+            this RegionalSubbasin regionalSubbasin, DatabaseEntities dbContext)
         {
-            return HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+            return dbContext.RegionalSubbasins
                 .Where(x => x.OCSurveyDownstreamCatchmentID == regionalSubbasin.OCSurveyCatchmentID).ToList();
         }
+
 
         public static FeatureCollection TraceBackboneDownstream(this Neighborhood regionalSubbasin)
         {
