@@ -191,7 +191,7 @@ namespace Neptune.Web.Models
                 return new List<HRUCharacteristic>();
             }
 
-            if (Delineation.DelineationType == DelineationType.Centralized)
+            if (Delineation.DelineationType == DelineationType.Centralized && TreatmentBMPType.TreatmentBMPModelingType != null)
             {
                 var upstreamRegionalSubbasinIDs = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities);
                 return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>

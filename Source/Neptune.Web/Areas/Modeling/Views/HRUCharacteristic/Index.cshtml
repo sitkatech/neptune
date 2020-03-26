@@ -18,13 +18,24 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.ModalDialog
 @inherits Neptune.Web.Areas.Modeling.Views.HRUCharacteristic.Index
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.HasAdminPermissions)
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Refresh HRU Characteristics", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")), ViewDataTyped.RefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+    }
 }
 
 <div class="row">

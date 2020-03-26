@@ -179,6 +179,7 @@ namespace Neptune.Web.Controllers
                     x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
             IHaveHRUCharacteristics entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
+
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
                 verifiedUnverifiedUrl, new HRUCharacteristicsViewData(entityWithHRUCharacteristics, entityWithHRUCharacteristics.GetHRUCharacteristics().ToList()), mapServiceUrl);
             return RazorView<Detail, DetailViewData>(viewData);

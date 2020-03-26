@@ -19,14 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Globalization;
-using System.Web;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
+using System.Globalization;
+using System.Web;
 
-namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic{
+namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic
+{
     public class HRUCharacteristicGridSpec : GridSpec<Models.HRUCharacteristic>
     {
         public HRUCharacteristicGridSpec()

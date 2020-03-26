@@ -117,10 +117,14 @@ namespace Neptune.Web.ScheduledJobs
                 throw;
             }
 
-            File.Delete(outputLayerPath);
-            if (loadGeneratingUnitRefreshAreaID != null)
+            // clean up temp files if not running in a local environment
+            if (NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType != NeptuneEnvironmentType.Local)
             {
-                File.Delete(clipLayerPath);
+                File.Delete(outputLayerPath);
+                if (loadGeneratingUnitRefreshAreaID != null)
+                {
+                    File.Delete(clipLayerPath);
+                }
             }
 
             

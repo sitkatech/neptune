@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Hangfire;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Modeling.Views.HRUCharacteristic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Modeling.Controllers
 {
@@ -33,6 +36,38 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             gridSpec = new HRUCharacteristicGridSpec();
 
             return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.ToList();
+        }
+
+
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult RefreshHRUCharacteristics()
+        {
+            return ViewRefreshHRUCharacteristics(new ConfirmDialogFormViewModel());
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshHRUCharacteristics(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshHRUCharacteristics(viewModel);
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
+
+            SetMessageForDisplay("HRU Characteristic refresh will run in the background.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshHRUCharacteristics(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = "Are you sure you want to refresh the HRU Characteristics?<br /><br />This can take several hours and will prevent other scheduled jobs from running in the meantime.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
     }
 }
