@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
@@ -63,10 +64,12 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
 
-            var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
-                .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
+            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels
+                .Select(x => x.Parcel).ToList();
+            var parcelGeoJsonFeatureCollection = parcels.ToGeoJsonFeatureCollection();
+            var treatmentBMPs = waterQualityManagementPlan.TreatmentBMPs;
             var treatmentBmpGeoJsonFeatureCollection =
-                waterQualityManagementPlan.TreatmentBMPs.ToGeoJsonFeatureCollection();
+                treatmentBMPs.ToGeoJsonFeatureCollection();
 
             treatmentBmpGeoJsonFeatureCollection.Features.ForEach(x =>
             {
@@ -78,6 +81,10 @@ namespace Neptune.Web.Controllers
                     x.Properties.Add("PopupUrl", SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.MapPopup(treatmentBmpID)));
                 }
             });
+
+            var boundingBoxGeometries = new List<DbGeometry>();
+            boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
+            boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
@@ -93,12 +100,12 @@ namespace Neptune.Web.Controllers
                     LayerInitialVisibility.Show)
             };
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
-                BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
+                new BoundingBox(boundingBoxGeometries));
 
-            if (waterQualityManagementPlan.TreatmentBMPs.Any(x => x.Delineation != null))
+            if (treatmentBMPs.Any(x => x.Delineation != null))
             {
                 mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(
-                    waterQualityManagementPlan.TreatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation)));
+                    treatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation)));
             }
 
             var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
