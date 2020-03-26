@@ -129,7 +129,7 @@ def snapGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
     params = {
         'INPUT':inputLayer,
         'REFERENCE_LAYER':inputLayer,
-        'TOLERANCE':5,
+        'TOLERANCE':1,
         'BEHAVIOR':1,
         'OUTPUT':'TEMPORARY_OUTPUT'
     }
@@ -205,10 +205,10 @@ if __name__ == '__main__':
 
     masterOverlay.startEditing()
 
-    # for feat in masterOverlay.getFeatures():
-    #     ## todo: would be nice to also exclude those where the RegionalSubbasinID is non-exist. could also handle that by making LSPC_RSB as an intersect instead of a union.
-    #     if feat.geometry().area() < 1:
-    #         masterOverlay.deleteFeature(feat.id())
+    for feat in masterOverlay.getFeatures():
+        ## todo: would be nice to also exclude those where the RegionalSubbasinID is non-exist. could also handle that by making LSPC_RSB as an intersect instead of a union.
+        if feat.geometry().area() < 1:
+            masterOverlay.deleteFeature(feat.id())
     
     # masterOverlay.commitChanges()
 
