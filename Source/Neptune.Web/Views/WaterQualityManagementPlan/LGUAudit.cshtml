@@ -1,0 +1,23 @@
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.WaterQualityManagementPlan
+
+@inherits LGUAudit
+
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h2>Water Quality Management Plan LGU Audit Details</h2>
+    </div>
+    <div class="col-xs-12">
+        @Html.DhtmlxGrid(ViewDataTyped.AuditGridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+    </div>
+</div>

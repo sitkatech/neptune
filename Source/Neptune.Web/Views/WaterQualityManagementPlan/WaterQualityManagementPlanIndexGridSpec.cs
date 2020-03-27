@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using LtInfo.Common.BootstrapWrappers;
 using LtInfo.Common.DhtmlWrappers;

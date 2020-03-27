@@ -59,6 +59,23 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [SitkaAdminFeature]
+        public ViewResult LGUAudit()
+        {
+            var wqmpGridSpec = new WaterQualityManagementPlanLGUAuditGridSpec();
+            var viewData = new LGUAuditViewData(CurrentPerson, wqmpGridSpec);
+            return RazorView<LGUAudit, LGUAuditViewData>(viewData);
+        }
+
+        public GridJsonNetJObjectResult<vWaterQualityManagementPlanLGUAudit>
+            WaterQualityManagementPlanLGUAuditGridData()
+        {
+            var gridSpec = new WaterQualityManagementPlanLGUAuditGridSpec();
+            return new GridJsonNetJObjectResult<vWaterQualityManagementPlanLGUAudit>(
+                HttpRequestStorage.DatabaseEntities.vWaterQualityManagementPlanLGUAudits.ToList(), gridSpec);
+        }
+
+        [HttpGet]
         [WaterQualityManagementPlanViewFeature]
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
@@ -121,10 +138,16 @@ namespace Neptune.Web.Controllers
             x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
                 waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
 
+            var anyLspcBasins = waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && HttpRequestStorage.DatabaseEntities.LSPCBasins.Any(x =>
+                                    x.LSPCBasinGeometry.Intersects(waterQualityManagementPlan.WaterQualityManagementPlanBoundary));
+
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
-                waterQualityManagementPlanVerifyTreatmentBMP, new HRUCharacteristicsViewData(waterQualityManagementPlan, ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()));
+                waterQualityManagementPlanVerifyTreatmentBMP,
+                new HRUCharacteristicsViewData(waterQualityManagementPlan,
+                    ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()),
+                anyLspcBasins);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

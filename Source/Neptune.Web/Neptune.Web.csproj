@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -457,6 +457,8 @@
     <Compile Include="Models\Generated\vTreatmentBMPDetailedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vViewTreatmentBMPModelingAttributes.Binding.cs" />
     <Compile Include="Models\Generated\vViewTreatmentBMPModelingAttributesConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vWaterQualityManagementPlanLGUAudit.Binding.cs" />
+    <Compile Include="Models\Generated\vWaterQualityManagementPlanLGUAuditConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlan.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlan.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanConfiguration.Binding.cs" />
@@ -825,6 +827,7 @@
     <Compile Include="Views\TreatmentBMP\UploadTreatmentBMPsViewData.cs" />
     <Compile Include="Views\TreatmentBMP\UploadTreatmentBMPs.cs" />
     <Compile Include="Views\TreatmentBMP\UploadTreatmentBMPsViewModel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\WaterQualityManagementPlanLGUAuditGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WaterQualityManagementPlanVerificationGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WqmpVerify.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WqmpVerifyViewData.cs" />
@@ -2032,6 +2035,7 @@
     <Content Include="Views\RegionalSubbasinRevisionRequest\Close.cshtml" />
     <Content Include="Views\TreatmentBMP\EditUpstreamBMP.cshtml" />
     <Content Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\LGUAudit.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

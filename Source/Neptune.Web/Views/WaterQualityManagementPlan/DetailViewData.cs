@@ -31,9 +31,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
-        public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs  { get; }
+        public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
-        public string CalculatedParcelArea {  get; }
+        public string CalculatedParcelArea { get; }
 
         public string TrashCaptureEffectiveness { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
@@ -43,12 +43,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
         public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
         public Models.FieldDefinition FieldDefinitionForAreaWithinWQMP { get; }
+        public bool AnyLSPCBasins { get; }
+
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
-            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs, HRUCharacteristicsViewData hruCharacteristicsViewData)
+            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs, HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -113,12 +115,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
                 ? "Not Provided"
                 : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
-            
+
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
             FieldDefinitionForAreaWithinWQMP = Models.FieldDefinition.AreaWithinWQMP;
+
+            AnyLSPCBasins = anyLspcBasins;
         }
+
 
         public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
         {

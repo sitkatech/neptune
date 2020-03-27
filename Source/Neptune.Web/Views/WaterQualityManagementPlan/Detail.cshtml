@@ -223,7 +223,7 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                                        {
+                                                                                            {
                                                         ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
                                                         ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
                                                         ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
@@ -276,6 +276,10 @@
                     else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
                     {
                         <p class="systemText">No treatment area is provided for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">treatment area is provided</a>.</p>
+                    }
+                    else if (!ViewDataTyped.AnyLSPCBasins)
+                    {
+                        <p class="systemText">The @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel() boundary does not lie within any LSPC Basin; no Land Use Statistics Will be calculated.</p>
                     }
                     else
                     {
