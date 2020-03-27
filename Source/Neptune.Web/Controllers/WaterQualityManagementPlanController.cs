@@ -116,8 +116,11 @@ namespace Neptune.Web.Controllers
                     1,
                     LayerInitialVisibility.Show)
             };
+            //var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
+            //    new BoundingBox(boundingBoxGeometries));
+
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
-                new BoundingBox(boundingBoxGeometries));
+                BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
             if (treatmentBMPs.Any(x => x.Delineation != null))
             {

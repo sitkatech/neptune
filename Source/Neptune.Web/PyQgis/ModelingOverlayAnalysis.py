@@ -125,6 +125,17 @@ def bufferZero(inputLayer, memoryOutputName, context=None):
     
     return bufferZeroResult['OUTPUT']
 
+def fixGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
+    params = {
+        'INPUT':inputLayer,
+        'OUTPUT':'memory:'+memoryOutputName}
+    if context is not None:
+        fixResult = processing.run("native:fixgeometries", params)
+    else:
+        fixResult = processing.run("native:fixgeometries", params, context= context)
+
+    return fixResult['OUTPUT']
+
 def snapGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
     params = {
         'INPUT':inputLayer,
@@ -177,6 +188,7 @@ if __name__ == '__main__':
     delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", context=PROCESSING_CONTEXT)
     delineationLayer = bufferZero(delineationLayer, "Delineations", context=PROCESSING_CONTEXT)
 
+    wqmpLayer = fixGeometriesWithinLayer(wqmpLayer, "WQMPFixed", context=PROCESSING_CONTEXT)
     wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", context=PROCESSING_CONTEXT)
     wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
 
