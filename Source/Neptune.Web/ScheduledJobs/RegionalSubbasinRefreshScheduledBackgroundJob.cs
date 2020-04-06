@@ -6,12 +6,14 @@ using Neptune.Web.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using Hangfire;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Models;
 
@@ -32,6 +34,7 @@ namespace Neptune.Web.ScheduledJobs
         // only runs in prod to avoid hitting OC Survey with multiple concurrent identical requests
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
+            NeptuneEnvironmentType.Local,
             NeptuneEnvironmentType.Prod,
         };
 
@@ -58,17 +61,16 @@ namespace Neptune.Web.ScheduledJobs
         private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
         {
             var catchmentGeometriesForLGURefresh = dbContext.RegionalSubbasins
-                .Where(x => x.IsWaitingForLGURefresh == true).Select(x => x.CatchmentGeometry);
+                .Where(x => x.IsWaitingForLGURefresh == true).Select(x => x.CatchmentGeometry).ToList();
 
-            var featureCollection = new FeatureCollection()
-            {
-                CRS = new NamedCRS("EPSG:2771")
-            };
+            var refreshAreaGeoemtry = catchmentGeometriesForLGURefresh.UnionListGeometries();
 
-            foreach (var dbGeometry in catchmentGeometriesForLGURefresh)
-            {
-                featureCollection.Features.Add(DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry));
-            }
+            var loadGeneratingUnitRefreshArea = new LoadGeneratingUnitRefreshArea(refreshAreaGeoemtry);
+            dbContext.LoadGeneratingUnitRefreshAreas.Add(loadGeneratingUnitRefreshArea);
+            dbContext.SaveChangesWithNoAuditing();
+            
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
+
 
             // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now...
             //var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
@@ -91,11 +93,11 @@ namespace Neptune.Web.ScheduledJobs
 
             //dbContext.SaveChanges(person);
 
-            // Instead, just queue a total LGU update
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
+            //// Instead, just queue a total LGU update
+            //BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
 
-            // And follow it up with an HRU update
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
+            //// And follow it up with an HRU update
+            //BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
 
         }
 
