@@ -1,6 +1,6 @@
 print 'Getting logins to create'
 if object_id('tempdb.dbo.#accountsToCreate') is not null drop table #accountsToCreate
-select '${db-user}' as AccountName, 'S' as AccountType
+select '${db-user}' as AccountName, 'U' as AccountType
 into #accountsToCreate
 ${other-sql-user-accounts-to-create}
 
