@@ -10,7 +10,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using GeoJSON.Net.CoordinateReferenceSystem;
 using Hangfire;
+using LtInfo.Common.GeoJson;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
@@ -27,6 +29,7 @@ namespace Neptune.Web.ScheduledJobs
 
         public int PersonID { get; set; }
 
+        // only runs in prod to avoid hitting OC Survey with multiple concurrent identical requests
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Prod,
@@ -54,6 +57,19 @@ namespace Neptune.Web.ScheduledJobs
 
         private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
         {
+            var catchmentGeometriesForLGURefresh = dbContext.RegionalSubbasins
+                .Where(x => x.IsWaitingForLGURefresh == true).Select(x => x.CatchmentGeometry);
+
+            var featureCollection = new FeatureCollection()
+            {
+                CRS = new NamedCRS("EPSG:2771")
+            };
+
+            foreach (var dbGeometry in catchmentGeometriesForLGURefresh)
+            {
+                featureCollection.Features.Add(DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry));
+            }
+
             // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now...
             //var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
             //var loadGeneratingUnitRefreshAreas = regionalSubbasinsWaitingForRefresh.Select(x=>

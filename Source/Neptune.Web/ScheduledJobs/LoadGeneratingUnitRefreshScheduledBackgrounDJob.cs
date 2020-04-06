@@ -55,22 +55,17 @@ namespace Neptune.Web.ScheduledJobs
 
             LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea = null;
 
-            if (loadGeneratingUnitRefreshAreaID != null)
-            {
-                loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
-                var lguInputClipFeatures = DbContext.LoadGeneratingUnits
-                    .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
-                        .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x => DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
+            loadGeneratingUnitRefreshArea =
+                DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
 
-                var lguInputClipFeatureCollection = new FeatureCollection(lguInputClipFeatures)
-                {
-                    CRS = new NamedCRS("EPSG:2771")
-                };
-
-                //var lguInputClipGeoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
+            var lguInputClipFeatureCollection = MakeClipFeatureCollectionFromRefreshArea(loadGeneratingUnitRefreshArea);
+            
+            if (lguInputClipFeatureCollection != null ){
+            
                 var lguInputClipGeoJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(lguInputClipFeatureCollection);
 
                 File.WriteAllText(clipLayerPath, lguInputClipGeoJsonString);
+
                 additionalCommandLineArguments.AddRange( new List<string>{
                     "--clip", clipLayerPath
                 });
@@ -141,12 +136,23 @@ namespace Neptune.Web.ScheduledJobs
             }
         }
 
-        public void LoadGeneratingUnitRefreshAfterRSBRefresh(List<LoadGeneratingUnitRefreshArea> refreshAreas)
+        private FeatureCollection MakeClipFeatureCollectionFromRefreshArea(
+            LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea)
         {
-            foreach (var refreshArea in refreshAreas)
+            if (loadGeneratingUnitRefreshArea == null)
             {
-                LoadGeneratingUnitRefreshImpl(refreshArea.LoadGeneratingUnitRefreshAreaID);
+                return null;
             }
+
+            var lguInputClipFeatures = DbContext.LoadGeneratingUnits
+                .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
+                    .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x =>
+                    DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
+
+            return new FeatureCollection(lguInputClipFeatures)
+            {
+                CRS = new NamedCRS("EPSG:2771")
+            };
         }
     }
 
