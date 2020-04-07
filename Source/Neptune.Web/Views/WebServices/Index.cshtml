@@ -1,0 +1,36 @@
+﻿@using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.Views
+@using MoreLinq
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.SortOrder
+@inherits Neptune.Web.Views.WebServices.Index
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+<p>Web Services are functions that can be accessed over the web (using the http protocol), 
+    typically consumed by software or programs rather than humans. </p>
+
+<ul style="list-style: none; @(ViewDataTyped.WebServiceAccessToken.HasValue ? String.Empty : "display:none")" id="haveWebServiceAccessTokenPanel">
+    <li>
+        @BootstrapHtmlHelpers.MakeModalDialogAlertLinkFromUrl(ViewDataTyped.GetWebServiceAccessTokenUrl, "Web Service Access Token", "Close", "View Access Token", new List<string>(), null)
+    </li>
+    <li><a href="@ViewDataTyped.WebServicesListUrl">List of Web Services</a></li>
+</ul>
+
+<ul style="list-style: none; @(ViewDataTyped.WebServiceAccessToken.HasValue ? "display:none" : String.Empty)" id="notHaveWebServiceAccessTokenPanel">
+    <li id="getWebServicesAccessTokenLink">
+        @BootstrapHtmlHelpers.MakeModalDialogAlertLinkFromUrl(ViewDataTyped.GetWebServiceAccessTokenUrl, "Web Service Access Token", "Close", "Get Access Token", new List<string>(), "enableWebServicesListLink")
+    </li>
+    <li id="webServicesListLink"><span class="disabled">List of Web Services<span class="alert"> (disabled; you must first request an Access Token)</span></span></li>
+</ul>
+
+<script type="text/javascript">
+    function enableWebServicesListLink() {
+        jQuery("#notHaveWebServiceAccessTokenPanel").hide();
+        jQuery("#haveWebServiceAccessTokenPanel").show();
+    }
+</script>
