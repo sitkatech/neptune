@@ -65,7 +65,7 @@ Source code is available upon request via <support@sitkatech.com>.
                  </div>
                  <div class="col-xs-12 col-sm-7">
                      <div class='input-group date' id='fieldVisitDatePicker'>
-                         <input type='text' class="form-control" name="FieldVisitDate"/>
+                         <input type='text' class="form-control" name="FieldVisitDate" readonly/>
                          <span class="input-group-addon">
                              <span class="glyphicon glyphicon-calendar"></span>
                          </span>
@@ -93,7 +93,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 </div>
                 <div class="col-xs-12 col-sm-7">
                     <div class='input-group date' id='fieldVisitDatePicker'>
-                        <input type='text' class="form-control" name="FieldVisitDate"/>
+                        <input type='text' class="form-control" name="FieldVisitDate" readonly/>
                         <span class="input-group-addon" id="dateTimePickerButton">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -126,6 +126,7 @@ Source code is available upon request via <support@sitkatech.com>.
             format: 'L',
             //attach to a parent with a relative position. This is the outside modal, but modalIDs are generated on the fly
             defaultDate: new Date(),
+            ignoreReadonly: true,
             widgetParent: jQuery("#fieldVisitInfo").parent().parent().parent().parent()
         });
 
