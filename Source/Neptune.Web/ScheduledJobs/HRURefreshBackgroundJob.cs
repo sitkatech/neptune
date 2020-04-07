@@ -15,7 +15,7 @@ namespace Neptune.Web.ScheduledJobs
         {
         }
 
-        public new static string JobName => "LGU Refresh";
+        public new static string JobName => "HRU Refresh";
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
@@ -42,7 +42,7 @@ namespace Neptune.Web.ScheduledJobs
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByLSPCBasin)
             {
-                var batches = group.Batch(25);
+                var batches = group.Batch(50);
 
                 foreach (var batch in batches)
                 {
@@ -61,32 +61,6 @@ namespace Neptune.Web.ScheduledJobs
                     }
                 }
             }
-
-            //foreach (var lspcBasin in DbContext.LSPCBasins.ToList())
-            //{
-            //    var lspcBasinLoadGeneratingUnits = lspcBasin.LoadGeneratingUnits.Where(x => !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null) ).ToList();
-
-            //    if (lspcBasinLoadGeneratingUnits.Any())
-            //    {
-            //        var batches = lspcBasinLoadGeneratingUnits.Batch(25).ToList();
-            //        foreach (var batch in batches)
-            //        {
-            //            try
-            //            {
-            //                var batchHRUCharacteristics =
-            //                    HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), DbContext, Logger);
-
-            //                DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics);
-            //                DbContext.SaveChangesWithNoAuditing();
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                // this batch failed, but we don't want to give up the whole job.
-            //                Logger.Warn(ex.Message);
-            //            }
-            //        }
-            //    }
-            //}
         }
     }
 }

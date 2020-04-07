@@ -54,6 +54,7 @@ namespace Neptune.Web.Models
             {
                 Check.RequireNotNullThrowNotFound(person, personGuid.ToString());
             }
+
             return person;
         }
 

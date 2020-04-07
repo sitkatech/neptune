@@ -182,9 +182,17 @@ if __name__ == '__main__':
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
 
     # perhaps overly-aggressive application of the buffer-zero and 
+    lspcLayer = fixGeometriesWithinLayer(lspcLayer, "LSPCFixed", context=PROCESSING_CONTEXT)
     lspcLayer = bufferZero(lspcLayer, "LSPCBasins", context=PROCESSING_CONTEXT)
+
+    if clip_layer is not None:
+        lspcLayer = clip(lspcLayer, clip_layer, memoryOutputName="LSPCBasins", context=PROCESSING_CONTEXT)
+        lspcLayer = fixGeometriesWithinLayer(lspcLayer, "LSPCBasins", context=PROCESSING_CONTEXT)
+
+    regionalSubbasinLayer = fixGeometriesWithinLayer(regionalSubbasinLayer, "RegionalSubbasinFixed", context=PROCESSING_CONTEXT)
     regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", context=PROCESSING_CONTEXT)
 
+    delineationLayer = fixGeometriesWithinLayer(delineationLayer, "DelineationFixed", context=PROCESSING_CONTEXT)
     delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", context=PROCESSING_CONTEXT)
     delineationLayer = bufferZero(delineationLayer, "Delineations", context=PROCESSING_CONTEXT)
 
@@ -208,12 +216,13 @@ if __name__ == '__main__':
     lspc_rsb_wqmp = bufferZero(lspc_rsb_wqmp, "LSPC-RSB-D", context=PROCESSING_CONTEXT)
 
 
-    # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
-    if clip_layer is not None:
-        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
-        masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
-    else: 
-        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+    # # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
+    # if clip_layer is not None:
+    #     masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+    #     masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+    # else: 
+    #     masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+    masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
 
     masterOverlay.startEditing()
 
@@ -222,7 +231,9 @@ if __name__ == '__main__':
         if feat.geometry().area() < 1:
             masterOverlay.deleteFeature(feat.id())
     
-    # masterOverlay.commitChanges()
+    masterOverlay.commitChanges()
+
+    materOverlay = fixGeometriesWithinLayer(masterOverlay, "MasterOverlay", context=PROCESSING_CONTEXT)
 
     QgsVectorFileWriter.writeAsVectorFormat(masterOverlay, OUTPUT_PATH, "utf-8", delineationLayer.crs(), "ESRI Shapefile")
 

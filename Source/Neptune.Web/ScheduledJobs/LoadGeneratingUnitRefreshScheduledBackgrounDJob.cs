@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using GeoJSON.Net.CoordinateReferenceSystem;
+﻿using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -122,18 +119,18 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
 
-            
-            if (loadGeneratingUnitRefreshArea != null)
-            {
-                var loadGeneratingUnitsToRefreshHRUsOf = DbContext.LoadGeneratingUnits.Where(x =>
-                    x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
-                        .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
+            // no longer need to do HRUs here since it's going to be a scheduled jobbo.
+            //if (loadGeneratingUnitRefreshArea != null)
+            //{
+            //    var loadGeneratingUnitsToRefreshHRUsOf = DbContext.LoadGeneratingUnits.Where(x =>
+            //        x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
+            //            .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
 
-                var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext, Logger);
+            //    var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext, Logger);
 
-                DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-                DbContext.SaveChangesWithNoAuditing();
-            }
+            //    DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+            //    DbContext.SaveChangesWithNoAuditing();
+            //}
         }
 
         private FeatureCollection MakeClipFeatureCollectionFromRefreshArea(
@@ -194,7 +191,8 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
             "-a_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
-            "dbo.LoadGeneratingUnit"
+            "dbo.LoadGeneratingUnit",
+            "-explodecollections"
         };
 
         ExecuteOgr2OgrCommand(commandLineArguments);
