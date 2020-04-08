@@ -30,6 +30,7 @@ using Neptune.Web.Areas.Trash.Controllers;
 using HomeController = Neptune.Web.Controllers.HomeController;
 using ParcelController = Neptune.Web.Controllers.ParcelController;
 using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
+using WebServicesController = Neptune.Web.Controllers.WebServicesController;
 
 namespace Neptune.Web.Views
 {
@@ -147,6 +148,12 @@ namespace Neptune.Web.Views
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(c => c.Index()), currentPerson, Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized(), "Group1"));
+
+            if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
+            {
+                programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
+                    new SitkaRoute<WebServicesController>(c => c.Index()), currentPerson, "Web Services", "Group 2"));
+            }
 
             return programInfoMenu;
         }
