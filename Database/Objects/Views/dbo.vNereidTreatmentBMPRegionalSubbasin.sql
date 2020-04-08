@@ -14,8 +14,13 @@ from dbo.TreatmentBMP tbmp
 		on tbmp.TreatmentBMPID = d.TreatmentBMPID
 	join  dbo.RegionalSubbasin rsb
 		on tbmp.RegionalSubbasinID = rsb.RegionalSubbasinID
+	left join dbo.vNereidBMPColocation bmpc
+		on tbmp.TreatmentBMPID = bmpc.DownstreamBMPID
 where
 	tbmpt.TreatmentBMPModelingTypeID is not null
 	and (d.DelineationTypeID is null or d.DelineationTypeID = 2)
 	and IsInLSPCBasin = 1
+	and DownstreamBMPID is null
 go
+
+select * from vNereidTreatmentBMPRegionalSubbasin

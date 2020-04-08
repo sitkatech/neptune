@@ -441,6 +441,8 @@
     <Compile Include="Models\Generated\vGeoServerWaterQualityManagementPlanConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vMostRecentTreatmentBMPAssessment.Binding.cs" />
     <Compile Include="Models\Generated\vMostRecentTreatmentBMPAssessmentConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidBMPColocation.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidBMPColocationConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidTreatmentBMPRegionalSubbasin.Binding.cs" />
     <Compile Include="Models\Generated\vNereidTreatmentBMPRegionalSubbasinConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vOnlandVisualTrashAssessmentAreaProgress.Binding.cs" />

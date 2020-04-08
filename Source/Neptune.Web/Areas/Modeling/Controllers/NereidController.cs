@@ -62,11 +62,11 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
-        public JsonResult ValidateRSBNetwork()
+        public JsonResult ValidateNetwork()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
-            var graph = NereidUtilities.BuildRSBNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
             var serializedGraph = JsonConvert.SerializeObject(graph);
             var stringContent = new StringContent(serializedGraph);
