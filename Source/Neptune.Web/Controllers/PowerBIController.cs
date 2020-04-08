@@ -16,8 +16,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndParametersAttribute("BMP Modeling Parameterization Summary", new string [] {"Authorization Token"})]
-        public JsonResult TreatmentBMPParameterizationSummary(WebServiceToken webServiceToken)
+        [WebServiceDocumentationAttribute("BMP Modeling Parameterization Summary")]
+        public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
                 .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x => new
@@ -39,8 +39,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndParametersAttribute("BMP Attributes", new string[] {"Authorization Token"})]
-        public JsonResult TreatmentBMPAttributeSummary(WebServiceToken webServiceToken)
+        [WebServiceDocumentationAttribute("BMP Attributes")]
+        public JsonResult TreatmentBMPAttributeSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBITreatmentBMPs.Select(x => new TreatmentBMPForPowerBI
             {
@@ -95,8 +95,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndParametersAttribute("WQMP Summary", new string[] { "Authorization Token" })]
-        public JsonResult WaterQualityManagementPlanAttributeSummary(WebServiceToken webServiceToken)
+        [WebServiceDocumentationAttribute("WQMP Summary")]
+        public JsonResult WaterQualityManagementPlanAttributeSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             // this to-list ought to be okay
             var data = HttpRequestStorage.DatabaseEntities.vPowerBIWaterQualityManagementPlans.ToList().Select(x => new
@@ -123,8 +123,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndParametersAttribute("Land Surface Attributes", new string[] { "Authorization Token" })]
-        public JsonResult LandUseStatistics(WebServiceToken webServiceToken)
+        [WebServiceDocumentationAttribute("Land Surface Attributes")]
+        public JsonResult LandUseStatistics([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBILandUseStatistics.ToList();
 
@@ -139,8 +139,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndParametersAttribute("Centralized BMP mapping to Land Use", new string[] { "Authorization Token" })]
-        public JsonResult CentralizedBMPLoadGeneratingUnitMapping(WebServiceToken webServiceToken)
+        [WebServiceDocumentationAttribute("Centralized BMP mapping to Land Use")]
+        public JsonResult CentralizedBMPLoadGeneratingUnitMapping([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBICentralizedBMPLoadGeneratingUnits.Select(x => new
             {

@@ -23,21 +23,14 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Common
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class WebServiceNameAndParametersAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    public class ParameterDescription : Attribute
     {
-        public string Name;
-        public string[] Parameters;
+        public string Description;
 
-        public WebServiceNameAndParametersAttribute(string s)
+        public ParameterDescription(string s)
         {
-            Name = s;
-        }
-
-        public WebServiceNameAndParametersAttribute(string s, string[] p)
-        {
-            Name = s;
-            Parameters = p;
+            Description = s;
         }
     }
 }

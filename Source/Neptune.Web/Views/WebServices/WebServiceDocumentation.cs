@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ClosedXML.Excel;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -15,7 +16,7 @@ namespace Neptune.Web.Views.WebServices
     {
         public string Name;
         private readonly string Url;
-        private readonly string[] Parameters;
+        private readonly List<string> Parameters;
         public string Documentation;
 
         public string GetReplacedUrl(WebServiceToken userToken)
@@ -41,14 +42,34 @@ namespace Neptune.Web.Views.WebServices
 
         public WebServiceDocumentation(MethodInfo methodInfo)
         {
-            var attribs = methodInfo.GetCustomAttributes(typeof(WebServiceNameAndParametersAttribute), false);
+            var attribs = methodInfo.GetCustomAttributes(typeof(WebServiceDocumentationAttribute), false);
             Check.Require(attribs.Length == 1, "Expected 1 and only 1 WebServiceDocumentation attribute on found Web Methods.");
 
-            var attrib = (WebServiceNameAndParametersAttribute)attribs[0];
-
-            Documentation = attrib.Name;
+            var attrib = (WebServiceDocumentationAttribute)attribs[0];
+            
+            Documentation = attrib.Documentation;
             Name = methodInfo.Name;
-            Parameters = attrib.Parameters;
+
+            var parameters = methodInfo.GetParameters();
+            if (parameters.Length > 0)
+            {
+                Parameters = new List<string>();
+                parameters.ForEach(x =>
+                {
+                    var paramAttribs = x.GetCustomAttributes(typeof(ParameterDescription), false);
+                    if (paramAttribs.Length > 0)
+                    {
+                        var paramAttrib = (ParameterDescription) paramAttribs[0];
+                        Parameters.Add(paramAttrib.Description);
+                    }
+                    else
+                    {
+                        Parameters.Add(x.Name);
+                    }
+                });
+            }
+
+            
 
             var webServiceRouteMap = GetWebServiceRouteMap();
 
