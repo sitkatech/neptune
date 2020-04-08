@@ -42,7 +42,7 @@ namespace Neptune.Web.ScheduledJobs
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByLSPCBasin)
             {
-                var batches = group.Batch(50);
+                var batches = group.Batch(25);
 
                 foreach (var batch in batches)
                 {

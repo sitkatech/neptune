@@ -118,19 +118,6 @@ namespace Neptune.Web.ScheduledJobs
                     File.Delete(clipLayerPath);
                 }
             }
-
-            // no longer need to do HRUs here since it's going to be a scheduled jobbo.
-            //if (loadGeneratingUnitRefreshArea != null)
-            //{
-            //    var loadGeneratingUnitsToRefreshHRUsOf = DbContext.LoadGeneratingUnits.Where(x =>
-            //        x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
-            //            .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
-
-            //    var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext, Logger);
-
-            //    DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-            //    DbContext.SaveChangesWithNoAuditing();
-            //}
         }
 
         private FeatureCollection MakeClipFeatureCollectionFromRefreshArea(
@@ -171,7 +158,6 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
         string outputPath, string connectionString)
     {
         var databaseConnectionString = $"MSSQL:{connectionString}";
-        // todo: fix this
         var selectStatement =
             $"Select LSPCID as LSPCBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
 
@@ -191,8 +177,7 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
             "-a_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
-            "dbo.LoadGeneratingUnit",
-            "-explodecollections"
+            "dbo.LoadGeneratingUnit"
         };
 
         ExecuteOgr2OgrCommand(commandLineArguments);
