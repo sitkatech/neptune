@@ -20,15 +20,20 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly WebServiceToken WebServiceTokenForUnitTests;
 
+        public static readonly WebServiceToken WebServiceTokenForParameterizedReplacements;
+
         /// <summary>
         /// The Unit Test GUID which can be used to make the web service token
         /// </summary>
         public static readonly Guid WebServiceTokenGuidForUnitTests = new Guid("709859C8-7376-4709-A298-7606E820DA05"); // corresponds to Ray Lee, PersonID = 1
 
+        public static readonly Guid WebServiceTokenGuidForParameterizedReplacement = new Guid("709859C8-7376-4709-A298-7606E820DA05");
         static WebServiceToken()
         {
             const bool isBeingCalledByStaticConstructor = true;
             WebServiceTokenForUnitTests = new WebServiceToken(WebServiceTokenGuidForUnitTests.ToString(), isBeingCalledByStaticConstructor);
+            // this should always be available, but it's also not a real web service token, we only use it for replacements
+            WebServiceTokenForParameterizedReplacements = new WebServiceToken(WebServiceTokenGuidForParameterizedReplacement.ToString(), isBeingCalledByStaticConstructor);
         }
 
         /// <summary>

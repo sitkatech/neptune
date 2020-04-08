@@ -14,10 +14,9 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult GetHRUCharacteristicsForPowerBI(WebServiceToken webServiceToken, int? treatmentBMPID = null)
+        public JsonResult GetHRUCharacteristicsForPowerBI(WebServiceToken webServiceToken)
         {
-            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-                    treatmentBMPID == null || x.GetTreatmentBMP().TreatmentBMPID == treatmentBMPID).ToList()
+            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.ToList()
                 .Select(x => new PowerBIHRUCharacteristics()
                 {
                     HRUEntityType = x.GetTreatmentBMP() != null
@@ -39,7 +38,13 @@ namespace Neptune.Web.Controllers
                         x.GetWaterQualityManagementPlan()?.WaterQualityManagementPlanName ?? "N/A"
                 });
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return new JsonResult()
+            {
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+
+            };
         }
 
         [HttpGet]

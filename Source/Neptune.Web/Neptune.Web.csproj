@@ -530,10 +530,10 @@
     <Compile Include="Models\WebServiceToken.cs" />
     <Compile Include="ScheduledJobs\HRURefreshBackgroundJob.cs" />
     <Compile Include="Security\WebServicesViewFeature.cs" />
+    <Compile Include="Services\IWebServices.cs" />
+    <Compile Include="Services\WebServices.cs" />
     <Compile Include="Views\WebServices\Index.cs" />
     <Compile Include="Views\WebServices\IndexViewData.cs" />
-    <Compile Include="Views\WebServices\List.cs" />
-    <Compile Include="Views\WebServices\ListViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributesViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditUpstreamBMP.cs" />
@@ -1154,8 +1154,6 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
-    <Compile Include="Views\WebServices\ViewAccessToken.cs" />
-    <Compile Include="Views\WebServices\ViewAccessTokenViewData.cs" />
     <Content Include="Areas\DroolTool\Content\35-512.png" />
     <Content Include="Areas\DroolTool\Content\chevvy.png" />
     <Content Include="Areas\DroolTool\Content\h2oc_color_logo.PNG" />
@@ -2045,8 +2043,6 @@
     <Content Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\LGUAudit.cshtml" />
     <Content Include="Views\WebServices\Index.cshtml" />
-    <Content Include="Views\WebServices\List.cshtml" />
-    <Content Include="Views\WebServices\ViewAccessToken.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
