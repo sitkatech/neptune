@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Web.Mvc;
-using Hangfire;
+﻿using Hangfire;
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -12,6 +6,10 @@ using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading;
+using System.Web.Mvc;
 
 namespace Neptune.Web.Areas.Modeling.Controllers
 {
@@ -68,14 +66,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
-            var nodes = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
-                .Select(x => new Node {ID= x.OCSurveyCatchmentID.ToString() }).ToList();
-
-            var edges = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
-                .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
-                    new Edge(){ SourceID = x.OCSurveyCatchmentID.ToString(), TargetID = x.OCSurveyDownstreamCatchmentID.ToString() }).ToList();
-
-            var graph = new Graph(true, nodes, edges);
+            var graph = NereidUtilities.BuildRSBNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
             var serializedGraph = JsonConvert.SerializeObject(graph);
             var stringContent = new StringContent(serializedGraph);
