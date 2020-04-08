@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using System.Linq;
 using System.Web.Mvc;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using DocumentFormat.OpenXml.Wordprocessing;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Security;
 
@@ -14,41 +16,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult GetHRUCharacteristicsForPowerBI(WebServiceToken webServiceToken)
-        {
-            var data = HttpRequestStorage.DatabaseEntities.HRUCharacteristics.ToList()
-                .Select(x => new PowerBIHRUCharacteristics()
-                {
-                    HRUEntityType = x.GetTreatmentBMP() != null
-                        ? "Treatment BMP"
-                        : (x.GetWaterQualityManagementPlan() != null
-                            ? "Water Quality Management Plan"
-                            : "Regional Subbasin"),
-                    HydrologicSoilGroup = x.HydrologicSoilGroup,
-                    ImperviousAcres = Math.Round(x.ImperviousAcres, 3),
-                    LastUpdated = x.LastUpdated.ToLongDateString(),
-                    LSPCLandUseDescription = x.HRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeDisplayName,
-                    RegionalSubbasin = x.GetRegionalSubbasin() != null
-                        ? x.GetRegionalSubbasin().Watershed + " - " + x.GetRegionalSubbasin().DrainID
-                        : "N/A",
-                    SlopePercentage = x.SlopePercentage,
-                    TotalAcres = Math.Round(x.Area, 3),
-                    TreatmentBMP = x.GetTreatmentBMP()?.TreatmentBMPName ?? "N/A",
-                    WaterQualityManagementPlan =
-                        x.GetWaterQualityManagementPlan()?.WaterQualityManagementPlanName ?? "N/A"
-                });
-
-            return new JsonResult()
-            {
-                Data = data,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                MaxJsonLength = int.MaxValue
-
-            };
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
+        [WebServiceNameAndParametersAttribute("BMP Modeling Parameterization Summary", new string [] {"Authorization Token"})]
         public JsonResult TreatmentBMPParameterizationSummary(WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
@@ -71,6 +39,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [WebServiceNameAndParametersAttribute("BMP Attributes", new string[] {"Authorization Token"})]
         public JsonResult TreatmentBMPAttributeSummary(WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBITreatmentBMPs.Select(x => new TreatmentBMPForPowerBI
@@ -126,6 +95,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [WebServiceNameAndParametersAttribute("WQMP Summary", new string[] { "Authorization Token" })]
         public JsonResult WaterQualityManagementPlanAttributeSummary(WebServiceToken webServiceToken)
         {
             // this to-list ought to be okay
@@ -153,6 +123,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [WebServiceNameAndParametersAttribute("Land Surface Attributes", new string[] { "Authorization Token" })]
         public JsonResult LandUseStatistics(WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBILandUseStatistics.ToList();
@@ -168,6 +139,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [WebServiceNameAndParametersAttribute("Centralized BMP mapping to Land Use", new string[] { "Authorization Token" })]
         public JsonResult CentralizedBMPLoadGeneratingUnitMapping(WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBICentralizedBMPLoadGeneratingUnits.Select(x => new

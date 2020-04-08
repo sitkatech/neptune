@@ -19,7 +19,7 @@ CREATE TABLE [dbo].[Person](
 	[LoginName] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[DroolToolRoleID] [int] NULL,
 	[ReceiveRSBRevisionRequestEmails] [bit] NOT NULL,
-	[WebServiceAccessToken] [uniqueidentifier] NULL,
+	[WebServiceAccessToken] [uniqueidentifier] NOT NULL,
  CONSTRAINT [PK_Person_PersonID] PRIMARY KEY CLUSTERED 
 (
 	[PersonID] ASC
