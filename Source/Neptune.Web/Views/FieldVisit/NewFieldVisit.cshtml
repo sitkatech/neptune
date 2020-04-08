@@ -94,7 +94,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 <div class="col-xs-12 col-sm-7">
                     <div class='input-group date' id='fieldVisitDatePicker'>
                         <input type='text' class="form-control" name="FieldVisitDate" readonly/>
-                        <span class="input-group-addon" id="dateTimePickerButton">
+                        <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
@@ -134,6 +134,10 @@ Source code is available upon request via <support@sitkatech.com>.
         jQuery(window).resize(function() {
             clearTimeout(timeout);
             timeout = setTimeout(function() { datePickerPosition(jQuery('#fieldVisitDatePicker'))}, 100);
+        });
+
+        jQuery('[name="FieldVisitDate"]').on("click", function () {
+            jQuery(this).next().trigger('click');
         });
 
         jQuery('#fieldVisitDatePicker').on('dp.show',
