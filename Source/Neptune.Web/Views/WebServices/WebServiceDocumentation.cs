@@ -56,10 +56,10 @@ namespace Neptune.Web.Views.WebServices
                 Parameters = new List<string>();
                 parameters.ForEach(x =>
                 {
-                    var paramAttribs = x.GetCustomAttributes(typeof(ParameterDescription), false);
+                    var paramAttribs = x.GetCustomAttributes(typeof(ParameterDescriptionAttribute), false);
                     if (paramAttribs.Length > 0)
                     {
-                        var paramAttrib = (ParameterDescription) paramAttribs[0];
+                        var paramAttrib = (ParameterDescriptionAttribute) paramAttribs[0];
                         Parameters.Add(paramAttrib.Description);
                     }
                     else

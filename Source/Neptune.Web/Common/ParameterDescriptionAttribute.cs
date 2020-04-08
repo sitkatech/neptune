@@ -24,11 +24,11 @@ using Neptune.Web.Models;
 namespace Neptune.Web.Common
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-    public class ParameterDescription : Attribute
+    public class ParameterDescriptionAttribute : Attribute
     {
         public string Description;
 
-        public ParameterDescription(string s)
+        public ParameterDescriptionAttribute(string s)
         {
             Description = s;
         }
