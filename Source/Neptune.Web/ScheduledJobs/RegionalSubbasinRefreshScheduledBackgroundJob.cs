@@ -48,6 +48,7 @@ namespace Neptune.Web.ScheduledJobs
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
             RefreshCentralizedDelineations(dbContext, person);
+            RefreshIntersectionCache(dbContext);
 
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob());
 
@@ -55,6 +56,12 @@ namespace Neptune.Web.ScheduledJobs
             {
                 UpdateLoadGeneratingUnits(dbContext);
             }
+        }
+
+        private static void RefreshIntersectionCache(DatabaseEntities dbContext)
+        {
+            dbContext.Database.CommandTimeout = 30000;
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
         }
 
         private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext)

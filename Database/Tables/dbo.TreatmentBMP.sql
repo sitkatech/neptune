@@ -29,6 +29,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[LSPCBasinID] [int] NULL,
 	[PrecipitationZoneID] [int] NULL,
 	[UpstreamBMPID] [int] NULL,
+	[RegionalSubbasinID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC

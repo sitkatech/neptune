@@ -6,14 +6,16 @@ as
 select
 	Row_number() over(order by tbmp.TreatmentBMPID asc) as PrimaryKey, 
 	tbmp.TreatmentBMPID,
-	RegionalSubbasinID
+	rsb.RegionalSubbasinID
 from dbo.TreatmentBMP tbmp
 	left join dbo.TreatmentBMPType tbmpt
 		on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
 	left join dbo.Delineation d
 		on tbmp.TreatmentBMPID = d.TreatmentBMPID
-	left join dbo.RegionalSubbasin r
-		on tbmp.LocationPoint.STWithin(r.CatchmentGeometry) = 1
+	join  dbo.RegionalSubbasin rsb
+		on tbmp.RegionalSubbasinID = rsb.RegionalSubbasinID
 where
 	tbmpt.TreatmentBMPModelingTypeID is not null
-	and d.DelineationTypeID != 1
+	and (d.DelineationTypeID is null or d.DelineationTypeID = 2)
+	and IsInLSPCBasin = 1
+go
