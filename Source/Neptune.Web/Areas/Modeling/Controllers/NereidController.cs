@@ -142,7 +142,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var executing = deserializeObject.Status == NereidJobStatus.STARTED;
             var resultRoute = deserializeObject.ResultRoute;
 
-            SubgraphResult subgraphResult = new SubgraphResult();
+            SubgraphResult subgraphResult = executing ? new SubgraphResult() : deserializeObject.Data;
 
             while (executing)
             {
@@ -277,7 +277,7 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
     public class NetworkValidatorResult
     {
         [JsonProperty("isvalid")]
-        public bool IsValid { get; set; }
+        public string IsValid { get; set; }
         [JsonProperty("node_cycles")]
         public List<List<string>> NodeCycles { get; set; }
         [JsonProperty("edge_cycles")]
