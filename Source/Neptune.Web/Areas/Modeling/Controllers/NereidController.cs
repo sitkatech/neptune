@@ -188,9 +188,9 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = DateTime.Now;
 
-            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node>{new Node("BMP_39")});
+            var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
-            var serializedGraph = JsonConvert.SerializeObject(subgraphRequestObject);
+            var serializedGraph = JsonConvert.SerializeObject(solutionSequenceRequestObject);
             var stringContent = new StringContent(serializedGraph);
 
             var subgraphCallStartTime = DateTime.Now;
@@ -258,6 +258,26 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
         }
 
         public Graph() { }
+    }
+
+    public class NereidSolutionSequenceRequestObject
+    {
+        [JsonProperty("directed")]
+        public bool Directed { get; set; }
+
+        [JsonProperty("edges")]
+        public List<Edge> Edges { get; set; }
+
+        public NereidSolutionSequenceRequestObject()
+        {
+            Directed = true;
+        }
+
+        public NereidSolutionSequenceRequestObject(Graph graph)
+        {
+            Edges = graph.Edges;
+            Directed = true;
+        }
     }
 
     public class NereidSubgraphRequestObject
