@@ -58,10 +58,17 @@ namespace Neptune.Web.ScheduledJobs
             loadGeneratingUnitRefreshArea =
                 DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
 
-            var lguInputClipFeatureCollection = MakeClipFeatureCollectionFromRefreshArea(loadGeneratingUnitRefreshArea);
-            
-            if (lguInputClipFeatureCollection != null ){
-            
+                var lguInputClipFeatureCollection = new FeatureCollection(lguInputClipFeatures)
+                {
+                    CRS = new NamedCRS("EPSG:2771")
+                };
+                
+                // in case the load-generating units were deleted by an update, add the refresh area itself to the clip collection
+                lguInputClipFeatureCollection.Features.Add(
+                    DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(loadGeneratingUnitRefreshArea
+                        .LoadGeneratingUnitRefreshAreaGeometry));
+
+                //var lguInputClipGeoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
                 var lguInputClipGeoJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(lguInputClipFeatureCollection);
 
                 File.WriteAllText(clipLayerPath, lguInputClipGeoJsonString);
