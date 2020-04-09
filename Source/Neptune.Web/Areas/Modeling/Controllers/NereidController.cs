@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using System;
+using Hangfire;
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -66,10 +67,14 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
+            var buildGraphStartTime = DateTime.Now;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var buildGraphEndTime = DateTime.Now;
 
             var serializedGraph = JsonConvert.SerializeObject(graph);
             var stringContent = new StringContent(serializedGraph);
+
+            var validateCallStartTime = DateTime.Now;
             var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
 
             var deserializeObject = JsonConvert.DeserializeObject<NereidResult<NetworkValidatorResult>>(postResultContentAsStringResult);
@@ -97,7 +102,19 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 }
             }
 
-            return Json(networkValidatorResult, JsonRequestBehavior.AllowGet);
+            var validateCallEndTime = DateTime.Now;
+
+
+            var returnValue = new
+            {
+                NetworkValidatorResult = networkValidatorResult,
+                BuildGraphElapsedTime = (buildGraphEndTime - buildGraphStartTime).Milliseconds,
+                ValidateGraphElapsedTime = (validateCallEndTime - validateCallStartTime).Milliseconds,
+                NodeCount = graph.Nodes.Count,
+                EdgeCount = graph.Edges.Count,
+            };
+
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
     }
 }
