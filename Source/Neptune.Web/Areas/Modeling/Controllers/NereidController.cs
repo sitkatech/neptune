@@ -176,6 +176,66 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
+        
+        // todo: the POCOs for this haven't been written yet
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult SolutionSequence()
+        {
+            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
+
+            var buildGraphStartTime = DateTime.Now;
+            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var buildGraphEndTime = DateTime.Now;
+
+            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node>{new Node("BMP_39")});
+
+            var serializedGraph = JsonConvert.SerializeObject(subgraphRequestObject);
+            var stringContent = new StringContent(serializedGraph);
+
+            var subgraphCallStartTime = DateTime.Now;
+            var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
+
+            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<object>>(postResultContentAsStringResult);
+
+            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
+            var resultRoute = deserializeObject.ResultRoute;
+
+            var subgraphResult = executing ? new object() : deserializeObject.Data;
+            string responseContent = postResultContentAsStringResult;
+            while (executing)
+            {
+                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
+
+                var continuePollingResponse =
+                    JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
+
+                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
+                {
+                    executing = false;
+                    subgraphResult = continuePollingResponse.Data;
+                    responseContent = stringResponse;
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            var subgraphCallEndTime = DateTime.Now;
+
+
+            var returnValue = new
+            {
+                SubgraphResult = responseContent,
+                BuildGraphElapsedTime = (buildGraphEndTime - buildGraphStartTime).Milliseconds,
+                SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
+                NodeCount = graph.Nodes.Count,
+                EdgeCount = graph.Edges.Count,
+            };
+
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
+        }
     }
 }
 
@@ -217,7 +277,7 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
             Nodes = nodes;
         }
     }
-
+    
     public class Edge
     {
         [JsonProperty("source")]
