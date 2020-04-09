@@ -1,5 +1,4 @@
-﻿using System;
-using Hangfire;
+﻿using Hangfire;
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -7,10 +6,14 @@ using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Web.Mvc;
+using Edge = Neptune.Web.Areas.Modeling.NereidModels.Edge;
+using Node = Neptune.Web.Areas.Modeling.NereidModels.Node;
 
 namespace Neptune.Web.Areas.Modeling.Controllers
 {
@@ -63,7 +66,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         [HttpGet]
         [SitkaAdminFeature]
-        public JsonResult ValidateNetwork()
+        public JsonResult Validate()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
@@ -82,7 +85,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var executing = deserializeObject.Status == NereidJobStatus.STARTED;
             var resultRoute = deserializeObject.ResultRoute;
 
-            NetworkValidatorResult networkValidatorResult = new NetworkValidatorResult();
+            NetworkValidatorResult networkValidatorResult = executing ? new NetworkValidatorResult() : deserializeObject.Data;
 
             while (executing)
             {
@@ -104,12 +107,69 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var validateCallEndTime = DateTime.Now;
 
-
             var returnValue = new
             {
                 NetworkValidatorResult = networkValidatorResult,
                 BuildGraphElapsedTime = (buildGraphEndTime - buildGraphStartTime).Milliseconds,
                 ValidateGraphElapsedTime = (validateCallEndTime - validateCallStartTime).Milliseconds,
+                NodeCount = graph.Nodes.Count,
+                EdgeCount = graph.Edges.Count,
+            };
+
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
+        }
+        
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult Subgraph()
+        {
+            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
+
+            var buildGraphStartTime = DateTime.Now;
+            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var buildGraphEndTime = DateTime.Now;
+
+            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node>{new Node("BMP_39")});
+
+            var serializedGraph = JsonConvert.SerializeObject(subgraphRequestObject);
+            var stringContent = new StringContent(serializedGraph);
+
+            var subgraphCallStartTime = DateTime.Now;
+            var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
+
+            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<SubgraphResult>>(postResultContentAsStringResult);
+
+            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
+            var resultRoute = deserializeObject.ResultRoute;
+
+            SubgraphResult subgraphResult = new SubgraphResult();
+
+            while (executing)
+            {
+                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
+
+                var continuePollingResponse =
+                    JsonConvert.DeserializeObject<NereidResult<SubgraphResult>>(stringResponse);
+
+                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
+                {
+                    executing = false;
+                    subgraphResult = continuePollingResponse.Data;
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            var subgraphCallEndTime = DateTime.Now;
+
+
+            var returnValue = new
+            {
+                SubgraphResult = subgraphResult,
+                BuildGraphElapsedTime = (buildGraphEndTime - buildGraphStartTime).Milliseconds,
+                SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
                 NodeCount = graph.Nodes.Count,
                 EdgeCount = graph.Edges.Count,
             };
@@ -138,6 +198,24 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
         }
 
         public Graph() { }
+    }
+
+    public class NereidSubgraphRequestObject
+    {
+        [JsonProperty("graph")]
+        public Graph Graph { get; set; }
+        [JsonProperty("nodes")]
+        public List<Node> Nodes { get; set; }
+
+        public NereidSubgraphRequestObject()
+        {
+        }
+
+        public NereidSubgraphRequestObject(Graph graph, List<Node> nodes)
+        {
+            Graph = graph;
+            Nodes = nodes;
+        }
     }
 
     public class Edge
@@ -181,16 +259,33 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
         [JsonProperty("status")]
         [JsonConverter(typeof(StringEnumConverter))]
         public NereidJobStatus Status { get; set; }
-        [JsonProperty("result")]
-        public T Result { get; set; }
+        [JsonProperty("data")]
+        public T Data { get; set; }
         [JsonProperty("result_route")]
         public string ResultRoute { get; set; }
+    }
+
+    public class SubgraphResult
+    {
+        [JsonProperty("subgraph_nodes")]
+        // these will actually just be returned as lists of Nodes, but that's fine--
+        // --we can attach the appropriate edges later as needed
+        public List<Graph> SubgraphNodes { get; set; }
+
     }
     
     public class NetworkValidatorResult
     {
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonProperty("isvalid")]
+        public bool IsValid { get; set; }
+        [JsonProperty("node_cycles")]
+        public List<List<string>> NodeCycles { get; set; }
+        [JsonProperty("edge_cycles")]
+        public List<List<string>> EdgeCycles { get; set; }
+        [JsonProperty("multiple_out_edges")]
+        public List<List<string>> MultipleOutEdges { get; set; }
+        [JsonProperty("duplicate_edges")]
+        public List<List<string>> DuplicateEdges { get; set; }
     }
 
     public enum NereidJobStatus

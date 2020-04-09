@@ -28,13 +28,13 @@ namespace Neptune.Web.Common
             nodes.AddRange(colocationNodes);
             edges.AddRange(colocationEdges);
 
-            MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
-            nodes.AddRange(wqmpNodes);
-            edges.AddRange(wqmpEdges);
+            //MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
+            //nodes.AddRange(wqmpNodes);
+            //edges.AddRange(wqmpEdges);
 
-            MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
-            nodes.AddRange(centralizedBMPNodes);
-            edges.AddRange(centralizedBMPEdges);
+            //MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
+            //nodes.AddRange(centralizedBMPNodes);
+            //edges.AddRange(centralizedBMPEdges);
 
             var graph = new Graph(true, nodes, edges);
             return graph;
@@ -44,14 +44,14 @@ namespace Neptune.Web.Common
         private static void MakeRSBNodesAndEdges(DatabaseEntities dbContext, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         {
             rsbNodes = dbContext.RegionalSubbasins.Where(x=>x.IsInLSPCBasin == true)
-                .Select(x => new Node { ID = "RSB_" + x.RegionalSubbasinID }).ToList();
+                .Select(x => new Node { ID = "RSB_" + x.OCSurveyCatchmentID }).ToList();
             
             rsbEdges = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true)
                 .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
                     new Edge()
                     {
-                        SourceID = "RSB_" + x.RegionalSubbasinID,
-                        TargetID = "RSB_" + x.RegionalSubbasinID
+                        SourceID = "RSB_" + x.OCSurveyCatchmentID,
+                        TargetID = "RSB_" + x.OCSurveyDownstreamCatchmentID
                     }).ToList();
         }
 
@@ -61,7 +61,7 @@ namespace Neptune.Web.Common
             distributedBMPEdges = dbContext.vNereidTreatmentBMPRegionalSubbasins.Select(x => new Edge()
             {
                 SourceID = "BMP_" + x.TreatmentBMPID,
-                TargetID = "RSB_" + x.RegionalSubbasinID
+                TargetID = "RSB_" + x.OCSurveyCatchmentID
             }).ToList();
         }
 

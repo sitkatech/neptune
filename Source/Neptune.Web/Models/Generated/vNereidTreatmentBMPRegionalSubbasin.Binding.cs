@@ -25,11 +25,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidTreatmentBMPRegionalSubbasin(long? primaryKey, int treatmentBMPID, int regionalSubbasinID) : this()
+        public vNereidTreatmentBMPRegionalSubbasin(long? primaryKey, int treatmentBMPID, int regionalSubbasinID, int oCSurveyCatchmentID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPID = treatmentBMPID;
             this.RegionalSubbasinID = regionalSubbasinID;
+            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Neptune.Web.Models
             this.PrimaryKey = vNereidTreatmentBMPRegionalSubbasin.PrimaryKey;
             this.TreatmentBMPID = vNereidTreatmentBMPRegionalSubbasin.TreatmentBMPID;
             this.RegionalSubbasinID = vNereidTreatmentBMPRegionalSubbasin.RegionalSubbasinID;
+            this.OCSurveyCatchmentID = vNereidTreatmentBMPRegionalSubbasin.OCSurveyCatchmentID;
             CallAfterConstructor(vNereidTreatmentBMPRegionalSubbasin);
         }
 
@@ -48,5 +50,6 @@ namespace Neptune.Web.Models
         public long? PrimaryKey { get; set; }
         public int TreatmentBMPID { get; set; }
         public int RegionalSubbasinID { get; set; }
+        public int OCSurveyCatchmentID { get; set; }
     }
 }
