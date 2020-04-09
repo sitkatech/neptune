@@ -126,6 +126,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vGeoServerWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vNereidBMPColocationConfiguration());
+            modelBuilder.Configurations.Add(new vNereidRegionalSubbasinCentralizedBMPConfiguration());
             modelBuilder.Configurations.Add(new vNereidTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
             modelBuilder.Configurations.Add(new vPowerBICentralizedBMPLoadGeneratingUnitConfiguration());
@@ -229,6 +230,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
+        public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
         public virtual DbSet<vPowerBICentralizedBMPLoadGeneratingUnit> vPowerBICentralizedBMPLoadGeneratingUnits { get; set; }

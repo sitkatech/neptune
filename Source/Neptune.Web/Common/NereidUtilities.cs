@@ -1,4 +1,3 @@
-using System;
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Models;
 using System.Collections.Generic;
@@ -33,6 +32,10 @@ namespace Neptune.Web.Common
             nodes.AddRange(wqmpNodes);
             edges.AddRange(wqmpEdges);
 
+            MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
+            nodes.AddRange(centralizedBMPNodes);
+            edges.AddRange(centralizedBMPEdges);
+
             var graph = new Graph(true, nodes, edges);
             return graph;
         }
@@ -43,7 +46,7 @@ namespace Neptune.Web.Common
             rsbNodes = dbContext.RegionalSubbasins.Where(x=>x.IsInLSPCBasin == true)
                 .Select(x => new Node { ID = "RSB_" + x.RegionalSubbasinID }).ToList();
             
-            rsbEdges = dbContext.RegionalSubbasins
+            rsbEdges = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true)
                 .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
                     new Edge()
                     {
@@ -114,10 +117,56 @@ namespace Neptune.Web.Common
             }).ToList();
         }
 
-        private static void MakeCentralizedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> o,
-            out List<Node> o1)
+        private static void MakeCentralizedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> centralizedBMPEdges,
+            out List<Node> centralizedBMPNodes, List<Edge> existingEdges)
         {
-            throw new System.NotImplementedException();
+            centralizedBMPNodes = new List<Node>();
+            centralizedBMPEdges = new List<Edge>();
+            /*
+             * store current rsb target as ‘og_target’
+All other rsbs with the current rsb as their target must now point to the centralized bmp id (i.e. replace all in target column)
+Current rsb target equals centralized bmp node id
+centralized bmp target = ‘og_target’
+by doing this last, we can ensure that all other nodes in the table correctly have their ‘target’ attribute reset if they should drain to a centralized bmp. Doing this last means we are including distributed facility nodes and wqmp sites in the corrective action of the second step of the centralized node insertion.
+             */
+            foreach (var rsbCentralizedBMPPairing in dbContext.vNereidRegionalSubbasinCentralizedBMPs.ToList())
+            {
+                var newCentralizedBMPNodeID = "BMP_" + rsbCentralizedBMPPairing.TreatmentBMPID;
+                var existingRSBNodeID = "RSB_" + rsbCentralizedBMPPairing.RegionalSubbasinID;
+                
+                
+                // Find Edge with this RSB as its Source. Store its Target as ‘og_target’
+                // If this is null, it means this RSB is at the end of the flow network.
+                // We'll create an edge from RSB to BMP, but we won't create an edge from BMP to anywhere
+                var edgeWithThisNodeAsSource = existingEdges.SingleOrDefault(x=>x.SourceID == existingRSBNodeID);
+                if (edgeWithThisNodeAsSource != null)
+                {
+                    // Current rsb target equals centralized bmp node id
+                    edgeWithThisNodeAsSource.TargetID = newCentralizedBMPNodeID;
+                }
+                else
+                {
+                    centralizedBMPEdges.Add(new Edge
+                        {SourceID = existingRSBNodeID, TargetID = newCentralizedBMPNodeID});
+                }
+
+                var ogTargetID = edgeWithThisNodeAsSource?.TargetID;
+
+                // Find all Edges that point to this RSB. Set their Target to the new Centralized BMP Node
+                foreach (var edge in existingEdges.Where(x=>x.TargetID == existingRSBNodeID))
+                {
+                    edge.TargetID = newCentralizedBMPNodeID;
+                }
+
+
+                // Centralized BMP gets an edge pointing to "og_target"
+                centralizedBMPNodes.Add(new Node{ID = newCentralizedBMPNodeID});
+                // see above
+                if (ogTargetID != null)
+                {
+                    centralizedBMPEdges.Add(new Edge() {SourceID = newCentralizedBMPNodeID, TargetID = ogTargetID});
+                }
+            }
         }
     }
 }
