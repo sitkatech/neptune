@@ -246,6 +246,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var delineation = treatmentBMP.Delineation;
+            var isDelineationDistributed = delineation?.DelineationType == DelineationType.Distributed;
             var geometry = delineation.DelineationGeometry;
 
             if (delineation == null)
@@ -254,10 +255,19 @@ namespace Neptune.Web.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
+            foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
+            {
+                delineationLoadGeneratingUnit.DelineationID = null;
+            }
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null);
+            if (isDelineationDistributed)
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null);
+            }
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
@@ -280,17 +290,28 @@ namespace Neptune.Web.Controllers
         {
             var delineation = delineationPrimaryKey.EntityObject;
             var geometry = delineation.DelineationGeometry;
+            var isDelineationDistributed = delineation.DelineationType == DelineationType.Distributed;
+
+
             if (!ModelState.IsValid)
             {
                 return ViewDeleteDelineation(delineation, viewModel);
             }
-            
+
+            foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
+            {
+                delineationLoadGeneratingUnit.DelineationID = null;
+            }
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
-            ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null);
-
+            if (isDelineationDistributed)
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null);
+            }
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
