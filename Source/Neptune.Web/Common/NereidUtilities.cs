@@ -1,6 +1,7 @@
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Neptune.Web.Common
@@ -28,9 +29,9 @@ namespace Neptune.Web.Common
             nodes.AddRange(colocationNodes);
             edges.AddRange(colocationEdges);
 
-            //MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
-            //nodes.AddRange(wqmpNodes);
-            //edges.AddRange(wqmpEdges);
+            MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
+            nodes.AddRange(wqmpNodes);
+            edges.AddRange(wqmpEdges);
 
             //MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
             //nodes.AddRange(centralizedBMPNodes);
@@ -101,19 +102,19 @@ namespace Neptune.Web.Common
 
         private static void MakeWQMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> wqmpEdges, out List<Node> wqmpNodes)
         {
-            var wqmpRSBPairings = dbContext.LoadGeneratingUnits
+            var wqmpRSBPairings = dbContext.LoadGeneratingUnits.Include(x=>x.RegionalSubbasin)
                 .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null)
-                .Select(x => new {x.WaterQualityManagementPlanID, x.RegionalSubbasinID}).Distinct().ToList();
+                .Select(x => new {x.WaterQualityManagementPlanID, x.RegionalSubbasinID, x.RegionalSubbasin.OCSurveyCatchmentID}).Distinct().ToList();
 
             wqmpNodes = wqmpRSBPairings.Select(x => new Node
             {
-                ID = "WQMP_" + x.WaterQualityManagementPlanID + "_RSB_" + x.RegionalSubbasinID
+                ID = "WQMP_" + x.WaterQualityManagementPlanID + "_RSB_" + x.OCSurveyCatchmentID
             }).ToList();
 
             wqmpEdges = wqmpRSBPairings.Select(x => new Edge
             {
-                SourceID = "WQMP_" + x.WaterQualityManagementPlanID + "_RSB_" + x.RegionalSubbasinID,
-                TargetID = "RSB_" + x.RegionalSubbasinID
+                SourceID = "WQMP_" + x.WaterQualityManagementPlanID + "_RSB_" + x.OCSurveyCatchmentID,
+                TargetID = "RSB_" + x.OCSurveyCatchmentID
             }).ToList();
         }
 
