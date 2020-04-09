@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,9 @@ namespace Neptune.Web.Views.FieldVisit
         [Required]
         [DisplayName("Field Visit Type")]
         public int? FieldVisitTypeID { get; set; }
+        [Required]
+        [DisplayName("Field Visit Date")]
+        public DateTime FieldVisitDate { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder

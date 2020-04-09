@@ -512,6 +512,9 @@ namespace Neptune.Web.Controllers
         public ActionResult Delete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var delineationGeometry = treatmentBMP.Delineation?.DelineationGeometry;
+            var isDelineationDistributed = treatmentBMP.Delineation?.DelineationType == DelineationType.Distributed;
+
             if (!ModelState.IsValid)
             {
                 return ViewDeleteTreatmentBMP(treatmentBMP, viewModel);
@@ -524,9 +527,15 @@ namespace Neptune.Web.Controllers
                 downstreamBMP.UpstreamBMPID = null;
             }
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-
+            
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+            
+            // queue an LGU refresh for the area no longer governed by this BMP
+            if (isDelineationDistributed && delineationGeometry != null)
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null);
+            }
 
             SetMessageForDisplay($"Successfully deleted the Treatment BMP {treatmentBMPTreatmentBMPName}");
             return new ModalDialogFormJsonResult();

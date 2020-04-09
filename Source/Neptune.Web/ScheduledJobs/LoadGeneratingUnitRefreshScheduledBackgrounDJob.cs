@@ -48,26 +48,35 @@ namespace Neptune.Web.ScheduledJobs
 
             var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
 
-            var additionalCommandLineArguments = new List<string> {outputLayerPath};
+            var additionalCommandLineArguments = new List<string> { outputLayerPath };
 
             LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea = null;
 
-            loadGeneratingUnitRefreshArea =
-                DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
+            if (loadGeneratingUnitRefreshAreaID != null)
+            {
+                loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
+                var lguInputClipFeatures = DbContext.LoadGeneratingUnits
+                    .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
+                        .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x => DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
 
-            var lguInputClipFeatureCollection = MakeClipFeatureCollectionFromRefreshArea(loadGeneratingUnitRefreshArea);
-            
-            if (lguInputClipFeatureCollection != null ){
-            
+                var lguInputClipFeatureCollection = new FeatureCollection(lguInputClipFeatures)
+                {
+                    CRS = new NamedCRS("EPSG:2771")
+                };
+
+                // in case the load-generating units were deleted by an update, add the refresh area itself to the clip collection
+                lguInputClipFeatureCollection.Features.Add(
+                    DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(loadGeneratingUnitRefreshArea
+                        .LoadGeneratingUnitRefreshAreaGeometry));
+
+                //var lguInputClipGeoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
                 var lguInputClipGeoJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(lguInputClipFeatureCollection);
 
                 File.WriteAllText(clipLayerPath, lguInputClipGeoJsonString);
-
-                additionalCommandLineArguments.AddRange( new List<string>{
+                additionalCommandLineArguments.AddRange(new List<string>{
                     "--clip", clipLayerPath
                 });
             }
-
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
 
@@ -90,7 +99,7 @@ namespace Neptune.Web.ScheduledJobs
                     DbContext.Database.ExecuteSqlCommand(
                         $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
                 }
-                
+
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForLGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
 
@@ -140,7 +149,7 @@ namespace Neptune.Web.ScheduledJobs
         }
     }
 
-    
+
 }
 public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
 {
