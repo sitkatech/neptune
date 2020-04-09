@@ -6,7 +6,9 @@ As
 Select
 	rsb.RegionalSubbasinID as PrimaryKey,
 	rsb.RegionalSubbasinID,
-	bmp.TreatmentBMPID
+	rsb.OCSurveyCatchmentID,
+	bmp.TreatmentBMPID,
+	ROW_NUMBER() over (partition by rsb.RegionalSubbasinID order by d.DelineationID) as RowNumber
 from dbo.Delineation d
 	join dbo.TreatmentBMP bmp
 		on d.TreatmentBMPID = bmp.TreatmentBMPID

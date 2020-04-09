@@ -33,9 +33,9 @@ namespace Neptune.Web.Common
             nodes.AddRange(wqmpNodes);
             edges.AddRange(wqmpEdges);
 
-            //MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
-            //nodes.AddRange(centralizedBMPNodes);
-            //edges.AddRange(centralizedBMPEdges);
+            MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
+            nodes.AddRange(centralizedBMPNodes);
+            edges.AddRange(centralizedBMPEdges);
 
             var graph = new Graph(true, nodes, edges);
             return graph;
@@ -130,16 +130,22 @@ Current rsb target equals centralized bmp node id
 centralized bmp target = ‘og_target’
 by doing this last, we can ensure that all other nodes in the table correctly have their ‘target’ attribute reset if they should drain to a centralized bmp. Doing this last means we are including distributed facility nodes and wqmp sites in the corrective action of the second step of the centralized node insertion.
              */
-            foreach (var rsbCentralizedBMPPairing in dbContext.vNereidRegionalSubbasinCentralizedBMPs.ToList())
+            // todo: We're selecting by RowNumber == 1 so the network isn't invalid when there are
+            // multiple centralized delineations per one regional subbasin. In future, we'll need
+            // to find something better to do about that case than ignore the additionals.
+
+            foreach (var rsbCentralizedBMPPairing in dbContext.vNereidRegionalSubbasinCentralizedBMPs.Where(x=>x.RowNumber == 1).ToList())
             {
                 var newCentralizedBMPNodeID = "BMP_" + rsbCentralizedBMPPairing.TreatmentBMPID;
-                var existingRSBNodeID = "RSB_" + rsbCentralizedBMPPairing.RegionalSubbasinID;
+                var existingRSBNodeID = "RSB_" + rsbCentralizedBMPPairing.OCSurveyCatchmentID;
                 
                 
                 // Find Edge with this RSB as its Source. Store its Target as ‘og_target’
                 // If this is null, it means this RSB is at the end of the flow network.
                 // We'll create an edge from RSB to BMP, but we won't create an edge from BMP to anywhere
                 var edgeWithThisNodeAsSource = existingEdges.SingleOrDefault(x=>x.SourceID == existingRSBNodeID);
+                var ogTargetID = edgeWithThisNodeAsSource?.TargetID;
+                
                 if (edgeWithThisNodeAsSource != null)
                 {
                     // Current rsb target equals centralized bmp node id
@@ -150,8 +156,6 @@ by doing this last, we can ensure that all other nodes in the table correctly ha
                     centralizedBMPEdges.Add(new Edge
                         {SourceID = existingRSBNodeID, TargetID = newCentralizedBMPNodeID});
                 }
-
-                var ogTargetID = edgeWithThisNodeAsSource?.TargetID;
 
                 // Find all Edges that point to this RSB. Set their Target to the new Centralized BMP Node
                 foreach (var edge in existingEdges.Where(x=>x.TargetID == existingRSBNodeID))
