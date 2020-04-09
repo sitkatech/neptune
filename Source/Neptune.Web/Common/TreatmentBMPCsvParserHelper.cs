@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web.WebPages;
 using LtInfo.Common;
 
@@ -38,11 +39,13 @@ namespace Neptune.Web.Common
             customAttributes = new List<CustomAttribute>();
             customAttributeValues = new List<CustomAttributeValue>();
             var treatmentBMPsToUpload = new List<TreatmentBMP>();
+            var modelingAttributesToUpload = new List<TreatmentBMPModelingAttribute>();
             var fieldsDict = new Dictionary<string, int>();
 
             var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "Sizing Basis", "Trash Capture Status", "Owner" };
             var optionalFields = new List<string> {"Year Built or Installed","Asset ID in System of Record", "Required Lifespan of Installation",
                 "Allowable End Date of Installation (if applicable)", "Required Field Visits Per Year", "Required Post-Storm Field Visits Per Year","Notes"};
+            var availableModelingAttributes = GetAvailableModelingAttributes(bmpType);
             var customAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeCustomAttributeTypes
                 .Where(x => x.TreatmentBMPTypeID == bmpType).Select(x => x.CustomAttributeType);
 
@@ -50,7 +53,7 @@ namespace Neptune.Web.Common
             {
                 var header = parser.ReadFields();
                 var customAttributeNames = customAttributeTypes.Select(x => x.CustomAttributeTypeName).ToList();
-                fieldsDict = ValidateHeader(header, requiredFields, optionalFields, customAttributeNames, bmpType, out errorList);
+                fieldsDict = ValidateHeader(header, requiredFields, optionalFields, availableModelingAttributes, customAttributeNames, bmpType, out errorList);
                 if (errorList.Any())
                 {
                     return null;
@@ -78,6 +81,8 @@ namespace Neptune.Web.Common
                     continue;
                 }
                 treatmentBMPsToUpload.Add(currentBMP);
+                errorList.AddRange(currentErrorList);
+                modelingAttributesToUpload.Add(ParseModelingAttributes(currentBMP, currentBMP, fieldsDict, rowCount, out currentErrorList));
                 errorList.AddRange(currentErrorList);
                 customAttributes.AddRange(ParseCustomAttributes(currentBMP, currentRow, fieldsDict, customAttributeTypes.ToList(), rowCount, out currentErrorList, out currentCustomAttributeValues));
                 customAttributeValues.AddRange(currentCustomAttributeValues);
@@ -431,9 +436,41 @@ namespace Neptune.Web.Common
             return customAttributes;
         }
 
+        private static TreatmentBMPModelingAttribute ParseModelingAttributes(TreatmentBMP treatmentBMP, string[] currentRow, Dictionary<string, int> fieldsDict, List<string> availableModelingAttributesForType, int rowCount, out List<string> currentErrorList)
+        {
+            currentErrorList = new List<string>();
+            var newModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
+            foreach (var attribute in availableModelingAttributesForType)
+            {
+                if (fieldsDict.ContainsKey(attribute))
+                {
+                    var modelingProperty = attribute == "Drawdown Time For Water Quality Detention Volume"
+                        ? "DrawdownTimeForWQDetentionVolume"
+                        : attribute.Replace(" ", "");
+                    var value = currentRow[fieldsDict[attribute]];
+                    var propertyToChange = newModelingAttribute.GetType().GetProperty(modelingProperty);
+                    var propType = propertyToChange.PropertyType;
+                    if (propType == typeof(int) && !int.TryParse(value, out var valueInt))
+                    {
+                        currentErrorList.Add($"{attribute} field can not be converted to Integer at row: {rowCount}");
+                    }
+                    else if (propType == typeof(decimal) && !decimal.TryParse(value, out var valueDecimal))
+                    {
+                        currentErrorList.Add($"{attribute} field can not be converted to Decimal at row: {rowCount}");
+                    }
+                    //Need one for months and hydrological soil group
+                    else
+                    {
+                        propertyToChange.SetValue(newModelingAttribute, value);
+                    }
+                }
+            }
+            return newModelingAttribute;
+        }
+
 
         private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields,
-            List<string> optionalFields, List<string> customAttributes, int bmpType, out List<string> errorList)
+            List<string> optionalFields, List<string> availableModelingAttributes, List<string> customAttributes, int bmpType, out List<string> errorList)
         {
             errorList = new List<string>();
             var fieldsDict = new Dictionary<string, int>();
@@ -450,7 +487,7 @@ namespace Neptune.Web.Common
 
             List<string> headers = fieldsDict.Keys.ToList();
             IEnumerable<string> requiredFieldDifference = requiredFields.Except(headers);
-            IEnumerable<string> optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields);
+            IEnumerable<string> optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields).Except(availableModelingAttributes);
             IEnumerable<string> customAttributesDifference = optionalFieldDifference.ToList().Except(customAttributes);
 
             if (requiredFieldDifference.Any())
@@ -465,6 +502,115 @@ namespace Neptune.Web.Common
             }
 
             return fieldsDict;
+        }
+
+        public static List<string> GetAvailableModelingAttributes(int bmpType)
+        {
+            List<string> returnList = new List<string>();
+            TreatmentBMPModelingTypeEnum modelingType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType.ToEnum;
+            switch (modelingType)
+                {
+                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                        returnList.AddRange(new List<string>()
+                        {
+                            "Total Effective BMP Volume", 
+                            "Storage Volume Below Lowest Outlet Elevation", 
+                            "Media Bed Footprint",
+                            "Design Media Filtration Rate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
+                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                        returnList.AddRange(new List<string>()
+                        {
+                            "Total Effective BMP Volume",
+                            "Infiltration Surface Area",
+                            "Underlying Infiltration Rate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+                    case TreatmentBMPModelingTypeEnum.SandFilters:
+                        returnList.AddRange(new List<string>()
+                        {
+                            "Total Effective BMP Volume",
+                            "Media Bed Footprint",
+                            "Design Media Filtration Rate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
+                        returnList.AddRange(new List<string>()
+                        {
+                            "Total Effective BMP Volume",
+                            "Winter Harvested Water Demand",
+                            "Summer Harvested Water Demand"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
+                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
+                        returnList.AddRange(new List<string>()
+                        {
+                            "Permanent Pool or Wetland Volume",
+                            "Water Quality Detention Volume",
+                            "Drawdown Time for Water Quality Detention Volume",
+                            "Winter Harvested Water Demand",
+                            "Summer Harvested Water Demand"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                        returnList.AddRange(new List<string>
+                        {
+                            "Total Effective BMP Volume",
+                            "Storage Volume Below Lowest Outlet Elevation",
+                            "Effective Footprint",
+                            "Drawdown Time For Water Quality Detention Volume"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                        returnList.AddRange(new List<string>
+                        {
+                            "Design Dry Weather Treatment Capacity",
+                            "Average Treatment Flowrate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.Drywell:
+                        returnList.AddRange(new List<string>
+                        {
+                            "Total Effective Drywell BMP Volume",
+                            "Infiltration Discharge Rate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                        returnList.AddRange(new List<string>
+                        {
+                            "Treatment Rate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                        returnList.AddRange(new List<string>
+                        {
+                            "Design Low Flow Diversion Capacity",
+                            "Average Diverted Flowrate"
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                        returnList.AddRange(new List<string>
+                        {
+                            "Treatment Rate",
+                            "Wetted Footprint",
+                            "Effective Retention Depth"
+                        });
+                        break;
+                }
+
+            return returnList;
         }
     }
 
