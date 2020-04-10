@@ -459,7 +459,7 @@ namespace Neptune.Web.Common
                         {
                             if (!monthsToInt.ContainsKey(month))
                             {
-                                currentErrorList.Add($"{month} is an invalid month entry. Please check the month entries at row: {rowCount}." +
+                                currentErrorList.Add($"{month} is an invalid entry for {attribute}. Please check the month entries, ensuring that each month is separated by a space, at row: {rowCount}." +
                                                      $"Acceptable values are: {string.Join(", ", monthsToInt.Select(x => x.Key))}");
                             }
                             else
@@ -562,6 +562,12 @@ namespace Neptune.Web.Common
                     
                 }
             }
+
+            if (newModelingAttribute.RoutingConfigurationID == RoutingConfiguration.Offline.RoutingConfigurationID &&
+                newModelingAttribute.DiversionRate == null)
+            {
+                currentErrorList.Add($"The modeling attribute 'Diversion Rate' is required when the Routing Configuration is set to 'Offline'. Please adjust entry at row: {rowCount}");
+            }
             return newModelingAttribute;
         }
 
@@ -643,8 +649,6 @@ namespace Neptune.Web.Common
         {
             List<string> returnList = new List<string>()
             {
-                FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
-                FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                 FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName
             };
             TreatmentBMPModelingTypeEnum modelingType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType.ToEnum;
@@ -653,6 +657,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                         returnList.AddRange(new List<string>()
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName, 
                             FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName, 
                             FieldDefinition.MediaBedFootprint.FieldDefinitionDisplayName,
@@ -667,6 +673,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
                         returnList.AddRange(new List<string>()
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
                             FieldDefinition.InfiltrationSurfaceArea.FieldDefinitionDisplayName,
                             FieldDefinition.UnderlyingInfiltrationRate.FieldDefinitionDisplayName
@@ -676,6 +684,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.SandFilters:
                         returnList.AddRange(new List<string>()
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
                             FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
                             FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName
@@ -684,6 +694,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                         returnList.AddRange(new List<string>()
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
                             FieldDefinition.WinterHarvestedWaterDemand.FieldDefinitionDisplayName,
                             FieldDefinition.SummerHarvestedWaterDemand.FieldDefinitionDisplayName
@@ -693,6 +705,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                         returnList.AddRange(new List<string>()
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.PermanentPoolOrWetlandVolume.FieldDefinitionDisplayName,
                             FieldDefinition.DesignResidenceTimeForPermanentPool.FieldDefinitionDisplayName,
                             FieldDefinition.WaterQualityDetentionVolume.FieldDefinitionDisplayName,
@@ -706,6 +720,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
                         returnList.AddRange(new List<string>
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
                             FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
                             FieldDefinition.EffectiveFootprint.FieldDefinitionDisplayName,
@@ -724,6 +740,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.Drywell:
                         returnList.AddRange(new List<string>
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveDrywellBMPVolume.FieldDefinitionDisplayName,
                             FieldDefinition.InfiltrationDischargeRate.FieldDefinitionDisplayName
                         });
@@ -748,6 +766,8 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.VegetatedSwale:
                         returnList.AddRange(new List<string>
                         {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TreatmentRate.FieldDefinitionDisplayName,
                             FieldDefinition.WettedFootprint.FieldDefinitionDisplayName,
                             FieldDefinition.EffectiveRetentionDepth.FieldDefinitionDisplayName

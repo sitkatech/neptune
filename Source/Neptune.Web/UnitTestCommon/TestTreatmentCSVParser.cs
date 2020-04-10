@@ -1073,7 +1073,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
                 List<CustomAttributeValue> customAttributeValues;
                 List<TreatmentBMPModelingAttribute> modelingAttributes;
                 List<TreatmentBMPOperationMonth> operationMonths;
-                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
                 Assert.That(errorList.Any(x => !x.Contains("Diversion Rate")), Is.True);
                 Assert.That(modelingAttributes[0].DiversionRate, Is.EqualTo(1.0));
@@ -1958,6 +1958,101 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
                 Assert.That(errorList.Any(x => x.Contains("Routing Configuration")), Is.True);
+            }
+
+            [Test]
+            public void TestBMPModelingAttributeMonthsOfOperationJanGood()
+            {
+                var csv =
+                    @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
+Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Jan";
+                List<string> errorList;
+                List<CustomAttribute> customAttributes;
+                List<CustomAttributeValue> customAttributeValues;
+                List<TreatmentBMPModelingAttribute> modelingAttributes;
+                List<TreatmentBMPOperationMonth> operationMonths;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
+                Assert.That(errorList.Any(x => !x.Contains("Months of Operation")), Is.True);
+                Assert.That(operationMonths[0].OperationMonth, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void TestBMPModelingAttributeMonthsOfOperationJanSpaceFebGood()
+            {
+                var csv =
+                    @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
+Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Jan Feb";
+                List<string> errorList;
+                List<CustomAttribute> customAttributes;
+                List<CustomAttributeValue> customAttributeValues;
+                List<TreatmentBMPModelingAttribute> modelingAttributes;
+                List<TreatmentBMPOperationMonth> operationMonths;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
+                Assert.That(errorList.Any(x => !x.Contains("Months of Operation")), Is.True);
+                Assert.That(operationMonths[0].OperationMonth, Is.EqualTo(1));
+                Assert.That(operationMonths[1].OperationMonth, Is.EqualTo(2));
+            }
+
+            [Test]
+            public void TestBMPModelingAttributeMonthsOfOperationJanFebMarAprMayJunJulAugSepOctNovDecWithSpacesGood()
+            {
+                var csv =
+                    @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
+Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec";
+                List<string> errorList;
+                List<CustomAttribute> customAttributes;
+                List<CustomAttributeValue> customAttributeValues;
+                List<TreatmentBMPModelingAttribute> modelingAttributes;
+                List<TreatmentBMPOperationMonth> operationMonths;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
+                Assert.That(errorList.Any(x => !x.Contains("Months of Operation")), Is.True);
+                Assert.That(operationMonths[0].OperationMonth, Is.EqualTo(1));
+                Assert.That(operationMonths[1].OperationMonth, Is.EqualTo(2));
+                Assert.That(operationMonths[2].OperationMonth, Is.EqualTo(3));
+                Assert.That(operationMonths[3].OperationMonth, Is.EqualTo(4));
+                Assert.That(operationMonths[4].OperationMonth, Is.EqualTo(5));
+                Assert.That(operationMonths[5].OperationMonth, Is.EqualTo(6));
+                Assert.That(operationMonths[6].OperationMonth, Is.EqualTo(7));
+                Assert.That(operationMonths[7].OperationMonth, Is.EqualTo(8));
+                Assert.That(operationMonths[8].OperationMonth, Is.EqualTo(9));
+                Assert.That(operationMonths[9].OperationMonth, Is.EqualTo(10));
+                Assert.That(operationMonths[10].OperationMonth, Is.EqualTo(11));
+                Assert.That(operationMonths[11].OperationMonth, Is.EqualTo(12));
+            }
+
+            [Test]
+            public void TestBMPModelingAttributeMonthsOfOperationJanFebNoSpacesBad()
+            {
+                var csv =
+                    @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
+Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,JanFeb";
+                List<string> errorList;
+                List<CustomAttribute> customAttributes;
+                List<CustomAttributeValue> customAttributeValues;
+                List<TreatmentBMPModelingAttribute> modelingAttributes;
+                List<TreatmentBMPOperationMonth> operationMonths;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
+                Assert.That(errorList.Any(x => x.Contains("Months of Operation")), Is.True);
+            }
+
+            [Test]
+            public void TestBMPModelingAttributeMonthsOfOperationBad()
+            {
+                var csv =
+                    @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
+Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+                List<string> errorList;
+                List<CustomAttribute> customAttributes;
+                List<CustomAttributeValue> customAttributeValues;
+                List<TreatmentBMPModelingAttribute> modelingAttributes;
+                List<TreatmentBMPOperationMonth> operationMonths;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out operationMonths);
+                Assert.That(errorList.Any(x => x.Contains("Months of Operation")), Is.True);
             }
         }
     }
