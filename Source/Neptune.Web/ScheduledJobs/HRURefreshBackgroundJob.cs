@@ -1,6 +1,7 @@
 ﻿using System;
 using Neptune.Web.Common;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using MoreLinq;
 using Neptune.Web.Models;
@@ -30,6 +31,8 @@ namespace Neptune.Web.ScheduledJobs
 
         private void HRURefreshImpl()
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
             
             // collect the load generating units that require updates,
@@ -59,6 +62,16 @@ namespace Neptune.Web.ScheduledJobs
                         // this batch failed, but we don't want to give up the whole job.
                         Logger.Warn(ex.Message);
                     }
+
+                    if (stopwatch.Elapsed.Minutes > 20)
+                    {
+                        break;
+                    }
+                }
+
+                if (stopwatch.Elapsed.Minutes > 20)
+                {
+                    break;
                 }
             }
         }
