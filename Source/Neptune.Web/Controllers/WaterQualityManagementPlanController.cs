@@ -347,7 +347,11 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
 
             var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
-            ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary);
+
+            if (!(oldBoundary == null && newBoundary == null))
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary);
+            }
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }
