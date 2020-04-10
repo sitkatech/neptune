@@ -16,7 +16,11 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceDocumentationAttribute("BMP Modeling Parameterization Summary")]
+        [WebServiceNameAndDescriptionAttribute("Treatment Facility Parameterization",
+                                            "This table can be joined to the ‘Treatment Facility Attributes’ table to indicate " +
+                                            "if a facility is fully parameterized and ready to be computed in the Modeling Module. The BMP " +
+                                            "Inventory and Modeling Module in the OCST website provide new indicators and alerts to help determine " +
+                                            "which attributes are missing for a specific facility.")]
         public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
@@ -39,7 +43,17 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceDocumentationAttribute("BMP Attributes")]
+        [WebServiceNameAndDescriptionAttribute("Treatment Facility Attributes, Centralized BMP Attributes",
+                                "This table contains the Modeling Attributes that have been entered for each Facility. Each row is a single facility and" +
+                                          " its physical attributes. Null values for a modeling parameter in this table does not necessarily indicate that the BMP is missing data. " +
+                                          "This is because there are usually only a few parameters required for each bmp type, and because there are many types of BMPs in this table. " +
+                                          "See the ‘Treatment Facility Parameterization’ table for the indicator that the BMP is missing data." + 
+                                          "<br/><br/>" +
+                                          "This table also includes additional information to help locate and filter the facilities such as lat / lon, watershed, and jurisdiction." +
+                                          "<br/><br/>" +
+                                          "The second table, ‘Centralized BMP Attrs’ is identical to the first, except it’s filtered to just the centralized facility delineation types. This " +
+                                          "is to facilitate reporting calculations related to facility tributary area for which we make different calculations if the facility is centralized or " +
+                                          "distributed.")]
         public JsonResult TreatmentBMPAttributeSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBITreatmentBMPs.Select(x => new TreatmentBMPForPowerBI
@@ -95,7 +109,14 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceDocumentationAttribute("WQMP Summary")]
+        [WebServiceNameAndDescriptionAttribute("WQMP Attributes",
+                                                "This table includes summary attributes of WQMP sites helpful for filtering and " +
+                                                "reporting, and each row is a single WQMP project site. Additional summary attributes may " +
+                                                "be added to this table in the future.  In its current form (as of March, 2020) this table " +
+                                                "does not yet support identification of treatment achieved via entries to the Other Structural " +
+                                                "Facility table available in the OCST interface, but standalone BMPs in the ‘Treatment Facility" +
+                                                " Attributes’ do store an association to a WQMP if such an association exists.  Future reporting " +
+                                                "capabilities are planned to include treatment accounted for in the Other Structural Facility interface.")]
         public JsonResult WaterQualityManagementPlanAttributeSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             // this to-list ought to be okay
@@ -123,7 +144,18 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceDocumentationAttribute("Land Surface Attributes")]
+        [WebServiceNameAndDescriptionAttribute("Land Use",
+                                                "This table is the result of a spatial overlay analysis (union) between the Regional " +
+                                                "Subbasins managed by OC Survey, WQMP project boundaries entered into OCST, and distributed " +
+                                                "delineations also entered into OCST. The result is a **non-overlapping** account of how the " +
+                                                "land surface is classified in the OCST system. These OCST classes are further subdivided by additional " +
+                                                "spatial analysis (provided by a web service build by OC Survey) to identify hydrologic soil group (HSG), " +
+                                                "slope category (0, 5, 10+), land use, and to compute a % imperviousness for each resulting ‘sliver’ of the " +
+                                                "landscape. This generates a very tall table in which each row is a sliver that identifies precisely how each " +
+                                                "sliver is treated, and how each sliver might assert influence on the hydrology of the system. " + 
+                                                "<br/>" +
+                                                "The PowerBI file uses the ID columns(TreatmentBMPID, WaterQualityManagementPlanID) to group these slivers into pivot " +
+                                                "tables to report total area treated, land use composition and % impervious.")]
         public JsonResult LandUseStatistics([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBILandUseStatistics.ToList();
@@ -139,7 +171,15 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceDocumentationAttribute("Centralized BMP mapping to Land Use")]
+        [WebServiceNameAndDescriptionAttribute("Centralized BMP Land Use Relationship",
+                                                "This table is a utility table to enable upstream summary reporting of " +
+                                                "centralized facilities. Centralized facilities are a special case, since the area " +
+                                                "they treat may also be treated by a distributed facility, or a WQMP, or even by " +
+                                                "another centralized BMP upstream. This table is the result of visiting each centralized " +
+                                                "facility and checking which “slivers” from the ‘Land Use’ table are upstream of the " +
+                                                "current centralized facility. This relationship allows the report to accurately aggregate " +
+                                                "the area treated by each centralized facility individually. This relationship drives the " +
+                                                "upstream area calculations on the Centralized Facilities dashboard of the PowerBI file (dated March, 2020).")]
         public JsonResult CentralizedBMPLoadGeneratingUnitMapping([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = HttpRequestStorage.DatabaseEntities.vPowerBICentralizedBMPLoadGeneratingUnits.Select(x => new

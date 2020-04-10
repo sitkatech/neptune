@@ -55,7 +55,10 @@ namespace Neptune.Web.Models
             "OnlandVisualTrashAssessmentObservationPhotoStaging",
             "DelineationStaging",
             "RegionalSubbasin",
-            "RegionalSubbasinStaging"
+            "RegionalSubbasinStaging",
+            "HRUCharacteristic",
+            "DelineationOverlap",
+            "LoadGeneratingUnit"
         };
 
         public string GetAuditDescriptionDisplay()
