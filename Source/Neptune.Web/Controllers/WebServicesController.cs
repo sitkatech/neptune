@@ -20,7 +20,7 @@ namespace Neptune.Web.Controllers
         [JurisdictionEditFeature]
         public ViewResult Index()
         {
-            var allMethods = FindAttributedMethods(typeof(PowerBIController), typeof(WebServiceDocumentationAttribute));
+            var allMethods = FindAttributedMethods(typeof(PowerBIController), typeof(WebServiceNameAndDescriptionAttribute));
             var serviceDocumentationList = allMethods.Select(c => new WebServiceDocumentation(c)).OrderBy(c => c.Name).ToList();
             var webServiceAccessToken = new WebServiceToken(CurrentPerson.WebServiceAccessToken.ToString());
             var viewData = new IndexViewData(CurrentPerson, webServiceAccessToken, serviceDocumentationList);

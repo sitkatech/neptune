@@ -17,7 +17,8 @@ namespace Neptune.Web.Views.WebServices
         public string Name;
         private readonly string Url;
         private readonly List<string> Parameters;
-        public string Documentation;
+        public string Description;
+        public string DescriptionHeader;
 
         public string GetReplacedUrl(WebServiceToken userToken)
         {
@@ -42,12 +43,13 @@ namespace Neptune.Web.Views.WebServices
 
         public WebServiceDocumentation(MethodInfo methodInfo)
         {
-            var attribs = methodInfo.GetCustomAttributes(typeof(WebServiceDocumentationAttribute), false);
+            var attribs = methodInfo.GetCustomAttributes(typeof(WebServiceNameAndDescriptionAttribute), false);
             Check.Require(attribs.Length == 1, "Expected 1 and only 1 WebServiceDocumentation attribute on found Web Methods.");
 
-            var attrib = (WebServiceDocumentationAttribute)attribs[0];
+            var attrib = (WebServiceNameAndDescriptionAttribute)attribs[0];
             
-            Documentation = attrib.Documentation;
+            Description = attrib.Description;
+            DescriptionHeader = attrib.Name;
             Name = methodInfo.Name;
 
             var parameters = methodInfo.GetParameters();
