@@ -443,6 +443,8 @@
     <Compile Include="Models\Generated\vMostRecentTreatmentBMPAssessmentConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidBMPColocation.Binding.cs" />
     <Compile Include="Models\Generated\vNereidBMPColocationConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidLoadingInput.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidLoadingInputConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidRegionalSubbasinCentralizedBMP.Binding.cs" />
     <Compile Include="Models\Generated\vNereidRegionalSubbasinCentralizedBMPConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidTreatmentBMPRegionalSubbasin.Binding.cs" />

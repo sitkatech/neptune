@@ -2,6 +2,7 @@
 using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
@@ -52,7 +53,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 {
                     new Node("A"),
                     new Node("B")
-                },new List<Edge>
+                }, new List<Edge>
                 {
                     new Edge ("A", "B")
                 }
@@ -118,7 +119,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult Subgraph()
@@ -129,7 +130,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = DateTime.Now;
 
-            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node>{new Node("BMP_39")});
+            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
 
             var serializedGraph = JsonConvert.SerializeObject(subgraphRequestObject);
             var stringContent = new StringContent(serializedGraph);
@@ -176,7 +177,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
-        
+
         // todo: the POCOs for this haven't been written yet
         [HttpGet]
         [SitkaAdminFeature]
@@ -236,11 +237,107 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult Loading()
+        {
+            // todo: replace state/region with ca/soc
+            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
+
+            var regionalSubbasinsForTest = new List<int> { 4283, 8029, 4153 };
+
+            var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
+
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs);
+            var serializedRequest = JsonConvert.SerializeObject(landSurfaceLoadingRequest);
+            var requestStringContent = new StringContent(serializedRequest);
+
+            var subgraphCallStartTime = DateTime.Now;
+            var postResultContentAsStringResult = HttpClient.PostAsync(landSurfaceLoadingUrl, requestStringContent).Result.Content.ReadAsStringAsync().Result;
+
+            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<object>>(postResultContentAsStringResult);
+
+            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
+            var resultRoute = deserializeObject.ResultRoute;
+
+            string responseContent = postResultContentAsStringResult;
+            while (executing)
+            {
+                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
+
+                var continuePollingResponse =
+                    JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
+
+                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
+                {
+                    executing = false;
+                    responseContent = stringResponse;
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            var subgraphCallEndTime = DateTime.Now;
+
+
+            var returnValue = new
+            {
+                SubgraphResult = responseContent,
+                SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
+            };
+
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
+        }
     }
 }
 
 namespace Neptune.Web.Areas.Modeling.NereidModels
 {
+    public class LandSurfaceLoadingRequest
+    {
+        [JsonProperty("land_surfaces")]
+        public List<LandSurface> LandSurfaces { get; set; }
+
+        public LandSurfaceLoadingRequest()
+        {
+
+        }
+
+        public LandSurfaceLoadingRequest(List<vNereidLoadingInput> vNereidLoadingInputs)
+        {
+            LandSurfaces = vNereidLoadingInputs.Select(x => new LandSurface(x)).ToList();
+        }
+    }
+
+    public class LandSurface
+    {
+        [JsonProperty("node_id")]
+        public string NodeID { get; set; }
+        [JsonProperty("surface_key")]
+        public string SurfaceKey { get; set; }
+        [JsonProperty("area_acres")]
+        public double Area { get; set; }
+        [JsonProperty("imp_area_acres")]
+        public double ImperviousArea { get; set; }
+
+        public LandSurface()
+        {
+
+        }
+
+        public LandSurface(vNereidLoadingInput vNereidLoadingInput)
+        {
+            NodeID = vNereidLoadingInput.PrimaryKey.ToString();
+            SurfaceKey =
+                $"{vNereidLoadingInput.LSPCBasinKey}-{vNereidLoadingInput.HRUCharacteristicLandUseCodeName}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
+            Area = vNereidLoadingInput.Area;
+            ImperviousArea = vNereidLoadingInput.ImperviousAcres;
+        }
+    }
+
     public class Graph
     {
         [JsonProperty("directed")]
@@ -297,7 +394,7 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
             Nodes = nodes;
         }
     }
-    
+
     public class Edge
     {
         [JsonProperty("source")]
@@ -353,7 +450,7 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
         public List<Graph> SubgraphNodes { get; set; }
 
     }
-    
+
     public class NetworkValidatorResult
     {
         [JsonProperty("isvalid")]

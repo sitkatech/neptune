@@ -41,7 +41,7 @@ namespace Neptune.Web.ScheduledJobs
 
             var loadGeneratingUnitsToUpdate = DbContext.LoadGeneratingUnits.Where(x => !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null)).ToList();
 
-            var loadGeneratingUnitsToUpdateGroupedByLSPCBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.LSPCBasin);
+            var loadGeneratingUnitsToUpdateGroupedByLSPCBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.RegionalSubbasin);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByLSPCBasin)
             {
