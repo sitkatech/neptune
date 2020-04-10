@@ -15,32 +15,32 @@ namespace Neptune.Web.Common
 {
     public static class TreatmentBMPCsvParserHelper
     {
-        public static List<TreatmentBMP> CSVUpload(Stream fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
+        public static List<TreatmentBMP> CSVUpload(Stream fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
             var StreamReader = new StreamReader(fileStream);
             var parser = new TextFieldParser(StreamReader);
 
 
-            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues, out treatmentBMPOperationMonths);
+            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out treatmentBMPOperationMonths);
         }
 
-        public static List<TreatmentBMP> CSVUpload(string fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
+        public static List<TreatmentBMP> CSVUpload(string fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
             var stringReader = new StringReader(fileStream);
             var parser = new TextFieldParser(stringReader);
 
-            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues, out treatmentBMPOperationMonths);
+            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out treatmentBMPOperationMonths);
         }
 
-        public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
+        public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
             parser.SetDelimiters(",");
             errorList = new List<string>();
             customAttributes = new List<CustomAttribute>();
             customAttributeValues = new List<CustomAttributeValue>();
             treatmentBMPOperationMonths = new List<TreatmentBMPOperationMonth>();
+            modelingAttributes = new List<TreatmentBMPModelingAttribute>();
             var treatmentBMPsToUpload = new List<TreatmentBMP>();
-            var modelingAttributesToUpload = new List<TreatmentBMPModelingAttribute>();
             var fieldsDict = new Dictionary<string, int>();
 
             var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "Sizing Basis", "Trash Capture Status", "Owner" };
@@ -84,7 +84,7 @@ namespace Neptune.Web.Common
                 }
                 treatmentBMPsToUpload.Add(currentBMP);
                 errorList.AddRange(currentErrorList);
-                modelingAttributesToUpload.Add(ParseModelingAttributes(currentBMP, currentRow, fieldsDict, availableModelingAttributes, rowCount, out currentErrorList, out treatmentBMPOperationMonths));
+                modelingAttributes.Add(ParseModelingAttributes(currentBMP, currentRow, fieldsDict, availableModelingAttributes, rowCount, out currentErrorList, out treatmentBMPOperationMonths));
                 errorList.AddRange(currentErrorList);
                 treatmentBMPOperationMonths.AddRange(currentTreatmentBMPOperationMonths);
                 customAttributes.AddRange(ParseCustomAttributes(currentBMP, currentRow, fieldsDict, customAttributeTypes.ToList(), rowCount, out currentErrorList, out currentCustomAttributeValues));
@@ -459,7 +459,8 @@ namespace Neptune.Web.Common
                         {
                             if (!monthsToInt.ContainsKey(month))
                             {
-                                currentErrorList.Add($"{month} is an invalid month entry. Please check the month entries at row: {rowCount}");
+                                currentErrorList.Add($"{month} is an invalid month entry. Please check the month entries at row: {rowCount}." +
+                                                     $"Acceptable values are: {string.Join(", ", monthsToInt.Select(x => x.Key))}");
                             }
                             else
                             {
@@ -472,14 +473,40 @@ namespace Neptune.Web.Common
                         var propertyToChange = newModelingAttribute.GetType().GetProperty(modelingProperty);
                         var propType = propertyToChange.Name == "UnderlyingHydrologicSoilGroupID" ? typeof(UnderlyingHydrologicSoilGroup) :
                                        propertyToChange.Name == "TimeOfConcentrationID" ? typeof(TimeOfConcentration) :
+                                       propertyToChange.Name == "RoutingConfigurationID" ? typeof(RoutingConfiguration) :
                                        propertyToChange.PropertyType;
-                        if (propType == typeof(int) && !int.TryParse(value, out var valueInt))
+
+                        if (propType.IsGenericType &&
+                            propType.GetGenericTypeDefinition() == typeof(Nullable<>))
                         {
-                            currentErrorList.Add($"{attribute} field can not be converted to Integer at row: {rowCount}");
+                            propType = propType.GetGenericArguments()[0];
                         }
-                        else if (propType == typeof(decimal) && !decimal.TryParse(value, out var valueDecimal))
+
+                        if (propType == typeof(int))
                         {
-                            currentErrorList.Add($"{attribute} field can not be converted to Decimal at row: {rowCount}");
+                            if (int.TryParse(value, out var valueInt))
+                            {
+                                propertyToChange.SetValue(newModelingAttribute,
+                                    valueInt);
+                            }
+                            else
+                            {
+                                currentErrorList.Add(
+                                    $"{attribute} field can not be converted to Integer at row: {rowCount}");
+                            }
+                        }
+                        else if (propType == typeof(double))
+                        {
+                            if (double.TryParse(value, out var valueDouble))
+                            {
+                                propertyToChange.SetValue(newModelingAttribute,
+                                    valueDouble);
+                            }
+                            else
+                            {
+                                currentErrorList.Add($"{attribute} field can not be converted to Double at row: {rowCount}");
+                            }
+                            
                         }
                         else if (propType == typeof(UnderlyingHydrologicSoilGroup))
                         {
@@ -489,7 +516,8 @@ namespace Neptune.Web.Common
                                 (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain &&
                                 underlyingHydrologicSoilGroup.ToEnum == UnderlyingHydrologicSoilGroupEnum.Liner))
                             {
-                                currentErrorList.Add($"{value} is not a valid {attribute} entry for Treatment BMPs of {treatmentBMP.TreatmentBMPType} type at row: {rowCount}");
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry for Treatment BMPs of {treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName} type at row: {rowCount}." +
+                                                     $"Acceptable values are :{string.Join(", ", UnderlyingHydrologicSoilGroup.All.Where(x => treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain ? x.UnderlyingHydrologicSoilGroupDisplayName != "Liner" : true).Select(x => x.UnderlyingHydrologicSoilGroupDisplayName))}");
                             }
                             else
                             {
@@ -507,12 +535,28 @@ namespace Neptune.Web.Common
                             }
                             else
                             {
-                                currentErrorList.Add($"{value} is not a valid {attribute} entry at row: {rowCount}");
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry at row: {rowCount}." +
+                                                     $"Acceptable values are:{string.Join(", ", TimeOfConcentration.All.Select(x => x.TimeOfConcentrationDisplayName))}");
+                            }
+                        }
+                        else if (propType == typeof(RoutingConfiguration))
+                        {
+                            var routingConfiguration =
+                                RoutingConfiguration.All.SingleOrDefault(
+                                    x => x.RoutingConfigurationDisplayName == value);
+                            if (routingConfiguration != null)
+                            {
+                                propertyToChange.SetValue(newModelingAttribute, routingConfiguration.RoutingConfigurationID);
+                            }
+                            else
+                            {
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry at row: {rowCount}." +
+                                                     $"Accetpable values are:{string.Join(", ", RoutingConfiguration.All.Select(x => x.RoutingConfigurationDisplayName))}");
                             }
                         }
                         else
                         {
-                            propertyToChange.SetValue(newModelingAttribute, value);
+                            currentErrorList.Add($"{attribute} is not a valid modeling parameter entry at row: {rowCount}");
                         }
                     }
                     
@@ -540,8 +584,10 @@ namespace Neptune.Web.Common
 
             List<string> headers = fieldsDict.Keys.ToList();
             IEnumerable<string> requiredFieldDifference = requiredFields.Except(headers);
-            IEnumerable<string> optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields).Except(availableModelingAttributes);
-            IEnumerable<string> customAttributesDifference = optionalFieldDifference.ToList().Except(customAttributes);
+            IEnumerable<string> optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields);
+            IEnumerable<string> modelingAttributesDifference =
+                optionalFieldDifference.Except(availableModelingAttributes);
+            IEnumerable<string> customAttributesDifference = modelingAttributesDifference.ToList().Except(customAttributes);
 
             if (requiredFieldDifference.Any())
             {
@@ -551,7 +597,7 @@ namespace Neptune.Web.Common
 
             if (customAttributesDifference.Any())
             {
-                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property or custom attribute of the BMP type ‘{bmpType}’");
+                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property, modeling attribute, or custom attribute of the BMP type ‘{bmpType}’");
             }
 
             return fieldsDict;
@@ -560,13 +606,29 @@ namespace Neptune.Web.Common
         public static string GetAppropriateModelingAttributeColumnName(string fieldDefinition)
         {
             string returnVal;
-            if (fieldDefinition == FieldDefinition.PermanentPoolOrWetlandVolume.FieldDefinitionDisplayName)
+            if (fieldDefinition == FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName)
+            {
+                returnVal = "UnderlyingHydrologicSoilGroupID";
+            }
+            else if (fieldDefinition == FieldDefinition.DesignResidenceTimeForPermanentPool.FieldDefinitionDisplayName)
+            {
+                returnVal = "DesignResidenceTimeforPermanentPool";
+            }
+            else if (fieldDefinition == FieldDefinition.DrawdownTimeForWQDetentionVolume.FieldDefinitionDisplayName)
+            {
+                returnVal = "DrawdownTimeforWQDetentionVolume";
+            }
+            else if (fieldDefinition == FieldDefinition.PermanentPoolOrWetlandVolume.FieldDefinitionDisplayName)
             {
                 returnVal = "PermanentPoolorWetlandVolume";
             }
-            else if (fieldDefinition == FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName)
+            else if (fieldDefinition == FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName)
             {
-                returnVal = "UnderlyingHydrologicSoilGroupID";
+                returnVal = "TimeOfConcentrationID";
+            }
+            else if (fieldDefinition == FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName)
+            {
+                returnVal = "RoutingConfigurationID";
             }
             else
             {
@@ -579,7 +641,12 @@ namespace Neptune.Web.Common
 
         public static List<string> GetAvailableModelingAttributes(int bmpType)
         {
-            List<string> returnList = new List<string>();
+            List<string> returnList = new List<string>()
+            {
+                FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName
+            };
             TreatmentBMPModelingTypeEnum modelingType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType.ToEnum;
             switch (modelingType)
                 {
@@ -666,8 +733,7 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
                         returnList.AddRange(new List<string>
                         {
-                            FieldDefinition.TreatmentRate.FieldDefinitionDisplayName,
-                            FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName
+                            FieldDefinition.TreatmentRate.FieldDefinitionDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
@@ -682,7 +748,6 @@ namespace Neptune.Web.Common
                     case TreatmentBMPModelingTypeEnum.VegetatedSwale:
                         returnList.AddRange(new List<string>
                         {
-                            FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName,
                             FieldDefinition.TreatmentRate.FieldDefinitionDisplayName,
                             FieldDefinition.WettedFootprint.FieldDefinitionDisplayName,
                             FieldDefinition.EffectiveRetentionDepth.FieldDefinitionDisplayName
