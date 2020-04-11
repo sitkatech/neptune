@@ -957,7 +957,7 @@ namespace Neptune.Web.Controllers
             var bmpType = viewModel.BMPType;
 
             var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType.GetValueOrDefault(), out var errorList,
-                out var customAttributes, out var customAttributeValues);
+                out var customAttributes, out var customAttributeValues, out var modelingAttributes, out var treatmentBMPOperationMonths);
 
             if (errorList.Count != 0)
             {
@@ -967,6 +967,8 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.AddRange(treatmentBMPs);
             HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes);
             HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.AddRange(modelingAttributes);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.AddRange(treatmentBMPOperationMonths);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
             SetMessageForDisplay($"Upload Successful: {treatmentBMPs.Count} records added");
