@@ -181,6 +181,7 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
+            SetMessageForDisplay("Successfully updated Field Visit Date and Field Visit Type");
             //Because this could come from multiple places, look for where the modal was triggered from
             return new ModalDialogFormJsonResult(Request.UrlReferrer.ToString());
         }
