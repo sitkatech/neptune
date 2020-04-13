@@ -75,36 +75,9 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = DateTime.Now;
 
-            var serializedGraph = JsonConvert.SerializeObject(graph);
-            var stringContent = new StringContent(serializedGraph);
-
             var validateCallStartTime = DateTime.Now;
-            var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
-
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<NetworkValidatorResult>>(postResultContentAsStringResult);
-
-            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
-            var resultRoute = deserializeObject.ResultRoute;
-
-            NetworkValidatorResult networkValidatorResult = executing ? new NetworkValidatorResult() : deserializeObject.Data;
-
-            while (executing)
-            {
-                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
-
-                var continuePollingResponse =
-                    JsonConvert.DeserializeObject<NereidResult<NetworkValidatorResult>>(stringResponse);
-
-                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
-                {
-                    executing = false;
-                    networkValidatorResult = JsonConvert.DeserializeObject<NetworkValidatorResult>(stringResponse);
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
-            }
+            var networkValidatorResult =
+                RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, out var responseContent);
 
             var validateCallEndTime = DateTime.Now;
 
@@ -131,41 +104,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var buildGraphEndTime = DateTime.Now;
 
             var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
-
-            var serializedGraph = JsonConvert.SerializeObject(subgraphRequestObject);
-            var stringContent = new StringContent(serializedGraph);
-
             var subgraphCallStartTime = DateTime.Now;
-            var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
 
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<SubgraphResult>>(postResultContentAsStringResult);
-
-            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
-            var resultRoute = deserializeObject.ResultRoute;
-
-            SubgraphResult subgraphResult = executing ? new SubgraphResult() : deserializeObject.Data;
-
-            while (executing)
-            {
-                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
-
-                var continuePollingResponse =
-                    JsonConvert.DeserializeObject<NereidResult<SubgraphResult>>(stringResponse);
-
-                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
-                {
-                    executing = false;
-                    subgraphResult = continuePollingResponse.Data;
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
-            }
-
+            var subgraphResult = RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
+                networkValidatorUrl, out var responseContent);
             var subgraphCallEndTime = DateTime.Now;
-
-
+            
             var returnValue = new
             {
                 SubgraphResult = subgraphResult,
@@ -191,41 +135,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
-            var serializedGraph = JsonConvert.SerializeObject(solutionSequenceRequestObject);
-            var stringContent = new StringContent(serializedGraph);
-
             var subgraphCallStartTime = DateTime.Now;
-            var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
-
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<object>>(postResultContentAsStringResult);
-
-            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
-            var resultRoute = deserializeObject.ResultRoute;
-
-            var subgraphResult = executing ? new object() : deserializeObject.Data;
-            string responseContent = postResultContentAsStringResult;
-            while (executing)
-            {
-                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
-
-                var continuePollingResponse =
-                    JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
-
-                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
-                {
-                    executing = false;
-                    subgraphResult = continuePollingResponse.Data;
-                    responseContent = stringResponse;
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
-            }
-
+            var responseObject =
+                RunJobAtNereid<NereidSolutionSequenceRequestObject, object>(solutionSequenceRequestObject,
+                    networkValidatorUrl, out var responseContent);
             var subgraphCallEndTime = DateTime.Now;
-
-
+            
             var returnValue = new
             {
                 SubgraphResult = responseContent,
