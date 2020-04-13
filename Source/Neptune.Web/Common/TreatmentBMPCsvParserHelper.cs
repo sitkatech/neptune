@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web.WebPages;
 using LtInfo.Common;
 
@@ -14,35 +15,38 @@ namespace Neptune.Web.Common
 {
     public static class TreatmentBMPCsvParserHelper
     {
-        public static List<TreatmentBMP> CSVUpload(Stream fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues)
+        public static List<TreatmentBMP> CSVUpload(Stream fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
             var StreamReader = new StreamReader(fileStream);
             var parser = new TextFieldParser(StreamReader);
 
 
-            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues);
+            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out treatmentBMPOperationMonths);
         }
 
-        public static List<TreatmentBMP> CSVUpload(string fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues)
+        public static List<TreatmentBMP> CSVUpload(string fileStream, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
             var stringReader = new StringReader(fileStream);
             var parser = new TextFieldParser(stringReader);
 
-            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues);
+            return ParseBmpRowsFromCsv(parser, bmpType, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, out treatmentBMPOperationMonths);
         }
 
-        public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues)
+        public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, int bmpType, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
             parser.SetDelimiters(",");
             errorList = new List<string>();
             customAttributes = new List<CustomAttribute>();
             customAttributeValues = new List<CustomAttributeValue>();
+            treatmentBMPOperationMonths = new List<TreatmentBMPOperationMonth>();
+            modelingAttributes = new List<TreatmentBMPModelingAttribute>();
             var treatmentBMPsToUpload = new List<TreatmentBMP>();
             var fieldsDict = new Dictionary<string, int>();
 
             var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "Sizing Basis", "Trash Capture Status", "Owner" };
             var optionalFields = new List<string> {"Year Built or Installed","Asset ID in System of Record", "Required Lifespan of Installation",
                 "Allowable End Date of Installation (if applicable)", "Required Field Visits Per Year", "Required Post-Storm Field Visits Per Year","Notes"};
+            var availableModelingAttributes = GetAvailableModelingAttributes(bmpType);
             var customAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeCustomAttributeTypes
                 .Where(x => x.TreatmentBMPTypeID == bmpType).Select(x => x.CustomAttributeType);
 
@@ -50,7 +54,7 @@ namespace Neptune.Web.Common
             {
                 var header = parser.ReadFields();
                 var customAttributeNames = customAttributeTypes.Select(x => x.CustomAttributeTypeName).ToList();
-                fieldsDict = ValidateHeader(header, requiredFields, optionalFields, customAttributeNames, bmpType, out errorList);
+                fieldsDict = ValidateHeader(header, requiredFields, optionalFields, availableModelingAttributes, customAttributeNames, bmpType, out errorList);
                 if (errorList.Any())
                 {
                     return null;
@@ -68,6 +72,7 @@ namespace Neptune.Web.Common
                 var currentRow = parser.ReadFields();
                 var currentErrorList = new List<string>();
                 var currentCustomAttributeValues = new List<CustomAttributeValue>();
+                var currentTreatmentBMPOperationMonths = new List<TreatmentBMPOperationMonth>();
 
                 var currentBMP = ParseRequiredAndOptionalFieldAndCreateBMP(bmpType, currentRow, fieldsDict, rowCount, out currentErrorList);
 
@@ -79,6 +84,9 @@ namespace Neptune.Web.Common
                 }
                 treatmentBMPsToUpload.Add(currentBMP);
                 errorList.AddRange(currentErrorList);
+                modelingAttributes.Add(ParseModelingAttributes(currentBMP, currentRow, fieldsDict, availableModelingAttributes, rowCount, out currentErrorList, out treatmentBMPOperationMonths));
+                errorList.AddRange(currentErrorList);
+                treatmentBMPOperationMonths.AddRange(currentTreatmentBMPOperationMonths);
                 customAttributes.AddRange(ParseCustomAttributes(currentBMP, currentRow, fieldsDict, customAttributeTypes.ToList(), rowCount, out currentErrorList, out currentCustomAttributeValues));
                 customAttributeValues.AddRange(currentCustomAttributeValues);
                 errorList.AddRange(currentErrorList);
@@ -431,9 +439,141 @@ namespace Neptune.Web.Common
             return customAttributes;
         }
 
+        private static TreatmentBMPModelingAttribute ParseModelingAttributes(TreatmentBMP treatmentBMP, string[] currentRow, Dictionary<string, int> fieldsDict, List<string> availableModelingAttributesForType, int rowCount, out List<string> currentErrorList, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
+        {
+            currentErrorList = new List<string>();
+            var newModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
+            newModelingAttribute.RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID;
+            treatmentBMPOperationMonths = new List<TreatmentBMPOperationMonth>();
+            foreach (var attribute in availableModelingAttributesForType)
+            {
+                if (fieldsDict.ContainsKey(attribute))
+                {
+                    var modelingProperty = GetAppropriateModelingAttributeColumnName(attribute);
+                    var value = currentRow[fieldsDict[attribute]];
+
+                    if (modelingProperty == FieldDefinition.MonthsOfOperation.FieldDefinitionName && !String.IsNullOrWhiteSpace(value))
+                    {
+                        var months = value.Split(' ');
+                        foreach (var month in months)
+                        {
+                            if (!monthsToInt.ContainsKey(month))
+                            {
+                                currentErrorList.Add($"{month} is an invalid entry for {attribute}. Please check the month entries, ensuring that each month is separated by a space, at row: {rowCount}." +
+                                                     $"Acceptable values are: {string.Join(", ", monthsToInt.Select(x => x.Key))}");
+                            }
+                            else
+                            {
+                                treatmentBMPOperationMonths.Add(new TreatmentBMPOperationMonth(treatmentBMP, monthsToInt[month]));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var propertyToChange = newModelingAttribute.GetType().GetProperty(modelingProperty);
+                        var propType = propertyToChange.Name == "UnderlyingHydrologicSoilGroupID" ? typeof(UnderlyingHydrologicSoilGroup) :
+                                       propertyToChange.Name == "TimeOfConcentrationID" ? typeof(TimeOfConcentration) :
+                                       propertyToChange.Name == "RoutingConfigurationID" ? typeof(RoutingConfiguration) :
+                                       propertyToChange.PropertyType;
+
+                        if (propType.IsGenericType &&
+                            propType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            propType = propType.GetGenericArguments()[0];
+                        }
+
+                        if (propType == typeof(int))
+                        {
+                            if (int.TryParse(value, out var valueInt))
+                            {
+                                propertyToChange.SetValue(newModelingAttribute,
+                                    valueInt);
+                            }
+                            else
+                            {
+                                currentErrorList.Add(
+                                    $"{attribute} field can not be converted to Integer at row: {rowCount}");
+                            }
+                        }
+                        else if (propType == typeof(double))
+                        {
+                            if (double.TryParse(value, out var valueDouble))
+                            {
+                                propertyToChange.SetValue(newModelingAttribute,
+                                    valueDouble);
+                            }
+                            else
+                            {
+                                currentErrorList.Add($"{attribute} field can not be converted to Double at row: {rowCount}");
+                            }
+                            
+                        }
+                        else if (propType == typeof(UnderlyingHydrologicSoilGroup))
+                        {
+                            var underlyingHydrologicSoilGroup = UnderlyingHydrologicSoilGroup.All
+                                .SingleOrDefault(x => x.UnderlyingHydrologicSoilGroupDisplayName == value);
+                            if (underlyingHydrologicSoilGroup == null ||
+                                (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain &&
+                                underlyingHydrologicSoilGroup.ToEnum == UnderlyingHydrologicSoilGroupEnum.Liner))
+                            {
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry for Treatment BMPs of {treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName} type at row: {rowCount}." +
+                                                     $"Acceptable values are :{string.Join(", ", UnderlyingHydrologicSoilGroup.All.Where(x => treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain ? x.UnderlyingHydrologicSoilGroupDisplayName != "Liner" : true).Select(x => x.UnderlyingHydrologicSoilGroupDisplayName))}");
+                            }
+                            else
+                            {
+                                propertyToChange.SetValue(newModelingAttribute,
+                                    underlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupID);
+                            }
+                        }
+                        else if (propType == typeof(TimeOfConcentration))
+                        {
+                            var timeOfConcentration =
+                                TimeOfConcentration.All.SingleOrDefault(x => x.TimeOfConcentrationDisplayName == value);
+                            if (timeOfConcentration != null)
+                            {
+                                propertyToChange.SetValue(newModelingAttribute, timeOfConcentration.TimeOfConcentrationID);
+                            }
+                            else
+                            {
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry at row: {rowCount}." +
+                                                     $"Acceptable values are:{string.Join(", ", TimeOfConcentration.All.Select(x => x.TimeOfConcentrationDisplayName))}");
+                            }
+                        }
+                        else if (propType == typeof(RoutingConfiguration))
+                        {
+                            var routingConfiguration =
+                                RoutingConfiguration.All.SingleOrDefault(
+                                    x => x.RoutingConfigurationDisplayName == value);
+                            if (routingConfiguration != null)
+                            {
+                                propertyToChange.SetValue(newModelingAttribute, routingConfiguration.RoutingConfigurationID);
+                            }
+                            else
+                            {
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry at row: {rowCount}." +
+                                                     $"Accetpable values are:{string.Join(", ", RoutingConfiguration.All.Select(x => x.RoutingConfigurationDisplayName))}");
+                            }
+                        }
+                        else
+                        {
+                            currentErrorList.Add($"{attribute} is not a valid modeling parameter entry at row: {rowCount}");
+                        }
+                    }
+                    
+                }
+            }
+
+            if (newModelingAttribute.RoutingConfigurationID == RoutingConfiguration.Offline.RoutingConfigurationID &&
+                newModelingAttribute.DiversionRate == null)
+            {
+                currentErrorList.Add($"The modeling attribute 'Diversion Rate' is required when the Routing Configuration is set to 'Offline'. Please adjust entry at row: {rowCount}");
+            }
+            return newModelingAttribute;
+        }
+
 
         private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields,
-            List<string> optionalFields, List<string> customAttributes, int bmpType, out List<string> errorList)
+            List<string> optionalFields, List<string> availableModelingAttributes, List<string> customAttributes, int bmpType, out List<string> errorList)
         {
             errorList = new List<string>();
             var fieldsDict = new Dictionary<string, int>();
@@ -451,7 +591,9 @@ namespace Neptune.Web.Common
             List<string> headers = fieldsDict.Keys.ToList();
             IEnumerable<string> requiredFieldDifference = requiredFields.Except(headers);
             IEnumerable<string> optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields);
-            IEnumerable<string> customAttributesDifference = optionalFieldDifference.ToList().Except(customAttributes);
+            IEnumerable<string> modelingAttributesDifference =
+                optionalFieldDifference.Except(availableModelingAttributes);
+            IEnumerable<string> customAttributesDifference = modelingAttributesDifference.ToList().Except(customAttributes);
 
             if (requiredFieldDifference.Any())
             {
@@ -461,11 +603,196 @@ namespace Neptune.Web.Common
 
             if (customAttributesDifference.Any())
             {
-                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property or custom attribute of the BMP type ‘{bmpType}’");
+                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property, modeling attribute, or custom attribute of the BMP type ‘{bmpType}’");
             }
 
             return fieldsDict;
         }
+
+        public static string GetAppropriateModelingAttributeColumnName(string fieldDefinition)
+        {
+            string returnVal;
+            if (fieldDefinition == FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName)
+            {
+                returnVal = "UnderlyingHydrologicSoilGroupID";
+            }
+            else if (fieldDefinition == FieldDefinition.DesignResidenceTimeForPermanentPool.FieldDefinitionDisplayName)
+            {
+                returnVal = "DesignResidenceTimeforPermanentPool";
+            }
+            else if (fieldDefinition == FieldDefinition.DrawdownTimeForWQDetentionVolume.FieldDefinitionDisplayName)
+            {
+                returnVal = "DrawdownTimeforWQDetentionVolume";
+            }
+            else if (fieldDefinition == FieldDefinition.PermanentPoolOrWetlandVolume.FieldDefinitionDisplayName)
+            {
+                returnVal = "PermanentPoolorWetlandVolume";
+            }
+            else if (fieldDefinition == FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName)
+            {
+                returnVal = "TimeOfConcentrationID";
+            }
+            else if (fieldDefinition == FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName)
+            {
+                returnVal = "RoutingConfigurationID";
+            }
+            else
+            {
+                returnVal = FieldDefinition.All.Single(x => x.FieldDefinitionDisplayName == fieldDefinition)
+                    .FieldDefinitionName;
+            }
+
+            return returnVal;
+        }
+
+        public static List<string> GetAvailableModelingAttributes(int bmpType)
+        {
+            List<string> returnList = new List<string>()
+            {
+                FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName
+            };
+            TreatmentBMPModelingTypeEnum modelingType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType.ToEnum;
+            switch (modelingType)
+                {
+                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                        returnList.AddRange(new List<string>()
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName, 
+                            FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName, 
+                            FieldDefinition.MediaBedFootprint.FieldDefinitionDisplayName,
+                            FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName,
+                            FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
+                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                        returnList.AddRange(new List<string>()
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.InfiltrationSurfaceArea.FieldDefinitionDisplayName,
+                            FieldDefinition.UnderlyingInfiltrationRate.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+                    case TreatmentBMPModelingTypeEnum.SandFilters:
+                        returnList.AddRange(new List<string>()
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
+                            FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
+                        returnList.AddRange(new List<string>()
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.WinterHarvestedWaterDemand.FieldDefinitionDisplayName,
+                            FieldDefinition.SummerHarvestedWaterDemand.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
+                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
+                        returnList.AddRange(new List<string>()
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.PermanentPoolOrWetlandVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.DesignResidenceTimeForPermanentPool.FieldDefinitionDisplayName,
+                            FieldDefinition.WaterQualityDetentionVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.DrawdownTimeForWQDetentionVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.WinterHarvestedWaterDemand.FieldDefinitionDisplayName,
+                            FieldDefinition.SummerHarvestedWaterDemand.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                        returnList.AddRange(new List<string>
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
+                            FieldDefinition.EffectiveFootprint.FieldDefinitionDisplayName,
+                            FieldDefinition.DrawdownTimeForWQDetentionVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                        returnList.AddRange(new List<string>
+                        {
+                            FieldDefinition.DesignDryWeatherTreatmentCapacity.FieldDefinitionDisplayName,
+                            FieldDefinition.AverageTreatmentFlowrate.FieldDefinitionDisplayName,
+                            FieldDefinition.MonthsOfOperation.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.Drywell:
+                        returnList.AddRange(new List<string>
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TotalEffectiveDrywellBMPVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.InfiltrationDischargeRate.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                        returnList.AddRange(new List<string>
+                        {
+                            FieldDefinition.TreatmentRate.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                        returnList.AddRange(new List<string>
+                        {
+                            FieldDefinition.DesignLowFlowDiversionCapacity.FieldDefinitionDisplayName,
+                            FieldDefinition.AverageDivertedFlowrate.FieldDefinitionDisplayName,
+                            FieldDefinition.MonthsOfOperation.FieldDefinitionDisplayName
+                        });
+                        break;
+                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                        returnList.AddRange(new List<string>
+                        {
+                            FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
+                            FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
+                            FieldDefinition.TreatmentRate.FieldDefinitionDisplayName,
+                            FieldDefinition.WettedFootprint.FieldDefinitionDisplayName,
+                            FieldDefinition.EffectiveRetentionDepth.FieldDefinitionDisplayName
+                        });
+                        break;
+                }
+
+            return returnList;
+        }
+
+        private static readonly Dictionary<string, int> monthsToInt = new Dictionary<string, int>()
+        {
+            { "Jan", 1 },
+            { "Feb", 2 },
+            { "Mar", 3 },
+            { "Apr", 4 },
+            { "May", 5 },
+            { "Jun", 6 },
+            { "Jul", 7 },
+            { "Aug", 8 },
+            { "Sep", 9 },
+            { "Oct", 10 },
+            { "Nov", 11 },
+            { "Dec", 12 }
+        };
     }
 
 }
