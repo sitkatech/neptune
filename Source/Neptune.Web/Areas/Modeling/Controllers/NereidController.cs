@@ -391,6 +391,24 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
         public List<List<string>> DuplicateEdges { get; set; }
     }
 
+    public class TreatmentSite
+    {
+        [JsonProperty("node_id")]
+        public string NodeID { get; set; }
+
+        [JsonProperty("facility_type")]
+        public string FacilityType { get; set; }
+
+        [JsonProperty("area_pct")]
+        public int AreaPercentage { get; set; }
+
+        [JsonProperty("captured_pct")]
+        public int CapturedPercentage { get; set; }
+
+        [JsonProperty("retained_pct")]
+        public int RetainedPercentage { get; set; }
+    }
+
     public enum NereidJobStatus
     {
         STARTED,
