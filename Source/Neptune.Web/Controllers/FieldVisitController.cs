@@ -36,6 +36,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Views;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -153,6 +154,35 @@ namespace Neptune.Web.Controllers
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Inventory(fieldVisit)));
+        }
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public PartialViewResult EditDateAndType(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new EditDateAndTypeViewModel(fieldVisit);
+            return ViewEditDateAndType(fieldVisit, viewModel);
+        }
+
+        private PartialViewResult ViewEditDateAndType(FieldVisit fieldVisit, EditDateAndTypeViewModel viewModel)
+        {
+            var viewData = new EditDateAndTypeViewData(fieldVisit);
+            return RazorPartialView<EditDateAndType, EditDateAndTypeViewData, EditDateAndTypeViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditDateAndType(FieldVisitPrimaryKey fieldVisitPrimaryKey, EditDateAndTypeViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            fieldVisit.FieldVisitTypeID = viewModel.FieldVisitTypeID;
+            fieldVisit.VisitDate = viewModel.FieldVisitDate;
+
+            SetMessageForDisplay("Successfully updated Field Visit Date and Field Visit Type");
+            //Because this could come from multiple places, look for where the modal was triggered from
+            return new ModalDialogFormJsonResult(Request.UrlReferrer.ToString());
         }
 
         [HttpGet]
