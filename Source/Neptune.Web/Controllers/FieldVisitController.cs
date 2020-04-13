@@ -173,13 +173,12 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditDateAndType(FieldVisitPrimaryKey fieldVisitPrimaryKey, EditDateAndTypeViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             fieldVisit.FieldVisitTypeID = viewModel.FieldVisitTypeID;
             fieldVisit.VisitDate = viewModel.FieldVisitDate;
-
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay("Successfully updated Field Visit Date and Field Visit Type");
             //Because this could come from multiple places, look for where the modal was triggered from
