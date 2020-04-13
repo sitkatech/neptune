@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -70,10 +71,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public JsonResult Validate()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            var buildGraphStartTime = DateTime.Now;
+            var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
-            var buildGraphEndTime = DateTime.Now;
+            var buildGraphEndTime = stopwatch.Elapsed;
 
             var validateCallStartTime = DateTime.Now;
             var networkValidatorResult =
@@ -128,10 +131,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public JsonResult SolutionSequence()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            var buildGraphStartTime = DateTime.Now;
+            var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
-            var buildGraphEndTime = DateTime.Now;
+            var buildGraphEndTime = stopwatch.Elapsed;
 
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
@@ -174,6 +179,19 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             };
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult TreatmentSiteTable()
+        {
+            var treatmentSites = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Where(x => x.LoadGeneratingUnits.Any())
+                .Select(x => new TreatmentSite
+                {
+                    
+                });
+
+            throw new NotImplementedException();
         }
 
         private static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent)
