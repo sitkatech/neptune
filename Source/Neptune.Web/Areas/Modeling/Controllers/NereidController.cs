@@ -185,13 +185,23 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult TreatmentSiteTable()
         {
-            var treatmentSites = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Where(x => x.LoadGeneratingUnits.Any())
-                .Select(x => new TreatmentSite
-                {
-                    
-                });
+            var waterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
 
-            throw new NotImplementedException();
+            var treatmentSites = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .SelectMany(x => x.QuickBMPs).Join(
+                    waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new {bmp, node}).ToList().Select(x =>
+                    new TreatmentSite
+                    {
+                        NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
+                            x.node.RegionalSubbasinID),
+                        AreaPercentage = x.bmp.PercentOfSiteTreated,
+                        CapturedPercentage = x.bmp.PercentCaptured,
+                        RetainedPercentage = x.bmp.PercentRetained,
+                        FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
+                    });
+
+            return Json(new {TreatmentSites = treatmentSites}, JsonRequestBehavior.AllowGet);
         }
 
         private static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent)
@@ -418,13 +428,13 @@ namespace Neptune.Web.Areas.Modeling.NereidModels
         public string FacilityType { get; set; }
 
         [JsonProperty("area_pct")]
-        public int AreaPercentage { get; set; }
+        public decimal? AreaPercentage { get; set; }
 
         [JsonProperty("captured_pct")]
-        public int CapturedPercentage { get; set; }
+        public decimal? CapturedPercentage { get; set; }
 
         [JsonProperty("retained_pct")]
-        public int RetainedPercentage { get; set; }
+        public decimal? RetainedPercentage { get; set; }
     }
 
     public enum NereidJobStatus

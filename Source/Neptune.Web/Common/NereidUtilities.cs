@@ -2,7 +2,6 @@ using Neptune.Web.Areas.Modeling.NereidModels;
 using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Drawing;
 using System.Linq;
 
 namespace Neptune.Web.Common
@@ -42,44 +41,43 @@ namespace Neptune.Web.Common
             return graph;
         }
 
-        private static string RegionalSubbasinNodeID(RegionalSubbasin regionalSubbasin)
+        public static string RegionalSubbasinNodeID(RegionalSubbasin regionalSubbasin)
         {
             return "RSB_" + regionalSubbasin.OCSurveyCatchmentID;
         }
-
-        private static string RegionalSubbasinNodeID(int regionalSubbasinCatchmentID)
+        public static string RegionalSubbasinNodeID(int regionalSubbasinCatchmentID)
         {
             return "RSB_" + regionalSubbasinCatchmentID;
         }
 
-        private static string TreatmentBMPNodeID(TreatmentBMP treatmentBMP)
+        public static string TreatmentBMPNodeID(TreatmentBMP treatmentBMP)
         {
             return "BMP_" + treatmentBMP.TreatmentBMPID;
         }
 
-        private static string TreatmentBMPNodeID(int treatmentBMPID)
+        public static string TreatmentBMPNodeID(int treatmentBMPID)
         {
             return "BMP_" + treatmentBMPID;
         }
 
-        private static string WaterQualityManagementPlanNodeID(int waterQualityManagementPlanID,
+        public static string WaterQualityManagementPlanNodeID(int waterQualityManagementPlanID,
             int regionalSubbasinCatchmentID)
         {
             return "WQMP_" + waterQualityManagementPlanID + "_RSB_" + regionalSubbasinCatchmentID;
         }
 
-        private static string DelineationNodeID(Delineation delineation)
+        public static string DelineationNodeID(Delineation delineation)
         {
             return "Delineation_" + delineation.DelineationID;
         }
 
-        private static void MakeRSBNodesAndEdges(DatabaseEntities dbContext, out List<Edge> rsbEdges, out List<Node> rsbNodes)
+        public static void MakeRSBNodesAndEdges(DatabaseEntities dbContext, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         {
-            var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x=>x.IsInLSPCBasin == true).ToList();
+            var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true).ToList();
 
             rsbNodes = regionalSubbasinsInCoverage
                 .Select(x => new Node { ID = RegionalSubbasinNodeID(x) }).ToList();
-            
+
             rsbEdges = regionalSubbasinsInCoverage
                 .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
                     new Edge()
@@ -89,11 +87,11 @@ namespace Neptune.Web.Common
                     }).ToList();
         }
 
-        private static void MakeDistributedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes)
+        public static void MakeDistributedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes)
         {
             var vNereidTreatmentBMPRegionalSubbasins = dbContext.vNereidTreatmentBMPRegionalSubbasins.ToList();
             distributedBMPNodes = vNereidTreatmentBMPRegionalSubbasins
-                .Select(x => new Node() {ID = TreatmentBMPNodeID(x.TreatmentBMPID)}).ToList();
+                .Select(x => new Node() { ID = TreatmentBMPNodeID(x.TreatmentBMPID) }).ToList();
 
             distributedBMPEdges = vNereidTreatmentBMPRegionalSubbasins.Select(x => new Edge()
             {
@@ -102,7 +100,7 @@ namespace Neptune.Web.Common
             }).ToList();
         }
 
-        private static void MakeDistributedDelineationNodesAndEdges(DatabaseEntities dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes)
+        public static void MakeDistributedDelineationNodesAndEdges(DatabaseEntities dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes)
         {
             var distributedDelineations = dbContext.Delineations
                 .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID).ToList();
@@ -142,20 +140,30 @@ namespace Neptune.Web.Common
 
         private static void MakeWQMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> wqmpEdges, out List<Node> wqmpNodes)
         {
-            var wqmpRSBPairings = dbContext.LoadGeneratingUnits.Include(x=>x.RegionalSubbasin)
-                .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null)
-                .Select(x => new {x.WaterQualityManagementPlanID, x.RegionalSubbasinID, x.RegionalSubbasin.OCSurveyCatchmentID}).Distinct().ToList();
+            var wqmpRSBPairings = GetWaterQualityManagementPlanNodes(dbContext).ToList();
 
             wqmpNodes = wqmpRSBPairings.Select(x => new Node
             {
-                ID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID.Value, x.OCSurveyCatchmentID)
+                ID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID)
             }).ToList();
 
             wqmpEdges = wqmpRSBPairings.Select(x => new Edge
             {
-                SourceID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID.Value, x.OCSurveyCatchmentID),
+                SourceID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID),
                 TargetID = RegionalSubbasinNodeID(x.OCSurveyCatchmentID)
             }).ToList();
+        }
+
+        public static IQueryable<WaterQualityManagementPlanNode> GetWaterQualityManagementPlanNodes(DatabaseEntities dbContext)
+        {
+            return dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin)
+                .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null)
+                .Select(x => new WaterQualityManagementPlanNode
+                {
+                    WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
+                    RegionalSubbasinID = x.RegionalSubbasinID.Value,
+                    OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID
+                }).Distinct();
         }
 
         private static void MakeCentralizedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> centralizedBMPEdges,
@@ -168,18 +176,18 @@ namespace Neptune.Web.Common
             // multiple centralized delineations per one regional subbasin. In future, we'll need
             // to find something better to do about that case than ignore the additionals.
 
-            foreach (var rsbCentralizedBMPPairing in dbContext.vNereidRegionalSubbasinCentralizedBMPs.Where(x=>x.RowNumber == 1).ToList())
+            foreach (var rsbCentralizedBMPPairing in dbContext.vNereidRegionalSubbasinCentralizedBMPs.Where(x => x.RowNumber == 1).ToList())
             {
                 var newCentralizedBMPNodeID = TreatmentBMPNodeID(rsbCentralizedBMPPairing.TreatmentBMPID);
                 var existingRSBNodeID = RegionalSubbasinNodeID(rsbCentralizedBMPPairing.OCSurveyCatchmentID);
-                
-                
+
+
                 // Find Edge with this RSB as its Source. Store its Target as ‘og_target’
                 // If this is null, it means this RSB is at the end of the flow network.
                 // We'll create an edge from RSB to BMP, but we won't create an edge from BMP to anywhere
-                var edgeWithThisNodeAsSource = existingEdges.SingleOrDefault(x=>x.SourceID == existingRSBNodeID);
+                var edgeWithThisNodeAsSource = existingEdges.SingleOrDefault(x => x.SourceID == existingRSBNodeID);
                 var ogTargetID = edgeWithThisNodeAsSource?.TargetID;
-                
+
                 if (edgeWithThisNodeAsSource != null)
                 {
                     // Current rsb target equals centralized bmp node id
@@ -188,24 +196,31 @@ namespace Neptune.Web.Common
                 else
                 {
                     centralizedBMPEdges.Add(new Edge
-                        {SourceID = existingRSBNodeID, TargetID = newCentralizedBMPNodeID});
+                    { SourceID = existingRSBNodeID, TargetID = newCentralizedBMPNodeID });
                 }
 
                 // Find all Edges that point to this RSB. Set their Target to the new Centralized BMP Node
-                foreach (var edge in existingEdges.Where(x=>x.TargetID == existingRSBNodeID))
+                foreach (var edge in existingEdges.Where(x => x.TargetID == existingRSBNodeID))
                 {
                     edge.TargetID = newCentralizedBMPNodeID;
                 }
 
 
                 // Centralized BMP gets an edge pointing to "og_target"
-                centralizedBMPNodes.Add(new Node{ID = newCentralizedBMPNodeID});
+                centralizedBMPNodes.Add(new Node { ID = newCentralizedBMPNodeID });
                 // see above
                 if (ogTargetID != null)
                 {
-                    centralizedBMPEdges.Add(new Edge() {SourceID = newCentralizedBMPNodeID, TargetID = ogTargetID});
+                    centralizedBMPEdges.Add(new Edge() { SourceID = newCentralizedBMPNodeID, TargetID = ogTargetID });
                 }
             }
         }
+    }
+
+    public class WaterQualityManagementPlanNode
+    {
+        public int WaterQualityManagementPlanID { get; set; }
+        public int RegionalSubbasinID { get; set; }
+        public int OCSurveyCatchmentID { get; set; }
     }
 }
