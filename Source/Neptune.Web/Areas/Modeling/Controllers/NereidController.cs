@@ -242,29 +242,48 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult Loading()
         {
-            // todo: replace state/region with ca/soc
             var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
 
             var regionalSubbasinsForTest = new List<int> { 4283, 8029, 4153 };
-
             var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
-
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs);
-            var serializedRequest = JsonConvert.SerializeObject(landSurfaceLoadingRequest);
-            var requestStringContent = new StringContent(serializedRequest);
 
             var subgraphCallStartTime = DateTime.Now;
-            var postResultContentAsStringResult = HttpClient.PostAsync(landSurfaceLoadingUrl, requestStringContent).Result.Content.ReadAsStringAsync().Result;
+            var responseObject = RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent);
+            var subgraphCallEndTime = DateTime.Now;
+            
+            var returnValue = new
+            {
+                SubgraphResult = responseContent,
+                SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
+            };
 
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<object>>(postResultContentAsStringResult);
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
+        }
+
+        private static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent)
+        {
+            NereidResult<TResp> responseObject = null;
+            var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
+            var requestStringContent = new StringContent(serializedRequest);
+
+            var postResultContentAsStringResult = HttpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
+                .Content.ReadAsStringAsync().Result;
+
+            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
 
             var executing = deserializeObject.Status == NereidJobStatus.STARTED;
             var resultRoute = deserializeObject.ResultRoute;
 
-            string responseContent = postResultContentAsStringResult;
+            responseContent = postResultContentAsStringResult;
+            if (!executing)
+            {
+                responseObject = deserializeObject;
+            }
             while (executing)
             {
-                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content.ReadAsStringAsync().Result;
+                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content
+                    .ReadAsStringAsync().Result;
 
                 var continuePollingResponse =
                     JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
@@ -273,6 +292,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 {
                     executing = false;
                     responseContent = stringResponse;
+                    responseObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(responseContent);
                 }
                 else
                 {
@@ -280,16 +300,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 }
             }
 
-            var subgraphCallEndTime = DateTime.Now;
-
-
-            var returnValue = new
-            {
-                SubgraphResult = responseContent,
-                SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
-            };
-
-            return Json(returnValue, JsonRequestBehavior.AllowGet);
+            return responseObject;
         }
     }
 }

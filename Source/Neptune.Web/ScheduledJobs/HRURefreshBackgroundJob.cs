@@ -1,21 +1,14 @@
-﻿using System;
+﻿using MoreLinq;
 using Neptune.Web.Common;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using MoreLinq;
-using Neptune.Web.Models;
 using Exception = System.Exception;
 
 namespace Neptune.Web.ScheduledJobs
 {
     public class HRURefreshBackgroundJob : ScheduledBackgroundJobBase
     {
-
-        public HRURefreshBackgroundJob()
-        {
-        }
-
         public new static string JobName => "HRU Refresh";
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>

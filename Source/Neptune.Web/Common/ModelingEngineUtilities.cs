@@ -1,9 +1,8 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using Hangfire;
 using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
+using System;
 using System.Data.Entity.Spatial;
-using Hangfire;
 
 namespace Neptune.Web.Common
 {
