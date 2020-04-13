@@ -531,6 +531,9 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Views\FieldVisit\EditDateAndType.cs" />
+    <Compile Include="Views\FieldVisit\EditDateAndTypeViewData.cs" />
+    <Compile Include="Views\FieldVisit\EditDateAndTypeViewModel.cs" />
     <Compile Include="Common\WebServiceNameAndDescriptionAttribute.cs" />
     <Compile Include="Common\ParameterDescriptionAttribute.cs" />
     <Compile Include="Controllers\WebServicesController.cs" />
@@ -2054,6 +2057,7 @@
     <Content Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\LGUAudit.cshtml" />
     <Content Include="Views\WebServices\Index.cshtml" />
+    <Content Include="Views\FieldVisit\EditDateAndType.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

@@ -18,6 +18,7 @@ namespace Neptune.Web.Views.FieldVisit
         public List<string> ValidationWarnings { get; set; }
 
         public string WrapupUrl { get; }
+        public string EditDateAndTypeUrl { get; }
         public bool UserCanDeleteMaintenanceRecord { get; }
         public Models.MaintenanceRecord MaintenanceRecord { get; }
         public Models.TreatmentBMPAssessment InitialAssessment { get; }
@@ -35,6 +36,8 @@ namespace Neptune.Web.Views.FieldVisit
             SubEntityName = fieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
             SubEntityUrl = fieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
+
+            EditDateAndTypeUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.EditDateAndType(fieldVisit.PrimaryKey));
 
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
