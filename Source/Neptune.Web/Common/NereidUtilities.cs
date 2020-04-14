@@ -71,6 +71,27 @@ namespace Neptune.Web.Common
             return "Delineation_" + delineation.DelineationID;
         }
 
+        public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit)
+        {
+            if (loadGeneratingUnit.DelineationID != null)
+            {
+                return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
+            }
+
+            if (loadGeneratingUnit.WaterQualityManagementPlanID != null)
+            {
+                return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
+                    loadGeneratingUnit.OCSurveyCatchmentID);
+            }
+
+            return RegionalSubbasinNodeID(loadGeneratingUnit.OCSurveyCatchmentID);
+        }
+
+        private static string DelineationNodeID(int delineationID)
+        {
+            return "Delineation_" + delineationID;
+        }
+
         public static void MakeRSBNodesAndEdges(DatabaseEntities dbContext, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         {
             var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true).ToList();

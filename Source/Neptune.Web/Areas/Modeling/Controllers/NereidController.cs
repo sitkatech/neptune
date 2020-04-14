@@ -70,11 +70,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
             var stopwatch = new Stopwatch();
+            
             stopwatch.Start();
-
             var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
+            stopwatch.Stop();
 
             var validateCallStartTime = DateTime.Now;
             var networkValidatorResult =
@@ -134,6 +135,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
+            stopwatch.Stop();
 
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
@@ -160,19 +162,22 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public JsonResult Loading()
         {
             var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
-
             var regionalSubbasinsForTest = new List<int> { 4283, 8029, 4153 };
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            var buildLoadingInputStartTime = stopwatch.Elapsed;
             var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs);
+            var buildLoadingInputEndTime = stopwatch.Elapsed;
+            stopwatch.Stop();
 
-            var subgraphCallStartTime = DateTime.Now;
             var responseObject = RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent);
-            var subgraphCallEndTime = DateTime.Now;
             
             var returnValue = new
             {
                 SubgraphResult = responseContent,
-                SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
+                SubgraphCallElapsedTime = (buildLoadingInputEndTime - buildLoadingInputStartTime).Milliseconds,
             };
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);

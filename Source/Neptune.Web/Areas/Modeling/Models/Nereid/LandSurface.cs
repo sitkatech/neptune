@@ -1,4 +1,5 @@
-﻿using Neptune.Web.Models;
+﻿using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
@@ -21,7 +22,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         public LandSurface(vNereidLoadingInput vNereidLoadingInput)
         {
-            NodeID = vNereidLoadingInput.PrimaryKey.ToString();
+            NodeID = NereidUtilities.LandSurfaceNodeID(vNereidLoadingInput);
             SurfaceKey =
                 $"{vNereidLoadingInput.LSPCBasinKey}-{vNereidLoadingInput.HRUCharacteristicLandUseCodeName}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
             Area = vNereidLoadingInput.Area;
