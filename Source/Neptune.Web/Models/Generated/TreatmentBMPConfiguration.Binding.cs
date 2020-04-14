@@ -41,6 +41,7 @@ namespace Neptune.Web.Models
             Property(x => x.LSPCBasinID).HasColumnName(@"LSPCBasinID").HasColumnType("int").IsOptional();
             Property(x => x.PrecipitationZoneID).HasColumnName(@"PrecipitationZoneID").HasColumnType("int").IsOptional();
             Property(x => x.UpstreamBMPID).HasColumnName(@"UpstreamBMPID").HasColumnType("int").IsOptional();
+            Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMPType).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID

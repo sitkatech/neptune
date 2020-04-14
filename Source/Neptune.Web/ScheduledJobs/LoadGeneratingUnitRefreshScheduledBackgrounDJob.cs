@@ -127,19 +127,6 @@ namespace Neptune.Web.ScheduledJobs
                     File.Delete(clipLayerPath);
                 }
             }
-
-
-            if (loadGeneratingUnitRefreshArea != null)
-            {
-                var loadGeneratingUnitsToRefreshHRUsOf = DbContext.LoadGeneratingUnits.Where(x =>
-                    x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
-                        .LoadGeneratingUnitRefreshAreaGeometry)).ToList();
-
-                var hruCharacteristics = HRUUtilities.RetrieveHRUCharacteristics(loadGeneratingUnitsToRefreshHRUsOf, DbContext, Logger);
-
-                DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-                DbContext.SaveChangesWithNoAuditing();
-            }
         }
 
         private FeatureCollection MakeClipFeatureCollectionFromRefreshArea(
@@ -180,7 +167,6 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
         string outputPath, string connectionString)
     {
         var databaseConnectionString = $"MSSQL:{connectionString}";
-        // todo: fix this
         var selectStatement =
             $"Select LSPCID as LSPCBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
 

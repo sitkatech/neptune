@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[RegionalSubbasin](
 	[CatchmentGeometry4326] [geometry] NULL,
 	[LastUpdate] [datetime] NULL,
 	[IsWaitingForLGURefresh] [bit] NULL,
+	[IsInLSPCBasin] [bit] NULL,
  CONSTRAINT [PK_RegionalSubbasin_RegionalSubbasinID] PRIMARY KEY CLUSTERED 
 (
 	[RegionalSubbasinID] ASC
