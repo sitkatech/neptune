@@ -1,4 +1,4 @@
-using Neptune.Web.Areas.Modeling.NereidModels;
+using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Data.Entity;

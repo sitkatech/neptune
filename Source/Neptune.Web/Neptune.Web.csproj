@@ -48,6 +48,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Modeling\Models\Nereid\Edge.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\Graph.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\LandSurface.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\LandSurfaceLoadingRequest.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\NereidJobStatus.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\NereidResult.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\NereidSolutionSequenceRequestObject.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\NereidSubgraphRequestObject.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\NetworkValidatorResult.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\Node.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\SubgraphResult.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\TreatmentFacility.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\TreatmentSite.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -3390,7 +3403,6 @@
   <ItemGroup>
     <Folder Include="Areas\DroolTool\Models\" />
     <Folder Include="Areas\Modeling\Content\" />
-    <Folder Include="Areas\Modeling\Models\" />
     <Folder Include="Areas\Modeling\Security\" />
     <Folder Include="Areas\Trash\Content\img\" />
     <Folder Include="Areas\Trash\Models\" />

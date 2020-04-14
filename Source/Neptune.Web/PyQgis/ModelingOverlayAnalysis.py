@@ -229,6 +229,7 @@ if __name__ == '__main__':
     clip_layer = None
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
+        clip_layer = fixGeometriesWithinLayer(clip_layer, "ClipLayer", context=PROCESSING_CONTEXT)
         
     lspcLayer = fetchLayer("vLSPCBasinLGUInput")
     regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")
@@ -263,7 +264,7 @@ if __name__ == '__main__':
 
     wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
 
-    lspc_rsb = intersection(lspcLayer, regionalSubbasinLayer, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
+    lspc_rsb = union(lspcLayer, regionalSubbasinLayer, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb)
     lspc_rsb = bufferZero(lspc_rsb, "LSPC-RSB", context=PROCESSING_CONTEXT)
 

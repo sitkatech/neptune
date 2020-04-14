@@ -69,7 +69,6 @@ namespace Neptune.Web.ScheduledJobs
             AddRecurringJob(RegionalSubbasinRefreshScheduledBackgroundJob.JobName, () => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(1122, true),
                 MakeDailyUtcCronJobStringFromLocalTime(1, 30), recurringJobIds);
 
-            
             //AddRecurringJob(HRURefreshBackgroundJob.JobName, () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(),
             //    Cron.MinuteInterval(30), recurringJobIds);
 

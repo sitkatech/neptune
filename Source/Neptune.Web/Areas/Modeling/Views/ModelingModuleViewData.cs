@@ -68,7 +68,7 @@ namespace Neptune.Web.Areas.Modeling.Views
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldVisitController>(c => c.Index()), currentPerson, "View All Field Records", "Group2"));
             if (new WaterQualityManagementPlanViewFeature().HasPermissionByPerson(currentPerson))
             {
-                bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group3"));
+                bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group3"));
             }
             if (new JurisdictionManageFeature().HasPermissionByPerson(currentPerson))
             {

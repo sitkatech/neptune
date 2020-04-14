@@ -27,7 +27,7 @@ using System.Web;
 
 namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic
 {
-    public class HRUCharacteristicGridSpec : GridSpec<Models.HRUCharacteristic>
+    public class HRUCharacteristicGridSpec : GridSpec<Web.Models.HRUCharacteristic>
     {
         public HRUCharacteristicGridSpec()
         {
