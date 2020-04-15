@@ -696,7 +696,6 @@ namespace Neptune.Web.Common
                             FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
                             FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
-                            FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
                             FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName,
                             FieldDefinition.MediaBedFootprint.FieldDefinitionDisplayName
                         });
