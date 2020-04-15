@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
 
 
-        public UploadTreatmentBMPsViewData(Person currentPerson, IEnumerable<SelectListItem> bmpTypes, List<string> errorList, string treatmentBMPsUploadUrl) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public UploadTreatmentBMPsViewData(Person currentPerson, IEnumerable<SelectListItem> bmpTypes, List<string> errorList, Models.NeptunePage neptunePage, string treatmentBMPsUploadUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "BMP Bulk Upload";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

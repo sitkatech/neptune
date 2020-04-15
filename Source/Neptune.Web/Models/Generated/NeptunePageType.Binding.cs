@@ -65,6 +65,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeRegionalSubbasins RegionalSubbasins = NeptunePageTypeRegionalSubbasins.Instance;
         public static readonly NeptunePageTypeDelineationReconciliationReport DelineationReconciliationReport = NeptunePageTypeDelineationReconciliationReport.Instance;
         public static readonly NeptunePageTypeViewTreatmentBMPModelingAttributes ViewTreatmentBMPModelingAttributes = NeptunePageTypeViewTreatmentBMPModelingAttributes.Instance;
+        public static readonly NeptunePageTypeUploadTreatmentBMPs UploadTreatmentBMPs = NeptunePageTypeUploadTreatmentBMPs.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -74,7 +75,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -234,6 +235,8 @@ namespace Neptune.Web.Models
                     return TreatmentBMPAssessment;
                 case NeptunePageTypeEnum.TreatmentBMPType:
                     return TreatmentBMPType;
+                case NeptunePageTypeEnum.UploadTreatmentBMPs:
+                    return UploadTreatmentBMPs;
                 case NeptunePageTypeEnum.ViewTreatmentBMPModelingAttributes:
                     return ViewTreatmentBMPModelingAttributes;
                 case NeptunePageTypeEnum.WaterQualityMaintenancePlan:
@@ -294,7 +297,8 @@ namespace Neptune.Web.Models
         HRUCharacteristics = 45,
         RegionalSubbasins = 46,
         DelineationReconciliationReport = 47,
-        ViewTreatmentBMPModelingAttributes = 48
+        ViewTreatmentBMPModelingAttributes = 48,
+        UploadTreatmentBMPs = 49
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -577,5 +581,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeViewTreatmentBMPModelingAttributes(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeViewTreatmentBMPModelingAttributes Instance = new NeptunePageTypeViewTreatmentBMPModelingAttributes(48, @"ViewTreatmentBMPModelingAttributes", @"View Treatment BMP Modeling Attributes", 2);
+    }
+
+    public partial class NeptunePageTypeUploadTreatmentBMPs : NeptunePageType
+    {
+        private NeptunePageTypeUploadTreatmentBMPs(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeUploadTreatmentBMPs Instance = new NeptunePageTypeUploadTreatmentBMPs(49, @"UploadTreatmentBMPs", @"Upload Treatment BMPs", 2);
     }
 }
