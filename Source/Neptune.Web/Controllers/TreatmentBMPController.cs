@@ -981,7 +981,8 @@ namespace Neptune.Web.Controllers
                 .ToSelectListWithEmptyFirstRow(
                     x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
                     x => x.TreatmentBMPTypeName.ToString(CultureInfo.InvariantCulture));
-            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, errorList,
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.UploadTreatmentBMPs);
+            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, errorList, neptunePage,
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
             return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData,
                 viewModel);
