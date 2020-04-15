@@ -20,23 +20,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         
         [JsonProperty("ref_data_key")]
         public string ReferenceDataKey { get; set; }
-
-        [JsonProperty("treatment_rate_cfs")]
-        public double? AverageDivertedFlowrate { get; set; }
-
-        // todo: developer of Nereid kinda forgot that a JSON object can have at most one property with a given name
-        // have to get him to update this to use different names
-        //[JsonProperty("treatment_rate_cfs")]
-        [JsonIgnore]
-        public double? AverageTreatmentFlowrate { get; set; }
-
-        [JsonProperty("design_capacity_cfs")]
-        public double? DesignDryWeatherTreatmentCapacity { get; set; }
-
-//        [JsonProperty("design_capacity_cfs")]
-        [JsonIgnore]
-        public double? DesignLowFlowDiversionCapacity { get; set; }
-
+        
         [JsonProperty("media_filtration_rate_inhr")]
         public double? DesignMediaFiltrationRate { get; set; }
 
@@ -49,23 +33,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         [JsonProperty("treatment_drawdown_time_hr")]
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
 
-        [JsonProperty("area_sqft")]
-        public double? EffectiveFootprint { get; set; }
-
         [JsonProperty("depth_ft")]
         public double? EffectiveRetentionDepth { get; set; }
-
-        //[JsonProperty("treatment_rate_cfs")]
-        [JsonIgnore]
-        public double? InfiltrationDischargeRate { get; set; }
-
-        //[JsonProperty("area_sqft")]
-        [JsonIgnore]
-        public double? InfiltrationSurfaceArea { get; set; }
-
-        //[JsonProperty("area_sqft")]
-        [JsonIgnore]
-        public double? MediaBedFootprint { get; set; }
 
         [JsonProperty("months_operational")]
         public string MonthsOfOperation { get; set; }
@@ -91,8 +60,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         [JsonProperty("total_volume_cuft")]
         public double? TotalEffectiveBMPVolume { get; set; }
 
-        //[JsonProperty("treatment_rate_cfs")]
-        [JsonIgnore]
+        [JsonProperty("treatment_rate_cfs")]
         public double? TreatmentRate { get; set; }
 
         [JsonProperty("hsg")]
@@ -107,15 +75,17 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         [JsonProperty("treatment_volume_cuft")]
         public double? WaterQualityDetentionVolume { get; set; }
 
-        //[JsonProperty("area_sqft")]
-        [JsonIgnore]
-        public double? WettedFootprint { get; set; }
-
         [JsonProperty("winter_demand_cfs")]
         public double? WinterHarvestedWaterDemand { get; set; }
 
         [JsonProperty("design_storm_depth_inches")]
         public double? DesignStormwaterDepth { get; set; }
+
+        [JsonProperty("area_sqft")]
+        public double? Area { get; set; }
+
+        [JsonProperty("design_capacity_cfs")]
+        public double? DesignCapacity { get; set; }
     }
 
     public static class TreatmentFacilityExtensions
@@ -126,8 +96,6 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             var lspcBasinKey = treatmentBMP.LSPCBasin?.LSPCBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
             
-            
-
             if (!isFullyParameterized)
             {
                 return new TreatmentFacility
@@ -138,43 +106,90 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 };
             }
 
+            double? treatmentRate = null;
+
+
+            var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
+
+            // treatment rate is an alias for four different fields, so we need to pick the one that's not null
+            if (modelingAttribute.InfiltrationDischargeRate != null)
+            {
+                treatmentRate = modelingAttribute.InfiltrationDischargeRate;
+            }
+            else if (modelingAttribute.TreatmentRate != null)
+            {
+                treatmentRate = modelingAttribute.TreatmentRate;
+            }
+            else if (modelingAttribute.AverageDivertedFlowrate != null)
+            {
+                treatmentRate = modelingAttribute.AverageDivertedFlowrate;
+            }
+            else if (modelingAttribute.AverageTreatmentFlowrate != null)
+            {
+                treatmentRate = modelingAttribute.AverageTreatmentFlowrate;
+            }
+
+            double? area = null;
+
+            // area_sqft is an alias for four different fields, so we need to take the one that's not null
+            if (modelingAttribute.EffectiveFootprint != null)
+            {
+                area = modelingAttribute.EffectiveFootprint;
+            }
+            else if (modelingAttribute.InfiltrationSurfaceArea != null)
+            {
+                area = modelingAttribute.InfiltrationSurfaceArea;
+            }
+            else if (modelingAttribute.MediaBedFootprint != null)
+            {
+                area = modelingAttribute.MediaBedFootprint;
+            }
+            else if (modelingAttribute.WettedFootprint != null)
+            {
+                area = modelingAttribute.WettedFootprint;
+            }
+
+            double? designCapacity = null;
+
+            if (modelingAttribute.DesignDryWeatherTreatmentCapacity != null)
+            {
+                designCapacity = modelingAttribute.DesignDryWeatherTreatmentCapacity;
+            }
+            else if (modelingAttribute.DesignLowFlowDiversionCapacity != null)
+            {
+                designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity;
+            }
+
             var treatmentFacility = new TreatmentFacility
             {
                 NodeID = treatmentBMPNodeID,
                 FacilityType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
                 ReferenceDataKey = lspcBasinKey,
                 DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
-                AverageDivertedFlowrate = treatmentBMP.TreatmentBMPModelingAttribute.AverageDivertedFlowrate,
-                AverageTreatmentFlowrate = treatmentBMP.TreatmentBMPModelingAttribute.AverageTreatmentFlowrate,
-                DesignDryWeatherTreatmentCapacity = treatmentBMP.TreatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity,
-                DesignLowFlowDiversionCapacity = treatmentBMP.TreatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity,
-                DesignMediaFiltrationRate = treatmentBMP.TreatmentBMPModelingAttribute.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = treatmentBMP.TreatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool,
-                DiversionRate = treatmentBMP.TreatmentBMPModelingAttribute.DiversionRate,
-                DrawdownTimeforWQDetentionVolume = treatmentBMP.TreatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume,
-                EffectiveFootprint = treatmentBMP.TreatmentBMPModelingAttribute.EffectiveFootprint,
-                EffectiveRetentionDepth = treatmentBMP.TreatmentBMPModelingAttribute.EffectiveRetentionDepth,
-                InfiltrationDischargeRate = treatmentBMP.TreatmentBMPModelingAttribute.InfiltrationDischargeRate,
-                InfiltrationSurfaceArea = treatmentBMP.TreatmentBMPModelingAttribute.InfiltrationSurfaceArea,
-                MediaBedFootprint = treatmentBMP.TreatmentBMPModelingAttribute.MediaBedFootprint,
-                // todo: this bad boi has to be either "summer," "winter," or "both", which change will be made soon.
+                DesignCapacity = designCapacity,
+                DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
+                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool,
+                DiversionRate = modelingAttribute.DiversionRate,
+                DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
+                Area = area,
+                EffectiveRetentionDepth = modelingAttribute.EffectiveRetentionDepth,
+                // todo: right now this is modeled as a select-multiple, but it's going to be changing to a pick-one of either "summer" or "winter" soon.
                 MonthsOfOperation = "jan",
-                PermanentPoolorWetlandVolume = treatmentBMP.TreatmentBMPModelingAttribute.PermanentPoolorWetlandVolume,
-                RoutingConfiguration = treatmentBMP.TreatmentBMPModelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID ? true : false,
-                StorageVolumeBelowLowestOutletElevation = treatmentBMP.TreatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation,
-                SummerHarvestedWaterDemand = treatmentBMP.TreatmentBMPModelingAttribute.SummerHarvestedWaterDemand,
-                
-                TimeOfConcentration = treatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName,
-
-                TotalDrawdownTime = treatmentBMP.TreatmentBMPModelingAttribute.DrawdownTimeForDetentionVolume,
-                TotalEffectiveBMPVolume = treatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume,
-                TreatmentRate = treatmentBMP.TreatmentBMPModelingAttribute.TreatmentRate,
-                UnderlyingHydrologicSoilGroup = treatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName,
-                UnderlyingInfiltrationRate = treatmentBMP.TreatmentBMPModelingAttribute.UnderlyingInfiltrationRate,
-                UpstreamBMP = treatmentBMP.TreatmentBMPModelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPModelingAttribute.UpstreamTreatmentBMPID.Value) : null,
-                WaterQualityDetentionVolume = treatmentBMP.TreatmentBMPModelingAttribute.WaterQualityDetentionVolume,
-                WettedFootprint = treatmentBMP.TreatmentBMPModelingAttribute.WettedFootprint,
-                WinterHarvestedWaterDemand = treatmentBMP.TreatmentBMPModelingAttribute.WinterHarvestedWaterDemand
+                PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolorWetlandVolume,
+                RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
+                StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,
+                SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand,
+                // todo: we should not have to supply defaults ourselves. Austin will fix this soon
+                TimeOfConcentration = modelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
+                // todo: this is not the right value, but it's not clear from the spec what value is supposed to be used here. Austin will fix the spec soon.
+                TotalDrawdownTime = modelingAttribute.DrawdownTimeforWQDetentionVolume,
+                TotalEffectiveBMPVolume = modelingAttribute.TotalEffectiveBMPVolume,
+                TreatmentRate = treatmentRate,
+                UnderlyingHydrologicSoilGroup = modelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName,
+                UnderlyingInfiltrationRate = modelingAttribute.UnderlyingInfiltrationRate,
+                UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
+                WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
+                WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand
             };
             return treatmentFacility;
         }

@@ -217,6 +217,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
                 .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList()
                 .Where(x=>x.IsFullyParameterized())
+                //.Where(x=>x.TreatmentBMPTypeID == 36)
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
@@ -227,9 +228,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 out var responseContent);
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
-
-            var foo = new {rpcTime = stopwatchElapsedMilliseconds, responseContent = responseContent};
-            return Json(foo, JsonRequestBehavior.AllowGet);
+            return Json(
+                new
+                {
+                    rpcTime = stopwatchElapsedMilliseconds, responseContent = responseContent,
+                    requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
+                }, JsonRequestBehavior.AllowGet);
         }
 
         private static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent)
