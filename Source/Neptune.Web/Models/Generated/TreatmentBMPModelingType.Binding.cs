@@ -198,43 +198,43 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain Instance = new TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain(1, @"Bioinfiltration (Bioretention With Raised Underdrain)", @"Bioinfiltration (bioretention with raised underdrain)");
+        public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain Instance = new TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain(1, @"BioinfiltrationBioretentionWithRaisedUnderdrain)", @"Bioinfiltration (bioretention with raised underdrain)");
     }
 
     public partial class TreatmentBMPModelingTypeBioretentionWithNoUnderdrain : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeBioretentionWithNoUnderdrain(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain Instance = new TreatmentBMPModelingTypeBioretentionWithNoUnderdrain(2, @"Bioretention With No Underdrain", @"Bioretention with no Underdrain");
+        public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain Instance = new TreatmentBMPModelingTypeBioretentionWithNoUnderdrain(2, @"BioretentionWithNoUnderdrain", @"Bioretention with no Underdrain");
     }
 
     public partial class TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner Instance = new TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner(3, @"Bioretention With Underdrain And Impervious Liner", @"Bioretention with Underdrain and Impervious Liner");
+        public static readonly TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner Instance = new TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner(3, @"BioretentionWithUnderdrainAndImperviousLiner", @"Bioretention with Underdrain and Impervious Liner");
     }
 
     public partial class TreatmentBMPModelingTypeCisternsForHarvestAndUse : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeCisternsForHarvestAndUse(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeCisternsForHarvestAndUse Instance = new TreatmentBMPModelingTypeCisternsForHarvestAndUse(4, @"Cisterns For Harvest And Use", @"Cisterns for Harvest and Use");
+        public static readonly TreatmentBMPModelingTypeCisternsForHarvestAndUse Instance = new TreatmentBMPModelingTypeCisternsForHarvestAndUse(4, @"CisternsForHarvestAndUse", @"Cisterns for Harvest and Use");
     }
 
     public partial class TreatmentBMPModelingTypeConstructedWetland : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeConstructedWetland(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeConstructedWetland Instance = new TreatmentBMPModelingTypeConstructedWetland(5, @"Constructed Wetland", @"Constructed Wetland");
+        public static readonly TreatmentBMPModelingTypeConstructedWetland Instance = new TreatmentBMPModelingTypeConstructedWetland(5, @"ConstructedWetland", @"Constructed Wetland");
     }
 
     public partial class TreatmentBMPModelingTypeDryExtendedDetentionBasin : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeDryExtendedDetentionBasin(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeDryExtendedDetentionBasin Instance = new TreatmentBMPModelingTypeDryExtendedDetentionBasin(6, @"Dry Extended Detention Basin", @"Dry Extended Detention Basin");
+        public static readonly TreatmentBMPModelingTypeDryExtendedDetentionBasin Instance = new TreatmentBMPModelingTypeDryExtendedDetentionBasin(6, @"DryExtendedDetentionBasin", @"Dry Extended Detention Basin");
     }
 
     public partial class TreatmentBMPModelingTypeDryWeatherTreatmentSystems : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeDryWeatherTreatmentSystems(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeDryWeatherTreatmentSystems Instance = new TreatmentBMPModelingTypeDryWeatherTreatmentSystems(7, @"Dry Weather Treatment Systems", @"Dry Weather Treatment Systems");
+        public static readonly TreatmentBMPModelingTypeDryWeatherTreatmentSystems Instance = new TreatmentBMPModelingTypeDryWeatherTreatmentSystems(7, @"DryWeatherTreatmentSystems", @"Dry Weather Treatment Systems");
     }
 
     public partial class TreatmentBMPModelingTypeDrywell : TreatmentBMPModelingType
@@ -246,84 +246,84 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPModelingTypeFlowDurationControlBasin : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeFlowDurationControlBasin(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeFlowDurationControlBasin Instance = new TreatmentBMPModelingTypeFlowDurationControlBasin(9, @"Flow Duration Control Basin", @"Flow Duration Control Basin");
+        public static readonly TreatmentBMPModelingTypeFlowDurationControlBasin Instance = new TreatmentBMPModelingTypeFlowDurationControlBasin(9, @"FlowDurationControlBasin", @"Flow Duration Control Basin");
     }
 
     public partial class TreatmentBMPModelingTypeFlowDurationControlTank : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeFlowDurationControlTank(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeFlowDurationControlTank Instance = new TreatmentBMPModelingTypeFlowDurationControlTank(10, @"Flow Duration Control Tank", @"Flow Duration Control Tank");
+        public static readonly TreatmentBMPModelingTypeFlowDurationControlTank Instance = new TreatmentBMPModelingTypeFlowDurationControlTank(10, @"FlowDurationControlTank", @"Flow Duration Control Tank");
     }
 
     public partial class TreatmentBMPModelingTypeHydrodynamicSeparator : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeHydrodynamicSeparator(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeHydrodynamicSeparator Instance = new TreatmentBMPModelingTypeHydrodynamicSeparator(11, @"Hydrodynamic Separator", @"Hydrodynamic Separator");
+        public static readonly TreatmentBMPModelingTypeHydrodynamicSeparator Instance = new TreatmentBMPModelingTypeHydrodynamicSeparator(11, @"HydrodynamicSeparator", @"Hydrodynamic Separator");
     }
 
     public partial class TreatmentBMPModelingTypeInfiltrationBasin : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeInfiltrationBasin(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeInfiltrationBasin Instance = new TreatmentBMPModelingTypeInfiltrationBasin(12, @"Infiltration Basin", @"Infiltration Basin");
+        public static readonly TreatmentBMPModelingTypeInfiltrationBasin Instance = new TreatmentBMPModelingTypeInfiltrationBasin(12, @"InfiltrationBasin", @"Infiltration Basin");
     }
 
     public partial class TreatmentBMPModelingTypeInfiltrationTrench : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeInfiltrationTrench(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeInfiltrationTrench Instance = new TreatmentBMPModelingTypeInfiltrationTrench(13, @"Infiltration Trench", @"Infiltration Trench");
+        public static readonly TreatmentBMPModelingTypeInfiltrationTrench Instance = new TreatmentBMPModelingTypeInfiltrationTrench(13, @"InfiltrationTrench", @"Infiltration Trench");
     }
 
     public partial class TreatmentBMPModelingTypeLowFlowDiversions : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeLowFlowDiversions(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeLowFlowDiversions Instance = new TreatmentBMPModelingTypeLowFlowDiversions(14, @"Low Flow Diversions", @"Low Flow Diversions");
+        public static readonly TreatmentBMPModelingTypeLowFlowDiversions Instance = new TreatmentBMPModelingTypeLowFlowDiversions(14, @"LowFlowDiversions", @"Low Flow Diversions");
     }
 
     public partial class TreatmentBMPModelingTypePermeablePavement : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypePermeablePavement(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypePermeablePavement Instance = new TreatmentBMPModelingTypePermeablePavement(15, @"Permeable Pavement", @"Permeable Pavement");
+        public static readonly TreatmentBMPModelingTypePermeablePavement Instance = new TreatmentBMPModelingTypePermeablePavement(15, @"PermeablePavement", @"Permeable Pavement");
     }
 
     public partial class TreatmentBMPModelingTypeProprietaryBiotreatment : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeProprietaryBiotreatment(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeProprietaryBiotreatment Instance = new TreatmentBMPModelingTypeProprietaryBiotreatment(16, @"Proprietary Biotreatment", @"Proprietary Biotreatment");
+        public static readonly TreatmentBMPModelingTypeProprietaryBiotreatment Instance = new TreatmentBMPModelingTypeProprietaryBiotreatment(16, @"ProprietaryBiotreatment", @"Proprietary Biotreatment");
     }
 
     public partial class TreatmentBMPModelingTypeProprietaryTreatmentControl : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeProprietaryTreatmentControl(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeProprietaryTreatmentControl Instance = new TreatmentBMPModelingTypeProprietaryTreatmentControl(17, @"Proprietary Treatment Control", @"Proprietary Treatment Control");
+        public static readonly TreatmentBMPModelingTypeProprietaryTreatmentControl Instance = new TreatmentBMPModelingTypeProprietaryTreatmentControl(17, @"ProprietaryTreatmentControl", @"Proprietary Treatment Control");
     }
 
     public partial class TreatmentBMPModelingTypeSandFilters : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeSandFilters(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeSandFilters Instance = new TreatmentBMPModelingTypeSandFilters(18, @"Sand Filters", @"Sand Filters");
+        public static readonly TreatmentBMPModelingTypeSandFilters Instance = new TreatmentBMPModelingTypeSandFilters(18, @"SandFilters", @"Sand Filters");
     }
 
     public partial class TreatmentBMPModelingTypeUndergroundInfiltration : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeUndergroundInfiltration(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeUndergroundInfiltration Instance = new TreatmentBMPModelingTypeUndergroundInfiltration(19, @"Underground Infiltration", @"Underground Infiltration");
+        public static readonly TreatmentBMPModelingTypeUndergroundInfiltration Instance = new TreatmentBMPModelingTypeUndergroundInfiltration(19, @"UndergroundInfiltration", @"Underground Infiltration");
     }
 
     public partial class TreatmentBMPModelingTypeVegetatedFilterStrip : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeVegetatedFilterStrip(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeVegetatedFilterStrip Instance = new TreatmentBMPModelingTypeVegetatedFilterStrip(20, @"Vegetated Filter Strip", @"Vegetated Filter Strip");
+        public static readonly TreatmentBMPModelingTypeVegetatedFilterStrip Instance = new TreatmentBMPModelingTypeVegetatedFilterStrip(20, @"VegetatedFilterStrip", @"Vegetated Filter Strip");
     }
 
     public partial class TreatmentBMPModelingTypeVegetatedSwale : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeVegetatedSwale(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeVegetatedSwale Instance = new TreatmentBMPModelingTypeVegetatedSwale(21, @"Vegetated Swale", @"Vegetated Swale");
+        public static readonly TreatmentBMPModelingTypeVegetatedSwale Instance = new TreatmentBMPModelingTypeVegetatedSwale(21, @"VegetatedSwale", @"Vegetated Swale");
     }
 
     public partial class TreatmentBMPModelingTypeWetDetentionBasin : TreatmentBMPModelingType
     {
         private TreatmentBMPModelingTypeWetDetentionBasin(int treatmentBMPModelingTypeID, string treatmentBMPModelingTypeName, string treatmentBMPModelingTypeDisplayName) : base(treatmentBMPModelingTypeID, treatmentBMPModelingTypeName, treatmentBMPModelingTypeDisplayName) {}
-        public static readonly TreatmentBMPModelingTypeWetDetentionBasin Instance = new TreatmentBMPModelingTypeWetDetentionBasin(22, @"Wet Detention Basin", @"Wet Detention Basin");
+        public static readonly TreatmentBMPModelingTypeWetDetentionBasin Instance = new TreatmentBMPModelingTypeWetDetentionBasin(22, @"WetDetentionBasin", @"Wet Detention Basin");
     }
 }

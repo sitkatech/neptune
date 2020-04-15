@@ -7,11 +7,13 @@ using Neptune.Web.Security;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Web.Mvc;
+using Neptune.Web.Models;
 using Edge = Neptune.Web.Areas.Modeling.Models.Nereid.Edge;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 
@@ -79,7 +81,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var validateCallStartTime = DateTime.Now;
             var networkValidatorResult =
-                RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, out var responseContent);
+                RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, out _);
 
             var validateCallEndTime = DateTime.Now;
 
@@ -109,7 +111,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var subgraphCallStartTime = DateTime.Now;
 
             var subgraphResult = RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-                networkValidatorUrl, out var responseContent);
+                networkValidatorUrl, out _);
             var subgraphCallEndTime = DateTime.Now;
             
             var returnValue = new
@@ -140,7 +142,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
             var subgraphCallStartTime = DateTime.Now;
-            var responseObject =
+            var unused =
                 RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(solutionSequenceRequestObject,
                     networkValidatorUrl, out var responseContent);
             var subgraphCallEndTime = DateTime.Now;
@@ -172,7 +174,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
-            var responseObject = RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent);
+            var unused = RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent);
             
             var returnValue = new
             {
@@ -204,6 +206,30 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     });
 
             return Json(new {TreatmentSites = treatmentSites}, JsonRequestBehavior.AllowGet);
+        }
+        
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult TreatmentFacility()
+        {
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+
+            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList()
+                .Where(x=>x.IsFullyParameterized())
+                .Select(x => x.ToTreatmentFacility()).ToList();
+
+            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl,
+                out var responseContent);
+            var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+
+            var foo = new {rpcTime = stopwatchElapsedMilliseconds, responseContent = responseContent};
+            return Json(foo, JsonRequestBehavior.AllowGet);
         }
 
         private static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent)
