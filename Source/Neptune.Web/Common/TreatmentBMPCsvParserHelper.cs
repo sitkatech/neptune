@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -84,9 +85,15 @@ namespace Neptune.Web.Common
                 }
                 treatmentBMPsToUpload.Add(currentBMP);
                 errorList.AddRange(currentErrorList);
-                modelingAttributes.Add(ParseModelingAttributes(currentBMP, currentRow, fieldsDict, availableModelingAttributes, rowCount, out currentErrorList, out treatmentBMPOperationMonths));
-                errorList.AddRange(currentErrorList);
-                treatmentBMPOperationMonths.AddRange(currentTreatmentBMPOperationMonths);
+                
+                if (availableModelingAttributes.Count > 0)
+                {
+                    modelingAttributes.Add(ParseModelingAttributes(currentBMP, currentRow, fieldsDict,
+                        availableModelingAttributes, rowCount, out currentErrorList, out treatmentBMPOperationMonths));
+                    errorList.AddRange(currentErrorList);
+                    treatmentBMPOperationMonths.AddRange(currentTreatmentBMPOperationMonths);
+                }
+
                 customAttributes.AddRange(ParseCustomAttributes(currentBMP, currentRow, fieldsDict, customAttributeTypes.ToList(), rowCount, out currentErrorList, out currentCustomAttributeValues));
                 customAttributeValues.AddRange(currentCustomAttributeValues);
                 errorList.AddRange(currentErrorList);
@@ -447,24 +454,25 @@ namespace Neptune.Web.Common
             treatmentBMPOperationMonths = new List<TreatmentBMPOperationMonth>();
             foreach (var attribute in availableModelingAttributesForType)
             {
-                if (fieldsDict.ContainsKey(attribute))
+                if (fieldsDict.ContainsKey(attribute) && !String.IsNullOrWhiteSpace(currentRow[fieldsDict[attribute]]))
                 {
                     var modelingProperty = GetAppropriateModelingAttributeColumnName(attribute);
                     var value = currentRow[fieldsDict[attribute]];
-
-                    if (modelingProperty == FieldDefinition.MonthsOfOperation.FieldDefinitionName && !String.IsNullOrWhiteSpace(value))
+                    if (modelingProperty == FieldDefinition.MonthsOfOperation.FieldDefinitionName)
                     {
-                        var months = value.Split(' ');
+                        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                        var months = value.Split(',');
                         foreach (var month in months)
                         {
-                            if (!monthsToInt.ContainsKey(month))
+                            var titleCasedmonth = textInfo.ToTitleCase(month.Trim().ToLower());
+                            if (!monthsToInt.ContainsKey(titleCasedmonth))
                             {
-                                currentErrorList.Add($"{month} is an invalid entry for {attribute}. Please check the month entries, ensuring that each month is separated by a space, at row: {rowCount}." +
+                                currentErrorList.Add($"'{month}' is an invalid entry for {attribute}. Please check the month entries, ensuring that each month is separated by a comma, at row: {rowCount}. \n" +
                                                      $"Acceptable values are: {string.Join(", ", monthsToInt.Select(x => x.Key))}");
                             }
                             else
                             {
-                                treatmentBMPOperationMonths.Add(new TreatmentBMPOperationMonth(treatmentBMP, monthsToInt[month]));
+                                treatmentBMPOperationMonths.Add(new TreatmentBMPOperationMonth(treatmentBMP, monthsToInt[titleCasedmonth]));
                             }
                         }
                     }
@@ -603,7 +611,7 @@ namespace Neptune.Web.Common
 
             if (customAttributesDifference.Any())
             {
-                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property, modeling attribute, or custom attribute of the BMP type ‘{bmpType}’");
+                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property, modeling attribute, or custom attribute of the BMP type ‘{HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType.TreatmentBMPModelingTypeDisplayName}’");
             }
 
             return fieldsDict;
@@ -647,20 +655,21 @@ namespace Neptune.Web.Common
 
         public static List<string> GetAvailableModelingAttributes(int bmpType)
         {
-            List<string> returnList = new List<string>()
+            List<string> returnList = new List<string>();
+            var modelingType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType;
+            if (modelingType != null)
             {
-                FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName
-            };
-            TreatmentBMPModelingTypeEnum modelingType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(bmpType).TreatmentBMPModelingType.ToEnum;
-            switch (modelingType)
+                returnList.Add(FieldDefinition.TimeOfConcentration.FieldDefinitionDisplayName);
+
+                switch (modelingType.ToEnum)
                 {
                     case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                         returnList.AddRange(new List<string>()
                         {
                             FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName,
                             FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
-                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName, 
-                            FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName, 
+                            FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
+                            FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
                             FieldDefinition.MediaBedFootprint.FieldDefinitionDisplayName,
                             FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName,
                             FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName
@@ -688,7 +697,8 @@ namespace Neptune.Web.Common
                             FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TotalEffectiveBMPVolume.FieldDefinitionDisplayName,
                             FieldDefinition.StorageVolumeBelowLowestOutletElevation.FieldDefinitionDisplayName,
-                            FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName
+                            FieldDefinition.DesignMediaFiltrationRate.FieldDefinitionDisplayName,
+                            FieldDefinition.MediaBedFootprint.FieldDefinitionDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
@@ -770,11 +780,12 @@ namespace Neptune.Web.Common
                             FieldDefinition.DiversionRate.FieldDefinitionDisplayName,
                             FieldDefinition.TreatmentRate.FieldDefinitionDisplayName,
                             FieldDefinition.WettedFootprint.FieldDefinitionDisplayName,
-                            FieldDefinition.EffectiveRetentionDepth.FieldDefinitionDisplayName
+                            FieldDefinition.EffectiveRetentionDepth.FieldDefinitionDisplayName,
+                            FieldDefinition.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionDisplayName
                         });
                         break;
                 }
-
+            }
             return returnList;
         }
 
