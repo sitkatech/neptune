@@ -2,18 +2,17 @@
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Web.Mvc;
-using Neptune.Web.Models;
 using Edge = Neptune.Web.Areas.Modeling.Models.Nereid.Edge;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 
@@ -207,7 +206,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(new {TreatmentSites = treatmentSites}, JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult TreatmentFacility()
@@ -217,7 +216,6 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
                 .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList()
                 .Where(x=>x.IsFullyParameterized())
-                //.Where(x=>x.TreatmentBMPTypeID == 36)
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};

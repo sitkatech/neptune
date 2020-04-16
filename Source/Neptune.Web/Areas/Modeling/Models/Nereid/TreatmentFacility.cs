@@ -160,6 +160,11 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity;
             }
 
+
+            // null-coalescence here represents default values.
+            // It's generally an anti-pattern for an API to require its clients to insert default values,
+            // since the API should be written to replace nulls/absent values with defaults,
+            // but it's so few that it's not worth a revision to the modeling engine at this time (4/16/2020)
             var treatmentFacility = new TreatmentFacility
             {
                 NodeID = treatmentBMPNodeID,
@@ -168,24 +173,23 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool,
+                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool ?? double.PositiveInfinity,
                 DiversionRate = modelingAttribute.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,
                 EffectiveRetentionDepth = modelingAttribute.EffectiveRetentionDepth,
                 // todo: right now this is modeled as a select-multiple, but it's going to be changing to a pick-one of either "summer" or "winter" soon.
+                // todo: #565 will update how this field is stored in OCST so that the correct value can be supplied here..
                 MonthsOfOperation = "jan",
                 PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolorWetlandVolume,
                 RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand,
-                // todo: we should not have to supply defaults ourselves. Austin will fix this soon
                 TimeOfConcentration = modelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
-                // todo: this is not the right value, but it's not clear from the spec what value is supposed to be used here. Austin will fix the spec soon.
                 TotalDrawdownTime = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 TotalEffectiveBMPVolume = modelingAttribute.TotalEffectiveBMPVolume,
                 TreatmentRate = treatmentRate,
-                UnderlyingHydrologicSoilGroup = modelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName,
+                UnderlyingHydrologicSoilGroup = modelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName,
                 UnderlyingInfiltrationRate = modelingAttribute.UnderlyingInfiltrationRate,
                 UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
                 WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
