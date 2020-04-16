@@ -340,6 +340,16 @@ namespace Neptune.Web.Controllers
 
             if (treatmentBMP.Delineation != null)
             {
+                foreach (var delineationLoadGeneratingUnit in treatmentBMP.Delineation.LoadGeneratingUnits)
+                {
+                    delineationLoadGeneratingUnit.DelineationID = null;
+                }
+                HttpRequestStorage.DatabaseEntities.SaveChanges(); 
+
+                HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMP.Delineation
+                    .DelineationOverlaps);
+                HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMP.Delineation
+                    .DelineationOverlapsWhereYouAreTheOverlappingDelineation);
                 HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMP.Delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
