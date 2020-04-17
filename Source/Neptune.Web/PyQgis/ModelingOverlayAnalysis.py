@@ -151,9 +151,7 @@ def bufferZero(inputLayer, memoryOutputName, context=None):
 def fixGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
     params = {
         'INPUT':inputLayer,
-        'OUTPUT':'memory:'+memoryOutputName
-    }
-
+        'OUTPUT':'memory:'+memoryOutputName}
     if context is not None:
         fixResult = processing.run("native:fixgeometries", params)
     else:
@@ -167,7 +165,7 @@ def snapGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
         'REFERENCE_LAYER':inputLayer,
         'TOLERANCE':1,
         'BEHAVIOR':1,
-        'OUTPUT':'memory:'+memoryOutputName
+        'OUTPUT':'TEMPORARY_OUTPUT'
     }
     
     if context is not None:
@@ -229,7 +227,6 @@ if __name__ == '__main__':
     clip_layer = None
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
-        clip_layer = fixGeometriesWithinLayer(clip_layer, "ClipLayer", context=PROCESSING_CONTEXT)
         
     lspcLayer = fetchLayer("vLSPCBasinLGUInput")
     regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")
@@ -237,19 +234,9 @@ if __name__ == '__main__':
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
 
     # perhaps overly-aggressive application of the buffer-zero and 
-    lspcLayer = fixGeometriesWithinLayer(lspcLayer, "LSPCFixed", context=PROCESSING_CONTEXT)
     lspcLayer = bufferZero(lspcLayer, "LSPCBasins", context=PROCESSING_CONTEXT)
-
-    QgsVectorFileWriter.writeAsVectorFormat(lspcLayer, "C:\\temp\\lspcsBeforeSnapFix.shp", "utf-8", delineationLayer.crs(), "ESRI Shapefile")
-
-    # if clip_layer is not None:
-    #     lspcLayer = clip(lspcLayer, clip_layer, memoryOutputName="LSPCBasins", context=PROCESSING_CONTEXT)
-    #     lspcLayer = fixGeometriesWithinLayer(lspcLayer, "LSPCBasins", context=PROCESSING_CONTEXT)
-
-    regionalSubbasinLayer = fixGeometriesWithinLayer(regionalSubbasinLayer, "RegionalSubbasinFixed", context=PROCESSING_CONTEXT)
     regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", context=PROCESSING_CONTEXT)
 
-    delineationLayer = fixGeometriesWithinLayer(delineationLayer, "DelineationFixed", context=PROCESSING_CONTEXT)
     delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", context=PROCESSING_CONTEXT)
     delineationLayer = bufferZero(delineationLayer, "Delineations", context=PROCESSING_CONTEXT)
 
@@ -258,13 +245,13 @@ if __name__ == '__main__':
     wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
 
     # At present time, we're only concerned with the area covered by LSPC basins. 
-    regionalSubbasinLayer = clip(regionalSubbasinLayer, lspcLayer, "FixedRSBClipped")
+    regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, lspcLayer, "RSBClipped")
     delineationLayerClipped = clip(delineationLayer, lspcLayer, "DelineationClipped")
     wqmpLayerClipped = clip(wqmpLayer, lspcLayer, "WQMPClipped")
 
     wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
 
-    lspc_rsb = union(lspcLayer, regionalSubbasinLayer, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
+    lspc_rsb = union(lspcLayer, regionalSubbasinLayerClipped, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb)
     lspc_rsb = bufferZero(lspc_rsb, "LSPC-RSB", context=PROCESSING_CONTEXT)
 
@@ -279,18 +266,17 @@ if __name__ == '__main__':
         masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
     else: 
         masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
-    
+
     masterOverlay.startEditing()
 
     for feat in masterOverlay.getFeatures():
         ## todo: would be nice to also exclude those where the RegionalSubbasinID is non-exist. could also handle that by making LSPC_RSB as an intersect instead of a union.
-        if feat.geometry().area() < 1 or feat["RSBID"] is None:
+        if feat.geometry().area() < 1:
             masterOverlay.deleteFeature(feat.id())
     
-    masterOverlay.commitChanges()
-
-    materOverlay = fixGeometriesWithinLayer(masterOverlay, "MasterOverlay", context=PROCESSING_CONTEXT)
+    # masterOverlay.commitChanges()
 
     QgsVectorFileWriter.writeAsVectorFormat(masterOverlay, OUTPUT_PATH, "utf-8", delineationLayer.crs(), "ESRI Shapefile")
+
 
     #raiseIfLayerInvalid(masterOverlay)

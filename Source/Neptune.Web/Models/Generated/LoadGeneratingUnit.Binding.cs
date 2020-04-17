@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LoadGeneratingUnit(int loadGeneratingUnitID, DbGeometry loadGeneratingUnitGeometry, int? lSPCBasinID, int? regionalSubbasinID, int? delineationID, int? waterQualityManagementPlanID) : this()
+        public LoadGeneratingUnit(int loadGeneratingUnitID, DbGeometry loadGeneratingUnitGeometry, int? lSPCBasinID, int? regionalSubbasinID, int? delineationID, int? waterQualityManagementPlanID, bool? isEmptyResponseFromHRUService) : this()
         {
             this.LoadGeneratingUnitID = loadGeneratingUnitID;
             this.LoadGeneratingUnitGeometry = loadGeneratingUnitGeometry;
@@ -38,6 +38,7 @@ namespace Neptune.Web.Models
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DelineationID = delineationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
+            this.IsEmptyResponseFromHRUService = isEmptyResponseFromHRUService;
         }
 
         /// <summary>
@@ -110,6 +111,7 @@ namespace Neptune.Web.Models
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
+        public bool? IsEmptyResponseFromHRUService { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return LoadGeneratingUnitID; } set { LoadGeneratingUnitID = value; } }
 

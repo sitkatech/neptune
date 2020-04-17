@@ -21,6 +21,7 @@ namespace Neptune.Web.Models
             Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
+            Property(x => x.IsEmptyResponseFromHRUService).HasColumnName(@"IsEmptyResponseFromHRUService").HasColumnType("bit").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.LSPCBasin).WithMany(b => b.LoadGeneratingUnits).HasForeignKey(c => c.LSPCBasinID).WillCascadeOnDelete(false); // FK_LoadGeneratingUnit_LSPCBasin_LSPCBasinID

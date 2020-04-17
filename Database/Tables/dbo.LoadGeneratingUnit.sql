@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[LoadGeneratingUnit](
 	[RegionalSubbasinID] [int] NULL,
 	[DelineationID] [int] NULL,
 	[WaterQualityManagementPlanID] [int] NULL,
+	[IsEmptyResponseFromHRUService] [bit] NULL,
  CONSTRAINT [PK_LoadGeneratingUnit_LoadGeneratingUnitID] PRIMARY KEY CLUSTERED 
 (
 	[LoadGeneratingUnitID] ASC

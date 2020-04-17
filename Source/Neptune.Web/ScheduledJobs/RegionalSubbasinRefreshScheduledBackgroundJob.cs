@@ -1,25 +1,24 @@
-﻿using GeoJSON.Net.Feature;
-using Hangfire;
+﻿using System;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using GeoJSON.Net.CoordinateReferenceSystem;
+using Hangfire;
+using LtInfo.Common.GeoJson;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
     class RegionalSubbasinRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
-        public new static string JobName = "Refresh RSBs";
-
         public RegionalSubbasinRefreshScheduledBackgroundJob(int currentPersonPersonID, bool queueLGURefresh)
         {
             PersonID = currentPersonPersonID;
@@ -33,8 +32,8 @@ namespace Neptune.Web.ScheduledJobs
         // only runs in prod to avoid hitting OC Survey with multiple concurrent identical requests
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Local,
             NeptuneEnvironmentType.Prod,
+            //NeptuneEnvironmentType.Local,
         };
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person, bool queueLguRefresh)
@@ -48,43 +47,56 @@ namespace Neptune.Web.ScheduledJobs
             ThrowIfDownstreamInvalid(dbContext);
             MergeAndReproject(dbContext, person);
             RefreshCentralizedDelineations(dbContext, person);
-            RefreshIntersectionCache(dbContext);
 
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob());
 
             if (queueLguRefresh)
             {
-                UpdateLoadGeneratingUnits(dbContext);
+                UpdateLoadGeneratingUnits(dbContext, person);
             }
         }
 
-        private static void RefreshIntersectionCache(DatabaseEntities dbContext)
+        private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
         {
-            dbContext.Database.CommandTimeout = 30000;
-            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
-        }
+            var catchmentGeometriesForLGURefresh = dbContext.RegionalSubbasins
+                .Where(x => x.IsWaitingForLGURefresh == true).Select(x => x.CatchmentGeometry);
 
-        private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext)
-        {
-            var regionalSubbasinsWaitingForLGURefresh = dbContext.RegionalSubbasins
-                .Where(x => x.IsWaitingForLGURefresh == true);
-
-            if (!regionalSubbasinsWaitingForLGURefresh.Any())
+            var featureCollection = new FeatureCollection()
             {
-                return;
+                CRS = new NamedCRS("EPSG:2771")
+            };
+
+            foreach (var dbGeometry in catchmentGeometriesForLGURefresh)
+            {
+                featureCollection.Features.Add(DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry));
             }
 
-            var catchmentGeometriesForLGURefresh = regionalSubbasinsWaitingForLGURefresh.Select(x => x.CatchmentGeometry).ToList();
+            // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now...
+            //var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
+            //var loadGeneratingUnitRefreshAreas = regionalSubbasinsWaitingForRefresh.Select(x=>
+            //    new LoadGeneratingUnitRefreshArea(x.CatchmentGeometry)).ToList();
 
-            var refreshAreaGeoemtry = catchmentGeometriesForLGURefresh.UnionListGeometries();
+            //dbContext.LoadGeneratingUnitRefreshAreas.AddRange(loadGeneratingUnitRefreshAreas);
+            //dbContext.SaveChanges(person);
 
-            var loadGeneratingUnitRefreshArea = new LoadGeneratingUnitRefreshArea(refreshAreaGeoemtry);
-            dbContext.LoadGeneratingUnitRefreshAreas.Add(loadGeneratingUnitRefreshArea);
-            dbContext.SaveChangesWithNoAuditing();
+            //var loadGeneratingUnitRefreshScheduledBackgroundJob =
+            //    new LoadGeneratingUnitRefreshScheduledBackgroundJob(dbContext);
 
-            BackgroundJob.Enqueue(() =>
-                ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(loadGeneratingUnitRefreshArea
-                    .LoadGeneratingUnitRefreshAreaID));
+            //loadGeneratingUnitRefreshScheduledBackgroundJob.LoadGeneratingUnitRefreshAfterRSBRefresh(
+            //    loadGeneratingUnitRefreshAreas);
+
+            //foreach (var regionalSubbasin in regionalSubbasinsWaitingForRefresh)
+            //{
+            //    regionalSubbasin.IsWaitingForLGURefresh = false;
+            //}
+
+            //dbContext.SaveChanges(person);
+
+            // Instead, just queue a total LGU update
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
+
+            // And follow it up with an HRU update
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
 
         }
 
@@ -218,7 +230,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (TaskCanceledException tce)
                     {
                         throw new RemoteServiceException(
-                            "The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            $"The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             tce);
                     }
 
@@ -230,7 +242,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (JsonReaderException jre)
                     {
                         throw new RemoteServiceException(
-                            "The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            $"The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             jre);
                     }
 

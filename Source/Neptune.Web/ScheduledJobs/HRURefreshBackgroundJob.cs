@@ -1,15 +1,22 @@
-﻿using MoreLinq;
+﻿using System;
 using Neptune.Web.Common;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using MoreLinq;
+using Neptune.Web.Models;
 using Exception = System.Exception;
 
 namespace Neptune.Web.ScheduledJobs
 {
     public class HRURefreshBackgroundJob : ScheduledBackgroundJobBase
     {
-        public new static string JobName => "HRU Refresh";
+
+        public HRURefreshBackgroundJob()
+        {
+        }
+
+        public new static string JobName => "LGU Refresh";
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
@@ -24,17 +31,18 @@ namespace Neptune.Web.ScheduledJobs
 
         private void HRURefreshImpl()
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
             // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
             
             // collect the load generating units that require updates,
             // group them by LSPC basin so requests to the HRU service are spatially bounded,
             // and batch them for processing 25 at a time so requests are small.
 
-            var loadGeneratingUnitsToUpdate = DbContext.LoadGeneratingUnits.Where(x => !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null)).ToList();
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdateGroupedByLSPCBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.RegionalSubbasin);
+            var loadGeneratingUnitsToUpdate = DbContext.LoadGeneratingUnits.Where(x => !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null || x.IsEmptyResponseFromHRUService == true)).ToList();
+
+            var loadGeneratingUnitsToUpdateGroupedByLSPCBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.LSPCBasin);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByLSPCBasin)
             {
@@ -45,7 +53,15 @@ namespace Neptune.Web.ScheduledJobs
                     try
                     {
                         var batchHRUCharacteristics =
-                            HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), DbContext, Logger);
+                            HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), DbContext, Logger).ToList();
+
+                        if (!batchHRUCharacteristics.Any())
+                        {
+                            foreach (var loadGeneratingUnit in batch)
+                            {
+                                loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
+                            }
+                        }
 
                         DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics);
                         DbContext.SaveChangesWithNoAuditing();
