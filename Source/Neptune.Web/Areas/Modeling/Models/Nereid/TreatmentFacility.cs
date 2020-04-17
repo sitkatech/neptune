@@ -160,6 +160,14 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity;
             }
 
+            if (designCapacity == null)
+            {
+                designCapacity = treatmentRate;
+            }
+            else if (treatmentRate == null)
+            {
+                treatmentRate = designCapacity;
+            }
 
             // null-coalescence here represents default values.
             // It's generally an anti-pattern for an API to require its clients to insert default values,
@@ -180,7 +188,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 EffectiveRetentionDepth = modelingAttribute.EffectiveRetentionDepth,
                 // todo: right now this is modeled as a select-multiple, but it's going to be changing to a pick-one of either "summer" or "winter" soon.
                 // todo: #565 will update how this field is stored in OCST so that the correct value can be supplied here..
-                MonthsOfOperation = "jan",
+                MonthsOfOperation = "both",
                 PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolorWetlandVolume,
                 RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,

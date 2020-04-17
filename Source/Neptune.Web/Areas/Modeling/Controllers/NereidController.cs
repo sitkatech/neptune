@@ -190,10 +190,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var waterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
 
-            var treatmentSites = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .SelectMany(x => x.QuickBMPs).Join(
+            var list = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .SelectMany(x => x.QuickBMPs.Where(y=>y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
                     waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
-                    x => x.WaterQualityManagementPlanID, (bmp, node) => new {bmp, node}).ToList().Select(x =>
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new {bmp, node}).ToList();
+
+            var treatmentSites = list.Select(x =>
                     new TreatmentSite
                     {
                         NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
