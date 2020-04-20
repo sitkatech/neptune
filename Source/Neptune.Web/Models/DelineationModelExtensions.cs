@@ -34,12 +34,12 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetDetailUrlForGrid(this Delineation delineation)
         {
-            return UrlTemplate.MakeHrefString(GetDetailUrl(delineation), "View", new Dictionary<string, string>{{"class", "gridButton"}});
+            return UrlTemplate.MakeHrefString(GetDetailUrl(delineation), "View", new Dictionary<string, string> {{"class", "gridButton"}});
         }
 
-        public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Delineation> delineationGeometryStagings)
+        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Delineation> delineationGeometryStagings)
         {
-            var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
+            var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(delineationGeometryStagings.Where(x => x?.DelineationGeometry != null).Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.DelineationGeometry4326);
@@ -58,6 +58,28 @@ namespace Neptune.Web.Models
         {
             var color = Color.FromName(colorName);
             return $"#{color.R:x2}{color.G:x2}{color.B:x2}";
+        }
+
+        /// <summary>
+        /// The preference over delete-full for delineation. Nulls the DelineationID on any LGUs,
+        /// deletes any overlaps, and then deletes the delineation.
+        /// </summary>
+        /// <param name="treatmentBMPDelineation"></param>
+        public static void DeleteDelineation(this Delineation treatmentBMPDelineation)
+        {
+            foreach (var delineationLoadGeneratingUnit in treatmentBMPDelineation.LoadGeneratingUnits)
+            {
+                delineationLoadGeneratingUnit.DelineationID = null;
+            }
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMPDelineation
+                .DelineationOverlaps);
+            HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMPDelineation
+                .DelineationOverlapsWhereYouAreTheOverlappingDelineation);
+            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
         }
     }
 }
