@@ -340,18 +340,7 @@ namespace Neptune.Web.Controllers
 
             if (treatmentBMP.Delineation != null)
             {
-                foreach (var delineationLoadGeneratingUnit in treatmentBMP.Delineation.LoadGeneratingUnits)
-                {
-                    delineationLoadGeneratingUnit.DelineationID = null;
-                }
-                HttpRequestStorage.DatabaseEntities.SaveChanges(); 
-
-                HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMP.Delineation
-                    .DelineationOverlaps);
-                HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMP.Delineation
-                    .DelineationOverlapsWhereYouAreTheOverlappingDelineation);
-                HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMP.Delineation);
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                treatmentBMP.Delineation.DeleteDelineation();
             }
 
             SetMessageForDisplay("Upstream BMP successfully updated");
@@ -538,6 +527,9 @@ namespace Neptune.Web.Controllers
             }
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             
+            // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
+            // We should write a more finely-grained delete that deletes delineations via the
+            // pattern established in DelineationController
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             

@@ -180,7 +180,7 @@ namespace Neptune.Web.Controllers
                 }
                 else
                 {
-                    HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
+                    treatmentBMPDelineation.DeleteDelineation();
                 }
             }
             else
@@ -247,7 +247,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var delineation = treatmentBMP.Delineation;
             var isDelineationDistributed = delineation?.DelineationType == DelineationType.Distributed;
-            var geometry = delineation.DelineationGeometry;
+            var geometry = delineation?.DelineationGeometry;
 
             if (delineation == null)
             {
@@ -255,14 +255,16 @@ namespace Neptune.Web.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
-            foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
-            {
-                delineationLoadGeneratingUnit.DelineationID = null;
-            }
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            //foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
+            //{
+            //    delineationLoadGeneratingUnit.DelineationID = null;
+            //}
+            //HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            //HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+            //HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            delineation.DeleteDelineation();
 
             if (isDelineationDistributed)
             {
@@ -298,14 +300,17 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteDelineation(delineation, viewModel);
             }
 
-            foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
-            {
-                delineationLoadGeneratingUnit.DelineationID = null;
-            }
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            //foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
+            //{
+            //    delineationLoadGeneratingUnit.DelineationID = null;
+            //}
+            //HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            //HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+            //HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            delineation.DeleteDelineation();
+
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
             if (isDelineationDistributed)
