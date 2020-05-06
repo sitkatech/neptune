@@ -1,0 +1,20 @@
+<layer>
+  <name>Jurisdictions</name>
+  <id>LayerInfoImpl-43360ed9:16a6e9f7a23:49e9</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-43360ed9:16a79d62ace:6d1c</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl-43360ed9:16a79d62ace:6d1c</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-43360ed9:16a6e9f7a23:49e8</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

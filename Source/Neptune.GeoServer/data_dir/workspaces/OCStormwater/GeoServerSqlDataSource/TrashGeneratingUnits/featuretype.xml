@@ -1,0 +1,52 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-139e23df:169ffd998d9:-7fff</id>
+  <name>TrashGeneratingUnits</name>
+  <nativeName>vGeoServerTrashGeneratingUnit</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--4c8be7a1:15d76abd161:-7ffe</id>
+  </namespace>
+  <title>vGeoServerTrashGeneratingUnit</title>
+  <keywords>
+    <string>features</string>
+    <string>vGeoServerTrashGeneratingUnit</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-118.12208166679818</minx>
+    <maxx>-117.41282470283623</maxx>
+    <miny>33.3871204799278</miny>
+    <maxy>33.94763459255206</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-118.12208166679818</minx>
+    <maxx>-117.41282470283623</maxx>
+    <miny>33.3871204799278</miny>
+    <maxy>33.94763459255206</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="elevation">
+      <dimensionInfo>
+        <enabled>false</enabled>
+      </dimensionInfo>
+    </entry>
+    <entry key="time">
+      <dimensionInfo>
+        <enabled>false</enabled>
+        <defaultValue/>
+      </dimensionInfo>
+    </entry>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--7c524755:15d7bc5e17f:-7fff</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

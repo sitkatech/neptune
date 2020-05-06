@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gwcConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geowebcache.org/schema/1.13.0 http://geowebcache.org/schema/1.13.0/geowebcache.xsd" xmlns="http://geowebcache.org/schema/1.13.0">
+  <version>1.13.0</version>
+  <backendTimeout>120</backendTimeout>
+  <blobStores>
+    <FileBlobStore default="true">
+      <id>NeptuneGeoserverCache</id>
+      <enabled>true</enabled>
+      <baseDirectory>C:\Sitka\Neptune\NeptuneGeoserverCache</baseDirectory>
+      <fileSystemBlockSize>4096</fileSystemBlockSize>
+    </FileBlobStore>
+  </blobStores>
+  <gridSets/>
+  <layers/>
+</gwcConfiguration>

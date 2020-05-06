@@ -1,0 +1,41 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--2e667036:16907d46a74:-7d9d</id>
+  <name>OnlandVisualTrashAssessmentAreas</name>
+  <nativeName>vGeoServerOnlandVisualTrashAssessmentArea</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--4c8be7a1:15d76abd161:-7ffe</id>
+  </namespace>
+  <title>vGeoServerOnlandVisualTrashAssessmentArea</title>
+  <keywords>
+    <string>features</string>
+    <string>vGeoServerOnlandVisualTrashAssessmentArea</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-118.01652726805541</minx>
+    <maxx>-117.67410669590863</maxx>
+    <miny>33.466016738000064</miny>
+    <maxy>33.87338193887694</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-118.01652726805541</minx>
+    <maxx>-117.67410669590863</maxx>
+    <miny>33.466016738000064</miny>
+    <maxy>33.87338193887694</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--7c524755:15d7bc5e17f:-7fff</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

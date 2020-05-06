@@ -1,0 +1,20 @@
+<layer>
+  <name>MaskLayers</name>
+  <id>LayerInfoImpl--c4854d0:16a8e2ecbde:435b</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-43360ed9:16a79d62ace:6d1c</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl-43360ed9:16a79d62ace:6d1c</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--c4854d0:16a8e2ecbde:435a</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

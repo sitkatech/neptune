@@ -1,0 +1,24 @@
+<layer>
+  <name>Parcels</name>
+  <id>LayerInfoImpl--7c524755:15d7bc5e17f:-7ffc</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-172edce0:1568f3846ac:-7710</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl-6da9e8af:16930f4e1c6:-3f0a</id>
+    </style>
+    <style>
+      <id>StyleInfoImpl--7a268591:164294fdd66:7b5d</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--7c524755:15d7bc5e17f:-7ffd</id>
+  </resource>
+  <queryable>true</queryable>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

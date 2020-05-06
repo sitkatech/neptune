@@ -1,0 +1,15 @@
+<layer>
+  <name>ObservationPointExport</name>
+  <id>LayerInfoImpl-8c7db4:16b9f1ddcfc:-2c12</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fdf</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-8c7db4:16b9f1ddcfc:-2c13</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

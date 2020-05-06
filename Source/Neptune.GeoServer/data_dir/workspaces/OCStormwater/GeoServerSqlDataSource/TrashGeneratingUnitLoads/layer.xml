@@ -1,0 +1,26 @@
+<layer>
+  <name>TrashGeneratingUnitLoads</name>
+  <id>LayerInfoImpl-67cdb93f:16b6ba89b83:51d</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-67cdb93f:16b6ba89b83:51e</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl-67cdb93f:16b6ba89b83:51e</id>
+    </style>
+    <style>
+      <id>StyleInfoImpl-67cdb93f:16b6ba89b83:3c94</id>
+    </style>
+    <style>
+      <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-67cdb93f:16b6ba89b83:51c</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

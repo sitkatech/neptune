@@ -6,7 +6,7 @@
 
 # /Source/
 /Source/.vs/
-/Source/Corral.v12.suo
+/Source/Neptune.v12.suo
 /Source/NuGetPackages
 /Source/Neptune.sln.DotSettings
 /Source/Neptune.sln.DotSettings.user
@@ -28,3 +28,9 @@
 Source/Neptune.Web/PyQgis/.vscode/
 
 /Source/_ReSharper.Caches
+
+
+/Source/Neptune.GeoServer/data_dir/geoserver-environment.properties
+/Source/Neptune.GeoServer/data_dir/.updatepassword.lock
+/Source/Neptune.GeoServer/data_dir/security/*
+/Source/Neptune.GeoServer/data_dir/wps.xml

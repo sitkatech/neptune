@@ -1,0 +1,20 @@
+<layer>
+  <name>LandUseBlocks</name>
+  <id>LayerInfoImpl-1ab83468:16878691b4b:-3c6d</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-1ab83468:16878691b4b:-3c6a</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl-1ab83468:16878691b4b:-3c6a</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-1ab83468:16878691b4b:-3c6e</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

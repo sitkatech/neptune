@@ -1,0 +1,20 @@
+<layer>
+  <name>OnlandVisualTrashAssessmentAreas</name>
+  <id>LayerInfoImpl--2e667036:16907d46a74:-7d9c</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--2e667036:16907d46a74:-711f</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl--2e667036:16907d46a74:-711f</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--2e667036:16907d46a74:-7d9d</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
