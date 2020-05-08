@@ -955,13 +955,12 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ActionResult UploadBMPs(UploadTreatmentBMPsViewModel viewModel)
         {
-            var uploadCSV = viewModel.UploadCSV;
-            var bmpType = viewModel.BMPType;
+            var uploadedCSVFile = viewModel.UploadCSV;
+            // ReSharper disable once PossibleInvalidOperationException
+            var treatmentBMPType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(viewModel.TreatmentBMPTypeID.Value);
+            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadedCSVFile.InputStream, treatmentBMPType, out var errorList, out var customAttributes, out var customAttributeValues, out var modelingAttributes, out var treatmentBMPOperationMonths);
 
-            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType.GetValueOrDefault(), out var errorList,
-                out var customAttributes, out var customAttributeValues, out var modelingAttributes, out var treatmentBMPOperationMonths);
-
-            if (errorList.Count != 0)
+            if (errorList.Any())
             {
                 return ViewUploadBMPs(viewModel, errorList);
             }
