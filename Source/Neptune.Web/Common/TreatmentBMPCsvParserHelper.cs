@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.FileIO;
 using Neptune.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.IO;
@@ -67,31 +68,40 @@ namespace Neptune.Web.Common
 
             // if the fields don't match throw an exception
             var rowCount = 1;
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
+            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
             while (!parser.EndOfData)
             {
                 var currentRow = parser.ReadFields();
 
-                var currentBMP = ParseRequiredAndOptionalFieldAndCreateBMP(currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPType);
+                var currentTreatmentBMP = ParseRequiredAndOptionalFieldAndCreateBMP(currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPType, organizations, stormwaterJurisdictions);
+                if (currentTreatmentBMP != null)
+                {
+                    if (treatmentBMPsToUpload.Select(x => x.TreatmentBMPName).Contains(currentTreatmentBMP.TreatmentBMPName))
+                    {
+                        currentErrorList.Add(
+                            $"The BMP with Name '{currentTreatmentBMP.TreatmentBMPName}' was already added in this upload, duplicate name is found at row: {rowCount}");
+                        continue;
+                    }
 
-                if (treatmentBMPsToUpload.Select(x => x.TreatmentBMPName).Contains(currentBMP.TreatmentBMPName))
-                {
-                    currentErrorList.Add(
-                        $"The BMP with Name '{currentBMP.TreatmentBMPName}' was already added in this upload, duplicate name is found at row: {rowCount}");
-                    continue;
-                }
-                treatmentBMPsToUpload.Add(currentBMP);
-                errorList.AddRange(currentErrorList);
-                
-                if (availableModelingAttributes.Count > 0)
-                {
-                    modelingAttributes.Add(ParseModelingAttributes(currentBMP, currentRow, fieldsDict,
-                        availableModelingAttributes, rowCount, out currentErrorList, out var currentTreatmentBMPOperationMonths));
+                    treatmentBMPsToUpload.Add(currentTreatmentBMP);
                     errorList.AddRange(currentErrorList);
-                    treatmentBMPOperationMonths.AddRange(currentTreatmentBMPOperationMonths);
+
+                    if (availableModelingAttributes.Count > 0)
+                    {
+                        modelingAttributes.Add(ParseModelingAttributes(currentTreatmentBMP, treatmentBMPType, currentRow, fieldsDict,
+                            availableModelingAttributes, rowCount, out currentErrorList,
+                            out var currentTreatmentBMPOperationMonths));
+                        errorList.AddRange(currentErrorList);
+                        treatmentBMPOperationMonths.AddRange(currentTreatmentBMPOperationMonths);
+                    }
+
+                    customAttributes.AddRange(ParseCustomAttributes(currentTreatmentBMP, treatmentBMPType, currentRow, fieldsDict,
+                        customAttributeTypes, rowCount, out currentErrorList,
+                        out var currentCustomAttributeValues));
+                    customAttributeValues.AddRange(currentCustomAttributeValues);
                 }
 
-                customAttributes.AddRange(ParseCustomAttributes(currentBMP, currentRow, fieldsDict, customAttributeTypes.ToList(), rowCount, out currentErrorList, out var currentCustomAttributeValues));
-                customAttributeValues.AddRange(currentCustomAttributeValues);
                 errorList.AddRange(currentErrorList);
                 rowCount++;
             }
@@ -99,34 +109,37 @@ namespace Neptune.Web.Common
             return treatmentBMPsToUpload;
         }
 
-        private static TreatmentBMP ParseRequiredAndOptionalFieldAndCreateBMP(string[] row, Dictionary<string, int> fieldsDict, int count, out List<string> errorList, TreatmentBMPType treatmentBMPType)
+        private static TreatmentBMP ParseRequiredAndOptionalFieldAndCreateBMP(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList, TreatmentBMPType treatmentBMPType, List<Organization> organizations, List<StormwaterJurisdiction> stormwaterJurisdictions)
         {
             errorList = new List<string>();
-            var treatmentBMP = new TreatmentBMP(string.Empty, default(int), default(int), default(int), default(bool),
-                default(int), default(int));
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs;
-            var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
-            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
 
-            var treatmentBMPName = row[fieldsDict["BMP Name"]];
-            if (treatmentBMPName.IsNullOrWhiteSpace())
+            var treatmentBMPName = SetStringValue(row, fieldsDict, rowNumber, errorList, "BMP Name", TreatmentBMP.FieldLengths.TreatmentBMPName, true);
+            var stormwaterJurisdictionID = FindLookupValue(row, fieldsDict, "Jurisdiction", rowNumber, errorList, stormwaterJurisdictions, x => x.Organization.OrganizationName, x => x.StormwaterJurisdictionID, false);
+
+            if (!stormwaterJurisdictionID.HasValue || string.IsNullOrWhiteSpace(treatmentBMPName))
             {
-                errorList.Add(
-                    $"BMP Name is null, empty, or just whitespaces for row: {count}");
+                // no point in going further if we don't have a name and jurisdiction
+                return null;
             }
 
-            if (treatmentBMPs.Select(x => x.TreatmentBMPName).Contains(treatmentBMPName))
+            var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.SingleOrDefault(x => x.TreatmentBMPName == treatmentBMPName && x.StormwaterJurisdictionID == stormwaterJurisdictionID.Value);
+            if (treatmentBMP != null)
             {
-                errorList.Add($"A BMP with name '{treatmentBMPName}' already exists for row: {count}");
+                // one last check; make sure the treatment bmp type of the existing treatment bmp matches the passed type
+                if (treatmentBMPType.TreatmentBMPTypeID != treatmentBMP.TreatmentBMPTypeID)
+                {
+                    errorList.Add($"BMP with name '{treatmentBMPName}' has a Type '{treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName}', which does not match the uploaded Type '{treatmentBMPType.TreatmentBMPTypeName}' for row: {rowNumber}");
+                }
+            }
+            else
+            {
+                treatmentBMP = new TreatmentBMP(treatmentBMPName, treatmentBMPType.TreatmentBMPTypeID, stormwaterJurisdictionID.Value, default(int), default(bool),
+                    default(int), default(int));
             }
 
-            treatmentBMP.TreatmentBMPName = treatmentBMPName;
-            treatmentBMP.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
-            treatmentBMP.TreatmentBMPType = treatmentBMPType;
-          
             var treatmentBMPLatitude = row[fieldsDict["Latitude"]];
             var treatmentBMPLongitude = row[fieldsDict["Longitude"]];
-            var locationErrors = ParseLocation(treatmentBMPLatitude, treatmentBMPLongitude, count);
+            var locationErrors = ParseLocation(treatmentBMPLatitude, treatmentBMPLongitude, rowNumber);
             if (locationErrors.Any())
             {
                 errorList.AddRange(locationErrors);
@@ -139,31 +152,25 @@ namespace Neptune.Web.Common
                     CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(treatmentBMP.LocationPoint4326);
             }
 
-            var stormwaterJurisdictionID = FindLookupValue(row, fieldsDict, "Jurisdiction", count, errorList, jurisdictions, x => x.Organization.OrganizationName, x => x.StormwaterJurisdictionID, false);
-            if (stormwaterJurisdictionID.HasValue)
-            {
-                treatmentBMP.StormwaterJurisdictionID = stormwaterJurisdictionID.Value;
-            }
-
-            var ownerOrganizationID = FindLookupValue(row, fieldsDict, "Owner", count, errorList, organizations, x => x.OrganizationName, x => x.OrganizationID, false);
+            var ownerOrganizationID = FindLookupValue(row, fieldsDict, "Owner", rowNumber, errorList, organizations, x => x.OrganizationName, x => x.OrganizationID, false);
             if (ownerOrganizationID.HasValue)
             {
                 treatmentBMP.OwnerOrganizationID = ownerOrganizationID.Value;
             }
 
             //start of Optional Fields
-            var yearBuilt = GetOptionalIntFieldValue(row, fieldsDict, count, errorList, "Year Built or Installed");
+            var yearBuilt = GetOptionalIntFieldValue(row, fieldsDict, rowNumber, errorList, "Year Built or Installed");
             if (yearBuilt.HasValue)
             {
                 treatmentBMP.YearBuilt = yearBuilt;
             }
 
-            var assetIDInSystemOfRecord = SetStringValue(row, fieldsDict, count, errorList, "Asset ID in System of Record", TreatmentBMP.FieldLengths.SystemOfRecordID);
+            var assetIDInSystemOfRecord = SetStringValue(row, fieldsDict, rowNumber, errorList, "Asset ID in System of Record", TreatmentBMP.FieldLengths.SystemOfRecordID, false);
             if (!string.IsNullOrWhiteSpace(assetIDInSystemOfRecord))
             {
                 treatmentBMP.SystemOfRecordID = assetIDInSystemOfRecord;
             }
-            var notes = SetStringValue(row, fieldsDict, count, errorList, "Notes", TreatmentBMP.FieldLengths.Notes);
+            var notes = SetStringValue(row, fieldsDict, rowNumber, errorList, "Notes", TreatmentBMP.FieldLengths.Notes, false);
             if (!string.IsNullOrWhiteSpace(notes))
             {
                 treatmentBMP.Notes = notes;
@@ -172,7 +179,7 @@ namespace Neptune.Web.Common
             var fieldNameRequiredLifespanOfInstallation = "Required Lifespan of Installation";
             if (fieldsDict.ContainsKey(fieldNameRequiredLifespanOfInstallation))
             {
-                var treatmentBMPLifespanTypeID = FindLookupValue(row, fieldsDict, fieldNameRequiredLifespanOfInstallation, count, errorList, TreatmentBMPLifespanType.All, x => x.TreatmentBMPLifespanTypeDisplayName, x => x.TreatmentBMPLifespanTypeID, true);
+                var treatmentBMPLifespanTypeID = FindLookupValue(row, fieldsDict, fieldNameRequiredLifespanOfInstallation, rowNumber, errorList, TreatmentBMPLifespanType.All, x => x.TreatmentBMPLifespanTypeDisplayName, x => x.TreatmentBMPLifespanTypeID, true);
                 if (treatmentBMPLifespanTypeID.HasValue)
                 {
                     treatmentBMP.TreatmentBMPLifespanTypeID = treatmentBMPLifespanTypeID;
@@ -187,18 +194,18 @@ namespace Neptune.Web.Common
                         TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
                         errorList.Add(
-                            $"An end date must be provided if the '{fieldNameRequiredLifespanOfInstallation}' field is set to fixed end date for row: {count}");
+                            $"An end date must be provided if the '{fieldNameRequiredLifespanOfInstallation}' field is set to fixed end date for row: {rowNumber}");
                     }
                     if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation != TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
                         errorList.Add(
-                            $"An end date was provided when '{fieldNameRequiredLifespanOfInstallation}' field was set to {requiredLifespanOfInstallation} for row: {count}" );
+                            $"An end date was provided when '{fieldNameRequiredLifespanOfInstallation}' field was set to {requiredLifespanOfInstallation} for row: {rowNumber}" );
                     }
                     if (requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
                              !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            $"An end date was provided when '{fieldNameRequiredLifespanOfInstallation}' field was set to null for row: {count}");
+                            $"An end date was provided when '{fieldNameRequiredLifespanOfInstallation}' field was set to null for row: {rowNumber}");
                     }
 
                     if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace())
@@ -206,7 +213,7 @@ namespace Neptune.Web.Common
                         if (!DateTime.TryParse(allowableEndDateOfInstallation, out var allowableEndDateOfInstallationDateTime))
                         {
                             errorList.Add(
-                                $"{fieldNameAllowableEndDateOfInstallationIfApplicable} can not be converted to Date Time format at row: {count}");
+                                $"{fieldNameAllowableEndDateOfInstallationIfApplicable} can not be converted to Date Time format at row: {rowNumber}");
                         }
                         else
                         {
@@ -216,26 +223,26 @@ namespace Neptune.Web.Common
                 }
             }
 
-            var requiredFieldVisitsPerYear = GetOptionalIntFieldValue(row, fieldsDict, count, errorList, "Required Field Visits Per Year");
+            var requiredFieldVisitsPerYear = GetOptionalIntFieldValue(row, fieldsDict, rowNumber, errorList, "Required Field Visits Per Year");
             if (requiredFieldVisitsPerYear.HasValue)
             {
                 treatmentBMP.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYear;
             }
 
-            var requiredPostStormFieldVisitsPerYear = GetOptionalIntFieldValue(row, fieldsDict, count, errorList, "Required Post-Storm Field Visits Per Year");
+            var requiredPostStormFieldVisitsPerYear = GetOptionalIntFieldValue(row, fieldsDict, rowNumber, errorList, "Required Post-Storm Field Visits Per Year");
             if (requiredPostStormFieldVisitsPerYear.HasValue)
             {
                 treatmentBMP.RequiredPostStormFieldVisitsPerYear = requiredPostStormFieldVisitsPerYear;
             }
 
             //End of Optional Fields
-            var trashCaptureStatusTypeID = FindLookupValue(row, fieldsDict, "Trash Capture Status", count, errorList, TrashCaptureStatusType.All, x => x.TrashCaptureStatusTypeDisplayName, x => x.TrashCaptureStatusTypeID, true);
+            var trashCaptureStatusTypeID = FindLookupValue(row, fieldsDict, "Trash Capture Status", rowNumber, errorList, TrashCaptureStatusType.All, x => x.TrashCaptureStatusTypeDisplayName, x => x.TrashCaptureStatusTypeID, true);
             if (trashCaptureStatusTypeID.HasValue)
             {
                 treatmentBMP.TrashCaptureStatusTypeID = trashCaptureStatusTypeID.Value;
             }
 
-            var treatmentBMPSizingBasisTypeID = FindLookupValue(row, fieldsDict, "Sizing Basis", count, errorList, SizingBasisType.All, x => x.SizingBasisTypeDisplayName, x => x.SizingBasisTypeID, true);
+            var treatmentBMPSizingBasisTypeID = FindLookupValue(row, fieldsDict, "Sizing Basis", rowNumber, errorList, SizingBasisType.All, x => x.SizingBasisTypeDisplayName, x => x.SizingBasisTypeID, true);
             if (treatmentBMPSizingBasisTypeID.HasValue)
             {
                 treatmentBMP.SizingBasisTypeID = treatmentBMPSizingBasisTypeID.Value;
@@ -245,20 +252,27 @@ namespace Neptune.Web.Common
         }
 
         private static string SetStringValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName,
-            int fieldLength)
+            int fieldLength, bool requireNotEmpty)
         {
             if (fieldsDict.ContainsKey(fieldName))
             {
-                var assetIDInSystemOfRecord = row[fieldsDict[fieldName]];
-                if (!assetIDInSystemOfRecord.IsNullOrWhiteSpace())
+                var fieldValue = row[fieldsDict[fieldName]];
+                if (!string.IsNullOrWhiteSpace(fieldValue))
                 {
-                    if (assetIDInSystemOfRecord.Length > fieldLength)
+                    if (fieldValue.Length > fieldLength)
                     {
-                        errorList.Add($"{fieldName} is too long at row: {rowNumber}. It must be {fieldLength} characters or less. Current Length is {assetIDInSystemOfRecord.Length}.");
+                        errorList.Add($"{fieldName} is too long at row: {rowNumber}. It must be {fieldLength} characters or less. Current Length is {fieldValue.Length}.");
                     }
                     else
                     {
-                        return assetIDInSystemOfRecord;
+                        return fieldValue;
+                    }
+                }
+                else
+                {
+                    if (requireNotEmpty)
+                    {
+                        errorList.Add($"{fieldName} is null, empty, or just whitespaces for row: {rowNumber}");
                     }
                 }
             }
@@ -271,10 +285,9 @@ namespace Neptune.Web.Common
             if (fieldsDict.ContainsKey(fieldName))
             {
                 var fieldValue = row[fieldsDict[fieldName]];
-                if (fieldValue.IsNullOrWhiteSpace())
+                if (string.IsNullOrWhiteSpace(fieldValue))
                 {
-                    errorList.Add(
-                        $"{fieldName} is null, empty, or just whitespaces for row: {rowNumber}");
+                    errorList.Add($"{fieldName} is null, empty, or just whitespaces for row: {rowNumber}");
                 }
 
                 if (!lookupValues.Select(funcDisplayName.Invoke).Contains(fieldValue))
@@ -296,7 +309,7 @@ namespace Neptune.Web.Common
             return null;
         }
 
-        private static int? GetOptionalIntFieldValue(string[] row, Dictionary<string, int> fieldsDict, int count, List<string> errorList, string fieldName)
+        private static int? GetOptionalIntFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName)
         {
             if (fieldsDict.ContainsKey(fieldName))
             {
@@ -305,7 +318,7 @@ namespace Neptune.Web.Common
                 {
                     if (!int.TryParse(requiredFieldVisitsPerYear, out var requiredFieldVisitsPerYearInt))
                     {
-                        errorList.Add($"{fieldName} can not be converted to Int at row: {count}");
+                        errorList.Add($"{fieldName} can not be converted to Int at row: {rowNumber}");
                     }
                     else
                     {
@@ -317,48 +330,51 @@ namespace Neptune.Web.Common
             return null;
         }
 
-        private static List<string> ParseLocation(string treatmentBMPLatitude, string treatmentBMPLongitude, int count)
+        private static List<string> ParseLocation(string treatmentBMPLatitude, string treatmentBMPLongitude, int rowNumber)
         {
             var locationErrorList = new List<string>();
 
             if (treatmentBMPLatitude.IsNullOrWhiteSpace() || treatmentBMPLongitude.IsNullOrWhiteSpace())
             {
                 locationErrorList.Add(
-                    $"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
+                    $"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {rowNumber}");
             }
             if (!decimal.TryParse(treatmentBMPLatitude, out var treatmentBMPLatitudeDecimal))
             {
                 locationErrorList.Add(
-                    $"Treatment BMP Latitude can not be converted to Decimal format at row: {count}");
+                    $"Treatment BMP Latitude can not be converted to Decimal format at row: {rowNumber}");
             }
             if (!(treatmentBMPLatitudeDecimal <= 90 && treatmentBMPLatitudeDecimal >= -90))
             {
                 locationErrorList.Add(
-                    $"Treatment BMP Latitude {treatmentBMPLatitudeDecimal} is less than -90 or greater than 90 at row: {count}");
+                    $"Treatment BMP Latitude {treatmentBMPLatitudeDecimal} is less than -90 or greater than 90 at row: {rowNumber}");
             }
             if (!decimal.TryParse(treatmentBMPLongitude, out var treatmentBMPLongitudeDecimal))
             {
                 locationErrorList.Add(
-                    $"Treatment BMP Longitude can not be converted to Decimal format at row: {count}");
+                    $"Treatment BMP Longitude can not be converted to Decimal format at row: {rowNumber}");
             }
             if (!(treatmentBMPLongitudeDecimal <= 180 && treatmentBMPLongitudeDecimal >= -180))
             {
                 locationErrorList.Add(
-                    $"Treatment BMP Longitude {treatmentBMPLongitudeDecimal} is less than -180 or greater than 180 at row: {count}");
+                    $"Treatment BMP Longitude {treatmentBMPLongitudeDecimal} is less than -180 or greater than 180 at row: {rowNumber}");
             }
 
             return locationErrorList;
         }
 
-        private static List<CustomAttribute> ParseCustomAttributes(TreatmentBMP treatmentBMP, string[] currentRow, Dictionary<string, int> fieldsDict, List<CustomAttributeType> customAttributeTypes, int rowCount, out List<string> currentErrorList, out List<CustomAttributeValue> customAttributeValues)
+        private static List<CustomAttribute> ParseCustomAttributes(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType,
+            string[] currentRow, Dictionary<string, int> fieldsDict,
+            List<CustomAttributeType> customAttributeTypes, int rowNumber, out List<string> currentErrorList,
+            out List<CustomAttributeValue> customAttributeValues)
         {
             currentErrorList = new List<string>();
             customAttributeValues = new List<CustomAttributeValue>();
             var customAttributes = new List<CustomAttribute>();
             foreach (var customAttributeType in customAttributeTypes)
             {
-                TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMP.TreatmentBMPTypeID);
-                var newCustomAttribute = new CustomAttribute(treatmentBMP, treatmentBMPTypeCustomAttributeType, treatmentBMP.TreatmentBMPType, customAttributeType);
+                var treatmentBMPTypeCustomAttributeType = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID);
+                var newCustomAttribute = new CustomAttribute(treatmentBMP, treatmentBMPTypeCustomAttributeType, treatmentBMPType, customAttributeType);
                 if (fieldsDict.ContainsKey(customAttributeType.CustomAttributeTypeName))
                 {
                     var value = currentRow[fieldsDict[customAttributeType.CustomAttributeTypeName]];
@@ -367,16 +383,16 @@ namespace Neptune.Web.Common
 
                     if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowCount}");
+                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowNumber}");
                     }
                     else if (customAttributeDataType.IsDecimal() && !decimal.TryParse(value, out var valueDecimal))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Decimal at row: {rowCount}");
+                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Decimal at row: {rowNumber}");
                     }
                     else if (customAttributeDataType.IsDateTime() && !DateTime.TryParse(value, out var valueDateTime))
                     {
                         currentErrorList.Add(
-                            $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Date Time at row: {rowCount}");
+                            $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Date Time at row: {rowNumber}");
                     }
                     else
                     {
@@ -388,8 +404,12 @@ namespace Neptune.Web.Common
             return customAttributes;
         }
 
-        private static TreatmentBMPModelingAttribute ParseModelingAttributes(TreatmentBMP treatmentBMP, string[] currentRow, Dictionary<string, int> fieldsDict, List<string> availableModelingAttributesForType, int rowCount, out List<string> currentErrorList, out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
+        private static TreatmentBMPModelingAttribute ParseModelingAttributes(TreatmentBMP treatmentBMP,
+            TreatmentBMPType treatmentBMPType, string[] currentRow, Dictionary<string, int> fieldsDict,
+            List<string> availableModelingAttributesForType, int rowCount, out List<string> currentErrorList,
+            out List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths)
         {
+            var treatmentBMPModelingTypeEnum = treatmentBMPType.TreatmentBMPModelingType.ToEnum;
             currentErrorList = new List<string>();
             var newModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
             newModelingAttribute.RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID;
@@ -463,11 +483,11 @@ namespace Neptune.Web.Common
                             var underlyingHydrologicSoilGroup = UnderlyingHydrologicSoilGroup.All
                                 .SingleOrDefault(x => x.UnderlyingHydrologicSoilGroupDisplayName == value);
                             if (underlyingHydrologicSoilGroup == null ||
-                                (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain &&
-                                underlyingHydrologicSoilGroup.ToEnum == UnderlyingHydrologicSoilGroupEnum.Liner))
+                                (treatmentBMPModelingTypeEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain &&
+                                 underlyingHydrologicSoilGroup.ToEnum == UnderlyingHydrologicSoilGroupEnum.Liner))
                             {
-                                currentErrorList.Add($"{value} is not a valid {attribute} entry for Treatment BMPs of {treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName} type at row: {rowCount}." +
-                                                     $"Acceptable values are :{string.Join(", ", UnderlyingHydrologicSoilGroup.All.Where(x => treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum == TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain ? x.UnderlyingHydrologicSoilGroupDisplayName != "Liner" : true).Select(x => x.UnderlyingHydrologicSoilGroupDisplayName))}");
+                                currentErrorList.Add($"{value} is not a valid {attribute} entry for Treatment BMPs of {treatmentBMPType.TreatmentBMPTypeName} type at row: {rowCount}." +
+                                                     $"Acceptable values are :{string.Join(", ", UnderlyingHydrologicSoilGroup.All.Where(x => treatmentBMPModelingTypeEnum != TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain || x.UnderlyingHydrologicSoilGroupDisplayName != "Liner").Select(x => x.UnderlyingHydrologicSoilGroupDisplayName))}");
                             }
                             else
                             {
@@ -594,7 +614,7 @@ namespace Neptune.Web.Common
 
         public static List<string> GetAvailableModelingAttributes(TreatmentBMPType treatmentBMPType)
         {
-            List<string> returnList = new List<string>();
+            var returnList = new List<string>();
             var modelingType = treatmentBMPType.TreatmentBMPModelingType;
             if (modelingType != null)
             {

@@ -36,27 +36,39 @@ namespace Neptune.Web.UnitTestCommon
             public void TestBMPNameNull()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("BMP Name is null, empty, or just whitespaces for row: ")), Is.True, "Expected an error message");
             }
 
             [Test]
-            public void TestBMPNameExists()
+            public void TestBMPNameExistsAndMatchingJurisdictionAndType()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Test,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,";
+Test,30,10,County of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided,";
+                const int bmpType = 35;
+                var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
+                Assert.That(!errorList.Any(), Is.True, "Expected an error message");
+                Assert.That(treatmentBmps.Count, Is.EqualTo(1), "Expected only one treatment BMP");
+                Assert.That(treatmentBmps[0].TreatmentBMPID, Is.GreaterThan(0), "Treatment BMP ID should be > 0 since it is an existing one");
+            }
+
+            [Test]
+            public void TestBMPNameExistsAndNonMatchingType()
+            {
+                const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
+Test,30,10,County of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
-                Assert.That(errorList.Any(x => x.Contains("A BMP with name '")), Is.True, "Expected an error message");
+                Assert.That(errorList.Any(x => x.Contains(", which does not match the uploaded Type ")), Is.True, "Expected an error message");
             }
 
             [Test]
             public void TestBMPLatitudeNull()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment BMP Latitude ")), Is.True, "Expected an error message");
@@ -66,7 +78,7 @@ Frank,,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Lif
             public void TestBMPLatitudeValueNotDecimalParseable()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,AB120,120,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,AB120,120,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment BMP Latitude can not be converted to Decimal format at row: ")), Is.True, "Expected an error message");
@@ -76,7 +88,7 @@ Frank,AB120,120,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetui
             public void TestBMPLatitudeValueNotAcceptableDecimalValue()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,95,120,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,95,120,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment BMP Latitude 95")), Is.True, "Expected an error message");
@@ -86,7 +98,7 @@ Frank,95,120,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/
             public void TestBMPLongitudeNull()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment BMP Latitude")), Is.True, "Expected an error message");
@@ -96,7 +108,7 @@ Frank,30,,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Lif
             public void TestBMPLongitudeValueNotDecimalParseable()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,AB120,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,AB120,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment BMP Longitude can not be converted to Decimal format at row: ")), Is.True, "Expected an error message");
@@ -106,7 +118,7 @@ Frank,30,AB120,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuit
             public void TestBMPLongitudeValueNotAcceptableDecimalValue()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,85,181,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,85,181,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment BMP Longitude 181")), Is.True, "Expected an error message");
@@ -116,7 +128,7 @@ Frank,85,181,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/
             public void TestBMPLocationGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Treatment BMP Latitude")), Is.True, "Expected an error message");
@@ -162,7 +174,7 @@ Frank,30,10,City of Dana Point,Sitka Technology Group,2008,ABCD,Perpetuity/Life 
             public void TestOrganizationOwnerNameNull()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Owner is null, empty, or just whitespaces for row:")), Is.True, "Expected an error message");
@@ -172,7 +184,7 @@ Frank,30,10,Sitka Technology Group,,2008,ABCD,Perpetuity/Life of Project,11/12/2
             public void TestOrganizationOwnerNameExistsBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Grou,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Grou,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("No Owner with the name '")), Is.True, "Expected an error message");
@@ -182,7 +194,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Grou,2008,ABCD,Perpetuity/Li
             public void TestOrganizationOwnerExistsGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Owner is null, empty, or just whitespaces for row:")), Is.True, "Expected an error message");
@@ -196,7 +208,7 @@ Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Pro
             public void TestYearBuiltIntParseBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,AB34,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,AB34,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Year Built or Installed can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -205,7 +217,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,AB34,ABCD,Perpetuity/L
             public void TestYearBuiltIntParseGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Year Built or Installed can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -216,7 +228,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestYearBuiltIntAcceptsNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Year Built or Installed can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -233,7 +245,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life 
                 }
 
                 var csv = $@"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,{sysID},Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,{sysID},Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Asset ID in System of Record is too long at row")), Is.True, "Expected an error message");
@@ -243,7 +255,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,{sysID},Perpetuit
             public void TestAssetIdInSystemOfRecordsGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Asset ID in System of Record is too long at row")));
@@ -254,7 +266,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life 
             public void TestAssetIdInSystemOfRecordsNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Asset ID in System of Record is too long at row")), Is.True, "Expected an error message");
@@ -265,7 +277,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,,Perpetuity/Life 
             public void TestRequiredLifespanOfInstallationBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpet,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpet,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("No Required Lifespan of Installation with the name '")), Is.True, "Expected an error message");
@@ -275,7 +287,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpet,11/12
             public void TestRequiredLifespanOfInstallationGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("No Required Lifespan of Installation with the name '")), Is.True, "Expected an error message");
@@ -286,7 +298,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredLifespanOfInstallationNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("No Required Lifespan Of Installation with the name '")), Is.True, "Expected an error message");
@@ -297,7 +309,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,
             public void TestAllowableEndDateOfInstallationBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Allowable End Date of Installation (if applicable) can not be converted to Date Time format at row")), Is.True, "Expected an error message");
@@ -307,7 +319,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNullBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Fixed End Date,,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date")), Is.True, "Expected an error message");
@@ -317,7 +329,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Da
             public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNotNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date")), Is.True, "Expected an error message");
@@ -328,7 +340,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Da
             public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNotNullBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to Perpetuity/Life of Project")), Is.True, "Expected an error message");
@@ -338,7 +350,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to Perpetuity/Life of Project")), Is.True, "Expected an error message");
@@ -349,7 +361,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestAllowableEndDateOfInstallationTypeIsNullButDateNotNullBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to null")), Is.True, "Expected an error message");
@@ -359,7 +371,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,
             public void TestAllowableEndDateOfInstallationTypeIsNullButDateNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,,,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to null")), Is.True, "Expected an error message");
@@ -370,7 +382,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,,5,6,Happy,
             public void TestAllowableEndDateOfInstallationGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row")), Is.True, "Expected an error message");
@@ -381,7 +393,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Da
             public void TestAllowableEndDateOfInstallationNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row")), Is.True, "Expected an error message");
@@ -392,7 +404,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredFieldVisitsPerYearBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,Ab5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,Ab5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Required Field Visits Per Year can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -402,7 +414,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredFieldVisitsPerYearGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Required Field Visits per Year can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -413,7 +425,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredFieldVisitsPerYearNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Required Field Visits per Year can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -424,7 +436,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredPostStormFieldVisitsPerYearBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Required Post-Storm Field Visits Per Year can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -434,7 +446,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredPostStormFieldVisitsPerYearGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Required Post-Storm Field Visits Per Year can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -445,7 +457,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestRequiredPostStormFieldVisitsPerYearNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Required Post-Storm Field Visits Per Year can not be converted to Int at row")), Is.True, "Expected an error message");
@@ -462,7 +474,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
                 }
 
                 var csv = $@"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,{note},Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,{note},Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Notes is too long at row")), Is.True, "Expected an error message");
@@ -472,7 +484,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestNotesGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Notes is too long at row")), Is.True, "Expected an error message");
@@ -483,7 +495,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestNotesNullGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Notes length is too long at row")), Is.True, "Expected an error message");
@@ -495,7 +507,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestTrashCaptureStatusExistsNull()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,null,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,null,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("No Required Lifespan Of Installation by the name")), Is.True, "Expected an error message");
@@ -506,7 +518,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,null,11/12/2
             public void TestTrashCaptureStatusExistsBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,4,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,4,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("No Trash Capture Status with the name '")), Is.True, "Expected an error message");
@@ -516,7 +528,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestTrashCaptureStatusExistsGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Trash Capture Status is null, empty, or just whitespaces for row: ")), Is.True, "Expected an error message");
@@ -529,7 +541,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestSizingBasisExistsNull()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Sizing Basis is null, empty, or just whitespaces for row: ")), Is.True, "Expected an error message");
@@ -539,7 +551,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestSizingBasisExistsBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,4";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,4";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("No Sizing Basis with the name ")), Is.True, "Expected an error message");
@@ -549,7 +561,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestSizingBasisExistsGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("No Sizing Basis with the name '")), Is.True, "Expected an error message");
@@ -573,8 +585,8 @@ John,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Proj
             public void UploadListPopulatesBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,,Full,Not Provided";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(), Is.True, "Expected an error message");
@@ -584,7 +596,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeAverageDivertedFlowRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Average Diverted Flowrate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.LowFlowDiversions.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Average Diverted Flowrate")), Is.True);
@@ -595,7 +607,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeAverageDivertedFlowRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Average Diverted Flowrate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.LowFlowDiversions.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Average Diverted Flowrate")), Is.True);
@@ -605,7 +617,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeAverageTreatmentFlowRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Average Treatment Flowrate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Average Treatment Flowrate")), Is.True);
@@ -616,7 +628,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeAverageTreatmentFlowRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Average Treatment Flowrate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Average Treatment Flowrate")), Is.True);
@@ -626,7 +638,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignDryWeatherTreatmentCapacityGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Dry Weather Treatment Capacity,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Design Dry Weather Treatment Capacity")), Is.True);
@@ -637,7 +649,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignDryWeatherTreatmentCapacityBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Dry Weather Treatment Capacity,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Design Dry Weather Treatment Capacity")), Is.True);
@@ -647,7 +659,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignLowFlowDiversionCapacityGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Low Flow Diversion Capacity,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.LowFlowDiversions.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Design Low Flow Diversion Capacity")), Is.True);
@@ -658,7 +670,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignLowFlowDiversionCapacityBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Low Flow Diversion Capacity,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.LowFlowDiversions.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Design Low Flow Diversion Capacity")), Is.True);
@@ -668,7 +680,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignMediaFiltrationRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Media Filtration Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Design Media Filtration Rate")), Is.True);
@@ -679,7 +691,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignMediaFiltrationRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Media Filtration Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Design Media Filtration Rate")), Is.True);
@@ -689,7 +701,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignResidenceTimeforPermanentPoolGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Residence Time for Permanent Pool,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Design Residence Time for Permanent Pool")), Is.True);
@@ -700,7 +712,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDesignResidenceTimeforPermanentPoolBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Residence Time for Permanent Pool,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Design Residence Time for Permanent Pool")), Is.True);
@@ -710,7 +722,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDiversionRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Diversion Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Diversion Rate")), Is.True);
@@ -721,7 +733,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDiversionRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Diversion Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Diversion Rate")), Is.True);
@@ -731,7 +743,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDrawdownTimeforWQDetentionVolumeGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Drawdown Time for WQ Detention Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Drawdown Time for WQ Detention Volume")), Is.True);
@@ -742,7 +754,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDrawdownTimeforWQDetentionVolumeBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Drawdown Time for WQ Detention Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Drawdown Time for WQ Detention Volume")), Is.True);
@@ -752,7 +764,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeEffectiveFootprintGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Effective Footprint,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryExtendedDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Effective Footprint")), Is.True);
@@ -763,7 +775,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeEffectiveFootprintBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Effective Footprint,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryExtendedDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Effective Footprint")), Is.True);
@@ -773,7 +785,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeEffectiveRetentionDepthGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Effective Retention Depth,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Effective Retention Depth")), Is.True);
@@ -784,7 +796,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeEffectiveRetentionDepthBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Effective Retention Depth,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Effective Retention Depth")), Is.True);
@@ -794,7 +806,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeInfiltrationDischargeRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Infiltration Discharge Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.Drywell.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Infiltration Discharge Rate")), Is.True);
@@ -805,7 +817,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeInfiltrationDischargeRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Infiltration Discharge Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.Drywell.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Infiltration Discharge Rate")), Is.True);
@@ -815,7 +827,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeInfiltrationSurfaceAreaGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Infiltration Surface Area,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioretentionWithNoUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Infiltration Surface Area")), Is.True);
@@ -826,7 +838,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeInfiltrationSurfaceAreaBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Infiltration Surface Area,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioretentionWithNoUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Infiltration Surface Area")), Is.True);
@@ -836,7 +848,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMediaBedFootprintGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Media Bed Footprint,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Media Bed Footprint")), Is.True);
@@ -847,7 +859,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMediaBedFootprintBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Media Bed Footprint,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Media Bed Footprint")), Is.True);
@@ -857,7 +869,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributePermanentPoolOrWetlandVolumeGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Permanent Pool or Wetland Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Permanent Pool or Wetland Volume")), Is.True);
@@ -868,7 +880,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributePermanentPoolOrWetlandVolumeBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Permanent Pool or Wetland Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Permanent Pool or Wetland Volume")), Is.True);
@@ -878,7 +890,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeStorageVolumeBelowLowestOutletElevationGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Storage Volume Below Lowest Outlet Elevation,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Storage Volume Below Lowest Outlet Elevation")), Is.True);
@@ -889,7 +901,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeStorageVolumeBelowLowestOutletElevationBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Storage Volume Below Lowest Outlet Elevation,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Storage Volume Below Lowest Outlet Elevation")), Is.True);
@@ -899,7 +911,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeSummerHarvestedWaterDemandGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Summer Harvested Water Demand,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Summer Harvested Water Demand")), Is.True);
@@ -910,7 +922,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeSummerHarvestedWaterDemandBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Summer Harvested Water Demand,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Summer Harvested Water Demand")), Is.True);
@@ -920,7 +932,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID5Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,5";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,5";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -931,7 +943,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID10Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,10";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,10";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -942,7 +954,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID15Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,15";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,15";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -953,7 +965,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID20Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,20";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,20";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -964,7 +976,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID30Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,30";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,30";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -975,7 +987,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID45Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,45";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,45";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -986,7 +998,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationID60Good()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,60";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,60";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Time of Concentration")), Is.True);
@@ -997,7 +1009,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTimeOfConcentrationIDBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Time of Concentration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,25";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,25";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Time of Concentration")), Is.True);
@@ -1007,7 +1019,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeDrawdownTimeForDetentionVolumeGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Drawdown Time For Detention Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _,  out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Drawdown Time For Detention Volume")), Is.True);
@@ -1019,7 +1031,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             {
                 const string csv =
                     @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Drawdown Time For Detention Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Drawdown Time For Detention Volume")), Is.True);
@@ -1029,7 +1041,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTotalEffectiveBMPVolumeGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Total Effective BMP Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Total Effective BMP Volume")), Is.True);
@@ -1040,7 +1052,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTotalEffectiveBMPVolumeBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Total Effective BMP Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Total Effective BMP Volume")), Is.True);
@@ -1050,7 +1062,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTotalEffectiveDrywellBMPVolumeGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Total Effective Drywell BMP Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.Drywell.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Total Effective Drywell BMP Volume")), Is.True);
@@ -1061,7 +1073,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTotalEffectiveDrywellBMPVolumeBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Total Effective Drywell BMP Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.Drywell.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Total Effective Drywell BMP Volume")), Is.True);
@@ -1071,7 +1083,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTreatmentRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Treatment Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.HydrodynamicSeparator.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Treatment Rate")), Is.True);
@@ -1082,7 +1094,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeTreatmentRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Treatment Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.HydrodynamicSeparator.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Treatment Rate")), Is.True);
@@ -1092,7 +1104,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDAGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,A";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,A";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1103,7 +1115,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDBGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,B";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,B";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1114,7 +1126,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDCGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,C";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,C";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1125,7 +1137,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDDGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,D";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,D";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1136,7 +1148,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDLinerGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Liner";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Liner";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1147,7 +1159,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDLinerWithBioinfiltrationBioretentionWithRaisedUnderdrainBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Liner";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Liner";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1157,7 +1169,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingHydrologicSoilGroupIDBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Hydrologic Soil Group (HSG),  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.FlowDurationControlTank.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Underlying Hydrologic Soil Group (HSG)")), Is.True);
@@ -1167,7 +1179,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingInfiltrationRateGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Infiltration Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.UndergroundInfiltration.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Underlying Infiltration Rate")), Is.True);
@@ -1178,7 +1190,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeUnderlyingInfiltrationRateBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Underlying Infiltration Rate,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.UndergroundInfiltration.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Underlying Infiltration Rate")), Is.True);
@@ -1188,7 +1200,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeWaterQualityDetentionVolumeGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Water Quality Detention Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Water Quality Detention Volume")), Is.True);
@@ -1199,7 +1211,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeWaterQualityDetentionVolumeBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Water Quality Detention Volume,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Water Quality Detention Volume")), Is.True);
@@ -1209,7 +1221,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeWettedFootprintGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Wetted Footprint,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Wetted Footprint")), Is.True);
@@ -1220,7 +1232,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeWettedFootprintBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Wetted Footprint,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.VegetatedSwale.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Wetted Footprint")), Is.True);
@@ -1230,7 +1242,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeWinterHarvestedWaterDemandGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Winter Harvested Water Demand,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Winter Harvested Water Demand")), Is.True);
@@ -1241,7 +1253,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeWinterHarvestedWaterDemandBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Winter Harvested Water Demand,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Winter Harvested Water Demand")), Is.True);
@@ -1251,7 +1263,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeRoutingConfigurationIDOnlineGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Routing Configuration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Online";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Online";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Routing Configuration")), Is.True);
@@ -1262,7 +1274,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeRoutingConfigurationIDOfflineGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Routing Configuration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Offline";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Offline";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Routing Configuration")), Is.True);
@@ -1273,7 +1285,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeRoutingConfigurationIDBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Routing Configuration,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Routing Configuration")), Is.True);
@@ -1283,7 +1295,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMonthsOfOperationJanGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Jan";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,Jan";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out var operationMonths);
                 Assert.That(errorList.Any(x => !x.Contains("Months of Operation")), Is.True);
@@ -1294,7 +1306,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMonthsOfOperationJanCommaFebGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,""Jan,Feb""";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,""Jan,Feb""";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out var operationMonths);
                 Assert.That(errorList.Any(x => !x.Contains("Months of Operation")), Is.True);
@@ -1306,7 +1318,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMonthsOfOperationJanFebMarAprMayJunJulAugSepOctNovDecWithCommasGood()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,""Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec""";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,""Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec""";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out var operationMonths);
                 Assert.That(errorList.Any(x => !x.Contains("Months of Operation")), Is.True);
@@ -1328,7 +1340,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMonthsOfOperationJanFebNoSpacesBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,JanFeb";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,JanFeb";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Months of Operation")), Is.True);
@@ -1338,7 +1350,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             public void TestBMPModelingAttributeMonthsOfOperationBad()
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Months of Operation,  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
                 var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.DryWeatherTreatmentSystems.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Months of Operation")), Is.True);
