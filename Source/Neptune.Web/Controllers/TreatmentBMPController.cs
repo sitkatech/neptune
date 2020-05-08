@@ -965,14 +965,17 @@ namespace Neptune.Web.Controllers
                 return ViewUploadBMPs(viewModel, errorList);
             }
 
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPs.AddRange(treatmentBMPs);
-            HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes);
-            HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues);
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.AddRange(modelingAttributes);
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.AddRange(treatmentBMPOperationMonths);
+            var treatmentBmpsAdded = treatmentBMPs.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var treatmentBmpsUpdatedCount = treatmentBMPs.Count(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey));
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPs.AddRange(treatmentBmpsAdded);
+            HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
+            HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.AddRange(modelingAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.AddRange(treatmentBMPOperationMonths.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
-            SetMessageForDisplay($"Upload Successful: {treatmentBMPs.Count} records added");
+            var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdatedCount} records updated!";
+            SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
         }
 
