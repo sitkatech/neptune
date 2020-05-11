@@ -500,6 +500,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(onlandVisualTrashAssessmentStatus, "OnlandVisualTrashAssessmentStatus", primaryKey);
                     return onlandVisualTrashAssessmentStatus;
 
+                case "OperationMonth":
+                    var operationMonth = OperationMonth.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(operationMonth, "OperationMonth", primaryKey);
+                    return operationMonth;
+
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);
 

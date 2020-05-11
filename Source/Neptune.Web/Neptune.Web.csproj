@@ -259,6 +259,8 @@
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentScorePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentStatus.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\OperationMonth.Binding.cs" />
+    <Compile Include="Models\Generated\OperationMonthPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Organization.Binding.cs" />
     <Compile Include="Models\Generated\Organization.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\OrganizationConfiguration.Binding.cs" />
