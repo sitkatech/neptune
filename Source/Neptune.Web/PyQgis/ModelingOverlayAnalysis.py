@@ -267,14 +267,16 @@ if __name__ == '__main__':
     else: 
         masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
 
+    masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", context=PROCESSING_CONTEXT)
+
     masterOverlay.startEditing()
 
     for feat in masterOverlay.getFeatures():
         ## todo: would be nice to also exclude those where the RegionalSubbasinID is non-exist. could also handle that by making LSPC_RSB as an intersect instead of a union.
-        if feat.geometry().area() < 1:
+        if feat.geometry().area() < 1 or feat["RSBID"] is None:
             masterOverlay.deleteFeature(feat.id())
     
-    # masterOverlay.commitChanges()
+    masterOverlay.commitChanges()
 
     QgsVectorFileWriter.writeAsVectorFormat(masterOverlay, OUTPUT_PATH, "utf-8", delineationLayer.crs(), "ESRI Shapefile")
 

@@ -140,15 +140,15 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
-            var subgraphCallStartTime = DateTime.Now;
-            var unused =
+            var subgraphCallStartTime = stopwatch.Elapsed;
+            var solutionSequenceResult =
                 RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(solutionSequenceRequestObject,
-                    networkValidatorUrl, out var responseContent);
-            var subgraphCallEndTime = DateTime.Now;
+                    networkValidatorUrl, out _);
+            var subgraphCallEndTime = stopwatch.Elapsed;
             
             var returnValue = new
             {
-                SubgraphResult = responseContent,
+                SubgraphResult = solutionSequenceResult.Data,
                 BuildGraphElapsedTime = (buildGraphEndTime - buildGraphStartTime).Milliseconds,
                 SubgraphCallElapsedTime = (subgraphCallEndTime - subgraphCallStartTime).Milliseconds,
                 NodeCount = graph.Nodes.Count,
