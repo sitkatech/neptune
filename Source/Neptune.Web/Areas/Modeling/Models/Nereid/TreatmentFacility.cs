@@ -186,9 +186,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,
                 EffectiveRetentionDepth = modelingAttribute.EffectiveRetentionDepth,
-                // todo: right now this is modeled as a select-multiple, but it's going to be changing to a pick-one of either "summer" or "winter" soon.
-                // todo: #565 will update how this field is stored in OCST so that the correct value can be supplied here..
-                MonthsOfOperation = "both",
+                MonthsOfOperation = modelingAttribute.OperationMonth?.OperationMonthNereidAlias ?? OperationMonth.Both.OperationMonthNereidAlias,
                 PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolorWetlandVolume,
                 RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,
