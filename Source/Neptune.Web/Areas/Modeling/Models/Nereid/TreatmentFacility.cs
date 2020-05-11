@@ -186,7 +186,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,
                 EffectiveRetentionDepth = modelingAttribute.EffectiveRetentionDepth,
-                MonthsOfOperation = modelingAttribute.OperationMonth?.OperationMonthNereidAlias ?? OperationMonth.Both.OperationMonthNereidAlias,
+                MonthsOfOperation = modelingAttribute.MonthsOfOperation?.MonthsOfOperationNereidAlias ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias,
                 PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolorWetlandVolume,
                 RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,

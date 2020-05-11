@@ -1,11 +1,11 @@
-create table dbo.OperationMonth(
-OperationMonthID int not null constraint PK_OperationMonth_OperationMonthID primary key,
-OperationMonthName varchar(6) not null constraint AK_OperationMonth_OperationMonthName unique,
-OperationMonthDisplayName varchar(6) not null constraint AK_OperationMonth_OperationMonthDisplayName unique,
-OperationMonthNereidAlias varchar(6) not null
+create table dbo.MonthsOfOperation(
+MonthsOfOperationID int not null constraint PK_MonthsOfOperation_MonthsOfOperationID primary key,
+MonthsOfOperationName varchar(6) not null constraint AK_MonthsOfOperation_MonthsOfOperationName unique,
+MonthsOfOperationDisplayName varchar(6) not null constraint AK_MonthsOfOperation_MonthsOfOperationDisplayName unique,
+MonthsOfOperationNereidAlias varchar(6) not null
 )
 
-Insert into dbo.OperationMonth (OperationMonthID, OperationMonthName, OperationMonthDisplayName, OperationMonthNereidAlias)
+Insert into dbo.MonthsOfOperation (MonthsOfOperationID, MonthsOfOperationName, MonthsOfOperationDisplayName, MonthsOfOperationNereidAlias)
 values
 (1, 'Summer', 'Summer', 'summer'),
 (2, 'Winter', 'Winter', 'winter'),
@@ -14,13 +14,13 @@ values
 go
 
 Alter table dbo.TreatmentBMPModelingAttribute
-Add OperationMonthID int null constraint FK__TreatmentBMPModelingAttribute_OperationMonth_OperationMonthID
-	foreign key references dbo.OperationMonth(OperationMonthID)
+Add MonthsOfOperationID int null constraint FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID
+	foreign key references dbo.MonthsOfOperation(MonthsOfOperationID)
 GO
 
 --Set the summer months
 Update ma
-set ma.OperationMonthID = 1
+set ma.MonthsOfOperationID = 1
 from dbo.TreatmentBMPModelingAttribute ma
 	inner join dbo.TreatmentBMPOperationMonth mo
 	on ma.TreatmentBMPID = mo.TreatmentBMPID
@@ -29,9 +29,9 @@ where mo.OperationMonth = 4
 -- set the winter/both months
 
 Update ma
-set ma.OperationMonthID = 
+set ma.MonthsOfOperationID = 
 	case
-		when ma.OperationMonthID is not null then 3
+		when ma.MonthsOfOperationID is not null then 3
 		else 2
 	end
 from dbo.TreatmentBMPModelingAttribute ma
@@ -40,4 +40,4 @@ from dbo.TreatmentBMPModelingAttribute ma
 where mo.OperationMonth = 10
 GO
 
-Drop table TreatmentBMPOperationMonth
+Drop table dbo.TreatmentBMPOperationMonth

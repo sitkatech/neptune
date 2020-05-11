@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditModelingAttributesViewData : NeptuneViewData
     {
-        public EditModelingAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, IEnumerable<RoutingConfiguration> routingConfigurations, IEnumerable<TimeOfConcentration> timeOfConcentrations, IEnumerable<UnderlyingHydrologicSoilGroup> underlyingHydrologicSoilGroups, List<OperationMonth> monthsOfOperation) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditModelingAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, IEnumerable<RoutingConfiguration> routingConfigurations, IEnumerable<TimeOfConcentration> timeOfConcentrations, IEnumerable<UnderlyingHydrologicSoilGroup> underlyingHydrologicSoilGroups, List<MonthsOfOperation> monthsOfOperation) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             SubEntityUrl = treatmentBMP.GetDetailUrl();
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Modeling Attributes";
             TreatmentBMP = treatmentBMP;
-            MonthsOfOperation = monthsOfOperation.ToSelectList(x => x.OperationMonthID.ToString(CultureInfo.InvariantCulture), x => x.OperationMonthDisplayName);
+            MonthsOfOperation = monthsOfOperation.ToSelectList(x => x.MonthsOfOperationID.ToString(CultureInfo.InvariantCulture), x => x.MonthsOfOperationDisplayName);
             UnderlyingHydrologicSoilGroups = underlyingHydrologicSoilGroups.ToSelectListWithEmptyFirstRow(x => x.UnderlyingHydrologicSoilGroupID.ToString(), x => x.UnderlyingHydrologicSoilGroupDisplayName);
             TimeOfConcentrations = timeOfConcentrations.ToSelectListWithEmptyFirstRow(x => x.TimeOfConcentrationID.ToString(), x =>
                 $"{x.TimeOfConcentrationDisplayName} minutes");

@@ -1,6 +1,6 @@
-delete from dbo.OperationMonth
+delete from dbo.MonthsOfOperation
 
-Insert into dbo.OperationMonth (OperationMonthID, OperationMonthName, OperationMonthDisplayName, OperationMonthNereidAlias)
+Insert into dbo.MonthsOfOperation (MonthsOfOperationID, MonthsOfOperationName, MonthsOfOperationDisplayName, MonthsOfOperationNereidAlias)
 values
 (1, 'Summer', 'Summer', 'summer'),
 (2, 'Winter', 'Winter', 'winter'),

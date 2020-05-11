@@ -506,11 +506,11 @@ namespace Neptune.Web.Common
                             treatmentBMPModelingAttribute, attribute, RoutingConfiguration.All,
                             x => x.RoutingConfigurationDisplayName);
                     }
-                    else if (propType == typeof(OperationMonth))
+                    else if (propType == typeof(MonthsOfOperation))
                     {
                         SetModelingAttributeLookupValue(rowCount, currentErrorList, value, propertyToChange,
-                            treatmentBMPModelingAttribute, attribute, OperationMonth.All,
-                            x => x.OperationMonthDisplayName);
+                            treatmentBMPModelingAttribute, attribute, MonthsOfOperation.All,
+                            x => x.MonthsOfOperationDisplayName);
                     }
                     else
                     {
@@ -601,6 +601,10 @@ namespace Neptune.Web.Common
             else if (fieldDefinition == FieldDefinition.RoutingConfiguration.FieldDefinitionDisplayName)
             {
                 returnVal = "RoutingConfigurationID";
+            }
+            else if (fieldDefinition == FieldDefinition.MonthsOfOperation.FieldDefinitionDisplayName)
+            {
+                returnVal = "MonthsOfOperationID";
             }
             else
             {

@@ -33,7 +33,7 @@ CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
 	[WaterQualityDetentionVolume] [float] NULL,
 	[WettedFootprint] [float] NULL,
 	[WinterHarvestedWaterDemand] [float] NULL,
-	[OperationMonthID] [int] NULL,
+	[MonthsOfOperationID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMPModelingAttribute_TreatmentBMPModelingAttributeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPModelingAttributeID] ASC
@@ -45,10 +45,10 @@ CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
 ) ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK__TreatmentBMPModelingAttribute_OperationMonth_OperationMonthID] FOREIGN KEY([OperationMonthID])
-REFERENCES [dbo].[OperationMonth] ([OperationMonthID])
+ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID] FOREIGN KEY([MonthsOfOperationID])
+REFERENCES [dbo].[MonthsOfOperation] ([MonthsOfOperationID])
 GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK__TreatmentBMPModelingAttribute_OperationMonth_OperationMonthID]
+ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_RoutingConfiguration_RoutingConfigurationID] FOREIGN KEY([RoutingConfigurationID])
 REFERENCES [dbo].[RoutingConfiguration] ([RoutingConfigurationID])

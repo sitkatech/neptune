@@ -418,7 +418,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public string DisplayMonthsOfOperation()
         {
-            return TreatmentBMP.TreatmentBMPModelingAttribute.OperationMonth.OperationMonthDisplayName;
+            return TreatmentBMP.TreatmentBMPModelingAttribute.MonthsOfOperation.MonthsOfOperationDisplayName;
         }
     }
 }

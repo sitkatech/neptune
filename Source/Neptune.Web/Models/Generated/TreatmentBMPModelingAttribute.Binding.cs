@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPModelingAttribute(int treatmentBMPModelingAttributeID, int treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? operationMonthID) : this()
+        public TreatmentBMPModelingAttribute(int treatmentBMPModelingAttributeID, int treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? monthsOfOperationID) : this()
         {
             this.TreatmentBMPModelingAttributeID = treatmentBMPModelingAttributeID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -62,7 +62,7 @@ namespace Neptune.Web.Models
             this.WaterQualityDetentionVolume = waterQualityDetentionVolume;
             this.WettedFootprint = wettedFootprint;
             this.WinterHarvestedWaterDemand = winterHarvestedWaterDemand;
-            this.OperationMonthID = operationMonthID;
+            this.MonthsOfOperationID = monthsOfOperationID;
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Neptune.Web.Models
         public double? WaterQualityDetentionVolume { get; set; }
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
-        public int? OperationMonthID { get; set; }
+        public int? MonthsOfOperationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPModelingAttributeID; } set { TreatmentBMPModelingAttributeID = value; } }
 
@@ -167,7 +167,7 @@ namespace Neptune.Web.Models
         public RoutingConfiguration RoutingConfiguration { get { return RoutingConfigurationID.HasValue ? RoutingConfiguration.AllLookupDictionary[RoutingConfigurationID.Value] : null; } }
         public TimeOfConcentration TimeOfConcentration { get { return TimeOfConcentrationID.HasValue ? TimeOfConcentration.AllLookupDictionary[TimeOfConcentrationID.Value] : null; } }
         public UnderlyingHydrologicSoilGroup UnderlyingHydrologicSoilGroup { get { return UnderlyingHydrologicSoilGroupID.HasValue ? UnderlyingHydrologicSoilGroup.AllLookupDictionary[UnderlyingHydrologicSoilGroupID.Value] : null; } }
-        public OperationMonth OperationMonth { get { return OperationMonthID.HasValue ? OperationMonth.AllLookupDictionary[OperationMonthID.Value] : null; } }
+        public MonthsOfOperation MonthsOfOperation { get { return MonthsOfOperationID.HasValue ? MonthsOfOperation.AllLookupDictionary[MonthsOfOperationID.Value] : null; } }
 
         public static class FieldLengths
         {

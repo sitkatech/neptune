@@ -415,6 +415,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(measurementUnitType, "MeasurementUnitType", primaryKey);
                     return measurementUnitType;
 
+                case "MonthsOfOperation":
+                    var monthsOfOperation = MonthsOfOperation.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(monthsOfOperation, "MonthsOfOperation", primaryKey);
+                    return monthsOfOperation;
+
                 case "Neighborhood":
                     return Neighborhoods.GetNeighborhood(primaryKey);
 
@@ -497,11 +502,6 @@ namespace Neptune.Web.Models
                     var onlandVisualTrashAssessmentStatus = OnlandVisualTrashAssessmentStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(onlandVisualTrashAssessmentStatus, "OnlandVisualTrashAssessmentStatus", primaryKey);
                     return onlandVisualTrashAssessmentStatus;
-
-                case "OperationMonth":
-                    var operationMonth = OperationMonth.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(operationMonth, "OperationMonth", primaryKey);
-                    return operationMonth;
 
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);

@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBITreatmentBMP(int primaryKey, string treatmentBMPName, string treatmentBMPTypeName, string jurisdiction, double? locationLon, double? locationLat, string watershed, int? upstreamBMPID, string delineationType, int? waterQualityManagementPlanID, int? treatmentBMPModelingAttributeID, int? treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? operationMonthID) : this()
+        public vPowerBITreatmentBMP(int primaryKey, string treatmentBMPName, string treatmentBMPTypeName, string jurisdiction, double? locationLon, double? locationLat, string watershed, int? upstreamBMPID, string delineationType, int? waterQualityManagementPlanID, int? treatmentBMPModelingAttributeID, int? treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? monthsOfOperationID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
@@ -67,7 +67,7 @@ namespace Neptune.Web.Models
             this.WaterQualityDetentionVolume = waterQualityDetentionVolume;
             this.WettedFootprint = wettedFootprint;
             this.WinterHarvestedWaterDemand = winterHarvestedWaterDemand;
-            this.OperationMonthID = operationMonthID;
+            this.MonthsOfOperationID = monthsOfOperationID;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Neptune.Web.Models
             this.WaterQualityDetentionVolume = vPowerBITreatmentBMP.WaterQualityDetentionVolume;
             this.WettedFootprint = vPowerBITreatmentBMP.WettedFootprint;
             this.WinterHarvestedWaterDemand = vPowerBITreatmentBMP.WinterHarvestedWaterDemand;
-            this.OperationMonthID = vPowerBITreatmentBMP.OperationMonthID;
+            this.MonthsOfOperationID = vPowerBITreatmentBMP.MonthsOfOperationID;
             CallAfterConstructor(vPowerBITreatmentBMP);
         }
 
@@ -161,6 +161,6 @@ namespace Neptune.Web.Models
         public double? WaterQualityDetentionVolume { get; set; }
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
-        public int? OperationMonthID { get; set; }
+        public int? MonthsOfOperationID { get; set; }
     }
 }

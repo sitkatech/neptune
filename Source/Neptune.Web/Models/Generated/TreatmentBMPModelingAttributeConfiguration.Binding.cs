@@ -45,7 +45,7 @@ namespace Neptune.Web.Models
             Property(x => x.WaterQualityDetentionVolume).HasColumnName(@"WaterQualityDetentionVolume").HasColumnType("float").IsOptional();
             Property(x => x.WettedFootprint).HasColumnName(@"WettedFootprint").HasColumnType("float").IsOptional();
             Property(x => x.WinterHarvestedWaterDemand).HasColumnName(@"WinterHarvestedWaterDemand").HasColumnType("float").IsOptional();
-            Property(x => x.OperationMonthID).HasColumnName(@"OperationMonthID").HasColumnType("int").IsOptional();
+            Property(x => x.MonthsOfOperationID).HasColumnName(@"MonthsOfOperationID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMP).WithMany(b => b.TreatmentBMPModelingAttributes).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_TreatmentBMPModelingAttribute_TreatmentBMP_TreatmentBMPID

@@ -114,7 +114,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public int? UpstreamTreatmentBMPID { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOfOperation)]
-        public int? OperationMonthID { get; set; }
+        public int? MonthsOfOperationID { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }
 
@@ -155,7 +155,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume;
                 WettedFootprint = treatmentBMPModelingAttribute.WettedFootprint;
                 WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand;
-                OperationMonthID = treatmentBMPModelingAttribute.OperationMonthID;
+                MonthsOfOperationID = treatmentBMPModelingAttribute.MonthsOfOperationID;
             }
         }
 
@@ -192,7 +192,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.WaterQualityDetentionVolume = WaterQualityDetentionVolume;
             treatmentBMPModelingAttribute.WettedFootprint = WettedFootprint;
             treatmentBMPModelingAttribute.WinterHarvestedWaterDemand = WinterHarvestedWaterDemand;
-            treatmentBMPModelingAttribute.OperationMonthID = OperationMonthID;
+            treatmentBMPModelingAttribute.MonthsOfOperationID = MonthsOfOperationID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
