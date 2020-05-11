@@ -678,7 +678,6 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
-            List<int> treatmentBMPOperationMonths;
             if (treatmentBMPModelingAttribute == null)
             {
                 treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP)
@@ -689,16 +688,9 @@ namespace Neptune.Web.Controllers
                     TimeOfConcentrationID = TimeOfConcentration.FiveMinutes.TimeOfConcentrationID,
                     DesignResidenceTimeforPermanentPool = 720
                 };
-                treatmentBMPOperationMonths = Enumerable.Range(4, 7).ToList();
-            }
-            else
-            {
-                treatmentBMPOperationMonths = treatmentBMP.TreatmentBMPOperationMonths.Any()
-                    ? treatmentBMP.TreatmentBMPOperationMonths.Select(x => x.OperationMonth).ToList()
-                    : new List<int>();
             }
 
-            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMPOperationMonths, treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID);
+            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID);
             return ViewEditModelingAttributes(viewModel, treatmentBMP);
         }
 
@@ -720,10 +712,7 @@ namespace Neptune.Web.Controllers
                 treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.Add(treatmentBMPModelingAttribute);
             }
-
-            var allTreatmentBMPOperationMonths = HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.Local;
-            var treatmentBMPOperationMonths = treatmentBMP.TreatmentBMPOperationMonths.ToList();
-            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson, treatmentBMPOperationMonths, allTreatmentBMPOperationMonths);
+            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
             SetMessageForDisplay("Modeling Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
@@ -733,7 +722,7 @@ namespace Neptune.Web.Controllers
             var routingConfigurations = RoutingConfiguration.All.OrderBy(x => x.RoutingConfigurationDisplayName);
             var timeOfConcentrations = TimeOfConcentration.All.OrderBy(x => x.TimeOfConcentrationID);
             var underlyingHydrologicSoilGroups = UnderlyingHydrologicSoilGroup.All.OrderBy(x => x.UnderlyingHydrologicSoilGroupID);
-            var monthsOfOperation = Enumerable.Range(1, 12);
+            var monthsOfOperation = OperationMonth.All;
             var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation);
             return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditModelingAttributesViewModel>(viewData, viewModel);
         }
@@ -958,7 +947,7 @@ namespace Neptune.Web.Controllers
             var uploadedCSVFile = viewModel.UploadCSV;
             // ReSharper disable once PossibleInvalidOperationException
             var treatmentBMPType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(viewModel.TreatmentBMPTypeID.Value);
-            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadedCSVFile.InputStream, treatmentBMPType, out var errorList, out var customAttributes, out var customAttributeValues, out var modelingAttributes, out var treatmentBMPOperationMonths);
+            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadedCSVFile.InputStream, treatmentBMPType, out var errorList, out var customAttributes, out var customAttributeValues, out var modelingAttributes);
 
             if (errorList.Any())
             {
@@ -971,7 +960,6 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.AddRange(modelingAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPOperationMonths.AddRange(treatmentBMPOperationMonths.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
             var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdatedCount} records updated!";

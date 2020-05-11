@@ -19,13 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Globalization;
-using System.Linq;
-using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
@@ -35,6 +28,10 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -421,9 +418,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public string DisplayMonthsOfOperation()
         {
-            return string.Join(", ",
-                TreatmentBMP.TreatmentBMPOperationMonths.OrderBy(x => x.OperationMonth).Select(x =>
-                    CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(x.OperationMonth)));
+            return TreatmentBMP.TreatmentBMPModelingAttribute.OperationMonth.OperationMonthDisplayName;
         }
     }
 }
