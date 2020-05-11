@@ -38,3 +38,6 @@ from dbo.TreatmentBMPModelingAttribute ma
 	inner join dbo.TreatmentBMPOperationMonth mo
 	on ma.TreatmentBMPID = mo.TreatmentBMPID
 where mo.OperationMonth = 10
+GO
+
+Drop table TreatmentBMPOperationMonth

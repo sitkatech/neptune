@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -416,10 +416,6 @@
     <Compile Include="Models\Generated\TreatmentBMPObservation.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservationConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservationPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPOperationMonth.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPOperationMonth.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPOperationMonthConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPOperationMonthPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPType.DatabaseContextExtensions.cs" />
@@ -584,7 +580,6 @@
     <Compile Include="Models\LSPCBasin.cs" />
     <Compile Include="Models\PrecipitationZone.cs" />
     <Compile Include="Models\TreatmentBMPModelingAttribute.cs" />
-    <Compile Include="Models\TreatmentBMPOperationMonth.cs" />
     <Compile Include="Models\Watershed.cs" />
     <Compile Include="ScheduledJobs\DelineationDiscrepancyCheckerBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\GeoprocessingException.cs" />

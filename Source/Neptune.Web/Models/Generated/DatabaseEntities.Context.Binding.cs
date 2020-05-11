@@ -104,7 +104,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new TreatmentBMPImageConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPModelingAttributeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPObservationConfiguration());
-            modelBuilder.Configurations.Add(new TreatmentBMPOperationMonthConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeAssessmentObservationTypeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeCustomAttributeTypeConfiguration());
@@ -208,7 +207,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<TreatmentBMPImage> TreatmentBMPImages { get; set; }
         public virtual DbSet<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributes { get; set; }
         public virtual DbSet<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
-        public virtual DbSet<TreatmentBMPOperationMonth> TreatmentBMPOperationMonths { get; set; }
         public virtual DbSet<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual DbSet<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
         public virtual DbSet<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
@@ -674,9 +672,6 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMPObservation":
                     return TreatmentBMPObservations.GetTreatmentBMPObservation(primaryKey);
-
-                case "TreatmentBMPOperationMonth":
-                    return TreatmentBMPOperationMonths.GetTreatmentBMPOperationMonth(primaryKey);
 
                 case "TreatmentBMP":
                     return TreatmentBMPs.GetTreatmentBMP(primaryKey);

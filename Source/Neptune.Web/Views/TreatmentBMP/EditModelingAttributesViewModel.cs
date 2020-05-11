@@ -19,14 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -117,7 +114,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public int? UpstreamTreatmentBMPID { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOfOperation)]
-        public List<int> MonthsofOperation { get; set; }
+        public int? OperationMonthID { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }
 
@@ -125,7 +122,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
         }
 
-        public EditModelingAttributesViewModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute, List<int> treatmentBMPOperationMonths, int? treatmentBMPModelingTypeID)
+        public EditModelingAttributesViewModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute, int? treatmentBMPModelingTypeID)
         {
             TreatmentBMPModelingTypeID = treatmentBMPModelingTypeID;
             if (treatmentBMPModelingAttribute != null)
@@ -158,14 +155,12 @@ namespace Neptune.Web.Views.TreatmentBMP
                 WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume;
                 WettedFootprint = treatmentBMPModelingAttribute.WettedFootprint;
                 WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand;
+                OperationMonthID = treatmentBMPModelingAttribute.OperationMonthID;
             }
-            MonthsofOperation = treatmentBMPOperationMonths;
         }
 
         public void UpdateModel(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute,
-            Person currentPerson,
-            List<TreatmentBMPOperationMonth> treatmentBMPOperationMonths,
-            ObservableCollection<TreatmentBMPOperationMonth> allTreatmentBMPOperationMonths)
+            Person currentPerson)
         {
             //treatmentBMPModelingAttribute.UpstreamTreatmentBMPID = UpstreamTreatmentBMPID;
             treatmentBMPModelingAttribute.TotalEffectiveBMPVolume = TotalEffectiveBMPVolume;
@@ -197,14 +192,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.WaterQualityDetentionVolume = WaterQualityDetentionVolume;
             treatmentBMPModelingAttribute.WettedFootprint = WettedFootprint;
             treatmentBMPModelingAttribute.WinterHarvestedWaterDemand = WinterHarvestedWaterDemand;
-
-            var postedMonthsOfOperation = new List<TreatmentBMPOperationMonth>();
-            if (MonthsofOperation != null && MonthsofOperation.Any())
-            {
-                postedMonthsOfOperation = MonthsofOperation.Select(x => new TreatmentBMPOperationMonth(treatmentBMPModelingAttribute.TreatmentBMPID, x)).ToList();
-            }
-
-            treatmentBMPOperationMonths.Merge(postedMonthsOfOperation, allTreatmentBMPOperationMonths, (x, y) => x.OperationMonth == y.OperationMonth);
+            treatmentBMPModelingAttribute.OperationMonthID = OperationMonthID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

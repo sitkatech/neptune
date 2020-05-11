@@ -20,6 +20,7 @@
     -----------------------------------------------------------------------*@
 
 @using System.Globalization
+@using DocumentFormat.OpenXml.Wordprocessing
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Models
@@ -287,10 +288,10 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.MonthsofOperation)
+                                            @Html.LabelWithSugarFor(x => x.OperationMonthID)
                                         </label>
                                         <div class="col-sm-8">
-                                            @Html.CheckBoxListFor(x => x.MonthsofOperation, ViewDataTyped.MonthsOfOperation)
+                                            @Html.DropDownListFor(x=>x.OperationMonthID, ViewDataTyped.MonthsOfOperation)
                                         </div>
                                     </div>
                                     break;
@@ -348,10 +349,10 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">
-                                            @Html.LabelWithSugarFor(x => x.MonthsofOperation)
+                                            @Html.LabelWithSugarFor(x => x.OperationMonthID)
                                         </label>
                                         <div class="col-sm-8">
-                                            @Html.CheckBoxListFor(x => x.MonthsofOperation, ViewDataTyped.MonthsOfOperation)
+                                            @Html.DropDownListFor(x => x.OperationMonthID, ViewDataTyped.MonthsOfOperation, new {@class = "form-control", style="width:auto;"})
                                         </div>
                                     </div>
                                     break;
