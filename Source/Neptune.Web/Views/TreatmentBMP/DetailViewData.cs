@@ -186,7 +186,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForInfiltrationDischargeRate = Models.FieldDefinition.InfiltrationDischargeRate;
             FieldDefinitionForInfiltrationSurfaceArea = Models.FieldDefinition.InfiltrationSurfaceArea;
             FieldDefinitionForMediaBedFootprint = Models.FieldDefinition.MediaBedFootprint;
-            FieldDefinitionForMonthsofOperation = Models.FieldDefinition.MonthsOfOperation;
+            FieldDefinitionForMonthsofOperation = Models.FieldDefinition.MonthsOperational;
             FieldDefinitionForPermanentPoolorWetlandVolume = Models.FieldDefinition.PermanentPoolOrWetlandVolume;
             FieldDefinitionForRoutingConfiguration = Models.FieldDefinition.RoutingConfiguration;
             FieldDefinitionForStorageVolumeBelowLowestOutletElevation = Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation;

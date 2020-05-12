@@ -91,7 +91,7 @@ VALUES
 (87, 'InfiltrationDischargeRate', 'Infiltration Discharge Rate', 'Design or tested infiltration flowrate of the drywell. This is specified in cubic feet per section, rather than inches per hour.', 1),
 (88, 'InfiltrationSurfaceArea', 'Infiltration Surface Area', 'Surface area through which infiltration can occur in the system. If infiltration will occur into the sidewalls of a BMP, it is appropriate to include half of the sidewall area as as part of the infiltration surface area.', 1),
 (89, 'MediaBedFootprint', 'Media Bed Footprint', 'Surface area of the media bed of the BMP.', 1),
-(90, 'MonthsOfOperation', 'Months of Operation', 'This defines the months that the facility is operational.', 1),
+(90, 'MonthsOperational', 'Months Operational', 'This defines the months that the facility is operational. For modeling purposes, this can be "Summer," "Winter," or "Both."', 1),
 (91, 'PermanentPoolOrWetlandVolume', 'Permanent Pool or Wetland Volume', 'Volume of water below the lowest surface outlet. Serves as a wetland or permanent pool. Water may be harvested from this pool. ', 1),
 (92, 'RoutingConfiguration', 'Routing Configuration', 'This specifies whether the BMP receives all flow from the drainage area (online), or if there is a diversion structure that limits the flow into the BMP (offline).', 1),
 (93, 'StorageVolumeBelowLowestOutletElevation', 'Storage Volume Below Lowest Outlet Elevation', 'The volume of water stored below the lowest outlet (e.g., underdrain, orifice) of the system.', 1),

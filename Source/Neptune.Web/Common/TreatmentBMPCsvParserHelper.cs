@@ -637,7 +637,7 @@ namespace Neptune.Web.Common
             {
                 returnVal = "RoutingConfigurationID";
             }
-            else if (fieldDefinition == FieldDefinition.MonthsOfOperation.FieldDefinitionDisplayName)
+            else if (fieldDefinition == FieldDefinition.MonthsOperational.FieldDefinitionDisplayName)
             {
                 returnVal = "MonthsOfOperationID";
             }
@@ -740,7 +740,7 @@ namespace Neptune.Web.Common
                         {
                             FieldDefinition.DesignDryWeatherTreatmentCapacity.FieldDefinitionDisplayName,
                             FieldDefinition.AverageTreatmentFlowrate.FieldDefinitionDisplayName,
-                            FieldDefinition.MonthsOfOperation.FieldDefinitionDisplayName
+                            FieldDefinition.MonthsOperational.FieldDefinitionDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.Drywell:
@@ -765,7 +765,7 @@ namespace Neptune.Web.Common
                         {
                             FieldDefinition.DesignLowFlowDiversionCapacity.FieldDefinitionDisplayName,
                             FieldDefinition.AverageDivertedFlowrate.FieldDefinitionDisplayName,
-                            FieldDefinition.MonthsOfOperation.FieldDefinitionDisplayName
+                            FieldDefinition.MonthsOperational.FieldDefinitionDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:

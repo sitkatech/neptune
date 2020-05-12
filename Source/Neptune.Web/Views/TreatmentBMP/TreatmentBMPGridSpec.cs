@@ -110,7 +110,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.InfiltrationDischargeRate.ToGridHeaderString("Infiltration Discharge Rate (cfs)"), x => x.InfiltrationDischargeRate, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.InfiltrationSurfaceArea.ToGridHeaderString("Infiltration Surface Area (sq ft)"), x => x.InfiltrationSurfaceArea, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString("Media Bed Footprint (sq ft)"), x => x.MediaBedFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(Models.FieldDefinition.MonthsOfOperation.ToGridHeaderString("Months Of Operation"), x => x.OperationMonths, 100, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString("Months Operational"), x => x.OperationMonths, 100, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.PermanentPoolOrWetlandVolume.ToGridHeaderString("Permanent Pool Or Wetland Volume (cu ft)"), x => x.PermanentPoolorWetlandVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString("Storage Volume Below Lowest Outlet Elevation (cu ft)"), x => x.StorageVolumeBelowLowestOutletElevation, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString("Summer Harvested Water Demand (gpd)"), x => x.SummerHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);

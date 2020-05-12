@@ -113,7 +113,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.UpstreamBMP)]
         public int? UpstreamTreatmentBMPID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOfOperation)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOperational)]
         public int? MonthsOfOperationID { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }
