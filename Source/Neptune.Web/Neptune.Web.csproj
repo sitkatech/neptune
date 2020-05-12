@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -1203,6 +1203,7 @@
       <DependentUpon>DroolToolSplash.css</DependentUpon>
     </Content>
     <Content Include="Areas\DroolTool\Views\Home\NeighborhoodComponent.html" />
+    <Compile Include="Areas\Modeling\Models\Nereid\SolutionRequestObject.cs" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedCurrentOrNetChangeControl.js" />
     <Content Include="Areas\Trash\Views\Home\OVTABasedResultsCalculationControl.js" />

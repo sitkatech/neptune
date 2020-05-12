@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using LtInfo.Common;
+using LtInfo.Common.Models;
+using Microsoft.VisualBasic.FileIO;
 using Neptune.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -7,8 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web.WebPages;
-using LtInfo.Common;
-using LtInfo.Common.Models;
 
 namespace Neptune.Web.Common
 {

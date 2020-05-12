@@ -2,7 +2,6 @@
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
@@ -13,7 +12,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Web.Mvc;
-using Edge = Neptune.Web.Areas.Modeling.Models.Nereid.Edge;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 
 namespace Neptune.Web.Areas.Modeling.Controllers
@@ -27,6 +25,11 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             HttpClient = new HttpClient();
         }
 
+        /// <summary>
+        /// Manually fire a re-calculation of the LGU layer.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public ContentResult TriggerLGURun()
@@ -35,6 +38,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Content("LGU refresh will run in the background");
         }
 
+        /// <summary>
+        /// Manually fire a run of the HRU statistics job.
+        /// This does not recalculate the LGU layer or discard existing HRU statistics.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public ContentResult TriggerHRURun()
@@ -43,31 +52,16 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Content("HRU refresh will run in the background");
         }
 
+        /// <summary>
+        /// Build the entire Network Graph and send it to the Nereid network/validate endpoint.
+        /// Can be used to diagnose issues in the network data, the network builder, or the Nereid validator.
+        /// Confirms that we are building one of the four inputs to the watershed/solve endpoint correctly.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
-        public ContentResult TestNereidNetworkValidator()
-        {
-            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
-
-            var graph = new Graph(true, new List<Node>
-                {
-                    new Node("A"),
-                    new Node("B")
-                }, new List<Edge>
-                {
-                    new Edge ("A", "B")
-                }
-            );
-
-            var serializedGraph = JsonConvert.SerializeObject(graph);
-            var stringContent = new StringContent(serializedGraph);
-            var postResultContentAsStringResult = HttpClient.PostAsync(networkValidatorUrl, stringContent).Result.Content.ReadAsStringAsync().Result;
-            return Content(postResultContentAsStringResult);
-        }
-
-        [HttpGet]
-        [SitkaAdminFeature]
-        public JsonResult Validate()
+        public JsonResult ValidateNetworkGraph()
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
             var stopwatch = new Stopwatch();
@@ -79,8 +73,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Stop();
 
             var validateCallStartTime = DateTime.Now;
-            var networkValidatorResult =
-                RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, out _);
+            var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, out _, HttpClient);
 
             var validateCallEndTime = DateTime.Now;
 
@@ -96,6 +89,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Build the network graph and run a test case against the Nereid network/subgraph endpoint.
+        /// This confirms that we can retrieve the minimal subgraph needed to solve any given node.
+        /// Available only to Sitka Admins.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult Subgraph()
@@ -109,8 +108,8 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
             var subgraphCallStartTime = DateTime.Now;
 
-            var subgraphResult = RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-                networkValidatorUrl, out _);
+            var subgraphResult = NereidUtilities.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
+                networkValidatorUrl, out _, HttpClient);
             var subgraphCallEndTime = DateTime.Now;
             
             var returnValue = new
@@ -125,6 +124,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Builds the network graph and runs a test case against the Nereid network/solution_sequence endpoint.
+        /// This confirms that the infrastructure for subdividing large solution jobs is working.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult SolutionSequence()
@@ -141,9 +146,8 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
             var subgraphCallStartTime = stopwatch.Elapsed;
-            var solutionSequenceResult =
-                RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(solutionSequenceRequestObject,
-                    networkValidatorUrl, out _);
+            var solutionSequenceResult = NereidUtilities.RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(solutionSequenceRequestObject,
+                    networkValidatorUrl, out _, HttpClient);
             var subgraphCallEndTime = stopwatch.Elapsed;
             
             var returnValue = new
@@ -158,6 +162,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Runs a test case against the Nereid land_surface/loading endpoint for a small list of RSBs.
+        /// Confirms that we are building one of the four inputs to the watershed/solve endpoint correctly.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult Loading()
@@ -173,7 +183,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
-            var unused = RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent);
+            var unused = NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent, HttpClient);
             
             var returnValue = new
             {
@@ -184,6 +194,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Builds and displays the treatment_site table, one of the four inputs to the Nereid watershed/solve endpoint.
+        /// Thre is no validator for this; the only test fixture available is to manually confirm the schema and the data.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult TreatmentSiteTable()
@@ -209,73 +225,51 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Json(new {TreatmentSites = treatmentSites}, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Runs a test case against the Nereid treatment_facility/validate endpoint.
+        /// Confirms that we are building one of the four inputs to the Nereid watershed/solve endpoint correctly.
+        /// Available only to Sitka Admins.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
         public JsonResult TreatmentFacility()
         {
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
 
-            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList()
-                .Where(x=>x.IsFullyParameterized())
+            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ModeledTreatmentBMPs()
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl,
-                out var responseContent);
+            NereidUtilities.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl,
+                out var responseContent, HttpClient);
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
             return Json(
                 new
                 {
-                    rpcTime = stopwatchElapsedMilliseconds, responseContent = responseContent,
+                    rpcTime = stopwatchElapsedMilliseconds,
+                    responseContent,
                     requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
                 }, JsonRequestBehavior.AllowGet);
         }
 
-        private static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent)
+        /// <summary>
+        /// Runs a very small test case against the Nereid watershed/solve endpoint.
+        /// Builds the complete network graph, then hits the subgraph endpoint with
+        /// a node that we know has a small upstream. Uses the return value to construct
+        /// the input and then fires that against the solution endpoint.
+        /// Available only to Sitka Admins.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult SolutionTestCase()
         {
-            NereidResult<TResp> responseObject = null;
-            var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
-            var requestStringContent = new StringContent(serializedRequest);
-
-            var postResultContentAsStringResult = HttpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
-                .Content.ReadAsStringAsync().Result;
-
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
-
-            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
-            var resultRoute = deserializeObject.ResultRoute;
-
-            responseContent = postResultContentAsStringResult;
-            if (!executing)
-            {
-                responseObject = deserializeObject;
-            }
-            while (executing)
-            {
-                var stringResponse = HttpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content
-                    .ReadAsStringAsync().Result;
-
-                var continuePollingResponse =
-                    JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
-
-                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
-                {
-                    executing = false;
-                    responseContent = stringResponse;
-                    responseObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(responseContent);
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
-            }
-
-            return responseObject;
+            throw new NotImplementedException();
         }
     }
 }

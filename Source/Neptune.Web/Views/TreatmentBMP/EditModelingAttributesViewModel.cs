@@ -110,14 +110,14 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.WinterHarvestedWaterDemand)]
         public double? WinterHarvestedWaterDemand { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.UpstreamBMP)]
-        public int? UpstreamTreatmentBMPID { get; set; }
-
         [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOperational)]
         public int? MonthsOfOperationID { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }
 
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
         public EditModelingAttributesViewModel()
         {
         }
@@ -299,18 +299,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             return validationResults;
-        }
-
-        private void ValidateDiversionRate(List<ValidationResult> validationResults)
-        {
-            if (RoutingConfigurationID == (int) RoutingConfigurationEnum.Offline)
-            {
-                if (DiversionRate == null)
-                {
-                    validationResults.Add(
-                        new ValidationResult("Diversion Rate is required when Routing Configuration is 'Offline'"));
-                }
-            }
         }
 
         private static void ValidateFieldIsRequired(List<ValidationResult> validationResults, string fieldName, object valueToCheck)

@@ -19,16 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
-using DocumentFormat.OpenXml.EMMA;
 
 
 namespace Neptune.Web.Views.TreatmentBMP

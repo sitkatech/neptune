@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Neptune.Web.Common;
+﻿using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
 {

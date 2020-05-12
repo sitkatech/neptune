@@ -3,6 +3,9 @@ using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Common
 {
@@ -235,6 +238,55 @@ namespace Neptune.Web.Common
                     centralizedBMPEdges.Add(new Edge() { SourceID = newCentralizedBMPNodeID, TargetID = ogTargetID });
                 }
             }
+        }
+
+        public static IEnumerable<TreatmentBMP> ModeledTreatmentBMPs(this IQueryable<TreatmentBMP> databaseEntitiesTreatmentBMPs)
+        {
+            return databaseEntitiesTreatmentBMPs
+                .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList()
+                .Where(x=>x.IsFullyParameterized());
+        }
+
+        public static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent, HttpClient httpClient)
+        {
+            NereidResult<TResp> responseObject = null;
+            var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
+            var requestStringContent = new StringContent(serializedRequest);
+
+            var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
+                .Content.ReadAsStringAsync().Result;
+
+            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+
+            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
+            var resultRoute = deserializeObject.ResultRoute;
+
+            responseContent = postResultContentAsStringResult;
+            if (!executing)
+            {
+                responseObject = deserializeObject;
+            }
+            while (executing)
+            {
+                var stringResponse = httpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content
+                    .ReadAsStringAsync().Result;
+
+                var continuePollingResponse =
+                    JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
+
+                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
+                {
+                    executing = false;
+                    responseContent = stringResponse;
+                    responseObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(responseContent);
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            return responseObject;
         }
     }
 
