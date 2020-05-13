@@ -70,12 +70,13 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
-            stopwatch.Stop();
 
-            var validateCallStartTime = DateTime.Now;
+            var validateCallStartTime = stopwatch.Elapsed;
             var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, out _, HttpClient);
 
-            var validateCallEndTime = DateTime.Now;
+            var validateCallEndTime = stopwatch.Elapsed;
+
+            stopwatch.Stop();
 
             var returnValue = new
             {
@@ -99,19 +100,23 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult Subgraph()
         {
-            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
+            var subgraphUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            var buildGraphStartTime = DateTime.Now;
+            var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
-            var buildGraphEndTime = DateTime.Now;
+            var buildGraphEndTime = stopwatch.Elapsed;
 
             var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
-            var subgraphCallStartTime = DateTime.Now;
+            var subgraphCallStartTime = stopwatch.Elapsed;
 
             var subgraphResult = NereidUtilities.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-                networkValidatorUrl, out _, HttpClient);
-            var subgraphCallEndTime = DateTime.Now;
-            
+                subgraphUrl, out _, HttpClient);
+            var subgraphCallEndTime = stopwatch.Elapsed;
+
+            stopwatch.Stop();
+
             var returnValue = new
             {
                 SubgraphResult = subgraphResult,
@@ -269,6 +274,21 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult SolutionTestCase()
         {
+            var subgraphUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            
+            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+
+            // tree should only be about 70 nodes unless data changes. 
+            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("RSB_123582") });
+            
+            var subgraphResult = NereidUtilities.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
+                subgraphUrl, out _, HttpClient);
+
+            //subgraphResult.Data.SubgraphNodes[0].Nodes;
+
+
             throw new NotImplementedException();
         }
     }
