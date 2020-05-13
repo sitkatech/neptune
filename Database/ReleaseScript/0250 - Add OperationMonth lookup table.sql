@@ -37,7 +37,7 @@ set ma.MonthsOfOperationID =
 from dbo.TreatmentBMPModelingAttribute ma
 	inner join dbo.TreatmentBMPOperationMonth mo
 	on ma.TreatmentBMPID = mo.TreatmentBMPID
-where mo.OperationMonth = 10
+where mo.OperationMonth = 11
 GO
 
 Drop table dbo.TreatmentBMPOperationMonth

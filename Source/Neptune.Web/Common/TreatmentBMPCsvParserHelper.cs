@@ -474,7 +474,10 @@ namespace Neptune.Web.Common
                             propertyToChange.Name == "RoutingConfigurationID"
                                 ? typeof(RoutingConfiguration)
                                 :
-                                propertyToChange.PropertyType;
+                                propertyToChange.Name == "MonthsOfOperationID"
+                                    ? typeof(MonthsOfOperation)
+                                    :
+                                    propertyToChange.PropertyType;
 
                     if (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {

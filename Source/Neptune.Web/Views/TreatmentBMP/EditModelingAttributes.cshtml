@@ -291,7 +291,7 @@
                                             @Html.LabelWithSugarFor(x => x.MonthsOfOperationID)
                                         </label>
                                         <div class="col-sm-8">
-                                            @Html.DropDownListFor(x=>x.MonthsOfOperationID, ViewDataTyped.MonthsOfOperation)
+                                            @Html.DropDownListFor(x => x.MonthsOfOperationID, ViewDataTyped.MonthsOfOperation, new { @class = "form-control", style = "width:auto;" })
                                         </div>
                                     </div>
                                     break;
