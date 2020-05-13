@@ -1092,7 +1092,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionMonthsOperational : FieldDefinition
     {
         private FieldDefinitionMonthsOperational(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionMonthsOperational Instance = new FieldDefinitionMonthsOperational(90, @"MonthsOperational", @"MonthsOperational", @"This defines the months that the facility is operational. For modeling purposes, this can be ""Summer,"" ""Winter,"" or ""Both.""", true);
+        public static readonly FieldDefinitionMonthsOperational Instance = new FieldDefinitionMonthsOperational(90, @"MonthsOperational", @"Months Operational", @"This defines the months that the facility is operational. For modeling purposes, this can be ""Summer,"" ""Winter,"" or ""Both.""", true);
     }
 
     public partial class FieldDefinitionPermanentPoolOrWetlandVolume : FieldDefinition
