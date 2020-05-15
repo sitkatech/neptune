@@ -22,4 +22,10 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             Directed = true;
         }
     }
+
+    public class GenericNeriedResponseWithErrors
+    {
+        [JsonProperty]
+        public List<string> Errors { get; set; }
+    }
 }

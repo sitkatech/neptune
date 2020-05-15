@@ -4,6 +4,7 @@
     {
         STARTED,
         SUCCESS,
+        FAILURE,
         valid
     }
 }

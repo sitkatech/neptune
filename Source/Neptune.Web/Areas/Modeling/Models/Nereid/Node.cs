@@ -16,6 +16,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         [JsonIgnore]
         public WaterQualityManagementPlanNode WaterQualityManagementPlan { get; set; }
 
+        public int? TreatmentBMPID { get; set; }
+
         public Node(string id)
         {
             ID = id;

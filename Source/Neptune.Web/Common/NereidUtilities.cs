@@ -115,7 +115,7 @@ namespace Neptune.Web.Common
         {
             var vNereidTreatmentBMPRegionalSubbasins = dbContext.vNereidTreatmentBMPRegionalSubbasins.ToList();
             distributedBMPNodes = vNereidTreatmentBMPRegionalSubbasins
-                .Select(x => new Node() { ID = TreatmentBMPNodeID(x.TreatmentBMPID) }).ToList();
+                .Select(x => new Node() { ID = TreatmentBMPNodeID(x.TreatmentBMPID), TreatmentBMPID = x.TreatmentBMPID }).ToList();
 
             distributedBMPEdges = vNereidTreatmentBMPRegionalSubbasins.Select(x => new Edge()
             {
@@ -234,7 +234,7 @@ namespace Neptune.Web.Common
 
 
                 // Centralized BMP gets an edge pointing to "og_target"
-                centralizedBMPNodes.Add(new Node { ID = newCentralizedBMPNodeID });
+                centralizedBMPNodes.Add(new Node { ID = newCentralizedBMPNodeID, TreatmentBMPID = rsbCentralizedBMPPairing.TreatmentBMPID });
                 // see above
                 if (ogTargetID != null)
                 {

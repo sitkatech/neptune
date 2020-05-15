@@ -9,10 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using Neptune.Web.Models;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 
 namespace Neptune.Web.Areas.Modeling.Controllers
@@ -275,65 +277,91 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult SolutionTestCase()
         {
-            var subgraphUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
-            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
-            var solutionSequenceUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             
                 var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
-            // this subgraph is 22 nodes deep
-            var subgraph = graph.GetUpstreamSubgraph(new Node {ID = "RSB_42"});
+                var single = graph.Nodes.Single(x=>x.ID == "RSB_42");
 
-            //// tree should only be about 70 nodes unless data changes. 
-            //var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("RSB_4255") });
-            ////var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("RSB_123582") });
+                // this subgraph is 22 nodes deep
+            var subgraph = graph.GetUpstreamSubgraph(single);
 
-            //var subgraphResult = NereidUtilities.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-            //    subgraphUrl, out _, HttpClient);
-
-            //// create the subgraph that has these nodes as its nodes and the appropriate edges
-            //// appropriate edges = where target in nodes?
-            //var subgraphNodes = subgraphResult.Data.SubgraphNodes[0].Nodes;
-            //var subgraphNodeIDs = subgraphNodes.Select(x => x.ID).ToList();
-            //var subgraphEdges = graph.Edges.Where(x => subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
-
-            // validate the subgraph
-            //var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
-            var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(subgraph, networkValidatorUrl, out _, HttpClient);
-
-            //// and then, y'know, assuming I didn't fangle it up, let's go ahead and do this.
-            //// Not strictly necessary for this test case, but I want to be able to see the picture of the graph
-            //var nereidSolutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(subgraph);
-            //var solutionSequenceResult =
-            //    NereidUtilities.RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(
-            //        nereidSolutionSequenceRequestObject, solutionSequenceUrl, out var lol, HttpClient);
-
-            // Anyway, now I need to get the land_surface, treatment_facility, and treatment_site tables for this request.
+            // Now I need to get the land_surface, treatment_facility, and treatment_site tables for this request.
             // these are going to look very much like the various calls made throughout the testing methods, but filtered
             // to the subgraph. Fortunately, we've added metadata to the nodes to help us do the filtration
 
-            var delineations = subgraph.Nodes.Where(x=>x.Delineation != null).Select(x => x.Delineation.DelineationID).Distinct().ToList();
-            var regionalSubbasins = subgraph.Nodes.Where(x => x.RegionalSubbasin != null).Select(x => x.RegionalSubbasin.RegionalSubbasinID).Distinct().ToList();
-            var waterQualityManagementPlans = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null).Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).Distinct().ToList();
+            var delineations = subgraph.Nodes.Where(x => x.Delineation != null).Select(x => x.Delineation.DelineationID)
+                .Distinct().ToList();
+            var regionalSubbasins = subgraph.Nodes.Where(x => x.RegionalSubbasin != null)
+                .Select(x => x.RegionalSubbasin.RegionalSubbasinID).Distinct().ToList();
+            var waterQualityManagementPlans = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null)
+                .Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).Distinct().ToList();
+            var treatmentBMPs = subgraph.Nodes.Where(x => x.TreatmentBMPID != null)
+                .Select(x => x.TreatmentBMPID.Value).Distinct().ToList();
 
-            // land_surface
-            //whyyyy must Iiiiiii materialiiiiiiize
-            var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
-            var loadingInputDbSet = vNereidLoadingInputs.Where(x=>
+            var landSurfaces = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList().Where(x=>
                 delineations.Contains(x.DelineationID.GetValueOrDefault()) ||
                 regionalSubbasins.Contains(x.RegionalSubbasinID) ||
                 waterQualityManagementPlans.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
-                ).ToList();
+            ).ToList().Select(x => new LandSurface(x)).ToList();
 
-            var landSurfaces = loadingInputDbSet.Select(x => new LandSurface(x)).ToList();
+            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Where(x => treatmentBMPs.Contains(x.TreatmentBMPID)).ModeledTreatmentBMPs()
+                .Select(x => x.ToTreatmentFacility()).ToList();
+
+            var waterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
+
+            var waterQualityManagementPlanBMPs = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .Where(x=> waterQualityManagementPlans.Contains(x.WaterQualityManagementPlanID))
+                .SelectMany(x => x.QuickBMPs.Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
+                    waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node })
+                .Where(x=>regionalSubbasins.Contains(x.node.RegionalSubbasinID))   // ignore parts that live in RSBs outside our solve area.
+                .ToList();
+
+            var treatmentSites = waterQualityManagementPlanBMPs.Select(x =>
+                new TreatmentSite
+                {
+                    NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
+                        x.node.RegionalSubbasinID),
+                    AreaPercentage = x.bmp.PercentOfSiteTreated,
+                    CapturedPercentage = x.bmp.PercentCaptured,
+                    RetainedPercentage = x.bmp.PercentRetained,
+                    FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
+                }).ToList();
+
+            // validate input objects -- not strictly necessary, just for testing purposes
             var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
-            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest { LandSurfaces = landSurfaces};
-            var unused = NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent, HttpClient);
-            throw new NotImplementedException();
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest {LandSurfaces = landSurfaces};
+            var landSurfaceResponseObject = NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, GenericNeriedResponseWithErrors>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var loadingResponse, HttpClient);
+
+            var treatmentFacilityTable = new TreatmentFacilityTable { TreatmentFacilities = treatmentFacilities};
+            var treatmentFacilityResponseObject = NereidUtilities.RunJobAtNereid<TreatmentFacilityTable, GenericNeriedResponseWithErrors>(treatmentFacilityTable, treatmentFacilityUrl, out var treatmentFacilityResponse, HttpClient);
+
+            var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(subgraph, networkValidatorUrl, out var networkValidatorResponse, HttpClient);
+
+
+            var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=soc";
+
+            var solutionRequestObject = new SolutionRequestObject()
+            {
+                Graph = subgraph,
+                LandSurfaces = landSurfaces,
+                TreatmentFacilities = treatmentFacilities,
+                TreatmentSites = treatmentSites,
+                PreviousResults = new List<object>()
+            };
+
+            var unused = NereidUtilities.RunJobAtNereid<SolutionRequestObject, object>(solutionRequestObject, solveUrl, out var responseContent, HttpClient);
+
+            var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            stopwatch.Stop();
+
+            return Json(new {elapsed = stopwatchElapsedMilliseconds, responseContent}, JsonRequestBehavior.AllowGet);
         }
     }
 }
