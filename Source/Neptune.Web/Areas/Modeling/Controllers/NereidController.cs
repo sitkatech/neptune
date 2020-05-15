@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using System.Web;
 using System.Web.Mvc;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 
@@ -139,7 +140,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult SolutionSequence()
         {
-            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
+            var solutionSequenceUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -152,7 +153,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var subgraphCallStartTime = stopwatch.Elapsed;
             var solutionSequenceResult = NereidUtilities.RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(solutionSequenceRequestObject,
-                    networkValidatorUrl, out _, HttpClient);
+                    solutionSequenceUrl, out _, HttpClient);
             var subgraphCallEndTime = stopwatch.Elapsed;
             
             var returnValue = new
@@ -275,20 +276,63 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public JsonResult SolutionTestCase()
         {
             var subgraphUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
+            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
+            var solutionSequenceUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+                var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
-            // tree should only be about 70 nodes unless data changes. 
-            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("RSB_123582") });
-            
-            var subgraphResult = NereidUtilities.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-                subgraphUrl, out _, HttpClient);
+            // this subgraph is 22 nodes deep
+            var subgraph = graph.GetUpstreamSubgraph(new Node {ID = "RSB_42"});
 
-            //subgraphResult.Data.SubgraphNodes[0].Nodes;
+            //// tree should only be about 70 nodes unless data changes. 
+            //var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("RSB_4255") });
+            ////var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("RSB_123582") });
 
+            //var subgraphResult = NereidUtilities.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
+            //    subgraphUrl, out _, HttpClient);
 
+            //// create the subgraph that has these nodes as its nodes and the appropriate edges
+            //// appropriate edges = where target in nodes?
+            //var subgraphNodes = subgraphResult.Data.SubgraphNodes[0].Nodes;
+            //var subgraphNodeIDs = subgraphNodes.Select(x => x.ID).ToList();
+            //var subgraphEdges = graph.Edges.Where(x => subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
+
+            // validate the subgraph
+            //var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
+            var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(subgraph, networkValidatorUrl, out _, HttpClient);
+
+            //// and then, y'know, assuming I didn't fangle it up, let's go ahead and do this.
+            //// Not strictly necessary for this test case, but I want to be able to see the picture of the graph
+            //var nereidSolutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(subgraph);
+            //var solutionSequenceResult =
+            //    NereidUtilities.RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(
+            //        nereidSolutionSequenceRequestObject, solutionSequenceUrl, out var lol, HttpClient);
+
+            // Anyway, now I need to get the land_surface, treatment_facility, and treatment_site tables for this request.
+            // these are going to look very much like the various calls made throughout the testing methods, but filtered
+            // to the subgraph. Fortunately, we've added metadata to the nodes to help us do the filtration
+
+            var delineations = subgraph.Nodes.Where(x=>x.Delineation != null).Select(x => x.Delineation.DelineationID).Distinct().ToList();
+            var regionalSubbasins = subgraph.Nodes.Where(x => x.RegionalSubbasin != null).Select(x => x.RegionalSubbasin.RegionalSubbasinID).Distinct().ToList();
+            var waterQualityManagementPlans = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null).Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).Distinct().ToList();
+
+            // land_surface
+            //whyyyy must Iiiiiii materialiiiiiiize
+            var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
+            var loadingInputDbSet = vNereidLoadingInputs.Where(x=>
+                delineations.Contains(x.DelineationID.GetValueOrDefault()) ||
+                regionalSubbasins.Contains(x.RegionalSubbasinID) ||
+                waterQualityManagementPlans.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
+                ).ToList();
+
+            var landSurfaces = loadingInputDbSet.Select(x => new LandSurface(x)).ToList();
+            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
+
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest { LandSurfaces = landSurfaces};
+            var unused = NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent, HttpClient);
             throw new NotImplementedException();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
@@ -20,5 +21,27 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         }
 
         public Graph() { }
+    }
+
+    public static class GraphExtensionMethods
+    {
+        public static Graph GetUpstreamSubgraph(this Graph graph, Node node)
+        {
+            var edgesToAdd = graph.Edges.Where(x=>x.TargetID == node.ID).ToList();
+
+            List<Edge> subgraphEdges = new List<Edge>();
+            List<Node> subgraphNodes = new List<Node>(){node};
+            while (edgesToAdd.Any())
+            {
+                subgraphEdges.AddRange(edgesToAdd);
+                var sourceNodeIDs = edgesToAdd.Select(x => x.SourceID).ToList();
+                var sourceNodesToAdd = graph.Nodes.Where(x => sourceNodeIDs.Contains(x.ID)).ToList();
+                subgraphNodes.AddRange(sourceNodesToAdd);
+
+                edgesToAdd = graph.Edges.Where(x => sourceNodeIDs.Contains(x.TargetID)).ToList();
+            }
+
+            return new Graph(true, subgraphNodes, subgraphEdges);
+        }
     }
 }

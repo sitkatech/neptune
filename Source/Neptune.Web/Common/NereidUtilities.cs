@@ -100,7 +100,7 @@ namespace Neptune.Web.Common
             var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true).ToList();
 
             rsbNodes = regionalSubbasinsInCoverage
-                .Select(x => new Node { ID = RegionalSubbasinNodeID(x) }).ToList();
+                .Select(x => new Node { ID = RegionalSubbasinNodeID(x), RegionalSubbasin = x }).ToList();
 
             rsbEdges = regionalSubbasinsInCoverage
                 .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
@@ -132,7 +132,8 @@ namespace Neptune.Web.Common
             delineationNodes = distributedDelineations
                 .Select(x => new Node()
                 {
-                    ID = DelineationNodeID(x)
+                    ID = DelineationNodeID(x),
+                    Delineation = x
                 }).ToList();
 
             delineationEdges = distributedDelineations
@@ -168,7 +169,9 @@ namespace Neptune.Web.Common
 
             wqmpNodes = wqmpRSBPairings.Select(x => new Node
             {
-                ID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID)
+                ID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID),
+                WaterQualityManagementPlan = x
+
             }).ToList();
 
             wqmpEdges = wqmpRSBPairings.Select(x => new Edge
