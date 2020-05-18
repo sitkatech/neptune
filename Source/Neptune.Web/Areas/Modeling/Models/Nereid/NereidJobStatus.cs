@@ -5,6 +5,7 @@
         STARTED,
         SUCCESS,
         FAILURE,
+        PENDING,
         valid
     }
 }

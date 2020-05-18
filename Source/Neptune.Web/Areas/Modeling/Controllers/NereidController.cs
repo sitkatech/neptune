@@ -142,22 +142,22 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult SolutionSequence()
         {
-            var solutionSequenceUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence";
+            var solutionSequenceUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
-            stopwatch.Stop();
 
             var solutionSequenceRequestObject = new NereidSolutionSequenceRequestObject(graph);
 
             var subgraphCallStartTime = stopwatch.Elapsed;
             var solutionSequenceResult = NereidUtilities.RunJobAtNereid<NereidSolutionSequenceRequestObject, SolutionSequenceResult>(solutionSequenceRequestObject,
-                    solutionSequenceUrl, out _, HttpClient);
+                    solutionSequenceUrl, out var responseContent, HttpClient);
             var subgraphCallEndTime = stopwatch.Elapsed;
-            
+
+            stopwatch.Stop();
             var returnValue = new
             {
                 SubgraphResult = solutionSequenceResult.Data,
