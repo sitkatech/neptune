@@ -16,11 +16,11 @@ namespace Neptune.Web.ScheduledJobs
         {
         }
 
-        public new static string JobName => "LGU Refresh";
+        public new static string JobName => "HRU Refresh";
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            //NeptuneEnvironmentType.Local,
+            NeptuneEnvironmentType.Local,
             NeptuneEnvironmentType.Prod,
             NeptuneEnvironmentType.Qa
         };

@@ -67,7 +67,7 @@ namespace Neptune.Web.ScheduledJobs
                 MakeDailyUtcCronJobStringFromLocalTime(22, 30), recurringJobIds);
 
             AddRecurringJob("Refresh RSBs", () => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(1122, true),
-                MakeDailyUtcCronJobStringFromLocalTime(1, 30), recurringJobIds);
+                MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Friday), recurringJobIds);
 
             AddRecurringJob(HRURefreshBackgroundJob.JobName,
                 () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(), Cron.MinuteInterval(30), recurringJobIds);
@@ -109,6 +109,12 @@ namespace Neptune.Web.ScheduledJobs
         {
             var utcCronTime = MakeUtcCronTime(hour, minute);
             return Cron.Daily(utcCronTime.Hour, utcCronTime.Minute);
+        }
+
+        private static string MakeWeeklyUtcCronJobStringFromLocalTime(int hour, int minute, DayOfWeek dayOfWeek)
+        {
+            var utcCronTime = MakeUtcCronTime(hour, minute);
+            return Cron.Weekly(dayOfWeek, utcCronTime.Hour, utcCronTime.Minute);
         }
 
         private static string MakeYearlyUtcCronJobStringFromLocalTime(int month, int day, int hour, int minute)

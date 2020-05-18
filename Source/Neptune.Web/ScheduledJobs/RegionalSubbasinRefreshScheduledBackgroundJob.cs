@@ -45,6 +45,7 @@ namespace Neptune.Web.ScheduledJobs
             ThrowIfCatchIdnNotUnique(newRegionalSubbasinFeatureCollection);
             StageFeatureCollection(newRegionalSubbasinFeatureCollection);
             ThrowIfDownstreamInvalid(dbContext);
+            DeleteLoadGeneratingUnits(dbContext);
             MergeAndReproject(dbContext, person);
             RefreshCentralizedDelineations(dbContext, person);
 
@@ -56,42 +57,14 @@ namespace Neptune.Web.ScheduledJobs
             }
         }
 
+        private static void DeleteLoadGeneratingUnits(DatabaseEntities dbContext)
+        {
+            dbContext.Database.ExecuteSqlCommand(
+                $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+        }
+
         private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
         {
-            var catchmentGeometriesForLGURefresh = dbContext.RegionalSubbasins
-                .Where(x => x.IsWaitingForLGURefresh == true).Select(x => x.CatchmentGeometry);
-
-            var featureCollection = new FeatureCollection()
-            {
-                CRS = new NamedCRS("EPSG:2771")
-            };
-
-            foreach (var dbGeometry in catchmentGeometriesForLGURefresh)
-            {
-                featureCollection.Features.Add(DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry));
-            }
-
-            // NP 3/20 This can take way too long if there are a lot of RSBs to update, so leaving it out for now...
-            //var regionalSubbasinsWaitingForRefresh = dbContext.RegionalSubbasins.Where(x => x.IsWaitingForLGURefresh == true).ToList();
-            //var loadGeneratingUnitRefreshAreas = regionalSubbasinsWaitingForRefresh.Select(x=>
-            //    new LoadGeneratingUnitRefreshArea(x.CatchmentGeometry)).ToList();
-
-            //dbContext.LoadGeneratingUnitRefreshAreas.AddRange(loadGeneratingUnitRefreshAreas);
-            //dbContext.SaveChanges(person);
-
-            //var loadGeneratingUnitRefreshScheduledBackgroundJob =
-            //    new LoadGeneratingUnitRefreshScheduledBackgroundJob(dbContext);
-
-            //loadGeneratingUnitRefreshScheduledBackgroundJob.LoadGeneratingUnitRefreshAfterRSBRefresh(
-            //    loadGeneratingUnitRefreshAreas);
-
-            //foreach (var regionalSubbasin in regionalSubbasinsWaitingForRefresh)
-            //{
-            //    regionalSubbasin.IsWaitingForLGURefresh = false;
-            //}
-
-            //dbContext.SaveChanges(person);
-
             // Instead, just queue a total LGU update
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
 
