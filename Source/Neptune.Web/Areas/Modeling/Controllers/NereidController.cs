@@ -334,6 +334,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             // validate input objects -- not strictly necessary, just for testing purposes
             var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+            var treatmentSiteUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_site/validate?state=ca&region=soc";
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest {LandSurfaces = landSurfaces};
@@ -344,6 +345,11 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(subgraph, networkValidatorUrl, out var networkValidatorResponse, HttpClient);
 
+            var treatmentSiteTable = new TreatmentSiteTable {treatment_sites = treatmentSites};
+            var treatmentSiteResponseObject = NereidUtilities.RunJobAtNereid<TreatmentSiteTable, GenericNeriedResponseWithErrors>(treatmentSiteTable,
+                treatmentSiteUrl, out var treatmentSiteResponse, HttpClient);
+
+            var badGuys = subgraph.Nodes.Where(x => x.ID == null || string.IsNullOrWhiteSpace(x.ID)).ToList();
 
             var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=soc";
 
@@ -363,5 +369,10 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(new {elapsed = stopwatchElapsedMilliseconds, responseContent}, JsonRequestBehavior.AllowGet);
         }
+    }
+
+    public class TreatmentSiteTable
+    {
+        public List<TreatmentSite> treatment_sites { get; set; }
     }
 }
