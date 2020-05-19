@@ -243,11 +243,19 @@ namespace Neptune.Web.Common
             }
         }
 
-        public static IEnumerable<TreatmentBMP> ModeledTreatmentBMPs(this IQueryable<TreatmentBMP> databaseEntitiesTreatmentBMPs)
+        public static IQueryable<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext)
         {
-            return databaseEntitiesTreatmentBMPs
-                .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList()
-                .Where(x=>x.IsFullyParameterized());
+            return dbContext.TreatmentBMPs
+                .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null);
+
+        }
+
+        // todo: instead of throwing out Not-Fully-Parameterized, send them as "NoTreatment".
+        // (so the "IsFullyParamterized" should be turned into an if-statement at the ToTreatmentFacility
+        // method and this method can then be eliminated
+        public static IEnumerable<TreatmentBMP> ModeledTreatmentBMPs(this IEnumerable<TreatmentBMP> databaseEntitiesTreatmentBMPs)
+        {
+            return databaseEntitiesTreatmentBMPs.Where(x=>x.IsFullyParameterized());
         }
 
         public static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent, HttpClient httpClient)

@@ -2,19 +2,16 @@
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
-using Neptune.Web.Models;
+using System.Data.Entity;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 using SolutionResponseObject = Neptune.Web.Areas.Modeling.Models.Nereid.SolutionResponseObject;
 
@@ -246,7 +243,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
 
-            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ModeledTreatmentBMPs()
+            var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities).ModeledTreatmentBMPs()
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
@@ -287,7 +284,13 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var single = graph.Nodes.Single(x=>x.ID == "RSB_42");
             var subgraph = graph.GetUpstreamSubgraph(single);
 
-            var responseContent = SolveSubgraph(subgraph);
+            var allLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
+            var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities).ToList();
+            var allWaterqualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities).ToList();
+            var allModelingQuickBMPs = HttpRequestStorage.DatabaseEntities.QuickBMPs.Include(x => x.TreatmentBMPType)
+                .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
+
+            var responseContent = SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
@@ -334,44 +337,43 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Json(new { elapsed = stopwatchElapsedMilliseconds, responseContent = "Didn't run it!" }, JsonRequestBehavior.AllowGet);
         }
 
-        private static string SolveSubgraph(Graph subgraph)
+        private static string SolveSubgraph(Graph subgraph, List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs, List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes, List<QuickBMP> allModelingQuickBMPs)
         {
             // Now I need to get the land_surface, treatment_facility, and treatment_site tables for this request.
             // these are going to look very much like the various calls made throughout the testing methods, but filtered
             // to the subgraph. Fortunately, we've added metadata to the nodes to help us do the filtration
 
-            var delineations = subgraph.Nodes.Where(x => x.Delineation != null).Select(x => x.Delineation.DelineationID)
+            var delineationToIncludeIDs = subgraph.Nodes.Where(x => x.Delineation != null).Select(x => x.Delineation.DelineationID)
                 .Distinct().ToList();
-            var regionalSubbasins = subgraph.Nodes.Where(x => x.RegionalSubbasin != null)
+            var regionalSubbasinToIncludeIDs = subgraph.Nodes.Where(x => x.RegionalSubbasin != null)
                 .Select(x => x.RegionalSubbasin.RegionalSubbasinID).Distinct().ToList();
-            var waterQualityManagementPlans = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null)
+            var waterQualityManagementPlanToIncludeIDs = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null)
                 .Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).Distinct().ToList();
-            var treatmentBMPs = subgraph.Nodes.Where(x => x.TreatmentBMPID != null)
+            var treatmentBMPToIncludeIDs = subgraph.Nodes.Where(x => x.TreatmentBMPID != null)
                 .Select(x => x.TreatmentBMPID.Value).Distinct().ToList();
 
-            var landSurfaces = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList().Where(x =>
-                delineations.Contains(x.DelineationID.GetValueOrDefault()) ||
-                regionalSubbasins.Contains(x.RegionalSubbasinID) ||
-                waterQualityManagementPlans.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
+            var landSurfaces = allLoadingInputs.Where(x =>
+                delineationToIncludeIDs.Contains(x.DelineationID.GetValueOrDefault()) ||
+                regionalSubbasinToIncludeIDs.Contains(x.RegionalSubbasinID) ||
+                waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
             ).ToList().Select(x => new LandSurface(x)).ToList();
 
-            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Where(x => treatmentBMPs.Contains(x.TreatmentBMPID)).ModeledTreatmentBMPs()
+            var treatmentFacilities = allModelingBMPs
+                .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID)).ModeledTreatmentBMPs()
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
-            var waterQualityManagementPlanNodes =
-                NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
+            var filteredQuickBMPs = allModelingQuickBMPs
+                .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID)).ToList();
+            var filteredWQMPNodes = allWaterqualityManagementPlanNodes.Where(y=>
+                waterQualityManagementPlanToIncludeIDs.Contains(y.WaterQualityManagementPlanID) &&
+                regionalSubbasinToIncludeIDs.Contains(y.RegionalSubbasinID) // ignore parts that live in RSBs outside our solve area.
+                ).ToList();
 
-            var waterQualityManagementPlanBMPs = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .Where(x => waterQualityManagementPlans.Contains(x.WaterQualityManagementPlanID))
-                .SelectMany(x => x.QuickBMPs.Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
-                    waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
+            var treatmentSites = filteredQuickBMPs
+                .Join(
+                    filteredWQMPNodes, x => x.WaterQualityManagementPlanID,
                     x => x.WaterQualityManagementPlanID, (bmp, node) => new {bmp, node})
-                .Where(x => regionalSubbasins.Contains(x.node
-                    .RegionalSubbasinID)) // ignore parts that live in RSBs outside our solve area.
-                .ToList();
-
-            var treatmentSites = waterQualityManagementPlanBMPs.Select(x =>
+                .Select(x =>
                 new TreatmentSite
                 {
                     NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
