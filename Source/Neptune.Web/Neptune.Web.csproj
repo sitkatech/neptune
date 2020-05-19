@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -536,7 +536,7 @@
     <Compile Include="Areas\Modeling\Models\Nereid\LandSurfaceLoadingRequest.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\NereidJobStatus.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\NereidResult.cs" />
-    <Compile Include="Areas\Modeling\Models\Nereid\NereidSolutionSequenceRequestObject.cs" />
+    <Compile Include="Areas\Modeling\Models\Nereid\SolutionSequenceRequest.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\NereidSubgraphRequestObject.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\NetworkValidatorResult.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\Node.cs" />

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Web.Helpers;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
 {
-    public class NereidSolutionSequenceRequestObject
+    public class SolutionSequenceRequest
     {
         [JsonProperty("directed")]
         public bool Directed { get; set; }
@@ -11,21 +12,24 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         [JsonProperty("edges")]
         public List<Edge> Edges { get; set; }
 
-        public NereidSolutionSequenceRequestObject()
+        public SolutionSequenceRequest()
         {
             Directed = true;
         }
 
-        public NereidSolutionSequenceRequestObject(Graph graph)
+        public SolutionSequenceRequest(Graph graph)
         {
             Edges = graph.Edges;
             Directed = true;
         }
     }
 
-    public class GenericNeriedResponseWithErrors
+    public class GenericNeriedResponse
     {
-        [JsonProperty]
+        [JsonProperty("errors")]
         public List<string> Errors { get; set; }
+
+        [JsonProperty("warnings")]
+        public List<string> Warnings { get; set; }
     }
 }
