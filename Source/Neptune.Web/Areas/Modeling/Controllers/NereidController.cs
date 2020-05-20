@@ -243,7 +243,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
 
-            var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities).ModeledTreatmentBMPs()
+            var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
@@ -288,7 +288,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities).ToList();
             var allWaterqualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities).ToList();
             var allModelingQuickBMPs = HttpRequestStorage.DatabaseEntities.QuickBMPs.Include(x => x.TreatmentBMPType)
-                .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
+                .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
             var responseContent = SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs);
 
@@ -359,7 +359,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             ).ToList().Select(x => new LandSurface(x)).ToList();
 
             var treatmentFacilities = allModelingBMPs
-                .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID)).ModeledTreatmentBMPs()
+                .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID))
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var filteredQuickBMPs = allModelingQuickBMPs
@@ -379,8 +379,8 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
                         x.node.RegionalSubbasinID),
                     AreaPercentage = x.bmp.PercentOfSiteTreated,
-                    CapturedPercentage = x.bmp.PercentCaptured,
-                    RetainedPercentage = x.bmp.PercentRetained,
+                    CapturedPercentage = x.bmp.PercentCaptured ?? 0,
+                    RetainedPercentage = x.bmp.PercentRetained ?? 0,
                     FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
                 }).ToList();
 

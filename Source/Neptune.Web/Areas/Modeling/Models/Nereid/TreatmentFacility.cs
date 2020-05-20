@@ -96,6 +96,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             var lspcBasinKey = treatmentBMP.LSPCBasin?.LSPCBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
             
+
             if (!isFullyParameterized)
             {
                 return new TreatmentFacility
@@ -107,8 +108,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             }
 
             double? treatmentRate = null;
-
-
+            
             var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
 
             // treatment rate is an alias for four different fields, so we need to pick the one that's not null
