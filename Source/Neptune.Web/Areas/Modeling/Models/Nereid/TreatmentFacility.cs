@@ -103,7 +103,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 {
                     NodeID = treatmentBMPNodeID,
                     FacilityType = "NoTreatment",
-                    ReferenceDataKey = lspcBasinKey
+                    ReferenceDataKey = lspcBasinKey,
+                    DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
                 };
             }
 

@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
 {
@@ -14,5 +16,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         public T Data { get; set; }
         [JsonProperty("result_route")]
         public string ResultRoute { get; set; }
+
+        [JsonProperty("detail")]
+        public JArray Detail { get; set; }
     }
 }

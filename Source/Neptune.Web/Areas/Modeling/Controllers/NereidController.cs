@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using System;
+using Hangfire;
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -244,6 +245,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
 
             var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
+                .ToList().Where(x => x.IsFullyParameterized())
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
@@ -258,6 +260,45 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 new
                 {
                     rpcTime = stopwatchElapsedMilliseconds,
+                    responseContent,
+                    requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
+                }, JsonRequestBehavior.AllowGet);
+        }
+        
+        /// <summary>
+        /// Runs a test case against the Nereid treatment_facility/validate endpoint.
+        /// Specifically tests that "NoTreatment" BMPs are being handled correctly by Nereid validator. I.e., they should pass validation automatically
+        /// Confirms that we are building one of the four inputs to the Nereid watershed/solve endpoint correctly.
+        /// Available only to Sitka Admins.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult NoTreatmentFacility()
+        {
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+
+            var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility()).ToList();
+
+            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
+            bool failed = false;
+            string responseContent = null;
+            try
+            {
+                NereidUtilities.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable,
+                    treatmentFacilityUrl,
+                    out responseContent, HttpClient);
+            }
+            catch (Exception)
+            {
+                failed = true;
+            }
+
+            return Json(
+                new
+                {
+                    firstCallFailed = failed,
                     responseContent,
                     requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
                 }, JsonRequestBehavior.AllowGet);

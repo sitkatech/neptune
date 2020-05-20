@@ -1,3 +1,4 @@
+using System;
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Models;
 using System.Collections.Generic;
@@ -265,6 +266,12 @@ namespace Neptune.Web.Common
             var resultRoute = deserializeObject.ResultRoute;
 
             responseContent = postResultContentAsStringResult;
+
+            if (deserializeObject.Detail != null)
+            {
+                throw new Exception(deserializeObject.Detail.ToString());
+            }
+
             if (!executing)
             {
                 responseObject = deserializeObject;
@@ -276,6 +283,11 @@ namespace Neptune.Web.Common
 
                 var continuePollingResponse =
                     JsonConvert.DeserializeObject<NereidResult<object>>(stringResponse);
+
+                if (continuePollingResponse.Detail != null)
+                {
+                    throw new Exception(deserializeObject.Detail.ToString());
+                }
 
                 if (continuePollingResponse.Status != NereidJobStatus.STARTED)
                 {
