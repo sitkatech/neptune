@@ -4,11 +4,13 @@ using Microsoft.VisualBasic.FileIO;
 using Neptune.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web.WebPages;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Common
 {
@@ -407,6 +409,7 @@ namespace Neptune.Web.Common
             currentErrorList = new List<string>();
             customAttributeValues = new List<CustomAttributeValue>();
             var customAttributes = new List<CustomAttribute>();
+            var isNew = !ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID);
             foreach (var customAttributeType in customAttributeTypes)
             {
                 var treatmentBMPTypeCustomAttributeType = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID);
@@ -422,22 +425,47 @@ namespace Neptune.Web.Common
 
                     var customAttributeDataType = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeName;
 
-                    if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
+                    var customAttributeTypeAcceptableValues =
+                        customAttributeType.CustomAttributeTypeOptionsSchema != null
+                            ? JsonConvert.DeserializeObject<List<string>>(
+                                customAttributeType.CustomAttributeTypeOptionsSchema)
+                            : null;
+
+                    if (String.IsNullOrEmpty(value))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowNumber}");
+                        //Don't do anything with an empty value if we're updating, but add it if we're new
+                        if (isNew)
+                        {
+                            customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
+                        }
+                    }
+                    else if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
+                    {
+                        currentErrorList.Add(
+                            $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowNumber}");
                     }
                     else if (customAttributeDataType.IsDecimal() && !decimal.TryParse(value, out var valueDecimal))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Decimal at row: {rowNumber}");
+                        currentErrorList.Add(
+                            $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Decimal at row: {rowNumber}");
                     }
-                    else if (customAttributeDataType.IsDateTime() && !DateTime.TryParse(value, out var valueDateTime))
+                    else if (customAttributeDataType.IsDateTime() &&
+                             !DateTime.TryParse(value, out var valueDateTime))
                     {
                         currentErrorList.Add(
                             $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Date Time at row: {rowNumber}");
                     }
+                    else if (customAttributeTypeAcceptableValues != null &&
+                             !customAttributeTypeAcceptableValues.Contains(value))
+                    {
+                        currentErrorList.Add(
+                            $"{value} is not a valid {customAttributeType.CustomAttributeTypeName} entry at row: {rowNumber}. Acceptable values are: {string.Join(", ", customAttributeTypeAcceptableValues)}"
+                        );
+                    }
                     else
                     {
-                        customAttribute.CustomAttributeValues.Clear();
+                        HttpRequestStorage.DatabaseEntities.CustomAttributeValues.RemoveRange(customAttribute
+                            .CustomAttributeValues);
                         customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
                     }
                 }
@@ -462,7 +490,7 @@ namespace Neptune.Web.Common
                 {
                     var modelingProperty = GetAppropriateModelingAttributeColumnName(attribute);
                     var value = currentRow[fieldsDict[attribute]];
-                    
+
                     var propertyToChange = treatmentBMPModelingAttribute.GetType().GetProperty(modelingProperty);
                     var propType = propertyToChange.Name == "UnderlyingHydrologicSoilGroupID"
                         ?
