@@ -345,37 +345,92 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
-        public JsonResult SolveSOC()
+        public ActionResult SolveSOC()
         {
             var solutionSequenceUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
-            
+
+            var failed = false;
+            var exceptionMessage = "";
+            var stackTrace = "";
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+            
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
+            var allLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
+            var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities).ToList();
+            var allwaterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities).ToList();
+            var allModelingQuickBMPs = HttpRequestStorage.DatabaseEntities.QuickBMPs.Include(x => x.TreatmentBMPType)
+                .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
+            var prepareInputsFromDatabaseElapsedTime = stopwatch.ElapsedMilliseconds;
+
             var solutionSequenceResult = NereidUtilities.RunJobAtNereid<SolutionSequenceRequest,SolutionSequenceResult>(new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, HttpClient );
+            var prepareSolutionSequenceElapsedTime = stopwatch.ElapsedMilliseconds;
 
-            foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
+            try
             {
-                foreach (var series in parallel.Series)
+                foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
                 {
-                    var subgraphNodeIDs = series.Nodes.Select(x=>x.ID).ToList();
+                    foreach (var series in parallel.Series)
+                    {
+                        var subgraphNodeIDs = series.Nodes.Select(x => x.ID).ToList();
 
-                    // create the subgraph that has these nodes as its nodes and the appropriate edges
-                    // appropriate edges = where target in nodes?
-                    var subgraphNodes = graph.Nodes.Where(x => subgraphNodeIDs.Contains(x.ID)).ToList();
-                    var subgraphEdges = graph.Edges.Where(x => subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
+                        // create the subgraph that has these nodes as its nodes and the appropriate edges
+                        // appropriate edges = where target in nodes?
+                        var subgraphNodes = graph.Nodes.Where(x => subgraphNodeIDs.Contains(x.ID)).ToList();
+                        var subgraphEdges = graph.Edges.Where(x =>
+                            subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
 
-                    var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
+                        var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
 
+                        SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
+                            allModelingQuickBMPs);
+                    }
                 }
             }
+            catch (NereidException<SolutionRequestObject,SolutionResponseObject> nexc)
+            {
+                var elapsed = stopwatch.ElapsedMilliseconds;
+                var data = new
+                {
+                    prepareInputsFromDatabaseElapsedTime,
+                    prepareSolutionSequenceElapsedTime =
+                        prepareSolutionSequenceElapsedTime - prepareInputsFromDatabaseElapsedTime,
+                    solveElapsedTime = elapsed - prepareSolutionSequenceElapsedTime,
+                    totalElapsedTime = elapsed,
+                    nodesProcessed = graph.Nodes.Count(x=>x.Results != null),
+                    failed = true,
+                    failingRequest = nexc.Request,
+                    failureResponse = nexc.Response
+                };
+
+                return Content(JsonConvert.SerializeObject(data));
+            }
+            catch (Exception exception)
+            {
+                failed = true;
+                exceptionMessage = exception.Message;
+                stackTrace = exception.StackTrace;
+            }
             
-            var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            var totalElapsedTime= stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
 
-            return Json(new { elapsed = stopwatchElapsedMilliseconds, responseContent = "Didn't run it!" }, JsonRequestBehavior.AllowGet);
+            return Json(
+                new
+                {
+                    prepareInputsFromDatabaseElapsedTime,
+                    prepareSolutionSequenceElapsedTime =
+                        prepareSolutionSequenceElapsedTime - prepareInputsFromDatabaseElapsedTime,
+                    solveElapsedTime = totalElapsedTime - prepareSolutionSequenceElapsedTime,
+                    totalElapsedTime,
+                    nodesProcessed = graph.Nodes.Count(x => x.Results != null),
+                    failed,
+                    exceptionMessage,
+                    stackTrace
+                }, JsonRequestBehavior.AllowGet);
         }
 
         private static string SolveSubgraph(Graph subgraph, List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs, List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes, List<QuickBMP> allModelingQuickBMPs)
@@ -425,7 +480,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
                 }).ToList();
 
-            ValidateForTesting(subgraph, landSurfaces, treatmentFacilities, treatmentSites);
+            //ValidateForTesting(subgraph, landSurfaces, treatmentFacilities, treatmentSites);
 
             var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=soc";
 
@@ -441,11 +496,18 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var results = NereidUtilities.RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(solutionRequestObject, solveUrl,
                 out var responseContent, HttpClient);
 
-            foreach (var dataLeafResult in results.Data.LeafResults)
+            if (results.Data.Errors != null && results.Data.Errors.Count > 0)
             {
-                var node = subgraph.Nodes.Single(x=>x.ID == dataLeafResult["node_id"].ToString());
-                node.Results = dataLeafResult;
+                throw new NereidException<SolutionRequestObject, SolutionResponseObject>
+                    {Request = solutionRequestObject, Response = results.Data};
             }
+
+            // don't need to store the leaf results. They're either data we already have, or just loading summaries
+            //foreach (var dataLeafResult in results.Data.LeafResults)
+            //{
+            //    var node = subgraph.Nodes.Single(x=>x.ID == dataLeafResult["node_id"].ToString());
+            //    node.Results = dataLeafResult;
+            //}
             foreach (var dataLeafResult in results.Data.Results)
             {
                 var node = subgraph.Nodes.Single(x => x.ID == dataLeafResult["node_id"].ToString());
@@ -483,6 +545,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 NereidUtilities.RunJobAtNereid<TreatmentSiteTable, GenericNeriedResponse>(treatmentSiteTable,
                     treatmentSiteUrl, out var treatmentSiteResponse, HttpClient);
         }
+    }
+
+    internal class NereidException<TReq,TResp> : Exception
+    {
+        public TReq Request { get; set; }
+        public TResp Response { get; set; }
     }
 
     public class TreatmentSiteTable
