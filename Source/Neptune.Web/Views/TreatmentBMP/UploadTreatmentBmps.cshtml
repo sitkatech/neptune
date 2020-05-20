@@ -70,8 +70,9 @@
 @if (ViewDataTyped.ErrorList.Any())
 {
     var count = 1;
+    var errorProperGrammarMessage = ViewDataTyped.ErrorList.Count == 1 ? "is 1 error that needs" : "are " + ViewDataTyped.ErrorList.Count + " errors that need";
     <div>
-        <div class="alert alert-danger">There are @ViewDataTyped.ErrorList.Count errors that need to be fixed before upload can be successful</div>
+        <div class="alert alert-danger">There @errorProperGrammarMessage to be fixed before upload can be successful</div>
         <div class="panel panel-default mt-2">
             <div class="panel-heading">
                 <div class="row">
