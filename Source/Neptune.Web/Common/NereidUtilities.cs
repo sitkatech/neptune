@@ -127,8 +127,12 @@ namespace Neptune.Web.Common
 
         public static void MakeDistributedDelineationNodesAndEdges(DatabaseEntities dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes)
         {
-            var distributedDelineations = dbContext.Delineations
-                .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID).ToList();
+            var distributedDelineations = dbContext.Delineations.Include(x=>x.TreatmentBMP)
+                .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID &&
+                            // don't include delineations for non-modeled BMPs
+                            x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
+                            x.TreatmentBMP.RegionalSubbasinID != null &&
+                            x.TreatmentBMP.LSPCBasinID != null).ToList();
 
             delineationNodes = distributedDelineations
                 .Select(x => new Node()
@@ -247,7 +251,7 @@ namespace Neptune.Web.Common
         public static IQueryable<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext)
         {
             return dbContext.TreatmentBMPs
-                .Where(x => x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null);
+                .Where(x => x.RegionalSubbasinID!= null && x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null);
 
         }
         

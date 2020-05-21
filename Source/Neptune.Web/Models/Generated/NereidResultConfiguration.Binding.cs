@@ -21,7 +21,7 @@ namespace Neptune.Web.Models
             Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.NodeID).HasColumnName(@"NodeID").HasColumnType("varchar").IsOptional();
-            Property(x => x.FullResponse).HasColumnName(@"FullResponse").HasColumnType("varbinary").IsRequired();
+            Property(x => x.FullResponse).HasColumnName(@"FullResponse").HasColumnType("varchar").IsRequired();
 
         }
     }

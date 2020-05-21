@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NereidResult(int nereidResultID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, byte[] fullResponse) : this()
+        public NereidResult(int nereidResultID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, string fullResponse) : this()
         {
             this.NereidResultID = nereidResultID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -44,7 +44,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NereidResult(byte[] fullResponse) : this()
+        public NereidResult(string fullResponse) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.NereidResultID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -58,7 +58,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static NereidResult CreateNewBlank()
         {
-            return new NereidResult(default(byte[]));
+            return new NereidResult(default(string));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Neptune.Web.Models
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public string NodeID { get; set; }
-        public byte[] FullResponse { get; set; }
+        public string FullResponse { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NereidResultID; } set { NereidResultID = value; } }
 

@@ -9,7 +9,7 @@ CREATE TABLE [dbo].[NereidResult](
 	[RegionalSubbasinID] [int] NULL,
 	[DelineationID] [int] NULL,
 	[NodeID] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[FullResponse] [varbinary](max) NOT NULL,
+	[FullResponse] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_NereidResult_NereidResultID] PRIMARY KEY CLUSTERED 
 (
 	[NereidResultID] ASC

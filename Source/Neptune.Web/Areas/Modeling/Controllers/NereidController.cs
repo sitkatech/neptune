@@ -1,5 +1,4 @@
-﻿using System;
-using Hangfire;
+﻿using Hangfire;
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -7,12 +6,14 @@ using Neptune.Web.Models;
 using Neptune.Web.ScheduledJobs;
 using Neptune.Web.Security;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Mvc;
-using System.Data.Entity;
+using Newtonsoft.Json.Linq;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 using SolutionResponseObject = Neptune.Web.Areas.Modeling.Models.Nereid.SolutionResponseObject;
 
@@ -67,7 +68,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
             var stopwatch = new Stopwatch();
-            
+
             stopwatch.Start();
             var buildGraphStartTime = stopwatch.Elapsed;
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
@@ -191,7 +192,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Stop();
 
             var unused = NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent, HttpClient);
-            
+
             var returnValue = new
             {
                 SubgraphResult = responseContent,
@@ -214,9 +215,9 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var waterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
 
             var list = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .SelectMany(x => x.QuickBMPs.Where(y=>y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
+                .SelectMany(x => x.QuickBMPs.Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
                     waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
-                    x => x.WaterQualityManagementPlanID, (bmp, node) => new {bmp, node}).ToList();
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node }).ToList();
 
             var treatmentSites = list.Select(x =>
                     new TreatmentSite
@@ -229,7 +230,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                         FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
                     });
 
-            return Json(new {TreatmentSites = treatmentSites}, JsonRequestBehavior.AllowGet);
+            return Json(new { TreatmentSites = treatmentSites }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -248,7 +249,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 .ToList().Where(x => x.IsFullyParameterized())
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
-            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
+            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -264,7 +265,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
                 }, JsonRequestBehavior.AllowGet);
         }
-        
+
         /// <summary>
         /// Runs a test case against the Nereid treatment_facility/validate endpoint.
         /// Specifically tests that "NoTreatment" BMPs are being handled correctly by Nereid validator. I.e., they should pass validation automatically
@@ -281,7 +282,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
                 .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility()).ToList();
 
-            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities};
+            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
             bool failed = false;
             string responseContent = null;
             try
@@ -304,6 +305,17 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult GetTreatmentBMPResult(int treatmentBMPID)
+        {
+            var fullResponse = HttpRequestStorage.DatabaseEntities.NereidResults.SingleOrDefault(x=>x.TreatmentBMPID == treatmentBMPID)?.FullResponse;
+            var jObject = JObject.Parse(fullResponse);
+            var keyValue = jObject.ToKeyValue();
+            return Json(keyValue, JsonRequestBehavior.AllowGet);
+            //return Json(jObject, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Runs a very small test case against the Nereid watershed/solve endpoint.
         /// Builds the complete network graph, then hits the subgraph endpoint with
@@ -318,11 +330,11 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-        
+
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
             // this subgraph is 23 nodes deep
-            var single = graph.Nodes.Single(x=>x.ID == "RSB_42");
+            var single = graph.Nodes.Single(x => x.ID == "RSB_42");
             var subgraph = graph.GetUpstreamSubgraph(single);
 
             var allLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
@@ -331,12 +343,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var allModelingQuickBMPs = HttpRequestStorage.DatabaseEntities.QuickBMPs.Include(x => x.TreatmentBMPType)
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
-            var responseContent = SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs);
+            var responseContent = SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs, out _);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
 
-            return Json(new {elapsed = stopwatchElapsedMilliseconds, responseContent}, JsonRequestBehavior.AllowGet);
+            return Json(new { elapsed = stopwatchElapsedMilliseconds, responseContent }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -352,11 +364,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var failed = false;
             var exceptionMessage = "";
             var stackTrace = "";
+            var missingNodeIDs = new List<string>();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            
+
             var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
             var allLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
@@ -366,7 +379,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
             var prepareInputsFromDatabaseElapsedTime = stopwatch.ElapsedMilliseconds;
 
-            var solutionSequenceResult = NereidUtilities.RunJobAtNereid<SolutionSequenceRequest,SolutionSequenceResult>(new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, HttpClient );
+            var solutionSequenceResult = NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, HttpClient);
             var prepareSolutionSequenceElapsedTime = stopwatch.ElapsedMilliseconds;
 
             try
@@ -386,11 +399,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                         var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
 
                         SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
-                            allModelingQuickBMPs);
+                            allModelingQuickBMPs, out var notFoundNodes);
+                        missingNodeIDs.AddRange(notFoundNodes);
                     }
                 }
             }
-            catch (NereidException<SolutionRequestObject,SolutionResponseObject> nexc)
+            catch (NereidException<SolutionRequestObject, SolutionResponseObject> nexc)
             {
                 var elapsed = stopwatch.ElapsedMilliseconds;
                 var data = new
@@ -400,8 +414,11 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                         prepareSolutionSequenceElapsedTime - prepareInputsFromDatabaseElapsedTime,
                     solveElapsedTime = elapsed - prepareSolutionSequenceElapsedTime,
                     totalElapsedTime = elapsed,
-                    nodesProcessed = graph.Nodes.Count(x=>x.Results != null),
+                    nodesProcessed = graph.Nodes.Count(x => x.Results != null),
+                    missingNodeIDs,
                     failed = true,
+                    exceptionMessage = nexc.Message,
+                    innerExceptionStackTrace = nexc.InnerException?.StackTrace,
                     failingRequest = nexc.Request,
                     failureResponse = nexc.Response
                 };
@@ -414,9 +431,20 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 exceptionMessage = exception.Message;
                 stackTrace = exception.StackTrace;
             }
-            
-            var totalElapsedTime= stopwatch.ElapsedMilliseconds;
+
+            var totalElapsedTime = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
+
+            var nereidResults = graph.Nodes.Where(x=>x.Results!= null).Select(x => new NereidResult(x.Results.ToString())
+            {
+                TreatmentBMPID = x.TreatmentBMPID, DelineationID = x.Delineation?.DelineationID,
+                NodeID = x.ID,
+                RegionalSubbasinID = x.RegionalSubbasin?.RegionalSubbasinID,
+                WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID
+            });
+
+            HttpRequestStorage.DatabaseEntities.NereidResults.AddRange(nereidResults);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             return Json(
                 new
@@ -427,14 +455,17 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     solveElapsedTime = totalElapsedTime - prepareSolutionSequenceElapsedTime,
                     totalElapsedTime,
                     nodesProcessed = graph.Nodes.Count(x => x.Results != null),
+                    missingNodeIDs,
                     failed,
                     exceptionMessage,
                     stackTrace
                 }, JsonRequestBehavior.AllowGet);
         }
 
-        private static string SolveSubgraph(Graph subgraph, List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs, List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes, List<QuickBMP> allModelingQuickBMPs)
+        private static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph, List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs, List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes, List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes)
         {
+            notFoundNodes = new List<string>();
+
             // Now I need to get the land_surface, treatment_facility, and treatment_site tables for this request.
             // these are going to look very much like the various calls made throughout the testing methods, but filtered
             // to the subgraph. Fortunately, we've added metadata to the nodes to help us do the filtration
@@ -460,7 +491,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var filteredQuickBMPs = allModelingQuickBMPs
                 .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID)).ToList();
-            var filteredWQMPNodes = allWaterqualityManagementPlanNodes.Where(y=>
+            var filteredWQMPNodes = allWaterqualityManagementPlanNodes.Where(y =>
                 waterQualityManagementPlanToIncludeIDs.Contains(y.WaterQualityManagementPlanID) &&
                 regionalSubbasinToIncludeIDs.Contains(y.RegionalSubbasinID) // ignore parts that live in RSBs outside our solve area.
                 ).ToList();
@@ -468,7 +499,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentSites = filteredQuickBMPs
                 .Join(
                     filteredWQMPNodes, x => x.WaterQualityManagementPlanID,
-                    x => x.WaterQualityManagementPlanID, (bmp, node) => new {bmp, node})
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node })
                 .Select(x =>
                 new TreatmentSite
                 {
@@ -490,31 +521,66 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 LandSurfaces = landSurfaces,
                 TreatmentFacilities = treatmentFacilities,
                 TreatmentSites = treatmentSites,
-                PreviousResults = subgraph.Nodes.Where(x=>x.Results!=null).Select(x=>x.Results).ToList()
+                PreviousResults = subgraph.Nodes.Where(x => x.Results != null).Select(x => x.Results).ToList()
             };
+            NereidResult<SolutionResponseObject> results = null;
+            try
+            {
+                results = NereidUtilities.RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(
+                    solutionRequestObject, solveUrl,
+                    out var responseContent, HttpClient);
+            }
+            catch (Exception e)
+            {
+                throw new NereidException<SolutionRequestObject, SolutionResponseObject>(e.Message, e)
+                {
+                    Request = solutionRequestObject,
+                    Response = results?.Data
+                };
+            }
 
-            var results = NereidUtilities.RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(solutionRequestObject, solveUrl,
-                out var responseContent, HttpClient);
-
-            if (results.Data.Errors != null && results.Data.Errors.Count > 0)
+            if (results?.Data.Errors != null && results.Data.Errors.Count > 0)
             {
                 throw new NereidException<SolutionRequestObject, SolutionResponseObject>
-                    {Request = solutionRequestObject, Response = results.Data};
+                { Request = solutionRequestObject, Response = results.Data };
+            }
+
+            foreach (var dataLeafResult in results.Data.Results)
+            {
+                var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
+                if (node == null)
+                {
+                    //throw new NereidException<SolutionRequestObject, SolutionResponseObject>
+                    //    ($"Found Node ID {dataLeafResult["node_id"]} in response... Does not exist on graph...")
+                    //    { Request = solutionRequestObject, Response = results.Data };
+
+                    // this is an edge case that should only happen if an RSB in the SOC area has
+                    // its downstream catchment outside the SOC area for some reason.
+                    // if that truly is the only time this happens, then I'm not worried about it.
+                    // But, if it happens under other circumstances, I'm very worried about it.
+                    notFoundNodes.Add(dataLeafResult["node_id"].ToString());
+                }
+                else
+                {
+                    node.Results = dataLeafResult;
+                }
             }
 
             // don't need to store the leaf results. They're either data we already have, or just loading summaries
-            //foreach (var dataLeafResult in results.Data.LeafResults)
-            //{
-            //    var node = subgraph.Nodes.Single(x=>x.ID == dataLeafResult["node_id"].ToString());
-            //    node.Results = dataLeafResult;
-            //}
-            foreach (var dataLeafResult in results.Data.Results)
+            foreach (var dataLeafResult in results.Data.LeafResults)
             {
-                var node = subgraph.Nodes.Single(x => x.ID == dataLeafResult["node_id"].ToString());
-                node.Results = dataLeafResult;
+                var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
+                if (node == null)
+                {
+                    notFoundNodes.Add(dataLeafResult["node_id"].ToString());
+                }
+                else
+                {
+                    node.Results = dataLeafResult;
+                }
             }
 
-            return responseContent;
+            return results;
         }
 
         private static void ValidateForTesting(Graph subgraph, List<LandSurface> landSurfaces, List<TreatmentFacility> treatmentFacilities, List<TreatmentSite> treatmentSites)
@@ -527,12 +593,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentSiteUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_site/validate?state=ca&region=soc";
             var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
 
-            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest {LandSurfaces = landSurfaces};
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest { LandSurfaces = landSurfaces };
             var landSurfaceResponseObject =
                 NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, GenericNeriedResponse>(
                     landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var loadingResponse, HttpClient);
 
-            var treatmentFacilityTable = new TreatmentFacilityTable {TreatmentFacilities = treatmentFacilities};
+            var treatmentFacilityTable = new TreatmentFacilityTable { TreatmentFacilities = treatmentFacilities };
             var treatmentFacilityResponseObject =
                 NereidUtilities.RunJobAtNereid<TreatmentFacilityTable, GenericNeriedResponse>(treatmentFacilityTable,
                     treatmentFacilityUrl, out var treatmentFacilityResponse, HttpClient);
@@ -540,15 +606,26 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(subgraph,
                 networkValidatorUrl, out var networkValidatorResponse, HttpClient);
 
-            var treatmentSiteTable = new TreatmentSiteTable {treatment_sites = treatmentSites};
+            var treatmentSiteTable = new TreatmentSiteTable { treatment_sites = treatmentSites };
             var treatmentSiteResponseObject =
                 NereidUtilities.RunJobAtNereid<TreatmentSiteTable, GenericNeriedResponse>(treatmentSiteTable,
                     treatmentSiteUrl, out var treatmentSiteResponse, HttpClient);
         }
     }
 
-    internal class NereidException<TReq,TResp> : Exception
+    internal class NereidException<TReq, TResp> : Exception
     {
+        public NereidException()
+        { }
+
+        public NereidException(string s) : base(s)
+        {
+        }
+
+        public NereidException(string s, Exception exception) : base(s, exception)
+        {
+        }
+
         public TReq Request { get; set; }
         public TResp Response { get; set; }
     }

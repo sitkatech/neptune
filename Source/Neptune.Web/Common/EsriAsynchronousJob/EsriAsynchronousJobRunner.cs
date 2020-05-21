@@ -13,7 +13,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         public string BaseUrl { get; set; }
         public string ResultEndpoint { get; }
 
-        public string PostUrl => $"{BaseUrl}/submitJob/?f=pjson";
+        public string PostUrl => $"{BaseUrl}/submitJob/";
 
         public string JobStatusUrl => $"{BaseUrl}/jobs/{JobID}/?f=pjson";
         public string JobResultUrl => $"{BaseUrl}/jobs/{JobID}/results/{ResultEndpoint}/?f=pjson";
@@ -37,8 +37,13 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
         public string RunJobRaw(Object requestObject)
         {
+            Thread.Sleep(5000);
             var requestFormData = requestObject.ToKeyValue();
             //var requestContent = new FormUrlEncodedContent(requestFormData);
+
+            requestFormData.Add("env:outSR", "");
+            requestFormData.Add("env:processSR", "");
+            requestFormData.Add("context", "");
 
             var encodedItems = requestFormData.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
             var encodedContent = new StringContent(String.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
@@ -53,12 +58,12 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
             while (isExecuting)
             {
-                Thread.Sleep(5000);
                 var jobStatusHttpResponseMessage = HttpClient.GetAsync(jobStatusUrl).Result;
                 jobStatusResponse =
                     JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
                         .ReadAsStringAsync().Result);
                 isExecuting = jobStatusResponse.IsExecuting();
+                Thread.Sleep(10000);
             }
 
             switch (jobStatusResponse.jobStatus)
