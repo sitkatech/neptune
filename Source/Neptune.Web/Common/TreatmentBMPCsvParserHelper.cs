@@ -422,7 +422,7 @@ namespace Neptune.Web.Common
                 {
                     var value = currentRow[fieldsDict[customAttributeType.CustomAttributeTypeName]];
 
-                    var customAttributeDataType = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeName;
+                    var customAttributeDataTypeEnum = customAttributeType.CustomAttributeDataType.ToEnum;
 
                     var customAttributeTypeAcceptableValues =
                         customAttributeType.CustomAttributeTypeOptionsSchema != null
@@ -438,36 +438,71 @@ namespace Neptune.Web.Common
                             customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
                         }
                     }
-                    if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
+                    else if (!ValidateCustomAttributeValueEntry(
+                        value, 
+                        customAttributeDataTypeEnum,
+                        customAttributeTypeAcceptableValues))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowNumber}");
-                    }
-                    else if (customAttributeDataType.IsDecimal() && !decimal.TryParse(value, out var valueDecimal))
-                    {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Decimal at row: {rowNumber}");
-                    }
-                    else if (customAttributeDataType.IsDateTime() && !DateTime.TryParse(value, out var valueDateTime))
-                    {
-                        currentErrorList.Add(
-                            $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Date Time at row: {rowNumber}");
-                    }
-                    else if (customAttributeTypeAcceptableValues != null &&
-                             !customAttributeTypeAcceptableValues.Contains(value))
-                    {
-                        currentErrorList.Add(
-                            $"{value} is not a valid {customAttributeType.CustomAttributeTypeName} entry at row: {rowNumber}. Acceptable values are: {string.Join(", ", customAttributeTypeAcceptableValues)}"
-                        );
+                        currentErrorList.Add(GetErrorForCustomAttributeType(
+                            value, 
+                            customAttributeDataTypeEnum, 
+                            customAttributeType.CustomAttributeTypeName,
+                            customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName, 
+                            customAttributeTypeAcceptableValues, 
+                            rowNumber));
                     }
                     else
                     {
                         HttpRequestStorage.DatabaseEntities.CustomAttributeValues.RemoveRange(customAttribute
                             .CustomAttributeValues);
-                        customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
+                        customAttribute.CustomAttributeValues.Clear();
+                        customAttributeValues.Add(new CustomAttributeValue(customAttribute.CustomAttributeID, value));
                     }
                 }
                 customAttributes.Add(customAttribute);
             }
             return customAttributes;
+        }
+
+        private static string GetErrorForCustomAttributeType(string value,
+            CustomAttributeDataTypeEnum customAttributeDataTypeEnum,
+            string customAttributeTypeName, string customAttributeDataTypeDisplayName, List<string> customAttributeTypeAcceptableValues, int rowNumber)
+        {
+            switch (customAttributeDataTypeEnum)
+            {
+                case CustomAttributeDataTypeEnum.Integer:
+                case CustomAttributeDataTypeEnum.Decimal:
+                case CustomAttributeDataTypeEnum.DateTime:
+                    return
+                        $"{customAttributeTypeName} field can not be converted to {customAttributeDataTypeDisplayName} at row: {rowNumber}";
+                case CustomAttributeDataTypeEnum.MultiSelect:
+                case CustomAttributeDataTypeEnum.PickFromList:
+                    return
+                        $"{value} is not a valid {customAttributeTypeName} entry at row: {rowNumber}. Acceptable values are: {string.Join(", ", customAttributeTypeAcceptableValues)}";
+                default:
+                    return
+                        $"{customAttributeTypeName} entry at row: {rowNumber} experienced an unknown error. Please double check the sheet, and contact support with further questions.";
+            }
+        }
+
+        private static bool ValidateCustomAttributeValueEntry(string value, CustomAttributeDataTypeEnum customAttributeDataType, List<string> customAttributeTypeAcceptableValues)
+        {
+            switch (customAttributeDataType)
+            {
+                case CustomAttributeDataTypeEnum.Integer:
+                    return int.TryParse(value, out var valueInt);
+                case CustomAttributeDataTypeEnum.Decimal:
+                    return decimal.TryParse(value, out var valueDecimal);
+                case CustomAttributeDataTypeEnum.DateTime:
+                    return DateTime.TryParse(value, out var valueDateTime);
+                case CustomAttributeDataTypeEnum.PickFromList:
+                case CustomAttributeDataTypeEnum.MultiSelect:
+                    return customAttributeTypeAcceptableValues.Contains(value);
+                case CustomAttributeDataTypeEnum.String:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private static TreatmentBMPModelingAttribute ParseModelingAttributes(TreatmentBMP treatmentBMP,
@@ -486,7 +521,7 @@ namespace Neptune.Web.Common
                 {
                     var modelingProperty = GetAppropriateModelingAttributeColumnName(attribute);
                     var value = currentRow[fieldsDict[attribute]];
-                    
+
                     var propertyToChange = treatmentBMPModelingAttribute.GetType().GetProperty(modelingProperty);
                     var propType = propertyToChange.Name == "UnderlyingHydrologicSoilGroupID"
                         ?
