@@ -435,7 +435,7 @@ namespace Neptune.Web.Common
                         //Don't do anything with an empty value if we're updating, but add it if we're new
                         if (isNew)
                         {
-                            customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
+                            customAttributeValues.Add(new CustomAttributeValue(customAttribute.CustomAttributeID, value));
                         }
                     }
                     else if (!ValidateCustomAttributeValueEntry(
