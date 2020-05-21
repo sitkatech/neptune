@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web.WebPages;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Common
 {
@@ -407,6 +408,7 @@ namespace Neptune.Web.Common
             currentErrorList = new List<string>();
             customAttributeValues = new List<CustomAttributeValue>();
             var customAttributes = new List<CustomAttribute>();
+            var isNew = !ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID);
             foreach (var customAttributeType in customAttributeTypes)
             {
                 var treatmentBMPTypeCustomAttributeType = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID);
@@ -422,6 +424,20 @@ namespace Neptune.Web.Common
 
                     var customAttributeDataType = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeName;
 
+                    var customAttributeTypeAcceptableValues =
+                        customAttributeType.CustomAttributeTypeOptionsSchema != null
+                            ? JsonConvert.DeserializeObject<List<string>>(
+                                customAttributeType.CustomAttributeTypeOptionsSchema)
+                            : null;
+
+                    if (String.IsNullOrEmpty(value))
+                    {
+                        //Don't do anything with an empty value if we're updating, but add it if we're new
+                        if (isNew)
+                        {
+                            customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
+                        }
+                    }
                     if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
                     {
                         currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowNumber}");
@@ -435,9 +451,17 @@ namespace Neptune.Web.Common
                         currentErrorList.Add(
                             $"{customAttributeType.CustomAttributeTypeName} field can not be converted to Date Time at row: {rowNumber}");
                     }
+                    else if (customAttributeTypeAcceptableValues != null &&
+                             !customAttributeTypeAcceptableValues.Contains(value))
+                    {
+                        currentErrorList.Add(
+                            $"{value} is not a valid {customAttributeType.CustomAttributeTypeName} entry at row: {rowNumber}. Acceptable values are: {string.Join(", ", customAttributeTypeAcceptableValues)}"
+                        );
+                    }
                     else
                     {
-                        customAttribute.CustomAttributeValues.Clear();
+                        HttpRequestStorage.DatabaseEntities.CustomAttributeValues.RemoveRange(customAttribute
+                            .CustomAttributeValues);
                         customAttributeValues.Add(new CustomAttributeValue(customAttribute, value));
                     }
                 }
