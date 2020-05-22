@@ -348,6 +348,11 @@ namespace Neptune.Web.Models
                 return false; 
             }
 
+            if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType == null)
+            {
+                return false;
+            }
+
             var bmpModelingType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum;
             var bmpModelingAttributes = treatmentBMP.TreatmentBMPModelingAttribute;
 

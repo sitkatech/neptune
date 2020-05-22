@@ -180,8 +180,11 @@ namespace Neptune.Web.Controllers
 
             IHaveHRUCharacteristics entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
 
+            var modeledBMPPerformanceViewData = new ModeledBMPPerformanceViewData(treatmentBMP, CurrentPerson);
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
-                verifiedUnverifiedUrl, new HRUCharacteristicsViewData(entityWithHRUCharacteristics, entityWithHRUCharacteristics.GetHRUCharacteristics().ToList()), mapServiceUrl);
+                verifiedUnverifiedUrl,
+                new HRUCharacteristicsViewData(entityWithHRUCharacteristics,
+                    entityWithHRUCharacteristics.GetHRUCharacteristics().ToList()), mapServiceUrl, modeledBMPPerformanceViewData);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

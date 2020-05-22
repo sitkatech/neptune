@@ -114,9 +114,16 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string EditUpstreamBMPUrl { get; }
         public string RemoveUpstreamBMPUrl { get; }
 
+        public bool IsAnalyzedInModelingModule { get; }
+        public bool IsInSOC { get; }
+        public bool IsFullyParameterized { get; }
+
+        public ModeledBMPPerformanceViewData ModeledBMPPerformanceViewData { get; }
+
+
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
-            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl)
+            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl, ModeledBMPPerformanceViewData modeledBMPPerformanceViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
@@ -154,6 +161,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
             MapServiceUrl = mapServiceUrl;
+            ModeledBMPPerformanceViewData = modeledBMPPerformanceViewData;
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
             DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";
@@ -212,6 +220,11 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditUpstreamBMP(treatmentBMP));
             RemoveUpstreamBMPUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RemoveUpstreamBMP(treatmentBMP));
+
+            IsAnalyzedInModelingModule = treatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
+            IsInSOC = treatmentBMP.LSPCBasinID != null;
+            IsFullyParameterized = treatmentBMP.IsFullyParameterized();
+
         }
 
         private List<HtmlString> CheckForDelineationErrors(Models.TreatmentBMP treatmentBMP)

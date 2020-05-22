@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -560,6 +560,8 @@
     <Compile Include="Models\WebServiceToken.cs" />
     <Compile Include="ScheduledJobs\HRURefreshBackgroundJob.cs" />
     <Compile Include="Security\WebServicesViewFeature.cs" />
+    <Compile Include="Views\TreatmentBMP\ModeledBMPPerformance.cs" />
+    <Compile Include="Views\TreatmentBMP\ModeledBMPPerformanceViewData.cs" />
     <Compile Include="Views\WebServices\Index.cs" />
     <Compile Include="Views\WebServices\IndexViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />
@@ -2074,6 +2076,7 @@
     <Content Include="Views\WaterQualityManagementPlan\LGUAudit.cshtml" />
     <Content Include="Views\WebServices\Index.cshtml" />
     <Content Include="Views\FieldVisit\EditDateAndType.cshtml" />
+    <Content Include="Views\TreatmentBMP\ModeledBMPPerformance.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
