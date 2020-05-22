@@ -1,3 +1,15 @@
 ﻿@inherits Neptune.Web.Views.TreatmentBMP.ModeledBMPPerformance
     
 <p>Hellow, orld!</p>
+
+<a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
+
+<script>
+    jQuery(function() {
+        jQuery.ajax("@ViewDataTyped.ModelingResultsUrl").done(function(data) {
+            console.log(data);
+        }).fail(function(error) {
+            console.log(error);
+        });
+    });    
+</script>

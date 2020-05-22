@@ -1,4 +1,7 @@
-﻿namespace Neptune.Web.ScheduledJobs
+﻿using System.Collections.Generic;
+using Neptune.Web.Common;
+
+namespace Neptune.Web.ScheduledJobs
 {
     public static class ScheduledBackgroundJobLaunchHelper
     {
@@ -55,6 +58,29 @@
         {
             var refreshAssessmentScoreJob = new RefreshAssessmentScoreJob(personID);
             refreshAssessmentScoreJob.RunJob();
+        }
+
+        public static void RunTotalNetworkSolve()
+        {
+            var totalNetworkSolveJob = new TotalNetworkSolveJob();
+            totalNetworkSolveJob.RunJob();
+        }
+    }
+
+    public class TotalNetworkSolveJob : ScheduledBackgroundJobBase
+    {
+        public new static string JobName => "Total Network Solve";
+
+        public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
+        {
+            NeptuneEnvironmentType.Local,
+            NeptuneEnvironmentType.Prod,
+            NeptuneEnvironmentType.Qa
+        };
+
+        protected override void RunJobImplementation()
+        {
+            NereidUtilities.TotalNetworkSolve(out _, out _, out _, DbContext);
         }
     }
 }

@@ -24,10 +24,10 @@ wqmp.TrashCaptureEffectiveness
 dbo.WaterQualityManagementPlan wqmp
 join dbo.StormwaterJurisdiction sj on wqmp.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 join dbo.Organization o on sj.OrganizationID = o.OrganizationID
-join dbo.WaterQualityManagementPlanStatus stat on wqmp.WaterQualityManagementPlanStatusID = stat.WaterQualityManagementPlanStatusID
+left join dbo.WaterQualityManagementPlanStatus stat on wqmp.WaterQualityManagementPlanStatusID = stat.WaterQualityManagementPlanStatusID
 join dbo.WaterQualityManagementPlanDevelopmentType devel on wqmp.WaterQualityManagementPlanDevelopmentTypeID = devel.WaterQualityManagementPlanDevelopmentTypeID
 join dbo.WaterQualityManagementPlanLandUse land on wqmp.WaterQualityManagementPlanLandUseID = land.WaterQualityManagementPlanLandUseID
-join dbo.WaterQualityManagementPlanPermitTerm term on wqmp.WaterQualityManagementPlanPermitTermID = term.WaterQualityManagementPlanPermitTermID
-join dbo.HydromodificationApplies hydromod on wqmp.HydromodificationAppliesID = hydromod.HydromodificationAppliesID
-join dbo.HydrologicSubarea hydrosub on wqmp.HydrologicSubareaID = hydrosub.HydrologicSubareaID
+left join dbo.WaterQualityManagementPlanPermitTerm term on wqmp.WaterQualityManagementPlanPermitTermID = term.WaterQualityManagementPlanPermitTermID
+left join dbo.HydromodificationApplies hydromod on wqmp.HydromodificationAppliesID = hydromod.HydromodificationAppliesID
+left join dbo.HydrologicSubarea hydrosub on wqmp.HydrologicSubareaID = hydrosub.HydrologicSubareaID
 join dbo.TrashCaptureStatusType trash on wqmp.TrashCaptureStatusTypeID = trash.TrashCaptureStatusTypeID

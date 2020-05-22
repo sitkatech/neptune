@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using Neptune.Web.Areas.Modeling.Controllers;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Common
@@ -306,6 +307,185 @@ namespace Neptune.Web.Common
             }
 
             return responseObject;
+        }
+
+        public static IEnumerable<NereidResult> TotalNetworkSolve(out string stackTrace,
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext)
+        {
+            var solutionSequenceUrl =
+                $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
+
+            stackTrace = "";
+            missingNodeIDs = new List<string>();
+
+            graph = NereidUtilities.BuildNetworkGraph(dbContext);
+
+            var allLoadingInputs = dbContext.vNereidLoadingInputs.ToList();
+            var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(dbContext).ToList();
+            var allwaterQualityManagementPlanNodes =
+                NereidUtilities.GetWaterQualityManagementPlanNodes(dbContext).ToList();
+            var allModelingQuickBMPs = dbContext.QuickBMPs.Include(x => x.TreatmentBMPType)
+                .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
+
+            var solutionSequenceResult =
+                NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(
+                    new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, NereidController.HttpClient);
+
+            foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
+            {
+                foreach (var series in parallel.Series)
+                {
+                    var subgraphNodeIDs = series.Nodes.Select(x => x.ID).ToList();
+
+                    // create the subgraph that has these nodes as its nodes and the appropriate edges
+                    // appropriate edges = where target in nodes?
+                    var subgraphNodes = graph.Nodes.Where(x => subgraphNodeIDs.Contains(x.ID)).ToList();
+                    var subgraphEdges = graph.Edges.Where(x =>
+                        subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
+
+                    var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
+
+                    SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
+                        allModelingQuickBMPs, out var notFoundNodes);
+                    missingNodeIDs.AddRange(notFoundNodes);
+                }
+            }
+
+            var nereidResults = graph.Nodes.Where(x => x.Results != null).Select(x => new NereidResult(x.Results.ToString())
+            {
+                TreatmentBMPID = x.TreatmentBMPID, DelineationID = x.Delineation?.DelineationID,
+                NodeID = x.ID,
+                RegionalSubbasinID = x.RegionalSubbasin?.RegionalSubbasinID,
+                WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID
+            }).ToList();
+
+            dbContext.Database.ExecuteSqlCommand(
+                $"EXEC dbo.pDeleteNereidResults");
+            dbContext.NereidResults.AddRange(nereidResults);
+            dbContext.SaveChangesWithNoAuditing();
+
+            return nereidResults;
+        }
+
+        public static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph, List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs, List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes, List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes)
+        {
+            notFoundNodes = new List<string>();
+
+            // Now I need to get the land_surface, treatment_facility, and treatment_site tables for this request.
+            // these are going to look very much like the various calls made throughout the testing methods, but filtered
+            // to the subgraph. Fortunately, we've added metadata to the nodes to help us do the filtration
+
+            var delineationToIncludeIDs = subgraph.Nodes.Where(x => x.Delineation != null).Select(x => x.Delineation.DelineationID)
+                .Distinct().ToList();
+            var regionalSubbasinToIncludeIDs = subgraph.Nodes.Where(x => x.RegionalSubbasin != null)
+                .Select(x => x.RegionalSubbasin.RegionalSubbasinID).Distinct().ToList();
+            var waterQualityManagementPlanToIncludeIDs = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null)
+                .Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).Distinct().ToList();
+            var treatmentBMPToIncludeIDs = subgraph.Nodes.Where(x => x.TreatmentBMPID != null)
+                .Select(x => x.TreatmentBMPID.Value).Distinct().ToList();
+
+            var landSurfaces = allLoadingInputs.Where(x =>
+                delineationToIncludeIDs.Contains(x.DelineationID.GetValueOrDefault()) ||
+                regionalSubbasinToIncludeIDs.Contains(x.RegionalSubbasinID) ||
+                waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
+            ).ToList().Select(x => new LandSurface(x)).ToList();
+
+            var treatmentFacilities = allModelingBMPs
+                .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID))
+                .Select(x => x.ToTreatmentFacility()).ToList();
+
+            var filteredQuickBMPs = allModelingQuickBMPs
+                .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID)).ToList();
+            var filteredWQMPNodes = allWaterqualityManagementPlanNodes.Where(y =>
+                    waterQualityManagementPlanToIncludeIDs.Contains(y.WaterQualityManagementPlanID) &&
+                    regionalSubbasinToIncludeIDs.Contains(y.RegionalSubbasinID) // ignore parts that live in RSBs outside our solve area.
+            ).ToList();
+
+            var treatmentSites = filteredQuickBMPs
+                .Join(
+                    filteredWQMPNodes, x => x.WaterQualityManagementPlanID,
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node })
+                .Select(x =>
+                    new TreatmentSite
+                    {
+                        NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
+                            x.node.RegionalSubbasinID),
+                        AreaPercentage = x.bmp.PercentOfSiteTreated,
+                        CapturedPercentage = x.bmp.PercentCaptured ?? 0,
+                        RetainedPercentage = x.bmp.PercentRetained ?? 0,
+                        FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
+                    }).ToList();
+
+            //ValidateForTesting(subgraph, landSurfaces, treatmentFacilities, treatmentSites);
+
+            var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=soc";
+
+            var solutionRequestObject = new SolutionRequestObject()
+            {
+                Graph = subgraph,
+                LandSurfaces = landSurfaces,
+                TreatmentFacilities = treatmentFacilities,
+                TreatmentSites = treatmentSites,
+                PreviousResults = subgraph.Nodes.Where(x => x.Results != null).Select(x => x.Results).ToList()
+            };
+            NereidResult<SolutionResponseObject> results = null;
+            try
+            {
+                results = NereidUtilities.RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(
+                    solutionRequestObject, solveUrl,
+                    out var responseContent, NereidController.HttpClient);
+            }
+            catch (Exception e)
+            {
+                throw new NereidException<SolutionRequestObject, SolutionResponseObject>(e.Message, e)
+                {
+                    Request = solutionRequestObject,
+                    Response = results?.Data
+                };
+            }
+
+            if (results?.Data.Errors != null && results.Data.Errors.Count > 0)
+            {
+                throw new NereidException<SolutionRequestObject, SolutionResponseObject>
+                    { Request = solutionRequestObject, Response = results.Data };
+            }
+
+            foreach (var dataLeafResult in results.Data.Results)
+            {
+                var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
+                if (node == null)
+                {
+                    //throw new NereidException<SolutionRequestObject, SolutionResponseObject>
+                    //    ($"Found Node ID {dataLeafResult["node_id"]} in response... Does not exist on graph...")
+                    //    { Request = solutionRequestObject, Response = results.Data };
+
+                    // this is an edge case that should only happen if an RSB in the SOC area has
+                    // its downstream catchment outside the SOC area for some reason.
+                    // if that truly is the only time this happens, then I'm not worried about it.
+                    // But, if it happens under other circumstances, I'm very worried about it.
+                    notFoundNodes.Add(dataLeafResult["node_id"].ToString());
+                }
+                else
+                {
+                    node.Results = dataLeafResult;
+                }
+            }
+
+            // todo: don't need to store the leaf results. They're either data we already have, or just loading summaries
+            foreach (var dataLeafResult in results.Data.LeafResults)
+            {
+                var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
+                if (node == null)
+                {
+                    notFoundNodes.Add(dataLeafResult["node_id"].ToString());
+                }
+                else
+                {
+                    node.Results = dataLeafResult;
+                }
+            }
+
+            return results;
         }
     }
 
