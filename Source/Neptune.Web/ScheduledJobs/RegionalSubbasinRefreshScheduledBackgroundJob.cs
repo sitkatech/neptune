@@ -33,7 +33,6 @@ namespace Neptune.Web.ScheduledJobs
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Prod,
-            //NeptuneEnvironmentType.Local,
         };
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person, bool queueLguRefresh)
