@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -45,25 +46,25 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             requestFormData.Add("env:processSR", "");
             requestFormData.Add("context", "");
 
-            var encodedItems = requestFormData.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
-            var encodedContent = new StringContent(String.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+            var retry = true;
+            EsriJobStatusResponse jobStatusResponse = null;
+            while (retry)
+            {
+                jobStatusResponse = SubmitJob(requestFormData);
+                JobID = jobStatusResponse.jobId;
+                retry = CheckShouldRetry(jobStatusResponse);
+            }
 
-            var httpResponseMessage = HttpClient.PostAsync(PostUrl, encodedContent).Result;
-            var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-            var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responseContent);
-
-            JobID = jobStatusResponse.jobId;
-            var jobStatusUrl = JobStatusUrl;
             var isExecuting = jobStatusResponse.IsExecuting();
 
             while (isExecuting)
             {
-                var jobStatusHttpResponseMessage = HttpClient.GetAsync(jobStatusUrl).Result;
+                Thread.Sleep(5000);
+                var jobStatusHttpResponseMessage = HttpClient.GetAsync(JobStatusUrl).Result;
                 jobStatusResponse =
                     JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
                         .ReadAsStringAsync().Result);
                 isExecuting = jobStatusResponse.IsExecuting();
-                Thread.Sleep(10000);
             }
 
             switch (jobStatusResponse.jobStatus)
@@ -81,6 +82,32 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                     throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
                         $"Unexpected job status from HRU job {jobStatusResponse.jobId}");
             }
+        }
+
+        private bool CheckShouldRetry(EsriJobStatusResponse jobStatusResponse)
+        {
+            Thread.Sleep(5000);
+            var jobStatusHttpResponseMessage = HttpClient.GetAsync(JobStatusUrl).Result;
+            jobStatusResponse =
+                JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
+                    .ReadAsStringAsync().Result);
+
+            // if we don't have any messages on the status response,
+            // this request ended up in a bad state and we should just abandon it and try again.
+            // A little rude of us to send two requests for the same data, but the server should
+            // respond correctly the first time if it doesn't want us to keep asking.
+            return jobStatusResponse.messages.Count == 0;
+        }
+
+        private EsriJobStatusResponse SubmitJob(IDictionary<string, string> requestFormData)
+        {
+            var encodedItems = requestFormData.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
+            var encodedContent = new StringContent(String.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+
+            var httpResponseMessage = HttpClient.PostAsync(PostUrl, encodedContent).Result;
+            var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responseContent);
+            return jobStatusResponse;
         }
 
         public string JobID { get; set;  }
