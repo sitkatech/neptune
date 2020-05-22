@@ -444,7 +444,7 @@ namespace Neptune.Web.Common
                 };
             }
 
-            if (results?.Data.Errors != null && results.Data.Errors.Count > 0)
+            if (results?.Data.Errors != null && results.Data.Errors.Count > 0 && (results.Data.Results == null || results.Data.Results.Count == 0) )
             {
                 throw new NereidException<SolutionRequestObject, SolutionResponseObject>
                     { Request = solutionRequestObject, Response = results.Data };

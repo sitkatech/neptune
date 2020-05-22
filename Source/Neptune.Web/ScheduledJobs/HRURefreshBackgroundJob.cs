@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Hangfire;
+using MoreLinq;
 using Neptune.Web.Common;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
-using Hangfire;
-using MoreLinq;
-using Neptune.Web.Models;
 using Exception = System.Exception;
 
 namespace Neptune.Web.ScheduledJobs
@@ -87,18 +85,24 @@ namespace Neptune.Web.ScheduledJobs
             }
 
 
-            // if there was any work done, check if all the work is done and if so blast off with a new solve.
+            // if there was any work done, 
             if (loadGeneratingUnitsToUpdate.Any())
             {
                 DbContext.LoadGeneratingUnits.Load();
 
-                if (!DbContext.LoadGeneratingUnits.Any(x =>
-                    !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
-                      x.IsEmptyResponseFromHRUService == true)))
+                // check if all the HRUs are populated and if so blast off with a new solve.
+                var loadGeneratingUnitsMissingHrus = DbContext.LoadGeneratingUnits.Where(x =>
+                    !x.HRUCharacteristics.Any() && 
+                    x.RegionalSubbasinID != null &&
+                    x.IsEmptyResponseFromHRUService == false);
+
+                if (!loadGeneratingUnitsMissingHrus.Any())
                 {
                     BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunTotalNetworkSolve());
                 }
             }
+
+            stopwatch.Stop();
         }
     }
 }
