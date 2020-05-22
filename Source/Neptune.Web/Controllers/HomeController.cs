@@ -108,6 +108,14 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        public ViewResult AboutModelingBMPPerformance()
+        {
+            var con = new HomeController {ControllerContext = ControllerContext};
+            return con.ViewPageContent(NeptunePageTypeEnum.AboutModelingBMPPerformance);
+        }
+
+        [HttpGet]
+        [AnonymousUnclassifiedFeature]
         public ViewResult About()
         {
             var con = new HomeController { ControllerContext = ControllerContext };
