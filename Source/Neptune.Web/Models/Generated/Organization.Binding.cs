@@ -91,6 +91,35 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(FundingSources.Any())
+            {
+                dependentObjects.Add(typeof(FundingSource).Name);
+            }
+
+            if(People.Any())
+            {
+                dependentObjects.Add(typeof(Person).Name);
+            }
+
+            if((StormwaterJurisdiction != null))
+            {
+                dependentObjects.Add(typeof(StormwaterJurisdiction).Name);
+            }
+
+            if(TreatmentBMPsWhereYouAreTheOwnerOrganization.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};

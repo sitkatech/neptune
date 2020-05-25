@@ -69,8 +69,8 @@ namespace Neptune.Web.ScheduledJobs
             AddRecurringJob("Refresh RSBs", () => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(1122, true),
                 MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
-            //AddRecurringJob(HRURefreshBackgroundJob.JobName,
-            //    () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(), Cron.MinuteInterval(30), recurringJobIds);
+            AddRecurringJob(HRURefreshBackgroundJob.JobName,
+                () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(), Cron.MinuteInterval(30), recurringJobIds);
 
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);

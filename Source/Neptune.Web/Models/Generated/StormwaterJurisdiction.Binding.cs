@@ -90,6 +90,65 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(DelineationStagings.Any())
+            {
+                dependentObjects.Add(typeof(DelineationStaging).Name);
+            }
+
+            if(LandUseBlocks.Any())
+            {
+                dependentObjects.Add(typeof(LandUseBlock).Name);
+            }
+
+            if(OnlandVisualTrashAssessments.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessment).Name);
+            }
+
+            if(OnlandVisualTrashAssessmentAreas.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessmentArea).Name);
+            }
+
+            if((StormwaterJurisdictionGeometry != null))
+            {
+                dependentObjects.Add(typeof(StormwaterJurisdictionGeometry).Name);
+            }
+
+            if(StormwaterJurisdictionPeople.Any())
+            {
+                dependentObjects.Add(typeof(StormwaterJurisdictionPerson).Name);
+            }
+
+            if(TrashGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(TrashGeneratingUnit).Name);
+            }
+
+            if(TrashGeneratingUnit4326s.Any())
+            {
+                dependentObjects.Add(typeof(TrashGeneratingUnit4326).Name);
+            }
+
+            if(TreatmentBMPs.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
+
+            if(WaterQualityManagementPlans.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlan).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionGeometry).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};

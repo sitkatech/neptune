@@ -72,6 +72,25 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(Counties.Any())
+            {
+                dependentObjects.Add(typeof(County).Name);
+            }
+
+            if(StormwaterJurisdictions.Any())
+            {
+                dependentObjects.Add(typeof(StormwaterJurisdiction).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StateProvince).Name, typeof(County).Name, typeof(StormwaterJurisdiction).Name};

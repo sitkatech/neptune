@@ -83,6 +83,30 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(TreatmentBMPBenchmarkAndThresholds.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPBenchmarkAndThreshold).Name);
+            }
+
+            if(TreatmentBMPObservations.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPObservation).Name);
+            }
+
+            if(TreatmentBMPTypeAssessmentObservationTypes.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPTypeAssessmentObservationType).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAssessmentObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeAssessmentObservationType).Name};

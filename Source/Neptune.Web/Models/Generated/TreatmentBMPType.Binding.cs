@@ -80,6 +80,65 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(CustomAttributes.Any())
+            {
+                dependentObjects.Add(typeof(CustomAttribute).Name);
+            }
+
+            if(MaintenanceRecords.Any())
+            {
+                dependentObjects.Add(typeof(MaintenanceRecord).Name);
+            }
+
+            if(MaintenanceRecordObservations.Any())
+            {
+                dependentObjects.Add(typeof(MaintenanceRecordObservation).Name);
+            }
+
+            if(QuickBMPs.Any())
+            {
+                dependentObjects.Add(typeof(QuickBMP).Name);
+            }
+
+            if(TreatmentBMPs.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
+
+            if(TreatmentBMPAssessments.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPAssessment).Name);
+            }
+
+            if(TreatmentBMPBenchmarkAndThresholds.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPBenchmarkAndThreshold).Name);
+            }
+
+            if(TreatmentBMPObservations.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPObservation).Name);
+            }
+
+            if(TreatmentBMPTypeAssessmentObservationTypes.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPTypeAssessmentObservationType).Name);
+            }
+
+            if(TreatmentBMPTypeCustomAttributeTypes.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPTypeCustomAttributeType).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecord).Name, typeof(MaintenanceRecordObservation).Name, typeof(QuickBMP).Name, typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeAssessmentObservationType).Name, typeof(TreatmentBMPTypeCustomAttributeType).Name};

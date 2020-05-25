@@ -21,6 +21,7 @@ namespace Neptune.Web.ScheduledJobs
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Prod,
+            NeptuneEnvironmentType.Local
         };
         protected override void RunJobImplementation()
         {
@@ -51,7 +52,7 @@ namespace Neptune.Web.ScheduledJobs
                     try
                     {
                         var batchHRUCharacteristics =
-                            HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), DbContext, Logger).ToList();
+                            HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), Logger).ToList();
 
                         if (!batchHRUCharacteristics.Any())
                         {

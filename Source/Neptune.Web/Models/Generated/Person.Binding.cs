@@ -129,6 +129,95 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(AuditLogs.Any())
+            {
+                dependentObjects.Add(typeof(AuditLog).Name);
+            }
+
+            if(DelineationsWhereYouAreTheVerifiedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(Delineation).Name);
+            }
+
+            if(DelineationStagingsWhereYouAreTheUploadedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(DelineationStaging).Name);
+            }
+
+            if(FieldVisitsWhereYouAreThePerformedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(FieldVisit).Name);
+            }
+
+            if(FileResourcesWhereYouAreTheCreatePerson.Any())
+            {
+                dependentObjects.Add(typeof(FileResource).Name);
+            }
+
+            if(LandUseBlockStagingsWhereYouAreTheUploadedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(LandUseBlockStaging).Name);
+            }
+
+            if(Notifications.Any())
+            {
+                dependentObjects.Add(typeof(Notification).Name);
+            }
+
+            if(OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessment).Name);
+            }
+
+            if(OrganizationsWhereYouAreThePrimaryContactPerson.Any())
+            {
+                dependentObjects.Add(typeof(Organization).Name);
+            }
+
+            if(RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(RegionalSubbasinRevisionRequest).Name);
+            }
+
+            if(RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson.Any())
+            {
+                dependentObjects.Add(typeof(RegionalSubbasinRevisionRequest).Name);
+            }
+
+            if(StormwaterJurisdictionPeople.Any())
+            {
+                dependentObjects.Add(typeof(StormwaterJurisdictionPerson).Name);
+            }
+
+            if(SupportRequestLogsWhereYouAreTheRequestPerson.Any())
+            {
+                dependentObjects.Add(typeof(SupportRequestLog).Name);
+            }
+
+            if(TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(TrashGeneratingUnitAdjustment).Name);
+            }
+
+            if(TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerify).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};

@@ -75,6 +75,25 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(BackboneSegments.Any())
+            {
+                dependentObjects.Add(typeof(BackboneSegment).Name);
+            }
+
+            if(NeighborhoodsWhereYouAreTheOCSurveyDownstreamNeighborhood.Any())
+            {
+                dependentObjects.Add(typeof(Neighborhood).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Neighborhood).Name, typeof(BackboneSegment).Name};

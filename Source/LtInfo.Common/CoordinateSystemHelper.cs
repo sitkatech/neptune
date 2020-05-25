@@ -152,11 +152,58 @@ namespace LtInfo.Common
 
             var outputWkb = internalGeometry.AsBinary();
 
-            var dbGeometry = DbGeometry.FromBinary(outputWkb, WGS_1984_SRID);
+            var dbGeometry = DbGeometry.FromBinary(outputWkb, NAD_83_CA_ZONE_VI_SRID);
 
             if (!dbGeometry.IsValid)
             {
-                dbGeometry = dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(WGS_1984_SRID);
+                dbGeometry = dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(NAD_83_CA_ZONE_VI_SRID);
+            }
+
+            return dbGeometry;
+        }
+        
+        public static DbGeometry Project2771To2230(DbGeometry inputGeometry)
+        {
+            var wkb = inputGeometry.AsBinary();
+
+            NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
+            Geometry internalGeometry = (Geometry)reader.Read(wkb);
+
+            double[] pointArray = new double[internalGeometry.Coordinates.Count() * 2];
+            double[] zArray = new double[1];
+            zArray[0] = 1;
+
+            int counterX = 0;
+            int counterY = 1;
+            foreach (var coordinate in internalGeometry.Coordinates)
+            {
+                pointArray[counterX] = coordinate.X;
+                pointArray[counterY] = coordinate.Y;
+
+                counterX = counterX + 2;
+                counterY = counterY + 2;
+            }
+
+            Reproject.ReprojectPoints(pointArray, zArray, CaStatePlane, CaStatePlane2230, 0, (pointArray.Length / 2));
+
+            counterX = 0;
+            counterY = 1;
+            foreach (var coordinate in internalGeometry.Coordinates)
+            {
+                coordinate.X = pointArray[counterX];
+                coordinate.Y = pointArray[counterY];
+
+                counterX = counterX + 2;
+                counterY = counterY + 2;
+            }
+
+            var outputWkb = internalGeometry.AsBinary();
+
+            var dbGeometry = DbGeometry.FromBinary(outputWkb, NAD_83_CA_ZONE_VI_SRID);
+
+            if (!dbGeometry.IsValid)
+            {
+                dbGeometry = dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(NAD_83_CA_ZONE_VI_SRID);
             }
 
             return dbGeometry;

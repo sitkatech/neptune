@@ -96,6 +96,30 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(DelineationOverlaps.Any())
+            {
+                dependentObjects.Add(typeof(DelineationOverlap).Name);
+            }
+
+            if(DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any())
+            {
+                dependentObjects.Add(typeof(DelineationOverlap).Name);
+            }
+
+            if(LoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name, typeof(LoadGeneratingUnit).Name};

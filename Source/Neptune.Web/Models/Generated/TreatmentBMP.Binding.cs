@@ -131,6 +131,85 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(CustomAttributes.Any())
+            {
+                dependentObjects.Add(typeof(CustomAttribute).Name);
+            }
+
+            if((Delineation != null))
+            {
+                dependentObjects.Add(typeof(Delineation).Name);
+            }
+
+            if(FieldVisits.Any())
+            {
+                dependentObjects.Add(typeof(FieldVisit).Name);
+            }
+
+            if(FundingEvents.Any())
+            {
+                dependentObjects.Add(typeof(FundingEvent).Name);
+            }
+
+            if(MaintenanceRecords.Any())
+            {
+                dependentObjects.Add(typeof(MaintenanceRecord).Name);
+            }
+
+            if(RegionalSubbasinRevisionRequests.Any())
+            {
+                dependentObjects.Add(typeof(RegionalSubbasinRevisionRequest).Name);
+            }
+
+            if(TreatmentBMPsWhereYouAreTheUpstreamBMP.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
+
+            if(TreatmentBMPAssessments.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPAssessment).Name);
+            }
+
+            if(TreatmentBMPBenchmarkAndThresholds.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPBenchmarkAndThreshold).Name);
+            }
+
+            if(TreatmentBMPDocuments.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPDocument).Name);
+            }
+
+            if(TreatmentBMPImages.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPImage).Name);
+            }
+
+            if((TreatmentBMPModelingAttribute != null))
+            {
+                dependentObjects.Add(typeof(TreatmentBMPModelingAttribute).Name);
+            }
+
+            if(TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPModelingAttribute).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifyTreatmentBMPs.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(TreatmentBMPModelingAttribute).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using LtInfo.Common;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
 
@@ -81,8 +82,8 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                     QueryFeatureID = loadGeneratingUnit.LoadGeneratingUnitID
                 };
 
-                var catchmentGeometry = loadGeneratingUnit.LoadGeneratingUnitGeometry;
-
+                var catchmentGeometry = CoordinateSystemHelper.Project2771To2230(loadGeneratingUnit.LoadGeneratingUnitGeometry);
+                
                 for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
                 {
                     yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes, loadGeneratingUnit.LoadGeneratingUnitID);

@@ -98,6 +98,25 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if((MaintenanceRecord != null))
+            {
+                dependentObjects.Add(typeof(MaintenanceRecord).Name);
+            }
+
+            if(TreatmentBMPAssessments.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPAssessment).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FieldVisit).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name};

@@ -105,6 +105,30 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(OnlandVisualTrashAssessmentObservations.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessmentObservation).Name);
+            }
+
+            if(OnlandVisualTrashAssessmentObservationPhotoStagings.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name);
+            }
+
+            if(OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name};

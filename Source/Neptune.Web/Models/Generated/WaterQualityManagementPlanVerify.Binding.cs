@@ -105,6 +105,35 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(WaterQualityManagementPlanVerifyPhotos.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerifyPhoto).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifyQuickBMPs.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerifyQuickBMP).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifySourceControlBMPs.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerifySourceControlBMP).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifyTreatmentBMPs.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlanVerify).Name, typeof(WaterQualityManagementPlanVerifyPhoto).Name, typeof(WaterQualityManagementPlanVerifyQuickBMP).Name, typeof(WaterQualityManagementPlanVerifySourceControlBMP).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};

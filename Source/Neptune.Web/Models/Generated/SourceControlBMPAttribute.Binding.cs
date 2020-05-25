@@ -80,6 +80,20 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(SourceControlBMPs.Any())
+            {
+                dependentObjects.Add(typeof(SourceControlBMP).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(SourceControlBMPAttribute).Name, typeof(SourceControlBMP).Name};

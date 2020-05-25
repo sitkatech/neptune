@@ -89,6 +89,30 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(CustomAttributes.Any())
+            {
+                dependentObjects.Add(typeof(CustomAttribute).Name);
+            }
+
+            if(MaintenanceRecordObservations.Any())
+            {
+                dependentObjects.Add(typeof(MaintenanceRecordObservation).Name);
+            }
+
+            if(TreatmentBMPTypeCustomAttributeTypes.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPTypeCustomAttributeType).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(CustomAttributeType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name, typeof(TreatmentBMPTypeCustomAttributeType).Name};

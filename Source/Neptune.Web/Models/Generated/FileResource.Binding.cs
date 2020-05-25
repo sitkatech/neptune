@@ -106,6 +106,75 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(FieldDefinitionDataImages.Any())
+            {
+                dependentObjects.Add(typeof(FieldDefinitionDataImage).Name);
+            }
+
+            if(NeptuneHomePageImages.Any())
+            {
+                dependentObjects.Add(typeof(NeptuneHomePageImage).Name);
+            }
+
+            if(NeptunePageImages.Any())
+            {
+                dependentObjects.Add(typeof(NeptunePageImage).Name);
+            }
+
+            if(OnlandVisualTrashAssessmentObservationPhotos.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessmentObservationPhoto).Name);
+            }
+
+            if(OnlandVisualTrashAssessmentObservationPhotoStagings.Any())
+            {
+                dependentObjects.Add(typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name);
+            }
+
+            if(OrganizationsWhereYouAreTheLogoFileResource.Any())
+            {
+                dependentObjects.Add(typeof(Organization).Name);
+            }
+
+            if(TreatmentBMPAssessmentPhotos.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPAssessmentPhoto).Name);
+            }
+
+            if(TreatmentBMPDocuments.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPDocument).Name);
+            }
+
+            if(TreatmentBMPImages.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMPImage).Name);
+            }
+
+            if(WaterQualityManagementPlanDocuments.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanDocument).Name);
+            }
+
+            if(WaterQualityManagementPlanPhotos.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanPhoto).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifies.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerify).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(FieldDefinitionDataImage).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(OnlandVisualTrashAssessmentObservationPhoto).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(Organization).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};

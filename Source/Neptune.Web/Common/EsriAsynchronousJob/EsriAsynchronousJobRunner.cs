@@ -5,12 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Hangfire;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
     public class EsriAsynchronousJobRunner: IDisposable
     {
+        private static readonly int MAX_RETRIES = 3;
+        private static readonly int DEFAULT_MILLISECONDS_TIMEOUT = 5000;
         public static HttpClient HttpClient { get; }
         public string BaseUrl { get; set; }
         public string ResultEndpoint { get; }
@@ -39,7 +42,6 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
         public string RunJobRaw(Object requestObject)
         {
-            Thread.Sleep(5000);
             var requestFormData = requestObject.ToKeyValue();
             //var requestContent = new FormUrlEncodedContent(requestFormData);
 
@@ -50,15 +52,32 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             var retry = true;
             var attempts = 0;
             EsriJobStatusResponse jobStatusResponse = null;
-            while (retry && attempts < 3)
+            while (retry && attempts < MAX_RETRIES)
             {
                 jobStatusResponse = SubmitJob(requestFormData);
                 JobID = jobStatusResponse.jobId;
-                retry = CheckShouldRetry(jobStatusResponse);
+                int timeout;
+                // wait 5 seconds before checking for process on first attempt, 30 on second, and 90 on third
+                switch (attempts)
+                {
+                    case 0:
+                        timeout = 5000;
+                        break;
+                    case 1:
+                        timeout = 30000;
+                        break;
+                    case 2:
+                        timeout = 90000;
+                        break;
+                    default:
+                        timeout = 5000;
+                        break;
+                }
+                retry = CheckShouldRetry(timeout);
                 attempts++;
             }
 
-            if (retry && attempts >= 3)
+            if (retry && attempts >= MAX_RETRIES)
             {
                 throw new TimeoutException("Remote service failed to respond within the timeout.");
             }
@@ -67,7 +86,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
             while (isExecuting)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(DEFAULT_MILLISECONDS_TIMEOUT);
                 var jobStatusHttpResponseMessage = HttpClient.GetAsync(JobStatusUrl).Result;
                 jobStatusResponse =
                     JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
@@ -92,11 +111,11 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             }
         }
 
-        private bool CheckShouldRetry(EsriJobStatusResponse jobStatusResponse)
+        private bool CheckShouldRetry(int millisecondsTimeout)
         {
-            Thread.Sleep(5000);
+            Thread.Sleep(millisecondsTimeout);
             var jobStatusHttpResponseMessage = HttpClient.GetAsync(JobStatusUrl).Result;
-            jobStatusResponse =
+            var jobStatusResponse =
                 JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
                     .ReadAsStringAsync().Result);
 

@@ -1,4 +1,3 @@
-using ApprovalUtilities.SimpleLogger;
 using log4net;
 using LtInfo.Common;
 using Neptune.Web.Common.EsriAsynchronousJob;
@@ -13,8 +12,7 @@ namespace Neptune.Web.Common
     public static class HRUUtilities
     {
         public static IEnumerable<HRUCharacteristic> RetrieveHRUCharacteristics(
-            List<LoadGeneratingUnit> loadGeneratingUnits,
-            DatabaseEntities dbContext, ILog logger)
+            List<LoadGeneratingUnit> loadGeneratingUnits, ILog logger)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
@@ -68,7 +66,7 @@ namespace Neptune.Web.Common
                 Features = loadGeneratingUnits.GetHRURequestFeatures().ToList(),
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
-                SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID },
+                SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_CA_ZONE_VI_SRID },
                 Fields = new List<EsriField>
                 {
                     new EsriField

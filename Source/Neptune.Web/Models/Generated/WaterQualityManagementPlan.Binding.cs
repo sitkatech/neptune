@@ -110,6 +110,50 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(LoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
+            }
+
+            if(QuickBMPs.Any())
+            {
+                dependentObjects.Add(typeof(QuickBMP).Name);
+            }
+
+            if(SourceControlBMPs.Any())
+            {
+                dependentObjects.Add(typeof(SourceControlBMP).Name);
+            }
+
+            if(TreatmentBMPs.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
+
+            if(WaterQualityManagementPlanDocuments.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanDocument).Name);
+            }
+
+            if(WaterQualityManagementPlanParcels.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanParcel).Name);
+            }
+
+            if(WaterQualityManagementPlanVerifies.Any())
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanVerify).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
         /// Dependent type names of this entity
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(LoadGeneratingUnit).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
