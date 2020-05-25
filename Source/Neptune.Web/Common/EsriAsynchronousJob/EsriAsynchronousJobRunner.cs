@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using Hangfire;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
@@ -47,12 +48,19 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
             requestFormData.Add("context", "");
 
             var retry = true;
+            var attempts = 0;
             EsriJobStatusResponse jobStatusResponse = null;
-            while (retry)
+            while (retry && attempts < 3)
             {
                 jobStatusResponse = SubmitJob(requestFormData);
                 JobID = jobStatusResponse.jobId;
                 retry = CheckShouldRetry(jobStatusResponse);
+                attempts++;
+            }
+
+            if (retry && attempts >= 3)
+            {
+                throw new TimeoutException("Remote service failed to respond within the timeout.");
             }
 
             var isExecuting = jobStatusResponse.IsExecuting();
