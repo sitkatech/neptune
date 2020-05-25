@@ -51,8 +51,8 @@ namespace Neptune.Web.Common
             }
             catch (Exception ex)
             {
-                Logger.Warning(ex.Message);
-                Logger.Warning($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
+                logger.Warn(ex.Message, ex);
+                logger.Warn($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
                 //throw new EsriAsynchronousJobUnknownErrorException(
                 //    $"Esri job succeeded, but results were not usable. Content retrieved is:\n {rawResponse}", ex);
             }
