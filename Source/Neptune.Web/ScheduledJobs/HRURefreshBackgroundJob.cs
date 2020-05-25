@@ -92,7 +92,7 @@ namespace Neptune.Web.ScheduledJobs
                 var loadGeneratingUnitsMissingHrus = DbContext.LoadGeneratingUnits.Where(x =>
                     !x.HRUCharacteristics.Any() && 
                     x.RegionalSubbasinID != null &&
-                    x.IsEmptyResponseFromHRUService == false);
+                    x.IsEmptyResponseFromHRUService != true);
 
                 if (!loadGeneratingUnitsMissingHrus.Any())
                 {
