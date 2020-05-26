@@ -22,6 +22,7 @@ namespace Neptune.Web.Models
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.NodeID).HasColumnName(@"NodeID").HasColumnType("varchar").IsOptional();
             Property(x => x.FullResponse).HasColumnName(@"FullResponse").HasColumnType("varchar").IsRequired();
+            Property(x => x.LastUpdate).HasColumnName(@"LastUpdate").HasColumnType("datetime").IsOptional();
 
         }
     }

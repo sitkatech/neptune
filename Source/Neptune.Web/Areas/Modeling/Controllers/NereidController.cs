@@ -280,6 +280,37 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         /// <summary>
         /// Runs a test case against the Nereid treatment_facility/validate endpoint.
+        /// Confirms that we are building one of the four inputs to the Nereid watershed/solve endpoint correctly.
+        /// Available only to Sitka Admins.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult ValidateTreatmentFacility(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+
+            var treatmentFacility = treatmentBMPPrimaryKey.EntityObject.ToTreatmentFacility();
+
+            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = new List<TreatmentFacility> {treatmentFacility} };
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            NereidUtilities.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl,
+                out var responseContent, HttpClient);
+            var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+            return Json(
+                new
+                {
+                    rpcTime = stopwatchElapsedMilliseconds,
+                    responseContent,
+                    requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
+                }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Runs a test case against the Nereid treatment_facility/validate endpoint.
         /// Specifically tests that "NoTreatment" BMPs are being handled correctly by Nereid validator. I.e., they should pass validation automatically
         /// Confirms that we are building one of the four inputs to the Nereid watershed/solve endpoint correctly.
         /// Available only to Sitka Admins.

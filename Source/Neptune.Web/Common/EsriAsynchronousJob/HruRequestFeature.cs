@@ -2,6 +2,7 @@
 // Names have to match remote service's expectation, therefore:
 // ReSharper disable InconsistentNaming
 
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using LtInfo.Common;
@@ -81,12 +82,23 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                     Length = loadGeneratingUnit.LoadGeneratingUnitGeometry.Length.GetValueOrDefault(),
                     QueryFeatureID = loadGeneratingUnit.LoadGeneratingUnitID
                 };
+                DbGeometry catchmentGeometry = null;
+                try
+                {
+                    catchmentGeometry = CoordinateSystemHelper.Project2771To2230(loadGeneratingUnit.LoadGeneratingUnitGeometry);
+                }
+                catch (Exception ex)
+                {
+                    var a = ex.Message;
+                }
 
-                var catchmentGeometry = CoordinateSystemHelper.Project2771To2230(loadGeneratingUnit.LoadGeneratingUnitGeometry);
-                
                 for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
                 {
-                    yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes, loadGeneratingUnit.LoadGeneratingUnitID);
+                    if (catchmentGeometry.ElementAt(i).SpatialTypeName.ToUpper() == "POLYGON")
+                    {
+                        yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes,
+                            loadGeneratingUnit.LoadGeneratingUnitID);
+                    }
                 }
             }
         }

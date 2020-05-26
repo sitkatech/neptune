@@ -16,7 +16,8 @@ select tb.TreatmentBMPID as PrimaryKey, tb.TreatmentBMPName, tb.UpstreamBMPID,
 	   tma.TotalEffectiveBMPVolume, tma.TotalEffectiveDrywellBMPVolume, tma.TreatmentRate, tma.UnderlyingHydrologicSoilGroupID, tma.UnderlyingInfiltrationRate,
 	   tma.WaterQualityDetentionVolume, tma.WettedFootprint, tma.WinterHarvestedWaterDemand,
 	   om.MonthsOfOperationDisplayName as OperationMonths,
-	   pz.DesignStormwaterDepthInInches, ws.WatershedName
+	   pz.DesignStormwaterDepthInInches, ws.WatershedName,
+	   dt.DelineationTypeDisplayName as DelineationType
 from dbo.TreatmentBMP tb
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID and tbt.IsAnalyzedInModelingModule = 1
 join dbo.StormwaterJurisdiction sj on tb.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
@@ -25,6 +26,8 @@ left join dbo.TreatmentBMPModelingAttribute tma on tb.TreatmentBMPID = tma.Treat
 left join dbo.MonthsOfOperation om on tma.MonthsOfOperationID = om.MonthsOfOperationID
 left join dbo.PrecipitationZone pz on tb.PrecipitationZoneID = pz.PrecipitationZoneID
 left join dbo.Watershed ws on tb.WatershedID = ws.WatershedID
+left join dbo.Delineation d on d.TreatmentBMPID = tb.TreatmentBMPID
+left join dbo.DelineationType dt on dt.DelineationTypeID = d.DelineationTypeID
 GO
 
 

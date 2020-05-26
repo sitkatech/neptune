@@ -1,15 +1,172 @@
-﻿@inherits Neptune.Web.Views.TreatmentBMP.ModeledBMPPerformance
-    
+﻿@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.TreatmentBMP.ModeledBMPPerformance
+
+
+<style>
+    th {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    .resultSelector .btn-neptune:not(.active) {
+        background: gray;
+    }
+</style>
+
 <p class="systemText">Coming soon.</p>
+<div ng-app="NeptuneApp" id="ModeledBMPPerformanceApp" ng-controller="ModeledBMPPerformanceController" style="max-height: 600px;">
+
+    <div class="btn-group resultSelector" ng-init="weatherType = 'dry'">
+        <label class="btn btn-neptune active" ng-class="{'active':weatherType === 'dry'}" ng-click="weatherType = 'dry'">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="dry" ng-model="model.weatherType" checked style="visibility:hidden; width:0px;"> Dry
+        </label>
+        <label class="btn btn-neptune" ng-class="{'active':weatherType === 'wet'}" ng-click="weatherType = 'wet'">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="wet" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Wet
+        </label>
+        <label class="btn btn-neptune" ng-class="{'active':weatherType === 'total'}" ng-click="weatherType = 'total'">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="total" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Total
+        </label>
+    </div>
+
+    <table class="table table-responsive table-striped table-condensed">
+        <thead>
+            <tr style="text-align: center;">
+                <th>Pollutant</th>
+                <th>Load Reduction</th>
+                <th>Percent Reduction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="pollutant in pollutants">
+                <td ng-bind="pollutant.long_name"></td>
+                <td ng-bind="loadReduction(pollutant)"></td>
+                <td ng-bind="percentReduction(pollutant)"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
 
 <script>
-    jQuery(function() {
-        jQuery.ajax("@ViewDataTyped.ModelingResultsUrl").done(function(data) {
-            console.log(data);
-        }).fail(function(error) {
-            console.log(error);
+    angular.module("NeptuneApp").controller("ModeledBMPPerformanceController",
+        function($scope) {
+            jQuery.ajax("@ViewDataTyped.ModelingResultsUrl").done(function(data) {
+                $scope.modelResults = data;
+                $scope.$apply();
+            }).fail(function(error) {
+                console.log(error);
+            });
+
+            $scope.model = { weatherType: "dry" };
+
+            $scope.setWeatherType = function(weatherType) {
+                $scope.model.weatherType = weatherType;
+            }
+
+            $scope.loadReduction = function (pollutant) {
+                
+                if (!$scope.modelResults) {
+                    return "";
+                }
+                debugger;
+                return loadRemoved(pollutant).toFixed(2) + " " + pollutant.load_unit;
+            };
+            
+            $scope.percentReduction = function(pollutant) {
+                if (!$scope.modelResults) {
+                    return "";
+                }
+                debugger;
+                return (100 * loadRemoved(pollutant) / load(pollutant)).toFixed(0) + "%";
+            }
+
+            $scope.pollutants = [
+                {
+                    "long_name": "Total Suspended Solids",
+                    "short_name": "TSS",
+                    "concentration_unit": "mg/L",
+                    "load_unit": "lbs"
+                },
+                { "long_name": "Total Nitrogen", "short_name": "TN", "concentration_unit": "mg/L", "load_unit": "lbs" },
+                {
+                    "long_name": "Total Phosphorus",
+                    "short_name": "TP",
+                    "concentration_unit": "mg/L",
+                    "load_unit": "lbs"
+                }, { "long_name": "Total Zinc", "short_name": "TZn", "concentration_unit": "ug/L", "load_unit": "lbs" },
+                {
+                    "long_name": "Dissolved Zinc",
+                    "short_name": "DZn",
+                    "concentration_unit": "ug/L",
+                    "load_unit": "lbs"
+                },
+                { "long_name": "Total Copper", "short_name": "TCu", "concentration_unit": "ug/L", "load_unit": "lbs" },
+                {
+                    "long_name": "Dissolved Copper",
+                    "short_name": "DCu",
+                    "concentration_unit": "ug/L",
+                    "load_unit": "lbs"
+                }, { "long_name": "Total Lead", "short_name": "TPb", "concentration_unit": "ug/L", "load_unit": "lbs" },
+                {
+                    "long_name": "Fecal Coliform",
+                    "short_name": "FC",
+                    "concentration_unit": "MPN/_100mL",
+                    "load_unit": "mpn"
+                }
+            ];
+
+            function load(pollutant) {
+                var field = loadingFieldName(pollutant);
+                
+                var summer = "summer_dw" + field;
+                var winter = "winter_dw" + field;
+
+                if ($scope.weatherType === 'wet') {
+                    return Number($scope.modelResults[field]) || 0;
+                } else if ($scope.weatherType === 'dry') {
+                    
+                    return Number($scope.modelResults[summer]) + Number($scope.modelResults[winter]);
+                } else if ($scope.weatherType === 'total') {
+                    return (Number($scope.modelResults[summer]) || 0) +
+                        (Number($scope.modelResults[winter]) || 0) +
+                        (Number($scope.modelResults[field]) ||0);
+                }
+            }
+
+            function loadingFieldName(pollutant) {
+                return pollutant.short_name + "_load_" + pollutant.load_unit + "_direct";
+            }
+
+            function loadReducedFieldName(pollutant) {
+                return pollutant.short_name +
+                    "_load_" +
+                    pollutant.load_unit +
+                    "_removed";
+            }
+
+            function loadRemoved(pollutant) {
+                var field = loadReducedFieldName(pollutant);
+                
+                var summer = "summer_dw" + field;
+                var winter = "winter_dw" + field;
+
+                if ($scope.weatherType === 'wet') {
+                    return Number($scope.modelResults[field]) || 0;
+                } else if ($scope.weatherType === 'dry') {
+                    
+                    return Number($scope.modelResults[summer]) + Number($scope.modelResults[winter]);
+                } else if ($scope.weatherType === 'total') {
+                    return (Number($scope.modelResults[summer]) || 0) +
+                        (Number($scope.modelResults[winter]) || 0) +
+                        (Number($scope.modelResults[field]) ||0);
+                }
+
+            }
+
         });
-    });    
+
 </script>

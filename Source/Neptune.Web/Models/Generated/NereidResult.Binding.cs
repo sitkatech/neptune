@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NereidResult(int nereidResultID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, string fullResponse) : this()
+        public NereidResult(int nereidResultID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, string fullResponse, DateTime? lastUpdate) : this()
         {
             this.NereidResultID = nereidResultID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.DelineationID = delineationID;
             this.NodeID = nodeID;
             this.FullResponse = fullResponse;
+            this.LastUpdate = lastUpdate;
         }
 
         /// <summary>
@@ -111,6 +112,7 @@ namespace Neptune.Web.Models
         public int? DelineationID { get; set; }
         public string NodeID { get; set; }
         public string FullResponse { get; set; }
+        public DateTime? LastUpdate { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NereidResultID; } set { NereidResultID = value; } }
 

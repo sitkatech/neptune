@@ -203,7 +203,7 @@ namespace LtInfo.Common
 
             if (!dbGeometry.IsValid)
             {
-                dbGeometry = dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry().FixSrid(NAD_83_CA_ZONE_VI_SRID);
+                dbGeometry = dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry();//.FixSrid(NAD_83_CA_ZONE_VI_SRID);
             }
 
             return dbGeometry;

@@ -356,7 +356,8 @@ namespace Neptune.Web.Common
                 TreatmentBMPID = x.TreatmentBMPID, DelineationID = x.Delineation?.DelineationID,
                 NodeID = x.ID,
                 RegionalSubbasinID = x.RegionalSubbasin?.RegionalSubbasinID,
-                WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID
+                WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID,
+                LastUpdate = DateTime.Now
             }).ToList();
 
             dbContext.Database.ExecuteSqlCommand(
@@ -481,7 +482,10 @@ namespace Neptune.Web.Common
                 }
                 else
                 {
-                    node.Results = dataLeafResult;
+                    if (node.Results == null)
+                    {
+                        node.Results = dataLeafResult;
+                    }
                 }
             }
 

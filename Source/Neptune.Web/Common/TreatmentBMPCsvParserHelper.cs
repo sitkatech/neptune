@@ -456,7 +456,18 @@ namespace Neptune.Web.Common
                         HttpRequestStorage.DatabaseEntities.CustomAttributeValues.RemoveRange(customAttribute
                             .CustomAttributeValues);
                         customAttribute.CustomAttributeValues.Clear();
-                        customAttributeValues.Add(new CustomAttributeValue(customAttribute.CustomAttributeID, value));
+
+                        if (customAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
+                        {
+                            var attributeValues = value.Split(new[] {','}).Select(x => x.Trim()).Select(x =>
+                                new CustomAttributeValue(customAttribute.CustomAttributeID, x));
+                            customAttributeValues.AddRange(attributeValues);
+                        }
+                        else
+                        {
+                            customAttributeValues.Add(
+                                new CustomAttributeValue(customAttribute.CustomAttributeID, value));
+                        }
                     }
                 }
                 customAttributes.Add(customAttribute);
@@ -497,7 +508,9 @@ namespace Neptune.Web.Common
                     return DateTime.TryParse(value, out var valueDateTime);
                 case CustomAttributeDataTypeEnum.PickFromList:
                 case CustomAttributeDataTypeEnum.MultiSelect:
-                    return customAttributeTypeAcceptableValues.Contains(value);
+                    var splitValues = value.Split(new[] {','}).Select(x => x.Trim());
+
+                    return splitValues.All(customAttributeTypeAcceptableValues.Contains);
                 case CustomAttributeDataTypeEnum.String:
                     return true;
                 default:
