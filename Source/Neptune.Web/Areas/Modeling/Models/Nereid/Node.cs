@@ -20,6 +20,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         public int? TreatmentBMPID { get; set; }
         [JsonIgnore]
         public JObject Results { get; set; }
+        [JsonIgnore]
+        public JObject PreviousResults { get; set; }
 
         public Node(string id)
         {

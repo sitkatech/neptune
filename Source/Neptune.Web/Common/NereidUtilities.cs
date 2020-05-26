@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading;
 using Neptune.Web.Areas.Modeling.Controllers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Common
 {
@@ -427,7 +428,7 @@ namespace Neptune.Web.Common
                 LandSurfaces = landSurfaces,
                 TreatmentFacilities = treatmentFacilities,
                 TreatmentSites = treatmentSites,
-                PreviousResults = subgraph.Nodes.Where(x => x.Results != null).Select(x => x.Results).ToList()
+                PreviousResults = subgraph.Nodes.Where(x => x.PreviousResults != null).Select(x => x.PreviousResults).ToList()
             };
             NereidResult<SolutionResponseObject> results = null;
             try
@@ -451,6 +452,7 @@ namespace Neptune.Web.Common
                     { Request = solutionRequestObject, Response = results.Data };
             }
 
+            var previousResultsKeys = results.Data.PreviousResultsKeys;
             foreach (var dataLeafResult in results.Data.Results)
             {
                 var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
@@ -469,10 +471,19 @@ namespace Neptune.Web.Common
                 else
                 {
                     node.Results = dataLeafResult;
+
+                    // track the smaller subset of results that need to be sent for subsequent calls
+                    var previousResults = new JObject();
+                    foreach (var key in previousResultsKeys)
+                    {
+                        var value = dataLeafResult[key];
+                        previousResults.Add(key, value);
+                    }
+
+                    node.PreviousResults = previousResults;
                 }
             }
 
-            // todo: don't need to store the leaf results. They're either data we already have, or just loading summaries
             foreach (var dataLeafResult in results.Data.LeafResults)
             {
                 var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
@@ -482,6 +493,7 @@ namespace Neptune.Web.Common
                 }
                 else
                 {
+                    // don't store the leaf results if already data at this node--most of the time these nodes are read-only
                     if (node.Results == null)
                     {
                         node.Results = dataLeafResult;

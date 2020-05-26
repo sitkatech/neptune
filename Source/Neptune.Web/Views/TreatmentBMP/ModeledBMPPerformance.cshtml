@@ -30,8 +30,22 @@
             <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="total" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Total
         </label>
     </div>
-
-    <table class="table table-responsive table-striped table-condensed">
+    
+    <table class="table table-responsive table-striped table-condensed" ng-if="modelResults">
+        <thead>
+        <tr style="text-align: center;">
+            <th>Volume Treated</th>
+            <th>Volume Reduced</th>
+            <th>Volume Bypassed</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td ng-bind='volumeTreated()'></td>
+                <td ng-bind='volumeReduced()'></td>
+                <td ng-bind='volumeBypassed()'></td>
+            </tr>
+        </tbody>
         <thead>
             <tr style="text-align: center;">
                 <th>Pollutant</th>
@@ -72,16 +86,14 @@
                 if (!$scope.modelResults) {
                     return "";
                 }
-                debugger;
-                return loadRemoved(pollutant).toFixed(2) + " " + pollutant.load_unit;
+                return loadRemoved(pollutant).toFixed(4) + " " + pollutant.load_unit;
             };
             
             $scope.percentReduction = function(pollutant) {
                 if (!$scope.modelResults) {
                     return "";
                 }
-                debugger;
-                return (100 * loadRemoved(pollutant) / load(pollutant)).toFixed(0) + "%";
+                return (100 * loadRemoved(pollutant) / load(pollutant)).toFixed(2) + "%";
             }
 
             $scope.pollutants = [
@@ -119,6 +131,53 @@
                 }
             ];
 
+            $scope.volumeTreated = function () {
+                var value;
+                if ($scope.weatherType === "wet") {
+                    value = Number($scope.modelResults["runoff_volume_cuft_inflow"]);
+                } else if ($scope.weatherType === "dry") {
+                    value = Number($scope.modelResults["summer_dry_weather_flow_cuft_inflow"]) +
+                        Number($scope.modelResults["winter_dry_weather_flow_cuft_inflow"]);
+                } else if ($scope.setWeatherType === "total") {
+                    value = Number($scope.modelResults["runoff_volume_cuft_inflow"]) +
+                        Number($scope.modelResults["summer_dry_weather_flow_cuft_inflow"]) +
+                        Number($scope.modelResults["winter_dry_weather_flow_cuft_inflow"]);
+                }
+                return value.toFixed(2) + " gal";
+            }
+
+            $scope.volumeReduced = function(){
+                var value;
+                if ($scope.weatherType === "wet") {
+                    value = Number($scope.modelResults["runoff_volume_cuft_captured"]);
+                } else if ($scope.weatherType === "dry") {
+                    value = Number($scope.modelResults["summer_dry_weather_flow_cuft_captured"]) +
+                        Number($scope.modelResults["winter_dry_weather_flow_cuft_captured"]);
+                } else if ($scope.setWeatherType === "total") {
+                    value = Number($scope.modelResults["runoff_volume_cuft_captured"]) +
+                        Number($scope.modelResults["summer_dry_weather_flow_cuft_captured"]) +
+                        Number($scope.modelResults["winter_dry_weather_flow_cuft_captured"]);
+                }
+
+                return value.toFixed(2) + " gal";
+            }
+
+            $scope.volumeBypassed = function () {
+                debugger;
+                var value;
+                if ($scope.weatherType === "wet") {
+                    value = Number($scope.modelResults["runoff_volume_cuft_bypassed"]);
+                } else if ($scope.weatherType === "dry") {
+                    value = Number($scope.modelResults["summer_dry_weather_flow_cuft_bypassed"]) +
+                        Number($scope.modelResults["winter_dry_weather_flow_cuft_bypassed"]);
+                } else if ($scope.weatherType === "total") {
+                    value = Number($scope.modelResults["runoff_volume_cuft_bypassed"]) +
+                        Number($scope.modelResults["summer_dry_weather_flow_cuft_bypassed"]) +
+                        Number($scope.modelResults["winter_dry_weather_flow_cuft_bypassed"]);
+                }
+                return value.toFixed(2) + " gal";
+            }
+
             function load(pollutant) {
                 var field = loadingFieldName(pollutant);
                 
@@ -138,7 +197,7 @@
             }
 
             function loadingFieldName(pollutant) {
-                return pollutant.short_name + "_load_" + pollutant.load_unit + "_direct";
+                return pollutant.short_name + "_load_" + pollutant.load_unit + "_inflow";
             }
 
             function loadReducedFieldName(pollutant) {
