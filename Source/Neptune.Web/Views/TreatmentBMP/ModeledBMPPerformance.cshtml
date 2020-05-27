@@ -3,12 +3,20 @@
 
 
 <style>
-    th {
-        text-align: center;
+    .modelResults th {
+        text-align: right;
     }
 
-    td {
-        text-align: center;
+    .modelResults td {
+        text-align: right;
+    }
+
+    .modelResults th.left {
+        text-align: left;
+    }
+
+    .modelResults td.left {
+        text-align: left;
     }
 
     .resultSelector .btn-neptune:not(.active) {
@@ -18,45 +26,45 @@
 
 <div ng-app="NeptuneApp" id="ModeledBMPPerformanceApp" ng-controller="ModeledBMPPerformanceController" style="max-height: 600px;">
 
-    <div class="btn-group resultSelector" ng-init="weatherType = 'dry'">
-        <label class="btn btn-neptune active" ng-class="{'active':weatherType === 'dry'}" ng-click="weatherType = 'dry'">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="dry" ng-model="model.weatherType" checked style="visibility:hidden; width:0px;"> Dry
+    <div class="resultSelector" ng-init="weatherType = 'total'">
+        <label class="btn btn-neptune" ng-class="{'active':weatherType === 'total'}" ng-click="weatherType = 'total'">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="total" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Total
+        </label>
+        <label class="btn btn-neptune" ng-class="{'active':weatherType === 'dry'}" ng-click="weatherType = 'dry'">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="dry" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Dry
         </label>
         <label class="btn btn-neptune" ng-class="{'active':weatherType === 'wet'}" ng-click="weatherType = 'wet'">
             <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="wet" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Wet
         </label>
-        <label class="btn btn-neptune" ng-class="{'active':weatherType === 'total'}" ng-click="weatherType = 'total'">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="total" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Total
-        </label>
     </div>
     
-    <table class="table table-responsive table-striped table-condensed" ng-if="modelResults">
+    <table class="table table-responsive table-striped table-condensed modelResults" ng-if="modelResults">
         <thead>
         <tr style="text-align: center;">
-            <th>Volume Treated</th>
+            <th class="left">Volume Treated</th>
             <th>Volume Reduced</th>
             <th>Volume Bypassed</th>
         </tr>
         </thead>
         <tbody>
             <tr>
-                <td ng-bind='volumeTreated()'></td>
-                <td ng-bind='volumeReduced()'></td>
-                <td ng-bind='volumeBypassed()'></td>
+                <td class="left"><span ng-bind='volumeTreated() | number: 2'></span> gal</td>
+                <td><span ng-bind='volumeReduced() | number: 2'></span> gal</td>
+                <td><span ng-bind='volumeBypassed() | number: 2'></span> gal</td>
             </tr>
         </tbody>
         <thead>
             <tr style="text-align: center;">
-                <th>Pollutant</th>
+                <th class="left">Pollutant</th>
                 <th>Load Reduction</th>
                 <th>Percent Reduction</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="pollutant in pollutants">
-                <td ng-bind="pollutant.long_name"></td>
-                <td ng-bind="loadReduction(pollutant)"></td>
-                <td ng-bind="percentReduction(pollutant)"></td>
+                <td class="left" ng-bind="pollutant.long_name"></td>
+                <td><span ng-bind="loadReduction(pollutant) | number:4"></span> <span ng-bind="pollutant.load_unit"></span></td>
+                <td><span ng-bind="percentReduction(pollutant) | number:4"></span> %</td>
             </tr>
         </tbody>
     </table>
@@ -74,27 +82,20 @@
                 console.log(error);
             });
 
-            $scope.model = { weatherType: "dry" };
+            $scope.model = { weatherType: "total" };
 
             $scope.setWeatherType = function(weatherType) {
                 $scope.model.weatherType = weatherType;
             }
 
             $scope.loadReduction = function (pollutant) {
-                
-                if (!$scope.modelResults) {
-                    return "";
-                }
-                return loadRemoved(pollutant).toFixed(4) + " " + pollutant.load_unit;
+                return loadRemoved(pollutant);
             };
             
             $scope.percentReduction = function(pollutant) {
-                if (!$scope.modelResults) {
-                    return "";
-                }
                 var reductionFactor = (loadRemoved(pollutant) / load(pollutant)) || 0;
 
-                return (100 * reductionFactor).toFixed(2) + "%";
+                return (100 * reductionFactor);
             }
 
             $scope.pollutants = [
@@ -139,12 +140,12 @@
                 } else if ($scope.weatherType === "dry") {
                     value = Number($scope.modelResults["summer_dry_weather_flow_cuft_inflow"]) +
                         Number($scope.modelResults["winter_dry_weather_flow_cuft_inflow"]);
-                } else if ($scope.setWeatherType === "total") {
+                } else if ($scope.weatherType === "total") {
                     value = Number($scope.modelResults["runoff_volume_cuft_inflow"]) +
                         Number($scope.modelResults["summer_dry_weather_flow_cuft_inflow"]) +
                         Number($scope.modelResults["winter_dry_weather_flow_cuft_inflow"]);
                 }
-                return value.toFixed(2) + " gal";
+                return value;
             }
 
             $scope.volumeReduced = function(){
@@ -154,17 +155,16 @@
                 } else if ($scope.weatherType === "dry") {
                     value = Number($scope.modelResults["summer_dry_weather_flow_cuft_captured"]) +
                         Number($scope.modelResults["winter_dry_weather_flow_cuft_captured"]);
-                } else if ($scope.setWeatherType === "total") {
+                } else if ($scope.weatherType === "total") {
                     value = Number($scope.modelResults["runoff_volume_cuft_captured"]) +
                         Number($scope.modelResults["summer_dry_weather_flow_cuft_captured"]) +
                         Number($scope.modelResults["winter_dry_weather_flow_cuft_captured"]);
                 }
 
-                return value.toFixed(2) + " gal";
+                return value;
             }
 
             $scope.volumeBypassed = function () {
-                debugger;
                 var value;
                 if ($scope.weatherType === "wet") {
                     value = Number($scope.modelResults["runoff_volume_cuft_bypassed"]);
@@ -176,7 +176,7 @@
                         Number($scope.modelResults["summer_dry_weather_flow_cuft_bypassed"]) +
                         Number($scope.modelResults["winter_dry_weather_flow_cuft_bypassed"]);
                 }
-                return value.toFixed(2) + " gal";
+                return value;
             }
 
             function load(pollutant) {
