@@ -19,14 +19,40 @@
         text-align: left;
     }
 
-    .resultSelector .btn-neptune:not(.active) {
-        background: gray;
+    .nav.nav-tabs.resultSelector li.active {
+        border-bottom-style: none;
+    }
+
+    .nav.nav-tabs.resultSelector li.active a{
+        color: white;
+        background-color: #00c1d5;
+        border-bottom-color: #f9f9f9;
+    }
+
+    .nav.nav-tabs.resultSelector li.active:hover a{
+        color: white;
+        background-color: #00c1d5;
+        border-bottom-color: #f9f9f9;
+    }
+    .nav.nav-tabs.resultSelector li a {
+        color: black;
+
+        background: none;
+        width: 100px;
+        text-align: center;
+        border-color: #ddd;
     }
 </style>
 
 <div ng-app="NeptuneApp" id="ModeledBMPPerformanceApp" ng-controller="ModeledBMPPerformanceController" style="max-height: 600px;">
 
-    <div class="resultSelector" ng-init="weatherType = 'total'">
+    <ul class="nav nav-tabs resultSelector" role="tablist" ng-init="weatherType = 'total'">
+        <li role="presentation" ng-class="{'active':weatherType === 'total'}"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" ng-click="weatherType = 'total'">Total</a></li>
+        <li role="presentation" ng-class="{'active':weatherType === 'dry'}"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" ng-click="weatherType = 'dry'">Dry</a></li>
+        <li role="presentation" ng-class="{'active':weatherType === 'wet'}"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" ng-click="weatherType = 'wet'">Wet</a></li>
+    </ul>
+    <br/>
+    @*<div class="resultSelector" ng-init="weatherType = 'total'">
         <label class="btn btn-neptune" ng-class="{'active':weatherType === 'total'}" ng-click="weatherType = 'total'">
             <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="total" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Total
         </label>
@@ -36,7 +62,7 @@
         <label class="btn btn-neptune" ng-class="{'active':weatherType === 'wet'}" ng-click="weatherType = 'wet'">
             <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="wet" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Wet
         </label>
-    </div>
+    </div>*@
     
     <table class="table table-responsive table-striped table-condensed modelResults" ng-if="modelResults">
         <thead>
@@ -82,12 +108,8 @@
                 console.log(error);
             });
 
-            $scope.model = { weatherType: "total" };
-
-            $scope.setWeatherType = function(weatherType) {
-                $scope.model.weatherType = weatherType;
-            }
-
+            $scope.weatherTye = 'total';
+            
             $scope.loadReduction = function (pollutant) {
                 return loadRemoved(pollutant);
             };
