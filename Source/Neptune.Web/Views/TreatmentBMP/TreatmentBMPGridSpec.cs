@@ -93,7 +93,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("BMP Name"), x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.PrimaryKey), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => (new TreatmentBMPPrimaryKey(x.PrimaryKey)).EntityObject.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
-            Add(Models.FieldDefinition.DelineationType.ToGridHeaderString("Delineation Type"), x=>x.DelineationTYpe, 120);
+            Add(Models.FieldDefinition.DelineationType.ToGridHeaderString("Delineation Type"), x=>x.DelineationType, 120);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(Models.TreatmentBMPTypeModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPTypeName), 100);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170);
             Add(Models.FieldDefinition.Watershed.ToGridHeaderString("Watershed"), x => x.WatershedName, 170);

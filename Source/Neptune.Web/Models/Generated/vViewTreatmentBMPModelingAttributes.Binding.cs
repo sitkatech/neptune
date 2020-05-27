@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName, string delineationTYpe) : this()
+        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName, string delineationType) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
@@ -66,7 +66,7 @@ namespace Neptune.Web.Models
             this.OperationMonths = operationMonths;
             this.DesignStormwaterDepthInInches = designStormwaterDepthInInches;
             this.WatershedName = watershedName;
-            this.DelineationTYpe = delineationTYpe;
+            this.DelineationType = delineationType;
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Neptune.Web.Models
             this.OperationMonths = vViewTreatmentBMPModelingAttributes.OperationMonths;
             this.DesignStormwaterDepthInInches = vViewTreatmentBMPModelingAttributes.DesignStormwaterDepthInInches;
             this.WatershedName = vViewTreatmentBMPModelingAttributes.WatershedName;
-            this.DelineationTYpe = vViewTreatmentBMPModelingAttributes.DelineationTYpe;
+            this.DelineationType = vViewTreatmentBMPModelingAttributes.DelineationType;
             CallAfterConstructor(vViewTreatmentBMPModelingAttributes);
         }
 
@@ -158,6 +158,6 @@ namespace Neptune.Web.Models
         public string OperationMonths { get; set; }
         public double? DesignStormwaterDepthInInches { get; set; }
         public string WatershedName { get; set; }
-        public string DelineationTYpe { get; set; }
+        public string DelineationType { get; set; }
     }
 }
