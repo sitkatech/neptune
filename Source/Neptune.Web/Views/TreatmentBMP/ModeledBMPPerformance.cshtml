@@ -16,7 +16,6 @@
     }
 </style>
 
-<p class="systemText">Coming soon.</p>
 <div ng-app="NeptuneApp" id="ModeledBMPPerformanceApp" ng-controller="ModeledBMPPerformanceController" style="max-height: 600px;">
 
     <div class="btn-group resultSelector" ng-init="weatherType = 'dry'">
@@ -93,7 +92,9 @@
                 if (!$scope.modelResults) {
                     return "";
                 }
-                return (100 * loadRemoved(pollutant) / load(pollutant)).toFixed(2) + "%";
+                var reductionFactor = (loadRemoved(pollutant) / load(pollutant)) || 0;
+
+                return (100 * reductionFactor).toFixed(2) + "%";
             }
 
             $scope.pollutants = [
