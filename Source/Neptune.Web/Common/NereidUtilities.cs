@@ -364,6 +364,8 @@ namespace Neptune.Web.Common
             dbContext.Database.ExecuteSqlCommand(
                 $"EXEC dbo.pDeleteNereidResults");
             dbContext.NereidResults.AddRange(nereidResults);
+            // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
+            dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();
 
             return nereidResults;
