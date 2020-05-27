@@ -311,7 +311,7 @@ namespace Neptune.Web.Common
         }
 
         public static IEnumerable<NereidResult> TotalNetworkSolve(out string stackTrace,
-            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext)
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient)
         {
             var solutionSequenceUrl =
                 $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
@@ -330,7 +330,7 @@ namespace Neptune.Web.Common
 
             var solutionSequenceResult =
                 NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(
-                    new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, NereidController.HttpClient);
+                    new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, httpClient);
 
             foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
             {
@@ -347,7 +347,7 @@ namespace Neptune.Web.Common
                     var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
 
                     SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
-                        allModelingQuickBMPs, out var notFoundNodes);
+                        allModelingQuickBMPs, out var notFoundNodes, httpClient);
                     missingNodeIDs.AddRange(notFoundNodes);
                 }
             }
@@ -369,7 +369,10 @@ namespace Neptune.Web.Common
             return nereidResults;
         }
 
-        public static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph, List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs, List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes, List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes)
+        public static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph,
+            List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
+            List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
+            List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes, HttpClient httpClient)
         {
             notFoundNodes = new List<string>();
 
@@ -435,7 +438,7 @@ namespace Neptune.Web.Common
             {
                 results = NereidUtilities.RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(
                     solutionRequestObject, solveUrl,
-                    out var responseContent, NereidController.HttpClient);
+                    out var responseContent, httpClient);
             }
             catch (Exception e)
             {

@@ -390,7 +390,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var allModelingQuickBMPs = HttpRequestStorage.DatabaseEntities.QuickBMPs.Include(x => x.TreatmentBMPType)
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
-            var responseContent = NereidUtilities.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs, out _);
+            var responseContent = NereidUtilities.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs, out _, NereidController.HttpClient);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
@@ -415,7 +415,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             try
             {
                 NereidUtilities.TotalNetworkSolve(out stackTrace, out missingNodeIDs,
-                    out graph, HttpRequestStorage.DatabaseEntities);
+                    out graph, HttpRequestStorage.DatabaseEntities, HttpClient);
             }
             catch (NereidException<SolutionRequestObject, SolutionResponseObject> nexc)
             {

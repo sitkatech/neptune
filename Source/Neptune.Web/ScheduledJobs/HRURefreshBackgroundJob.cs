@@ -21,7 +21,7 @@ namespace Neptune.Web.ScheduledJobs
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Prod,
-            NeptuneEnvironmentType.Local
+            //NeptuneEnvironmentType.Local
         };
         protected override void RunJobImplementation()
         {
