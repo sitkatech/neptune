@@ -723,6 +723,10 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
             SetMessageForDisplay("Modeling Attributes successfully saved.");
+
+            // need to re-execute the model at this node since it was re-parameterized
+            NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, HttpRequestStorage.DatabaseEntities);
+
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
@@ -964,14 +968,18 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBmpsAdded = treatmentBMPs.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
-            var treatmentBmpsUpdatedCount = treatmentBMPs.Count(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey));
+            var treatmentBmpsUpdated = treatmentBMPs.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey));
+
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.AddRange(treatmentBmpsAdded);
             HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.TreatmentBMPModelingAttributes.AddRange(modelingAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
-            var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdatedCount} records updated!";
+            // Need to re-executed model for updated BMPs since they may have been re-parameterized
+            NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, HttpRequestStorage.DatabaseEntities);
+
+            var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count()} records updated!";
             SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
         }

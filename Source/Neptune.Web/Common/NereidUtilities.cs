@@ -508,6 +508,27 @@ namespace Neptune.Web.Common
 
             return results;
         }
+
+        public static void MarkTreatmentBMPDirty(TreatmentBMP treatmentBMP, DatabaseEntities dbContext)
+        {
+            var dirtyModelNode = new DirtyModelNode(DateTime.Now)
+            {
+                TreatmentBMPID = treatmentBMP.TreatmentBMPID
+            };
+
+            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+
+            dbContext.SaveChanges();
+        }
+
+        public static void MarkTreatmentBMPDirty(IEnumerable<TreatmentBMP> treatmentBmpsUpdated, DatabaseEntities dbContext)
+        {
+            var dirtyModelNodes = treatmentBmpsUpdated.Select(x=> new DirtyModelNode(DateTime.Now){TreatmentBMPID = x.TreatmentBMPID});
+
+            dbContext.DirtyModelNodes.AddRange(dirtyModelNodes);
+            
+            dbContext.SaveChanges();
+        }
     }
 
     public class WaterQualityManagementPlanNode
