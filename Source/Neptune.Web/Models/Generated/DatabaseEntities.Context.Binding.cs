@@ -43,6 +43,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new DelineationConfiguration());
             modelBuilder.Configurations.Add(new DelineationOverlapConfiguration());
             modelBuilder.Configurations.Add(new DelineationStagingConfiguration());
+            modelBuilder.Configurations.Add(new DirtyModelNodeConfiguration());
             modelBuilder.Configurations.Add(new DroolToolWatershedConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataImageConfiguration());
@@ -148,6 +149,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<DelineationOverlap> DelineationOverlaps { get; set; }
         public virtual DbSet<Delineation> Delineations { get; set; }
         public virtual DbSet<DelineationStaging> DelineationStagings { get; set; }
+        public virtual DbSet<DirtyModelNode> DirtyModelNodes { get; set; }
         public virtual DbSet<DroolToolWatershed> DroolToolWatersheds { get; set; }
         public virtual DbSet<FieldDefinitionDataImage> FieldDefinitionDataImages { get; set; }
         public virtual DbSet<FieldDefinitionData> FieldDefinitionDatas { get; set; }
@@ -299,6 +301,9 @@ namespace Neptune.Web.Models
                     var delineationType = DelineationType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(delineationType, "DelineationType", primaryKey);
                     return delineationType;
+
+                case "DirtyModelNode":
+                    return DirtyModelNodes.GetDirtyModelNode(primaryKey);
 
                 case "DroolToolRole":
                     var droolToolRole = DroolToolRole.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
