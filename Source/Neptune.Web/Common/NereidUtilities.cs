@@ -1,14 +1,14 @@
-using System;
+using Neptune.Web.Areas.Modeling.Controllers;
 using Neptune.Web.Areas.Modeling.Models.Nereid;
 using Neptune.Web.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
-using Neptune.Web.Areas.Modeling.Controllers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Common
 {
@@ -527,6 +527,55 @@ namespace Neptune.Web.Common
 
             dbContext.DirtyModelNodes.AddRange(dirtyModelNodes);
             
+            dbContext.SaveChanges();
+        }
+
+        public static void MarkDownstreamNodeDirty(TreatmentBMP treatmentBMP, DatabaseEntities dbContext)
+        {
+            // if this bmp is an upstream, then its downstream node is, obviously...
+            if (treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP.Any())
+            {
+                MarkTreatmentBMPDirty(treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP.ToList(), dbContext);
+                return;
+            }
+
+            // otherwise, we're looking for either the Regional Subbasin or the Centralized BMP of the Regional Subbasin
+            var regionalSubbasinID = treatmentBMP.RegionalSubbasinID;
+
+            var centralizedBMP = dbContext.vNereidRegionalSubbasinCentralizedBMPs.SingleOrDefault(x => x.RegionalSubbasinID == regionalSubbasinID && x.RowNumber == 1);
+            if (centralizedBMP != null)
+            {
+                MarkTreatmentBMPDirty(centralizedBMP, dbContext);
+                return;
+            }
+
+            // no centralized BMPs there, just go ahead and mark the regional subbasin
+            MarkRegionalSubbasinDirty(regionalSubbasinID, dbContext);
+
+        }
+
+        private static void MarkRegionalSubbasinDirty(int? regionalSubbasinID, DatabaseEntities dbContext)
+        {
+           
+            var dirtyModelNode = new DirtyModelNode(DateTime.Now)
+            {
+                RegionalSubbasinID = regionalSubbasinID
+            };
+
+            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+
+            dbContext.SaveChanges();
+        }
+
+        private static void MarkTreatmentBMPDirty(vNereidRegionalSubbasinCentralizedBMP treatmentBMP, DatabaseEntities dbContext)
+        {
+            var dirtyModelNode = new DirtyModelNode(DateTime.Now)
+            {
+                TreatmentBMPID = treatmentBMP.TreatmentBMPID
+            };
+
+            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+
             dbContext.SaveChanges();
         }
     }

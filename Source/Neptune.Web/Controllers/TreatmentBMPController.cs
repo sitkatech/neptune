@@ -333,6 +333,7 @@ namespace Neptune.Web.Controllers
         public ActionResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             EditUpstreamBMPViewModel viewModel)
         {
+            // todo: should not allow the selection if the BMP is already used as an upstream
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
@@ -522,6 +523,8 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var delineationGeometry = treatmentBMP.Delineation?.DelineationGeometry;
             var isDelineationDistributed = treatmentBMP.Delineation?.DelineationType == DelineationType.Distributed;
+
+            NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, HttpRequestStorage.DatabaseEntities);
 
             if (!ModelState.IsValid)
             {
