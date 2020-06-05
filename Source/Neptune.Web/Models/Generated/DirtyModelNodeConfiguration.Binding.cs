@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
             Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
+            Property(x => x.CreateDate).HasColumnName(@"CreateDate").HasColumnType("datetime").IsRequired();
 
         }
     }

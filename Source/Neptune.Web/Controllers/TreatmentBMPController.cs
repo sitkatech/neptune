@@ -346,6 +346,9 @@ namespace Neptune.Web.Controllers
                 treatmentBMP.Delineation.DeleteDelineation();
             }
 
+            // need to re-execute the Nereid model for this node since source of run-off was changed.
+            NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, HttpRequestStorage.DatabaseEntities);
+
             SetMessageForDisplay("Upstream BMP successfully updated");
             return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMP)));
         }
@@ -357,9 +360,12 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBmpPrimaryKey.EntityObject;
 
             treatmentBMP.RemoveUpstreamBMP();
-
+            
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay("Upstream BMP successfully removed");
+
+            // need to re-execute the Nereid model here since source of run-off was removed.
+            NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, HttpRequestStorage.DatabaseEntities);
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }

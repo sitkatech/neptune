@@ -30,15 +30,26 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public DirtyModelNode(int dirtyModelNodeID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID) : this()
+        public DirtyModelNode(int dirtyModelNodeID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, DateTime createDate) : this()
         {
             this.DirtyModelNodeID = dirtyModelNodeID;
             this.TreatmentBMPID = treatmentBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DelineationID = delineationID;
+            this.CreateDate = createDate;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public DirtyModelNode(DateTime createDate) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.DirtyModelNodeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.CreateDate = createDate;
+        }
 
 
         /// <summary>
@@ -46,7 +57,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static DirtyModelNode CreateNewBlank()
         {
-            return new DirtyModelNode();
+            return new DirtyModelNode(default(DateTime));
         }
 
         /// <summary>
@@ -97,6 +108,7 @@ namespace Neptune.Web.Models
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
+        public DateTime CreateDate { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DirtyModelNodeID; } set { DirtyModelNodeID = value; } }
 

@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[DirtyModelNode](
 	[WaterQualityManagementPlanID] [int] NULL,
 	[RegionalSubbasinID] [int] NULL,
 	[DelineationID] [int] NULL,
+	[CreateDate] [datetime] NOT NULL,
  CONSTRAINT [PK_DirtyModelNode_DirtyModelNodeID] PRIMARY KEY CLUSTERED 
 (
 	[DirtyModelNodeID] ASC
