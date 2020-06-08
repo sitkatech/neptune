@@ -261,6 +261,8 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(waterQualityManagementPlan, viewModel);
             }
 
+            NereidUtilities.MarkDownstreamNodeDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+
             waterQualityManagementPlan.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay($"Successfully delete \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
 

@@ -554,6 +554,26 @@ namespace Neptune.Web.Common
 
         }
 
+        public static void MarkDownstreamNodeDirty(WaterQualityManagementPlan waterQualityManagementPlan, DatabaseEntities dbContext)
+        {
+            // otherwise, we're looking for either the Regional Subbasin or the Centralized BMP of the Regional Subbasin
+            var regionalSubbasinIDs = waterQualityManagementPlan.LoadGeneratingUnits.Select(x => x.RegionalSubbasinID)
+                .Distinct().ToList();
+
+            var centralizedBMP = dbContext.vNereidRegionalSubbasinCentralizedBMPs.Where(x =>
+                regionalSubbasinIDs.Contains(x.RegionalSubbasinID) && x.RowNumber == 1);
+
+            foreach (var bmp in centralizedBMP)
+            {
+                MarkTreatmentBMPDirty(bmp, dbContext);
+            }
+
+            foreach (var regionalSubbasinID in regionalSubbasinIDs)
+            {
+                MarkRegionalSubbasinDirty(regionalSubbasinID, dbContext);
+            }
+        }
+
         private static void MarkRegionalSubbasinDirty(int? regionalSubbasinID, DatabaseEntities dbContext)
         {
            
