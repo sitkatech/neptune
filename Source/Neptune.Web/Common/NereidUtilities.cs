@@ -590,6 +590,18 @@ namespace Neptune.Web.Common
 
             dbContext.SaveChanges();
         }
+
+        public static void MarkWqmpDirty(WaterQualityManagementPlan waterQualityManagementPlan, DatabaseEntities dbContext)
+        {
+            var dirtyModelNode = new DirtyModelNode(DateTime.Now)
+            {
+                WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID
+            };
+
+            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+
+            dbContext.SaveChanges();
+        }
     }
 
     public class WaterQualityManagementPlanNode

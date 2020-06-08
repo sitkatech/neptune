@@ -306,6 +306,8 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay(
                 $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
+            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
         }
 
@@ -353,6 +355,8 @@ namespace Neptune.Web.Controllers
                 ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary);
             }
 
+            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+            
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }
 
