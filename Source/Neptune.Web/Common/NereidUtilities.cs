@@ -578,6 +578,18 @@ namespace Neptune.Web.Common
 
             dbContext.SaveChanges();
         }
+
+        public static void MarkDelineationDirty(Delineation delineation, DatabaseEntities dbContext)
+        {
+            var dirtyModelNode = new DirtyModelNode(DateTime.Now)
+            {
+                DelineationID = delineation.DelineationID
+            };
+
+            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+
+            dbContext.SaveChanges();
+        }
     }
 
     public class WaterQualityManagementPlanNode

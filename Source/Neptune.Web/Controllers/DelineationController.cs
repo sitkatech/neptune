@@ -228,6 +228,17 @@ namespace Neptune.Web.Controllers
             delineation.DateLastVerified = DateTime.Now;
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
 
+            // if verifying delineation, execute model at the delineation
+            // if de-verifying, execute model at its BMP
+            if (delineation.IsVerified)
+            {
+                NereidUtilities.MarkDelineationDirty(delineation, HttpRequestStorage.DatabaseEntities);
+            }
+            else
+            {
+                NereidUtilities.MarkTreatmentBMPDirty(delineation.TreatmentBMP, HttpRequestStorage.DatabaseEntities);
+            }
+
             return Json(new {success = true});
         }
 
