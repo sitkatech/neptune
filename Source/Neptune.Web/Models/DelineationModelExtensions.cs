@@ -62,24 +62,30 @@ namespace Neptune.Web.Models
 
         /// <summary>
         /// The preference over delete-full for delineation. Nulls the DelineationID on any LGUs,
-        /// deletes any overlaps, and then deletes the delineation.
+        /// deletes any overlaps, deletes the delineation itself, and marks the delineation's
+        /// TreatmentBMP for a model run.
         /// </summary>
         /// <param name="treatmentBMPDelineation"></param>
-        public static void DeleteDelineation(this Delineation treatmentBMPDelineation)
+        /// <param name="dbContext"></param>
+        public static void DeleteDelineation(this Delineation treatmentBMPDelineation, DatabaseEntities dbContext)
         {
+            var treatmentBMP = treatmentBMPDelineation.TreatmentBMP;
+
             foreach (var delineationLoadGeneratingUnit in treatmentBMPDelineation.LoadGeneratingUnits)
             {
                 delineationLoadGeneratingUnit.DelineationID = null;
             }
 
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            dbContext.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMPDelineation
+            dbContext.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMPDelineation
                 .DelineationOverlaps);
-            HttpRequestStorage.DatabaseEntities.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMPDelineation
+            dbContext.DelineationOverlaps.DeleteDelineationOverlap(treatmentBMPDelineation
                 .DelineationOverlapsWhereYouAreTheOverlappingDelineation);
-            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            dbContext.Delineations.DeleteDelineation(treatmentBMPDelineation);
+            dbContext.SaveChanges();
+
+            NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, dbContext);
         }
     }
 }

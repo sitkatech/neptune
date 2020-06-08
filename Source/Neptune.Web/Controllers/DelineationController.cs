@@ -180,7 +180,7 @@ namespace Neptune.Web.Controllers
                 }
                 else
                 {
-                    treatmentBMPDelineation.DeleteDelineation();
+                    treatmentBMPDelineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
                 }
             }
             else
@@ -255,16 +255,7 @@ namespace Neptune.Web.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
-            //foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
-            //{
-            //    delineationLoadGeneratingUnit.DelineationID = null;
-            //}
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            //HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            delineation.DeleteDelineation();
+            delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
 
             if (isDelineationDistributed)
             {
@@ -300,16 +291,7 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteDelineation(delineation, viewModel);
             }
 
-            //foreach (var delineationLoadGeneratingUnit in delineation.LoadGeneratingUnits)
-            //{
-            //    delineationLoadGeneratingUnit.DelineationID = null;
-            //}
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            //HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            delineation.DeleteDelineation();
+            delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
 

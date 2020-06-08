@@ -344,7 +344,7 @@ namespace Neptune.Web.Controllers
 
             if (treatmentBMP.Delineation != null)
             {
-                treatmentBMP.Delineation.DeleteDelineation();
+                treatmentBMP.Delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
             }
 
             // need to re-execute the Nereid model for this node since source of run-off was changed.
