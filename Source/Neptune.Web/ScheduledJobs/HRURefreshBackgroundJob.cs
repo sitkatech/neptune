@@ -84,18 +84,18 @@ namespace Neptune.Web.ScheduledJobs
             }
 
 
-            // if there was any work done, 
+            // if there was any work done, check if all the HRUs are populated and if so blast off with a new solve.
             if (loadGeneratingUnitsToUpdate.Any())
             {
                 DbContext.LoadGeneratingUnits.Load();
 
-                // check if all the HRUs are populated and if so blast off with a new solve.
-                var loadGeneratingUnitsMissingHrus = DbContext.LoadGeneratingUnits.Where(x =>
-                    !x.HRUCharacteristics.Any() && 
-                    x.RegionalSubbasinID != null &&
-                    x.IsEmptyResponseFromHRUService != true);
+                // don't die if it takes longer than 30 seconds for this next query to come back
+                DbContext.Database.CommandTimeout = 3600;
+                var loadGeneratingUnitsMissingHrus = DbContext.LoadGeneratingUnits.Any(x =>
+                    !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
+                      x.IsEmptyResponseFromHRUService == true));
 
-                if (!loadGeneratingUnitsMissingHrus.Any())
+                if (!loadGeneratingUnitsMissingHrus)
                 {
                     BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunTotalNetworkSolve());
                 }
