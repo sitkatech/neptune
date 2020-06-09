@@ -334,17 +334,17 @@ namespace Neptune.Web.Common
 
         public static IEnumerable<NereidResult> DeltaSolve(out string stackTrace,
             out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext,
-            HttpClient httpClient, List<DirtyModelNode> dirtyNodes)
+            HttpClient httpClient, List<DirtyModelNode> dirtyModelNodes)
         {
             stackTrace = "";
             missingNodeIDs = new List<string>();
 
-            graph = NereidUtilities.BuildNetworkGraph(dbContext);
+            graph = BuildNetworkGraph(dbContext);
 
-            var dirtyTreatmentBMPIDs = dirtyNodes.Where(x => x.TreatmentBMPID != null).Select(y => y.TreatmentBMPID).ToList();
-            var dirtyDelineationIDs = dirtyNodes.Where(x => x.DelineationID != null).Select(y => y.DelineationID).ToList();
-            var dirtyRegionalSubbasinIDs = dirtyNodes.Where(x => x.RegionalSubbasinID != null).Select(y => y.RegionalSubbasinID).ToList();
-            var dirtyWaterQualityManagementPlanIDs = dirtyNodes.Where(x => x.WaterQualityManagementPlanID != null).Select(y => y.WaterQualityManagementPlanID).ToList();
+            var dirtyTreatmentBMPIDs = dirtyModelNodes.Where(x => x.TreatmentBMPID != null).Select(y => y.TreatmentBMPID).ToList();
+            var dirtyDelineationIDs = dirtyModelNodes.Where(x => x.DelineationID != null).Select(y => y.DelineationID).ToList();
+            var dirtyRegionalSubbasinIDs = dirtyModelNodes.Where(x => x.RegionalSubbasinID != null).Select(y => y.RegionalSubbasinID).ToList();
+            var dirtyWaterQualityManagementPlanIDs = dirtyModelNodes.Where(x => x.WaterQualityManagementPlanID != null).Select(y => y.WaterQualityManagementPlanID).ToList();
 
             var dirtyGraphNodes = graph.Nodes.Where(x => dirtyTreatmentBMPIDs.Contains(x.TreatmentBMPID) ||
                                                          dirtyDelineationIDs.Contains(x.Delineation?.DelineationID) ||
@@ -362,12 +362,28 @@ namespace Neptune.Web.Common
                 subgraphUrl, out _, httpClient);
 
             var nodesForSubgraph = subgraphResult.Data.SubgraphNodes.SelectMany(x=>x.Nodes).Distinct().ToList();
-            MakeSubgraphFromParentGraphAndNodes(graph, nodesForSubgraph);
+            var deltaSubgraph = MakeSubgraphFromParentGraphAndNodes(graph, nodesForSubgraph);
 
-            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, true);
+            var deltaNereidResults = NetworkSolveImpl(missingNodeIDs, deltaSubgraph, dbContext, httpClient, true);
 
+            var existingNereidResults = dbContext.NereidResults.Local;
+            existingNereidResults.MergeUpsert(deltaNereidResults, existingNereidResults, (old, novel) =>
+            
+                (old.TreatmentBMPID == novel.TreatmentBMPID) && (old.DelineationID == novel.DelineationID) &&
+                    (old.RegionalSubbasinID == novel.RegionalSubbasinID) &&
+                    (old.WaterQualityManagementPlanID == novel.WaterQualityManagementPlanID)
+            , (old, novel) =>
+            {
+                old.FullResponse = novel.FullResponse;
+                old.LastUpdate = novel.LastUpdate;
+            });
 
-            throw new NotImplementedException();
+            dbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
+
+            dbContext.Database.CommandTimeout = 600;
+            dbContext.SaveChanges();
+
+            return deltaNereidResults;
         }
 
         //public static string GetNodeID(this DirtyModelNode node)
@@ -431,7 +447,8 @@ namespace Neptune.Web.Common
 
             var nereidResults = graph.Nodes.Where(x => x.Results != null).Select(x => new NereidResult(x.Results.ToString())
             {
-                TreatmentBMPID = x.TreatmentBMPID, DelineationID = x.Delineation?.DelineationID,
+                TreatmentBMPID = x.TreatmentBMPID,
+                DelineationID = x.Delineation?.DelineationID,
                 NodeID = x.ID,
                 RegionalSubbasinID = x.RegionalSubbasinID,
                 WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID,

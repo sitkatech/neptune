@@ -29,6 +29,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public string InnerExceptionStackTrace { get; set; }
         public SolutionRequestObject FailingRequest { get; set; }
         public SolutionResponseObject FailureResponse { get; set; }
+        public long SolveTime { get; set; }
     }
 
     public class NereidController : NeptuneBaseController
@@ -472,6 +473,8 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var dirtyModelNodes = HttpRequestStorage.DatabaseEntities.DirtyModelNodes.ToList();
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 NereidUtilities.DeltaSolve(out stackTrace, out missingNodeIDs,
@@ -502,10 +505,14 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 stackTrace = exception.StackTrace;
             }
 
+            var deltaSolveTime = stopwatch.ElapsedMilliseconds;
+            stopwatch.Stop();
+
 
             return Json(
                 new SolutionSummary()
                 {
+                    SolveTime = deltaSolveTime,
                     NodesProcessed = graph.Nodes.Count(x => x.Results != null),
                     MissingNodeIDs = missingNodeIDs,
                     Failed = failed,
