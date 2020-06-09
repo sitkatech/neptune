@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using Neptune.Web.Areas.Modeling.Controllers;
-using Neptune.Web.Common;
+﻿using Neptune.Web.Areas.Modeling.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
@@ -68,29 +65,11 @@ namespace Neptune.Web.ScheduledJobs
             var totalNetworkSolveJob = new TotalNetworkSolveJob();
             totalNetworkSolveJob.RunJob();
         }
-    }
 
-    public class TotalNetworkSolveJob : ScheduledBackgroundJobBase
-    {
-        public new static string JobName => "Total Network Solve";
-
-        public HttpClient HttpClient { get; set; }
-
-        public TotalNetworkSolveJob() : base()
+        public static void RunDeltaSolve()
         {
-            HttpClient = new HttpClient();
-        }
-
-        public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
-        {
-            NeptuneEnvironmentType.Local,
-            NeptuneEnvironmentType.Prod,
-            NeptuneEnvironmentType.Qa
-        };
-
-        protected override void RunJobImplementation()
-        {
-            NereidUtilities.TotalNetworkSolve(out _, out _, out _, DbContext, HttpClient);
+            var deltaSolveJob = new DeltaSolveJob();
+            deltaSolveJob.RunJob();
         }
     }
 }

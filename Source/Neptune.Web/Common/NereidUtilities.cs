@@ -381,20 +381,10 @@ namespace Neptune.Web.Common
             dbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
 
             dbContext.Database.CommandTimeout = 600;
-            dbContext.SaveChanges();
+            dbContext.SaveChangesWithNoAuditing();
 
             return deltaNereidResults;
         }
-
-        //public static string GetNodeID(this DirtyModelNode node)
-        //{
-        //    if (node.TreatmentBMPID != null)
-        //    {
-        //        return TreatmentBMPNodeID(node.TreatmentBMPID.Value);
-        //    }
-
-        //    if (node.)
-        //}
 
         private static List<NereidResult> NetworkSolveImpl(List<string> missingNodeIDs, Graph graph, DatabaseEntities dbContext,
             HttpClient httpClient, bool sendPreviousResults)

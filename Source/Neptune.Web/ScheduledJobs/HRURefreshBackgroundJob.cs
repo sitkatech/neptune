@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using System;
+using Hangfire;
 using MoreLinq;
 using Neptune.Web.Common;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Neptune.Web.ScheduledJobs
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Prod,
-            //NeptuneEnvironmentType.Local
+            NeptuneEnvironmentType.Local
         };
         protected override void RunJobImplementation()
         {
@@ -84,24 +85,53 @@ namespace Neptune.Web.ScheduledJobs
             }
 
 
-            // if there was any work done, check if all the HRUs are populated and if so blast off with a new solve.
-            if (loadGeneratingUnitsToUpdate.Any())
+            ExecuteModelIfNeeded(loadGeneratingUnitsToUpdate.Any());
+
+            stopwatch.Stop();
+        }
+
+        private void ExecuteModelIfNeeded(bool wereAnyLoadGeneratingUnitsToUpdate)
+        {
+            var updatedRegionalSubbasins = DbContext.RegionalSubbasins.Where(x=>x.LastUpdate != null).ToList();
+            var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any() ? updatedRegionalSubbasins.Max(x=>x.LastUpdate.Value) : DateTime.MinValue;
+            var updatedNereidResults = DbContext.NereidResults.Where(x=>x.LastUpdate != null).ToList();
+            var lastNereidResultUpdateDate = updatedNereidResults.Any() ? updatedNereidResults.Max(x=>x.LastUpdate.Value) : DateTime.MinValue;
+            
+            if (wereAnyLoadGeneratingUnitsToUpdate)
             {
+                // if there was any work done, check if all the HRUs are populated and if so blast off with a new solve.
                 DbContext.LoadGeneratingUnits.Load();
 
                 // don't die if it takes longer than 30 seconds for this next query to come back
-                DbContext.Database.CommandTimeout = 3600;
+                DbContext.Database.CommandTimeout = 600;
                 var loadGeneratingUnitsMissingHrus = DbContext.LoadGeneratingUnits.Any(x =>
                     !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
                       x.IsEmptyResponseFromHRUService == true));
 
                 if (!loadGeneratingUnitsMissingHrus)
                 {
-                    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunTotalNetworkSolve());
+                    if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
+                    {
+                        BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunTotalNetworkSolve());
+                    }
+                    else if(DbContext.DirtyModelNodes.Any())
+                    {
+                        BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
+                    }
                 }
             }
-
-            stopwatch.Stop();
+            else
+            {
+                // if the job woke up and went immediately to sleep, then all HRUs are populated.
+                if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
+                {
+                    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunTotalNetworkSolve());
+                }
+                else if (DbContext.DirtyModelNodes.Any())
+                {
+                    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
+                }
+            }
         }
     }
 }
