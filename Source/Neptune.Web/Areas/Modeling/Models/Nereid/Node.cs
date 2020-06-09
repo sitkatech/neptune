@@ -11,7 +11,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         public string ID { get; set; }
 
         [JsonIgnore]
-        public RegionalSubbasin RegionalSubbasin { get; set; }
+        public int? RegionalSubbasinID { get; set; }
         [JsonIgnore]
         public Delineation Delineation { get; set; }
         [JsonIgnore]

@@ -453,6 +453,66 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     InnerExceptionStackTrace = stackTrace
                 }, JsonRequestBehavior.AllowGet);
         }
+        
+
+        /// <summary>
+        /// Kicks off a delta solve for whatever DirtyModelNodes are in the system. Does not mark the nodes as processed.
+        /// Testing purposes only; Sitka Admins only.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ActionResult DeltaSolve()
+        {
+            var failed = false;
+            var exceptionMessage = "";
+            var stackTrace = "";
+            var missingNodeIDs = new List<string>();
+            var graph = new Graph();
+
+            var dirtyModelNodes = HttpRequestStorage.DatabaseEntities.DirtyModelNodes.ToList();
+
+            try
+            {
+                NereidUtilities.DeltaSolve(out stackTrace, out missingNodeIDs,
+                    out graph, HttpRequestStorage.DatabaseEntities, HttpClient, dirtyModelNodes);
+            }
+            catch (NereidException<SolutionRequestObject, SolutionResponseObject> nexc)
+            {
+                var data = new SolutionSummary
+                {
+                    NodesProcessed = graph.Nodes.Count(x => x.Results != null),
+                    MissingNodeIDs = missingNodeIDs,
+                    Failed = true,
+                    ExceptionMessage = nexc.Message,
+                    InnerExceptionStackTrace = nexc.InnerException?.StackTrace,
+                    FailingRequest = nexc.Request,
+                    FailureResponse = nexc.Response
+                };
+
+                {
+                    return Content(JsonConvert.SerializeObject(data));
+                    
+                }
+            }
+            catch (Exception exception)
+            {
+                failed = true;
+                exceptionMessage = exception.Message;
+                stackTrace = exception.StackTrace;
+            }
+
+
+            return Json(
+                new SolutionSummary()
+                {
+                    NodesProcessed = graph.Nodes.Count(x => x.Results != null),
+                    MissingNodeIDs = missingNodeIDs,
+                    Failed = failed,
+                    ExceptionMessage = exceptionMessage,
+                    InnerExceptionStackTrace = stackTrace
+                }, JsonRequestBehavior.AllowGet);
+        }
 
         private static void ValidateForTesting(Graph subgraph, List<LandSurface> landSurfaces, List<TreatmentFacility> treatmentFacilities, List<TreatmentSite> treatmentSites)
         {

@@ -103,7 +103,7 @@ namespace Neptune.Web.Common
             var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true).ToList();
 
             rsbNodes = regionalSubbasinsInCoverage
-                .Select(x => new Node { ID = RegionalSubbasinNodeID(x), RegionalSubbasin = x }).ToList();
+                .Select(x => new Node { ID = RegionalSubbasinNodeID(x), RegionalSubbasinID = x.RegionalSubbasinID }).ToList();
 
             rsbEdges = regionalSubbasinsInCoverage
                 .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
@@ -159,7 +159,8 @@ namespace Neptune.Web.Common
             colocationNodes = bmpColocations
                 .Select(x => new Node()
                 {
-                    ID = TreatmentBMPNodeID(x.UpstreamBMPID)
+                    ID = TreatmentBMPNodeID(x.UpstreamBMPID),
+                    TreatmentBMPID = x.UpstreamBMPID
                 }).ToList();
 
             colocationEdges = bmpColocations
@@ -177,7 +178,8 @@ namespace Neptune.Web.Common
             wqmpNodes = wqmpRSBPairings.Select(x => new Node
             {
                 ID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID),
-                WaterQualityManagementPlan = x
+                WaterQualityManagementPlan = x,
+                RegionalSubbasinID = x.RegionalSubbasinID
 
             }).ToList();
 
@@ -295,7 +297,7 @@ namespace Neptune.Web.Common
                     throw new Exception(deserializeObject.Detail.ToString());
                 }
 
-                if (continuePollingResponse.Status != NereidJobStatus.STARTED)
+                if (continuePollingResponse.Status != NereidJobStatus.STARTED && continuePollingResponse.Status != NereidJobStatus.PENDING)
                 {
                     executing = false;
                     responseContent = stringResponse;
@@ -313,13 +315,76 @@ namespace Neptune.Web.Common
         public static IEnumerable<NereidResult> TotalNetworkSolve(out string stackTrace,
             out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient)
         {
-            var solutionSequenceUrl =
-                $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
-
             stackTrace = "";
             missingNodeIDs = new List<string>();
 
             graph = NereidUtilities.BuildNetworkGraph(dbContext);
+
+            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false);
+
+            dbContext.Database.ExecuteSqlCommand(
+                $"EXEC dbo.pDeleteNereidResults");
+            dbContext.NereidResults.AddRange(nereidResults);
+            // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
+            dbContext.Database.CommandTimeout = 600;
+            dbContext.SaveChangesWithNoAuditing();
+
+            return nereidResults;
+        }
+
+        public static IEnumerable<NereidResult> DeltaSolve(out string stackTrace,
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext,
+            HttpClient httpClient, List<DirtyModelNode> dirtyNodes)
+        {
+            stackTrace = "";
+            missingNodeIDs = new List<string>();
+
+            graph = NereidUtilities.BuildNetworkGraph(dbContext);
+
+            var dirtyTreatmentBMPIDs = dirtyNodes.Where(x => x.TreatmentBMPID != null).Select(y => y.TreatmentBMPID).ToList();
+            var dirtyDelineationIDs = dirtyNodes.Where(x => x.DelineationID != null).Select(y => y.DelineationID).ToList();
+            var dirtyRegionalSubbasinIDs = dirtyNodes.Where(x => x.RegionalSubbasinID != null).Select(y => y.RegionalSubbasinID).ToList();
+            var dirtyWaterQualityManagementPlanIDs = dirtyNodes.Where(x => x.WaterQualityManagementPlanID != null).Select(y => y.WaterQualityManagementPlanID).ToList();
+
+            var dirtyGraphNodes = graph.Nodes.Where(x => dirtyTreatmentBMPIDs.Contains(x.TreatmentBMPID) ||
+                                                         dirtyDelineationIDs.Contains(x.Delineation?.DelineationID) ||
+                                                         dirtyRegionalSubbasinIDs
+                                                             .Contains(x.RegionalSubbasinID) ||
+                                                         dirtyWaterQualityManagementPlanIDs
+                                                             .Contains(x.WaterQualityManagementPlan?
+                                                                 .WaterQualityManagementPlanID)).ToList();
+
+            var subgraphUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/subgraph";
+
+            var subgraphRequestObject = new NereidSubgraphRequestObject(graph, dirtyGraphNodes);
+
+            var subgraphResult = RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
+                subgraphUrl, out _, httpClient);
+
+            var nodesForSubgraph = subgraphResult.Data.SubgraphNodes.SelectMany(x=>x.Nodes).Distinct().ToList();
+            MakeSubgraphFromParentGraphAndNodes(graph, nodesForSubgraph);
+
+            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, true);
+
+
+            throw new NotImplementedException();
+        }
+
+        //public static string GetNodeID(this DirtyModelNode node)
+        //{
+        //    if (node.TreatmentBMPID != null)
+        //    {
+        //        return TreatmentBMPNodeID(node.TreatmentBMPID.Value);
+        //    }
+
+        //    if (node.)
+        //}
+
+        private static List<NereidResult> NetworkSolveImpl(List<string> missingNodeIDs, Graph graph, DatabaseEntities dbContext,
+            HttpClient httpClient, bool sendPreviousResults)
+        {
+            var solutionSequenceUrl =
+                $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
 
             var allLoadingInputs = dbContext.vNereidLoadingInputs.ToList();
             var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(dbContext).ToList();
@@ -332,19 +397,31 @@ namespace Neptune.Web.Common
                 NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(
                     new SolutionSequenceRequest(graph), solutionSequenceUrl, out _, httpClient);
 
+            // for the delta run, associate each node with its previous results
+            if (sendPreviousResults)
+            {
+                var previousModelResults = dbContext.NereidResults.ToList();
+                foreach (var node in graph.Nodes)
+                {
+                    var previousNodeResults = previousModelResults.SingleOrDefault(x =>
+                        node.TreatmentBMPID == x.TreatmentBMPID &&
+                        node.WaterQualityManagementPlan?.WaterQualityManagementPlanID ==
+                        x.WaterQualityManagementPlanID &&
+                        node.Delineation?.DelineationID == x.DelineationID &&
+                        node.RegionalSubbasinID == x.RegionalSubbasinID)?.FullResponse;
+                    if (previousNodeResults != null)
+                    {
+                        node.PreviousResults = JObject.Parse(previousNodeResults);
+                    }
+                }
+            }
+
             foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
             {
                 foreach (var series in parallel.Series)
                 {
-                    var subgraphNodeIDs = series.Nodes.Select(x => x.ID).ToList();
-
-                    // create the subgraph that has these nodes as its nodes and the appropriate edges
-                    // appropriate edges = where target in nodes?
-                    var subgraphNodes = graph.Nodes.Where(x => subgraphNodeIDs.Contains(x.ID)).ToList();
-                    var subgraphEdges = graph.Edges.Where(x =>
-                        subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
-
-                    var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
+                    var seriesNodes = series.Nodes;
+                    var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                     SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
                         allModelingQuickBMPs, out var notFoundNodes, httpClient);
@@ -356,19 +433,26 @@ namespace Neptune.Web.Common
             {
                 TreatmentBMPID = x.TreatmentBMPID, DelineationID = x.Delineation?.DelineationID,
                 NodeID = x.ID,
-                RegionalSubbasinID = x.RegionalSubbasin?.RegionalSubbasinID,
+                RegionalSubbasinID = x.RegionalSubbasinID,
                 WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID,
                 LastUpdate = DateTime.Now
             }).ToList();
 
-            dbContext.Database.ExecuteSqlCommand(
-                $"EXEC dbo.pDeleteNereidResults");
-            dbContext.NereidResults.AddRange(nereidResults);
-            // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
-            dbContext.Database.CommandTimeout = 600;
-            dbContext.SaveChangesWithNoAuditing();
-
             return nereidResults;
+        }
+
+        private static Graph MakeSubgraphFromParentGraphAndNodes(Graph graph, List<Node> nodes)
+        {
+            var subgraphNodeIDs = nodes.Select(x => x.ID).ToList();
+
+            // create the subgraph that has these nodes as its nodes and the appropriate edges
+            // appropriate edges = where target in nodes?
+            var subgraphNodes = graph.Nodes.Where(x => subgraphNodeIDs.Contains(x.ID)).ToList();
+            var subgraphEdges = graph.Edges.Where(x =>
+                subgraphNodeIDs.Contains(x.TargetID) && subgraphNodeIDs.Contains(x.SourceID)).ToList();
+
+            var subgraph = new Graph(true, subgraphNodes, subgraphEdges);
+            return subgraph;
         }
 
         public static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph,
@@ -384,8 +468,8 @@ namespace Neptune.Web.Common
 
             var delineationToIncludeIDs = subgraph.Nodes.Where(x => x.Delineation != null).Select(x => x.Delineation.DelineationID)
                 .Distinct().ToList();
-            var regionalSubbasinToIncludeIDs = subgraph.Nodes.Where(x => x.RegionalSubbasin != null)
-                .Select(x => x.RegionalSubbasin.RegionalSubbasinID).Distinct().ToList();
+            var regionalSubbasinToIncludeIDs = subgraph.Nodes.Where(x => x.RegionalSubbasinID != null)
+                .Select(x => x.RegionalSubbasinID).Distinct().ToList();
             var waterQualityManagementPlanToIncludeIDs = subgraph.Nodes.Where(x => x.WaterQualityManagementPlan != null)
                 .Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).Distinct().ToList();
             var treatmentBMPToIncludeIDs = subgraph.Nodes.Where(x => x.TreatmentBMPID != null)
@@ -463,14 +547,8 @@ namespace Neptune.Web.Common
                 var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
                 if (node == null)
                 {
-                    //throw new NereidException<SolutionRequestObject, SolutionResponseObject>
-                    //    ($"Found Node ID {dataLeafResult["node_id"]} in response... Does not exist on graph...")
-                    //    { Request = solutionRequestObject, Response = results.Data };
-
                     // this is an edge case that should only happen if an RSB in the SOC area has
                     // its downstream catchment outside the SOC area for some reason.
-                    // if that truly is the only time this happens, then I'm not worried about it.
-                    // But, if it happens under other circumstances, I'm very worried about it.
                     notFoundNodes.Add(dataLeafResult["node_id"].ToString());
                 }
                 else
