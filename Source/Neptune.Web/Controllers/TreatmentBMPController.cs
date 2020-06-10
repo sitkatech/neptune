@@ -987,6 +987,15 @@ namespace Neptune.Web.Controllers
             return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
         }
 
+        [HttpGet]
+        [TreatmentBMPViewFeature]
+        public JsonResult GetThemResultses(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var entityObject = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMPModelResultSimple = new TreatmentBMPModelResultSimple(entityObject);
+            return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
+        }
+
         private ViewResult ViewUploadBMPs(UploadTreatmentBMPsViewModel viewModel, List<string> errorList)
         {
             var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName)

@@ -1,5 +1,6 @@
 ﻿using Neptune.Web.Areas.Modeling.Controllers;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using HomeController = Neptune.Web.Controllers.HomeController;
 
@@ -18,8 +19,8 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.AboutModelingBMPPerformance());
 
             ModelingResultsUrl =
-                SitkaRoute<NereidController>.BuildUrlFromExpression(x =>
-                    x.GetTreatmentBMPResult(treatmentBMP.TreatmentBMPID));
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
+                    x.GetThemResultses(treatmentBMP));
         }
     }
 }
