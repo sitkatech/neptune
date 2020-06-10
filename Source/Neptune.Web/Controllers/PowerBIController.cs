@@ -8,6 +8,7 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Wordprocessing;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Security;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Controllers
 {
@@ -194,6 +195,25 @@ namespace Neptune.Web.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 MaxJsonLength = int.MaxValue
             };
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [WebServiceNameAndDescriptionAttribute("ModelResults", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
+        public ContentResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        {
+            var jobjects = HttpRequestStorage.DatabaseEntities.NereidResults.ToList()
+                .Select(x =>
+                {
+                    var jobject = JObject.Parse(x.FullResponse);
+                    jobject["TreatmentBMPID"] = x.TreatmentBMPID;
+                    jobject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
+                    jobject["DelineationID"] = x.DelineationID;
+                    jobject["RegionalSubbasinID"] = x.RegionalSubbasinID;
+                    return jobject;
+                }).ToList();
+
+            return Content(new JArray(jobjects).ToString());
         }
     }
 
