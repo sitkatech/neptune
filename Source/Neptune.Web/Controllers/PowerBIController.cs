@@ -199,7 +199,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndDescriptionAttribute("ModelResults", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
+        [WebServiceNameAndDescriptionAttribute("Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
         public ContentResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var jobjects = HttpRequestStorage.DatabaseEntities.NereidResults.ToList()
