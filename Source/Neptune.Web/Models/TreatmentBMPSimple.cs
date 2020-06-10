@@ -89,6 +89,42 @@ namespace Neptune.Web.Models
         public double WinterDryWeatherTCuInflow { get; set; }
         public double WinterDryWeatherTPbInflow { get; set; }
         public double WinterDryWeatherTZnInflow { get; set; }
+        public double DryWeatherInflow { get; set; }
+        public double DryWeatherTreated { get; set; }
+        public double DryWeatherRetained { get; set; }
+        public double DryWeatherUntreated { get; set; }
+        public double DryWeatherTSSRemoved { get; set; }
+        public double DryWeatherTNRemoved { get; set; }
+        public double DryWeatherTPRemoved { get; set; }
+        public double DryWeatherFCRemoved { get; set; }
+        public double DryWeatherTCuRemoved { get; set; }
+        public double DryWeatherTPbRemoved { get; set; }
+        public double DryWeatherTZnRemoved { get; set; }
+        public double DryWeatherTSSInflow { get; set; }
+        public double DryWeatherTNInflow { get; set; }
+        public double DryWeatherTPInflow { get; set; }
+        public double DryWeatherFCInflow { get; set; }
+        public double DryWeatherTCuInflow { get; set; }
+        public double DryWeatherTPbInflow { get; set; }
+        public double DryWeatherTZnInflow { get; set; }
+        public double TotalInflow { get; set; }
+        public double TotalTreated { get; set; }
+        public double TotalRetained { get; set; }
+        public double TotalUntreated { get; set; }
+        public double TotalTSSRemoved { get; set; }
+        public double TotalTNRemoved { get; set; }
+        public double TotalTPRemoved { get; set; }
+        public double TotalFCRemoved { get; set; }
+        public double TotalTCuRemoved { get; set; }
+        public double TotalTPbRemoved { get; set; }
+        public double TotalTZnRemoved { get; set; }
+        public double TotalTSSInflow { get; set; }
+        public double TotalTNInflow { get; set; }
+        public double TotalTPInflow { get; set; }
+        public double TotalFCInflow { get; set; }
+        public double TotalTCuInflow { get; set; }
+        public double TotalTPbInflow { get; set; }
+        public double TotalTZnInflow { get; set; }
 
         public TreatmentBMPModelResultSimple(TreatmentBMP treatmentBMP)
         {
@@ -150,6 +186,44 @@ namespace Neptune.Web.Models
             WinterDryWeatherTCuInflow = (nereidResult["winter_dwTCu_load_lbs_inflow"].Value<double>() * PoundsToGramsFactor).RoundToSignificantDigits(2);
             WinterDryWeatherTPbInflow = (nereidResult["winter_dwTPb_load_lbs_inflow"].Value<double>() * PoundsToGramsFactor).RoundToSignificantDigits(2);
             WinterDryWeatherTZnInflow = (nereidResult["winter_dwTZn_load_lbs_inflow"].Value<double>() * PoundsToGramsFactor).RoundToSignificantDigits(2);
+
+            DryWeatherInflow = SummerDryWeatherInflow + WinterDryWeatherInflow;
+            DryWeatherTreated = SummerDryWeatherTreated + WinterDryWeatherTreated;
+            DryWeatherRetained = SummerDryWeatherRetained + WinterDryWeatherRetained;
+            DryWeatherUntreated = SummerDryWeatherUntreated + WinterDryWeatherUntreated;
+            DryWeatherTSSRemoved = SummerDryWeatherTSSRemoved + WinterDryWeatherTSSRemoved;
+            DryWeatherTNRemoved = SummerDryWeatherTNRemoved + WinterDryWeatherTNRemoved;
+            DryWeatherTPRemoved = SummerDryWeatherTPRemoved + WinterDryWeatherTPRemoved;
+            DryWeatherFCRemoved = SummerDryWeatherFCRemoved + WinterDryWeatherFCRemoved;
+            DryWeatherTCuRemoved = SummerDryWeatherTCuRemoved + WinterDryWeatherTCuRemoved;
+            DryWeatherTPbRemoved = SummerDryWeatherTPbRemoved + WinterDryWeatherTPbRemoved;
+            DryWeatherTZnRemoved = SummerDryWeatherTZnRemoved + WinterDryWeatherTZnRemoved;
+            DryWeatherTSSInflow = SummerDryWeatherTSSInflow + WinterDryWeatherTSSInflow;
+            DryWeatherTNInflow = SummerDryWeatherTNInflow + WinterDryWeatherTNInflow;
+            DryWeatherTPInflow = SummerDryWeatherTPInflow + WinterDryWeatherTPInflow;
+            DryWeatherFCInflow = SummerDryWeatherFCInflow + WinterDryWeatherFCInflow;
+            DryWeatherTCuInflow = SummerDryWeatherTCuInflow + WinterDryWeatherTCuInflow;
+            DryWeatherTPbInflow = SummerDryWeatherTPbInflow + WinterDryWeatherTPbInflow;
+            DryWeatherTZnInflow = SummerDryWeatherTZnInflow + WinterDryWeatherTZnInflow;
+
+            TotalInflow = DryWeatherInflow + WetWeatherInflow;
+            TotalTreated = DryWeatherTreated + WetWeatherTreated;
+            TotalRetained = DryWeatherRetained + WetWeatherRetained;
+            TotalUntreated = DryWeatherUntreated + WetWeatherUntreated;
+            TotalTSSRemoved = DryWeatherTSSRemoved + WetWeatherTSSRemoved;
+            TotalTNRemoved = DryWeatherTNRemoved + WetWeatherTNRemoved;
+            TotalTPRemoved = DryWeatherTPRemoved + WetWeatherTPRemoved;
+            TotalFCRemoved = DryWeatherFCRemoved + WetWeatherFCRemoved;
+            TotalTCuRemoved = DryWeatherTCuRemoved + WetWeatherTCuRemoved;
+            TotalTPbRemoved = DryWeatherTPbRemoved + WetWeatherTPbRemoved;
+            TotalTZnRemoved = DryWeatherTZnRemoved + WetWeatherTZnRemoved;
+            TotalTSSInflow = DryWeatherTSSInflow + WetWeatherTSSInflow;
+            TotalTNInflow = DryWeatherTNInflow + WetWeatherTNInflow;
+            TotalTPInflow = DryWeatherTPInflow + WetWeatherTPInflow;
+            TotalFCInflow = DryWeatherFCInflow + WetWeatherFCInflow;
+            TotalTCuInflow = DryWeatherTCuInflow + WetWeatherTCuInflow;
+            TotalTPbInflow = DryWeatherTPbInflow + WetWeatherTPbInflow;
+            TotalTZnInflow = DryWeatherTZnInflow + WetWeatherTZnInflow;
         }
 
 
