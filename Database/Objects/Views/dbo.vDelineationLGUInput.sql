@@ -12,5 +12,6 @@ from
 	join dbo.TreatmentBMPType ttype
 		on ttype.TreatmentBMPTypeID = t.TreatmentBMPTypeID
 Where d.DelineationTypeID = 2  -- distributed
+ and d.IsVerified = 1 -- no provis!
  and ttype.TreatmentBMPModelingTypeID is not null  --only include modeling BMPs
 GO

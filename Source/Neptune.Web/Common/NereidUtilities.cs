@@ -131,6 +131,8 @@ namespace Neptune.Web.Common
         {
             var distributedDelineations = dbContext.Delineations.Include(x=>x.TreatmentBMP)
                 .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID &&
+                            // don't include the provisionals
+                            x.IsVerified &&
                             // don't include delineations for non-modeled BMPs
                             x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
                             x.TreatmentBMP.RegionalSubbasinID != null &&
