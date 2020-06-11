@@ -17,7 +17,11 @@ select tb.TreatmentBMPID as PrimaryKey, tb.TreatmentBMPName, tb.UpstreamBMPID,
 	   tma.WaterQualityDetentionVolume, tma.WettedFootprint, tma.WinterHarvestedWaterDemand,
 	   om.MonthsOfOperationDisplayName as OperationMonths,
 	   pz.DesignStormwaterDepthInInches, ws.WatershedName,
-	   dt.DelineationTypeDisplayName as DelineationType
+	   dt.DelineationTypeDisplayName as DelineationType,
+	   case
+		When d.IsVerified = 1 then 'Verified'
+		else 'Provisional'
+	   end as DelineationStatus
 from dbo.TreatmentBMP tb
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID and tbt.IsAnalyzedInModelingModule = 1
 join dbo.StormwaterJurisdiction sj on tb.StormwaterJurisdictionID = sj.StormwaterJurisdictionID

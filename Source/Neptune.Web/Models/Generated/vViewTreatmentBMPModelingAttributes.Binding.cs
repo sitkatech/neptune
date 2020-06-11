@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName, string delineationType) : this()
+        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName, string delineationType, string delineationStatus) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
@@ -67,6 +67,7 @@ namespace Neptune.Web.Models
             this.DesignStormwaterDepthInInches = designStormwaterDepthInInches;
             this.WatershedName = watershedName;
             this.DelineationType = delineationType;
+            this.DelineationStatus = delineationStatus;
         }
 
         /// <summary>
@@ -114,6 +115,7 @@ namespace Neptune.Web.Models
             this.DesignStormwaterDepthInInches = vViewTreatmentBMPModelingAttributes.DesignStormwaterDepthInInches;
             this.WatershedName = vViewTreatmentBMPModelingAttributes.WatershedName;
             this.DelineationType = vViewTreatmentBMPModelingAttributes.DelineationType;
+            this.DelineationStatus = vViewTreatmentBMPModelingAttributes.DelineationStatus;
             CallAfterConstructor(vViewTreatmentBMPModelingAttributes);
         }
 
@@ -159,5 +161,6 @@ namespace Neptune.Web.Models
         public double? DesignStormwaterDepthInInches { get; set; }
         public string WatershedName { get; set; }
         public string DelineationType { get; set; }
+        public string DelineationStatus { get; set; }
     }
 }
