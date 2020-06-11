@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidLoadingInput(int primaryKey, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int lSPCBasinKey, string hRUCharacteristicLandUseCodeName, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres) : this()
+        public vNereidLoadingInput(int primaryKey, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int lSPCBasinKey, string hRUCharacteristicLandUseCodeName, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, bool? delineationIsVerified) : this()
         {
             this.PrimaryKey = primaryKey;
             this.DelineationID = delineationID;
@@ -38,6 +38,7 @@ namespace Neptune.Web.Models
             this.SlopePercentage = slopePercentage;
             this.Area = area;
             this.ImperviousAcres = imperviousAcres;
+            this.DelineationIsVerified = delineationIsVerified;
         }
 
         /// <summary>
@@ -56,6 +57,7 @@ namespace Neptune.Web.Models
             this.SlopePercentage = vNereidLoadingInput.SlopePercentage;
             this.Area = vNereidLoadingInput.Area;
             this.ImperviousAcres = vNereidLoadingInput.ImperviousAcres;
+            this.DelineationIsVerified = vNereidLoadingInput.DelineationIsVerified;
             CallAfterConstructor(vNereidLoadingInput);
         }
 
@@ -72,5 +74,6 @@ namespace Neptune.Web.Models
         public int SlopePercentage { get; set; }
         public double Area { get; set; }
         public double ImperviousAcres { get; set; }
+        public bool? DelineationIsVerified { get; set; }
     }
 }

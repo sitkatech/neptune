@@ -767,39 +767,49 @@
             </div>
 
         </div>
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Land Use Statistics
-            </div>
-            <div class="panel-body">
-                @if ((ViewDataTyped.TreatmentBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.Delineation != null) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null))
-                {
-                    HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
-                }
-                else if (ViewDataTyped.TreatmentBMP.Delineation == null && (ViewDataTyped.TreatmentBMP.UpstreamBMP == null || ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation == null))
-                {
-                    <p class="systemText">
-                        No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
-                        @{
-                            if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
-                            {
-                                @:<a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.
+        @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule)
+        {
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Land Use Statistics
+                </div>
+                <div class="panel-body">
+                    @if ((ViewDataTyped.TreatmentBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.TreatmentBMP.Delineation.IsVerified) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified))
+                    {
+                        HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
+                    }
+                    else if (ViewDataTyped.TreatmentBMP.Delineation == null && (ViewDataTyped.TreatmentBMP.UpstreamBMP == null || ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation == null))
+                    {
+                        <p class="systemText">
+                            No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
+                            @{
+                                if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
+                                {
+                                    @:<a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.
+                                }
+                                else
+                                {
+                                    @:delineation is provided to the Upstream BMP or the Upstream BMP is removed.
+                                }
                             }
-                            else
-                            {
-                                @:delineation is provided to the Upstream BMP or the Upstream BMP is removed.
-                            }
-                        }
-                    </p>
-                }
-                else
-                {
-                    <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
-                }
+                        </p>
+                    }
+                    else if (ViewDataTyped.TreatmentBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.Delineation.IsVerified)
+                    {
+                        <p class="systemText">This Treatment BMP's Delineation is marked as Provisional. Land Use Statistics will not be calculated until the Delineation is verified.</p>
+                    }
+                    else if (ViewDataTyped.TreatmentBMP.UpstreamBMP != null && !ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified)
+                    {
+                        <p class="systemText">The Upstream BMP's Delineation is marked as Provisional. Land Use Statistics will not be calculated until the Upstream BMP's Delineation is verified.</p>
+                    }
+                    else
+                    {
+                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                    }
+                </div>
+
             </div>
-
-        </div>
-
+        }
     </div>
 
     <div class="col-xs-12">

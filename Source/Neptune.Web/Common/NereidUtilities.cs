@@ -79,7 +79,10 @@ namespace Neptune.Web.Common
 
         public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit)
         {
-            if (loadGeneratingUnit.DelineationID != null)
+            // provisional delineations are tracked in the LGU layer, but do not contribute runoff
+            // to their respective BMPs in the model therefore those LGUs should fall back to their
+            // WQMP if exists, otherwise their RSB.
+            if (loadGeneratingUnit.DelineationID != null && loadGeneratingUnit.DelineationIsVerified == true)
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
             }
