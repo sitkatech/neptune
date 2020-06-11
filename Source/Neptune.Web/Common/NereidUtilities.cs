@@ -362,8 +362,17 @@ namespace Neptune.Web.Common
 
             var subgraphResult = RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
                 subgraphUrl, out _, httpClient);
+            List<Node> nodesForSubgraph;
+            try
+            {
+                nodesForSubgraph = subgraphResult.Data.SubgraphNodes.SelectMany(x => x.Nodes).Distinct().ToList();
+            }
+            catch (Exception e)
+            {
+                throw new NereidException<NereidSubgraphRequestObject, SubgraphResult>(
+                    $"Exception thrown accessing result of subgraph call. Status was {subgraphResult.Status}.", e);
+            }
 
-            var nodesForSubgraph = subgraphResult.Data.SubgraphNodes.SelectMany(x=>x.Nodes).Distinct().ToList();
             var deltaSubgraph = MakeSubgraphFromParentGraphAndNodes(graph, nodesForSubgraph);
 
             var deltaNereidResults = NetworkSolveImpl(missingNodeIDs, deltaSubgraph, dbContext, httpClient, true);
@@ -379,7 +388,7 @@ namespace Neptune.Web.Common
                 old.FullResponse = novel.FullResponse;
                 old.LastUpdate = novel.LastUpdate;
             });
-
+                
             dbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
 
             dbContext.Database.CommandTimeout = 600;
