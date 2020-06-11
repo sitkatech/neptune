@@ -989,7 +989,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPViewFeature]
-        public JsonResult GetThemResultses(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public JsonResult GetModelResults(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var entityObject = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPModelResultSimple = new TreatmentBMPModelResultSimple(entityObject);

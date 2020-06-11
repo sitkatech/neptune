@@ -13,8 +13,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Mvc;
-using LtInfo.Common;
-using Newtonsoft.Json.Linq;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 using SolutionResponseObject = Neptune.Web.Areas.Modeling.Models.Nereid.SolutionResponseObject;
 
@@ -347,21 +345,6 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     responseContent,
                     requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
                 }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        [CrossAreaRoute]
-        public JsonResult GetTreatmentBMPResult(int treatmentBMPID)
-        {
-            var fullResponse = HttpRequestStorage.DatabaseEntities.NereidResults.SingleOrDefault(x=>x.TreatmentBMPID == treatmentBMPID)?.FullResponse;
-            if (fullResponse == null)
-            {
-                throw new SitkaRecordNotFoundException($"No results for {treatmentBMPID}.");
-            }
-            var jObject = JObject.Parse(fullResponse);
-            var keyValue = jObject.ToKeyValue();
-            return Json(keyValue, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

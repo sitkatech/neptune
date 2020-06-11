@@ -20,7 +20,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             ModelingResultsUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
-                    x.GetThemResultses(treatmentBMP));
+                    x.GetModelResults(treatmentBMP));
         }
     }
 }
