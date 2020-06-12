@@ -275,7 +275,7 @@ namespace Neptune.Web.Common
 
             var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
 
-            var executing = deserializeObject.Status == NereidJobStatus.STARTED;
+            var executing = deserializeObject.Status == NereidJobStatus.STARTED || deserializeObject.Status == NereidJobStatus.PENDING;
             var resultRoute = deserializeObject.ResultRoute;
 
             responseContent = postResultContentAsStringResult;
