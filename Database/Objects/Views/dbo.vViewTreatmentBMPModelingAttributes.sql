@@ -20,7 +20,8 @@ select tb.TreatmentBMPID as PrimaryKey, tb.TreatmentBMPName, tb.UpstreamBMPID,
 	   dt.DelineationTypeDisplayName as DelineationType,
 	   case
 		When d.IsVerified = 1 then 'Verified'
-		else 'Provisional'
+		when d.IsVerified = 0 then 'Provisional'
+		else null
 	   end as DelineationStatus
 from dbo.TreatmentBMP tb
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID and tbt.IsAnalyzedInModelingModule = 1

@@ -585,9 +585,13 @@
                     {
                         <p class="systemText">This Treatment BMP record is missing fields required to calculate model results. Please provide a delineation and required Modeling Parameters above.</p>
                     }
-                    else if (!ViewDataTyped.TreatmentBMP.Delineation.IsVerified)
+                    else if ((ViewDataTyped.TreatmentBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.Delineation.IsVerified))
                     {
                         <p class="systemText">This Treatment BMP's Delineation is marked as Provisional. Model results will not be calculated until the Delineation is verified.</p>
+                    }
+                    else if ((ViewDataTyped.TreatmentBMP.UpstreamBMP != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified))
+                    {
+                        <p class="systemText">The Upstream BMP's Delineation is marked as Provisional. Model results will not be calculated until the Upstream BMP's Delineation is verified.</p>
                     }
                     else
                     {
