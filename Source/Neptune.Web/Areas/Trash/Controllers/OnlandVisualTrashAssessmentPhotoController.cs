@@ -31,28 +31,25 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewAndRequiresJurisdictionsFeature]
         public ActionResult StageObservationPhoto(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
-            ObservationPhotoStagingSimple opss)
+            ObservationPhotoStagingSimple observationPhotoStagingSimple)
         {
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
 
+                // This endpoint can error out in a completely client-dependent way where the user's only recourse
+                // is to try again until it works. We've never seen a server-side error from this endpoint that we
+                // would be able to fix per-se, so just cancel the logging so we don't get bothered by it.
                 SitkaGlobalBase.CancelErrorLoggingFromApplicationEnd();
-
-                var error = RenderPartialViewToString(
-                    "~/Areas/Trash/Views/OnlandVisualTrashAssessmentPhoto/ObservationPhotoStaging.cshtml",
-                    new ObservationPhotoStagingViewData(), opss);
-
-                Logger.Error($"Error reported in OnlandVisualTrashAssessment/RecordObservations: \n{error}");
 
                 return Json(new
                 {
                     Error =
-                        "There was an error uploading the image. Please try again. If the issue persists, please contact support."
+                        "There was an error uploading the image. Please try again."
                 });
             }
 
-            var fileResource = FileResource.CreateNewFromHttpPostedFile(opss.Photo, CurrentPerson);
+            var fileResource = FileResource.CreateNewFromHttpPostedFile(observationPhotoStagingSimple.Photo, CurrentPerson);
 
             var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,
                 onlandVisualTrashAssessmentPrimaryKey.EntityObject);

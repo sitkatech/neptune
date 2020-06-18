@@ -52,17 +52,6 @@
         <li role="presentation" ng-class="{'active':weatherType === 'wet'}"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" ng-click="weatherType = 'wet'">Wet</a></li>
     </ul>
     <br />
-    @*<div class="resultSelector" ng-init="weatherType = 'total'">
-            <label class="btn btn-neptune" ng-class="{'active':weatherType === 'total'}" ng-click="weatherType = 'total'">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="total" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Total
-            </label>
-            <label class="btn btn-neptune" ng-class="{'active':weatherType === 'dry'}" ng-click="weatherType = 'dry'">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="dry" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Dry
-            </label>
-            <label class="btn btn-neptune" ng-class="{'active':weatherType === 'wet'}" ng-click="weatherType = 'wet'">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="wet" ng-model="model.weatherType" style="visibility:hidden; width:0px;"> Wet
-            </label>
-        </div>*@
     <div ng-if="modelResults"></div>
     <table class="table table-responsive table-striped table-condensed modelResults" ng-if="weatherType ==='wet'">
         <thead>
@@ -75,22 +64,22 @@
         <tbody>
             <tr>
                 <td class="left">To BMP</td>
-                <td><span ng-bind='modelResults.WetWeatherInflow | number'></span></td>
+                <td><span ng-bind='modelResults.WetWeatherInflow | sigFig:3 | number'></span></td>
                 <td>--</td>
             </tr>
             <tr>
                 <td class="left">Treated and Discharged</td>
-                <td><span ng-bind='modelResults.WetWeatherTreated | number'></span></td>
+                <td><span ng-bind='modelResults.WetWeatherTreated | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.WetWeatherTreated / modelResults.WetWeatherInflow || 0 | number: 0'></span>%</td>
             </tr>
             <tr>
                 <td class="left">Retained or Recycled</td>
-                <td><span ng-bind='modelResults.WetWeatherRetained | number'></span></td>
+                <td><span ng-bind='modelResults.WetWeatherRetained | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.WetWeatherRetained / modelResults.WetWeatherInflow || 0 | number: 0'></span>%</td>
             </tr>
             <tr>
                 <td class="left">Untreated (Bypass or Overflow)</td>
-                <td><span ng-bind='modelResults.WetWeatherUntreated | number'></span></td>
+                <td><span ng-bind='modelResults.WetWeatherUntreated | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.WetWeatherUntreated / modelResults.WetWeatherInflow || 0 | number: 0'></span>%</td>
             </tr>
         </tbody>
@@ -104,37 +93,37 @@
         <tbody>
             <tr>
                 <td class="left">Total Suspended Solids</td>
-                <td><span ng-bind="modelResults.WetWeatherTSSRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.WetWeatherTSSRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherTSSRemoved/modelResults.WetWeatherTSSInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Nitrogen</td>
-                <td><span ng-bind="modelResults.WetWeatherTNRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.WetWeatherTNRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherTNRemoved/modelResults.WetWeatherTNInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Phosphorous</td>
-                <td><span ng-bind="modelResults.WetWeatherTPRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.WetWeatherTPRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherTPRemoved/modelResults.WetWeatherTPInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Fecal Coliform</td>
-                <td><span ng-bind="modelResults.WetWeatherFCRemoved | number"></span> billion CFUs</td>
+                <td><span ng-bind="modelResults.WetWeatherFCRemoved | sigFig:2 | number"></span> billion CFUs</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherFCRemoved/modelResults.WetWeatherFCInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Copper</td>
-                <td><span ng-bind="modelResults.WetWeatherTCuRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.WetWeatherTCuRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherTCuRemoved/modelResults.WetWeatherTCuInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Lead</td>
-                <td><span ng-bind="modelResults.WetWeatherTPbRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.WetWeatherTPbRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherTPbRemoved/modelResults.WetWeatherTPbInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Zinc</td>
-                <td><span ng-bind="modelResults.WetWeatherTZnRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.WetWeatherTZnRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.WetWeatherTZnRemoved/modelResults.WetWeatherTZnInflow || 0 | number: 0"></span>%</td>
             </tr>
         </tbody>
@@ -150,22 +139,22 @@
         <tbody>
             <tr>
                 <td class="left">To BMP</td>
-                <td><span ng-bind='modelResults.DryWeatherInflow | number'></span></td>
+                <td><span ng-bind='modelResults.DryWeatherInflow | sigFig:3 | number'></span></td>
                 <td>--</td>
             </tr>
             <tr>
                 <td class="left">Treated and Discharged</td>
-                <td><span ng-bind='modelResults.DryWeatherTreated | number'></span></td>
+                <td><span ng-bind='modelResults.DryWeatherTreated | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.DryWeatherTreated / modelResults.DryWeatherInflow || 0 | number: 0'></span>%</td>
             </tr>
             <tr>
                 <td class="left">Retained or Recycled</td>
-                <td><span ng-bind='modelResults.DryWeatherRetained | number'></span></td>
+                <td><span ng-bind='modelResults.DryWeatherRetained | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.DryWeatherRetained / modelResults.DryWeatherInflow || 0 | number: 0'></span>%</td>
             </tr>
             <tr>
                 <td class="left">Untreated (Bypass or Overflow)</td>
-                <td><span ng-bind='modelResults.DryWeatherUntreated | number'></span></td>
+                <td><span ng-bind='modelResults.DryWeatherUntreated | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.DryWeatherUntreated / modelResults.DryWeatherInflow || 0 | number: 0'></span>%</td>
             </tr>
         </tbody>
@@ -179,37 +168,37 @@
         <tbody>
             <tr>
                 <td class="left">Total Suspended Solids</td>
-                <td><span ng-bind="modelResults.DryWeatherTSSRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.DryWeatherTSSRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherTSSRemoved/modelResults.DryWeatherTSSInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Nitrogen</td>
-                <td><span ng-bind="modelResults.DryWeatherTNRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.DryWeatherTNRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherTNRemoved/modelResults.DryWeatherTNInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Phosphorous</td>
-                <td><span ng-bind="modelResults.DryWeatherTPRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.DryWeatherTPRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherTPRemoved/modelResults.DryWeatherTPInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Fecal Coliform</td>
-                <td><span ng-bind="modelResults.DryWeatherFCRemoved | number"></span> billion CFUs</td>
+                <td><span ng-bind="modelResults.DryWeatherFCRemoved | sigFig:2 | number"></span> billion CFUs</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherFCRemoved/modelResults.DryWeatherFCInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Copper</td>
-                <td><span ng-bind="modelResults.DryWeatherTCuRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.DryWeatherTCuRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherTCuRemoved/modelResults.DryWeatherTCuInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Lead</td>
-                <td><span ng-bind="modelResults.DryWeatherTPbRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.DryWeatherTPbRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherTPbRemoved/modelResults.DryWeatherTPbInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Zinc</td>
-                <td><span ng-bind="modelResults.DryWeatherTZnRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.DryWeatherTZnRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.DryWeatherTZnRemoved/modelResults.DryWeatherTZnInflow || 0 | number: 0"></span>%</td>
             </tr>
         </tbody>
@@ -225,22 +214,22 @@
         <tbody>
             <tr>
                 <td class="left">To BMP</td>
-                <td><span ng-bind='modelResults.TotalInflow | number'></span></td>
+                <td><span ng-bind='modelResults.TotalInflow | sigFig:3 | number'></span></td>
                 <td>--</td>
             </tr>
             <tr>
                 <td class="left">Treated and Discharged</td>
-                <td><span ng-bind='modelResults.TotalTreated | number'></span></td>
+                <td><span ng-bind='modelResults.TotalTreated | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.TotalTreated / modelResults.TotalInflow || 0 | number: 0'></span>%</td>
             </tr>
             <tr>
                 <td class="left">Retained or Recycled</td>
-                <td><span ng-bind='modelResults.TotalRetained | number'></span></td>
+                <td><span ng-bind='modelResults.TotalRetained | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.TotalRetained / modelResults.TotalInflow || 0 | number: 0'></span>%</td>
             </tr>
             <tr>
                 <td class="left">Untreated (Bypass or Overflow)</td>
-                <td><span ng-bind='modelResults.TotalUntreated | number'></span></td>
+                <td><span ng-bind='modelResults.TotalUntreated | sigFig:3 | number'></span></td>
                 <td><span ng-bind='100 * modelResults.TotalUntreated / modelResults.TotalInflow || 0 | number: 0'></span>%</td>
             </tr>
         </tbody>
@@ -254,48 +243,63 @@
         <tbody>
             <tr>
                 <td class="left">Total Suspended Solids</td>
-                <td><span ng-bind="modelResults.TotalTSSRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.TotalTSSRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.TotalTSSRemoved/modelResults.TotalTSSInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Nitrogen</td>
-                <td><span ng-bind="modelResults.TotalTNRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.TotalTNRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.TotalTNRemoved/modelResults.TotalTNInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Phosphorous</td>
-                <td><span ng-bind="modelResults.TotalTPRemoved | number"></span> kg</td>
+                <td><span ng-bind="modelResults.TotalTPRemoved | sigFig:2 | number"></span> kg</td>
                 <td><span ng-bind="100 * modelResults.TotalTPRemoved/modelResults.TotalTPInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Fecal Coliform</td>
-                <td><span ng-bind="modelResults.TotalFCRemoved | number"></span> billion CFUs</td>
+                <td><span ng-bind="modelResults.TotalFCRemoved | sigFig:2 | number"></span> billion CFUs</td>
                 <td><span ng-bind="100 * modelResults.TotalFCRemoved/modelResults.TotalFCInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Copper</td>
-                <td><span ng-bind="modelResults.TotalTCuRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.TotalTCuRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.TotalTCuRemoved/modelResults.TotalTCuInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Lead</td>
-                <td><span ng-bind="modelResults.TotalTPbRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.TotalTPbRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.TotalTPbRemoved/modelResults.TotalTPbInflow || 0 | number: 0"></span>%</td>
             </tr>
             <tr>
                 <td class="left">Total Zinc</td>
-                <td><span ng-bind="modelResults.TotalTZnRemoved | number"></span> g</td>
+                <td><span ng-bind="modelResults.TotalTZnRemoved | sigFig:2 | number"></span> g</td>
                 <td><span ng-bind="100 * modelResults.TotalTZnRemoved/modelResults.TotalTZnInflow || 0 | number: 0"></span>%</td>
             </tr>
         </tbody>
     </table>
+    
     <p class="systemText">Results last calculated at <span ng-bind="modelResults.LastUpdated"></span></p>
+    <p class="systemText" ng-if="modelResults.Outdated">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</p>
+
 </div>
 
 <a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
 
 <script>
-    angular.module("NeptuneApp").controller("ModeledBMPPerformanceController",
+    angular.module("NeptuneApp").filter('sigFig', function() {
+        return function (input, prec) {
+            var inExponentialNotation = input.toPrecision(prec);
+            var split = inExponentialNotation.split("e+");
+            if (split[1]) {
+                return Number((split[0] + "0".repeat(split[1] - prec + 1)).replace(".", ""));
+            } else {
+                return split[0];
+            }
+            };
+        })
+
+        .controller("ModeledBMPPerformanceController",
         function($scope) {
             jQuery.ajax("@ViewDataTyped.ModelingResultsUrl").done(function(data) {
                 $scope.modelResults = data;
