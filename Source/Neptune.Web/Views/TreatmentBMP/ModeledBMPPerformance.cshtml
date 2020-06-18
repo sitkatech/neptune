@@ -289,15 +289,8 @@
 <script>
     angular.module("NeptuneApp").filter('sigFig', function() {
         return function (input, prec) {
-            var inExponentialNotation = input.toPrecision(prec);
-            var split = inExponentialNotation.split("e+");
-            if (split[1]) {
-                return Number((split[0] + "0".repeat(split[1] - prec + 1)).replace(".", ""));
-            } else {
-                return split[0];
-            }
-            };
-        })
+            return parseFloat(input.toPrecision(prec));
+        }})
 
         .controller("ModeledBMPPerformanceController",
         function($scope) {
