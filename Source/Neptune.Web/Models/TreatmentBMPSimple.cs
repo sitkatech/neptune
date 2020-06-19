@@ -145,7 +145,7 @@ namespace Neptune.Web.Models
             WetWeatherInflow = fullResults.ExtractDoubleValue("runoff_volume_cuft_inflow");
             WetWeatherTreated = fullResults.ExtractDoubleValue("runoff_volume_cuft_treated");
             WetWeatherRetained = fullResults.ExtractDoubleValue("runoff_volume_cuft_retained");
-            WetWeatherUntreated = (fullResults.ExtractDoubleValue("runoff_volume_cuft_bypassed") * PoundsToKilogramsFactor);
+            WetWeatherUntreated = (fullResults.ExtractDoubleValue("runoff_volume_cuft_bypassed"));
             WetWeatherTSSRemoved = (fullResults.ExtractDoubleValue("TSS_load_lbs_removed") * PoundsToKilogramsFactor);
             WetWeatherTNRemoved = (fullResults.ExtractDoubleValue("TN_load_lbs_removed") * PoundsToKilogramsFactor);
             WetWeatherTPRemoved = (fullResults.ExtractDoubleValue("TP_load_lbs_removed") * PoundsToKilogramsFactor);
@@ -164,7 +164,7 @@ namespace Neptune.Web.Models
             SummerDryWeatherInflow = fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_inflow");
             SummerDryWeatherTreated = fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_treated");
             SummerDryWeatherRetained = fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_retained");
-            SummerDryWeatherUntreated = (fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_bypassed") * PoundsToKilogramsFactor);
+            SummerDryWeatherUntreated = (fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_bypassed"));
             SummerDryWeatherTSSRemoved = (fullResults.ExtractDoubleValue("summer_dwTSS_load_lbs_removed") * PoundsToKilogramsFactor);
             SummerDryWeatherTNRemoved = (fullResults.ExtractDoubleValue("summer_dwTN_load_lbs_removed") * PoundsToKilogramsFactor);
             SummerDryWeatherTPRemoved = (fullResults.ExtractDoubleValue("summer_dwTP_load_lbs_removed") * PoundsToKilogramsFactor);
@@ -183,7 +183,7 @@ namespace Neptune.Web.Models
             WinterDryWeatherInflow = fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_inflow");
             WinterDryWeatherTreated = fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_treated");
             WinterDryWeatherRetained = fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_retained");
-            WinterDryWeatherUntreated = (fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_bypassed") * PoundsToKilogramsFactor);
+            WinterDryWeatherUntreated = (fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_bypassed"));
             WinterDryWeatherTSSRemoved = (fullResults.ExtractDoubleValue("winter_dwTSS_load_lbs_removed") * PoundsToKilogramsFactor);
             WinterDryWeatherTNRemoved = (fullResults.ExtractDoubleValue("winter_dwTN_load_lbs_removed") * PoundsToKilogramsFactor);
             WinterDryWeatherTPRemoved = (fullResults.ExtractDoubleValue("winter_dwTP_load_lbs_removed") * PoundsToKilogramsFactor);
