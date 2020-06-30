@@ -279,9 +279,8 @@
         </tbody>
     </table>
     
+    <p class="systemText" style="margin-bottom: 10px;" ng-if="modelResults.Outdated">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</p>
     <p class="systemText">Results last calculated at <span ng-bind="modelResults.LastUpdated"></span></p>
-    <p class="systemText" ng-if="modelResults.Outdated">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</p>
-
 </div>
 
 <a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
