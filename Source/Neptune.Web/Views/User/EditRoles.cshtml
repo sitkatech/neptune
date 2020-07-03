@@ -42,23 +42,6 @@
         </div>
         <div class="form-group">
             <div class="col-xs-12 col-sm-3 control-label">
-                @Html.LabelWithSugarFor(m => m.DroolToolRoleID)
-            </div>
-            <div class="col-xs-12 col-sm-9">
-                @if (ViewDataTyped.IsAdmin)
-                {
-                    @Html.DropDownListFor(m => m.DroolToolRoleID, ViewDataTyped.DroolToolRoles, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.DroolToolRoleID)
-                }
-                else
-                {
-                    @ViewDataTyped.CurrentDroolToolRole.DroolToolRoleDisplayName
-                    @Html.HiddenFor(m => m.DroolToolRoleID)
-                }
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-12 col-sm-3 control-label">
                 @Html.LabelWithSugarFor(m => m.ShouldReceiveSystemCommunications)
             </div>
             <div class="col-xs-12 col-sm-9">

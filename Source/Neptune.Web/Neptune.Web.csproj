@@ -54,12 +54,6 @@
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
     <Compile Include="Models\Generated\AuditLogEventTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\AuditLogPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegment.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegment.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\BackboneSegmentConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegmentPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegmentType.Binding.cs" />
-    <Compile Include="Models\Generated\BackboneSegmentTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\County.Binding.cs" />
     <Compile Include="Models\Generated\County.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\CountyConfiguration.Binding.cs" />
@@ -99,12 +93,6 @@
     <Compile Include="Models\Generated\DirtyModelNode.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\DirtyModelNodeConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\DirtyModelNodePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\DroolToolRole.Binding.cs" />
-    <Compile Include="Models\Generated\DroolToolRolePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\DroolToolWatershed.Binding.cs" />
-    <Compile Include="Models\Generated\DroolToolWatershed.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\DroolToolWatershedConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\DroolToolWatershedPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinition.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinitionData.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinitionData.DatabaseContextExtensions.cs" />
@@ -201,10 +189,6 @@
     <Compile Include="Models\Generated\MeasurementUnitTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\MonthsOfOperation.Binding.cs" />
     <Compile Include="Models\Generated\MonthsOfOperationPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\Neighborhood.Binding.cs" />
-    <Compile Include="Models\Generated\Neighborhood.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\NeighborhoodConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\NeighborhoodPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneArea.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneAreaPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneHomePageImage.Binding.cs" />
@@ -439,8 +423,6 @@
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\UnderlyingHydrologicSoilGroup.Binding.cs" />
     <Compile Include="Models\Generated\UnderlyingHydrologicSoilGroupPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\vDroolMetric.Binding.cs" />
-    <Compile Include="Models\Generated\vDroolMetricConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vFieldVisitDetailed.Binding.cs" />
     <Compile Include="Models\Generated\vFieldVisitDetailedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vGeoServerWaterQualityManagementPlan.Binding.cs" />
@@ -629,11 +611,8 @@
     <Compile Include="Common\QgisRunner.cs" />
     <Compile Include="Common\QgisRunnerTest.cs" />
     <Compile Include="Controllers\QgisController.cs" />
-    <Compile Include="Models\DroolMetricSimple.cs" />
     <Compile Include="Common\EsriAsynchronousJob\HruRequestFeature.cs" />
     <Compile Include="Models\IHaveHRUCharacteristics.cs" />
-    <Compile Include="Models\vDroolMetricModelExtensions.cs" />
-    <Compile Include="Areas\DroolTool\Controllers\NeighborhoodController.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\OnlandVisualTrashAssessmentExportTypeEnum.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialDataViewData.cs" />
@@ -667,19 +646,6 @@
     <Compile Include="Models\TrashGeneratingUnit.cs" />
     <Compile Include="Common\AreaCalculationsHelper.cs" />
     <Compile Include="Areas\Trash\Controllers\LandUseBlockController.cs" />
-    <Compile Include="Areas\DroolTool\Views\Home\About.cs" />
-    <Compile Include="Areas\DroolTool\Views\Home\AboutViewData.cs" />
-    <Compile Include="Areas\DroolTool\Security\DroolToolEditFeature.cs" />
-    <Compile Include="Areas\DroolTool\Security\DroolToolFeature.cs" />
-    <Compile Include="Areas\DroolTool\Security\DroolToolFeatureWithContext.cs" />
-    <Compile Include="Areas\DroolTool\Security\DroolToolViewFeature.cs" />
-    <Compile Include="Models\DroolToolRole.cs" />
-    <Compile Include="Areas\DroolTool\Controllers\HomeController.cs" />
-    <Compile Include="Areas\DroolTool\Views\Home\Index.cs" />
-    <Compile Include="Areas\DroolTool\Views\Home\IndexViewData.cs" />
-    <Compile Include="Areas\DroolTool\Views\DroolToolModuleViewData.cs" />
-    <Compile Include="Areas\DroolTool\Views\Shared\NavAndHeaderLayout.cs" />
-    <Compile Include="Areas\DroolTool\Views\Shared\SiteLayout.cs" />
     <Compile Include="Models\LoadResultsSimple.cs" />
     <Compile Include="Models\TrashGeneratingUnitAdjustment.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobBase.cs" />
@@ -1189,32 +1155,6 @@
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
     <Compile Include="Views\WebServices\WebServiceDocumentation.cs" />
-    <Content Include="Areas\DroolTool\Content\35-512.png" />
-    <Content Include="Areas\DroolTool\Content\chevvy.png" />
-    <Content Include="Areas\DroolTool\Content\h2oc_color_logo.PNG" />
-    <Content Include="Areas\DroolTool\Content\mnwd_color_logo.jpg" />
-    <Content Include="Areas\DroolTool\Content\mock\slideout1.png" />
-    <Content Include="Areas\DroolTool\Content\mock\slideout2.png" />
-    <Content Include="Areas\DroolTool\Content\mock\slideout3.png" />
-    <Content Include="Areas\DroolTool\Content\moneywater.png" />
-    <Content Include="Areas\DroolTool\Content\photo-placeholder-square.png" />
-    <Content Include="Areas\DroolTool\Content\piggy.png" />
-    <Content Include="Areas\DroolTool\Content\udt_color_logo.png" />
-    <Content Include="Areas\DroolTool\Content\udt_mchr_logo.png" />
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolMain.css">
-      <DependentUpon>DroolToolMain.less</DependentUpon>
-    </Content>
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolMain.min.css">
-      <DependentUpon>DroolToolMain.css</DependentUpon>
-    </Content>
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolMap.js" />
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.css">
-      <DependentUpon>DroolToolSplash.less</DependentUpon>
-    </Content>
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.min.css">
-      <DependentUpon>DroolToolSplash.css</DependentUpon>
-    </Content>
-    <Content Include="Areas\DroolTool\Views\Home\NeighborhoodComponent.html" />
     <Compile Include="Areas\Modeling\Models\Nereid\SolutionRequestObject.cs" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedCurrentOrNetChangeControl.js" />
@@ -1242,7 +1182,6 @@
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.js" />
-    <Content Include="Content\img\icons\droolToolIcon.png" />
     <Content Include="Content\img\legendImages\delineationCentralized.PNG" />
     <Content Include="Content\img\legendImages\delineationDistributed.PNG" />
     <Content Include="Content\img\legendImages\Full.png" />
@@ -1460,7 +1399,6 @@
     <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.js" />
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.css" />
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.js" />
-    <Content Include="Content\leaflet\leaflet.showlocationcontrol\leaflet.showlocationcontrol.js" />
     <Content Include="Content\leaflet\leaflet.snogylop\leaflet.snogylop.js" />
     <Content Include="Content\leaflet\leaflet.spin\leaflet.spin.min.js" />
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.css" />
@@ -1560,18 +1498,9 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\TrashAssessmentSummaryMap.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditBasics.cshtml" />
     <Compile Include="Common\TrashGeneratingUnitHelper.cs" />
-    <Content Include="Areas\DroolTool\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\DroolTool\Views\Home\Index.cshtml" />
-    <Content Include="Areas\DroolTool\Views\Shared\NavAndHeaderLayout.cshtml" />
-    <Content Include="Areas\DroolTool\Views\Shared\SiteLayout.cshtml" />
-    <Content Include="Areas\DroolTool\Views\web.config" />
-    <Content Include="Areas\DroolTool\Views\Home\About.cshtml" />
-    <Compile Include="Areas\DroolTool\Controllers\BackboneController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditLocation.cshtml" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentExportController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentExport\ExportAssessmentGeospatialData.cshtml" />
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolSplash.less" />
-    <Content Include="Areas\DroolTool\Views\Home\DroolToolMain.less" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentPhoto\ObservationPhotoStaging.cshtml" />
     <Content Include="Areas\Modeling\Views\HRUCharacteristic\Index.cshtml" />
     <None Include="compilerconfig.json" />
@@ -3412,7 +3341,6 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\DroolTool\Models\" />
     <Folder Include="Areas\Modeling\Content\" />
     <Folder Include="Areas\Modeling\Security\" />
     <Folder Include="Areas\Trash\Content\img\" />

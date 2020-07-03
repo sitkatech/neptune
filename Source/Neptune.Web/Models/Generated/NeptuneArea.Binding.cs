@@ -21,7 +21,6 @@ namespace Neptune.Web.Models
         public static readonly NeptuneAreaTrash Trash = NeptuneAreaTrash.Instance;
         public static readonly NeptuneAreaOCStormwaterTools OCStormwaterTools = NeptuneAreaOCStormwaterTools.Instance;
         public static readonly NeptuneAreaModeling Modeling = NeptuneAreaModeling.Instance;
-        public static readonly NeptuneAreaDroolTool DroolTool = NeptuneAreaDroolTool.Instance;
 
         public static readonly List<NeptuneArea> All;
         public static readonly ReadOnlyDictionary<int, NeptuneArea> AllLookupDictionary;
@@ -31,7 +30,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptuneArea()
         {
-            All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling, DroolTool };
+            All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptuneArea>(All.ToDictionary(x => x.NeptuneAreaID));
         }
 
@@ -105,8 +104,6 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case NeptuneAreaEnum.DroolTool:
-                    return DroolTool;
                 case NeptuneAreaEnum.Modeling:
                     return Modeling;
                 case NeptuneAreaEnum.OCStormwaterTools:
@@ -123,8 +120,7 @@ namespace Neptune.Web.Models
     {
         Trash = 1,
         OCStormwaterTools = 2,
-        Modeling = 3,
-        DroolTool = 4
+        Modeling = 3
     }
 
     public partial class NeptuneAreaTrash : NeptuneArea
@@ -143,11 +139,5 @@ namespace Neptune.Web.Models
     {
         private NeptuneAreaModeling(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
         public static readonly NeptuneAreaModeling Instance = new NeptuneAreaModeling(3, @"Modeling", @"Modeling Module", 20, true);
-    }
-
-    public partial class NeptuneAreaDroolTool : NeptuneArea
-    {
-        private NeptuneAreaDroolTool(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
-        public static readonly NeptuneAreaDroolTool Instance = new NeptuneAreaDroolTool(4, @"DroolTool", @"Urban Drool Tool", 40, true);
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Neptune.Web.Areas.DroolTool.Security;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -107,32 +106,6 @@ namespace Neptune.Web.Models
         protected override Func<Person, IRole> GetPersonRoleToUseFunc()
         {
             return x => x.Role;
-        }
-    }
-
-    public partial class NeptuneAreaDroolTool
-    {
-        public override string GetHomeUrl()
-        {
-            return SitkaRoute<Areas.DroolTool.Controllers.HomeController>.BuildUrlFromExpression(hc => hc.Index());
-        }
-
-        public override bool IsAreaVisibleToPerson(Person person)
-        {
-            return new DroolToolViewFeature().HasPermissionByPerson(person);
-        }
-
-        public override string GetIconUrl()
-        {
-            return "/Content/img/icons/droolToolIcon.png";
-        }
-        public override IRole GetRole(int roleID)
-        {
-            return DroolToolRole.AllLookupDictionary[roleID];
-        }
-        protected override Func<Person, IRole> GetPersonRoleToUseFunc()
-        {
-            return x => x.DroolToolRole ?? DroolToolRole.Unassigned;
         }
     }
 }

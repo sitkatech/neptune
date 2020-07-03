@@ -29,7 +29,6 @@ namespace Neptune.Web.Models
             Property(x => x.OrganizationID).HasColumnName(@"OrganizationID").HasColumnType("int").IsRequired();
             Property(x => x.ReceiveSupportEmails).HasColumnName(@"ReceiveSupportEmails").HasColumnType("bit").IsRequired();
             Property(x => x.LoginName).HasColumnName(@"LoginName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(128);
-            Property(x => x.DroolToolRoleID).HasColumnName(@"DroolToolRoleID").HasColumnType("int").IsOptional();
             Property(x => x.ReceiveRSBRevisionRequestEmails).HasColumnName(@"ReceiveRSBRevisionRequestEmails").HasColumnType("bit").IsRequired();
             Property(x => x.WebServiceAccessToken).HasColumnName(@"WebServiceAccessToken").HasColumnType("uniqueidentifier").IsRequired();
 
