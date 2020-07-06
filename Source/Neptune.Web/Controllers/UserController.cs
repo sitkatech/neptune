@@ -104,8 +104,7 @@ namespace Neptune.Web.Controllers
             }
 
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
-            var droolToolRolesAsSelectListItems = DroolToolRole.All.ToSelectListWithEmptyFirstRow(x => x.DroolToolRoleID.ToString(CultureInfo.InvariantCulture), x => x.DroolToolRoleDisplayName);
-            var viewData = new EditRolesViewData(rolesAsSelectListItems, droolToolRolesAsSelectListItems, CurrentPerson.IsAdministrator(), person.DroolToolRole);
+            var viewData = new EditRolesViewData(rolesAsSelectListItems, CurrentPerson.IsAdministrator());
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
         }
 

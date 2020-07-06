@@ -123,40 +123,6 @@ if ( typeof Object.create !== 'function' ) {
         },
 
         position: function () {
-            // NP/Sitka 6/5/19 - We only need toasts to appear in the top center of the map on the Drool Tool homepage.
-
-            //if ( ( typeof this.options.position === 'string' ) && ( $.inArray( this.options.position, this._positionClasses) !== -1 ) ) {
-
-            //    if ( this.options.position === 'bottom-center' ) {
-            //        this._container.css({
-            //            left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
-            //            bottom: 20
-            //        });
-            //    } else if ( this.options.position === 'top-center' ) {
-            //        this._container.css({
-            //            left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
-            //            top: 20
-            //        });
-            //    } else if ( this.options.position === 'mid-center' ) {
-            //        this._container.css({
-            //            left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
-            //            top: ( $(window).outerHeight() / 2 ) - this._container.outerHeight()/2
-            //        });
-            //    } else {
-            //        this._container.addClass( this.options.position );
-            //    }
-
-            //} else if ( typeof this.options.position === 'object' ) {
-            //    this._container.css({
-            //        top : this.options.position.top ? this.options.position.top : 'auto',
-            //        bottom : this.options.position.bottom ? this.options.position.bottom : 'auto',
-            //        left : this.options.position.left ? this.options.position.left : 'auto',
-            //        right : this.options.position.right ? this.options.position.right : 'auto'
-            //    });
-            //} else {
-            //    this._container.addClass( 'bottom-left' );
-            //}
-
             this._container.css({
                 top: this.options.top,
                 left: ($(window).outerWidth() / 2) - this._container.outerWidth() / 2

@@ -37,10 +37,6 @@ namespace Neptune.Web.Views.User
         public int? RoleID { get; set; }
 
         [Required]
-        [DisplayName("Drool Tool Role")]
-        public int? DroolToolRoleID { get; set; }
-
-        [Required]
         [DisplayName("Should Receive RSB Revision Requests?")]
         public bool ShouldReceiveRSBRevisionRequests { get; set; }
 
@@ -59,7 +55,6 @@ namespace Neptune.Web.Views.User
         {
             PersonID = person.PersonID;
             RoleID = person.RoleID;
-            DroolToolRoleID = person.DroolToolRoleID;
             ShouldReceiveSystemCommunications = person.ReceiveSupportEmails;
             ShouldReceiveRSBRevisionRequests = person.ReceiveRSBRevisionRequestEmails;
         }
@@ -67,7 +62,6 @@ namespace Neptune.Web.Views.User
         public void UpdateModel(Person person, Person currentPerson)
         {
             person.RoleID = RoleID.GetValueOrDefault();  // will never default due to RequiredAttribute
-            person.DroolToolRoleID = DroolToolRoleID.GetValueOrDefault();
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
             person.ReceiveRSBRevisionRequestEmails = ShouldReceiveRSBRevisionRequests;
 

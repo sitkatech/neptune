@@ -137,7 +137,6 @@ namespace Neptune.Web.Models
                 true,
                 -1,
                 false,
-                null,
                 null, false, Guid.NewGuid());
             return anonymousSitkaUser;
         }
@@ -218,24 +217,6 @@ namespace Neptune.Web.Models
             return currentPerson.IsAdministrator()
                 ? string.Empty
                 : $"StormwaterJurisdictionID NOT IN ({string.Join(",", stormwaterJurisdictionIDs)})";
-        }
-
-        public static HtmlString GetDroolToolRoleDisplayNameAsUrl(this Person person)
-        {
-            if (person.DroolToolRole != null)
-            {
-                return person.DroolToolRole.GetDisplayNameAsUrl();
-            }
-            else return new HtmlString("<p class='systemText'>No Drool Tool role set</p>");
-        }
-
-        public static HtmlString GetDroolToolRoleDisplayName(this Person person)
-        {
-            if (person.DroolToolRole != null)
-            {
-                return new HtmlString(person.DroolToolRole.DroolToolRoleDisplayName);
-            }
-            else return new HtmlString("<p class='systemText'>No Drool Tool role set</p>");
         }
     }
 }

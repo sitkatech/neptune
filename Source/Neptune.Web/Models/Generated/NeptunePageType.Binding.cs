@@ -55,8 +55,6 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeTrashModuleProgramOverview TrashModuleProgramOverview = NeptunePageTypeTrashModuleProgramOverview.Instance;
         public static readonly NeptunePageTypeDelineationMap DelineationMap = NeptunePageTypeDelineationMap.Instance;
         public static readonly NeptunePageTypeBulkUploadRequest BulkUploadRequest = NeptunePageTypeBulkUploadRequest.Instance;
-        public static readonly NeptunePageTypeDroolToolHomePage DroolToolHomePage = NeptunePageTypeDroolToolHomePage.Instance;
-        public static readonly NeptunePageTypeDroolToolAboutPage DroolToolAboutPage = NeptunePageTypeDroolToolAboutPage.Instance;
         public static readonly NeptunePageTypeTreatmentBMPAssessment TreatmentBMPAssessment = NeptunePageTypeTreatmentBMPAssessment.Instance;
         public static readonly NeptunePageTypeEditOVTAArea EditOVTAArea = NeptunePageTypeEditOVTAArea.Instance;
         public static readonly NeptunePageTypeLandUseBlock LandUseBlock = NeptunePageTypeLandUseBlock.Instance;
@@ -76,7 +74,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, DroolToolHomePage, DroolToolAboutPage, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -160,10 +158,6 @@ namespace Neptune.Web.Models
                     return DelineationMap;
                 case NeptunePageTypeEnum.DelineationReconciliationReport:
                     return DelineationReconciliationReport;
-                case NeptunePageTypeEnum.DroolToolAboutPage:
-                    return DroolToolAboutPage;
-                case NeptunePageTypeEnum.DroolToolHomePage:
-                    return DroolToolHomePage;
                 case NeptunePageTypeEnum.EditOVTAArea:
                     return EditOVTAArea;
                 case NeptunePageTypeEnum.ExportAssessmentGeospatialData:
@@ -291,8 +285,6 @@ namespace Neptune.Web.Models
         TrashModuleProgramOverview = 36,
         DelineationMap = 37,
         BulkUploadRequest = 38,
-        DroolToolHomePage = 39,
-        DroolToolAboutPage = 40,
         TreatmentBMPAssessment = 41,
         EditOVTAArea = 42,
         LandUseBlock = 43,
@@ -525,18 +517,6 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeBulkUploadRequest(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeBulkUploadRequest Instance = new NeptunePageTypeBulkUploadRequest(38, @"BulkUploadRequest", @"Bulk Upload Request", 2);
-    }
-
-    public partial class NeptunePageTypeDroolToolHomePage : NeptunePageType
-    {
-        private NeptunePageTypeDroolToolHomePage(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeDroolToolHomePage Instance = new NeptunePageTypeDroolToolHomePage(39, @"DroolToolHomePage", @"Drool Tool Home Page", 2);
-    }
-
-    public partial class NeptunePageTypeDroolToolAboutPage : NeptunePageType
-    {
-        private NeptunePageTypeDroolToolAboutPage(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeDroolToolAboutPage Instance = new NeptunePageTypeDroolToolAboutPage(40, @"DroolToolAboutPage", @"Drool Tool About Page", 2);
     }
 
     public partial class NeptunePageTypeTreatmentBMPAssessment : NeptunePageType

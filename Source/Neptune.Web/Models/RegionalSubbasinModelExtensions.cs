@@ -51,68 +51,6 @@ namespace Neptune.Web.Models
                 .Where(x => x.OCSurveyDownstreamCatchmentID == regionalSubbasin.OCSurveyCatchmentID).ToList();
         }
 
-
-        public static FeatureCollection TraceBackboneDownstream(this Neighborhood regionalSubbasin)
-        {
-            var backboneDownstream = new List<BackboneSegment>();
-
-            var lookingAt = regionalSubbasin.BackboneSegments;
-
-            while (lookingAt.Any())
-            {
-                backboneDownstream.AddRange(lookingAt);
-
-                lookingAt = lookingAt.Where(x=>x.DownstreamBackboneSegment != null).Select(x =>x.DownstreamBackboneSegment).Distinct().ToList();
-            }
-
-            var featureCollection = new FeatureCollection();
-            featureCollection.Features.AddRange(backboneDownstream.Select(x =>
-            {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.BackboneSegmentGeometry4326);
-                feature.Properties.Add("dummy", "dummy");
-                return feature;
-            }));
-
-            return featureCollection;
-        }
-
-        public static FeatureCollection GetStormshedViaBackboneTrace(this Neighborhood regionalSubbasin)
-        {
-            var backboneAccumulated = new List<BackboneSegment>();
-
-            var startingPoint = regionalSubbasin.BackboneSegments;
-
-            var lookingAt = startingPoint.Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).ToList();
-
-            while (lookingAt.Any())
-            {
-                backboneAccumulated.AddRange(lookingAt);
-
-                var downFromHere = lookingAt.Where(x => x.DownstreamBackboneSegment != null)
-                    .Select(x => x.DownstreamBackboneSegment)
-                    .Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).Distinct()
-                    .Except(backboneAccumulated);
-
-                var upFromHere = lookingAt.SelectMany(x => x.BackboneSegmentsWhereYouAreTheDownstreamBackboneSegment)
-                    .Where(x => x.BackboneSegmentTypeID != BackboneSegmentType.Channel.BackboneSegmentTypeID).Distinct()
-                    .Except(backboneAccumulated);
-
-                lookingAt = upFromHere.Union(downFromHere).ToList();
-            }
-
-            var regionalSubbasinsInStormshed = backboneAccumulated.Select(x=>x.Neighborhood).Distinct();
-
-            var featureCollection = new FeatureCollection();
-            featureCollection.Features.AddRange(regionalSubbasinsInStormshed.Select(x =>
-            {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.NeighborhoodGeometry4326);
-                feature.Properties.Add("NeighborhoodID", x.NeighborhoodID);
-                return feature;
-            }));
-
-            return featureCollection;
-        }
-
         public static IEnumerable<TreatmentBMP> GetTreatmentBMPs(this RegionalSubbasin regionalSubbasin)
         {
             return HttpRequestStorage.DatabaseEntities.TreatmentBMPs

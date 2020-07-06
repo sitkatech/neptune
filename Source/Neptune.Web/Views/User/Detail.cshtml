@@ -124,19 +124,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-5 fieldLabel text-right">Urban Drool Tool Role</div>
-                    <div class="col-xs-7">
-                        @if (ViewDataTyped.UserIsAdmin)
-                        {
-                            @ViewDataTyped.Person.GetDroolToolRoleDisplayNameAsUrl()
-                        }
-                        else
-                        {
-                            @ViewDataTyped.Person.GetDroolToolRoleDisplayName()
-                        }
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
                     <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
                 </div>

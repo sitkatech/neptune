@@ -35,7 +35,6 @@ namespace Neptune.Web.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations.Add(new AuditLogConfiguration());
-            modelBuilder.Configurations.Add(new BackboneSegmentConfiguration());
             modelBuilder.Configurations.Add(new CountyConfiguration());
             modelBuilder.Configurations.Add(new CustomAttributeConfiguration());
             modelBuilder.Configurations.Add(new CustomAttributeTypeConfiguration());
@@ -44,7 +43,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new DelineationOverlapConfiguration());
             modelBuilder.Configurations.Add(new DelineationStagingConfiguration());
             modelBuilder.Configurations.Add(new DirtyModelNodeConfiguration());
-            modelBuilder.Configurations.Add(new DroolToolWatershedConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataConfiguration());
             modelBuilder.Configurations.Add(new FieldDefinitionDataImageConfiguration());
             modelBuilder.Configurations.Add(new FieldVisitConfiguration());
@@ -63,7 +61,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
-            modelBuilder.Configurations.Add(new NeighborhoodConfiguration());
             modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
@@ -122,7 +119,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTypeConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
             modelBuilder.Configurations.Add(new WatershedConfiguration());
-            modelBuilder.Configurations.Add(new vDroolMetricConfiguration());
             modelBuilder.Configurations.Add(new vFieldVisitDetailedConfiguration());
             modelBuilder.Configurations.Add(new vGeoServerWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
@@ -141,7 +137,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vWaterQualityManagementPlanLGUAuditConfiguration());
         }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
-        public virtual DbSet<BackboneSegment> BackboneSegments { get; set; }
         public virtual DbSet<County> Counties { get; set; }
         public virtual DbSet<CustomAttribute> CustomAttributes { get; set; }
         public virtual DbSet<CustomAttributeType> CustomAttributeTypes { get; set; }
@@ -150,7 +145,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<Delineation> Delineations { get; set; }
         public virtual DbSet<DelineationStaging> DelineationStagings { get; set; }
         public virtual DbSet<DirtyModelNode> DirtyModelNodes { get; set; }
-        public virtual DbSet<DroolToolWatershed> DroolToolWatersheds { get; set; }
         public virtual DbSet<FieldDefinitionDataImage> FieldDefinitionDataImages { get; set; }
         public virtual DbSet<FieldDefinitionData> FieldDefinitionDatas { get; set; }
         public virtual DbSet<FieldVisit> FieldVisits { get; set; }
@@ -169,7 +163,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
-        public virtual DbSet<Neighborhood> Neighborhoods { get; set; }
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
@@ -228,7 +221,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; set; }
         public virtual DbSet<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; set; }
         public virtual DbSet<Watershed> Watersheds { get; set; }
-        public virtual DbSet<vDroolMetric> vDroolMetrics { get; set; }
         public virtual DbSet<vFieldVisitDetailed> vFieldVisitDetaileds { get; set; }
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
@@ -257,14 +249,6 @@ namespace Neptune.Web.Models
 
                 case "AuditLog":
                     return AuditLogs.GetAuditLog(primaryKey);
-
-                case "BackboneSegment":
-                    return BackboneSegments.GetBackboneSegment(primaryKey);
-
-                case "BackboneSegmentType":
-                    var backboneSegmentType = BackboneSegmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(backboneSegmentType, "BackboneSegmentType", primaryKey);
-                    return backboneSegmentType;
 
                 case "County":
                     return Counties.GetCounty(primaryKey);
@@ -304,14 +288,6 @@ namespace Neptune.Web.Models
 
                 case "DirtyModelNode":
                     return DirtyModelNodes.GetDirtyModelNode(primaryKey);
-
-                case "DroolToolRole":
-                    var droolToolRole = DroolToolRole.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(droolToolRole, "DroolToolRole", primaryKey);
-                    return droolToolRole;
-
-                case "DroolToolWatershed":
-                    return DroolToolWatersheds.GetDroolToolWatershed(primaryKey);
 
                 case "FieldDefinitionDataImage":
                     return FieldDefinitionDataImages.GetFieldDefinitionDataImage(primaryKey);
@@ -426,9 +402,6 @@ namespace Neptune.Web.Models
                     var monthsOfOperation = MonthsOfOperation.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(monthsOfOperation, "MonthsOfOperation", primaryKey);
                     return monthsOfOperation;
-
-                case "Neighborhood":
-                    return Neighborhoods.GetNeighborhood(primaryKey);
 
                 case "NeptuneArea":
                     var neptuneArea = NeptuneArea.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
