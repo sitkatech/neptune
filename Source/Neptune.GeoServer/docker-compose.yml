@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   geoserver:
-    container_name: rio_geoserver
+    container_name: neptune_geoserver
     image: kartoza/geoserver:2.16.2
     entrypoint: /bin/bash /opt/geoserver/data_dir/sitka-geoserver-config/scripts/sitka-entry-point.sh
     environment:
@@ -26,7 +26,7 @@ services:
       - 127.0.0.1:8780:8080
       # 127.0.0.1:8743:8443
     volumes:
-      - c:/git/sitkatech/rio/Source/Rio.GeoServer/data_dir:/opt/geoserver/data_dir
+      - c:/git/sitkatech/neptune/Source/Neptune.GeoServer/data_dir:/opt/geoserver/data_dir
 # Try just having part of it so we don't have to svn ignore a bunch of stuff
 #      - ./data_dir/styles:/opt/geoserver/data_dir/styles
 #      - ./data_dir/workspaces:/opt/geoserver/data_dir/workspaces
@@ -40,7 +40,7 @@ services:
 
 secrets:
   GeoserverSqlServerPassword.txt:
-    file: C:\Sitka\Rio\Geoserver\GeoserverSqlServerPassword.txt
+    file: C:\Sitka\Neptune\Geoserver\GeoserverSqlServerPassword.txt
       # using "file:"  allows you to mimic docker secrets on your dev machine by pointing to a plaintext file
   GeoserverAdminPassword.txt:
-    file: C:\Sitka\Rio\Geoserver\GeoserverAdminPassword.txt
+    file: C:\Sitka\Neptune\Geoserver\GeoserverAdminPassword.txt
