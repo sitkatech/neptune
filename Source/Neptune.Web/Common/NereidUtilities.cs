@@ -590,18 +590,25 @@ namespace Neptune.Web.Common
 
             foreach (var dataLeafResult in results.Data.LeafResults)
             {
-                var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
-                if (node == null)
+                try
                 {
-                    notFoundNodes.Add(dataLeafResult["node_id"].ToString());
-                }
-                else
-                {
-                    // don't store the leaf results if already data at this node--most of the time these nodes are read-only
-                    if (node.Results == null)
+                    var node = subgraph.Nodes.SingleOrDefault(x => x.ID == dataLeafResult["node_id"].ToString());
+                    if (node == null)
                     {
-                        node.Results = dataLeafResult;
+                        notFoundNodes.Add(dataLeafResult["node_id"].ToString());
                     }
+                    else
+                    {
+                        // don't store the leaf results if already data at this node--most of the time these nodes are read-only
+                        if (node.Results == null)
+                        {
+                            node.Results = dataLeafResult;
+                        }
+                    }
+                }
+                catch (InvalidOperationException ioe)
+                {
+                    throw new DuplicateNodeException(dataLeafResult["node_id"].ToString(), ioe);
                 }
             }
 
@@ -720,6 +727,15 @@ namespace Neptune.Web.Common
             dbContext.DirtyModelNodes.Add(dirtyModelNode);
 
             dbContext.SaveChanges();
+        }
+    }
+
+    public class DuplicateNodeException : Exception
+    {
+        public DuplicateNodeException(string nodeID, Exception exception) : base(
+            $"Duplicate Node ID in solution graph: {nodeID}", exception)
+        {
+
         }
     }
 
