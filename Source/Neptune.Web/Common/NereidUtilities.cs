@@ -433,6 +433,7 @@ namespace Neptune.Web.Common
                     if (previousNodeResults != null)
                     {
                         node.PreviousResults = JObject.Parse(previousNodeResults);
+                        node.PreviousResults["errors"] = "";
                     }
                 }
             }
