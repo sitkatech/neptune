@@ -196,7 +196,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 TotalDrawdownTime = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 TotalEffectiveBMPVolume = modelingAttribute.TotalEffectiveBMPVolume,
                 TreatmentRate = treatmentRate,
-                UnderlyingHydrologicSoilGroup = modelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName,
+                UnderlyingHydrologicSoilGroup = modelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName.ToLower() ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName.ToLower(),
                 UnderlyingInfiltrationRate = modelingAttribute.UnderlyingInfiltrationRate,
                 UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
                 WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
