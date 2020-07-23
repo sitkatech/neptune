@@ -429,6 +429,7 @@ namespace Neptune.Web.Common
                         x.WaterQualityManagementPlanID &&
                         node.Delineation?.DelineationID == x.DelineationID &&
                         node.RegionalSubbasinID == x.RegionalSubbasinID)?.FullResponse;
+
                     if (previousNodeResults != null)
                     {
                         node.PreviousResults = JObject.Parse(previousNodeResults);

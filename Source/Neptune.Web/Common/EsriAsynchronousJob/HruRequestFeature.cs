@@ -54,6 +54,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
     public static class HruRequestFeatureHelpers
     {
+
         public static IEnumerable<HRURequestFeature> GetHRURequestFeatures(this IHaveHRUCharacteristics iHaveHRUCharacteristics)
         {
             var baseAttributes = new HRURequestFeatureAttributes
@@ -63,11 +64,22 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 Length = iHaveHRUCharacteristics.GetCatchmentGeometry().Length.GetValueOrDefault(),
             };
 
-            var catchmentGeometry = iHaveHRUCharacteristics.GetCatchmentGeometry();
+            DbGeometry catchmentGeometry = null;
+            try
+            {
+                catchmentGeometry = CoordinateSystemHelper.Project2771To2230(iHaveHRUCharacteristics.GetCatchmentGeometry());
+            }
+            catch (Exception ex)
+            {
+                var a = ex.Message;
+            }
 
             for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
             {
-                yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes, i);
+                if (catchmentGeometry.ElementAt(i).SpatialTypeName.ToUpper() == "POLYGON")
+                {
+                    yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes, i);
+                }
             }
         }
         
