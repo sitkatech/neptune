@@ -534,13 +534,18 @@ namespace Neptune.Web.Common
 
             var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=soc";
 
+            // get the list of leaf nodes for this subgraph
+            var targetNodeIDs = subgraph.Edges.Select(x => x.TargetID);
+            // As all men know in this kingdom by the sea, a leaf of a digraph is a node that's not the target of an edge
+            var leafNodes = subgraph.Nodes.Where(x=>!targetNodeIDs.Contains(x.ID));
+
             var solutionRequestObject = new SolutionRequestObject()
             {
                 Graph = subgraph,
                 LandSurfaces = landSurfaces,
                 TreatmentFacilities = treatmentFacilities,
                 TreatmentSites = treatmentSites,
-                PreviousResults = subgraph.Nodes.Where(x => x.PreviousResults != null).Select(x => x.PreviousResults).ToList()
+                PreviousResults = leafNodes.Where(x => x.PreviousResults != null).Select(x => x.PreviousResults).ToList()
             };
             NereidResult<SolutionResponseObject> results = null;
             try
