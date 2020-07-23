@@ -14,6 +14,7 @@ select
 	lgu.LSPCBasinID,
 	w.WatershedName,
 	d.TreatmentBMPID,
+	d.DelineationID,
 	lgu.WaterQualityManagementPlanID,
 	lgu.RegionalSubbasinID,
 	lgu.LoadGeneratingUnitID
