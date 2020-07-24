@@ -12,7 +12,9 @@ select
 	hru.Area,
 	luc.HRUCharacteristicLandUseCodeDisplayName,
 	lgu.LSPCBasinID,
-	w.WatershedName,
+	rsb.Watershed as WatershedName,
+	rsb.OCSurveyCatchmentID as CatchIDN,
+	rsb.OCSurveyDownstreamCatchmentID as DownCatchIDN,
 	d.TreatmentBMPID,
 	d.DelineationID,
 	lgu.WaterQualityManagementPlanID,
@@ -25,7 +27,7 @@ from
 		on lgu.DelineationID = d.DelineationID
 	left join dbo.TreatmentBMP t 
 		on t.TreatmentBMPID = d.TreatmentBMPID
-	left join dbo.Watershed w
-		on t.WatershedID = w.WatershedID
 	left join dbo.HRUCharacteristicLandUseCode luc
 		on hru.HRUCharacteristicLandUseCodeID = luc.HRUCharacteristicLandUseCodeID
+	left join dbo.RegionalSubbasin rsb
+		on rsb.RegionalSubbasinID = lgu.RegionalSubbasinID

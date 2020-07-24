@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBILandUseStatistic(int primaryKey, int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, double area, string hRUCharacteristicLandUseCodeDisplayName, int? lSPCBasinID, string watershedName, int? treatmentBMPID, int? delineationID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? loadGeneratingUnitID) : this()
+        public vPowerBILandUseStatistic(int primaryKey, int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, double area, string hRUCharacteristicLandUseCodeDisplayName, int? lSPCBasinID, string watershedName, int? catchIDN, int? downCatchIDN, int? treatmentBMPID, int? delineationID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? loadGeneratingUnitID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.HRUCharacteristicID = hRUCharacteristicID;
@@ -36,6 +36,8 @@ namespace Neptune.Web.Models
             this.HRUCharacteristicLandUseCodeDisplayName = hRUCharacteristicLandUseCodeDisplayName;
             this.LSPCBasinID = lSPCBasinID;
             this.WatershedName = watershedName;
+            this.CatchIDN = catchIDN;
+            this.DownCatchIDN = downCatchIDN;
             this.TreatmentBMPID = treatmentBMPID;
             this.DelineationID = delineationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -57,6 +59,8 @@ namespace Neptune.Web.Models
             this.HRUCharacteristicLandUseCodeDisplayName = vPowerBILandUseStatistic.HRUCharacteristicLandUseCodeDisplayName;
             this.LSPCBasinID = vPowerBILandUseStatistic.LSPCBasinID;
             this.WatershedName = vPowerBILandUseStatistic.WatershedName;
+            this.CatchIDN = vPowerBILandUseStatistic.CatchIDN;
+            this.DownCatchIDN = vPowerBILandUseStatistic.DownCatchIDN;
             this.TreatmentBMPID = vPowerBILandUseStatistic.TreatmentBMPID;
             this.DelineationID = vPowerBILandUseStatistic.DelineationID;
             this.WaterQualityManagementPlanID = vPowerBILandUseStatistic.WaterQualityManagementPlanID;
@@ -76,6 +80,8 @@ namespace Neptune.Web.Models
         public string HRUCharacteristicLandUseCodeDisplayName { get; set; }
         public int? LSPCBasinID { get; set; }
         public string WatershedName { get; set; }
+        public int? CatchIDN { get; set; }
+        public int? DownCatchIDN { get; set; }
         public int? TreatmentBMPID { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
