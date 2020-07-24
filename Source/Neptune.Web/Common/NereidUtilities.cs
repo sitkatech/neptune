@@ -712,6 +712,21 @@ namespace Neptune.Web.Common
             dbContext.SaveChanges();
         }
 
+        public static void MarkDelineationDirty(IEnumerable<Delineation> delineations, DatabaseEntities dbContext)
+        {
+            foreach (var delineation in delineations)
+            {
+                var dirtyModelNode = new DirtyModelNode(DateTime.Now)
+                {
+                    DelineationID = delineation.DelineationID
+                };
+
+                dbContext.DirtyModelNodes.Add(dirtyModelNode);
+            }
+
+            dbContext.SaveChanges();
+        }
+
         public static void MarkDelineationDirty(Delineation delineation, DatabaseEntities dbContext)
         {
             var dirtyModelNode = new DirtyModelNode(DateTime.Now)
@@ -736,7 +751,7 @@ namespace Neptune.Web.Common
             dbContext.SaveChanges();
         }
     }
-
+    ;
     public class DuplicateNodeException : Exception
     {
         public DuplicateNodeException(string nodeID, Exception exception) : base(

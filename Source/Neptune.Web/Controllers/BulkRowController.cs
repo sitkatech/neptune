@@ -84,6 +84,8 @@ namespace Neptune.Web.Controllers
             var bmpDelineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => viewModel.EntityIDList.Contains(x.DelineationID)).ToList();
             bmpDelineations.ForEach(x => x.MarkAsVerified(CurrentPerson));
 
+            NereidUtilities.MarkDelineationDirty(bmpDelineations, HttpRequestStorage.DatabaseEntities);
+
             var numberOfVerifiedBMPDelineations = bmpDelineations.Count;
 
             SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
