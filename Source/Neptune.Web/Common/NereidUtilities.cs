@@ -72,6 +72,12 @@ namespace Neptune.Web.Common
             return "WQMP_" + waterQualityManagementPlanID + "_RSB_" + regionalSubbasinCatchmentID;
         }
 
+        public static string WaterQualityManagementPlanTreatmentNodeID(int waterQualityManagementPlanID,
+            int regionalSubbasinCatchmentID)
+        {
+            return "WQMP_" + waterQualityManagementPlanID + "_RSB_" + regionalSubbasinCatchmentID + "-TMNT";
+        }
+
         public static string DelineationNodeID(Delineation delineation)
         {
             return "Delineation_" + delineation.DelineationID;
@@ -188,11 +194,30 @@ namespace Neptune.Web.Common
 
             }).ToList();
 
+            // WQMPs get two nodes-- one for the land surface data and one for the treatment data
+            var tmntNodes = wqmpRSBPairings.Select(x => new Node
+            {
+                ID = WaterQualityManagementPlanTreatmentNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID),
+                WaterQualityManagementPlan = x,
+                RegionalSubbasinID = x.RegionalSubbasinID
+            }).ToList();
+
+            wqmpNodes.AddRange(tmntNodes);
+
+            // the land surface node flows to the treatment node to the rsb node
             wqmpEdges = wqmpRSBPairings.Select(x => new Edge
             {
                 SourceID = WaterQualityManagementPlanNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID),
+                TargetID = WaterQualityManagementPlanTreatmentNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID)
+            }).ToList();
+
+            var tmntEdges = wqmpRSBPairings.Select(x => new Edge
+            {
+                SourceID = WaterQualityManagementPlanTreatmentNodeID(x.WaterQualityManagementPlanID, x.OCSurveyCatchmentID),
                 TargetID = RegionalSubbasinNodeID(x.OCSurveyCatchmentID)
             }).ToList();
+
+            wqmpEdges.AddRange(tmntEdges);
         }
 
         public static IQueryable<WaterQualityManagementPlanNode> GetWaterQualityManagementPlanNodes(DatabaseEntities dbContext)
