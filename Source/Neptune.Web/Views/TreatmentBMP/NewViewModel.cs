@@ -147,6 +147,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanTypeID;
             treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID ? TreatmentBMPLifespanEndDate : null;
             treatmentBMP.TrashCaptureEffectiveness = TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID ? TrashCaptureEffectiveness : null;
+
+            // set the regional subbasin ID so that model results can be obtained correctly.
+            var regionalSubbasinID = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+                .SingleOrDefault(x => x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint))?.RegionalSubbasinID;
+            treatmentBMP.RegionalSubbasinID = regionalSubbasinID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
