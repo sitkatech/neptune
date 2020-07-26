@@ -547,7 +547,7 @@ namespace Neptune.Web.Common
                 .Select(x =>
                     new TreatmentSite
                     {
-                        NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
+                        NodeID = NereidUtilities.WaterQualityManagementPlanTreatmentNodeID(x.node.WaterQualityManagementPlanID,
                             x.node.RegionalSubbasinID),
                         AreaPercentage = x.bmp.PercentOfSiteTreated,
                         CapturedPercentage = x.bmp.PercentCaptured ?? 0,
