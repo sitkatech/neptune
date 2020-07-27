@@ -407,10 +407,7 @@ namespace Neptune.Web.Common
 
             var existingNereidResults = dbContext.NereidResults.Local;
             existingNereidResults.MergeUpsert(deltaNereidResults, existingNereidResults, (old, novel) =>
-            
-                (old.TreatmentBMPID == novel.TreatmentBMPID) && (old.DelineationID == novel.DelineationID) &&
-                    (old.RegionalSubbasinID == novel.RegionalSubbasinID) &&
-                    (old.WaterQualityManagementPlanID == novel.WaterQualityManagementPlanID)
+                old.NodeID == novel.NodeID
             , (old, novel) =>
             {
                 old.FullResponse = novel.FullResponse;
