@@ -54,7 +54,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(CurrentPerson);
 
             var stormwaterJurisdictionID = viewModel.StormwaterJurisdictionID.GetValueOrDefault();
-            var treatmentBMPAKs = HttpRequestStorage.DatabaseEntities.DelineationStagings.Select(x => new { TreatmentBMPName = x.TreatmentBMPName, StormwaterJurisdictionID = stormwaterJurisdictionID });
+            var treatmentBMPAKs = HttpRequestStorage.DatabaseEntities.DelineationStagings.Select(x => new {x.TreatmentBMPName, StormwaterJurisdictionID = stormwaterJurisdictionID });
 
             var treatmentBMPsWithUpstreamBMPAlreadySet = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x =>
                 treatmentBMPAKs.Contains(new {x.TreatmentBMPName, x.StormwaterJurisdictionID})).Where(x=>x.UpstreamBMPID != null);

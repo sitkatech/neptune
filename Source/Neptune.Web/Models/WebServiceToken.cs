@@ -49,9 +49,7 @@ namespace Neptune.Web.Models
         /// </summary>
         private static Guid DemandValidWebServiceToken(string allegedWebServiceToken, bool isBeingCalledByStaticConstructor)
         {
-            Guid tokenGuid;
-
-            Check.Require(GuidUtility.TryParseGuid(allegedWebServiceToken, out tokenGuid),
+            Check.Require(GuidUtility.TryParseGuid(allegedWebServiceToken, out var tokenGuid),
                 $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{allegedWebServiceToken}\" is not a GUID.");
 
             if (IsValidAsUnitTestToken(tokenGuid, isBeingCalledByStaticConstructor))

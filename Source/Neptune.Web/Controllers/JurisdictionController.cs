@@ -48,8 +48,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<StormwaterJurisdiction> IndexGridJsonData()
         {
-            IndexGridSpec gridSpec;
-            var jurisdictions = GetJurisdictionsAndGridSpec(out gridSpec);
+            var jurisdictions = GetJurisdictionsAndGridSpec(out var gridSpec);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<StormwaterJurisdiction>(jurisdictions, gridSpec);
             return gridJsonNetJObjectResult;
         }

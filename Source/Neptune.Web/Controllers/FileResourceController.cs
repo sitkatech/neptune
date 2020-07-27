@@ -38,8 +38,7 @@ namespace Neptune.Web.Controllers
         [CrossAreaRoute]
         public ActionResult DisplayResource(string fileResourceGuidAsString)
         {
-            Guid fileResourceGuid;
-            var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out fileResourceGuid);
+            var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)
             {
                 var fileResource = HttpRequestStorage.DatabaseEntities.FileResources.SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
@@ -99,8 +98,7 @@ namespace Neptune.Web.Controllers
         [CrossAreaRoute]
         public ActionResult GetFileResourceResized(string fileResourceGuidAsString, int maxWidth, int maxHeight)
         {
-            Guid fileResourceGuid;
-            var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out fileResourceGuid);
+            var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)
             {
                 var fileResource = HttpRequestStorage.DatabaseEntities.FileResources.SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);

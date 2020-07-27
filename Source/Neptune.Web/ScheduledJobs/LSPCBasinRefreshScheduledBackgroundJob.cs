@@ -99,7 +99,7 @@ namespace Neptune.Web.ScheduledJobs
                         returnDistinctValues = false,
                         returnExtentOnly = false,
                         f = "geojson",
-                        resultOffset = resultOffset,
+                        resultOffset,
                         resultRecordCount = 1000
                     };
 

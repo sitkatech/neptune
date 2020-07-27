@@ -165,7 +165,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var subgraphCallStartTime = stopwatch.Elapsed;
             var solutionSequenceResult = NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(solutionSequenceRequestObject,
-                    solutionSequenceUrl, out var responseContent, HttpClient);
+                    solutionSequenceUrl, out _, HttpClient);
             var subgraphCallEndTime = stopwatch.Elapsed;
 
             stopwatch.Stop();
@@ -503,35 +503,6 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     InnerExceptionStackTrace = stackTrace
                 }, JsonRequestBehavior.AllowGet);
         }
-        
-        private static void ValidateForTesting(Graph subgraph, List<LandSurface> landSurfaces, List<TreatmentFacility> treatmentFacilities, List<TreatmentSite> treatmentSites)
-        {
-            // validate input objects -- not strictly necessary, just for testing purposes
-            var landSurfaceLoadingUrl =
-                $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
-            var treatmentFacilityUrl =
-                $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
-            var treatmentSiteUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_site/validate?state=ca&region=soc";
-            var networkValidatorUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/validate";
-
-            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest { LandSurfaces = landSurfaces };
-            var landSurfaceResponseObject =
-                NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, GenericNeriedResponse>(
-                    landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var loadingResponse, HttpClient);
-
-            var treatmentFacilityTable = new TreatmentFacilityTable { TreatmentFacilities = treatmentFacilities };
-            var treatmentFacilityResponseObject =
-                NereidUtilities.RunJobAtNereid<TreatmentFacilityTable, GenericNeriedResponse>(treatmentFacilityTable,
-                    treatmentFacilityUrl, out var treatmentFacilityResponse, HttpClient);
-
-            var networkValidatorResult = NereidUtilities.RunJobAtNereid<Graph, NetworkValidatorResult>(subgraph,
-                networkValidatorUrl, out var networkValidatorResponse, HttpClient);
-
-            var treatmentSiteTable = new TreatmentSiteTable { treatment_sites = treatmentSites };
-            var treatmentSiteResponseObject =
-                NereidUtilities.RunJobAtNereid<TreatmentSiteTable, GenericNeriedResponse>(treatmentSiteTable,
-                    treatmentSiteUrl, out var treatmentSiteResponse, HttpClient);
-        }
     }
 
     internal class NereidException<TReq, TResp> : Exception
@@ -549,10 +520,5 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         public TReq Request { get; set; }
         public TResp Response { get; set; }
-    }
-
-    public class TreatmentSiteTable
-    {
-        public List<TreatmentSite> treatment_sites { get; set; }
     }
 }

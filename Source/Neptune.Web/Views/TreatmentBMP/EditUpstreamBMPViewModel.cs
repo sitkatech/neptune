@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Neptune.Web.Common;
+using Neptune.Web.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {

@@ -36,10 +36,10 @@ namespace Neptune.Web.ScheduledJobs
             var featureCollection = RetrieveFeatureCollectionFromArcServer();
             ThrowIfPrecipitationZoneKeyNotUnique(featureCollection);
             StageFeatureCollection(featureCollection);
-            MergeAndUpdateTreatmentBMPProperties(dbContext, person);
+            MergeAndUpdateTreatmentBMPProperties(dbContext);
         }
 
-        private static void MergeAndUpdateTreatmentBMPProperties(DatabaseEntities dbContext, Person person)
+        private static void MergeAndUpdateTreatmentBMPProperties(DatabaseEntities dbContext)
         {
             // MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
             dbContext.Database.CommandTimeout = 30000;
@@ -99,7 +99,7 @@ namespace Neptune.Web.ScheduledJobs
                         returnDistinctValues = false,
                         returnExtentOnly = false,
                         f = "geojson",
-                        resultOffset = resultOffset,
+                        resultOffset,
                         resultRecordCount = 1000
                     };
 
@@ -118,7 +118,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (TaskCanceledException tce)
                     {
                         throw new RemoteServiceException(
-                            $"The Precipitation Zone service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            "The Precipitation Zone service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             tce);
                     }
 
@@ -130,7 +130,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (JsonReaderException jre)
                     {
                         throw new RemoteServiceException(
-                            $"The Precipitation Zone service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            "The Precipitation Zone service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             jre);
                     }
 

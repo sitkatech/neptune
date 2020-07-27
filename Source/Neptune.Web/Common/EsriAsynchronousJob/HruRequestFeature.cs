@@ -2,12 +2,11 @@
 // Names have to match remote service's expectation, therefore:
 // ReSharper disable InconsistentNaming
 
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
 using LtInfo.Common;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 
 namespace Neptune.Web.Common.EsriAsynchronousJob
 {
@@ -54,7 +53,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
     public static class HruRequestFeatureHelpers
     {
-
+        // ReSharper disable once UnusedMember.Global
         public static IEnumerable<HRURequestFeature> GetHRURequestFeatures(this IHaveHRUCharacteristics iHaveHRUCharacteristics)
         {
             var baseAttributes = new HRURequestFeatureAttributes
@@ -64,15 +63,8 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 Length = iHaveHRUCharacteristics.GetCatchmentGeometry().Length.GetValueOrDefault(),
             };
 
-            DbGeometry catchmentGeometry = null;
-            try
-            {
-                catchmentGeometry = CoordinateSystemHelper.Project2771To2230(iHaveHRUCharacteristics.GetCatchmentGeometry());
-            }
-            catch (Exception ex)
-            {
-                var a = ex.Message;
-            }
+            var catchmentGeometry =
+                CoordinateSystemHelper.Project2771To2230(iHaveHRUCharacteristics.GetCatchmentGeometry());
 
             for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
             {
@@ -94,16 +86,9 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                     Length = loadGeneratingUnit.LoadGeneratingUnitGeometry.Length.GetValueOrDefault(),
                     QueryFeatureID = loadGeneratingUnit.LoadGeneratingUnitID
                 };
-                DbGeometry catchmentGeometry = null;
-                try
-                {
-                    catchmentGeometry = CoordinateSystemHelper.Project2771To2230(loadGeneratingUnit.LoadGeneratingUnitGeometry);
-                }
-                catch (Exception ex)
-                {
-                    var a = ex.Message;
-                }
-
+                var catchmentGeometry =
+                    CoordinateSystemHelper.Project2771To2230(loadGeneratingUnit.LoadGeneratingUnitGeometry);
+               
                 for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
                 {
                     if (catchmentGeometry.ElementAt(i).SpatialTypeName.ToUpper() == "POLYGON")

@@ -333,7 +333,6 @@ namespace Neptune.Web.Controllers
         public ActionResult EditUpstreamBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             EditUpstreamBMPViewModel viewModel)
         {
-            // todo: should not allow the selection if the BMP is already used as an upstream
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
@@ -342,10 +341,7 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModel(treatmentBMP);
 
-            if (treatmentBMP.Delineation != null)
-            {
-                treatmentBMP.Delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
-            }
+            treatmentBMP.Delineation?.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
 
             // need to re-execute the Nereid model for this node since source of run-off was changed.
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, HttpRequestStorage.DatabaseEntities);
@@ -689,18 +685,17 @@ namespace Neptune.Web.Controllers
         public ViewResult EditModelingAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
-            if (treatmentBMPModelingAttribute == null)
+            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute ?? new TreatmentBMPModelingAttribute(treatmentBMP)
             {
-                treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP)
-                {
-                    // defaults for a brand new record; note, we probably should only set these for the given type, but it doesn't really matter too much since we are using it to prepopulate, and if a certain type does not have a property it won't show on the editor and therefore be considered null when saving
-                    UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupID,
-                    RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID,
-                    TimeOfConcentrationID = TimeOfConcentration.FiveMinutes.TimeOfConcentrationID,
-                    DesignResidenceTimeforPermanentPool = 720
-                };
-            }
+                /* defaults for a brand new record; note, we probably should only set these for the given type,
+                 * but it doesn't really matter too much since we are using it to prepopulate, and if a certain
+                 * type does not have a property it won't show on the editor and therefore be considered null when saving
+                 */
+                UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupID,
+                RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID,
+                TimeOfConcentrationID = TimeOfConcentration.FiveMinutes.TimeOfConcentrationID,
+                DesignResidenceTimeforPermanentPool = 720
+            };
 
             var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID);
             return ViewEditModelingAttributes(viewModel, treatmentBMP);
@@ -971,7 +966,7 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBmpsAdded = treatmentBMPs.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
-            var treatmentBmpsUpdated = treatmentBMPs.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey));
+            var treatmentBmpsUpdated = treatmentBMPs.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
 
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.AddRange(treatmentBmpsAdded);
             HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
@@ -982,7 +977,7 @@ namespace Neptune.Web.Controllers
             // Need to re-executed model for updated BMPs since they may have been re-parameterized
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, HttpRequestStorage.DatabaseEntities);
 
-            var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count()} records updated!";
+            var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count} records updated!";
             SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
         }
