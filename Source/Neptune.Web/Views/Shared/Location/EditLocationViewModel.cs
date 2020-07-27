@@ -65,6 +65,7 @@ namespace Neptune.Web.Views.Shared.Location
             treatmentBMP.Watershed = HttpRequestStorage.DatabaseEntities.Watersheds.FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry));
             treatmentBMP.LSPCBasin = HttpRequestStorage.DatabaseEntities.LSPCBasins.FirstOrDefault(x => locationPoint.Intersects(x.LSPCBasinGeometry));
             treatmentBMP.PrecipitationZone = HttpRequestStorage.DatabaseEntities.PrecipitationZones.FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry));
+            treatmentBMP.RegionalSubbasinID = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.FirstOrDefault(x => locationPoint.Intersects(x.CatchmentGeometry))?.RegionalSubbasinID;
         }
 
     }
