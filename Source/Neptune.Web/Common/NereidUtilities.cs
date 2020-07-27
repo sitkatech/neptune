@@ -458,7 +458,8 @@ namespace Neptune.Web.Common
                     if (previousNodeResults != null)
                     {
                         node.PreviousResults = JObject.Parse(previousNodeResults);
-                        node.PreviousResults["errors"] = "";
+                        node.PreviousResults["node_errors"] = "";
+                        node.PreviousResults["node_warnings"] = "";
                     }
                 }
             }
@@ -548,7 +549,7 @@ namespace Neptune.Web.Common
                     new TreatmentSite
                     {
                         NodeID = NereidUtilities.WaterQualityManagementPlanTreatmentNodeID(x.node.WaterQualityManagementPlanID,
-                            x.node.RegionalSubbasinID),
+                            x.node.OCSurveyCatchmentID),
                         AreaPercentage = x.bmp.PercentOfSiteTreated,
                         CapturedPercentage = x.bmp.PercentCaptured ?? 0,
                         RetainedPercentage = x.bmp.PercentRetained ?? 0,
