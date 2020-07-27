@@ -448,12 +448,15 @@ namespace Neptune.Web.Common
                 var previousModelResults = dbContext.NereidResults.ToList();
                 foreach (var node in graph.Nodes)
                 {
+                    // todo: this needs to be fixed to account for the fact that there are two result nodes for wqmps.
                     var previousNodeResults = previousModelResults.SingleOrDefault(x =>
-                        node.TreatmentBMPID == x.TreatmentBMPID &&
-                        node.WaterQualityManagementPlan?.WaterQualityManagementPlanID ==
-                        x.WaterQualityManagementPlanID &&
-                        node.Delineation?.DelineationID == x.DelineationID &&
-                        node.RegionalSubbasinID == x.RegionalSubbasinID)?.FullResponse;
+                        //node.TreatmentBMPID == x.TreatmentBMPID &&
+                        //node.WaterQualityManagementPlan?.WaterQualityManagementPlanID ==
+                        //x.WaterQualityManagementPlanID &&
+                        //node.Delineation?.DelineationID == x.DelineationID &&
+                        //node.RegionalSubbasinID == x.RegionalSubbasinID
+                        node.ID == x.NodeID
+                        )?.FullResponse;
 
                     if (previousNodeResults != null)
                     {
