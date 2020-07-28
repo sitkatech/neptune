@@ -1,19 +1,17 @@
-﻿using System;
-using GeoJSON.Net.Feature;
+﻿using GeoJSON.Net.Feature;
+using Hangfire;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
-using GeoJSON.Net.CoordinateReferenceSystem;
-using Hangfire;
-using LtInfo.Common.GeoJson;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -53,17 +51,17 @@ namespace Neptune.Web.ScheduledJobs
 
             if (queueLguRefresh)
             {
-                UpdateLoadGeneratingUnits(dbContext, person);
+                UpdateLoadGeneratingUnits();
             }
         }
 
         private static void DeleteLoadGeneratingUnits(DatabaseEntities dbContext)
         {
             dbContext.Database.ExecuteSqlCommand(
-                $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+                "EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
         }
 
-        private static void UpdateLoadGeneratingUnits(DatabaseEntities dbContext, Person person)
+        private static void UpdateLoadGeneratingUnits()
         {
             // Instead, just queue a total LGU update
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
@@ -193,7 +191,7 @@ namespace Neptune.Web.ScheduledJobs
                     var nameValueCollection =
                         JsonConvert.DeserializeObject<Dictionary<string, string>>(configurationSerialized);
                     var queryParameters = string.Join("&",
-                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode((string)x.Value)}"));
+                        nameValueCollection.Select(x => $"{x.Key}={HttpUtility.UrlEncode(x.Value)}"));
                     var uri = $"{baseRequestUri}?{queryParameters}";
                     string response;
                     try
@@ -203,7 +201,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (TaskCanceledException tce)
                     {
                         throw new RemoteServiceException(
-                            $"The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            "The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             tce);
                     }
 
@@ -215,7 +213,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (JsonReaderException jre)
                     {
                         throw new RemoteServiceException(
-                            $"The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            "The Regional Subbasin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             jre);
                     }
 

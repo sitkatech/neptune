@@ -2,14 +2,13 @@
 using LtInfo.Common.Models;
 using Microsoft.VisualBasic.FileIO;
 using Neptune.Web.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Web.WebPages;
-using Newtonsoft.Json;
 
 namespace Neptune.Web.Common
 {
@@ -501,14 +500,14 @@ namespace Neptune.Web.Common
             switch (customAttributeDataType)
             {
                 case CustomAttributeDataTypeEnum.Integer:
-                    return int.TryParse(value, out var valueInt);
+                    return int.TryParse(value, out _);
                 case CustomAttributeDataTypeEnum.Decimal:
-                    return decimal.TryParse(value, out var valueDecimal);
+                    return decimal.TryParse(value, out _);
                 case CustomAttributeDataTypeEnum.DateTime:
-                    return DateTime.TryParse(value, out var valueDateTime);
+                    return DateTime.TryParse(value, out _);
                 case CustomAttributeDataTypeEnum.PickFromList:
                 case CustomAttributeDataTypeEnum.MultiSelect:
-                    var splitValues = value.Split(new[] {','}).Select(x => x.Trim());
+                    var splitValues = value.Split(',').Select(x => x.Trim());
 
                     return splitValues.All(customAttributeTypeAcceptableValues.Contains);
                 case CustomAttributeDataTypeEnum.String:
@@ -536,22 +535,22 @@ namespace Neptune.Web.Common
                     var value = currentRow[fieldsDict[attribute]];
 
                     var propertyToChange = treatmentBMPModelingAttribute.GetType().GetProperty(modelingProperty);
-                    var propType = propertyToChange.Name == "UnderlyingHydrologicSoilGroupID"
+                    var propType = propertyToChange?.Name == "UnderlyingHydrologicSoilGroupID"
                         ?
                         typeof(UnderlyingHydrologicSoilGroup)
                         :
-                        propertyToChange.Name == "TimeOfConcentrationID"
+                        propertyToChange?.Name == "TimeOfConcentrationID"
                             ? typeof(TimeOfConcentration)
                             :
-                            propertyToChange.Name == "RoutingConfigurationID"
+                            propertyToChange?.Name == "RoutingConfigurationID"
                                 ? typeof(RoutingConfiguration)
                                 :
-                                propertyToChange.Name == "MonthsOfOperationID"
+                                propertyToChange?.Name == "MonthsOfOperationID"
                                     ? typeof(MonthsOfOperation)
                                     :
-                                    propertyToChange.PropertyType;
+                                    propertyToChange?.PropertyType;
 
-                    if (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    if (propType != null && (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>)))
                     {
                         propType = propType.GetGenericArguments()[0];
                     }
