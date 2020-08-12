@@ -156,6 +156,8 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
             self.delineationMapService.adjustZoom(self.selectedBMPDelineationLayer);
         } else {
             delineationStatus = "None";
+            var coords = layer.feature.geometry.coordinates;
+            self.map.setView([coords[1], coords[0]], 18);
         }
         self.delineationMapService.broadcastDelineationMapState({ selectedTreatmentBMPFeature: layer.feature });
         
