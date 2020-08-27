@@ -340,7 +340,7 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static bool IsFullyParameterized(this Models.TreatmentBMP treatmentBMP)
+        public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
         {
 
             if (treatmentBMP.Delineation == null && treatmentBMP.UpstreamBMP?.Delineation == null)
@@ -477,6 +477,19 @@ namespace Neptune.Web.Models
             }
 
             return true;
+        }
+
+        public static void SetTreatmentBMPPointInPolygonDataByLocationPoint(this TreatmentBMP treatmentBMP,
+            DbGeometry locationPoint)
+        {
+            treatmentBMP.WatershedID = HttpRequestStorage.DatabaseEntities.Watersheds
+                .FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry))?.WatershedID;
+            treatmentBMP.LSPCBasinID = HttpRequestStorage.DatabaseEntities.LSPCBasins
+                .FirstOrDefault(x => locationPoint.Intersects(x.LSPCBasinGeometry))?.LSPCBasinID;
+            treatmentBMP.PrecipitationZoneID = HttpRequestStorage.DatabaseEntities.PrecipitationZones
+                .FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry))?.PrecipitationZoneID;
+            treatmentBMP.RegionalSubbasinID = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+                .FirstOrDefault(x => locationPoint.Intersects(x.CatchmentGeometry))?.RegionalSubbasinID;
         }
     }
 }

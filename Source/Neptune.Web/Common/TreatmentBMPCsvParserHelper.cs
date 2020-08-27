@@ -151,8 +151,10 @@ namespace Neptune.Web.Common
             if (locationPoint4326 != null)
             {
                 treatmentBMP.LocationPoint4326 = locationPoint4326;
-                treatmentBMP.LocationPoint =
-                    CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
+                var locationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
+                treatmentBMP.LocationPoint = locationPoint;
+
+                treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint);
             }
 
             var ownerOrganizationID = FindLookupValue(row, fieldsDict, "Owner", rowNumber, errorList, organizations,
