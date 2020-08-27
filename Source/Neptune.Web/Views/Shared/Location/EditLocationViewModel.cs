@@ -62,9 +62,9 @@ namespace Neptune.Web.Views.Shared.Location
             treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary();
 
             // associate watershed, lspc basin, precipitation zone
-            treatmentBMP.Watershed = HttpRequestStorage.DatabaseEntities.Watersheds.FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry));
-            treatmentBMP.LSPCBasin = HttpRequestStorage.DatabaseEntities.LSPCBasins.FirstOrDefault(x => locationPoint.Intersects(x.LSPCBasinGeometry));
-            treatmentBMP.PrecipitationZone = HttpRequestStorage.DatabaseEntities.PrecipitationZones.FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry));
+            treatmentBMP.WatershedID = HttpRequestStorage.DatabaseEntities.Watersheds.FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry))?.WatershedID;
+            treatmentBMP.LSPCBasinID = HttpRequestStorage.DatabaseEntities.LSPCBasins.FirstOrDefault(x => locationPoint.Intersects(x.LSPCBasinGeometry))?.LSPCBasinID;
+            treatmentBMP.PrecipitationZoneID = HttpRequestStorage.DatabaseEntities.PrecipitationZones.FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry))?.PrecipitationZoneID;
             treatmentBMP.RegionalSubbasinID = HttpRequestStorage.DatabaseEntities.RegionalSubbasins.FirstOrDefault(x => locationPoint.Intersects(x.CatchmentGeometry))?.RegionalSubbasinID;
         }
 
