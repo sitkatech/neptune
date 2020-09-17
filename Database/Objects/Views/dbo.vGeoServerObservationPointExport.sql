@@ -8,6 +8,9 @@ Select
 	a.OnlandVisualTrashAssessmentID as AssessmentID,
 	o.LocationPoint,
 	o.Note,
+	--The third argument in CONVERT defines the style for the date
+	--107 produces the date in the format Mon dd, yyyy
+	--Consult https://docs.microsoft.com/en-us/sql/t-sql/functions/cast-and-convert-transact-sql?view=sql-server-ver15 if a new format is desired
 	CONVERT(VARCHAR(12), a.CompletedDate, 107) CompletedDate,
 	Score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
 	area.StormwaterJurisdictionID as JurisID,
