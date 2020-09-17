@@ -10,7 +10,7 @@ create view dbo.vGeoServerAssessmentAreaExport as
 		area.OnlandVisualTrashAssessmentAreaGeometry,
 		score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
 		ovta.OnlandVisualTrashAssessmentID as AssessmentID,
-		ovta.CompletedDate,
+		CONVERT(VARCHAR(12), ovta.CompletedDate, 107) CompletedDate,
 		ovta.IsProgressAssessment,
 		area.AssessmentAreaDescription as [Description]
 	from dbo.OnlandVisualTrashAssessmentArea area

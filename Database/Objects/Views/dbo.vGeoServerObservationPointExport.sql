@@ -8,7 +8,7 @@ Select
 	a.OnlandVisualTrashAssessmentID as AssessmentID,
 	o.LocationPoint,
 	o.Note,
-	a.CompletedDate,
+	CONVERT(VARCHAR(12), a.CompletedDate, 107) CompletedDate,
 	Score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
 	area.StormwaterJurisdictionID as JurisID,
 	org.OrganizationName as JurisName,
