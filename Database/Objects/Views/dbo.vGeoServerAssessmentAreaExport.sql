@@ -10,7 +10,10 @@ create view dbo.vGeoServerAssessmentAreaExport as
 		area.OnlandVisualTrashAssessmentAreaGeometry,
 		score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
 		ovta.OnlandVisualTrashAssessmentID as AssessmentID,
-		ovta.CompletedDate,
+		--The third argument in CONVERT defines the style for the date
+		--107 produces the date in the format Mon dd, yyyy
+		--Consult https://docs.microsoft.com/en-us/sql/t-sql/functions/cast-and-convert-transact-sql?view=sql-server-ver15 if a new format is desired
+		CONVERT(VARCHAR(12), ovta.CompletedDate, 107) CompletedDate,
 		ovta.IsProgressAssessment,
 		area.AssessmentAreaDescription as [Description]
 	from dbo.OnlandVisualTrashAssessmentArea area
