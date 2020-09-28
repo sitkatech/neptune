@@ -49,4 +49,5 @@ values
 (47, 'DelineationReconciliationReport', 'Delineation Reconciliation Report', 2),
 (48, 'ViewTreatmentBMPModelingAttributes', 'View Treatment BMP Modeling Attributes', 2),
 (49, 'UploadTreatmentBMPs', 'Upload Treatment BMPs', 2),
-(50, 'AboutModelingBMPPerformance', 'About Modeling BMP Performance', 2)
+(50, 'AboutModelingBMPPerformance', 'About Modeling BMP Performance', 2),
+(51, 'BulkUploadFieldVisits', 'Bulk Upload Field Visits', 2)
