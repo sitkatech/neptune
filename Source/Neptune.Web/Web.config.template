@@ -61,6 +61,7 @@
     <add key="PyqgisWorkingDirectory" value="${pyqgis-working-directory}"/>
     <add key="PathToPyqgisLauncher" value="${path-to-pyqgis-launcher}"/>
     <add key="NereidUrl" value ="${nereid-url}"/>
+    <add key="PathToFieldVisitUploadTemplate" value="${path-to-field-visit-upload-template}"/>
 
   </appSettings>
   <system.net>

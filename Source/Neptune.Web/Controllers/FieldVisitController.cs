@@ -885,7 +885,7 @@ namespace Neptune.Web.Controllers
             FileInfo newFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx").FileInfo;
             FileInfo template =
                 new FileInfo(
-                    @"C:\git\sitkatech\neptune\Source\Neptune.Web\Content\Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx");
+                    NeptuneWebConfiguration.PathToFieldVisitUploadTemplate);
             var row = 2;
             using (ExcelPackage package = new ExcelPackage(newFile, template))
             {

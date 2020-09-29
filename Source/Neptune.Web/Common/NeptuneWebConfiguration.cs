@@ -68,6 +68,9 @@ namespace Neptune.Web.Common
 
         public static string NereidUrl = SitkaConfiguration.GetOptionalAppSetting("NereidUrl");
 
+        public static string PathToFieldVisitUploadTemplate =
+            SitkaConfiguration.GetRequiredAppSetting("PathToFieldVisitUploadTemplate");
+
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 
         public static readonly NeptuneEnvironment NeptuneEnvironment = NeptuneEnvironment.MakeNeptuneEnvironment(SitkaConfiguration.GetRequiredAppSetting("NeptuneEnvironment"));
