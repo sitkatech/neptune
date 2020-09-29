@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -26,20 +27,20 @@ using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using LtInfo.Common;
-using Neptune.Web.Views;
-using OfficeOpenXml;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -52,7 +53,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FieldRecords);
             var maintenanceAttributeTypes =
-                HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x=>x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+                HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
             var viewData = new IndexViewData(CurrentPerson, neptunePage, maintenanceAttributeTypes, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
@@ -203,7 +204,7 @@ namespace Neptune.Web.Controllers
         public ActionResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey, InventoryViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
         }
 
@@ -260,7 +261,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
 
             SetMessageForDisplay("Successfully updated Treatment BMP Location.");
 
@@ -291,7 +292,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.Photos(fieldVisit)), new SitkaRoute<FieldVisitController>(c => c.Attributes(fieldVisit)), fieldVisit);
         }
@@ -327,14 +328,15 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
 
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return ViewAttributes(fieldVisit, viewModel);
             }
 
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
             SetMessageForDisplay("Successfully updated Treatment BMP Attributes.");
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
                 c.Attributes(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>
@@ -449,7 +451,7 @@ namespace Neptune.Web.Controllers
                     MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID
                 };
             }
-            
+
             return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
 
@@ -497,7 +499,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
             viewModel.UpdateModel(fieldVisit, allCustomAttributeTypes);
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
 
@@ -556,7 +558,7 @@ namespace Neptune.Web.Controllers
 
             fieldVisit.VerifyFieldVisit(CurrentPerson);
             SetMessageForDisplay("The Field Visit was successfully verified.");
-            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.Detail(fieldVisitPrimaryKey)));
+            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Detail(fieldVisitPrimaryKey)));
         }
 
         private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
@@ -695,7 +697,7 @@ namespace Neptune.Web.Controllers
             treatmentBMPAssessment.CalculateIsAssessmentComplete();
             treatmentBMPAssessment.CalculateAssessmentScore();
 
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
@@ -790,17 +792,17 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
-            
+
             return treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial
-                    ?  RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, treatmentBMPAssessmentTypeEnum)), new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)), fieldVisit)
+                    ? RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, treatmentBMPAssessmentTypeEnum)), new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)), fieldVisit)
                     : RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, treatmentBMPAssessmentTypeEnum)), new SitkaRoute<FieldVisitController>(x => x.VisitSummary(fieldVisit)), fieldVisit);
         }
 
         private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, AssessmentPhotosViewModel viewModel)
         {
-            var fieldVisitSection = treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (FieldVisitSection) FieldVisitSection.Assessment : FieldVisitSection.PostMaintenanceAssessment;
+            var fieldVisitSection = treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (FieldVisitSection)FieldVisitSection.Assessment : FieldVisitSection.PostMaintenanceAssessment;
 
             var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, treatmentBMPAssessment);
 
@@ -851,7 +853,7 @@ namespace Neptune.Web.Controllers
                 fieldVisit.MaintenanceRecord != null ? "maintenance record" : null
             };
             var entitiesConcatenated = string.Join(", ", entitiesSubstrings.Where(x => x != null));
-            var lastComma = entitiesConcatenated.LastIndexOf(",",StringComparison.InvariantCulture);
+            var lastComma = entitiesConcatenated.LastIndexOf(",", StringComparison.InvariantCulture);
             var associatedFieldVisitEntitiesString = lastComma > -1 ? entitiesConcatenated.Insert(lastComma + 1, " and") : entitiesConcatenated;
 
             return !associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "";
@@ -868,11 +870,16 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public FileResult GetTrashScreenBulkUploadTemplate()
         {
-            // todo: constify the 35
-            var currentPersonTrashScreens =
-            CurrentPerson.GetStormwaterJurisdictionsPersonCanView()
-                .SelectMany(x => x.TreatmentBMPs.Where(y => y.TreatmentBMPTypeID == 35)).ToList();
 
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView().ToList();
+
+            // todo: constify the 35
+            var currentPersonTrashScreens = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.StormwaterJurisdiction)
+                .Include(x => x.StormwaterJurisdiction.Organization)
+                .Where(x => x.TreatmentBMPTypeID == 35 &&
+                            stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+
+            // todo: we will need a commercial license in order to continue using this library outside of dev/QA environment
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             FileInfo newFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx").FileInfo;
@@ -885,8 +892,10 @@ namespace Neptune.Web.Controllers
                 var worksheet = package.Workbook.Worksheets["Field Visits"];
                 foreach (var treatmentBMP in currentPersonTrashScreens)
                 {
-                    var cell = worksheet.Cells[$"A{row}"];
-                    cell.Value = treatmentBMP.TreatmentBMPName;
+                    worksheet.Cells[$"A{row}"].Value = treatmentBMP.TreatmentBMPName;
+                    worksheet.Cells[$"B{row}"].Value = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName;
+                    worksheet.Cells[$"C{row}"].Value = treatmentBMP.YearBuilt;
+                    worksheet.Cells[$"D{row}"].Value = treatmentBMP.Notes;
                     row++;
                 }
                 package.Save();
