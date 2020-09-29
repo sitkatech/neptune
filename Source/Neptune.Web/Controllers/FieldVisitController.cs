@@ -41,6 +41,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using DocumentFormat.OpenXml.EMMA;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -863,7 +864,31 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public ViewResult BulkUploadTrashScreenVisit()
         {
-            return RazorView<BulkUploadTrashScreenVisit, BulkUploadTrashScreenVisitViewData>(new BulkUploadTrashScreenVisitViewData(CurrentPerson));
+            var bulkUploadTrashScreenVisitViewModel = new BulkUploadTrashScreenVisitViewModel();
+
+            return ViewBulkUploadTrashScreenVisit(bulkUploadTrashScreenVisitViewModel);
+        }
+
+        private ViewResult ViewBulkUploadTrashScreenVisit(
+            BulkUploadTrashScreenVisitViewModel bulkUploadTrashScreenVisitViewModel)
+        {
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadTrashScreenVisitViewData(CurrentPerson);
+
+            return RazorView<BulkUploadTrashScreenVisit, BulkUploadTrashScreenVisitViewData,
+                BulkUploadTrashScreenVisitViewModel>(bulkUploadTrashScreenVisitViewData,
+                bulkUploadTrashScreenVisitViewModel);
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        public ActionResult BulkUploadTrashScreenVisit(BulkUploadTrashScreenVisitViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
+
+            throw new NotImplementedException();
         }
 
         [HttpGet]

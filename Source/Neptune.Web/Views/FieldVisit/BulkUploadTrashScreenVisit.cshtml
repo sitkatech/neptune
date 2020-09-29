@@ -20,9 +20,33 @@
     -----------------------------------------------------------------------*@
 
 @using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.FieldVisit.BulkUploadTrashScreenVisit
 
 
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
-Hello, world!
+
+Hello, world! Have an editor:
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+
+        <div class="form-group ">
+            <div class="col-sm-2 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.UploadXLSX)
+            </div>
+            <div class="col-sm-10 col-xs-12">
+                @Html.EditorFor(m => m.UploadXLSX, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="pull-right">
+        <button type="submit" class="btn btn-neptune">Upload</button>
+    </div>
+</form>
+
+Have a template download link:
+
+<a href="@ViewDataTyped.TemplateDownloadUrl" class="btn btn-neptune" download>Clicky!</a>
