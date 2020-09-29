@@ -34,9 +34,12 @@ using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using Neptune.Web.Views;
+using OfficeOpenXml;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -852,6 +855,45 @@ namespace Neptune.Web.Controllers
             var associatedFieldVisitEntitiesString = lastComma > -1 ? entitiesConcatenated.Insert(lastComma + 1, " and") : entitiesConcatenated;
 
             return !associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "";
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ViewResult BulkUploadTrashScreenVisit()
+        {
+            return RazorView<BulkUploadTrashScreenVisit, BulkUploadTrashScreenVisitViewData>(new BulkUploadTrashScreenVisitViewData(CurrentPerson));
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public FileResult GetTrashScreenBulkUploadTemplate()
+        {
+            // todo: constify the 35
+            var currentPersonTrashScreens =
+            CurrentPerson.GetStormwaterJurisdictionsPersonCanView()
+                .SelectMany(x => x.TreatmentBMPs.Where(y => y.TreatmentBMPTypeID == 35)).ToList();
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            FileInfo newFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx").FileInfo;
+            FileInfo template =
+                new FileInfo(
+                    @"C:\git\sitkatech\neptune\Source\Neptune.Web\Content\Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx");
+            var row = 2;
+            using (ExcelPackage package = new ExcelPackage(newFile, template))
+            {
+                var worksheet = package.Workbook.Worksheets["Field Visits"];
+                foreach (var treatmentBMP in currentPersonTrashScreens)
+                {
+                    var cell = worksheet.Cells[$"A{row}"];
+                    cell.Value = treatmentBMP.TreatmentBMPName;
+                    row++;
+                }
+                package.Save();
+
+            }
+
+            return File(newFile.FullName, @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
 }

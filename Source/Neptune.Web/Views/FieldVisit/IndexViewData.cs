@@ -21,6 +21,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string MaintenanceRecordGridName { get; }
         public string MaintenanceRecordGridDataUrl { get; }
         public bool HasManagePermissions { get; }
+        public string BulkUploadTrashScreenVisitUrl { get; set; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
             IEnumerable<Models.CustomAttributeType> maintenanceAttributeTypes, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
@@ -58,6 +59,8 @@ namespace Neptune.Web.Views.FieldVisit
                 SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.AllMaintenanceRecordsGridJsonData());
 
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            BulkUploadTrashScreenVisitUrl =
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.BulkUploadTrashScreenVisit());
         }
     }
 }

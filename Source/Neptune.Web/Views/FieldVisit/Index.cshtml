@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using DocumentFormat.OpenXml.Wordprocessing
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common
@@ -34,6 +35,15 @@
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+@section RightOfPageTitle{
+    @if(ViewDataTyped.HasManagePermissions)
+    {
+        <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadTrashScreenVisitUrl">Bulk Upload Trash Screen Field Visits</a>
+    }
+}
 
 <div class="row">
     <div class="col-xs-12 col-sm-12">
