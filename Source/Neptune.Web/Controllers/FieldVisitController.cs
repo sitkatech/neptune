@@ -36,6 +36,7 @@ using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Globalization;
 using System.IO;
@@ -888,14 +889,20 @@ namespace Neptune.Web.Controllers
                 return ViewBulkUploadTrashScreenVisit(viewModel);
             }
 
+            var uploadXlsxInputStream = viewModel.UploadXLSX.InputStream;
+
+            // todo: set this in startup or something like that.
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            var dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
+
             throw new NotImplementedException();
         }
 
         [HttpGet]
         [JurisdictionManageFeature]
-        public FileResult GetTrashScreenBulkUploadTemplate()
+        public FileResult TrashScreenBulkUploadTemplate()
         {
-
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView().ToList();
 
             // todo: constify the 35
@@ -907,12 +914,13 @@ namespace Neptune.Web.Controllers
             // todo: we will need a commercial license in order to continue using this library outside of dev/QA environment
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            FileInfo newFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx").FileInfo;
-            FileInfo template =
+            // todo: pretty sure i need to wrap usings around this...
+            var newFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx").FileInfo;
+            var template =
                 new FileInfo(
                     NeptuneWebConfiguration.PathToFieldVisitUploadTemplate);
             var row = 2;
-            using (ExcelPackage package = new ExcelPackage(newFile, template))
+            using (var package = new ExcelPackage(newFile, template))
             {
                 var worksheet = package.Workbook.Worksheets["Field Visits"];
                 foreach (var treatmentBMP in currentPersonTrashScreens)
@@ -928,6 +936,34 @@ namespace Neptune.Web.Controllers
             }
 
             return File(newFile.FullName, @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
+
+        // todo: let's move this to a more common namespace since might be useful
+        public static DataTable GetDataTableFromExcel(Stream stream, string worksheetName, bool hasHeader = true)
+        {
+            // code borrowed from https://stackoverflow.com/questions/11239805/how-convert-stream-excel-file-to-datatable-c/11239895#11239895
+            // with variables given appropriate names, some changes for our use-case, and mild clean-up
+            using (var excelPackage = new OfficeOpenXml.ExcelPackage())
+            {
+                excelPackage.Load(stream);
+                var worksheet = excelPackage.Workbook.Worksheets[worksheetName];
+                var dataTable = new DataTable();
+                foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
+                {
+                    dataTable.Columns.Add(hasHeader ? firstRowCell.Text : $"Column {firstRowCell.Start.Column}");
+                }
+                var startRow = hasHeader ? 2 : 1;
+                for (var rowNumber = startRow; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
+                {
+                    var worksheetRow = worksheet.Cells[rowNumber, 1, rowNumber, worksheet.Dimension.End.Column];
+                    var dataTableRow = dataTable.Rows.Add();
+                    foreach (var cell in worksheetRow)
+                    {
+                        dataTableRow[cell.Start.Column - 1] = cell.Text;
+                    }
+                }
+                return dataTable;
+            }
         }
     }
 }
