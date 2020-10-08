@@ -27,9 +27,6 @@
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
-
-Hello, world! Have an editor:
-
 <form method="post" enctype="multipart/form-data">
     <div class="form-horizontal">
 
@@ -43,10 +40,8 @@ Hello, world! Have an editor:
         </div>
     </div>
     <div class="pull-right">
-        <button type="submit" class="btn btn-neptune">Upload</button>
+        <button type="submit" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-upload") Upload</button>
     </div>
 </form>
 
-Have a template download link:
-
-<a href="@ViewDataTyped.TemplateDownloadUrl" class="btn btn-neptune" download>Clicky!</a>
+<a href="@ViewDataTyped.TemplateDownloadUrl" class="btn btn-neptune" download>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-download-alt") Download Template</a>

@@ -41,8 +41,10 @@ using System.Data.Entity;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using DocumentFormat.OpenXml.EMMA;
+using Newtonsoft.Json;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -880,6 +882,22 @@ namespace Neptune.Web.Controllers
                 bulkUploadTrashScreenVisitViewModel);
         }
 
+        private const string INLET = "Inlet Condition";
+        private const string OUTLET = "Outlet Condition";
+        private const string OPERABILITY = "Device Operability";
+        private const string NUISANCE = "Significant Nuisance Conditions";
+        private const string ACCUMULATION = "Material Accumulation as Percent of Total System Volume";
+        
+        private const int InletAndTrashScreenTreatmentBMPTypeID = 35;
+        
+        private const string GREEN_WASTE= "Percent Green Waste";
+        private const string MECHANICAL_REPAIR= "Mechanical Repair Conducted";
+        private const string SEDIMENT = "Percent Sediment";
+        private const string STRUCTURAL_REPAIR= "Structural Repair Conducted";
+        private const string TRASH = "Percent Trash";
+        private const string VOLUME_CUFT = "Total Material Volume Removed (cu-ft)";
+        private const string VOLUME_GAL = "Total Material Volume Removed (gal)";
+        
         [HttpPost]
         [JurisdictionManageFeature]
         public ActionResult BulkUploadTrashScreenVisit(BulkUploadTrashScreenVisitViewModel viewModel)
@@ -896,7 +914,296 @@ namespace Neptune.Web.Controllers
 
             var dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
 
-            throw new NotImplementedException();
+            var numRows = dataTableFromExcel.Rows.Count;
+
+
+            var treatmentBMPTypeAssessmentObservationTypes =
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAssessmentObservationTypes
+                    .Include(x => x.TreatmentBMPAssessmentObservationType).Where(x =>
+                    x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID).ToList();
+
+            var treatmentBMPTypeCustomAttributeTypes = HttpRequestStorage.DatabaseEntities
+                .TreatmentBMPTypeCustomAttributeTypes.Include(x => x.CustomAttributeType)
+                .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
+                            x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                            CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+
+            var caredAboutAssessmentObservationTypeNames = new[] {INLET, OUTLET, OPERABILITY, NUISANCE, ACCUMULATION};
+
+            var caredAboutCustomAttributeTypeNames = new[]
+            {
+                GREEN_WASTE,
+                MECHANICAL_REPAIR,
+                SEDIMENT,
+                STRUCTURAL_REPAIR,
+                TRASH,
+                VOLUME_CUFT,
+                VOLUME_GAL
+            };
+
+            var customAttributeTypeDictionary = new Dictionary<string, CustomAttributeType>();
+            foreach (var name in caredAboutCustomAttributeTypeNames)
+            {
+                customAttributeTypeDictionary.Add(name,
+                    treatmentBMPTypeCustomAttributeTypes.Select(x=>x.CustomAttributeType).Single(x =>
+                        x.CustomAttributeTypeName == name));
+            }
+
+            var treatmentBMPTypeCustomAttributeTypeDictionary = new Dictionary<string, TreatmentBMPTypeCustomAttributeType>();
+            foreach (var name in caredAboutCustomAttributeTypeNames)
+            {
+                treatmentBMPTypeCustomAttributeTypeDictionary.Add(name,
+                    treatmentBMPTypeCustomAttributeTypes.Single(x =>
+                        x.CustomAttributeType.CustomAttributeTypeName == name));
+            }
+
+            var treatmentBMPTypeassessmentObservationTypeDictionary =
+                new Dictionary<string, TreatmentBMPTypeAssessmentObservationType>();
+
+            foreach (var name in caredAboutAssessmentObservationTypeNames)
+            {
+                treatmentBMPTypeassessmentObservationTypeDictionary.Add(name,
+                    treatmentBMPTypeAssessmentObservationTypes.Single(x =>
+                        x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName == name));
+            }
+
+            var treatmentBMPAssessmentObservationTypeDictionary =
+                new Dictionary<string, TreatmentBMPAssessmentObservationType>();
+
+            foreach (var name in caredAboutAssessmentObservationTypeNames)
+            {
+                treatmentBMPAssessmentObservationTypeDictionary.Add(name,
+                    treatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Single(x =>
+                          x.TreatmentBMPAssessmentObservationTypeName == name));
+            }
+
+            var allFieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.ToList();
+
+            try
+            {
+                for (int i = 0; i < numRows; i++)
+                {
+                    var row = dataTableFromExcel.Rows[i];
+
+                    var treatmentBMPName = row["BMP Name"].ToString();
+                    var jurisdictionName = row["Jurisdiction"].ToString();
+
+                    var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                        .Include(x => x.TreatmentBMPType)
+                        .Include(x => x.StormwaterJurisdiction.Organization).SingleOrDefault(x =>
+                            x.TreatmentBMPName == treatmentBMPName &&
+                            x.StormwaterJurisdiction.Organization.OrganizationName == jurisdictionName);
+
+                    if (treatmentBMP == null)
+                    {
+                        throw new InvalidOperationException($"Invalid BMP Name or Jurisdiction at row {i + 2}");
+                    }
+
+                    var rawFieldVisitType = row["Field Visit Type"].ToString();
+                    var fieldVisitType =
+                        FieldVisitType.All.SingleOrDefault(x => x.FieldVisitTypeDisplayName == rawFieldVisitType);
+                    if (fieldVisitType == null)
+                    {
+                        throw new InvalidOperationException($"Invalid Field Visit Type at row {i + 2}");
+                    }
+
+                    var rawFieldVisitDate = row["Field Visit Date"].ToString();
+                    var fieldVisitDateIsValid = DateTime.TryParse(rawFieldVisitDate, out var fieldVisitDate);
+
+                    if (!fieldVisitDateIsValid)
+                    {
+                        throw new InvalidOperationException($"Invalid Field Visit Date at row {i + 2}");
+                    }
+
+                    var fieldVisit = allFieldVisits.SingleOrDefault(x =>
+                                         x.TreatmentBMPID == treatmentBMP.TreatmentBMPID &&
+                                         x.VisitDate.Date == fieldVisitDate.Date) ??
+                                     new FieldVisit(treatmentBMP, FieldVisitStatus.Complete, CurrentPerson,
+                                         fieldVisitDate, false, fieldVisitType, true);
+
+                    var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment(
+                        treatmentBMP, treatmentBMP.TreatmentBMPType,
+                        fieldVisit, TreatmentBMPAssessmentType.Initial, true);
+                    var postMaintenanceAssessment =
+                        fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
+                            treatmentBMP.TreatmentBMPType,
+                            fieldVisit, TreatmentBMPAssessmentType.PostMaintenance, true);
+
+                    var maintenanceRecord = fieldVisit.MaintenanceRecord ??
+                                            new MaintenanceRecord(treatmentBMP, treatmentBMP.TreatmentBMPType,
+                                                fieldVisit);
+
+                    var rawMaintenanceType = row["Maintenance Type"].ToString();
+                    var rawDescription = row["Description"].ToString();
+
+                    var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x =>
+                        x.MaintenanceRecordTypeDisplayName == rawMaintenanceType);
+
+                    if (maintenanceRecordType == null)
+                    {
+                        throw new InvalidOperationException($"Invalid Maintenance type at row {i + 2}");
+                    }
+
+                    maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
+                    maintenanceRecord.MaintenanceRecordDescription = rawDescription;
+
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION, false);
+
+                    //todo: foreach cared about name, find or make the MaintenanceRecordObservation and find or make the MaintenanceRecord ObservationValue
+                    // note that validation happens in CADT.ValueParsedForDataType
+
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i);
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i);
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i);
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i);
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
+                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
+
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OPERABILITY,
+                        true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, ACCUMULATION,
+                        false);
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                SetErrorForDisplay(e.Message);
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
+            catch (Exception )
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
+
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
+
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Index()));
+        }
+
+        private static void UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(DataRow row,
+            Dictionary<string, TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypeDictionary,
+            MaintenanceRecord maintenanceRecord, string observationName, int rowNumber)
+        {
+            var rawObservation = row[observationName].ToString();
+            var treatmentBMPTypeCustomAttributeType =
+                treatmentBMPTypeCustomAttributeTypeDictionary[observationName];
+
+            var maintenanceRecordObservation = maintenanceRecord.MaintenanceRecordObservations.SingleOrDefault(x =>
+                x.CustomAttributeType.CustomAttributeTypeName == observationName);
+            string valueParsedForDataType;
+            try
+            {
+                valueParsedForDataType = treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType
+                    .ValueParsedForDataType(rawObservation);
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException($"Invalid {observationName} at row {rowNumber + 2}");
+            }
+
+            if (maintenanceRecordObservation != null)
+            {
+                var maintenanceRecordObservationValue =
+                    maintenanceRecordObservation.MaintenanceRecordObservationValues.SingleOrDefault();
+                if (maintenanceRecordObservationValue != null)
+                {
+                    maintenanceRecordObservationValue.ObservationValue = valueParsedForDataType;
+                }
+                else
+                {
+                    maintenanceRecordObservationValue =
+                        new MaintenanceRecordObservationValue(maintenanceRecordObservation, valueParsedForDataType);
+                }
+            }
+            else
+            {
+                maintenanceRecordObservation = new MaintenanceRecordObservation(maintenanceRecord,
+                    treatmentBMPTypeCustomAttributeType,
+                    treatmentBMPTypeCustomAttributeType.TreatmentBMPType,
+                    treatmentBMPTypeCustomAttributeType.CustomAttributeType);
+                var maintenanceRecordObservationValue =
+                    new MaintenanceRecordObservationValue(maintenanceRecordObservation, valueParsedForDataType);
+            }
+        }
+
+        private static void UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
+            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail)
+        {
+            var rawInletCondition = row[observationTypeName].ToString();
+            var rawInletConditionNotes = row[$"{observationTypeName} Notes"].ToString();
+            string inletConditionObservationValue;
+            if (isPassFail)
+            {
+                inletConditionObservationValue =
+                    rawInletCondition == "Pass" ? "true" : (rawInletCondition == "Fail" ? "false" : "invalid");
+            }
+            else
+            {
+                inletConditionObservationValue = rawInletCondition;
+            }
+
+            if (rawInletCondition == "invalid")
+            {
+                throw new InvalidOperationException($"Invalid {observationTypeName} at row {rowNumber + 2}");
+            }
+
+            var inletConditionBoxed = new
+            {
+                SingleValueObservations = new[]
+                {
+                    new
+                    {
+                        PropertyObserved = observationTypeName,
+                        ObservationValue = inletConditionObservationValue,
+                        Notes = rawInletConditionNotes
+                    }
+                }
+            };
+
+            var inletConditionJson = JsonConvert.SerializeObject(inletConditionBoxed);
+
+            var validateObservationDataJson = treatmentBMPAssessmentObservationTypeDictionary[observationTypeName]
+                .ObservationTypeSpecification.ObservationTypeCollectionMethod
+                .ValidateObservationDataJson(treatmentBMPAssessmentObservationTypeDictionary[observationTypeName],
+                    inletConditionJson);
+
+            if (validateObservationDataJson.Count > 0)
+            {
+                throw new InvalidOperationException($"Invalid {observationTypeName} at row {rowNumber + 2}");
+            }
+
+            var initialInletConditionObservation = GetExistingTreatmentBMPObservationOrCreateNew(assessment,
+                treatmentBMPAssessmentObservationTypeDictionary[observationTypeName]);
+            initialInletConditionObservation.ObservationData = inletConditionJson;
         }
 
         [HttpGet]
@@ -905,13 +1212,11 @@ namespace Neptune.Web.Controllers
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView().ToList();
 
-            // todo: constify the 35
             var currentPersonTrashScreens = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.StormwaterJurisdiction)
                 .Include(x => x.StormwaterJurisdiction.Organization)
-                .Where(x => x.TreatmentBMPTypeID == 35 &&
+                .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
                             stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
 
-            // todo: we will need a commercial license in order to continue using this library outside of dev/QA environment
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             // todo: pretty sure i need to wrap usings around this...
@@ -935,10 +1240,9 @@ namespace Neptune.Web.Controllers
 
             }
 
-            return File(newFile.FullName, @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return File(newFile.FullName, @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
         }
 
-        // todo: let's move this to a more common namespace since might be useful
         public static DataTable GetDataTableFromExcel(Stream stream, string worksheetName, bool hasHeader = true)
         {
             // code borrowed from https://stackoverflow.com/questions/11239805/how-convert-stream-excel-file-to-datatable-c/11239895#11239895
