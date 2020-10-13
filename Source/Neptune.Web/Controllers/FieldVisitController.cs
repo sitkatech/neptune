@@ -912,7 +912,16 @@ namespace Neptune.Web.Controllers
             // todo: set this in startup or something like that.
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            var dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
+            DataTable dataTableFromExcel;
+            try
+            {
+                dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
 
             var numRows = dataTableFromExcel.Rows.Count;
 
@@ -1039,77 +1048,84 @@ namespace Neptune.Web.Controllers
                                      new FieldVisit(treatmentBMP, FieldVisitStatus.Complete, CurrentPerson,
                                          fieldVisitDate, false, fieldVisitType, true);
                     
-                    // todo: check that initial assessment fields are filled in before validating/making initial assessment record
-                    var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment(
-                        treatmentBMP, treatmentBMP.TreatmentBMPType,
-                        fieldVisit, TreatmentBMPAssessmentType.Initial, true);
-
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION, false);
-
-                    // todo: check that maintenance fields are filled in before validating/making initial assessment record
-
-                    var maintenanceRecord = fieldVisit.MaintenanceRecord ??
-                                            new MaintenanceRecord(treatmentBMP, treatmentBMP.TreatmentBMPType,
-                                                fieldVisit);
-
-                    var rawMaintenanceType = row["Maintenance Type"].ToString();
-                    var rawDescription = row["Description"].ToString();
-
-                    var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x =>
-                        x.MaintenanceRecordTypeDisplayName == rawMaintenanceType);
-
-                    if (maintenanceRecordType == null)
+                    if (InitialAssessmentFieldsPopulated(row))
                     {
-                        throw new InvalidOperationException($"Invalid Maintenance type at row {i + 2}");
+                        var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment(
+                            treatmentBMP, treatmentBMP.TreatmentBMPType,
+                            fieldVisit, TreatmentBMPAssessmentType.Initial, true);
+
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY, true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION, false);
                     }
 
-                    maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
-                    maintenanceRecord.MaintenanceRecordDescription = rawDescription;
+                    if (MaintenanceRecordFieldsPopulated(row))
+                    {
+                        var maintenanceRecord = fieldVisit.MaintenanceRecord ??
+                                                new MaintenanceRecord(treatmentBMP, treatmentBMP.TreatmentBMPType,
+                                                    fieldVisit);
 
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i);
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i);
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i);
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i);
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
-                    UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-                        treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
+                        var rawMaintenanceType = row["Maintenance Type"].ToString();
+                        var rawDescription = row["Description"].ToString();
 
-                    // todo: check that post-maintenance fields are filled in before validating/making post-maintenance assessment record
+                        var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x =>
+                            x.MaintenanceRecordTypeDisplayName == rawMaintenanceType);
 
-                    var postMaintenanceAssessment =
-                        fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
-                            treatmentBMP.TreatmentBMPType,
-                            fieldVisit, TreatmentBMPAssessmentType.PostMaintenance, true);
+                        if (maintenanceRecordType == null)
+                        {
+                            throw new InvalidOperationException($"Invalid Maintenance type at row {i + 2}");
+                        }
 
 
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OPERABILITY,
-                        true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, ACCUMULATION,
-                        false);
+                        maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
+                        maintenanceRecord.MaintenanceRecordDescription = rawDescription;
+
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i);
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i);
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i);
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i);
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
+                        UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
+                            treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
+                    }
+                    
+                    if (PostMaintenanceAssessmentFieldsPopulated(row))
+                    {
+                        var postMaintenanceAssessment =
+                            fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
+                                treatmentBMP.TreatmentBMPType,
+                                fieldVisit, TreatmentBMPAssessmentType.PostMaintenance, true);
+
+
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET, true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET,
+                            true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OPERABILITY,
+                            true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE,
+                            true);
+                        UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, ACCUMULATION,
+                            false);
+                    }
                 }
             }
             catch (InvalidOperationException e)
@@ -1129,6 +1145,54 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
 
             return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Index()));
+        }
+
+        private static bool PostMaintenanceAssessmentFieldsPopulated(DataRow row)
+        {
+            var startIndex = row.Table.Columns.IndexOf($"{INLET} (Post-Maintenance)");
+            var endIndex = row.Table.Columns.IndexOf($"{ACCUMULATION} Notes (Post-Maintenance)");
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(row[i].ToString()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool MaintenanceRecordFieldsPopulated(DataRow row)
+        {
+            var startIndex = row.Table.Columns.IndexOf("Maintenance Type");
+            var endIndex = row.Table.Columns.IndexOf(SEDIMENT);
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(row[i].ToString()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool InitialAssessmentFieldsPopulated(DataRow row)
+        {
+            var startIndex = row.Table.Columns.IndexOf(INLET);
+            var endIndex = row.Table.Columns.IndexOf($"{ACCUMULATION} Notes");
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(row[i].ToString()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(DataRow row,
@@ -1177,6 +1241,8 @@ namespace Neptune.Web.Controllers
             }
         }
 
+
+        // todo: I don't think this is handling the post-maintenance assessment at allllllllll
         private static void UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
             Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail)
         {
