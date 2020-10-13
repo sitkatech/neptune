@@ -979,11 +979,29 @@ namespace Neptune.Web.Controllers
 
             var allFieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.ToList();
 
+            var numColumns = dataTableFromExcel.Columns.Count;
+
             try
             {
                 for (int i = 0; i < numRows; i++)
                 {
                     var row = dataTableFromExcel.Rows[i];
+
+                    var rowEmpty = true;
+
+                    for (int j = 0; j < numColumns; j++)
+                    {
+                        rowEmpty = string.IsNullOrWhiteSpace(row[j].ToString());
+                        if (!rowEmpty)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (rowEmpty)
+                    {
+                        continue;
+                    }
 
                     var treatmentBMPName = row["BMP Name"].ToString();
                     var jurisdictionName = row["Jurisdiction"].ToString();
@@ -1020,14 +1038,24 @@ namespace Neptune.Web.Controllers
                                          x.VisitDate.Date == fieldVisitDate.Date) ??
                                      new FieldVisit(treatmentBMP, FieldVisitStatus.Complete, CurrentPerson,
                                          fieldVisitDate, false, fieldVisitType, true);
-
+                    
+                    // todo: check that initial assessment fields are filled in before validating/making initial assessment record
                     var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment(
                         treatmentBMP, treatmentBMP.TreatmentBMPType,
                         fieldVisit, TreatmentBMPAssessmentType.Initial, true);
-                    var postMaintenanceAssessment =
-                        fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
-                            treatmentBMP.TreatmentBMPType,
-                            fieldVisit, TreatmentBMPAssessmentType.PostMaintenance, true);
+
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true);
+                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION, false);
+
+                    // todo: check that maintenance fields are filled in before validating/making initial assessment record
 
                     var maintenanceRecord = fieldVisit.MaintenanceRecord ??
                                             new MaintenanceRecord(treatmentBMP, treatmentBMP.TreatmentBMPType,
@@ -1047,20 +1075,6 @@ namespace Neptune.Web.Controllers
                     maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
                     maintenanceRecord.MaintenanceRecordDescription = rawDescription;
 
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true);
-                    UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                        treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION, false);
-
-                    //todo: foreach cared about name, find or make the MaintenanceRecordObservation and find or make the MaintenanceRecord ObservationValue
-                    // note that validation happens in CADT.ValueParsedForDataType
-
                     UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
                         treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
                     UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
@@ -1075,6 +1089,14 @@ namespace Neptune.Web.Controllers
                         treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
                     UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
                         treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
+
+                    // todo: check that post-maintenance fields are filled in before validating/making post-maintenance assessment record
+
+                    var postMaintenanceAssessment =
+                        fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
+                            treatmentBMP.TreatmentBMPType,
+                            fieldVisit, TreatmentBMPAssessmentType.PostMaintenance, true);
+
 
                     UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                         treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET, true);
