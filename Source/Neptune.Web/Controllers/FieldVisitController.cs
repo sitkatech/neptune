@@ -1054,24 +1054,27 @@ namespace Neptune.Web.Controllers
                                          new FieldVisit(treatmentBMP, FieldVisitStatus.Complete, CurrentPerson,
                                              fieldVisitDate, false, fieldVisitType, true);
 
-                        if (InitialAssessmentFieldsPopulated(row))
+                        if (InitialAssessmentFieldsPopulated(row,i))
                         {
                             var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment(
                                 treatmentBMP, treatmentBMP.TreatmentBMPType,
                                 fieldVisit, TreatmentBMPAssessmentType.Initial, true);
 
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true,
+                                false);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true, false);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY,
-                                true);
+                                true, false);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true, false);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION,
-                                false);
+                                false, false);
+
+                            initialAssessment.CalculateAssessmentScore();
                         }
 
                         if (MaintenanceRecordFieldsPopulated(row))
@@ -1111,7 +1114,7 @@ namespace Neptune.Web.Controllers
                                 treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
                         }
 
-                        if (PostMaintenanceAssessmentFieldsPopulated(row))
+                        if (PostMaintenanceAssessmentFieldsPopulated(row, i))
                         {
                             var postMaintenanceAssessment =
                                 fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
@@ -1121,22 +1124,27 @@ namespace Neptune.Web.Controllers
 
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET,
-                                true);
+                                true, true);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET,
-                                true);
+                                true, true);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
                                 OPERABILITY,
-                                true);
+                                true, true);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE,
-                                true);
+                                true, true);
                             UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
                                 ACCUMULATION,
-                                false);
+                                false, true);
+
+                            postMaintenanceAssessment.CalculateAssessmentScore();
                         }
+                        
+
+
                     } catch(InvalidOperationException ioe)
                     {
                         errors.Add(ioe.Message);
@@ -1162,20 +1170,36 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Index()));
         }
 
-        private static bool PostMaintenanceAssessmentFieldsPopulated(DataRow row)
+        private static bool PostMaintenanceAssessmentFieldsPopulated(DataRow row, int index)
         {
             var startIndex = row.Table.Columns.IndexOf($"{INLET} (Post-Maintenance)");
             var endIndex = row.Table.Columns.IndexOf($"{ACCUMULATION} Notes (Post-Maintenance)");
+            
+            // they are allowed to submit a completely blank post-maint assessment, but all fields must be filled out if any are
+            var allowBlank = true;
 
             for (var i = startIndex; i <= endIndex; i++)
             {
+                if (row.Table.Columns[i].ColumnName.Trim().EndsWith("Notes"))
+                {
+                    // don't care about the notes columns which are optional.
+                    continue;
+                }
+
                 if (!string.IsNullOrWhiteSpace(row[i].ToString()))
                 {
-                    return true;
+                    allowBlank = false;
+                }
+                // if this field is empty, but a previous field is not, then we have to bork.
+                else if (!allowBlank)
+                {
+                    throw new InvalidOperationException($"Post-Maintenance Assessment at row {index + 2} must be completely filled out or left completely blank.");
                 }
             }
 
-            return false;
+            // if allowBlank is still true, then the assessment is empty, i.e. "not populated", i.e. this function returns false. and v/v
+
+            return !allowBlank;
         }
 
         private static bool MaintenanceRecordFieldsPopulated(DataRow row)
@@ -1194,20 +1218,36 @@ namespace Neptune.Web.Controllers
             return false;
         }
 
-        private static bool InitialAssessmentFieldsPopulated(DataRow row)
+        private static bool InitialAssessmentFieldsPopulated(DataRow row, int index)
         {
             var startIndex = row.Table.Columns.IndexOf(INLET);
             var endIndex = row.Table.Columns.IndexOf($"{ACCUMULATION} Notes");
 
+            // they are allowed to submit a completely blank initial assessment, but all fields must be filled out if any are
+            bool allowBlank = true;
+
             for (var i = startIndex; i <= endIndex; i++)
             {
+                if (row.Table.Columns[i].ColumnName.Trim().EndsWith("Notes"))
+                {
+                    // don't care about the notes columns which are optional.
+                    continue;
+                }
+
                 if (!string.IsNullOrWhiteSpace(row[i].ToString()))
                 {
-                    return true;
+                    allowBlank = false;
+                }
+                // if this field is empty, but a previous field is not, then we have to bork.
+                else if (!allowBlank)
+                {
+                    throw new InvalidOperationException($"Initial Assessment at row {index+2} must be completely filled out or left completely blank.");
                 }
             }
 
-            return false;
+            // if allowBlank is still true, then the assessment is empty, i.e. "not populated", i.e. this function returns false. and v/v
+
+            return !allowBlank;
         }
 
         private static void UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(DataRow row,
@@ -1259,22 +1299,23 @@ namespace Neptune.Web.Controllers
 
         // todo: I don't think this is handling the post-maintenance assessment at allllllllll
         private static void UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
-            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail)
+            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail, bool isPostMaintenance)
         {
-            var rawInletCondition = row[observationTypeName].ToString();
-            var rawInletConditionNotes = row[$"{observationTypeName} Notes"].ToString();
+            var suffix = isPostMaintenance ? " (Post-Maintenance)":"";
+            var rawInletCondition = row[$"{observationTypeName}{suffix}"].ToString().ToUpperInvariant();
+            var rawInletConditionNotes = row[$"{observationTypeName} Notes{suffix}"].ToString();
             string inletConditionObservationValue;
             if (isPassFail)
             {
                 inletConditionObservationValue =
-                    rawInletCondition == "Pass" ? "true" : (rawInletCondition == "Fail" ? "false" : "invalid");
+                    rawInletCondition == "PASS" ? "true" : (rawInletCondition == "FAIL" ? "false" : "invalid");
             }
             else
             {
                 inletConditionObservationValue = rawInletCondition;
             }
 
-            if (rawInletCondition == "invalid")
+            if (inletConditionObservationValue == "invalid")
             {
                 throw new InvalidOperationException($"Invalid {observationTypeName} at row {rowNumber + 2}");
             }
