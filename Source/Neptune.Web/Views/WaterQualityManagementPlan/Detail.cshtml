@@ -316,10 +316,7 @@
             <div class="panel-body">
                 <h4>
                     Modeling Approach
-                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                    {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="#">Edit</a>
-                    }
+                    @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string>{ "btn", "btn-xs", "btn-neptune"}, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 </h4>
                 <p>
                     @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription

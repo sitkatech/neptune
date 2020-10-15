@@ -553,6 +553,9 @@
     <Compile Include="Security\WebServicesViewFeature.cs" />
     <Compile Include="Views\TreatmentBMP\ModeledBMPPerformance.cs" />
     <Compile Include="Views\TreatmentBMP\ModeledBMPPerformanceViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditModelingApproach.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditModelingApproachViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditModelingApproachViewModel.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPs.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPsViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPsViewModel.cs" />
@@ -2027,6 +2030,7 @@
     <Content Include="Views\FieldVisit\BulkUploadTrashScreenVisit.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPs.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditSourceControlBMPs.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditModelingApproach.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

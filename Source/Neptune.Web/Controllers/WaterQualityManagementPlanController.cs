@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Spatial;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -672,5 +674,34 @@ namespace Neptune.Web.Controllers
         }
         #endregion
 
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public PartialViewResult EditModelingApproach(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditModelingApproachViewModel(waterQualityManagementPlan);
+            return ViewEditModelingApproach(viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditModelingApproach(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditModelingApproachViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditModelingApproach(viewModel);
+            }
+            viewModel.UpdateModel(waterQualityManagementPlan);
+            SetMessageForDisplay($"Modeling Approach successfully changed for {waterQualityManagementPlan.WaterQualityManagementPlanName}.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewEditModelingApproach(EditModelingApproachViewModel viewModel)
+        {
+            var viewData = new EditModelingApproachViewData(WaterQualityManagementPlanModelingApproach.All);
+            return RazorPartialView<EditModelingApproach, EditModelingApproachViewData, EditModelingApproachViewModel>(viewData, viewModel);
+        }
     }
 }
