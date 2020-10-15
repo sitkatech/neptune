@@ -1177,6 +1177,7 @@
     <Content Include="Content\JQuery\jquery.slideout\jquery.slideout.min.js">
       <DependentUpon>jquery.slideout.js</DependentUpon>
     </Content>
+    <Content Include="Content\leaflet\leaflet.vectorgrid\leaflet.vectorgrid.bundled.js" />
     <Content Include="PyQgis\ComputeTrashGeneratingUnits.py" />
     <Content Include="PyQgis\TestModule.py" />
     <Content Include="PyQgis\TestPyqgis.py" />

@@ -155,7 +155,7 @@
                     <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.DateOfContruction.ToStringDate()</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">Hydromodification Applies</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.HydromodificationApplies)</label>
                     <div class="col-sm-7">
                         @if (ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies != null)
                         {

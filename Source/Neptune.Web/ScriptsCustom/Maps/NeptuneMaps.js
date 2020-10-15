@@ -69,9 +69,12 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, cus
     });
 
     var streetLabelsLayer = new L.TileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {});
+    var topographyLayer = L.vectorGrid.protobuf("https://tiles.arcgis.com/tiles/UXmFoWC7yDHcDN5Q/arcgis/rest/services/Contours_2ft/VectorTileServer/tile/{z}/{y}/{x}.pbf",
+        {});
+    topographyLayer.id = "Topography";
 
     var baseLayers = { 'Aerial': esriAerial, 'Street': esriStreet, 'Terrain': esriTerrain, 'Hillshade': esriHillshade };
-    var overlayLayers = { 'Street Labels': streetLabelsLayer };
+    var overlayLayers = { 'Street Labels': streetLabelsLayer, 'Topography': topographyLayer };
 
     var streetLayerGroup;
     if (initialBaseLayerShown === "Hybrid")
@@ -147,6 +150,9 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, cus
         });
     }
     self.setMapBounds(mapInitJson);
+
+    //This needs to happen after the controls are added because jQuery is removing the disabled attributes after adding the control layers
+    this.map.on('zoomend', NeptuneMaps.disableAppropriateControls);
 };
 
 NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers) {
@@ -285,6 +291,29 @@ var BetterLayerControl = L.Control.Layers.extend(
         fixClass: function (classNameToAdd) {
             this._container.className += " ";
             this._container.className += classNameToAdd;
+        },
+
+        //The following three functions allow for layer control rebuilding on zoom
+        //This is beneficial for adding classes that will later disable a control based on zoom level
+        onAdd: function (map) {
+            this._map = map;
+            map.on('zoomend', this._update, this);
+            return L.Control.Layers.prototype.onAdd.call(this, map);
+        },
+
+        onRemove: function (map) {
+            map.off('zoomend', this._update, this);
+            L.Control.Layers.prototype.onRemove.call(this, map);
+        },
+
+        //Because of something jQuery is doing after we add our items, we can't just disable the control here
+        //We'll add this class, which jQuery doesn't take away, and then call the NeptuneMaps.disableAppropriateControls function to disable and turn off the layer
+        _addItem: function (obj) {
+            var item = L.Control.Layers.prototype._addItem.call(this, obj);
+            if (this._map.getZoom() < 14 && obj.name  === "Topography") {
+                $(item).find('input').addClass('disabled-control');
+            }
+            return item;
         }
     });
 
@@ -625,3 +654,12 @@ NeptuneMaps.epsg4326ToEpsg2771 = function(xy) {
         "+proj=lcc +lat_1=33.88333333333333 +lat_2=32.78333333333333 +lat_0=32.16666666666666 +lon_0=-116.25 +x_0=2000000 +y_0=500000 +ellps=GRS80 +units=m +no_defs";
     return proj4(projection, xy);
 };
+
+NeptuneMaps.disableAppropriateControls = function () {
+    $(".disabled-control").each(function () {
+        if ($(this).is(":checked")) {
+            $(this).trigger("click");
+        }
+        $(this).prop("disabled", true);
+    });
+}
