@@ -1180,7 +1180,7 @@ namespace Neptune.Web.Controllers
 
             for (var i = startIndex; i <= endIndex; i++)
             {
-                if (row.Table.Columns[i].ColumnName.Trim().EndsWith("Notes"))
+                if (row.Table.Columns[i].ColumnName.Trim().EndsWith("Notes (Post-Maintenance)"))
                 {
                     // don't care about the notes columns which are optional.
                     continue;
