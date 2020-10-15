@@ -56,11 +56,11 @@
 
                     @if (ViewDataTyped.HasSavedWqmpDraft)
                     {
-                        @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                        @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
                     }
                     else
                     {
-                        <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.BeginOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
                     }
                 </div>
             </div>
@@ -252,8 +252,8 @@
                 </div>
                 <div class="panel-body">
                     <div>
-                        <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">Add Parcels</a>
-                        <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Add Treatment BMPs</a>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
+                        <a class="btn btn-neptune" href="@ViewDataTyped.EditInventoriedBMPsUrl">Add Treatment BMPs</a>
                     </div>
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
                     <div class="row" style="margin-top: 12px;">
@@ -275,7 +275,7 @@
                     }
                     else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
                     {
-                        <p class="systemText">No treatment area is provided for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">treatment area is provided</a>.</p>
+                        <p class="systemText">No treatment area is provided for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
                     }
                     else if (!ViewDataTyped.AnyLSPCBasins)
                     {
@@ -297,7 +297,7 @@
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
-                        <a href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">
+                        <a href="@ViewDataTyped.EditParcelsUrl">
                             @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")
                         </a>
                     </span>
@@ -318,7 +318,7 @@
                     Modeling Approach
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                     {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditInventoriedBMPsUrl">Edit</a>
                     }
                 </h4>
                 <p>
@@ -328,9 +328,15 @@
                     Inventoried Structural BMPs
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                     {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditInventoriedBMPsUrl">Edit</a>
                     }
                 </h4>
+                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+                {
+                    <div class="alert alert-info">
+                        This WQMP is modeled by entering simplified structural BMPs parameters; any explicitly inventoried BMPs entered here are informational only.
+                    </div>
+                }
                 <div>
                     @if (ViewDataTyped.TreatmentBMPs.Any())
                     {
@@ -372,12 +378,15 @@
                     Simplified Structural BMPs
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                     {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSimplifiedStructuralBMPsUrl">Edit</a>
                     }
                 </h4>
-                <p>
-                    This WQMP is modeled by explicitly inventorying associated structural BMPs; any simplified BMPs entered here are informational only.
-                </p>
+                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Detailed)
+                {
+                    <div class="alert alert-info">
+                        This WQMP is modeled by explicitly inventorying associated structural BMPs; any simplified BMPs entered here are informational only.
+                    </div>
+                }
                 <div>
                     @if (ViewDataTyped.QuickBMPs.Any())
                     {
@@ -419,7 +428,7 @@
                     Source Control BMPs
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                     {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSourceControlBMPsUrl">Edit</a>
                     }
                 </h4>
 
@@ -470,7 +479,7 @@
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", 850, "Upload", "Cancel", new List<string>(), null, null)
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewDocumentUrl, "Upload New Document", 850, "Upload", "Cancel", new List<string>(), null, null)
                     </span>
                 }
             </div>
@@ -527,11 +536,11 @@
                     <span class="pull-right">
                         @if (ViewDataTyped.HasSavedWqmpDraft)
                         {
-                            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string>(), null, null)
+                            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.BeginOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string>(), null, null)
                         }
                         else
                         {
-                            <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
+                            <a href="@ViewDataTyped.BeginOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
                         }
                     </span>
                 }

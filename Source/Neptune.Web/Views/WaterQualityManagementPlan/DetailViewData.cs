@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
@@ -17,15 +16,17 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public bool CurrentPersonCanManageWaterQualityManagementPlans { get; }
-        public string EditWaterQualityManagementPlanTreatmentBmpsUrl { get; }
-        public string EditWaterQualityManagementPlanParcelsUrl { get; }
-        public string NewWaterQualityManagementPlanDocumentUrl { get; }
+        public string EditInventoriedBMPsUrl { get; }
+        public string EditSimplifiedStructuralBMPsUrl { get; }
+        public string EditSourceControlBMPsUrl { get; }
+        public string EditParcelsUrl { get; }
+        public string NewDocumentUrl { get; }
         public MapInitJson MapInitJson { get; }
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
         public bool HasSavedWqmpDraft { get; }
-        public string BeginWqmpOMVerificationRecordUrl { get; }
+        public string BeginOMVerificationRecordUrl { get; }
 
         public List<Models.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
@@ -63,13 +64,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 .HasPermission(currentPerson, waterQualityManagementPlan)
                 .HasPermission;
             currentPerson.IsManagerOrAdmin();
-            EditWaterQualityManagementPlanTreatmentBmpsUrl =
+            EditInventoriedBMPsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpBmps(WaterQualityManagementPlan));
-            EditWaterQualityManagementPlanParcelsUrl =
+            EditSimplifiedStructuralBMPsUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.EditSimplifiedStructuralBMPs(WaterQualityManagementPlan));
+            EditSourceControlBMPsUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.EditSourceControlBMPs(WaterQualityManagementPlan));
+            EditParcelsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpParcels(WaterQualityManagementPlan));
-            NewWaterQualityManagementPlanDocumentUrl =
+            NewDocumentUrl =
                 SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(c =>
                     c.New(waterQualityManagementPlan));
             MapInitJson = mapInitJson;
@@ -83,7 +90,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             HasSavedWqmpDraft = waterQualityManagementPlanVerifyDraft != null &&
                                 waterQualityManagementPlanVerifyDraft.IsDraft;
-            BeginWqmpOMVerificationRecordUrl = HasSavedWqmpDraft
+            BeginOMVerificationRecordUrl = HasSavedWqmpDraft
                 ? SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpVerifyModal(waterQualityManagementPlanVerifyDraft))
                 : SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
@@ -124,7 +131,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             AnyLSPCBasins = anyLspcBasins;
         }
-
 
         public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
         {

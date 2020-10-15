@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -553,6 +553,12 @@
     <Compile Include="Security\WebServicesViewFeature.cs" />
     <Compile Include="Views\TreatmentBMP\ModeledBMPPerformance.cs" />
     <Compile Include="Views\TreatmentBMP\ModeledBMPPerformanceViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPs.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPsViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPsViewModel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditSourceControlBMPs.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditSourceControlBMPsViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditSourceControlBMPsViewModel.cs" />
     <Compile Include="Views\WebServices\Index.cs" />
     <Compile Include="Views\WebServices\IndexViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />
@@ -1959,7 +1965,9 @@
     <Content Include="Views\Shared\ManagePhotosWithPreview\ManagePhotosWithPreview.cshtml" />
     <Content Include="Views\User\Invite.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\Detail.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditSourceControlBMPsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcelsController.js" />
+    <Content Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmpsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\Index.cshtml" />
     <Content Include="Views\WaterQualityManagementPlanDocument\New.cshtml" />
@@ -2016,6 +2024,8 @@
     <Content Include="Views\FieldVisit\EditDateAndType.cshtml" />
     <Content Include="Views\TreatmentBMP\ModeledBMPPerformance.cshtml" />
     <Content Include="Views\FieldVisit\BulkUploadTrashScreenVisit.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPs.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditSourceControlBMPs.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

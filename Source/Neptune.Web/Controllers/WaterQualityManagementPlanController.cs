@@ -287,7 +287,7 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
-            var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
+            var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan);
             return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
 
@@ -304,7 +304,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmpSimples, viewModel.SourceControlBMPSimples);
+            viewModel.UpdateModels(waterQualityManagementPlan);
             SetMessageForDisplay(
                 $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
@@ -317,9 +317,92 @@ namespace Neptune.Web.Controllers
             EditWqmpBmpsViewModel viewModel)
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
-            var viewData = new EditWqmpBmpsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
+            var viewData = new EditWqmpBmpsViewData(CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditWqmpBmps, EditWqmpBmpsViewData, EditWqmpBmpsViewModel>(viewData, viewModel);
         }
+
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public ViewResult EditSimplifiedStructuralBMPs(
+            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
+            var viewModel = new EditSimplifiedStructuralBMPsViewModel(waterQualityManagementPlan);
+            return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditSimplifiedStructuralBMPs(
+            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
+            EditSimplifiedStructuralBMPsViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
+            }
+
+            viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmpSimples);
+            SetMessageForDisplay(
+                $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
+            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
+        }
+
+        private ViewResult ViewEditSimplifiedStructuralBMPs(WaterQualityManagementPlan waterQualityManagementPlan,
+            EditSimplifiedStructuralBMPsViewModel viewModel)
+        {
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
+            var viewData = new EditSimplifiedStructuralBMPsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
+            return RazorView<EditSimplifiedStructuralBMPs, EditSimplifiedStructuralBMPsViewData, EditSimplifiedStructuralBMPsViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public ViewResult EditSourceControlBMPs(
+    WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
+            var viewModel = new EditSourceControlBMPsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
+            return ViewEditSourceControlBMPs(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditSourceControlBMPs(
+            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
+            EditSourceControlBMPsViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditSourceControlBMPs(waterQualityManagementPlan, viewModel);
+            }
+
+            viewModel.UpdateModels(waterQualityManagementPlan, viewModel.SourceControlBMPSimples);
+            SetMessageForDisplay(
+                $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
+            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
+        }
+
+        private ViewResult ViewEditSourceControlBMPs(WaterQualityManagementPlan waterQualityManagementPlan,
+            EditSourceControlBMPsViewModel viewModel)
+        {
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
+            var viewData = new EditSourceControlBMPsViewData(CurrentPerson, waterQualityManagementPlan);
+            return RazorView<EditSourceControlBMPs, EditSourceControlBMPsViewData, EditSourceControlBMPsViewModel>(viewData, viewModel);
+        }
+
 
         #endregion
 
