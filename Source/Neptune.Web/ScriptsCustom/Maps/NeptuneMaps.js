@@ -151,6 +151,7 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, cus
     }
     self.setMapBounds(mapInitJson);
 
+    //This needs to happen after the controls are added because jQuery is removing the disabled attributes after adding the control layers
     this.map.on('zoomend', NeptuneMaps.disableAppropriateControls);
 };
 
@@ -292,6 +293,8 @@ var BetterLayerControl = L.Control.Layers.extend(
             this._container.className += classNameToAdd;
         },
 
+        //The following three functions allow for layer control rebuilding on zoom
+        //This is beneficial for adding classes that will later disable a control based on zoom level
         onAdd: function (map) {
             this._map = map;
             map.on('zoomend', this._update, this);
@@ -303,14 +306,13 @@ var BetterLayerControl = L.Control.Layers.extend(
             L.Control.Layers.prototype.onRemove.call(this, map);
         },
 
+        //Because of something jQuery is doing after we add our items, we can't just disable the control here
+        //We'll add this class, which jQuery doesn't take away, and then call the NeptuneMaps.disableAppropriateControls function to disable and turn off the layer
         _addItem: function (obj) {
             var item = L.Control.Layers.prototype._addItem.call(this, obj);
-            // implement your logic here
-            // in this example layers are disabled below zoom 12
             if (this._map.getZoom() < 14 && obj.name  === "Topography") {
                 $(item).find('input').addClass('disabled-control');
             }
-
             return item;
         }
     });
