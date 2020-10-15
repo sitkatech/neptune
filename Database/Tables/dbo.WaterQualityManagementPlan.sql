@@ -28,6 +28,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
 	[TrashCaptureEffectiveness] [int] NULL,
 	[WaterQualityManagementPlanBoundary] [geometry] NULL,
+	[WaterQualityManagementPlanModelingApproachID] [int] NOT NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanID] ASC
@@ -69,6 +70,11 @@ ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_W
 REFERENCES [dbo].[WaterQualityManagementPlanLandUse] ([WaterQualityManagementPlanLandUseID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID]
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanModelingApproach_WaterQualityManagementPlanModelingApproachID] FOREIGN KEY([WaterQualityManagementPlanModelingApproachID])
+REFERENCES [dbo].[WaterQualityManagementPlanModelingApproach] ([WaterQualityManagementPlanModelingApproachID])
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanModelingApproach_WaterQualityManagementPlanModelingApproachID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanPermitTerm_WaterQualityManagementPlanPermitTermID] FOREIGN KEY([WaterQualityManagementPlanPermitTermID])
 REFERENCES [dbo].[WaterQualityManagementPlanPermitTerm] ([WaterQualityManagementPlanPermitTermID])

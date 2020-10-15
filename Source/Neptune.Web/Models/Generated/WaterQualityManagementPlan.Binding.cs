@@ -36,7 +36,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, DbGeometry waterQualityManagementPlanBoundary) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, DbGeometry waterQualityManagementPlanBoundary, int waterQualityManagementPlanModelingApproachID) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -63,12 +63,13 @@ namespace Neptune.Web.Models
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
             this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
             this.WaterQualityManagementPlanBoundary = waterQualityManagementPlanBoundary;
+            this.WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlanModelingApproachID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int stormwaterJurisdictionID, string waterQualityManagementPlanName, int trashCaptureStatusTypeID) : this()
+        public WaterQualityManagementPlan(int stormwaterJurisdictionID, string waterQualityManagementPlanName, int trashCaptureStatusTypeID, int waterQualityManagementPlanModelingApproachID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -76,12 +77,13 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
+            this.WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlanModelingApproachID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public WaterQualityManagementPlan(StormwaterJurisdiction stormwaterJurisdiction, string waterQualityManagementPlanName, TrashCaptureStatusType trashCaptureStatusType) : this()
+        public WaterQualityManagementPlan(StormwaterJurisdiction stormwaterJurisdiction, string waterQualityManagementPlanName, TrashCaptureStatusType trashCaptureStatusType, WaterQualityManagementPlanModelingApproach waterQualityManagementPlanModelingApproach) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -90,14 +92,15 @@ namespace Neptune.Web.Models
             stormwaterJurisdiction.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
             this.TrashCaptureStatusTypeID = trashCaptureStatusType.TrashCaptureStatusTypeID;
+            this.WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static WaterQualityManagementPlan CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction, TrashCaptureStatusType trashCaptureStatusType)
+        public static WaterQualityManagementPlan CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction, TrashCaptureStatusType trashCaptureStatusType, WaterQualityManagementPlanModelingApproach waterQualityManagementPlanModelingApproach)
         {
-            return new WaterQualityManagementPlan(stormwaterJurisdiction, default(string), trashCaptureStatusType);
+            return new WaterQualityManagementPlan(stormwaterJurisdiction, default(string), trashCaptureStatusType, waterQualityManagementPlanModelingApproach);
         }
 
         /// <summary>
@@ -243,6 +246,7 @@ namespace Neptune.Web.Models
         public int TrashCaptureStatusTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public DbGeometry WaterQualityManagementPlanBoundary { get; set; }
+        public int WaterQualityManagementPlanModelingApproachID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
@@ -262,6 +266,7 @@ namespace Neptune.Web.Models
         public HydromodificationApplies HydromodificationApplies { get { return HydromodificationAppliesID.HasValue ? HydromodificationApplies.AllLookupDictionary[HydromodificationAppliesID.Value] : null; } }
         public virtual HydrologicSubarea HydrologicSubarea { get; set; }
         public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
+        public WaterQualityManagementPlanModelingApproach WaterQualityManagementPlanModelingApproach { get { return WaterQualityManagementPlanModelingApproach.AllLookupDictionary[WaterQualityManagementPlanModelingApproachID]; } }
 
         public static class FieldLengths
         {

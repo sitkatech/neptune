@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
@@ -42,7 +43,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
         public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
         public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
-        public Models.FieldDefinition FieldDefinitionForAreaWithinWQMP { get; }
+        public Models.FieldDefinition FieldDefinitionForFullyParameterized { get; }
         public bool AnyLSPCBasins { get; }
 
 
@@ -119,7 +120,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
-            FieldDefinitionForAreaWithinWQMP = Models.FieldDefinition.AreaWithinWQMP;
+            FieldDefinitionForFullyParameterized = Models.FieldDefinition.FullyParameterized;
 
             AnyLSPCBasins = anyLspcBasins;
         }

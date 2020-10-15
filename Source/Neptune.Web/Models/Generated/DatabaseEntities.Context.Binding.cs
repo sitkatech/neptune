@@ -691,6 +691,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(waterQualityManagementPlanLandUse, "WaterQualityManagementPlanLandUse", primaryKey);
                     return waterQualityManagementPlanLandUse;
 
+                case "WaterQualityManagementPlanModelingApproach":
+                    var waterQualityManagementPlanModelingApproach = WaterQualityManagementPlanModelingApproach.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanModelingApproach, "WaterQualityManagementPlanModelingApproach", primaryKey);
+                    return waterQualityManagementPlanModelingApproach;
+
                 case "WaterQualityManagementPlanParcel":
                     return WaterQualityManagementPlanParcels.GetWaterQualityManagementPlanParcel(primaryKey);
 

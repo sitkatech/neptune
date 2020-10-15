@@ -312,15 +312,25 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 BMPs
-                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                {
-                    <span class="pull-right">
-                        <a href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                    </span>
-                }
             </div>
             <div class="panel-body">
-                <h4>Structural BMPs in Detailed Inventory</h4>
+                <h4>
+                    Modeling Approach
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    {
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                    }
+                </h4>
+                <p>
+                    @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
+                </p>
+                <h4 style="margin-top: 32px">
+                    Inventoried Structural BMPs
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    {
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                    }
+                </h4>
                 <div>
                     @if (ViewDataTyped.TreatmentBMPs.Any())
                     {
@@ -331,8 +341,9 @@
                                         <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
                                         <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
                                         <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
-                                        <th style="white-space: nowrap; border-top: none">Detailed Inventory Record?</th>
-                                        <th style="white-space: nowrap; border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForAreaWithinWQMP)</th>
+                                        <th style="white-space: nowrap; border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
+                                        <th style="white-space: nowrap; border-top: none; text-align: right"><label>Delineation Area</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Delineation Status</label></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -342,8 +353,9 @@
                                             <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
                                             <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                             <td>@treatmentBMP.Notes</td>
-                                            <td>Yes</td>
-                                            <td style="text-align: right">@ViewDataTyped.CalculateAreaWithinWQMP(treatmentBMP).ToGroupedNumeric()</td>
+                                            <td>@treatmentBMP.IsFullyParameterized()</td>
+                                            <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
+                                            <td>@(treatmentBMP.Delineation != null ? treatmentBMP.Delineation.IsVerified ? "Verified" : "Provisional" : "None")</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -356,7 +368,16 @@
                     }
                 </div>
 
-                <h4 style="margin-top:32px">Other Structural BMPs</h4>
+                <h4 style="margin-top: 32px">
+                    Simplified Structural BMPs
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    {
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                    }
+                </h4>
+                <p>
+                    This WQMP is modeled by explicitly inventorying associated structural BMPs; any simplified BMPs entered here are informational only.
+                </p>
                 <div>
                     @if (ViewDataTyped.QuickBMPs.Any())
                     {
@@ -394,7 +415,14 @@
                     }
                 </div>
 
-                <h4 style="margin-top:32px">Source Control BMPs</h4>
+                <h4 style="margin-top: 32px">
+                    Source Control BMPs
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    {
+                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">Edit</a>
+                    }
+                </h4>
+
                 @if (ViewDataTyped.SourceControlBMPs.Any())
                 {
                     <div style="padding: 0 16px">
@@ -407,9 +435,9 @@
                                         <th colspan="3" style="border-top: none; border-bottom: none"><h5 style="margin-top: 32px;">@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
                                     </tr>
                                     <tr>
-                                        <th style="white-space: nowrap; border-top:none"> Source Control Attribute</th>
-                                        <th style="white-space: nowrap; border-top:none"> Is Present</th>
-                                        <th style="white-space: nowrap; border-top:none"> Notes</th>
+                                        <th style="white-space: nowrap; border-top: none"> Source Control Attribute</th>
+                                        <th style="white-space: nowrap; border-top: none"> Is Present</th>
+                                        <th style="white-space: nowrap; border-top: none"> Notes</th>
                                     </tr>
                                 </thead>
                                 <tbody>

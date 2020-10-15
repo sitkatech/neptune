@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             Property(x => x.TrashCaptureStatusTypeID).HasColumnName(@"TrashCaptureStatusTypeID").HasColumnType("int").IsRequired();
             Property(x => x.TrashCaptureEffectiveness).HasColumnName(@"TrashCaptureEffectiveness").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanBoundary).HasColumnName(@"WaterQualityManagementPlanBoundary").HasColumnType("geometry").IsOptional();
+            Property(x => x.WaterQualityManagementPlanModelingApproachID).HasColumnName(@"WaterQualityManagementPlanModelingApproachID").HasColumnType("int").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.WaterQualityManagementPlans).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID
