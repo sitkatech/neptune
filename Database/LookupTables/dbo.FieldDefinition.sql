@@ -113,4 +113,5 @@ VALUES
 (109, 'AreaWithinWQMP', 'Area within WQMP', '', 1),
 (110, 'Watershed', 'Watershed', '', 1),
 (111, 'DesignStormwaterDepth', 'Design Stormwater Depth', '', 1),
-(112, 'FullyParameterized', 'Fully Parameterized?', 'Indicates whether all required attributes have been provided in order to calculate model results.', 1)
+(112, 'FullyParameterized', 'Fully Parameterized?', 'Indicates whether all required attributes have been provided in order to calculate model results.', 1),
+(113, 'HydromodificationApplies', 'Hydromodification Controls Apply', '', 1)

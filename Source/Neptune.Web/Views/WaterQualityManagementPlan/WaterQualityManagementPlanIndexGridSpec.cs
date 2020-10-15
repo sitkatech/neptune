@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Approval Date", x => x.ApprovalDate, 120);
             Add("Date of Construction", x => x.DateOfContruction, 120);
-            Add("Hydromodification Applies", x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 120,
+            Add(Models.FieldDefinition.HydromodificationApplies.ToGridHeaderString(), x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 130,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaName, 120,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
