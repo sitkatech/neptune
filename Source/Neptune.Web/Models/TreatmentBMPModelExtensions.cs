@@ -258,6 +258,11 @@ namespace Neptune.Web.Models
             return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
         }
 
+        public static string GetDelineationStatus(this TreatmentBMP treatmentBMP)
+        {
+            return treatmentBMP.Delineation != null ? treatmentBMP.Delineation.IsVerified ? "Verified" : "Provisional" : "None";
+        }
+
         /// <summary>
         /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries
         /// </summary>

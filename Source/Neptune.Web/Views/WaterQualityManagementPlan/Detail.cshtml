@@ -357,7 +357,7 @@
                                         <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                         <td>@treatmentBMP.Notes</td>
                                         <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
-                                        <td>@(treatmentBMP.Delineation != null ? treatmentBMP.Delineation.IsVerified ? "Verified" : "Provisional" : "None")</td>
+                                        <td>@treatmentBMP.GetDelineationStatus()</td>
                                         <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
                                     </tr>
                                     }

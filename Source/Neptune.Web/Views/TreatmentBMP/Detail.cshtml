@@ -583,7 +583,14 @@
                     }
                     else if (!ViewDataTyped.IsFullyParameterized)
                     {
-                        <p class="systemText">This Treatment BMP record is missing fields required to calculate model results. Please provide a delineation and required Modeling Parameters above.</p>
+                        if (ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null && ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+                        {
+                            <p class="systemText">This BMP is associated with a @UrlTemplate.MakeHrefString(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetDetailUrl(), "WQMP") that is modeled using the simplified approach; this BMP will not be modeled explicitly.</p>
+                        }
+                        else
+                        {
+                            <p class="systemText">This Treatment BMP record is missing fields required to calculate model results. Please provide a delineation and required Modeling Parameters above.</p>
+                        }
                     }
                     else if ((ViewDataTyped.TreatmentBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.Delineation.IsVerified))
                     {
