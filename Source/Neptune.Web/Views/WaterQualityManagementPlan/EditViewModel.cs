@@ -64,10 +64,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Phone")]
         public string MaintenanceContactPhone { get; set; }
 
-        [DisplayName("Date of Contruction")]
+        [DisplayName("Date of Construction")]
         public DateTime? DateOfContruction { get; set; }
 
-        [DisplayName("Hydromodification Applies")]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.HydromodificationApplies)]
         public int? HydromodificationAppliesID { get; set; }
 
         [DisplayName("Permit Term")]
