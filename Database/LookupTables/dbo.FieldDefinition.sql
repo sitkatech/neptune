@@ -107,11 +107,12 @@ VALUES
 (103, 'WaterQualityDetentionVolume', 'Water Quality Detention Volume', 'Volume of water above the surface outlet that provides a water quality detention function; surcharges during storms and drains after storms.  Do not include volume intended for peak flow control.', 1),
 (104, 'WettedFootprint', 'Wetted Footprint', 'Wetted footprint when BMP is half full.', 1),
 (105, 'WinterHarvestedWaterDemand', 'Winter Harvested Water Demand', 'Average daily harvested water demand from November through April. This should be averaged to account for any shutdowns during wet weather and reduction in demand during the winter season.', 1),
-(106, 'PercentOfSiteTreated', 'Percent of Site Treated', '', 1),
-(107, 'PercentCaptured', 'Percent Captured', '', 1),
-(108, 'PercentRetained', 'Percent Retained', '', 1),
+(106, 'PercentOfSiteTreated', '% of Site Treated', '', 1),
+(107, 'PercentCaptured', '% Captured', '', 1),
+(108, 'PercentRetained', '% Retained', '', 1),
 (109, 'AreaWithinWQMP', 'Area within WQMP', '', 1),
 (110, 'Watershed', 'Watershed', '', 1),
 (111, 'DesignStormwaterDepth', 'Design Stormwater Depth', '', 1),
 (112, 'FullyParameterized', 'Fully Parameterized?', 'Indicates whether all required attributes have been provided in order to calculate model results.', 1),
-(113, 'HydromodificationApplies', 'Hydromodification Controls Apply', '', 1)
+(113, 'HydromodificationApplies', 'Hydromodification Controls Apply', '', 1),
+(114, 'DelineationStatus', N'Delineation Status', N'Indicates whether the delineation is verified or not.', 1)

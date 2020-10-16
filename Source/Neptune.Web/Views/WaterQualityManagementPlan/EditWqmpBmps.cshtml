@@ -31,17 +31,6 @@
         .row-spacing {
             margin-top: 32px;
         }
-
-        .panel-heading a.collapsePanel:after {
-            font-family: 'Glyphicons Halflings';
-            content: "\e114";
-            float: right;
-            margin-top: -11px;
-        }
-
-        .panel-heading a.collapsePanel.collapsed:after {
-            content: "\e080";
-        }
     </style>
 }
 
@@ -57,7 +46,7 @@
             <div class="col-xs-12">
                 <h4>Structural BMPs in Detailed Inventory</h4>
                 <p>
-                    Select an Inventoried Treatment BMP from the dropdown then click <strong>Add</strong> to add it to the list. To add a BMP to the detailed inventory, use the Add a BMP page. When you're finished editing the Treatment BMPs, click <strong>Save</strong> to submit your changes.
+                    Select an Inventoried Treatment BMP from the dropdown then click <strong>Add</strong> to add it to the list. To add a BMP to the detailed inventory, use the <a href="@ViewDataTyped.NewTreatmentBMPUrl">Add a BMP</a> page. When you're finished editing the Treatment BMPs, click <strong>Save</strong> to submit your changes.
                 </p>
             </div>
         </div>

@@ -344,22 +344,22 @@
                                         <th style="white-space: nowrap; border-top: none"><label>Name</label></th>
                                         <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
                                         <th style="white-space: nowrap; border-top: none"><label>Notes</label></th>
-                                        <th style="white-space: nowrap; border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
-                                        <th style="white-space: nowrap; border-top: none; text-align: right"><label>Delineation Area</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Delineation Status</label></th>
+                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
+                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDelineationStatus)</th>
+                                        <th style="border-top: none; text-align: center"><label>Delineation Area (ac)</label></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                     {
-                                        <tr>
-                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td>@treatmentBMP.Notes</td>
-                                            <td>@treatmentBMP.IsFullyParameterized()</td>
-                                            <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
-                                            <td>@(treatmentBMP.Delineation != null ? treatmentBMP.Delineation.IsVerified ? "Verified" : "Provisional" : "None")</td>
-                                        </tr>
+                                    <tr>
+                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                        <td>@treatmentBMP.Notes</td>
+                                        <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
+                                        <td>@(treatmentBMP.Delineation != null ? treatmentBMP.Delineation.IsVerified ? "Verified" : "Provisional" : "None")</td>
+                                        <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>

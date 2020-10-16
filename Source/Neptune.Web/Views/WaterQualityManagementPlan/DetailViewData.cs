@@ -46,6 +46,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
         public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
         public Models.FieldDefinition FieldDefinitionForFullyParameterized { get; }
+        public Models.FieldDefinition FieldDefinitionForDelineationStatus { get; }
         public bool AnyLSPCBasins { get; }
 
 
@@ -132,6 +133,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
             FieldDefinitionForFullyParameterized = Models.FieldDefinition.FullyParameterized;
+            FieldDefinitionForDelineationStatus = Models.FieldDefinition.DelineationStatus;
 
             AnyLSPCBasins = anyLspcBasins;
         }

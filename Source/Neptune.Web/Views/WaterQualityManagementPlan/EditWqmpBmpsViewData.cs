@@ -10,6 +10,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular ViewDataForAngular { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
+        public string NewTreatmentBMPUrl { get; }
 
         public EditWqmpBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
@@ -29,6 +30,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPSimples);
 
             WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
+            NewTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
         }
 
 

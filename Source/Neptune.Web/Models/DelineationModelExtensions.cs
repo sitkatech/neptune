@@ -15,7 +15,8 @@ namespace Neptune.Web.Models
     {
         public static string GetDelineationAreaString(this Delineation delineation)
         {
-            return (delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
+            var delineationAcresAsString = (delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00");
+            return delineationAcresAsString != null ? $"{delineationAcresAsString} ac" : "-";
         }
 
         public static readonly UrlTemplate<int> DeleteUrlTemplate =
