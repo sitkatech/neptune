@@ -925,6 +925,17 @@ namespace Neptune.Web.Controllers
 
             var numRows = dataTableFromExcel.Rows.Count;
 
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
+
+            foreach (DataRow row in dataTableFromExcel.Rows)
+            {
+                var rowJurisdiction = row["Jurisdiction"].ToString();
+                if (!stormwaterJurisdictionsPersonCanView.Select(x=>x.Organization.OrganizationName).Contains(rowJurisdiction))
+                {
+                    SetErrorForDisplay($"You attempted to upload a spreadsheet containing BMPs in Jursidiction {rowJurisdiction}, which you do not have permission to manage.");
+                    return ViewBulkUploadTrashScreenVisit(viewModel);
+                }
+            }
 
             var treatmentBMPTypeAssessmentObservationTypes =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAssessmentObservationTypes
