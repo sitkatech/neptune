@@ -113,6 +113,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOperational)]
         public int? MonthsOfOperationID { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionEnum.DryWeatherFlowOverride)]
+        public int? DryWeatherFlowOverrideID { get; set; }
+
         public int? TreatmentBMPModelingTypeID { get; set; }
 
         /// <summary>
@@ -156,6 +159,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 WettedFootprint = treatmentBMPModelingAttribute.WettedFootprint;
                 WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand;
                 MonthsOfOperationID = treatmentBMPModelingAttribute.MonthsOfOperationID;
+                DryWeatherFlowOverrideID = treatmentBMPModelingAttribute.DryWeatherFlowOverrideID;
             }
         }
 
@@ -193,6 +197,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.WettedFootprint = WettedFootprint;
             treatmentBMPModelingAttribute.WinterHarvestedWaterDemand = WinterHarvestedWaterDemand;
             treatmentBMPModelingAttribute.MonthsOfOperationID = MonthsOfOperationID;
+            treatmentBMPModelingAttribute.DryWeatherFlowOverrideID = DryWeatherFlowOverrideID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

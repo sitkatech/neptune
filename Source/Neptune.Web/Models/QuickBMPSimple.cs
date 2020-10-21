@@ -12,6 +12,7 @@ namespace Neptune.Web.Models
         public decimal? PercentOfSiteTreated { get; set; }
         public decimal? PercentCaptured { get; set; }
         public decimal? PercentRetained { get; set; }
+        public int? DryWeatherFlowOverrideID { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder
@@ -27,6 +28,7 @@ namespace Neptune.Web.Models
             QuickTreatmentBMPTypeID = quickBMP.TreatmentBMPTypeID;
             QuickBMPTypeName = quickBMP.TreatmentBMPType.TreatmentBMPTypeName;
             QuickBMPNote = quickBMP.QuickBMPNote;
+            DryWeatherFlowOverrideID = quickBMP.DryWeatherFlowOverrideID;
             PercentOfSiteTreated = quickBMP.PercentOfSiteTreated;
             PercentCaptured = quickBMP.PercentCaptured;
             PercentRetained = quickBMP.PercentRetained;

@@ -110,6 +110,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinition FieldDefinitionForWinterHarvestedWaterDemand { get; }
         public Models.FieldDefinition FieldDefinitionForWatershed { get; }
         public Models.FieldDefinition FieldDefinitionForDesignStormwaterDepth { get; }
+        public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool HasModelingAttributes { get; }
         public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; }
         public string EditUpstreamBMPUrl { get; }
@@ -213,6 +214,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForWinterHarvestedWaterDemand = Models.FieldDefinition.WinterHarvestedWaterDemand;
             FieldDefinitionForWatershed = Models.FieldDefinition.Watershed;
             FieldDefinitionForDesignStormwaterDepth = Models.FieldDefinition.DesignStormwaterDepth;
+            FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
 
             OpenRevisionRequest = TreatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
@@ -468,6 +470,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string DisplayMonthsOfOperation()
         {
             return TreatmentBMP.TreatmentBMPModelingAttribute?.MonthsOfOperation?.MonthsOfOperationDisplayName;
+        }
+
+        public string DisplayDryWeatherFlowOverride()
+        {
+            return TreatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName;
         }
     }
 }

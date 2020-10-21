@@ -289,6 +289,11 @@ namespace Neptune.Web.Models
                 case "DirtyModelNode":
                     return DirtyModelNodes.GetDirtyModelNode(primaryKey);
 
+                case "DryWeatherFlowOverride":
+                    var dryWeatherFlowOverride = DryWeatherFlowOverride.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(dryWeatherFlowOverride, "DryWeatherFlowOverride", primaryKey);
+                    return dryWeatherFlowOverride;
+
                 case "FieldDefinitionDataImage":
                     return FieldDefinitionDataImages.GetFieldDefinitionDataImage(primaryKey);
 

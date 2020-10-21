@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
             Property(x => x.PercentOfSiteTreated).HasColumnName(@"PercentOfSiteTreated").HasColumnType("decimal").IsOptional().HasPrecision(5,2);
             Property(x => x.PercentCaptured).HasColumnName(@"PercentCaptured").HasColumnType("decimal").IsOptional().HasPrecision(5,2);
             Property(x => x.PercentRetained).HasColumnName(@"PercentRetained").HasColumnType("decimal").IsOptional().HasPrecision(5,2);
+            Property(x => x.DryWeatherFlowOverrideID).HasColumnName(@"DryWeatherFlowOverrideID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.WaterQualityManagementPlan).WithMany(b => b.QuickBMPs).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_QuickBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID

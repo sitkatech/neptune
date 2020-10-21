@@ -12,8 +12,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
         public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
         public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
+        public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
 
-        public EditSimplifiedStructuralBMPsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditSimplifiedStructuralBMPsViewData(Person currentPerson,
+            Models.WaterQualityManagementPlan waterQualityManagementPlan,
+            IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes, List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
+            int dryWeatherFlowOverrideDefaultID,
+            int dryWeatherFlowOverrideYesID) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
@@ -23,8 +28,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
+            FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
 
-            ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPTypes);
+            ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
 
             WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
@@ -33,10 +39,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public class EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular
         {
             public IEnumerable<TreatmentBMPTypeSimple> TreatmentBMPTypes { get; }
+            public IEnumerable<DryWeatherFlowOverride> DryWeatherFlowOverrides { get; }
+            public int DryWeatherFlowOverrideDefaultID { get; }
+            public int DryWeatherFlowOverrideYesID { get; set; }
 
-            public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes)
+            public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(
+                IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes,
+                IEnumerable<DryWeatherFlowOverride> dryWeatherFlowOverrides, int dryWeatherFlowOverrideDefaultID,
+                int dryWeatherFlowOverrideYesID)
             {
                 TreatmentBMPTypes = treatmentBMPTypes;
+                DryWeatherFlowOverrides = dryWeatherFlowOverrides;
+                DryWeatherFlowOverrideDefaultID = dryWeatherFlowOverrideDefaultID;
+                DryWeatherFlowOverrideYesID = dryWeatherFlowOverrideYesID;
             }
         }
     }

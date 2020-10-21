@@ -12,6 +12,7 @@ namespace Neptune.Web.Models
             QuickBMPName = quickBMPSimple.DisplayName;
             TreatmentBMPTypeID = quickBMPSimple.QuickTreatmentBMPTypeID;
             QuickBMPNote = quickBMPSimple.QuickBMPNote;
+            DryWeatherFlowOverrideID = quickBMPSimple.DryWeatherFlowOverrideID;
             PercentOfSiteTreated = quickBMPSimple.PercentOfSiteTreated;
             PercentCaptured= quickBMPSimple.PercentCaptured;
             PercentRetained = quickBMPSimple.PercentRetained;
