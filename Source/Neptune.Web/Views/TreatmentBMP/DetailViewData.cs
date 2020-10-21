@@ -474,7 +474,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public string DisplayDryWeatherFlowOverride()
         {
-            return TreatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName;
+            return TreatmentBMP.TreatmentBMPModelingAttribute != null ? TreatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
         }
     }
 }

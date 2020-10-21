@@ -171,12 +171,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public string DisplayDryWeatherFlowOverride(Models.TreatmentBMP treatmentBMP)
         {
-            return treatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName;
+            return treatmentBMP.TreatmentBMPModelingAttribute != null ? treatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
         }
 
         public string DisplayDryWeatherFlowOverride(QuickBMP quickBMP)
         {
-            return quickBMP.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName;
+            return quickBMP.DryWeatherFlowOverride != null ? quickBMP.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
         }
     }
 }
