@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[QuickBMP](
 	[PercentOfSiteTreated] [decimal](5, 2) NULL,
 	[PercentCaptured] [decimal](5, 2) NULL,
 	[PercentRetained] [decimal](5, 2) NULL,
+	[DryWeatherFlowOverrideID] [int] NULL,
  CONSTRAINT [PK_QuickBMP_QuickBMPID] PRIMARY KEY CLUSTERED 
 (
 	[QuickBMPID] ASC
@@ -22,6 +23,11 @@ CREATE TABLE [dbo].[QuickBMP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[QuickBMP]  WITH CHECK ADD  CONSTRAINT [FK_QuickBMP_DryWeatherFlowOverride_DryWeatherFlowOverrideID] FOREIGN KEY([DryWeatherFlowOverrideID])
+REFERENCES [dbo].[DryWeatherFlowOverride] ([DryWeatherFlowOverrideID])
+GO
+ALTER TABLE [dbo].[QuickBMP] CHECK CONSTRAINT [FK_QuickBMP_DryWeatherFlowOverride_DryWeatherFlowOverrideID]
 GO
 ALTER TABLE [dbo].[QuickBMP]  WITH CHECK ADD  CONSTRAINT [FK_QuickBMP_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])

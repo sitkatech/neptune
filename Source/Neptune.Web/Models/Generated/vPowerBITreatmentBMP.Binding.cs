@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBITreatmentBMP(int primaryKey, string treatmentBMPName, string treatmentBMPTypeName, string jurisdiction, double? locationLon, double? locationLat, string watershed, int? upstreamBMPID, string delineationType, int? waterQualityManagementPlanID, int? treatmentBMPModelingAttributeID, int? treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? monthsOfOperationID) : this()
+        public vPowerBITreatmentBMP(int primaryKey, string treatmentBMPName, string treatmentBMPTypeName, string jurisdiction, double? locationLon, double? locationLat, string watershed, int? upstreamBMPID, string delineationType, int? waterQualityManagementPlanID, int? treatmentBMPModelingAttributeID, int? treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? monthsOfOperationID, int? dryWeatherFlowOverrideID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
@@ -68,6 +68,7 @@ namespace Neptune.Web.Models
             this.WettedFootprint = wettedFootprint;
             this.WinterHarvestedWaterDemand = winterHarvestedWaterDemand;
             this.MonthsOfOperationID = monthsOfOperationID;
+            this.DryWeatherFlowOverrideID = dryWeatherFlowOverrideID;
         }
 
         /// <summary>
@@ -116,6 +117,7 @@ namespace Neptune.Web.Models
             this.WettedFootprint = vPowerBITreatmentBMP.WettedFootprint;
             this.WinterHarvestedWaterDemand = vPowerBITreatmentBMP.WinterHarvestedWaterDemand;
             this.MonthsOfOperationID = vPowerBITreatmentBMP.MonthsOfOperationID;
+            this.DryWeatherFlowOverrideID = vPowerBITreatmentBMP.DryWeatherFlowOverrideID;
             CallAfterConstructor(vPowerBITreatmentBMP);
         }
 
@@ -162,5 +164,6 @@ namespace Neptune.Web.Models
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
         public int? MonthsOfOperationID { get; set; }
+        public int? DryWeatherFlowOverrideID { get; set; }
     }
 }

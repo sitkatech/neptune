@@ -694,7 +694,8 @@ namespace Neptune.Web.Controllers
                 UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupID,
                 RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID,
                 TimeOfConcentrationID = TimeOfConcentration.FiveMinutes.TimeOfConcentrationID,
-                DesignResidenceTimeforPermanentPool = 720
+                DesignResidenceTimeforPermanentPool = 720,
+                DryWeatherFlowOverrideID = DryWeatherFlowOverride.No.DryWeatherFlowOverrideID
             };
 
             var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID);
@@ -734,7 +735,8 @@ namespace Neptune.Web.Controllers
             var timeOfConcentrations = TimeOfConcentration.All.OrderBy(x => x.TimeOfConcentrationID);
             var underlyingHydrologicSoilGroups = UnderlyingHydrologicSoilGroup.All.OrderBy(x => x.UnderlyingHydrologicSoilGroupID);
             var monthsOfOperation = MonthsOfOperation.All;
-            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation);
+            var dryWeatherFlowOverride = DryWeatherFlowOverride.All;
+            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation, dryWeatherFlowOverride);
             return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditModelingAttributesViewModel>(viewData, viewModel);
         }
 

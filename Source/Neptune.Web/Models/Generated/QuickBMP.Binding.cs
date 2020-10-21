@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public QuickBMP(int quickBMPID, int waterQualityManagementPlanID, int treatmentBMPTypeID, string quickBMPName, string quickBMPNote, decimal? percentOfSiteTreated, decimal? percentCaptured, decimal? percentRetained) : this()
+        public QuickBMP(int quickBMPID, int waterQualityManagementPlanID, int treatmentBMPTypeID, string quickBMPName, string quickBMPNote, decimal? percentOfSiteTreated, decimal? percentCaptured, decimal? percentRetained, int? dryWeatherFlowOverrideID) : this()
         {
             this.QuickBMPID = quickBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.PercentOfSiteTreated = percentOfSiteTreated;
             this.PercentCaptured = percentCaptured;
             this.PercentRetained = percentRetained;
+            this.DryWeatherFlowOverrideID = dryWeatherFlowOverrideID;
         }
 
         /// <summary>
@@ -145,12 +146,14 @@ namespace Neptune.Web.Models
         public decimal? PercentOfSiteTreated { get; set; }
         public decimal? PercentCaptured { get; set; }
         public decimal? PercentRetained { get; set; }
+        public int? DryWeatherFlowOverrideID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return QuickBMPID; } set { QuickBMPID = value; } }
 
         public virtual ICollection<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
+        public DryWeatherFlowOverride DryWeatherFlowOverride { get { return DryWeatherFlowOverrideID.HasValue ? DryWeatherFlowOverride.AllLookupDictionary[DryWeatherFlowOverrideID.Value] : null; } }
 
         public static class FieldLengths
         {

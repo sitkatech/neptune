@@ -146,13 +146,15 @@ namespace Neptune.Web.Controllers
             var anyLspcBasins = waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && HttpRequestStorage.DatabaseEntities.LSPCBasins.Any(x =>
                                     x.LSPCBasinGeometry.Intersects(waterQualityManagementPlan.WaterQualityManagementPlanBoundary));
 
+            var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
+
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 new HRUCharacteristicsViewData(waterQualityManagementPlan,
                     ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()),
-                anyLspcBasins);
+                anyLspcBasins, dryWeatherFlowOverrides);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -360,7 +362,10 @@ namespace Neptune.Web.Controllers
             EditSimplifiedStructuralBMPsViewModel viewModel)
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
-            var viewData = new EditSimplifiedStructuralBMPsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
+            var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
+            var dryWeatherFlowOverrideDefaultID = DryWeatherFlowOverride.No.DryWeatherFlowOverrideID;
+            var dryWeatherFlowOverrideYesID = DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID;
+            var viewData = new EditSimplifiedStructuralBMPsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
             return RazorView<EditSimplifiedStructuralBMPs, EditSimplifiedStructuralBMPsViewData, EditSimplifiedStructuralBMPsViewModel>(viewData, viewModel);
         }
 
