@@ -47,6 +47,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
         public Models.FieldDefinition FieldDefinitionForFullyParameterized { get; }
         public Models.FieldDefinition FieldDefinitionForDelineationStatus { get; }
+        public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool AnyLSPCBasins { get; }
 
 
@@ -54,7 +55,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
-            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs, HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins)
+            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
+            HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins,
+            List<DryWeatherFlowOverride> dryWeatherFlowOverrides)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -134,6 +137,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
             FieldDefinitionForFullyParameterized = Models.FieldDefinition.FullyParameterized;
             FieldDefinitionForDelineationStatus = Models.FieldDefinition.DelineationStatus;
+            FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
+
+
 
             AnyLSPCBasins = anyLspcBasins;
         }
@@ -161,6 +167,16 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             }
 
             return parameterizationErrors;
+        }
+
+        public string DisplayDryWeatherFlowOverride(Models.TreatmentBMP treatmentBMP)
+        {
+            return treatmentBMP.TreatmentBMPModelingAttribute != null ? treatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
+        }
+
+        public string DisplayDryWeatherFlowOverride(QuickBMP quickBMP)
+        {
+            return quickBMP.DryWeatherFlowOverride != null ? quickBMP.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
         }
     }
 }

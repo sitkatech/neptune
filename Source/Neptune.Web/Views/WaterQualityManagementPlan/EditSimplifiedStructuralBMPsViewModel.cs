@@ -37,6 +37,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 {
                     x.QuickBMPName = y.QuickBMPName;
                     x.QuickBMPNote = y.QuickBMPNote;
+                    x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
                     x.TreatmentBMPTypeID = y.TreatmentBMPTypeID;
                     x.PercentOfSiteTreated = y.PercentOfSiteTreated;
                     x.PercentCaptured = y.PercentCaptured;

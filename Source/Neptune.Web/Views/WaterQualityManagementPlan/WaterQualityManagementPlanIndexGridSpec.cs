@@ -55,7 +55,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Maintenance Contact Organization", x => x.MaintenanceContactOrganization, 120);
             Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);
             Add("Maintenance Contact Phone", x => x.MaintenanceContactPhone, 70);
-            Add("# of Treatment BMPs", x => x.TreatmentBMPs.Count, 100);
+            Add("# of Inventoried BMPs", x => x.TreatmentBMPs.Count, 100);
+            Add("# of Simplified BMPs", x => x.QuickBMPs.Count, 100);
             Add("Modeling Approach", x => x.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("# of Documents", x => x.WaterQualityManagementPlanDocuments.Count, 100);

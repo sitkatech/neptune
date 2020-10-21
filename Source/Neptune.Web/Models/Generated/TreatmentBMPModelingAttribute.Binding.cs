@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPModelingAttribute(int treatmentBMPModelingAttributeID, int treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? monthsOfOperationID) : this()
+        public TreatmentBMPModelingAttribute(int treatmentBMPModelingAttributeID, int treatmentBMPID, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, int? monthsOfOperationID, int? dryWeatherFlowOverrideID) : this()
         {
             this.TreatmentBMPModelingAttributeID = treatmentBMPModelingAttributeID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -63,6 +63,7 @@ namespace Neptune.Web.Models
             this.WettedFootprint = wettedFootprint;
             this.WinterHarvestedWaterDemand = winterHarvestedWaterDemand;
             this.MonthsOfOperationID = monthsOfOperationID;
+            this.DryWeatherFlowOverrideID = dryWeatherFlowOverrideID;
         }
 
         /// <summary>
@@ -169,6 +170,7 @@ namespace Neptune.Web.Models
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
         public int? MonthsOfOperationID { get; set; }
+        public int? DryWeatherFlowOverrideID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPModelingAttributeID; } set { TreatmentBMPModelingAttributeID = value; } }
 
@@ -178,6 +180,7 @@ namespace Neptune.Web.Models
         public TimeOfConcentration TimeOfConcentration { get { return TimeOfConcentrationID.HasValue ? TimeOfConcentration.AllLookupDictionary[TimeOfConcentrationID.Value] : null; } }
         public UnderlyingHydrologicSoilGroup UnderlyingHydrologicSoilGroup { get { return UnderlyingHydrologicSoilGroupID.HasValue ? UnderlyingHydrologicSoilGroup.AllLookupDictionary[UnderlyingHydrologicSoilGroupID.Value] : null; } }
         public MonthsOfOperation MonthsOfOperation { get { return MonthsOfOperationID.HasValue ? MonthsOfOperation.AllLookupDictionary[MonthsOfOperationID.Value] : null; } }
+        public DryWeatherFlowOverride DryWeatherFlowOverride { get { return DryWeatherFlowOverrideID.HasValue ? DryWeatherFlowOverride.AllLookupDictionary[DryWeatherFlowOverrideID.Value] : null; } }
 
         public static class FieldLengths
         {

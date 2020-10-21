@@ -108,11 +108,12 @@ VALUES
 (104, 'WettedFootprint', 'Wetted Footprint', 'Wetted footprint when BMP is half full.', 1),
 (105, 'WinterHarvestedWaterDemand', 'Winter Harvested Water Demand', 'Average daily harvested water demand from November through April. This should be averaged to account for any shutdowns during wet weather and reduction in demand during the winter season.', 1),
 (106, 'PercentOfSiteTreated', '% of Site Treated', '', 1),
-(107, 'PercentCaptured', '% Captured', '', 1),
-(108, 'PercentRetained', '% Retained', '', 1),
+(107, 'PercentCaptured', 'Wet Weather % Captured', '', 1),
+(108, 'PercentRetained', 'Wet Weather % Retained', '', 1),
 (109, 'AreaWithinWQMP', 'Area within WQMP', '', 1),
 (110, 'Watershed', 'Watershed', '', 1),
 (111, 'DesignStormwaterDepth', 'Design Stormwater Depth', '', 1),
 (112, 'FullyParameterized', 'Fully Parameterized?', 'Indicates whether all required attributes have been provided in order to calculate model results.', 1),
 (113, 'HydromodificationApplies', 'Hydromodification Controls Apply', '', 1),
-(114, 'DelineationStatus', N'Delineation Status', N'Indicates whether the delineation is verified or not.', 1)
+(114, 'DelineationStatus', N'Delineation Status', N'Indicates whether the delineation is verified or not.', 1),
+(115, 'DryWeatherFlowOverride', 'Dry Weather Flow Override?', 'Indicates if the modeled values for Dry Weather Flow have been overridden', 1)
