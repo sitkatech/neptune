@@ -33,7 +33,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanVerifyID, int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int? fileResourceID, int? waterQualityManagementPlanVerifyStatusID, int lastEditedByPersonID, string sourceControlCondition, string enforcementOrFollowupActions, DateTime lastEditedDate, bool isDraft) : this()
+        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanVerifyID, int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int? fileResourceID, int? waterQualityManagementPlanVerifyStatusID, int lastEditedByPersonID, string sourceControlCondition, string enforcementOrFollowupActions, DateTime lastEditedDate, bool isDraft, DateTime verificationDate) : this()
         {
             this.WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -46,12 +46,13 @@ namespace Neptune.Web.Models
             this.EnforcementOrFollowupActions = enforcementOrFollowupActions;
             this.LastEditedDate = lastEditedDate;
             this.IsDraft = isDraft;
+            this.VerificationDate = verificationDate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int lastEditedByPersonID, DateTime lastEditedDate, bool isDraft) : this()
+        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int lastEditedByPersonID, DateTime lastEditedDate, bool isDraft, DateTime verificationDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanVerifyID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -62,12 +63,13 @@ namespace Neptune.Web.Models
             this.LastEditedByPersonID = lastEditedByPersonID;
             this.LastEditedDate = lastEditedDate;
             this.IsDraft = isDraft;
+            this.VerificationDate = verificationDate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public WaterQualityManagementPlanVerify(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus, Person lastEditedByPerson, DateTime lastEditedDate, bool isDraft) : this()
+        public WaterQualityManagementPlanVerify(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus, Person lastEditedByPerson, DateTime lastEditedDate, bool isDraft, DateTime verificationDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanVerifyID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -85,6 +87,7 @@ namespace Neptune.Web.Models
             lastEditedByPerson.WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Add(this);
             this.LastEditedDate = lastEditedDate;
             this.IsDraft = isDraft;
+            this.VerificationDate = verificationDate;
         }
 
         /// <summary>
@@ -92,7 +95,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static WaterQualityManagementPlanVerify CreateNewBlank(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus, Person lastEditedByPerson)
         {
-            return new WaterQualityManagementPlanVerify(waterQualityManagementPlan, waterQualityManagementPlanVerifyType, waterQualityManagementPlanVisitStatus, lastEditedByPerson, default(DateTime), default(bool));
+            return new WaterQualityManagementPlanVerify(waterQualityManagementPlan, waterQualityManagementPlanVerifyType, waterQualityManagementPlanVisitStatus, lastEditedByPerson, default(DateTime), default(bool), default(DateTime));
         }
 
         /// <summary>
@@ -194,6 +197,7 @@ namespace Neptune.Web.Models
         public string EnforcementOrFollowupActions { get; set; }
         public DateTime LastEditedDate { get; set; }
         public bool IsDraft { get; set; }
+        public DateTime VerificationDate { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanVerifyID; } set { WaterQualityManagementPlanVerifyID = value; } }
 

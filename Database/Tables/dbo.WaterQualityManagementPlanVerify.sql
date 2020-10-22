@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanVerify](
 	[EnforcementOrFollowupActions] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[LastEditedDate] [datetime] NOT NULL,
 	[IsDraft] [bit] NOT NULL,
+	[VerificationDate] [datetime] NOT NULL,
  CONSTRAINT [PK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanVerifyID] ASC

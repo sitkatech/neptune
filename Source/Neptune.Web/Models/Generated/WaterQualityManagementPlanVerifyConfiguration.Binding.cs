@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
             Property(x => x.EnforcementOrFollowupActions).HasColumnName(@"EnforcementOrFollowupActions").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
             Property(x => x.LastEditedDate).HasColumnName(@"LastEditedDate").HasColumnType("datetime").IsRequired();
             Property(x => x.IsDraft).HasColumnName(@"IsDraft").HasColumnType("bit").IsRequired();
+            Property(x => x.VerificationDate).HasColumnName(@"VerificationDate").HasColumnType("datetime").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.WaterQualityManagementPlan).WithMany(b => b.WaterQualityManagementPlanVerifies).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlan_WaterQualityManagementPlanID
