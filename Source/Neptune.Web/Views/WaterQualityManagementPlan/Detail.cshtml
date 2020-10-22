@@ -577,6 +577,7 @@
                             <tr>
                                 <th> </th>
                                 <th> </th>
+                                <th>Verification Date</th>
                                 <th>Last Edited</th>
                                 <th>Last Edited By</th>
                                 <th>Type of Verification</th>
@@ -591,6 +592,7 @@
                                 <tr>
                                     <td style="padding-top: 8px"> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDeleteUrl(), new List<string>(), true)</td>
                                     <td> <a class="gridButton" href="@waterQualityManagementPlanVerify.GetDetailUrl()" style=" padding: 3px 9px; margin:0;">View</a></td>
+                                    <td>@waterQualityManagementPlanVerify.VerificationDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>
                                     <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</td>
