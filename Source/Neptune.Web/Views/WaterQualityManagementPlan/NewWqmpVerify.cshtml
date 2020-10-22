@@ -40,8 +40,8 @@
                                     <div class="col-xs-6 col-sm-9">
                                         @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
                                         {
-                                            <div class="radio-inline">
-                                                <label style="margin: 0" style="padding-top:0">
+                                            <div class="radio-inline" style="padding-top:0">
+                                                <label style="margin: 0">
                                                     @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName
                                                 </label>
                                             </div>
