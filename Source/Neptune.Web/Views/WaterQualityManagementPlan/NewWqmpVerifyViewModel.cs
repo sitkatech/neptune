@@ -29,7 +29,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [SitkaFileExtensions("pdf|zip|doc|docx|xls|xlsx|jpg|png")]
         public HttpPostedFileBase StructuralDocumentFile { get; set; }
 
-        
+        [Required]
+        [DisplayName("Verification Date")]
+        public DateTime VerificationDate { get; set; }
+
         public int? WaterQualityManagementPlanVerifyStatusID { get; set; }
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
@@ -53,6 +56,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifyTypeID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyTypeID;
             WaterQualityManagementPlanVisitStatusID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatusID;
             WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID;
+            VerificationDate = waterQualityManagementPlanVerify.VerificationDate;
             EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
             SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
 
@@ -85,6 +89,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = WaterQualityManagementPlanVerifyStatusID;
             waterQualityManagementPlanVerify.LastEditedByPerson = currentPerson;
             waterQualityManagementPlanVerify.LastEditedDate = DateTime.Now;
+            waterQualityManagementPlanVerify.VerificationDate = VerificationDate;
 
 
             var allWaterQualityManagementPlanVerifyQuickBMPsInDatabase = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Local;

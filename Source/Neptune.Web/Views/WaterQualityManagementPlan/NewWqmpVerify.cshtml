@@ -36,7 +36,7 @@
                             </div>
                             <div style="padding: 21px 15px">
                                 <div class="row">
-                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Type of Verification @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</label>
+                                    <div class="col-xs-6 col-sm-3 control-label text-right"> @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanVerifyTypeID)</div>
                                     <div class="col-xs-6 col-sm-9">
                                         @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
                                         {
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Visit Status @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</label>
+                                    <div class="col-xs-6 col-sm-3 control-label text-right"> @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanVisitStatusID)</div>
                                     <div class="col-xs-6 col-sm-9">
                                         @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
                                         {
@@ -60,6 +60,19 @@
                                                 </label>
                                             </div>
                                         }
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-3 control-label text-right">
+                                        @Html.LabelWithSugarFor(m => m.VerificationDate)
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3">
+                                        <div class='input-group date' id='verificationDatePicker'>
+                                            <input type='text' class="form-control" name="VerificationDate" readonly/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -250,5 +263,15 @@
 
     jQuery(document).ready(function() {
         verificationOMStatus();
+
+        jQuery('#verificationDatePicker').datetimepicker({
+            format: 'L',
+            defaultDate: new Date("@Model.VerificationDate.ToString()"),
+            ignoreReadonly: true
+        });
+
+        jQuery('[name="VerificationDate"]').on("click", function () {
+            jQuery(this).next().trigger('click');
+        });
     });
 </script>
