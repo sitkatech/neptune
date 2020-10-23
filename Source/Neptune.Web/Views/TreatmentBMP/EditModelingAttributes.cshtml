@@ -56,17 +56,8 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-horizontal">
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label">
-                                @Html.LabelWithSugarFor(x => x.DryWeatherFlowOverrideID)
-                                <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
-                            </label>
-                            <div class="col-sm-8">
-                                @Html.DropDownListFor(x => x.DryWeatherFlowOverrideID, ViewDataTyped.DryWeatherFlowOverride, new { @class = "form-control" })
-                            </div>
-                        </div>
 
-                            @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
+                        @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                             {
                                 case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                     <div class="form-group row">
@@ -395,6 +386,15 @@
                                     </div>
                                     break;
                             }
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">
+                                @Html.LabelWithSugarFor(x => x.DryWeatherFlowOverrideID)
+                                <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(x => x.DryWeatherFlowOverrideID, ViewDataTyped.DryWeatherFlowOverride, new { @class = "form-control" })
+                            </div>
+                        </div>
                         </div>
                     </div>
                     <div class="row">
