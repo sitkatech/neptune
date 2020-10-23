@@ -125,7 +125,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.WettedFootprint.ToGridHeaderString("Wetted Footprint (sq ft)"), x => x.WettedFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"), x => x.WinterHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => x.UpstreamBMPID != null ? UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace((int)x.UpstreamBMPID), x.UpstreamBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
-
+            Add(Models.FieldDefinition.DryWeatherFlowOverride.ToGridHeaderString("Dry Weather Flow Override"),
+                x => x.DryWeatherFlowOverrideID != null
+                    ? DryWeatherFlowOverride.AllLookupDictionary[x.DryWeatherFlowOverrideID.Value]
+                        .DryWeatherFlowOverrideDisplayName
+                    : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }
 }

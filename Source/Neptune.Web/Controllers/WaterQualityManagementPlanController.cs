@@ -131,7 +131,7 @@ namespace Neptune.Web.Controllers
             }
 
             var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
-                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).ToList();
+                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.VerificationDate).ToList();
             var waterQualityManagementPlanVerifyDraft = waterQualityManagementPlanVerifies.SingleOrDefault(x => x.IsDraft);
 
             var waterQualityManagementPlanVerifyQuickBMP =

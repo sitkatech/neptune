@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vTreatmentBMPDetailed(int primaryKey, int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, DateTime? treatmentBMPLifespanEndDate, string notes, int ownerOrganizationID, string ownerOrganizationName, int? treatmentBMPLifespanTypeID, string treatmentBMPLifespanTypeDisplayName, int trashCaptureStatusTypeID, string trashCaptureStatusTypeDisplayName, int sizingBasisTypeID, string sizingBasisTypeDisplayName, int? delineationTypeID, string delineationTypeDisplayName, long numberOfAssessments, int? latestTreatmentBMPAssessmentID, DateTime? latestAssessmentDate, double? latestAssessmentScore, long numberOfMaintenanceRecords, int? latestMaintenanceRecordID, DateTime? latestMaintenanceDate, int? numberOfBenchmarkAndThresholds, int numberOfBenchmarkAndThresholdsEntered) : this()
+        public vTreatmentBMPDetailed(int primaryKey, int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, DateTime? treatmentBMPLifespanEndDate, int? yearBuilt, string notes, int ownerOrganizationID, string ownerOrganizationName, int? treatmentBMPLifespanTypeID, string treatmentBMPLifespanTypeDisplayName, int trashCaptureStatusTypeID, string trashCaptureStatusTypeDisplayName, int sizingBasisTypeID, string sizingBasisTypeDisplayName, int? delineationTypeID, string delineationTypeDisplayName, long numberOfAssessments, int? latestTreatmentBMPAssessmentID, DateTime? latestAssessmentDate, double? latestAssessmentScore, long numberOfMaintenanceRecords, int? latestMaintenanceRecordID, DateTime? latestMaintenanceDate, int? numberOfBenchmarkAndThresholds, int numberOfBenchmarkAndThresholdsEntered) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPID = treatmentBMPID;
@@ -37,6 +37,7 @@ namespace Neptune.Web.Models
             this.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYear;
             this.RequiredPostStormFieldVisitsPerYear = requiredPostStormFieldVisitsPerYear;
             this.TreatmentBMPLifespanEndDate = treatmentBMPLifespanEndDate;
+            this.YearBuilt = yearBuilt;
             this.Notes = notes;
             this.OwnerOrganizationID = ownerOrganizationID;
             this.OwnerOrganizationName = ownerOrganizationName;
@@ -74,6 +75,7 @@ namespace Neptune.Web.Models
             this.RequiredFieldVisitsPerYear = vTreatmentBMPDetailed.RequiredFieldVisitsPerYear;
             this.RequiredPostStormFieldVisitsPerYear = vTreatmentBMPDetailed.RequiredPostStormFieldVisitsPerYear;
             this.TreatmentBMPLifespanEndDate = vTreatmentBMPDetailed.TreatmentBMPLifespanEndDate;
+            this.YearBuilt = vTreatmentBMPDetailed.YearBuilt;
             this.Notes = vTreatmentBMPDetailed.Notes;
             this.OwnerOrganizationID = vTreatmentBMPDetailed.OwnerOrganizationID;
             this.OwnerOrganizationName = vTreatmentBMPDetailed.OwnerOrganizationName;
@@ -109,6 +111,7 @@ namespace Neptune.Web.Models
         public int? RequiredFieldVisitsPerYear { get; set; }
         public int? RequiredPostStormFieldVisitsPerYear { get; set; }
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
+        public int? YearBuilt { get; set; }
         public string Notes { get; set; }
         public int OwnerOrganizationID { get; set; }
         public string OwnerOrganizationName { get; set; }
