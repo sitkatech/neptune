@@ -22,7 +22,8 @@ select tb.TreatmentBMPID as PrimaryKey, tb.TreatmentBMPName, tb.UpstreamBMPID,
 		When d.IsVerified = 1 then 'Verified'
 		when d.IsVerified = 0 then 'Provisional'
 		else null
-	   end as DelineationStatus
+	   end as DelineationStatus,
+	   tma.DryWeatherFlowOverrideID as DryWeatherFlowOverrideID
 from dbo.TreatmentBMP tb
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID and tbt.IsAnalyzedInModelingModule = 1
 join dbo.StormwaterJurisdiction sj on tb.StormwaterJurisdictionID = sj.StormwaterJurisdictionID

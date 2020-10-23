@@ -120,12 +120,12 @@ namespace Neptune.Web.Models
     public partial class WaterQualityManagementPlanModelingApproachDetailed : WaterQualityManagementPlanModelingApproach
     {
         private WaterQualityManagementPlanModelingApproachDetailed(int waterQualityManagementPlanModelingApproachID, string waterQualityManagementPlanModelingApproachName, string waterQualityManagementPlanModelingApproachDisplayName, string waterQualityManagementPlanModelingApproachDescription) : base(waterQualityManagementPlanModelingApproachID, waterQualityManagementPlanModelingApproachName, waterQualityManagementPlanModelingApproachDisplayName, waterQualityManagementPlanModelingApproachDescription) {}
-        public static readonly WaterQualityManagementPlanModelingApproachDetailed Instance = new WaterQualityManagementPlanModelingApproachDetailed(1, @"Detailed", @"Detailed", @"This WQMP is modeled by explicitly inventorying all associated structural BMPs.");
+        public static readonly WaterQualityManagementPlanModelingApproachDetailed Instance = new WaterQualityManagementPlanModelingApproachDetailed(1, @"Detailed", @"Detailed", @"This WQMP is modeled by inventorying the associated structural BMPs and defining their delineations. The performance of each BMP is modeled based on its modeling parameters and the attributes of the delineated tributary area.");
     }
 
     public partial class WaterQualityManagementPlanModelingApproachSimplified : WaterQualityManagementPlanModelingApproach
     {
         private WaterQualityManagementPlanModelingApproachSimplified(int waterQualityManagementPlanModelingApproachID, string waterQualityManagementPlanModelingApproachName, string waterQualityManagementPlanModelingApproachDisplayName, string waterQualityManagementPlanModelingApproachDescription) : base(waterQualityManagementPlanModelingApproachID, waterQualityManagementPlanModelingApproachName, waterQualityManagementPlanModelingApproachDisplayName, waterQualityManagementPlanModelingApproachDescription) {}
-        public static readonly WaterQualityManagementPlanModelingApproachSimplified Instance = new WaterQualityManagementPlanModelingApproachSimplified(2, @"Simplified", @"Simplified", @"This BMP is modeled by entering simplified structural BMP parameters directly on this WQMP");
+        public static readonly WaterQualityManagementPlanModelingApproachSimplified Instance = new WaterQualityManagementPlanModelingApproachSimplified(2, @"Simplified", @"Simplified", @"This WQMP is modeled by entering simplified structural BMP modeling parameters directly on this WQMP page.");
     }
 }

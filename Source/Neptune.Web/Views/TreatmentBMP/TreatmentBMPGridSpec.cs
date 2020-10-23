@@ -55,6 +55,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170);
             Add("Owner Organization", x => UrlTemplate.MakeHrefString(OrganizationModelExtensions.DetailUrlTemplate.ParameterReplace(x.OwnerOrganizationID), x.OwnerOrganizationName), 170);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Year Built", x => x.YearBuilt,100, DhtmlxGridColumnFormatType.Date);
             Add("Notes", x => x.Notes, 195);
             Add("Last Assessment Date", x => x.LatestAssessmentDate, 130);
             Add("Last Assessed Score", x => x.LatestAssessmentScore.HasValue ? x.LatestAssessmentScore.Value.ToString("0.0") : "-", 100, DhtmlxGridColumnFilterType.FormattedNumeric);
@@ -125,7 +126,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.WettedFootprint.ToGridHeaderString("Wetted Footprint (sq ft)"), x => x.WettedFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"), x => x.WinterHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(Models.FieldDefinition.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => x.UpstreamBMPID != null ? UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace((int)x.UpstreamBMPID), x.UpstreamBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
-
+            Add(Models.FieldDefinition.DryWeatherFlowOverride.ToGridHeaderString("Dry Weather Flow Override"),
+                x => x.DryWeatherFlowOverrideID != null
+                    ? DryWeatherFlowOverride.AllLookupDictionary[x.DryWeatherFlowOverrideID.Value]
+                        .DryWeatherFlowOverrideDisplayName
+                    : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }
 }
