@@ -289,13 +289,7 @@
                                     </td>
                                     <td class="text-right">@(ViewDataTyped.TreatmentBMP.PrecipitationZone != null ? string.Format("{0} inches", ViewDataTyped.TreatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches) : string.Empty)</td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)
-                                    </td>
-                                    <td class="text-right">@ViewDataTyped.DisplayDryWeatherFlowOverride()</td>
-                                </tr>
-                                @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
+                            @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                                 {
                                     case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                         <tr>
@@ -573,6 +567,12 @@
                                         </tr>
                                         break;
                                 }
+                            <tr>
+                                <td>
+                                    @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)
+                                </td>
+                                <td class="text-right">@ViewDataTyped.DisplayDryWeatherFlowOverride()</td>
+                            </tr>
                             </tbody>
                         </table>
                     }
