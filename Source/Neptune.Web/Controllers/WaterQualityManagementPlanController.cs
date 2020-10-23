@@ -147,6 +147,7 @@ namespace Neptune.Web.Controllers
                                     x.LSPCBasinGeometry.Intersects(waterQualityManagementPlan.WaterQualityManagementPlanBoundary));
 
             var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
+            var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
@@ -154,7 +155,7 @@ namespace Neptune.Web.Controllers
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 new HRUCharacteristicsViewData(waterQualityManagementPlan,
                     ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()),
-                anyLspcBasins, dryWeatherFlowOverrides);
+                anyLspcBasins, dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

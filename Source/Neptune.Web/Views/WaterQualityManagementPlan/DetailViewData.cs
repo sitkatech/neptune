@@ -36,6 +36,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
+        public List<WaterQualityManagementPlanModelingApproach> WaterQualityManagementPlanModelingApproaches { get; }
         public string CalculatedParcelArea { get; }
 
         public string TrashCaptureEffectiveness { get; }
@@ -57,7 +58,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
             HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins,
-            List<DryWeatherFlowOverride> dryWeatherFlowOverrides)
+            List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
+            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -131,6 +133,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
                 ? "Not Provided"
                 : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
+
+            WaterQualityManagementPlanModelingApproaches = waterQualityManagementPlanModelingApproaches;
 
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;

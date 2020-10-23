@@ -344,9 +344,24 @@
                     Modeling Approach
                     @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string>{ "btn", "btn-xs", "btn-neptune"}, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 </h4>
-                <p>
-                    @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
-                </p>
+                @*<p>
+                    <strong>@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong> - @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
+                </p>*@
+                <div class="col-xs-12">
+                    @foreach (var waterQualityManagementPlanModelingApproach in ViewDataTyped.WaterQualityManagementPlanModelingApproaches)
+                    {
+                        <div class="row" style="margin-bottom: 20px">
+                            <div class="col-sm-2" style="padding-right: 0; max-width:98px">
+                                <label>
+                                    @Html.RadioButtonFor(m => ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID, waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID, new {disabled = "disabled"}) @waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName
+                                </label>
+                            </div>
+                            <div class="col-sm-10">
+                                @waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
+                            </div>
+                        </div>
+                    }
+                </div>
                 <h4 style="margin-top: 32px">
                     Inventoried Structural BMPs
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
@@ -357,7 +372,7 @@
                 @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
                 {
                     <div class="alert alert-info">
-                        This WQMP is modeled by entering simplified structural BMPs parameters; any explicitly inventoried BMPs entered here are informational only.
+                        This WQMP is modeled by entering simplified structural BMPs parameters; any explicitly inventoried BMPs entered here are not considered in modeling.
                     </div>
                 }
                 <div>
@@ -441,6 +456,11 @@
                                         <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(quickBMP)</td>
                                     </tr>
                                 }
+                            <tr>
+                                <td colspan="3" style="text-align: right; font-weight: bold">Total % Site Treated:</td>
+                                <td colspan="1"style="text-align: right; font-weight:bold">@(string.Format("{0:0.#} %", ViewDataTyped.QuickBMPs.Sum(x => x.PercentOfSiteTreated)))</td>
+                                <td colspan="3"></td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
