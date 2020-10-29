@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using LtInfo.Common.DesignByContract;
+using NUnit.Framework;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -47,11 +49,11 @@ namespace Neptune.Web.ScheduledJobs
             // Hangfire defaults to 10 retries for failed jobs; this disables that behavior by doing no automatic retries.
             // http://hangfire.readthedocs.org/en/latest/background-processing/dealing-with-exceptions.html
             // Note that specific jobs may override this; look for uses of the AutomaticRetry symbol on specific job start functions.
-            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute {Attempts = 0});
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
-                Authorization = new[] { new HangfireNeptuneWebAuthorizationFilter() }
+                Authorization = new[] {new HangfireNeptuneWebAuthorizationFilter()}
             });
         }
 
@@ -61,12 +63,13 @@ namespace Neptune.Web.ScheduledJobs
         private static void ConfigureScheduledBackgroundJobs()
         {
             var recurringJobIds = new List<string>();
-            
+
             AddRecurringJob(TrashGeneratingUnitRefreshScheduledBackgroundJob.JobName,
                 () => ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitRefreshScheduledBackgroundJob(),
                 MakeDailyUtcCronJobStringFromLocalTime(22, 30), recurringJobIds);
 
-            AddRecurringJob("Refresh RSBs", () => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(1122, true),
+            AddRecurringJob("Refresh RSBs",
+                () => ScheduledBackgroundJobLaunchHelper.RunRegionalSubbasinRefreshBackgroundJob(1122, true),
                 MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
             AddRecurringJob(HRURefreshBackgroundJob.JobName,
@@ -140,11 +143,64 @@ namespace Neptune.Web.ScheduledJobs
             return MakeUtcCronTime(now.Year, month, day, hour, minute);
         }
 
-        private static DateTime MakeUtcCronTime(int year, int month, int day, int hour, int minute)
+        public static DateTime MakeUtcCronTime(int year, int month, int day, int hour, int minute)
         {
-            var localCrontTime = new DateTime(year, month, day, hour, minute, 0, DateTimeKind.Local);
-            var utcCronTime = TimeZoneInfo.ConvertTimeToUtc(localCrontTime);
+            TimeZoneInfo tz = TimeZoneInfo.Local; // getting the current system timezone
+            DateTime localCronTime = new DateTime(year, month, day, hour, minute, 0, DateTimeKind.Local);
+
+            // Catch cases where time is invalid or ambiguous due to daylight savings
+            // 3/8/20 2am becomes 3am (so 2am – 3am in invalid)
+            // 11/1/20 2am becomes 1am(so 1am – 2am is ambiguous)
+            if (tz.IsAmbiguousTime(localCronTime) || tz.IsInvalidTime(localCronTime))
+            {
+                localCronTime = localCronTime.Add(TimeSpan.Parse("1:01:00"));
+
+                // Make sure we've fixed the issue
+                Check.Ensure(!tz.IsAmbiguousTime(localCronTime));
+                Check.Ensure(!tz.IsInvalidTime(localCronTime));
+            }
+
+            var utcCronTime = TimeZoneInfo.ConvertTimeToUtc(localCronTime);
             return utcCronTime;
+        }
+    }
+
+    [TestFixture]
+    public class ScheduledBackgroundJobBootstrapperTest
+    {
+        [Test]
+        public void HandlesAmbiguousDaylightSavingsTimeWhenSchedulingJobs()
+        {
+            DateTime ambiguousDateTime = DateTime.Parse("11/01/2020 01:15:00");
+            Assert.That(TimeZoneInfo.Local.IsAmbiguousTime(ambiguousDateTime), "This test requires an ambiguous time.");
+            Assert.That(
+                ScheduledBackgroundJobBootstrapper.MakeUtcCronTime(ambiguousDateTime.Year, ambiguousDateTime.Month,
+                    ambiguousDateTime.Day, ambiguousDateTime.Hour, ambiguousDateTime.Minute),
+                Is.EqualTo(DateTime.Parse("11/01/2020 10:16:00")),
+                "Given an ambiguous time, move the local time ahead 1 hour and 1 minute before converting to UTC");
+        }
+
+        [Test]
+        public void HandlesinvalidDaylightSavingsTimeWhenSchedulingJobs()
+        {
+            DateTime invalidDateTime = DateTime.Parse("03/08/2020 02:15:00");
+            Assert.That(TimeZoneInfo.Local.IsInvalidTime(invalidDateTime), "This test requires an invalid time.");
+            Assert.That(
+                ScheduledBackgroundJobBootstrapper.MakeUtcCronTime(invalidDateTime.Year, invalidDateTime.Month,
+                    invalidDateTime.Day, invalidDateTime.Hour, invalidDateTime.Minute),
+                Is.EqualTo(DateTime.Parse("03/08/2020 10:16:00")),
+                "Given an invalid time, move the local time ahead 1 hour and 1 minute before converting to UTC");
+        }
+
+        [Test]
+        public void HandlesNonAmbiguousAndValidTimeWhenSchedulingJobs()
+        {
+            DateTime ambiguousDateTime = DateTime.Parse("11/01/2020 12:30:00");
+            Assert.That(
+                ScheduledBackgroundJobBootstrapper.MakeUtcCronTime(ambiguousDateTime.Year, ambiguousDateTime.Month,
+                    ambiguousDateTime.Day, ambiguousDateTime.Hour, ambiguousDateTime.Minute),
+                Is.EqualTo(DateTime.Parse("11/01/2020 20:30:00")),
+                "Given an non-ambiguous and valid time, time remains the same local time before converting to UTC");
         }
     }
 }
