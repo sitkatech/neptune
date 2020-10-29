@@ -88,7 +88,9 @@ namespace Neptune.Web.Common
             // provisional delineations are tracked in the LGU layer, but do not contribute runoff
             // to their respective BMPs in the model therefore those LGUs should fall back to their
             // WQMP if exists, otherwise their RSB.
-            if (loadGeneratingUnit.DelineationID != null && loadGeneratingUnit.DelineationIsVerified == true)
+
+            // todo v soon: Exclude Delineations when they should belong to the WQMP based on simple vs detailed
+            if (loadGeneratingUnit.DelineationID != null && loadGeneratingUnit.DelineationIsVerified == true )
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
             }
