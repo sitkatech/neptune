@@ -123,7 +123,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             }
             else if (modelingAttribute.AverageDivertedFlowrate != null)
             {
-                treatmentRate = modelingAttribute.AverageDivertedFlowrate;
+                // AverageDivertedFlowrate is collected in gallons per day instead of CFS, but we need to send CFS to Nereid.
+                treatmentRate = modelingAttribute.AverageDivertedFlowrate * NereidUtilities.GPD_TO_CFS;
             }
             else if (modelingAttribute.AverageTreatmentFlowrate != null)
             {
@@ -158,7 +159,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             }
             else if (modelingAttribute.DesignLowFlowDiversionCapacity != null)
             {
-                designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity;
+                // DesignLowFlowDiversionCapacity is collected in GPD, so convert to CFS
+                designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity * NereidUtilities.GPD_TO_CFS;
             }
 
             if (designCapacity == null)
@@ -191,7 +193,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolorWetlandVolume,
                 RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,
-                SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand,
+                // SummerHarvestedWaterDemand is collected in GPD, so convert to CFS
+                SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand  * NereidUtilities.GPD_TO_CFS,
                 TimeOfConcentration = modelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
                 TotalDrawdownTime = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 TotalEffectiveBMPVolume = modelingAttribute.TotalEffectiveBMPVolume,
@@ -200,7 +203,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 UnderlyingInfiltrationRate = modelingAttribute.UnderlyingInfiltrationRate,
                 UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
                 WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
-                WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand
+                // WinterHarvestedWaterDemand is collected in GPD, so convert to CFS
+                WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand * NereidUtilities.GPD_TO_CFS
             };
             return treatmentFacility;
         }

@@ -14,6 +14,8 @@ namespace Neptune.Web.Common
 {
     public static class NereidUtilities
     {
+        public const double GPD_TO_CFS = 0.0000015;
+
         public static Graph BuildNetworkGraph(DatabaseEntities dbContext)
         {
             var nodes = new List<Node>();
