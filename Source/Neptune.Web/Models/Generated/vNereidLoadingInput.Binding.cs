@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidLoadingInput(int primaryKey, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int lSPCBasinKey, string hRUCharacteristicLandUseCodeName, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, bool? delineationIsVerified) : this()
+        public vNereidLoadingInput(int primaryKey, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int lSPCBasinKey, string hRUCharacteristicLandUseCodeName, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, bool? delineationIsVerified, int? waterQualityManagementPlanModelingApproachID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.DelineationID = delineationID;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.Area = area;
             this.ImperviousAcres = imperviousAcres;
             this.DelineationIsVerified = delineationIsVerified;
+            this.WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlanModelingApproachID;
         }
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace Neptune.Web.Models
             this.Area = vNereidLoadingInput.Area;
             this.ImperviousAcres = vNereidLoadingInput.ImperviousAcres;
             this.DelineationIsVerified = vNereidLoadingInput.DelineationIsVerified;
+            this.WaterQualityManagementPlanModelingApproachID = vNereidLoadingInput.WaterQualityManagementPlanModelingApproachID;
             CallAfterConstructor(vNereidLoadingInput);
         }
 
@@ -75,5 +77,6 @@ namespace Neptune.Web.Models
         public double Area { get; set; }
         public double ImperviousAcres { get; set; }
         public bool? DelineationIsVerified { get; set; }
+        public int? WaterQualityManagementPlanModelingApproachID { get; set; }
     }
 }

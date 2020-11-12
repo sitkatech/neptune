@@ -18,5 +18,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         [JsonProperty("retained_pct")]
         public decimal? RetainedPercentage { get; set; }
+
+        [JsonProperty("eliminate_all_dry_weather_flow_override")]
+        public bool EliminateAllDryWeatherFlowOverride { get; set; }
     }
 }

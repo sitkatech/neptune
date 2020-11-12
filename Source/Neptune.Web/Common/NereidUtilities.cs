@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using HtmlDiff;
 
 namespace Neptune.Web.Common
 {
@@ -90,14 +91,18 @@ namespace Neptune.Web.Common
             // provisional delineations are tracked in the LGU layer, but do not contribute runoff
             // to their respective BMPs in the model therefore those LGUs should fall back to their
             // WQMP if exists, otherwise their RSB.
+            // If the associated BMP belongs to a Simple WQMP, it should not be accounted for in the modeling 
 
-            // todo v soon: Exclude Delineations when they should belong to the WQMP based on simple vs detailed
-            if (loadGeneratingUnit.DelineationID != null && loadGeneratingUnit.DelineationIsVerified == true )
+            if (loadGeneratingUnit.DelineationID != null &&
+                loadGeneratingUnit.DelineationIsVerified == true &&
+                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
             }
 
-            if (loadGeneratingUnit.WaterQualityManagementPlanID != null)
+            // Parcel Boundaries of Detailed WQMPs should not be considered
+            if (loadGeneratingUnit.WaterQualityManagementPlanID != null && 
+                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
                 return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
                     loadGeneratingUnit.OCSurveyCatchmentID);
@@ -130,6 +135,7 @@ namespace Neptune.Web.Common
         public static void MakeDistributedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes)
         {
             var vNereidTreatmentBMPRegionalSubbasins = dbContext.vNereidTreatmentBMPRegionalSubbasins.ToList();
+
             distributedBMPNodes = vNereidTreatmentBMPRegionalSubbasins
                 .Select(x => new Node() { ID = TreatmentBMPNodeID(x.TreatmentBMPID), TreatmentBMPID = x.TreatmentBMPID }).ToList();
 
@@ -535,11 +541,15 @@ namespace Neptune.Web.Common
             ).ToList().Select(x => new LandSurface(x)).ToList();
 
             var treatmentFacilities = allModelingBMPs
-                .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID))
+                .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
+                            // Don't create TreatmentFacilities for BMPs belonging to a Simple WQMP
+                            x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
                 .Select(x => x.ToTreatmentFacility()).ToList();
 
             var filteredQuickBMPs = allModelingQuickBMPs
-                .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID)).ToList();
+                .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&
+                            // Don't create TreatmentSites for QuickBMPs belonging to a Detailed WQMP
+                            x.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID).ToList();
             var filteredWQMPNodes = allWaterqualityManagementPlanNodes.Where(y =>
                     waterQualityManagementPlanToIncludeIDs.Contains(y.WaterQualityManagementPlanID) &&
                     regionalSubbasinToIncludeIDs.Contains(y.RegionalSubbasinID) // ignore parts that live in RSBs outside our solve area.
@@ -557,7 +567,9 @@ namespace Neptune.Web.Common
                         AreaPercentage = x.bmp.PercentOfSiteTreated,
                         CapturedPercentage = x.bmp.PercentCaptured ?? 0,
                         RetainedPercentage = x.bmp.PercentRetained ?? 0,
-                        FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
+                        FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
+                        EliminateAllDryWeatherFlowOverride = x.bmp.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
+
                     }).ToList();
 
             //ValidateForTesting(subgraph, landSurfaces, treatmentFacilities, treatmentSites);

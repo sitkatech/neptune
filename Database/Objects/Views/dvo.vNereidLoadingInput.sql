@@ -6,7 +6,7 @@ as
 select
 	hru.HRUCharacteristicID as PrimaryKey,
 	d.DelineationID,
-	WaterQualityManagementPlanID,
+	lgu.WaterQualityManagementPlanID,
 	rsb.RegionalSubbasinID, -- don't actually need this but it felt silly to leave it off
 	OCSurveyCatchmentID,
 	LSPCBasinKey,
@@ -15,7 +15,8 @@ select
 	SlopePercentage,
 	Area,
 	ImperviousAcres,
-	d.IsVerified as DelineationIsVerified
+	d.IsVerified as DelineationIsVerified,
+	wqmp.WaterQualityManagementPlanModelingApproachID
 from
 	dbo.HRUCharacteristic hru join dbo.LoadGeneratingUnit lgu
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID
@@ -27,5 +28,7 @@ from
 		on hru.HRUCharacteristicLandUseCodeID = hrucode.HRUCharacteristicLandUseCodeID
 	left join dbo.Delineation d
 		on d.DelineationID = lgu.DelineationID
+	left join dbo.WaterQualityManagementPlan wqmp
+		on lgu.WaterQualityManagementPlanID = lgu.WaterQualityManagementPlanID
 GO
 

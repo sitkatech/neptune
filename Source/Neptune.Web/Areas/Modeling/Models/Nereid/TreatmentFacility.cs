@@ -86,6 +86,9 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         [JsonProperty("design_capacity_cfs")]
         public double? DesignCapacity { get; set; }
+
+        [JsonProperty("eliminate_all_dry_weather_flow_override")]
+        public bool EliminateAllDryWeatherFlowOverride { get; set; }
     }
 
     public static class TreatmentFacilityExtensions
@@ -204,7 +207,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
                 WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
                 // WinterHarvestedWaterDemand is collected in GPD, so convert to CFS
-                WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand * NereidUtilities.GPD_TO_CFS
+                WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand * NereidUtilities.GPD_TO_CFS,
+                EliminateAllDryWeatherFlowOverride = modelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
             };
             return treatmentFacility;
         }
