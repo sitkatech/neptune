@@ -8,4 +8,5 @@ Select
 	WaterQualityManagementPlanBoundary
 from dbo.WaterQualityManagementPlan
 Where WaterQualityManagementPlanBoundary is not null
+	and WaterQualityManagementPlanModelingApproachID <> 1 -- exclude detailed WQMPs
 GO
