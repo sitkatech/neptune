@@ -257,22 +257,47 @@ namespace Neptune.Web.Common
                 var newCentralizedBMPNodeID = TreatmentBMPNodeID(rsbCentralizedBMPPairing.TreatmentBMPID);
                 var existingRSBNodeID = RegionalSubbasinNodeID(rsbCentralizedBMPPairing.OCSurveyCatchmentID);
 
+                var edgeFromRegionalSubbasinToDownstreamRegionalSubbasin = existingEdges.SingleOrDefault(x => x.SourceID == existingRSBNodeID);
+                var downstreamRegionalSubbasinID = edgeFromRegionalSubbasinToDownstreamRegionalSubbasin?.TargetID;
 
-                // Find Edge with this RSB as its Source. Store its Target as ‘og_target’
+                var centralizedBMPHasDownstreamBMP =
+                    dbContext.TreatmentBMPs.Any(x => x.UpstreamBMPID == rsbCentralizedBMPPairing.TreatmentBMPID);
+
                 // If this is null, it means this RSB is at the end of the flow network.
-                // We'll create an edge from RSB to BMP, but we won't create an edge from BMP to anywhere
-                var edgeWithThisNodeAsSource = existingEdges.SingleOrDefault(x => x.SourceID == existingRSBNodeID);
-                var ogTargetID = edgeWithThisNodeAsSource?.TargetID;
-
-                if (edgeWithThisNodeAsSource != null)
+                if (downstreamRegionalSubbasinID != null)
                 {
                     // Current rsb target equals centralized bmp node id
-                    edgeWithThisNodeAsSource.TargetID = newCentralizedBMPNodeID;
+                    edgeFromRegionalSubbasinToDownstreamRegionalSubbasin.TargetID = newCentralizedBMPNodeID;
                 }
+                // only *create* an edge from the RSB to the Cent if the RSB didn't already have an edge, since in that case
+                // this created edge would be identical to the modified one from above
                 else
                 {
                     centralizedBMPEdges.Add(new Edge
                     { SourceID = existingRSBNodeID, TargetID = newCentralizedBMPNodeID });
+                }
+
+                if (centralizedBMPHasDownstreamBMP)
+                {
+                    // we need to go downstream from this BMP until we hit an edge that flows to this RSB,
+                    // then we either point that edge at the downstream RSB, or we delete it, depending on if
+                    // the downstream RSB exists or doesn't respectively.
+                    
+                    // these edges are all guaranteed to exist since we ran MakeUpstreamBMPNodesAndEdges already
+                    var edgeToDownstreamNode = existingEdges.Single(x=>x.SourceID == newCentralizedBMPNodeID);
+                    while (edgeToDownstreamNode.TargetID != existingRSBNodeID)
+                    {
+                        edgeToDownstreamNode = existingEdges.Single(x => x.SourceID == edgeToDownstreamNode.TargetID);
+                    }
+
+                    if (downstreamRegionalSubbasinID != null)
+                    {
+                        edgeToDownstreamNode.TargetID = downstreamRegionalSubbasinID;
+                    }
+                    else
+                    {
+                        existingEdges.Remove(edgeToDownstreamNode);
+                    }
                 }
 
                 // Find all Edges that point to this RSB. Set their Target to the new Centralized BMP Node
@@ -282,12 +307,21 @@ namespace Neptune.Web.Common
                 }
 
 
-                // Centralized BMP gets an edge pointing to "og_target"
-                centralizedBMPNodes.Add(new Node { ID = newCentralizedBMPNodeID, TreatmentBMPID = rsbCentralizedBMPPairing.TreatmentBMPID });
-                // see above
-                if (ogTargetID != null)
+                if (!centralizedBMPHasDownstreamBMP)
                 {
-                    centralizedBMPEdges.Add(new Edge() { SourceID = newCentralizedBMPNodeID, TargetID = ogTargetID });
+                    // Don't create a new node for this centralized BMP if it's has a downstream BMP, because its node 
+                    // was already created in MakeUpstreamBMPNodesAndEdges
+                    // Don't create an edge from this Centralized BMP to the downstream Regional Subbasin, since it already
+                    // has a downstream BMP whose node was created in MakeUpstreamBMPNodesAndEdges
+
+                    centralizedBMPNodes.Add(new Node
+                        {ID = newCentralizedBMPNodeID, TreatmentBMPID = rsbCentralizedBMPPairing.TreatmentBMPID});
+
+                    // is this not the same thing as edgeFromRegionalSubbasinToDownstreamRegionalSubbasin != null?
+                    if (downstreamRegionalSubbasinID != null)
+                    {
+                        centralizedBMPEdges.Add(new Edge() {SourceID = newCentralizedBMPNodeID, TargetID = downstreamRegionalSubbasinID});
+                    }
                 }
             }
         }

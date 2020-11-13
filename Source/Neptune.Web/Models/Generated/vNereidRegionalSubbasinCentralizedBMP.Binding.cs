@@ -25,12 +25,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidRegionalSubbasinCentralizedBMP(int primaryKey, int regionalSubbasinID, int oCSurveyCatchmentID, int treatmentBMPID, long? rowNumber) : this()
+        public vNereidRegionalSubbasinCentralizedBMP(int primaryKey, int regionalSubbasinID, int oCSurveyCatchmentID, int treatmentBMPID, int? upstreamBMPID, long? rowNumber) : this()
         {
             this.PrimaryKey = primaryKey;
             this.RegionalSubbasinID = regionalSubbasinID;
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.UpstreamBMPID = upstreamBMPID;
             this.RowNumber = rowNumber;
         }
 
@@ -43,6 +44,7 @@ namespace Neptune.Web.Models
             this.RegionalSubbasinID = vNereidRegionalSubbasinCentralizedBMP.RegionalSubbasinID;
             this.OCSurveyCatchmentID = vNereidRegionalSubbasinCentralizedBMP.OCSurveyCatchmentID;
             this.TreatmentBMPID = vNereidRegionalSubbasinCentralizedBMP.TreatmentBMPID;
+            this.UpstreamBMPID = vNereidRegionalSubbasinCentralizedBMP.UpstreamBMPID;
             this.RowNumber = vNereidRegionalSubbasinCentralizedBMP.RowNumber;
             CallAfterConstructor(vNereidRegionalSubbasinCentralizedBMP);
         }
@@ -53,6 +55,7 @@ namespace Neptune.Web.Models
         public int RegionalSubbasinID { get; set; }
         public int OCSurveyCatchmentID { get; set; }
         public int TreatmentBMPID { get; set; }
+        public int? UpstreamBMPID { get; set; }
         public long? RowNumber { get; set; }
     }
 }

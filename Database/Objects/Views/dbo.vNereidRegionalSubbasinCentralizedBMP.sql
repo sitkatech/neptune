@@ -8,6 +8,7 @@ Select
 	rsb.RegionalSubbasinID,
 	rsb.OCSurveyCatchmentID,
 	bmp.TreatmentBMPID,
+	bmp.UpstreamBMPID,
 	ROW_NUMBER() over (partition by rsb.RegionalSubbasinID order by d.DelineationID) as RowNumber
 from dbo.Delineation d
 	join dbo.TreatmentBMP bmp
