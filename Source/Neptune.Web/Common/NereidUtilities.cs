@@ -477,7 +477,7 @@ namespace Neptune.Web.Common
             var allwaterQualityManagementPlanNodes =
                 NereidUtilities.GetWaterQualityManagementPlanNodes(dbContext).ToList();
             var allModelingQuickBMPs = dbContext.QuickBMPs.Include(x => x.TreatmentBMPType)
-                .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
+                .Where(x => x.IsFullyParameterized()).ToList();
 
             var solutionSequenceResult =
                 NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(

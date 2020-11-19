@@ -990,8 +990,8 @@ namespace Neptune.Web.Controllers
         [TreatmentBMPViewFeature]
         public JsonResult GetModelResults(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var entityObject = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(entityObject);
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(treatmentBMP);
             return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
         }
 

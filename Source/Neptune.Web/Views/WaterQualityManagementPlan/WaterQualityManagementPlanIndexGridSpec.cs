@@ -59,6 +59,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("# of Simplified BMPs", x => x.QuickBMPs.Count, 100);
             Add("Modeling Approach", x => x.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => x.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
             Add("# of Documents", x => x.WaterQualityManagementPlanDocuments.Count, 100);
             Add(Models.FieldDefinition.HasAllRequiredDocuments.ToGridHeaderString(),
                 x => x.HasAllRequiredDocuments()

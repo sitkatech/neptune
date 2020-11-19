@@ -7,6 +7,7 @@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.Shared.HRUCharacteristics
+@using Neptune.Web.Views.Shared.ModeledPerformance
 @using Neptune.Web.Views.WaterQualityManagementPlan
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -249,11 +250,11 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                                                            {
-                                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
-                                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
-                                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
-                                                    };
+                                                    {
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
+                                };
                             }
                             @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
                             {
@@ -267,6 +268,41 @@
                         </address>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Modeled Performance
+            </div>
+            <div class="panel-body">
+
+                @if (ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.TreatmentBMPs.Count == 0)
+                {
+                    <p class="systemText">This WQMP is modeled using the detailed approach, but no structural BMPs have been inventoried, so no results are available.</p>
+                }
+                else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.QuickBMPs.Count == 0)
+                {
+                    <p class="systemText">This WQMP is modeled using the simplified approach, but no simplified structural BMPs have been inventoried, so no results are available.</p>
+                }
+                // this will always be false if not relevant (i.e. Simplified approach is used)
+                else if (ViewDataTyped.AllDetailedBMPsNotFullyParameterized)
+                {
+                    <p class="systemText">This WQMP is modeled using the detailed approach, but none of its structural BMPs are fully parameterized for modeling, so no results are available.</p>
+                }
+                else if (!ViewDataTyped.AnyLSPCBasins)
+                {
+                    <p class="systemText">Model results are only available for WQMPs within the South Orange County WMA.</p>
+                }
+                else
+                {
+                    ModeledPerformance.RenderPartialView(Html, ViewDataTyped.ModeledPerformanceViewData);
+                    //this will always be false if not relevant (i.e. Simplified approach is used)
+                    if (ViewDataTyped.AnyDetailedBMPsNotFullyParameterized)
+                    {
+                        <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
+                    }
+                }
+
             </div>
         </div>
     </div>
@@ -342,11 +378,11 @@
             <div class="panel-body">
                 <h4>
                     Modeling Approach
-                    @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string>{ "btn", "btn-xs", "btn-neptune"}, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string> { "btn", "btn-xs", "btn-neptune" }, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 </h4>
                 @*<p>
-                    <strong>@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong> - @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
-                </p>*@
+                        <strong>@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong> - @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
+                    </p>*@
                 <div class="col-xs-12">
                     @foreach (var waterQualityManagementPlanModelingApproach in ViewDataTyped.WaterQualityManagementPlanModelingApproaches)
                     {
@@ -383,29 +419,29 @@
                         <div style="padding: 0 16px">
                             <table id="treatmentBMPTable" class="table table-condensed">
                                 <thead>
-                                <tr>
-                                    <th style="white-space: nowrap; border-top: none; min-width: 100px;"><label>Name</label></th>
-                                    <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
-                                    <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('treatmentBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
-                                    <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
-                                    <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
-                                    <th style="border-top: none; min-width: 110px;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDelineationStatus)</th>
-                                    <th style="border-top: none; text-align: center"><label>Delineation Area (ac)</label></th>
-                                </tr>
+                                    <tr>
+                                        <th style="white-space: nowrap; border-top: none; min-width: 100px;"><label>Name</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('treatmentBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
+                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
+                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
+                                        <th style="border-top: none; min-width: 110px;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDelineationStatus)</th>
+                                        <th style="border-top: none; text-align: center"><label>Delineation Area (ac)</label></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
-                                {
-                                    <tr>
-                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td class="notes collapsed">@treatmentBMP.Notes</td>
-                                        <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
-                                        <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
-                                        <td>@treatmentBMP.GetDelineationStatus()</td>
-                                        <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
-                                    </tr>
-                                }
+                                    @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
+                                    {
+                                        <tr>
+                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td class="notes collapsed">@treatmentBMP.Notes</td>
+                                            <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
+                                            <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
+                                            <td>@treatmentBMP.GetDelineationStatus()</td>
+                                            <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -432,40 +468,40 @@
                 <div>
                     @if (ViewDataTyped.QuickBMPs.Any())
                     {
-                    <div style="padding: 0 16px">
-                        <table id="quickBMPTable" class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th style="white-space: nowrap; border-top: none;min-width: 100px;"><label>Name</label></th>
-                                    <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
-                                    <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('quickBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
-                                    <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
-                                    <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
-                                    <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
-                                    <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                                {
+                        <div style="padding: 0 16px">
+                            <table id="quickBMPTable" class="table table-condensed">
+                                <thead>
                                     <tr>
-                                        <td>@quickBMP.QuickBMPName</td>
-                                        <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td class="notes collapsed">@quickBMP.QuickBMPNote</td>
-                                        <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentOfSiteTreated) : "")</td>
-                                        <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentCaptured) : "")</td>
-                                        <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentRetained) : "")</td>
-                                        <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(quickBMP)</td>
+                                        <th style="white-space: nowrap; border-top: none;min-width: 100px;"><label>Name</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                        <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('quickBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
+                                        <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                                        <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                                        <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
                                     </tr>
-                                }
-                            <tr>
-                                <td colspan="3" style="text-align: right; font-weight: bold">Total % Site Treated:</td>
-                                <td colspan="1"style="text-align: right; font-weight:bold">@(string.Format("{0:0.#} %", ViewDataTyped.QuickBMPs.Sum(x => x.PercentOfSiteTreated)))</td>
-                                <td colspan="3"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
+                                    {
+                                        <tr>
+                                            <td>@quickBMP.QuickBMPName</td>
+                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td class="notes collapsed">@quickBMP.QuickBMPNote</td>
+                                            <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentOfSiteTreated) : "")</td>
+                                            <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentCaptured) : "")</td>
+                                            <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentRetained) : "")</td>
+                                            <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(quickBMP)</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="3" style="text-align: right; font-weight: bold">Total % Site Treated:</td>
+                                        <td colspan="1" style="text-align: right; font-weight:bold">@(string.Format("{0:0.#} %", ViewDataTyped.QuickBMPs.Sum(x => x.PercentOfSiteTreated)))</td>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     }
                     else
                     {

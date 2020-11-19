@@ -54,6 +54,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
 
+        public bool AnyDetailedBMPsNotFullyParameterized { get; }
+        public bool AllDetailedBMPsNotFullyParameterized { get; }
+        public bool UsesDetailedModelingApproach { get; }
+
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
@@ -146,11 +150,26 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForFullyParameterized = Models.FieldDefinition.FullyParameterized;
             FieldDefinitionForDelineationStatus = Models.FieldDefinition.DelineationStatus;
             FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
-
-
-
+            
             AnyLSPCBasins = anyLspcBasins;
+
+            UsesDetailedModelingApproach = WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
+                                           WaterQualityManagementPlanModelingApproach.Detailed
+                                               .WaterQualityManagementPlanModelingApproachID;
+
+            if (UsesDetailedModelingApproach)
+            {
+                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized());
+                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized());
+            }
+            else
+            {
+                // this is redundant but I just want to make this perfectly clear.
+                AnyDetailedBMPsNotFullyParameterized = false;
+                    AllDetailedBMPsNotFullyParameterized = false;
+            }
         }
+
 
         public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
         {

@@ -716,8 +716,8 @@ namespace Neptune.Web.Controllers
         public JsonResult GetModelResults(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(waterQualityManagementPlan);
-            return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
+            var modeledPerformanceResultSimple = new ModeledPerformanceResultSimple(waterQualityManagementPlan);
+            return Json(modeledPerformanceResultSimple, JsonRequestBehavior.AllowGet);
         }
     }
 }

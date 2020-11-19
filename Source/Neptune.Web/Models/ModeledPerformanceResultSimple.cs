@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Common;
 using Newtonsoft.Json.Linq;
@@ -102,81 +103,141 @@ namespace Neptune.Web.Models
 
         public bool Outdated { get; set; }
 
-        public ModeledPerformanceResultSimple(List<TreatmentBMP> treatmentBMP)
+        public ModeledPerformanceResultSimple(List<TreatmentBMP> treatmentBMPs)
+        {
+            var nereidResults = ExtractResults(treatmentBMPs, out var lastDeltaQueue);
+
+            SetDatesAndScalarValues(nereidResults, lastDeltaQueue);
+        }
+
+        private static List<NereidResult> ExtractResults(List<TreatmentBMP> treatmentBMP, out DateTime? lastDeltaQueue)
         {
             var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x => x.TreatmentBMPID != null)
                 .ToList().Where(x =>
                     treatmentBMP.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID.GetValueOrDefault())).ToList();
-            var fullResults = nereidResults.Select(x=>JObject.Parse(x.FullResponse)).ToList();
 
-            var nereidResultLastUpdate = nereidResults.Select(x=>x.LastUpdate).Max().Value;
-            
-            LastUpdated = $"{nereidResultLastUpdate.ToShortDateString()} {nereidResultLastUpdate.ToShortTimeString()}";
-
-            var lastDeltaQueue = HttpRequestStorage.DatabaseEntities.DirtyModelNodes
+            lastDeltaQueue = HttpRequestStorage.DatabaseEntities.DirtyModelNodes
                 .Where(x => x.TreatmentBMPID != null).ToList().OrderByDescending(x => x.CreateDate)
                 .FirstOrDefault(x =>
                     treatmentBMP.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID.GetValueOrDefault()))
                 ?.CreateDate;
+            return nereidResults;
+        }
+
+        private void SetDatesAndScalarValues(List<NereidResult> nereidResults, DateTime? lastDeltaQueue)
+        {
+            // nereidResults should never ever be empty so this should never ever be a problem
+            // ReSharper disable once PossibleInvalidOperationException
+            var nereidResultLastUpdate = nereidResults.Select(x => x.LastUpdate).Max().Value;
+
+            LastUpdated = $"{nereidResultLastUpdate.ToShortDateString()} {nereidResultLastUpdate.ToShortTimeString()}";
 
             Outdated = lastDeltaQueue != null && lastDeltaQueue.Value > nereidResultLastUpdate;
 
-            WetWeatherInflow = fullResults.ExtractDoubleValue("runoff_volume_cuft_inflow");
-            WetWeatherTreated = fullResults.ExtractDoubleValue("runoff_volume_cuft_treated");
-            WetWeatherRetained = fullResults.ExtractDoubleValue("runoff_volume_cuft_retained");
-            WetWeatherUntreated = (fullResults.ExtractDoubleValue("runoff_volume_cuft_bypassed"));
-            WetWeatherTSSRemoved = (fullResults.ExtractDoubleValue("TSS_load_lbs_removed") * PoundsToKilogramsFactor);
-            WetWeatherTNRemoved = (fullResults.ExtractDoubleValue("TN_load_lbs_removed") * PoundsToKilogramsFactor);
-            WetWeatherTPRemoved = (fullResults.ExtractDoubleValue("TP_load_lbs_removed") * PoundsToKilogramsFactor);
-            WetWeatherFCRemoved = (fullResults.ExtractDoubleValue("FC_load_mpn_removed") / 1e9);
-            WetWeatherTCuRemoved = (fullResults.ExtractDoubleValue("TCu_load_lbs_removed") * PoundsToGramsFactor);
-            WetWeatherTPbRemoved = (fullResults.ExtractDoubleValue("TPb_load_lbs_removed") * PoundsToGramsFactor);
-            WetWeatherTZnRemoved = (fullResults.ExtractDoubleValue("TZn_load_lbs_removed") * PoundsToGramsFactor);
-            WetWeatherTSSInflow = (fullResults.ExtractDoubleValue("TSS_load_lbs_inflow") * PoundsToKilogramsFactor);
-            WetWeatherTNInflow = (fullResults.ExtractDoubleValue("TN_load_lbs_inflow") * PoundsToKilogramsFactor);
-            WetWeatherTPInflow = (fullResults.ExtractDoubleValue("TP_load_lbs_inflow") * PoundsToKilogramsFactor);
-            WetWeatherFCInflow = (fullResults.ExtractDoubleValue("FC_load_mpn_inflow") / 1e9);
-            WetWeatherTCuInflow = (fullResults.ExtractDoubleValue("TCu_load_lbs_inflow") * PoundsToGramsFactor);
-            WetWeatherTPbInflow = (fullResults.ExtractDoubleValue("TPb_load_lbs_inflow") * PoundsToGramsFactor);
-            WetWeatherTZnInflow = (fullResults.ExtractDoubleValue("TZn_load_lbs_inflow") * PoundsToGramsFactor);
+            var fullResults = nereidResults.Select(x => JObject.Parse(x.FullResponse)).ToList();
+            WetWeatherInflow = fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_inflow")).Sum();
+            WetWeatherTreated = fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_treated")).Sum();
+            WetWeatherRetained = fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_retained")).Sum();
+            WetWeatherUntreated = (fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_bypassed")).Sum());
+            WetWeatherTSSRemoved = (fullResults.Select(x => x.ExtractDoubleValue("TSS_load_lbs_removed")).Sum() *
+                                    PoundsToKilogramsFactor);
+            WetWeatherTNRemoved = (fullResults.Select(x => x.ExtractDoubleValue("TN_load_lbs_removed")).Sum() *
+                                   PoundsToKilogramsFactor);
+            WetWeatherTPRemoved = (fullResults.Select(x => x.ExtractDoubleValue("TP_load_lbs_removed")).Sum() *
+                                   PoundsToKilogramsFactor);
+            // todo: what is 1e9?????????????????????????
+            WetWeatherFCRemoved = (fullResults.Select(x => x.ExtractDoubleValue("FC_load_mpn_removed")).Sum() / 1e9);
+            WetWeatherTCuRemoved = (fullResults.Select(x => x.ExtractDoubleValue("TCu_load_lbs_removed")).Sum() *
+                                    PoundsToGramsFactor);
+            WetWeatherTPbRemoved = (fullResults.Select(x => x.ExtractDoubleValue("TPb_load_lbs_removed")).Sum() *
+                                    PoundsToGramsFactor);
+            WetWeatherTZnRemoved = (fullResults.Select(x => x.ExtractDoubleValue("TZn_load_lbs_removed")).Sum() *
+                                    PoundsToGramsFactor);
+            WetWeatherTSSInflow = (fullResults.Select(x => x.ExtractDoubleValue("TSS_load_lbs_inflow")).Sum() *
+                                   PoundsToKilogramsFactor);
+            WetWeatherTNInflow = (fullResults.Select(x => x.ExtractDoubleValue("TN_load_lbs_inflow")).Sum() *
+                                  PoundsToKilogramsFactor);
+            WetWeatherTPInflow = (fullResults.Select(x => x.ExtractDoubleValue("TP_load_lbs_inflow")).Sum() *
+                                  PoundsToKilogramsFactor);
+            WetWeatherFCInflow = (fullResults.Select(x => x.ExtractDoubleValue("FC_load_mpn_inflow")).Sum() / 1e9);
+            WetWeatherTCuInflow =
+                (fullResults.Select(x => x.ExtractDoubleValue("TCu_load_lbs_inflow")).Sum() * PoundsToGramsFactor);
+            WetWeatherTPbInflow =
+                (fullResults.Select(x => x.ExtractDoubleValue("TPb_load_lbs_inflow")).Sum() * PoundsToGramsFactor);
+            WetWeatherTZnInflow =
+                (fullResults.Select(x => x.ExtractDoubleValue("TZn_load_lbs_inflow")).Sum() * PoundsToGramsFactor);
 
-            SummerDryWeatherInflow = fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_inflow");
-            SummerDryWeatherTreated = fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_treated");
-            SummerDryWeatherRetained = fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_retained");
-            SummerDryWeatherUntreated = (fullResults.ExtractDoubleValue("summer_dry_weather_flow_cuft_bypassed"));
-            SummerDryWeatherTSSRemoved = (fullResults.ExtractDoubleValue("summer_dwTSS_load_lbs_removed") * PoundsToKilogramsFactor);
-            SummerDryWeatherTNRemoved = (fullResults.ExtractDoubleValue("summer_dwTN_load_lbs_removed") * PoundsToKilogramsFactor);
-            SummerDryWeatherTPRemoved = (fullResults.ExtractDoubleValue("summer_dwTP_load_lbs_removed") * PoundsToKilogramsFactor);
-            SummerDryWeatherFCRemoved = (fullResults.ExtractDoubleValue("summer_dwFC_load_mpn_removed") / 1e9);
-            SummerDryWeatherTCuRemoved = (fullResults.ExtractDoubleValue("summer_dwTCu_load_lbs_removed") * PoundsToGramsFactor);
-            SummerDryWeatherTPbRemoved = (fullResults.ExtractDoubleValue("summer_dwTPb_load_lbs_removed") * PoundsToGramsFactor);
-            SummerDryWeatherTZnRemoved = (fullResults.ExtractDoubleValue("summer_dwTZn_load_lbs_removed") * PoundsToGramsFactor);
-            SummerDryWeatherTSSInflow = (fullResults.ExtractDoubleValue("summer_dwTSS_load_lbs_inflow") * PoundsToKilogramsFactor);
-            SummerDryWeatherTNInflow = (fullResults.ExtractDoubleValue("summer_dwTN_load_lbs_inflow") * PoundsToKilogramsFactor);
-            SummerDryWeatherTPInflow = (fullResults.ExtractDoubleValue("summer_dwTP_load_lbs_inflow") * PoundsToKilogramsFactor);
-            SummerDryWeatherFCInflow = (fullResults.ExtractDoubleValue("summer_dwFC_load_mpn_inflow") / 1e9);
-            SummerDryWeatherTCuInflow = (fullResults.ExtractDoubleValue("summer_dwTCu_load_lbs_inflow") * PoundsToGramsFactor);
-            SummerDryWeatherTPbInflow = (fullResults.ExtractDoubleValue("summer_dwTPb_load_lbs_inflow") * PoundsToGramsFactor);
-            SummerDryWeatherTZnInflow = (fullResults.ExtractDoubleValue("summer_dwTZn_load_lbs_inflow") * PoundsToGramsFactor);
+            SummerDryWeatherInflow = fullResults.Select(x => x.ExtractDoubleValue("summer_dry_weather_flow_cuft_inflow")).Sum();
+            SummerDryWeatherTreated =
+                fullResults.Select(x => x.ExtractDoubleValue("summer_dry_weather_flow_cuft_treated")).Sum();
+            SummerDryWeatherRetained =
+                fullResults.Select(x => x.ExtractDoubleValue("summer_dry_weather_flow_cuft_retained")).Sum();
+            SummerDryWeatherUntreated =
+                (fullResults.Select(x => x.ExtractDoubleValue("summer_dry_weather_flow_cuft_bypassed")).Sum());
+            SummerDryWeatherTSSRemoved = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTSS_load_lbs_removed")).Sum() *
+                                          PoundsToKilogramsFactor);
+            SummerDryWeatherTNRemoved = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTN_load_lbs_removed")).Sum() *
+                                         PoundsToKilogramsFactor);
+            SummerDryWeatherTPRemoved = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTP_load_lbs_removed")).Sum() *
+                                         PoundsToKilogramsFactor);
+            SummerDryWeatherFCRemoved =
+                (fullResults.Select(x => x.ExtractDoubleValue("summer_dwFC_load_mpn_removed")).Sum() / 1e9);
+            SummerDryWeatherTCuRemoved = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTCu_load_lbs_removed")).Sum() *
+                                          PoundsToGramsFactor);
+            SummerDryWeatherTPbRemoved = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTPb_load_lbs_removed")).Sum() *
+                                          PoundsToGramsFactor);
+            SummerDryWeatherTZnRemoved = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTZn_load_lbs_removed")).Sum() *
+                                          PoundsToGramsFactor);
+            SummerDryWeatherTSSInflow = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTSS_load_lbs_inflow")).Sum() *
+                                         PoundsToKilogramsFactor);
+            SummerDryWeatherTNInflow = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTN_load_lbs_inflow")).Sum() *
+                                        PoundsToKilogramsFactor);
+            SummerDryWeatherTPInflow = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTP_load_lbs_inflow")).Sum() *
+                                        PoundsToKilogramsFactor);
+            SummerDryWeatherFCInflow =
+                (fullResults.Select(x => x.ExtractDoubleValue("summer_dwFC_load_mpn_inflow")).Sum() / 1e9);
+            SummerDryWeatherTCuInflow = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTCu_load_lbs_inflow")).Sum() *
+                                         PoundsToGramsFactor);
+            SummerDryWeatherTPbInflow = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTPb_load_lbs_inflow")).Sum() *
+                                         PoundsToGramsFactor);
+            SummerDryWeatherTZnInflow = (fullResults.Select(x => x.ExtractDoubleValue("summer_dwTZn_load_lbs_inflow")).Sum() *
+                                         PoundsToGramsFactor);
 
-            WinterDryWeatherInflow = fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_inflow");
-            WinterDryWeatherTreated = fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_treated");
-            WinterDryWeatherRetained = fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_retained");
-            WinterDryWeatherUntreated = (fullResults.ExtractDoubleValue("winter_dry_weather_flow_cuft_bypassed"));
-            WinterDryWeatherTSSRemoved = (fullResults.ExtractDoubleValue("winter_dwTSS_load_lbs_removed") * PoundsToKilogramsFactor);
-            WinterDryWeatherTNRemoved = (fullResults.ExtractDoubleValue("winter_dwTN_load_lbs_removed") * PoundsToKilogramsFactor);
-            WinterDryWeatherTPRemoved = (fullResults.ExtractDoubleValue("winter_dwTP_load_lbs_removed") * PoundsToKilogramsFactor);
-            WinterDryWeatherFCRemoved = (fullResults.ExtractDoubleValue("winter_dwFC_load_mpn_removed") / 1e9);
-            WinterDryWeatherTCuRemoved = (fullResults.ExtractDoubleValue("winter_dwTCu_load_lbs_removed") * PoundsToGramsFactor);
-            WinterDryWeatherTPbRemoved = (fullResults.ExtractDoubleValue("winter_dwTPb_load_lbs_removed") * PoundsToGramsFactor);
-            WinterDryWeatherTZnRemoved = (fullResults.ExtractDoubleValue("winter_dwTZn_load_lbs_removed") * PoundsToGramsFactor);
-            WinterDryWeatherTSSInflow = (fullResults.ExtractDoubleValue("winter_dwTSS_load_lbs_inflow") * PoundsToKilogramsFactor);
-            WinterDryWeatherTNInflow = (fullResults.ExtractDoubleValue("winter_dwTN_load_lbs_inflow") * PoundsToKilogramsFactor);
-            WinterDryWeatherTPInflow = (fullResults.ExtractDoubleValue("winter_dwTP_load_lbs_inflow") * PoundsToKilogramsFactor);
-            WinterDryWeatherFCInflow = (fullResults.ExtractDoubleValue("winter_dwFC_load_mpn_inflow") / 1e9);
-            WinterDryWeatherTCuInflow = (fullResults.ExtractDoubleValue("winter_dwTCu_load_lbs_inflow") * PoundsToGramsFactor);
-            WinterDryWeatherTPbInflow = (fullResults.ExtractDoubleValue("winter_dwTPb_load_lbs_inflow") * PoundsToGramsFactor);
-            WinterDryWeatherTZnInflow = (fullResults.ExtractDoubleValue("winter_dwTZn_load_lbs_inflow") * PoundsToGramsFactor);
+            WinterDryWeatherInflow = fullResults.Select(x => x.ExtractDoubleValue("winter_dry_weather_flow_cuft_inflow")).Sum();
+            WinterDryWeatherTreated =
+                fullResults.Select(x => x.ExtractDoubleValue("winter_dry_weather_flow_cuft_treated")).Sum();
+            WinterDryWeatherRetained =
+                fullResults.Select(x => x.ExtractDoubleValue("winter_dry_weather_flow_cuft_retained")).Sum();
+            WinterDryWeatherUntreated =
+                (fullResults.Select(x => x.ExtractDoubleValue("winter_dry_weather_flow_cuft_bypassed")).Sum());
+            WinterDryWeatherTSSRemoved = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTSS_load_lbs_removed")).Sum() *
+                                          PoundsToKilogramsFactor);
+            WinterDryWeatherTNRemoved = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTN_load_lbs_removed")).Sum() *
+                                         PoundsToKilogramsFactor);
+            WinterDryWeatherTPRemoved = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTP_load_lbs_removed")).Sum() *
+                                         PoundsToKilogramsFactor);
+            WinterDryWeatherFCRemoved =
+                (fullResults.Select(x => x.ExtractDoubleValue("winter_dwFC_load_mpn_removed")).Sum() / 1e9);
+            WinterDryWeatherTCuRemoved = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTCu_load_lbs_removed")).Sum() *
+                                          PoundsToGramsFactor);
+            WinterDryWeatherTPbRemoved = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTPb_load_lbs_removed")).Sum() *
+                                          PoundsToGramsFactor);
+            WinterDryWeatherTZnRemoved = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTZn_load_lbs_removed")).Sum() *
+                                          PoundsToGramsFactor);
+            WinterDryWeatherTSSInflow = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTSS_load_lbs_inflow")).Sum() *
+                                         PoundsToKilogramsFactor);
+            WinterDryWeatherTNInflow = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTN_load_lbs_inflow")).Sum() *
+                                        PoundsToKilogramsFactor);
+            WinterDryWeatherTPInflow = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTP_load_lbs_inflow")).Sum() *
+                                        PoundsToKilogramsFactor);
+            WinterDryWeatherFCInflow =
+                (fullResults.Select(x => x.ExtractDoubleValue("winter_dwFC_load_mpn_inflow")).Sum() / 1e9);
+            WinterDryWeatherTCuInflow = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTCu_load_lbs_inflow")).Sum() *
+                                         PoundsToGramsFactor);
+            WinterDryWeatherTPbInflow = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTPb_load_lbs_inflow")).Sum() *
+                                         PoundsToGramsFactor);
+            WinterDryWeatherTZnInflow = (fullResults.Select(x => x.ExtractDoubleValue("winter_dwTZn_load_lbs_inflow")).Sum() *
+                                         PoundsToGramsFactor);
 
             DryWeatherInflow = SummerDryWeatherInflow + WinterDryWeatherInflow;
             DryWeatherTreated = SummerDryWeatherTreated + WinterDryWeatherTreated;
@@ -219,7 +280,26 @@ namespace Neptune.Web.Models
 
         public ModeledPerformanceResultSimple(WaterQualityManagementPlan waterQualityManagementPlan)
         {
-            // todo
+            if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
+                WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+            {
+                var nereidResults = ExtractResults(waterQualityManagementPlan.TreatmentBMPs.ToList(), out var lastDeltaQueue);
+                SetDatesAndScalarValues(nereidResults, lastDeltaQueue);
+            }
+            else
+            {
+                var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x =>
+                    x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID);
+                var lastDeltaQueue = HttpRequestStorage.DatabaseEntities.DirtyModelNodes.FirstOrDefault(x =>
+                    x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID)?.CreateDate;
+                    SetDatesAndScalarValues(nereidResults.ToList(), lastDeltaQueue);
+            }
+
+        }
+
+        public ModeledPerformanceResultSimple(TreatmentBMP treatmentBMP): this(new List<TreatmentBMP>{treatmentBMP})
+        {
+            
         }
 
         private const double PoundsToKilogramsFactor = 0.453592;

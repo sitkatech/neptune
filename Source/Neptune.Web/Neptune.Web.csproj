@@ -539,6 +539,8 @@
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentSite.cs" />
     <Compile Include="Models\ModeledPerformanceResultSimple.cs" />
     <Compile Include="Models\ModelResultsDisplayHelper.cs" />
+    <Compile Include="Models\QuickBMPModelExtensions.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
     <Compile Include="Views\FieldVisit\BulkUploadTrashScreenVisit.cs" />
     <Compile Include="Views\FieldVisit\BulkUploadTrashScreenVisitViewData.cs" />
