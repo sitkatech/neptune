@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -51,6 +52,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool AnyLSPCBasins { get; }
 
+        public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
+
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
@@ -59,7 +62,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
             HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins,
             List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
-            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches)
+            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -135,6 +138,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
 
             WaterQualityManagementPlanModelingApproaches = waterQualityManagementPlanModelingApproaches;
+            ModeledPerformanceViewData = modeledPerformanceViewData;
 
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;

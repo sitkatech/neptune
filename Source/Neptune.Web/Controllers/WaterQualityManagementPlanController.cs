@@ -13,6 +13,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 
 namespace Neptune.Web.Controllers
@@ -155,7 +156,7 @@ namespace Neptune.Web.Controllers
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 new HRUCharacteristicsViewData(waterQualityManagementPlan,
                     ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()),
-                anyLspcBasins, dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches);
+                anyLspcBasins, dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(waterQualityManagementPlan, CurrentPerson));
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -710,6 +711,13 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new EditModelingApproachViewData(WaterQualityManagementPlanModelingApproach.All);
             return RazorPartialView<EditModelingApproach, EditModelingApproachViewData, EditModelingApproachViewModel>(viewData, viewModel);
+        }
+
+        public JsonResult GetModelResults(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(waterQualityManagementPlan);
+            return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
         }
     }
 }

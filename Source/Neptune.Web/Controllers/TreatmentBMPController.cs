@@ -43,6 +43,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -180,7 +181,7 @@ namespace Neptune.Web.Controllers
 
             IHaveHRUCharacteristics entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
 
-            var modeledBMPPerformanceViewData = new ModeledBMPPerformanceViewData(treatmentBMP, CurrentPerson);
+            var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(treatmentBMP, CurrentPerson);
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
                 verifiedUnverifiedUrl,
                 new HRUCharacteristicsViewData(entityWithHRUCharacteristics,
@@ -977,6 +978,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
             // Need to re-executed model for updated BMPs since they may have been re-parameterized
+            // can safely ignore the new BMPs since they won't have delineations yet
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, HttpRequestStorage.DatabaseEntities);
 
             var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count} records updated!";
@@ -989,7 +991,7 @@ namespace Neptune.Web.Controllers
         public JsonResult GetModelResults(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var entityObject = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPModelResultSimple = new TreatmentBMPModelResultSimple(entityObject);
+            var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(entityObject);
             return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
         }
 

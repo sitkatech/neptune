@@ -28,6 +28,7 @@
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
 @using Neptune.Web.Views.Shared.HRUCharacteristics
+@using Neptune.Web.Views.Shared.ModeledPerformance
 @using Neptune.Web.Views.Shared.SortOrder
 @using Neptune.Web.Views.TreatmentBMP
 @using Newtonsoft.Json
@@ -608,7 +609,7 @@
                     }
                     else
                     {
-                        ModeledBMPPerformance.RenderPartialView(Html, ViewDataTyped.ModeledBMPPerformanceViewData);
+                        ModeledPerformance.RenderPartialView(Html, ViewDataTyped.ModeledPerformanceViewData);
                     }
                 </div>
             </div>
