@@ -8,14 +8,18 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         public int ObjectID { get; set; }
         [JsonProperty("QueryFeatureID")]
         public int QueryFeatureID { get; set; }
-        [JsonProperty("HRU_Composite_LSPC_LU_DESC")]
+        [JsonProperty("LSPC_LU_EDIT")]
         public string LSPCLandUseDescription { get; set; }
-        [JsonProperty("HRU_Composite_soil_hsg")]
+        [JsonProperty("LU_2002")]
+        public string BaselineLandUseDescription { get; set; }
+        [JsonProperty("soil_hsg")]
         public string HydrologicSoilGroup { get; set; }
-        [JsonProperty("HRU_Composite_slope_pct")]
+        [JsonProperty("slope_pct")]
         public int SlopePercentage { get; set; }
-        [JsonProperty("SUM_imp_acres")]
+        [JsonProperty("imp_acres")]
         public double ImperviousAcres { get; set; }
+        [JsonProperty("imp_acres_02")]
+        public double BaselineImperviousAcres { get; set; }
         [JsonProperty("Shape_Length")]
         public double Length { get; set; }
         [JsonProperty("Shape_Area")]

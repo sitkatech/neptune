@@ -15,13 +15,13 @@ namespace Neptune.Web.Common
             List<LoadGeneratingUnit> loadGeneratingUnits, ILog logger)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
-            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
+            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "output_fc");
 
             var hruRequest = GetGPRecordSetLayer(loadGeneratingUnits);
 
             var serializeObject = new
             {
-                Input_Polygons = JsonConvert.SerializeObject(hruRequest),
+                input_fc = JsonConvert.SerializeObject(hruRequest),
                 returnZ = false,
                 returnM = false,
                 returnTrueCurves = false,

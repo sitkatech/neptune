@@ -23,6 +23,8 @@ namespace Neptune.Web.Models
             Property(x => x.Area).HasColumnName(@"Area").HasColumnType("float").IsRequired();
             Property(x => x.HRUCharacteristicLandUseCodeID).HasColumnName(@"HRUCharacteristicLandUseCodeID").HasColumnType("int").IsRequired();
             Property(x => x.LoadGeneratingUnitID).HasColumnName(@"LoadGeneratingUnitID").HasColumnType("int").IsRequired();
+            Property(x => x.BaselineImperviousAcres).HasColumnName(@"BaselineImperviousAcres").HasColumnType("float").IsOptional();
+            Property(x => x.BaselineHRUCharacteristicLandUseCodeID).HasColumnName(@"BaselineHRUCharacteristicLandUseCodeID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.LoadGeneratingUnit).WithMany(b => b.HRUCharacteristics).HasForeignKey(c => c.LoadGeneratingUnitID).WillCascadeOnDelete(false); // FK_HRUCharacteristic_LoadGeneratingUnit_LoadGeneratingUnitID

@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID, int loadGeneratingUnitID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID, int loadGeneratingUnitID, double? baselineImperviousAcres, int? baselineHRUCharacteristicLandUseCodeID) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
@@ -40,6 +40,8 @@ namespace Neptune.Web.Models
             this.Area = area;
             this.HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCodeID;
             this.LoadGeneratingUnitID = loadGeneratingUnitID;
+            this.BaselineImperviousAcres = baselineImperviousAcres;
+            this.BaselineHRUCharacteristicLandUseCodeID = baselineHRUCharacteristicLandUseCodeID;
         }
 
         /// <summary>
@@ -136,9 +138,12 @@ namespace Neptune.Web.Models
         public double Area { get; set; }
         public int HRUCharacteristicLandUseCodeID { get; set; }
         public int LoadGeneratingUnitID { get; set; }
+        public double? BaselineImperviousAcres { get; set; }
+        public int? BaselineHRUCharacteristicLandUseCodeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HRUCharacteristicID; } set { HRUCharacteristicID = value; } }
 
+        public HRUCharacteristicLandUseCode BaselineHRUCharacteristicLandUseCode { get { return BaselineHRUCharacteristicLandUseCodeID.HasValue ? HRUCharacteristicLandUseCode.AllLookupDictionary[BaselineHRUCharacteristicLandUseCodeID.Value] : null; } }
         public HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode { get { return HRUCharacteristicLandUseCode.AllLookupDictionary[HRUCharacteristicLandUseCodeID]; } }
         public virtual LoadGeneratingUnit LoadGeneratingUnit { get; set; }
 
