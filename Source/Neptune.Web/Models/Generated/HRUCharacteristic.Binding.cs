@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID, int loadGeneratingUnitID, double? baselineImperviousAcres, int? baselineHRUCharacteristicLandUseCodeID) : this()
+        public HRUCharacteristic(int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID, int loadGeneratingUnitID, double baselineImperviousAcres, int baselineHRUCharacteristicLandUseCodeID) : this()
         {
             this.HRUCharacteristicID = hRUCharacteristicID;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
@@ -47,7 +47,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public HRUCharacteristic(string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID, int loadGeneratingUnitID) : this()
+        public HRUCharacteristic(string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, int hRUCharacteristicLandUseCodeID, int loadGeneratingUnitID, double baselineImperviousAcres, int baselineHRUCharacteristicLandUseCodeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.HRUCharacteristicID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -59,12 +59,14 @@ namespace Neptune.Web.Models
             this.Area = area;
             this.HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCodeID;
             this.LoadGeneratingUnitID = loadGeneratingUnitID;
+            this.BaselineImperviousAcres = baselineImperviousAcres;
+            this.BaselineHRUCharacteristicLandUseCodeID = baselineHRUCharacteristicLandUseCodeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public HRUCharacteristic(string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode, LoadGeneratingUnit loadGeneratingUnit) : this()
+        public HRUCharacteristic(string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, DateTime lastUpdated, double area, HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode, LoadGeneratingUnit loadGeneratingUnit, double baselineImperviousAcres, HRUCharacteristicLandUseCode baselineHRUCharacteristicLandUseCode) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.HRUCharacteristicID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -77,14 +79,16 @@ namespace Neptune.Web.Models
             this.LoadGeneratingUnitID = loadGeneratingUnit.LoadGeneratingUnitID;
             this.LoadGeneratingUnit = loadGeneratingUnit;
             loadGeneratingUnit.HRUCharacteristics.Add(this);
+            this.BaselineImperviousAcres = baselineImperviousAcres;
+            this.BaselineHRUCharacteristicLandUseCodeID = baselineHRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static HRUCharacteristic CreateNewBlank(HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode, LoadGeneratingUnit loadGeneratingUnit)
+        public static HRUCharacteristic CreateNewBlank(HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode, LoadGeneratingUnit loadGeneratingUnit, HRUCharacteristicLandUseCode baselineHRUCharacteristicLandUseCode)
         {
-            return new HRUCharacteristic(default(string), default(int), default(double), default(DateTime), default(double), hRUCharacteristicLandUseCode, loadGeneratingUnit);
+            return new HRUCharacteristic(default(string), default(int), default(double), default(DateTime), default(double), hRUCharacteristicLandUseCode, loadGeneratingUnit, default(double), baselineHRUCharacteristicLandUseCode);
         }
 
         /// <summary>
@@ -138,12 +142,12 @@ namespace Neptune.Web.Models
         public double Area { get; set; }
         public int HRUCharacteristicLandUseCodeID { get; set; }
         public int LoadGeneratingUnitID { get; set; }
-        public double? BaselineImperviousAcres { get; set; }
-        public int? BaselineHRUCharacteristicLandUseCodeID { get; set; }
+        public double BaselineImperviousAcres { get; set; }
+        public int BaselineHRUCharacteristicLandUseCodeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HRUCharacteristicID; } set { HRUCharacteristicID = value; } }
 
-        public HRUCharacteristicLandUseCode BaselineHRUCharacteristicLandUseCode { get { return BaselineHRUCharacteristicLandUseCodeID.HasValue ? HRUCharacteristicLandUseCode.AllLookupDictionary[BaselineHRUCharacteristicLandUseCodeID.Value] : null; } }
+        public HRUCharacteristicLandUseCode BaselineHRUCharacteristicLandUseCode { get { return HRUCharacteristicLandUseCode.AllLookupDictionary[BaselineHRUCharacteristicLandUseCodeID]; } }
         public HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode { get { return HRUCharacteristicLandUseCode.AllLookupDictionary[HRUCharacteristicLandUseCodeID]; } }
         public virtual LoadGeneratingUnit LoadGeneratingUnit { get; set; }
 

@@ -28,7 +28,9 @@ namespace Neptune.Web.ScheduledJobs
         {
             // clear out all dirty nodes since the whole network is being run.
             DbContext.DirtyModelNodes.DeleteDirtyModelNode(DbContext.DirtyModelNodes.ToList());
-            NereidUtilities.TotalNetworkSolve(out _, out _, out _, DbContext, HttpClient);
+            NereidUtilities.TotalNetworkSolve(out _, out _, out _, DbContext, HttpClient, true);
+            NereidUtilities.TotalNetworkSolve(out _, out _, out _, DbContext, HttpClient, false);
+
         }
     }
     
@@ -53,7 +55,8 @@ namespace Neptune.Web.ScheduledJobs
         protected override void RunJobImplementation()
         {
             var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
-            NereidUtilities.DeltaSolve(out _, out _, out _, DbContext, HttpClient, dirtyModelNodes);
+            NereidUtilities.DeltaSolve(out _, out _, out _, DbContext, HttpClient, dirtyModelNodes, true);
+            NereidUtilities.DeltaSolve(out _, out _, out _, DbContext, HttpClient, dirtyModelNodes, false);
         }
     }
 }

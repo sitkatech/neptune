@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[NereidResult](
 	[NodeID] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[FullResponse] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[LastUpdate] [datetime] NULL,
+	[IsBaselineCondition] [bit] NOT NULL,
  CONSTRAINT [PK_NereidResult_NereidResultID] PRIMARY KEY CLUSTERED 
 (
 	[NereidResultID] ASC

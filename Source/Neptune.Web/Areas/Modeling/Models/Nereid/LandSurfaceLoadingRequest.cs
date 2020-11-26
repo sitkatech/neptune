@@ -17,7 +17,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         public LandSurfaceLoadingRequest(List<vNereidLoadingInput> vNereidLoadingInputs)
         {
-            LandSurfaces = vNereidLoadingInputs.Select(x => new LandSurface(x)).ToList();
+            // this is only used by the test endpoints
+            LandSurfaces = vNereidLoadingInputs.Select(x => new LandSurface(x, false)).ToList();
         }
     }
 }

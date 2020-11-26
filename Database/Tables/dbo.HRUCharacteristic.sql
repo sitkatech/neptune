@@ -11,8 +11,8 @@ CREATE TABLE [dbo].[HRUCharacteristic](
 	[Area] [float] NOT NULL,
 	[HRUCharacteristicLandUseCodeID] [int] NOT NULL,
 	[LoadGeneratingUnitID] [int] NOT NULL,
-	[BaselineImperviousAcres] [float] NULL,
-	[BaselineHRUCharacteristicLandUseCodeID] [int] NULL,
+	[BaselineImperviousAcres] [float] NOT NULL,
+	[BaselineHRUCharacteristicLandUseCodeID] [int] NOT NULL,
  CONSTRAINT [PK_HRUCharacteristic_HRUCharacteristicID] PRIMARY KEY CLUSTERED 
 (
 	[HRUCharacteristicID] ASC

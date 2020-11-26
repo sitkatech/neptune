@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Spatial;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
+﻿using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -15,6 +7,11 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Neptune.Web.Controllers
 {
@@ -102,9 +99,9 @@ namespace Neptune.Web.Controllers
                 }
             });
 
-            var boundingBoxGeometries = new List<DbGeometry>();
-            boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
-            boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
+            //var boundingBoxGeometries = new List<DbGeometry>();
+            //boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
+            //boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
@@ -292,7 +289,6 @@ namespace Neptune.Web.Controllers
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
             var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan);
             return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
@@ -322,7 +318,6 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditWqmpBmps(WaterQualityManagementPlan waterQualityManagementPlan,
             EditWqmpBmpsViewModel viewModel)
         {
-            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
             var viewData = new EditWqmpBmpsViewData(CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditWqmpBmps, EditWqmpBmpsViewData, EditWqmpBmpsViewModel>(viewData, viewModel);
         }
@@ -333,7 +328,6 @@ namespace Neptune.Web.Controllers
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
             var viewModel = new EditSimplifiedStructuralBMPsViewModel(waterQualityManagementPlan);
             return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
         }
@@ -407,7 +401,6 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditSourceControlBMPs(WaterQualityManagementPlan waterQualityManagementPlan,
             EditSourceControlBMPsViewModel viewModel)
         {
-            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
             var viewData = new EditSourceControlBMPsViewData(CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditSourceControlBMPs, EditSourceControlBMPsViewData, EditSourceControlBMPsViewModel>(viewData, viewModel);
         }

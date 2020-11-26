@@ -20,13 +20,21 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         }
 
-        public LandSurface(vNereidLoadingInput vNereidLoadingInput)
+        public LandSurface(vNereidLoadingInput vNereidLoadingInput, bool isBaselineCondition)
         {
+            var landUseCode = isBaselineCondition
+                ? vNereidLoadingInput.BaselineLandUseCode
+                : vNereidLoadingInput.LandUseCode;
+
+            var imperviousAcres = isBaselineCondition
+                ? vNereidLoadingInput.BaselineImperviousAcres
+                : vNereidLoadingInput.ImperviousAcres;
+
             NodeID = NereidUtilities.LandSurfaceNodeID(vNereidLoadingInput);
             SurfaceKey =
-                $"{vNereidLoadingInput.LSPCBasinKey}-{vNereidLoadingInput.HRUCharacteristicLandUseCodeName}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
+                $"{vNereidLoadingInput.LSPCBasinKey}-{landUseCode}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
             Area = vNereidLoadingInput.Area;
-            ImperviousArea = vNereidLoadingInput.ImperviousAcres;
+            ImperviousArea = imperviousAcres;
         }
     }
 }

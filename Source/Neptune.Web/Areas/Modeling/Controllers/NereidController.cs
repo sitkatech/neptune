@@ -258,7 +258,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
                 .ToList().Where(x => x.IsFullyParameterized())
-                .Select(x => x.ToTreatmentFacility()).ToList();
+                .Select(x => x.ToTreatmentFacility(true)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
 
@@ -289,7 +289,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
 
-            var treatmentFacility = treatmentBMPPrimaryKey.EntityObject.ToTreatmentFacility();
+            var treatmentFacility = treatmentBMPPrimaryKey.EntityObject.ToTreatmentFacility(true);
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = new List<TreatmentFacility> {treatmentFacility} };
 
@@ -322,7 +322,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
 
             var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility()).ToList();
+                .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility(true)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
             bool failed = false;
@@ -374,7 +374,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var allModelingQuickBMPs = HttpRequestStorage.DatabaseEntities.QuickBMPs.Include(x => x.TreatmentBMPType)
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
-            var responseContent = NereidUtilities.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs, out _, NereidController.HttpClient);
+            var responseContent = NereidUtilities.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWaterqualityManagementPlanNodes, allModelingQuickBMPs, out _, NereidController.HttpClient, true);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
@@ -399,7 +399,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             try
             {
                 NereidUtilities.TotalNetworkSolve(out stackTrace, out missingNodeIDs,
-                    out graph, HttpRequestStorage.DatabaseEntities, HttpClient);
+                    out graph, HttpRequestStorage.DatabaseEntities, HttpClient, true);
             }
             catch (NereidException<SolutionRequestObject, SolutionResponseObject> nexc)
             {
@@ -461,7 +461,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             try
             {
                 NereidUtilities.DeltaSolve(out stackTrace, out missingNodeIDs,
-                    out graph, HttpRequestStorage.DatabaseEntities, HttpClient, dirtyModelNodes);
+                    out graph, HttpRequestStorage.DatabaseEntities, HttpClient, dirtyModelNodes, true);
             }
             catch (NereidException<SolutionRequestObject, SolutionResponseObject> nexc)
             {

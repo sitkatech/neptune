@@ -93,14 +93,15 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
     public static class TreatmentFacilityExtensions
     {
-        public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP)
+        public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition)
         {
             var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP);
             var lspcBasinKey = treatmentBMP.LSPCBasin?.LSPCBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
-            
 
-            if (!isFullyParameterized)
+            // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
+            if (!isFullyParameterized || 
+                (isBaselineCondition && treatmentBMP.YearBuilt.GetValueOrDefault() > NereidUtilities.BASELINE_CUTOFF_YEAR))
             {
                 return new TreatmentFacility
                 {
