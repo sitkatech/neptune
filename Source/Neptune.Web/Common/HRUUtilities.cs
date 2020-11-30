@@ -62,9 +62,10 @@ namespace Neptune.Web.Common
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
                 Features = loadGeneratingUnits.GetHRURequestFeatures().ToList(),
+                DisplayFieldName = "",
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
-                SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_CA_ZONE_VI_SRID },
+                SpatialReference = new EsriSpatialReference { wkid = 102646, latestWkid = 2230},
                 Fields = new List<EsriField>
                 {
                     new EsriField
