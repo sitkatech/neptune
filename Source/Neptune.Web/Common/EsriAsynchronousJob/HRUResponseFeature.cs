@@ -20,7 +20,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
             var hruCharacteristic = new HRUCharacteristic(Attributes.HydrologicSoilGroup, Attributes.SlopePercentage,
                 Attributes.ImperviousAcres, DateTime.Now,
-                Attributes.Area / CoordinateSystemHelper.SquareFeetToAcresDivisor,
+                Attributes.Acres ,
                 hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID, Attributes.QueryFeatureID,
                 Attributes.BaselineImperviousAcres,
                 baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID);

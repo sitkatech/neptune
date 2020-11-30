@@ -22,7 +22,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         public double BaselineImperviousAcres { get; set; }
         [JsonProperty("Shape_Length")]
         public double Length { get; set; }
-        [JsonProperty("Shape_Area")]
+        [JsonProperty("acres")]
         public double Area { get; set; }
     }
 }
