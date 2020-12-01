@@ -400,7 +400,7 @@ namespace Neptune.Web.Common
 
             var baselineConditionSqlParam = new SqlParameter("@isBaselineCondition", isBaselineCondition);
             dbContext.Database.ExecuteSqlCommand(
-                "EXEC dbo.pDeleteNereidResults", baselineConditionSqlParam);
+                "EXEC dbo.pDeleteNereidResults @isBaselineCondition", baselineConditionSqlParam);
 
             dbContext.NereidResults.AddRange(nereidResults);
             // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
