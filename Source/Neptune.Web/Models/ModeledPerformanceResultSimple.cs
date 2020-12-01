@@ -103,6 +103,9 @@ namespace Neptune.Web.Models
 
         public bool Outdated { get; set; }
 
+        public bool IsWQMPResult { get; set; }
+        public bool IsSimplifiedWQMPResult { get; set; }
+
         public ModeledPerformanceResultSimple(List<TreatmentBMP> treatmentBMPs)
         {
             var nereidResults = ExtractResults(treatmentBMPs, out var lastDeltaQueue);
@@ -112,7 +115,7 @@ namespace Neptune.Web.Models
 
         private static List<NereidResult> ExtractResults(List<TreatmentBMP> treatmentBMP, out DateTime? lastDeltaQueue)
         {
-            var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x => x.TreatmentBMPID != null)
+            var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x => x.TreatmentBMPID != null && !x.IsBaselineCondition)
                 .ToList().Where(x =>
                     treatmentBMP.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID.GetValueOrDefault())).ToList();
 
@@ -280,16 +283,19 @@ namespace Neptune.Web.Models
 
         public ModeledPerformanceResultSimple(WaterQualityManagementPlan waterQualityManagementPlan)
         {
+            IsWQMPResult = true;
             if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                 WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
+                IsSimplifiedWQMPResult = false;
                 var nereidResults = ExtractResults(waterQualityManagementPlan.TreatmentBMPs.ToList(), out var lastDeltaQueue);
                 SetDatesAndScalarValues(nereidResults, lastDeltaQueue);
             }
             else
             {
+                IsSimplifiedWQMPResult = true;
                 var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x =>
-                    x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID);
+                    x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID && !x.IsBaselineCondition);
                 var lastDeltaQueue = HttpRequestStorage.DatabaseEntities.DirtyModelNodes.FirstOrDefault(x =>
                     x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID)?.CreateDate;
                     SetDatesAndScalarValues(nereidResults.ToList(), lastDeltaQueue);
