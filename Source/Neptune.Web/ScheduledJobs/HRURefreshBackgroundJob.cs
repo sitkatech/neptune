@@ -86,6 +86,8 @@ namespace Neptune.Web.ScheduledJobs
             }
 
 
+
+
             ExecuteModelIfNeeded(loadGeneratingUnitsToUpdate.Any());
 
             stopwatch.Stop();

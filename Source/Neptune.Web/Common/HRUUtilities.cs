@@ -39,7 +39,7 @@ namespace Neptune.Web.Common
 
                 newHRUCharacteristics.AddRange(
                     esriGPRecordSetLayer
-                        .Features
+                        .Features.Where(x=>x.Attributes.ImperviousAcres!= null)
                         .Select(x =>
                         {
                             var hruCharacteristic = x.ToHRUCharacteristic();
