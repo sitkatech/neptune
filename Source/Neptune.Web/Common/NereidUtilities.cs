@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -351,14 +352,15 @@ namespace Neptune.Web.Common
             }
             catch (JsonReaderException jre)
             {
-                var disposableTempFile = new DisposableTempFile();
+                var resultLogFile = Path.GetTempFileName();
+                System.IO.File.WriteAllText(resultLogFile,postResultContentAsStringResult);
 
-                using (var file = new System.IO.StreamWriter(disposableTempFile.FileInfo.FullName))
-                {
-                    file.Write(postResultContentAsStringResult);
-                }
+                var requestLogFile = Path.GetTempFileName();
+                System.IO.File.WriteAllText(requestLogFile, postResultContentAsStringResult);
 
-                throw new Exception($"Error deserializing result from Nereid. Raw result content logged at {disposableTempFile.FileInfo.FullName}", jre);
+                throw new Exception(
+                    $"Error deserializing result from Nereid. Raw result content logged at {resultLogFile}. Raw request content logged at {requestLogFile}",
+                    jre);
             }
 
             // ReSharper disable once PossibleNullReferenceException
