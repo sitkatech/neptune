@@ -497,7 +497,7 @@ namespace Neptune.Web.Common
                 foreach (var node in graph.Nodes)
                 {
                     var previousNodeResults = previousModelResults.SingleOrDefault(x =>
-                        node.ID == x.NodeID
+                        node.ID == x.NodeID && x.IsBaselineCondition == isBaselineCondition
                         )?.FullResponse;
 
                     if (previousNodeResults != null)
