@@ -43,6 +43,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
@@ -159,6 +160,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [AnonymousUnclassifiedFeature]
         [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {

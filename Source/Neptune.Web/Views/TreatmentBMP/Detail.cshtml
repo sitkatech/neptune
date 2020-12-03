@@ -103,7 +103,9 @@
     }
 }
 
-@if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationErrors.Any())
+@if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+{
+if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationErrors.Any())
 {
     <div class="alert alert-info">
         @if (ViewDataTyped.DelineationErrors.Any())
@@ -132,13 +134,13 @@
     </div>
 }
 
-@if (ViewDataTyped.OpenRevisionRequest != null)
+if (ViewDataTyped.OpenRevisionRequest != null)
 {
     <div class="alert alert-info">
         There is an open <a href="@ViewDataTyped.OpenRevisionRequest.GetDetailUrl()">Regional Subbasin Revision Request</a> relating to this BMP.
     </div>
 }
-
+}
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -158,8 +160,11 @@
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> { "btn", "btn-neptune", "btn-xs" }, null, null)
-                        &nbsp;&nbsp;
+                        @if(!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                        {
+                            @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> {"btn", "btn-neptune", "btn-xs"}, null, null)
+                            <span>&nbsp;&nbsp;</span>
+                        }
                         @Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")
                     </label>
                     <div class="col-sm-7">
@@ -739,14 +744,17 @@
                                 </div>
                             </div>
                         }
-                        <div class="row" style="margin-top: 10px">
-                            <div class="col-xs-12">
-                                @{
-                                    var textForUpstreamBMPDropdown = ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? "What if this BMP shares a delineation with an upstream BMP?" : "This BMP shares a delineation with Upstream BMP: " + ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName;
-                                }
-                                <a style="cursor: pointer" id="upstreamBMPDropdown"><span class="upstreamBMPDropdownIcon glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;@textForUpstreamBMPDropdown</a>
+                        if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                        {
+                            <div class="row" style="margin-top: 10px">
+                                <div class="col-xs-12">
+                                    @{
+                                        var textForUpstreamBMPDropdown = ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? "What if this BMP shares a delineation with an upstream BMP?" : "This BMP shares a delineation with Upstream BMP: " + ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName;
+                                    }
+                                    <a style="cursor: pointer" id="upstreamBMPDropdown"><span class="upstreamBMPDropdownIcon glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;@textForUpstreamBMPDropdown</a>
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                     else
                     {
@@ -766,13 +774,15 @@
                             {
                                 <div class="col-xs-4" style="margin-top: 8px">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new HtmlString("Not Provided") : ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl())</div>
                                 <div class="col-xs-3" style="margin-top: 6px">
-                                    @if (ViewDataTyped.TreatmentBMP.UpstreamBMP != null)
+                                    @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
                                     {
-                                        <form method="post" action="@ViewDataTyped.RemoveUpstreamBMPUrl" style="display: inline">
-                                            <button class="btn btn-sm btn-neptune" id="deleteUpstreamBMPButton" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
-                                        </form>
-                                    }
-                                    @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)
+                                        if (ViewDataTyped.TreatmentBMP.UpstreamBMP != null)
+                                        {
+                                            <form method="post" action="@ViewDataTyped.RemoveUpstreamBMPUrl" style="display: inline">
+                                                <button class="btn btn-sm btn-neptune" id="deleteUpstreamBMPButton" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
+                                            </form>
+                                        }
+                                        @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)}
                                 </div>
                             }
                             else
@@ -972,52 +982,55 @@
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="panel panelNeptune">
-                    <div class="panel-heading panelTitle">
-                        Documents
-                        <span class="pull-right">
-                            @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                        </span>
-                    </div>
-                    <div class="panel-body">
-                        @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
-                        {
-                            foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
+        
+        @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+        {
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            Documents
+                            <span class="pull-right">
+                                @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
                             {
-                                if (ViewDataTyped.CurrentPersonCanManage)
+                                foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
                                 {
-                                    <span>
-                                        @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", treatmentBMPDocument.GetEditTreatmentBMPDocumentUrl(), "Edit Treatment BMP Document", new List<string>(), true)
-                                        @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", treatmentBMPDocument.GetDeleteTreatmentBMPDocumentUrl(), new List<string>(), true)
-                                    </span>
+                                    if (ViewDataTyped.CurrentPersonCanManage)
+                                    {
+                                        <span>
+                                            @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", treatmentBMPDocument.GetEditTreatmentBMPDocumentUrl(), "Edit Treatment BMP Document", new List<string>(), true)
+                                            @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", treatmentBMPDocument.GetDeleteTreatmentBMPDocumentUrl(), new List<string>(), true)
+                                        </span>
+                                    }
+
+                                    <a href="@treatmentBMPDocument.FileResource.GetFileResourceUrl()">
+                                        @treatmentBMPDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
+                                    </a>
+
+                                    <dl class="dl-horizontal">
+                                        <dt>@Html.Label("Uploaded On")</dt>
+                                        <dd>@treatmentBMPDocument.UploadDate.ToShortDateString()</dd>
+                                        <dt>@Html.Label("File Type")</dt>
+                                        <dd>@treatmentBMPDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
+                                        <dt>@Html.Label("Description")</dt>
+                                        <dd>@treatmentBMPDocument.DocumentDescription</dd>
+                                    </dl>
+                                    <hr/>
                                 }
-
-                                <a href="@treatmentBMPDocument.FileResource.GetFileResourceUrl()">
-                                    @treatmentBMPDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
-                                </a>
-
-                                <dl class="dl-horizontal">
-                                    <dt>@Html.Label("Uploaded On")</dt>
-                                    <dd>@treatmentBMPDocument.UploadDate.ToShortDateString()</dd>
-                                    <dt>@Html.Label("File Type")</dt>
-                                    <dd>@treatmentBMPDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
-                                    <dt>@Html.Label("Description")</dt>
-                                    <dd>@treatmentBMPDocument.DocumentDescription</dd>
-                                </dl>
-                                <hr />
                             }
-                        }
-                        else
-                        {
-                            <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
-                        }
+                            else
+                            {
+                                <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 

@@ -22,6 +22,12 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)
         {
+            // verified BMPs are available for unassigned/anonymous users and therefore all users
+            if (contextModelObject.InventoryIsVerified)
+            {
+                return new PermissionCheckResult();
+            }
+
             var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
             if (!isAssignedToTreatmentBMP)
             {

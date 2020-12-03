@@ -122,6 +122,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool IsFullyParameterized { get; }
 
         public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
+        public bool CurrentPersonIsAnonymousOrUnassigned { get; }
 
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
@@ -138,6 +139,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x => x.Instructions(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
+            CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
