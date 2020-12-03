@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using LtInfo.Common;
 
 namespace Neptune.Web.Common
 {
@@ -343,9 +344,25 @@ namespace Neptune.Web.Common
 
             var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
                 .Content.ReadAsStringAsync().Result;
+            NereidResult<TResp> deserializeObject = null;
+            try
+            {
+                deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+            }
+            catch (JsonReaderException jre)
+            {
+                var disposableTempFile = new DisposableTempFile();
 
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+                using (var file = new System.IO.StreamWriter(disposableTempFile.FileInfo.FullName))
+                {
+                    file.Write(postResultContentAsStringResult);
+                }
 
+                throw new Exception($"Error deserializing result from Nereid. Raw result content logged at {disposableTempFile.FileInfo.FullName}", jre);
+            }
+
+            // ReSharper disable once PossibleNullReferenceException
+            // will not be null because of the catch-and-rethrow above
             var executing = deserializeObject.Status == NereidJobStatus.STARTED || deserializeObject.Status == NereidJobStatus.PENDING;
             var resultRoute = deserializeObject.ResultRoute;
 
