@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using DocumentFormat.OpenXml.Wordprocessing
 @using Neptune.Web.Views.Shared.SortOrder
 @using LtInfo.Common
 @using Neptune.Web.Models
@@ -80,7 +81,16 @@
                             @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName())
                             {
                                 <tr>
-                                    <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                    <td class="text-left">
+                                        @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                                        {
+                                            @TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()
+                                        }
+                                        else
+                                        {
+                                            @TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
+                                        }
+                                    </td>
                                     <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
                                     <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
                                     <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
@@ -127,7 +137,17 @@
                                     @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes.SortByOrderThenName())
                                     {
                                         <tr>
-                                            <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()</td>
+                                            
+                                            <td class="text-left">
+                                                @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                                                {
+                                                    @treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()
+                                                }
+                                                else
+                                                {
+                                                    @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
+                                                }
+                                            </td>
                                             <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</td>
                                             <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.GetMeasurementUnitDisplayName()</td>
                                             <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.IsRequired.ToYesNo()</td>

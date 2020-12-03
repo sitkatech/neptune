@@ -73,11 +73,22 @@ namespace Neptune.Web.Views.FieldVisit
                 Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             }
 
-            Add("Performed By", x => UrlTemplate.MakeHrefString(PersonModelExtensions.DetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 105,
-                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            if (!isAnonymousOrUnassigned)
+            {
+                Add("Performed By",
+                    x => UrlTemplate.MakeHrefString(
+                        PersonModelExtensions.DetailUrlTemplate.ParameterReplace(x.PerformedByPersonID),
+                        x.PerformedByPersonName), 105,
+                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            }
+            else
+            {
+                Add("Performed By", x => x.PerformedByPersonName, 105, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            }
+
             Add("Field Visit Verified", x => x.IsFieldVisitVerified.ToYesNo(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.FieldVisitStatusID != FieldVisitStatus.InProgress.FieldVisitStatusID
+            Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => isAnonymousOrUnassigned || x.FieldVisitStatusID != FieldVisitStatus.InProgress.FieldVisitStatusID
                     ? new HtmlString(x.FieldVisitStatusDisplayName)
                     : UrlTemplate.MakeHrefString(FieldVisitModelExtensions.WorkflowUrlTemplate.ParameterReplace(x.FieldVisitID),
                         x.FieldVisitStatusDisplayName), 85,
@@ -87,7 +98,7 @@ namespace Neptune.Web.Views.FieldVisit
             {
                 Add("Inventory Updated?", x => new HtmlString(x.InventoryUpdated ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
                 Add("Required Attributes Entered?", x => (x.NumberRequiredAttributesEntered >= x.NumberOfRequiredAttributes ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            
+
                 Add("Initial Assessment?",
                 x => x.TreatmentBMPAssessmentIDInitial.HasValue
                     ? UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessmentIDInitial.Value),

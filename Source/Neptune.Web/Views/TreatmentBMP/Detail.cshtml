@@ -856,7 +856,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     <div class="panel-body">
                         @if (ViewDataTyped.TreatmentBMP.FieldVisits.Any())
                         {
-                            @Html.DhtmlxGrid(ViewDataTyped.FieldVisitGridSpec, ViewDataTyped.FieldVisitGridName, ViewDataTyped.FieldVisitGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                            @Html.DhtmlxGrid(ViewDataTyped.FieldVisitGridSpec, ViewDataTyped.FieldVisitGridName, ViewDataTyped.FieldVisitGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                         }
                         @if (!ViewDataTyped.TreatmentBMP.FieldVisits.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
                         {
@@ -969,7 +969,16 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                     @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()))
                                     {
                                         <tr>
-                                            <td>@treatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                            <td>
+                                                @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                                                {
+                                                    @treatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()
+                                                }
+                                                else
+                                                {
+                                                    @treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
+                                                }
+                                            </td>
                                             <td>@treatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
                                             <td>@treatmentBMPAssessmentObservationType.GetFormattedThresholdValue(treatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
                                         </tr>
