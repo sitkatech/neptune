@@ -464,8 +464,6 @@ namespace Neptune.Web.Common
                 old.FullResponse = novel.FullResponse;
                 old.LastUpdate = novel.LastUpdate;
             });
-                
-            dbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
 
             dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();

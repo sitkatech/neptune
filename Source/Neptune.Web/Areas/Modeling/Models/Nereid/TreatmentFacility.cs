@@ -188,7 +188,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool ?? double.PositiveInfinity,
+                //convert Days to Hours for this field.
+                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool * 24 ?? double.PositiveInfinity,
                 DiversionRate = modelingAttribute.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,
