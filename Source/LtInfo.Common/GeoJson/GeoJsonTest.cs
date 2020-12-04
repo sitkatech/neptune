@@ -86,6 +86,8 @@ namespace LtInfo.Common.GeoJson
         [UseReporter(typeof(DiffReporter))]
         public void CanSerializeAFeatureCollectionTest()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             var fc = GetTestFeatureCollection();
             var json = JsonConvert.SerializeObject(fc, Formatting.Indented,
                 new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
@@ -95,6 +97,8 @@ namespace LtInfo.Common.GeoJson
         [Test]
         public void CanSerializeAFeatureCollectionAndEnsureItIsValidTest()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             var fc = GetTestFeatureCollection();
             var json = JsonConvert.SerializeObject(fc, Formatting.Indented,
     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });

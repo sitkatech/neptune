@@ -81,6 +81,8 @@ namespace LtInfo.Common.GdalOgr
         [Test]
         public void CanProperlyCreateCommandLineOptionsForOgr2OgrUsingGeoJSON()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             // Arrange
             // -------
 
@@ -204,6 +206,8 @@ namespace LtInfo.Common.GdalOgr
         [Test]
         public void CanExecuteOgr2OgrFromGeoJsonSingleColumnToExistingMsSql()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             var gdbFileInfo = FileUtility.FirstMatchingFileUpDirectoryTree(@"LTInfo.Common\GdalOgr\SampleFileGeodatabase.gdb.zip");
             const string sourceLayerName = "MySampleFeatureClass";
             // Act

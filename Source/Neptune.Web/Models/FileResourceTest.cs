@@ -30,6 +30,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.UnitTestCommon;
 using LtInfo.Common;
 using NUnit.Framework;
+using AssertCustom = LtInfo.Common.AssertCustom;
 
 namespace Neptune.Web.Models
 {
@@ -45,6 +46,8 @@ namespace Neptune.Web.Models
         [Test]
         public void CreateNewFromHttpPostedFileTest()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             // Arrange
             var testImageFile = new TestImageFile();
             var person = TestFramework.TestPerson.Create();
@@ -62,6 +65,8 @@ namespace Neptune.Web.Models
         [Test]
         public void GuidRegexWorksTest()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             var a = TestFramework.TestFileResource.Create();
             var results = FileResource.FindAllFileResourceGuidsFromStringContainingFileResourceUrls(a.GetFileResourceUrl());
 
@@ -167,6 +172,8 @@ namespace Neptune.Web.Models
         [Test]
         public void IsRegexToFindNonServerRootRelativeUrlsWorking()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             Trace.WriteLine(string.Format("Non-server root relative Regex string: {0}", NonServerRootRelativeUrlRegex));
             Assert.That(DoesHtmlStringContainNonServerRootRelativeUrl(""), Is.False, "Empty string - can't be bad");
             Assert.That(DoesHtmlStringContainNonServerRootRelativeUrl("ABC"), Is.False, "Simple string - can't be bad");
@@ -178,6 +185,8 @@ namespace Neptune.Web.Models
         [Test]
         public void UrlsInTextColumnsInDatabaseMatchDatabaseRecords()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             //TODO: Not sure if ProjectUpdateBatch should be in the exception list, but not clear how to correct data that has already posted that is breaking this test.
             const string findAnyColumnsThatCouldContainUrls = @"
 select c.TABLE_CATALOG, c.TABLE_SCHEMA, c.TABLE_NAME, c.COLUMN_NAME

@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.ModalDialog;
 using NUnit.Framework;
@@ -84,6 +85,8 @@ namespace Neptune.Web.Views
         [UseReporter(typeof(DiffReporter))]
         public void BuildDhtmlxGridHeaderTest()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             var gridSpec = new TestGridSpec();
             var result = DhtmlxGridHtmlHelpers.BuildDhtmlxGridHeader(gridSpec, GridName, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithFooterUrl, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithoutFooterUrl);
             Approvals.Verify(result);
@@ -119,6 +122,8 @@ namespace Neptune.Web.Views
         [UseReporter(typeof(DiffReporter))]
         public void CreateFilteredExcelDownloadIconHtmlTest()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             const string gridName = "testGridName";
             var result = DhtmlxGridHtmlHelpers.CreateFilteredExcelDownloadIconHtml(gridName, true, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithFooterUrl, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithoutFooterUrl);
             Approvals.Verify(result);

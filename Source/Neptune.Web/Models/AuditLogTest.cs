@@ -25,6 +25,7 @@ using Neptune.Web.Common;
 using Neptune.Web.UnitTestCommon;
 using LtInfo.Common.DesignByContract;
 using NUnit.Framework;
+using AssertCustom = LtInfo.Common.AssertCustom;
 
 namespace Neptune.Web.Models
 {
@@ -39,6 +40,8 @@ namespace Neptune.Web.Models
         [Test]
         public void TestOrganizationAuditLogging()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             // Get an arbitrary real-word person to do these actions
             var neptuneUser = HttpRequestStorage.DatabaseEntities.People.First();
 

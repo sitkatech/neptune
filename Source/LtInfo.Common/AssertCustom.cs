@@ -154,5 +154,13 @@ namespace LtInfo.Common
             var expectedColumn = gridSpec.SingleOrDefault(c => String.Equals(c.ColumnNameInnerText, expectColumnName, StringComparison.InvariantCultureIgnoreCase));
             Assert.That(expectedColumn, Is.Null, String.Format("Should not have Column \"{0}\"", expectColumnName));
         }
+
+        public static void IgnoreOnBuildServer()
+        {
+            if (Environment.MachineName.Equals("sprague", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Assert.Ignore();
+            }
+        }
     }
 }
