@@ -40,7 +40,8 @@ namespace Neptune.Web.Models
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-         //   _db = new NeptuneSqlDatabase();
+            AssertCustom.IgnoreOnBuildServer();
+            _db = new NeptuneSqlDatabase();
         }
 
         [Test]
