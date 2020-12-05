@@ -37,12 +37,12 @@ namespace Neptune.Web.Models
     [TestFixture]
     public class FileResourceTest
     {
-        [TestFixtureSetUp]
-        public void TestFixtureSetup()
-        {
-            AssertCustom.IgnoreOnBuildServer();
-            //_db = new NeptuneSqlDatabase();
-        }
+        //[TestFixtureSetUp]
+        //public void TestFixtureSetup()
+        //{
+        //    AssertCustom.IgnoreOnBuildServer();
+        //    //_db = new NeptuneSqlDatabase();
+        //}
 
         [Test]
         public void CreateNewFromHttpPostedFileTest()
