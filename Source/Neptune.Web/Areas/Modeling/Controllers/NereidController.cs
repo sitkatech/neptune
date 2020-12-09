@@ -192,7 +192,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public JsonResult Loading()
         {
             var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
-            var regionalSubbasinsForTest = new List<int> { 4283, 8029, 4153 };
+            var regionalSubbasinsForTest = new List<int> { 2377,12394 };
             var stopwatch = new Stopwatch();
 
             stopwatch.Start();

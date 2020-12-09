@@ -33,6 +33,6 @@ from
 	left join dbo.Delineation d
 		on d.DelineationID = lgu.DelineationID
 	left join dbo.WaterQualityManagementPlan wqmp
-		on lgu.WaterQualityManagementPlanID = lgu.WaterQualityManagementPlanID
+		on lgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 GO
 

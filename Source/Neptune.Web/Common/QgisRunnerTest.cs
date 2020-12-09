@@ -52,17 +52,5 @@ namespace Neptune.Web.Common
 
             Assert.That(processUtilityResult.ReturnCode == 0);
         }
-
-        [Test]
-        public void TestProcessing2()
-        {
-            AssertCustom.IgnoreOnBuildServer();
-
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript(
-                $"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py",
-                @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
-
-            Assert.That(processUtilityResult.ReturnCode == 0);
-        }
     }
 }
