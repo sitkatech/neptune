@@ -11,7 +11,7 @@ select
 	OCSurveyCatchmentID,
 	LSPCBasinKey,
 	hrucode.HRUCharacteristicLandUseCodeName as LandUseCode,
-	basehrucode.HRUCharacteristicLandUseCodeDisplayName as BaselineLandUseCode,
+	basehrucode.HRUCharacteristicLandUseCodeName as BaselineLandUseCode,
 	HydrologicSoilGroup,
 	SlopePercentage,
 	Area,

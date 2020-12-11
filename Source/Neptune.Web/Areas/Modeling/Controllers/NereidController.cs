@@ -198,7 +198,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Start();
             var buildLoadingInputStartTime = stopwatch.Elapsed;
             var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
-            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs);
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, false);
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
@@ -207,6 +207,40 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var returnValue = new
             {
                 SubgraphResult = responseContent,
+                SubgraphCallElapsedTime = (buildLoadingInputEndTime - buildLoadingInputStartTime).Milliseconds,
+            };
+
+            return Json(returnValue, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// Runs a test case against the Nereid land_surface/loading endpoint for a small list of RSBs.
+        /// Confirms that we are building one of the four inputs to the watershed/solve endpoint correctly.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult BaselineLoading()
+        {
+            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
+            var regionalSubbasinsForTest = new List<int> { 2377,12394 };
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            var buildLoadingInputStartTime = stopwatch.Elapsed;
+            var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, true);
+            var buildLoadingInputEndTime = stopwatch.Elapsed;
+            stopwatch.Stop();
+
+            var unused = NereidUtilities.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, out var responseContent, HttpClient);
+
+            var returnValue = new
+            {
+                LoadingRequest = landSurfaceLoadingRequest,
+
+                LoadingResult = responseContent,
+
                 SubgraphCallElapsedTime = (buildLoadingInputEndTime - buildLoadingInputStartTime).Milliseconds,
             };
 
@@ -446,7 +480,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
-        public ActionResult DeltaSolve()
+        public ActionResult DeltaSolveTest()
         {
             var failed = false;
             var exceptionMessage = "";
@@ -502,6 +536,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     ExceptionMessage = exceptionMessage,
                     InnerExceptionStackTrace = stackTrace
                 }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeltaSolve()
+        {
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
+            return Content("Enqueued");
         }
     }
 
