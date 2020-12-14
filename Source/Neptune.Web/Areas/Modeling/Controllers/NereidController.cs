@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 using SolutionResponseObject = Neptune.Web.Areas.Modeling.Models.Nereid.SolutionResponseObject;
 
@@ -212,6 +213,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
+
         /// <summary>
         /// Runs a test case against the Nereid land_surface/loading endpoint for a small list of RSBs.
         /// Confirms that we are building one of the four inputs to the watershed/solve endpoint correctly.
@@ -246,38 +248,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             return Json(returnValue, JsonRequestBehavior.AllowGet);
         }
-
-        /// <summary>
-        /// Builds and displays the treatment_site table, one of the four inputs to the Nereid watershed/solve endpoint.
-        /// Thre is no validator for this; the only test fixture available is to manually confirm the schema and the data.
-        /// Available only to Sitka Admins
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
-        public JsonResult TreatmentSiteTable()
-        {
-            var waterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
-
-            var list = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .SelectMany(x => x.QuickBMPs.Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
-                    waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
-                    x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node }).ToList();
-
-            var treatmentSites = list.Select(x =>
-                    new TreatmentSite
-                    {
-                        NodeID = NereidUtilities.WaterQualityManagementPlanNodeID(x.node.WaterQualityManagementPlanID,
-                            x.node.RegionalSubbasinID),
-                        AreaPercentage = x.bmp.PercentOfSiteTreated,
-                        CapturedPercentage = x.bmp.PercentCaptured,
-                        RetainedPercentage = x.bmp.PercentRetained,
-                        FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
-                    });
-
-            return Json(new { TreatmentSites = treatmentSites }, JsonRequestBehavior.AllowGet);
-        }
-
+        
         /// <summary>
         /// Runs a test case against the Nereid treatment_facility/validate endpoint.
         /// Confirms that we are building one of the four inputs to the Nereid watershed/solve endpoint correctly.
@@ -379,6 +350,76 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                     responseContent,
                     requestContent = JsonConvert.SerializeObject(treatmentFacilityTable)
                 }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        /// Builds and displays the treatment_site table, one of the four inputs to the Nereid watershed/solve endpoint.
+        /// Thre is no validator for this; the only test fixture available is to manually confirm the schema and the data.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TreatmentSiteTable()
+        {
+            var waterQualityManagementPlanNodes = NereidUtilities.GetWaterQualityManagementPlanNodes(HttpRequestStorage.DatabaseEntities);
+
+            var list = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .SelectMany(x => x.QuickBMPs.Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
+                    waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
+                    x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node }).ToList();
+
+            var treatmentSites = list.Select(x =>
+                new TreatmentSite
+                {
+                    NodeID = NereidUtilities.WaterQualityManagementPlanTreatmentNodeID(x.node.WaterQualityManagementPlanID,
+                        x.node.RegionalSubbasinID),
+                    AreaPercentage = x.bmp.PercentOfSiteTreated,
+                    CapturedPercentage = x.bmp.PercentCaptured,
+                    RetainedPercentage = x.bmp.PercentRetained,
+                    FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName
+                }).ToList();
+
+            var treatmentSiteTable = new TreatmentSiteTable(){TreatmentSites = treatmentSites};
+
+            return Content(JsonConvert.SerializeObject(treatmentSiteTable), "application/json");
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TreatmentFacilityTable()
+        {
+            var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
+                .ToList()
+                .Select(x => x.ToTreatmentFacility(true)).ToList();
+
+            var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
+
+            var serializeObject = JsonConvert.SerializeObject(treatmentFacilityTable);
+
+            return Content(serializeObject, "application/json");
+        }
+
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult LandSurfaceTable()
+        {
+            var vNereidLoadingInputs = HttpRequestStorage.DatabaseEntities.vNereidLoadingInputs.ToList();
+            var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, false);
+
+
+            return Content(JsonConvert.SerializeObject(landSurfaceLoadingRequest), "application/json");
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult NetworkTable()
+        {
+
+            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            return Content(JsonConvert.SerializeObject(graph), "application/json");
         }
 
         /// <summary>
