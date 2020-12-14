@@ -285,8 +285,8 @@
         <span ng-if="!modelResults.IsWQMPResult">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</span>
     </p>
 <p class="systemText" ng-if="!modelResults.IsResultSetEmpty">Results last calculated at <span ng-bind="modelResults.LastUpdated"></span></p>
-<p class="systemText" ng-if="modelResults.IsResultSetEmpty && modelResults.IsWQMPResult">Model results are not yet available for this WQMP.</p>
-<p class="systemText" ng-if="modelResults.IsResultSetEmpty && !modelResults.IsWQMPResult">Model results are not yet available for this BMP.</p>
+<p class="systemText" ng-if="modelResults.IsResultSetEmpty && modelResults.IsWQMPResult">Model results for this WQMP are awaiting calculation.</p>
+<p class="systemText" ng-if="modelResults.IsResultSetEmpty && !modelResults.IsWQMPResult">Model results for this BMP are awaiting calculation.</p>
 </div>
 
 <a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
