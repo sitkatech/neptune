@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Owin.Security.Notifications;
 using Neptune.Web.Common;
 using Newtonsoft.Json.Linq;
 
@@ -105,6 +106,7 @@ namespace Neptune.Web.Models
 
         public bool IsWQMPResult { get; set; }
         public bool IsSimplifiedWQMPResult { get; set; }
+        public bool IsResultSetEmpty { get; set; }
 
         public ModeledPerformanceResultSimple(List<TreatmentBMP> treatmentBMPs)
         {
@@ -129,6 +131,12 @@ namespace Neptune.Web.Models
 
         private void SetDatesAndScalarValues(List<NereidResult> nereidResults, DateTime? lastDeltaQueue)
         {
+            if (!nereidResults.Any())
+            {
+                IsResultSetEmpty = true;
+                return;
+            }
+
             // nereidResults should never ever be empty so this should never ever be a problem
             // ReSharper disable once PossibleInvalidOperationException
             var nereidResultLastUpdate = nereidResults.Select(x => x.LastUpdate).Max().Value;
