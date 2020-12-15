@@ -18,7 +18,8 @@ select
 	ImperviousAcres,
 	BaselineImperviousAcres,
 	d.IsVerified as DelineationIsVerified,
-	wqmp.WaterQualityManagementPlanModelingApproachID
+	wqmp.WaterQualityManagementPlanModelingApproachID as SpatiallyAssociatedModelingApproach,
+	bwqmp.WaterQualityManagementPlanModelingApproachID as RelationallyAssociatedModelingApproach
 from
 	dbo.HRUCharacteristic hru join dbo.LoadGeneratingUnit lgu
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID
@@ -34,5 +35,9 @@ from
 		on d.DelineationID = lgu.DelineationID
 	left join dbo.WaterQualityManagementPlan wqmp
 		on lgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
+	left join dbo.TreatmentBMP bmp
+		on d.TreatmentBMPID = bmp.TreatmentBMPID
+	left join dbo.WaterQualityManagementPlan bwqmp
+		on bmp.WaterQualityManagementPlanID = bwqmp.WaterQualityManagementPlanID
 GO
 

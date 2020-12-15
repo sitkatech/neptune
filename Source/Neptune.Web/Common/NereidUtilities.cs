@@ -98,14 +98,14 @@ namespace Neptune.Web.Common
 
             if (loadGeneratingUnit.DelineationID != null &&
                 loadGeneratingUnit.DelineationIsVerified == true &&
-                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
+                loadGeneratingUnit.RelationallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
             }
 
             // Parcel Boundaries of Detailed WQMPs should not be considered
             if (loadGeneratingUnit.WaterQualityManagementPlanID != null && 
-                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+                loadGeneratingUnit.SpatiallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
                 return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
                     loadGeneratingUnit.OCSurveyCatchmentID);
