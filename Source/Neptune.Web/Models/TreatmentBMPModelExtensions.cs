@@ -345,11 +345,11 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static bool UpdatedCentralizedBMPDelineationIfPresent(this TreatmentBMP treatmentBMP)
+        public static void UpdatedCentralizedBMPDelineationIfPresent(this TreatmentBMP treatmentBMP)
         {
             if (treatmentBMP.Delineation == null || treatmentBMP.Delineation.DelineationTypeID != (int) DelineationTypeEnum.Centralized)
             {
-                return false;
+                return;
             }
 
             var updated4326Geometry =
@@ -375,11 +375,7 @@ namespace Neptune.Web.Models
                 {
                     ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape);
                 }
-
-                return true;
             }
-
-            return false;
         }
 
         public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
