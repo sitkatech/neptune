@@ -74,6 +74,8 @@ angular.module("NeptuneApp")
 
         // UI element handlers
         $scope.beginDelineation = function () {
+            //Make sure we're cleaned up from any other editing requests
+            DelineationMapService.resetDelineationMapEditingState(true);
             $scope.delineationMapState.isInDelineationMode = true;
             $scope.delineationMap.addBeginDelineationControl();
         };

@@ -88,8 +88,8 @@
                         <input id="verifyDelineationButton" type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100" />
                     </div>
                     
-                    <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode">
-                        <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation(); $event.stopPropagation();" ng-hide="delineationMapState.isInDelineationMode">Edit</button>
+                    <div style="margin-top: 10px;" id="editOrDeleteDelineationButtonsWrapper" ng-hide="delineationMapState.isInEditLocationMode || delineationMapState.isInDelineationMode">
+                        <button class="btn btn-sm btn-neptune" id="delineationButton" type="button" ng-click="beginDelineation(); $event.stopPropagation();">Edit</button>
                         <button class="btn btn-sm btn-neptune" id="deleteDelineationButton" style="display: none;" ng-show="showDeleteButton()" ng-click="deleteDelineation(); $event.stopPropagation()"><span class="glyphicon glyphicon-trash"></span></button>
                         <a id="requestRevisionButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="showRequestRevisionButton()" style="margin-bottom: 5px;"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
                     </div>
@@ -113,7 +113,7 @@
                     <button class="btn btn-sm btn-neptune" id="cancelLocationButton" type="button" ng-click="cancelLocationEdit()">Cancel</button>
                 </div>
 
-                <div id="saveCancelAndThinButtonsWrapper" ng-show="delineationMapState.isInDelineationMode && delineationMapState.isEditedDelineationPresent">
+                <div style="margin-top: 10px;" id="saveCancelAndThinButtonsWrapper" ng-show="delineationMapState.isInDelineationMode && delineationMapState.isEditedDelineationPresent">
                     <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button" ng-click="saveDelineation()">Save</button>
                     <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button" ng-click="cancelDelineation()">Cancel</button>
                     <a id="requestRevisionDuringEditButton" ng-href="/RegionalSubbasinRevisionRequest/New/{{treatmentBMPID()}}" ng-show="delineationMapState.isEditingCentralizedDelineation" style="margin-bottom: 5px;"><button class="btn btn-sm btn-neptune">Request Revision</button></a>
