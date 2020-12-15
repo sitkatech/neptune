@@ -108,6 +108,7 @@
                 <div id="editLocationModeButtonsWrapper" ng-hide="!delineationMapState.isInEditLocationMode">
                     <hr />
                     <p>Click the map to set a new location for this BMP.</p>
+                    <p>For centralized BMPs, any existing delineation will automatically be re-calculated based the new saved location.</p>
                     <button class="btn btn-sm btn-neptune" id="saveLocationButton" type="button" ng-click="saveLocationEdit()">Save Location</button>
                     <button class="btn btn-sm btn-neptune" id="cancelLocationButton" type="button" ng-click="cancelLocationEdit()">Cancel</button>
                 </div>

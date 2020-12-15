@@ -42,6 +42,7 @@ namespace Neptune.Web.Views.Shared.Location
         [DisplayName("Latitude")]
         [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90")]
         public double? TreatmentBMPPointY { get; set; }
+        public bool? CentralizedBMPDelineationUpdated { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -64,6 +65,8 @@ namespace Neptune.Web.Views.Shared.Location
 
             // associate watershed, lspc basin, precipitation zone
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint);
+
+            treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent();
         }
     }
 }
