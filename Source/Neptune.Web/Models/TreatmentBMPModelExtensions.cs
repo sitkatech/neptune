@@ -370,11 +370,6 @@ namespace Neptune.Web.Models
                 {
                     treatmentBMP.Delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
                 }
-
-                if (!(newShape == null & oldShape == null) && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
-                {
-                    ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape);
-                }
             }
         }
 
