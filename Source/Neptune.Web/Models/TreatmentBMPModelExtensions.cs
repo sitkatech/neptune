@@ -345,6 +345,43 @@ namespace Neptune.Web.Models
             }
         }
 
+        public static bool UpdatedCentralizedBMPDelineationIfPresent(this TreatmentBMP treatmentBMP)
+        {
+            if (treatmentBMP.Delineation == null || treatmentBMP.Delineation.DelineationTypeID != (int) DelineationTypeEnum.Centralized)
+            {
+                return false;
+            }
+
+            var updated4326Geometry =
+                treatmentBMP.GetCentralizedDelineationGeometry4326(HttpRequestStorage.DatabaseEntities);
+
+            if (updated4326Geometry == null || !updated4326Geometry.SpatialEquals(treatmentBMP.Delineation.DelineationGeometry4326))
+            {
+                var oldShape = treatmentBMP.Delineation.DelineationGeometry;
+                var newShape = treatmentBMP.GetCentralizedDelineationGeometry2771(HttpRequestStorage.DatabaseEntities);
+                if (updated4326Geometry != null)
+                {
+                    treatmentBMP.Delineation.DelineationGeometry = newShape;
+                    treatmentBMP.Delineation.DelineationGeometry4326 = updated4326Geometry;
+                    treatmentBMP.Delineation.IsVerified = false;
+                    treatmentBMP.Delineation.DateLastModified = DateTime.Now;
+                }
+                else
+                {
+                    treatmentBMP.Delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
+                }
+
+                if (!(newShape == null & oldShape == null) && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
+                {
+                    ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
         {
 
