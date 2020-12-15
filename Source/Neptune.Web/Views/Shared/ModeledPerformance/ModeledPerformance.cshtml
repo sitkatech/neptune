@@ -46,13 +46,13 @@
 
 <div ng-app="NeptuneApp" id="ModeledBMPPerformanceApp" ng-controller="ModeledBMPPerformanceController" style="max-height: 600px;">
 
-    <ul class="nav nav-tabs resultSelector" role="tablist" ng-init="weatherType = 'total'">
-        <li role="presentation" ng-class="{'active':weatherType === 'total'}"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" ng-click="weatherType = 'total'">Total</a></li>
-        <li role="presentation" ng-class="{'active':weatherType === 'dry'}"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" ng-click="weatherType = 'dry'">Dry</a></li>
-        <li role="presentation" ng-class="{'active':weatherType === 'wet'}"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" ng-click="weatherType = 'wet'">Wet</a></li>
-    </ul>
-    <br />
     <div ng-if="!modelResults.IsResultSetEmpty">
+        <ul class="nav nav-tabs resultSelector" role="tablist" ng-init="weatherType = 'total'">
+            <li role="presentation" ng-class="{'active':weatherType === 'total'}"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" ng-click="weatherType = 'total'">Total</a></li>
+            <li role="presentation" ng-class="{'active':weatherType === 'dry'}"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" ng-click="weatherType = 'dry'">Dry</a></li>
+            <li role="presentation" ng-class="{'active':weatherType === 'wet'}"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" ng-click="weatherType = 'wet'">Wet</a></li>
+        </ul>
+        <br />
         <table class="table table-responsive table-striped table-condensed modelResults" ng-if="weatherType ==='wet'">
             <thead>
                 <tr style="text-align: center;">
@@ -284,9 +284,9 @@
         <span ng-if="modelResults.IsWQMPResult && !modelResults.IsSimplifiedWQMPResult">Parameters for related detailed BMPs have changed since the last model run; a new model run is pending to re-calculate results.</span>
         <span ng-if="!modelResults.IsWQMPResult">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</span>
     </p>
-<p class="systemText" ng-if="!modelResults.IsResultSetEmpty">Results last calculated at <span ng-bind="modelResults.LastUpdated"></span></p>
-<p class="systemText" ng-if="modelResults.IsResultSetEmpty && modelResults.IsWQMPResult">Model results for this WQMP are awaiting calculation.</p>
-<p class="systemText" ng-if="modelResults.IsResultSetEmpty && !modelResults.IsWQMPResult">Model results for this BMP are awaiting calculation.</p>
+    <p class="systemText" ng-if="!modelResults.IsResultSetEmpty">Results last calculated at <span ng-bind="modelResults.LastUpdated"></span></p>
+    <p class="systemText" ng-if="modelResults.IsResultSetEmpty && modelResults.IsWQMPResult">Model results for this WQMP are awaiting calculation.</p>
+    <p class="systemText" ng-if="modelResults.IsResultSetEmpty && !modelResults.IsWQMPResult">Model results for this BMP are awaiting calculation.</p>
 </div>
 
 <a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>

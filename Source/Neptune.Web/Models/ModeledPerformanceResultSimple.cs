@@ -296,7 +296,7 @@ namespace Neptune.Web.Models
                 WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
                 IsSimplifiedWQMPResult = false;
-                var nereidResults = ExtractResults(waterQualityManagementPlan.TreatmentBMPs.ToList(), out var lastDeltaQueue);
+                var nereidResults = ExtractResults(waterQualityManagementPlan.TreatmentBMPs.ToList().Where(x=>x.Delineation?.IsVerified ?? false).ToList(), out var lastDeltaQueue);
                 SetDatesAndScalarValues(nereidResults, lastDeltaQueue);
             }
             else
