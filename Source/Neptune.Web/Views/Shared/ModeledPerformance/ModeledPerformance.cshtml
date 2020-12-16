@@ -294,6 +294,9 @@
 <script>
     angular.module("NeptuneApp").filter('sigFig', function() {
         return function (input, prec) {
+            if (!input) {
+                return 0;
+            }
             return parseFloat(input.toPrecision(prec));
         }})
 
