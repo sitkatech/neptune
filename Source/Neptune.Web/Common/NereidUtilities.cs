@@ -7,16 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using LtInfo.Common;
 
 namespace Neptune.Web.Common
 {
     public static class NereidUtilities
     {
         public const double GPD_TO_CFS = 0.0000015;
-        public const int BASELINE_CUTOFF_YEAR = 2003;
+        public const int BASELINE_CUTOFF_YEAR = 2002;
 
         public static Graph BuildNetworkGraph(DatabaseEntities dbContext)
         {
@@ -96,14 +98,14 @@ namespace Neptune.Web.Common
 
             if (loadGeneratingUnit.DelineationID != null &&
                 loadGeneratingUnit.DelineationIsVerified == true &&
-                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
+                loadGeneratingUnit.RelationallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
             }
 
             // Parcel Boundaries of Detailed WQMPs should not be considered
             if (loadGeneratingUnit.WaterQualityManagementPlanID != null && 
-                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+                loadGeneratingUnit.SpatiallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
                 return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
                     loadGeneratingUnit.OCSurveyCatchmentID);
@@ -343,9 +345,26 @@ namespace Neptune.Web.Common
 
             var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
                 .Content.ReadAsStringAsync().Result;
+            NereidResult<TResp> deserializeObject = null;
+            try
+            {
+                deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+            }
+            catch (JsonReaderException jre)
+            {
+                var resultLogFile = Path.GetTempFileName();
+                System.IO.File.WriteAllText(resultLogFile,postResultContentAsStringResult);
 
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+                var requestLogFile = Path.GetTempFileName();
+                System.IO.File.WriteAllText(requestLogFile, postResultContentAsStringResult);
 
+                throw new Exception(
+                    $"Error deserializing result from Nereid. Raw result content logged at {resultLogFile}. Raw request content logged at {requestLogFile}",
+                    jre);
+            }
+
+            // ReSharper disable once PossibleNullReferenceException
+            // will not be null because of the catch-and-rethrow above
             var executing = deserializeObject.Status == NereidJobStatus.STARTED || deserializeObject.Status == NereidJobStatus.PENDING;
             var resultRoute = deserializeObject.ResultRoute;
 
@@ -464,8 +483,6 @@ namespace Neptune.Web.Common
                 old.FullResponse = novel.FullResponse;
                 old.LastUpdate = novel.LastUpdate;
             });
-                
-            dbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
 
             dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();
@@ -497,7 +514,7 @@ namespace Neptune.Web.Common
                 foreach (var node in graph.Nodes)
                 {
                     var previousNodeResults = previousModelResults.SingleOrDefault(x =>
-                        node.ID == x.NodeID
+                        node.ID == x.NodeID && x.IsBaselineCondition == isBaselineCondition
                         )?.FullResponse;
 
                     if (previousNodeResults != null)
@@ -603,7 +620,7 @@ namespace Neptune.Web.Common
                         CapturedPercentage = x.bmp.PercentCaptured ?? 0,
                         RetainedPercentage = x.bmp.PercentRetained ?? 0,
                         // treat wqmps built after 2003 as if they don't exist.
-                        FacilityType = (isBaselineCondition && x.node.DateOfConstruction.GetValueOrDefault().Year > BASELINE_CUTOFF_YEAR ) ? "NoTreatment" : x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
+                        FacilityType = (isBaselineCondition && x.node.DateOfConstruction.HasValue && x.node.DateOfConstruction.Value.Year > BASELINE_CUTOFF_YEAR ) ? "NoTreatment" : x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
                         EliminateAllDryWeatherFlowOverride = x.bmp.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
 
                     }).ToList();

@@ -691,11 +691,19 @@ namespace Neptune.Web.Controllers
         public ActionResult EditModelingApproach(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditModelingApproachViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            
             if (!ModelState.IsValid)
             {
                 return ViewEditModelingApproach(viewModel);
             }
             viewModel.UpdateModel(waterQualityManagementPlan);
+
+            if (waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlan.WaterQualityManagementPlanBoundary, null);
+                NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+            }
+
             SetMessageForDisplay($"Modeling Approach successfully changed for {waterQualityManagementPlan.WaterQualityManagementPlanName}.");
             return new ModalDialogFormJsonResult();
         }

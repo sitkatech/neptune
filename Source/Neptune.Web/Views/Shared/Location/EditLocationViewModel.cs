@@ -64,6 +64,8 @@ namespace Neptune.Web.Views.Shared.Location
 
             // associate watershed, lspc basin, precipitation zone
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint);
+
+            treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent();
         }
     }
 }

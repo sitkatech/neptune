@@ -272,9 +272,23 @@ NeptuneMaps.DelineationMap.prototype.exitEditLocationMode = function (save) {
             self.initializeTreatmentBMPClusteredLayer();
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
             self.setSelectedFeature(movedLayer.feature);
-            self.removeLoading();
-            self.initializationsOnMapRefresh();
-            toast("Successfully updated Treatment BMP location.", "success");
+            self.retrieveAndShowBMPDelineation(movedLayer.feature).then(function (response) {
+                var delineationStatus;
+                if (self.selectedBMPDelineationLayer) {
+                    delineationStatus = self.selectedBMPDelineationLayer.getLayers()[0].feature.properties
+                        .DelineationStatus;
+                } else {
+                    delineationStatus = "None";
+                }
+                self.selectedAssetControl.treatmentBMP(movedLayer.feature, delineationStatus);
+                self.delineationMapService.broadcastDelineationMapState({
+                    selectedTreatmentBMPFeature: movedLayer.feature
+                });
+            }).always(function () {
+                self.removeLoading();
+                self.initializationsOnMapRefresh();
+                toast("Successfully updated Treatment BMP location.", "success");
+            });
         }).fail(function() {
             self.initializeTreatmentBMPClusteredLayer();
             var movedLayer = self.treatmentBMPLayerLookup.get(treatmentBMPID);

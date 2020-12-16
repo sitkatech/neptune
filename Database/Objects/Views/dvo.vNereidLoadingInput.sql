@@ -11,14 +11,15 @@ select
 	OCSurveyCatchmentID,
 	LSPCBasinKey,
 	hrucode.HRUCharacteristicLandUseCodeName as LandUseCode,
-	basehrucode.HRUCharacteristicLandUseCodeDisplayName as BaselineLandUseCode,
+	basehrucode.HRUCharacteristicLandUseCodeName as BaselineLandUseCode,
 	HydrologicSoilGroup,
 	SlopePercentage,
 	Area,
 	ImperviousAcres,
 	BaselineImperviousAcres,
 	d.IsVerified as DelineationIsVerified,
-	wqmp.WaterQualityManagementPlanModelingApproachID
+	wqmp.WaterQualityManagementPlanModelingApproachID as SpatiallyAssociatedModelingApproach,
+	bwqmp.WaterQualityManagementPlanModelingApproachID as RelationallyAssociatedModelingApproach
 from
 	dbo.HRUCharacteristic hru join dbo.LoadGeneratingUnit lgu
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID
@@ -33,6 +34,10 @@ from
 	left join dbo.Delineation d
 		on d.DelineationID = lgu.DelineationID
 	left join dbo.WaterQualityManagementPlan wqmp
-		on lgu.WaterQualityManagementPlanID = lgu.WaterQualityManagementPlanID
+		on lgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
+	left join dbo.TreatmentBMP bmp
+		on d.TreatmentBMPID = bmp.TreatmentBMPID
+	left join dbo.WaterQualityManagementPlan bwqmp
+		on bmp.WaterQualityManagementPlanID = bwqmp.WaterQualityManagementPlanID
 GO
 

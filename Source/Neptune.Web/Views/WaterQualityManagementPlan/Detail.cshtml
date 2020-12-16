@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common
+﻿@using DocumentFormat.OpenXml.Wordprocessing
+@using LtInfo.Common
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
@@ -280,14 +281,23 @@
                 {
                     <p class="systemText">This WQMP is modeled using the detailed approach, but no structural BMPs have been inventoried, so no results are available.</p>
                 }
+                else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null)
+                {
+                    <p class="systemText">No treatment area has been defined for this Water Quality Management Plan. Add parcels to define the treatment area.</p>
+                }
                 else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.QuickBMPs.Count == 0)
                 {
                     <p class="systemText">This WQMP is modeled using the simplified approach, but no simplified structural BMPs have been inventoried, so no results are available.</p>
                 }
+                else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AllSimpleBMPsNotFullyParameterized)
+                {
+                    <p class="systemText">This WQMP is modeled using the simplified approach, but none of its simplified structural BMPs are fully parameterized, so no results are available.</p>
+
+                }
                 // this will always be false if not relevant (i.e. Simplified approach is used)
                 else if (ViewDataTyped.AllDetailedBMPsNotFullyParameterized)
                 {
-                    <p class="systemText">This WQMP is modeled using the detailed approach, but none of its structural BMPs are fully parameterized for modeling, so no results are available.</p>
+                    <p class="systemText">This WQMP is modeled using the detailed approach, but all of its structural BMPs are either missing required modeling parameters or missing verified delineations, so no results are available.</p>
                 }
                 else if (!ViewDataTyped.AnyLSPCBasins)
                 {
@@ -297,9 +307,12 @@
                 {
                     ModeledPerformance.RenderPartialView(Html, ViewDataTyped.ModeledPerformanceViewData);
                     //this will always be false if not relevant (i.e. Simplified approach is used)
-                    if (ViewDataTyped.AnyDetailedBMPsNotFullyParameterized)
+                    if (ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnyDetailedBMPsNotFullyParameterized)
                     {
-                        <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
+                        <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, or have missing or unverified delineations, so these results may be incomplete or inaccurate.</p>
+                    } else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnySimpleBMPsNotFullyParameterized)
+                    {
+                        <p class="systemText">Some of this WQMPs simplified BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
                     }
                 }
 

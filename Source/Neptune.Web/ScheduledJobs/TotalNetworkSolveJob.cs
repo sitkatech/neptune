@@ -55,8 +55,13 @@ namespace Neptune.Web.ScheduledJobs
         protected override void RunJobImplementation()
         {
             var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
+            
             NereidUtilities.DeltaSolve(out _, out _, out _, DbContext, HttpClient, dirtyModelNodes, true);
             NereidUtilities.DeltaSolve(out _, out _, out _, DbContext, HttpClient, dirtyModelNodes, false);
+
+            DbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
+            DbContext.Database.CommandTimeout = 600;
+            DbContext.SaveChangesWithNoAuditing();
         }
     }
 }

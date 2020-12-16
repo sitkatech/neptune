@@ -15,14 +15,14 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         [JsonProperty("soil_hsg")]
         public string HydrologicSoilGroup { get; set; }
         [JsonProperty("slope_pct")]
-        public int SlopePercentage { get; set; }
+        public int? SlopePercentage { get; set; }
         [JsonProperty("imp_acres")]
-        public double ImperviousAcres { get; set; }
+        public double? ImperviousAcres { get; set; }
         [JsonProperty("imp_acres_02")]
-        public double BaselineImperviousAcres { get; set; }
+        public double? BaselineImperviousAcres { get; set; }
         [JsonProperty("Shape_Length")]
-        public double Length { get; set; }
+        public double? Length { get; set; }
         [JsonProperty("acres")]
-        public double Acres { get; set; }
+        public double? Acres { get; set; }
     }
 }

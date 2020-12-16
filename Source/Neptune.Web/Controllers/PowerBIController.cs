@@ -211,7 +211,7 @@ namespace Neptune.Web.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        [WebServiceNameAndDescriptionAttribute("Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County in the Baseline Condition.")]
+        [WebServiceNameAndDescriptionAttribute("Baseline Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County in the Baseline Condition.")]
         public ContentResult BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var jobjects = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x=>x.IsBaselineCondition).ToList()

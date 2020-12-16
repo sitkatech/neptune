@@ -19,7 +19,10 @@ select
 	d.DelineationID,
 	lgu.WaterQualityManagementPlanID,
 	lgu.RegionalSubbasinID,
-	lgu.LoadGeneratingUnitID
+	lgu.LoadGeneratingUnitID,
+	lspc.LSPCBasinName,
+	luc.HRUCharacteristicLandUseCodeName as LandUse,
+	concat(lspc.LSPCBasinKey, '-', luc.HRUCharacteristicLandUseCodeName, '-', hru.HydrologicSoilGroup, '-', hru.SlopePercentage) as SurfaceKey
 from
 	dbo.HRUCharacteristic hru left join dbo.LoadGeneratingUnit lgu
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID
@@ -31,3 +34,5 @@ from
 		on hru.HRUCharacteristicLandUseCodeID = luc.HRUCharacteristicLandUseCodeID
 	left join dbo.RegionalSubbasin rsb
 		on rsb.RegionalSubbasinID = lgu.RegionalSubbasinID
+	left join dbo.LSPCBasin lspc
+		on lspc.LSPCBasinID = lgu.LSPCBasinID

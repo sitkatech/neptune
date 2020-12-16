@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
 {
@@ -21,5 +22,12 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         [JsonProperty("eliminate_all_dry_weather_flow_override")]
         public bool EliminateAllDryWeatherFlowOverride { get; set; }
+    }
+
+    public class TreatmentSiteTable
+    {
+
+        [JsonProperty("treatment_sites")]
+        public List<TreatmentSite> TreatmentSites { get; set; }
     }
 }

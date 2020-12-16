@@ -101,7 +101,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
             // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
             if (!isFullyParameterized || 
-                (isBaselineCondition && treatmentBMP.YearBuilt.GetValueOrDefault() > NereidUtilities.BASELINE_CUTOFF_YEAR))
+                (isBaselineCondition && treatmentBMP.YearBuilt.HasValue && treatmentBMP.YearBuilt.Value > NereidUtilities.BASELINE_CUTOFF_YEAR))
             {
                 return new TreatmentFacility
                 {
@@ -188,7 +188,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool ?? double.PositiveInfinity,
+                //convert Days to Hours for this field.
+                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool * 24 ?? double.PositiveInfinity,
                 DiversionRate = modelingAttribute.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,

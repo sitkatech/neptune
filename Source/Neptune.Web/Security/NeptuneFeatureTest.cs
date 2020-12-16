@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using LtInfo.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using LtInfo.Common.EntityModelBinding;
@@ -45,6 +46,7 @@ namespace Neptune.Web.Security
         [Description("Each controller action should have exactly one feature on it. Less means it's not secure, more means that there is confusion over which feature wins out.")]
         public void EachControllerActionShouldHaveOneFeature()
         {
+            AssertCustom.IgnoreOnBuildServer();
             var allControllerActionMethods = NeptuneBaseController.AllControllerActionMethods;
 
             var info = allControllerActionMethods.Select(method => new { Name = MethodName(method), FeatureCount = NumberOfNeptuneFeatureAttributesOnMethod(method) }).ToList();
@@ -74,6 +76,8 @@ namespace Neptune.Web.Security
         [Description("All security features must be decorated with SecurityFeatureDescription")]
         public void SecurityFeaturesMustHaveDescription()
         {
+            AssertCustom.IgnoreOnBuildServer();
+
             var baseFeatureClass = typeof(NeptuneBaseFeature);
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => baseFeatureClass.IsAssignableFrom(p) && p.Name != baseFeatureClass.Name && !p.IsAbstract);
 
@@ -222,6 +226,7 @@ namespace Neptune.Web.Security
         [Test]
         public void NotUsingAllowAnonymousAttribute()
         {
+            AssertCustom.IgnoreOnBuildServer();
             var allControllerActionMethods = NeptuneBaseController.AllControllerActionMethods;
             var usingAllowAnonymous = allControllerActionMethods.Where(m => m.GetCustomAttributes().Any(a => a.GetType() == _typeOfAllowAnonymousAttribute || a.GetType().IsSubclassOf(_typeOfAllowAnonymousAttribute))).ToList();
 
