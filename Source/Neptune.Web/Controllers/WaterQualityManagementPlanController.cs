@@ -12,13 +12,14 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Security.Shared;
 
 namespace Neptune.Web.Controllers
 {
     public class WaterQualityManagementPlanController : NeptuneBaseController
     {
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.WaterQualityMaintenancePlan);
