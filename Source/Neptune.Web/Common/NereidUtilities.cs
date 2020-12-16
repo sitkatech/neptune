@@ -18,7 +18,7 @@ namespace Neptune.Web.Common
     public static class NereidUtilities
     {
         public const double GPD_TO_CFS = 0.0000015;
-        public const int BASELINE_CUTOFF_YEAR = 2003;
+        public const int BASELINE_CUTOFF_YEAR = 2002;
 
         public static Graph BuildNetworkGraph(DatabaseEntities dbContext)
         {
@@ -620,7 +620,7 @@ namespace Neptune.Web.Common
                         CapturedPercentage = x.bmp.PercentCaptured ?? 0,
                         RetainedPercentage = x.bmp.PercentRetained ?? 0,
                         // treat wqmps built after 2003 as if they don't exist.
-                        FacilityType = (isBaselineCondition && x.node.DateOfConstruction.GetValueOrDefault().Year > BASELINE_CUTOFF_YEAR ) ? "NoTreatment" : x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
+                        FacilityType = (isBaselineCondition && x.node.DateOfConstruction.HasValue && x.node.DateOfConstruction.Value.Year > BASELINE_CUTOFF_YEAR ) ? "NoTreatment" : x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
                         EliminateAllDryWeatherFlowOverride = x.bmp.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
 
                     }).ToList();

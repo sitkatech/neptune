@@ -101,7 +101,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
             // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
             if (!isFullyParameterized || 
-                (isBaselineCondition && treatmentBMP.YearBuilt.GetValueOrDefault() > NereidUtilities.BASELINE_CUTOFF_YEAR))
+                (isBaselineCondition && treatmentBMP.YearBuilt.HasValue && treatmentBMP.YearBuilt.Value > NereidUtilities.BASELINE_CUTOFF_YEAR))
             {
                 return new TreatmentFacility
                 {
