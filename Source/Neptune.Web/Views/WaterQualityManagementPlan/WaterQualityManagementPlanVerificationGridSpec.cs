@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                         new Dictionary<string, string> {{"class", "gridButton"}}), 60,
                     DhtmlxGridColumnFilterType.None);
             }
-            Add("WQMP Name", x => isAnonymousOrUnassigned ? new HtmlString(x.WaterQualityManagementPlan.WaterQualityManagementPlanName) : x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300, DhtmlxGridColumnFilterType.Text);
+            Add("WQMP Name", x => x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300, DhtmlxGridColumnFilterType.Text);
             Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.WaterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()) : x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
             Add("Verification Date", x => x.VerificationDate, 150);
             Add("Last Edited Date", x => x.LastEditedDate, 150);

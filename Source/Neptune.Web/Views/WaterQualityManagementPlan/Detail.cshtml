@@ -96,7 +96,7 @@
     </div>
 }
 
-@if (ViewDataTyped.ParameterizationErrors.Any())
+@if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.ParameterizationErrors.Any())
 {
     <div class="alert alert-info">
         <ul>
@@ -127,7 +127,16 @@
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
-                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()
+                        }
+                        else
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Priority</label>
@@ -251,7 +260,7 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                    {
+                                                                        {
                                     ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
                                     ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
                                     ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
@@ -310,7 +319,8 @@
                     if (ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnyDetailedBMPsNotFullyParameterized)
                     {
                         <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, or have missing or unverified delineations, so these results may be incomplete or inaccurate.</p>
-                    } else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnySimpleBMPsNotFullyParameterized)
+                    }
+                    else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnySimpleBMPsNotFullyParameterized)
                     {
                         <p class="systemText">Some of this WQMPs simplified BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
                     }
@@ -393,9 +403,6 @@
                     Modeling Approach
                     @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string> { "btn", "btn-xs", "btn-neptune" }, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 </h4>
-                @*<p>
-                        <strong>@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong> - @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
-                    </p>*@
                 <div class="col-xs-12">
                     @foreach (var waterQualityManagementPlanModelingApproach in ViewDataTyped.WaterQualityManagementPlanModelingApproaches)
                     {
@@ -420,7 +427,7 @@
                         <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditInventoriedBMPsUrl">Edit</a>
                     }
                 </h4>
-                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+                @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
                 {
                     <div class="alert alert-info">
                         This WQMP is modeled by entering simplified structural BMPs parameters; any explicitly inventoried BMPs entered here are not considered in modeling.
@@ -446,7 +453,16 @@
                                     @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                     {
                                         <tr>
-                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                            <td>
+                                                @if (treatmentBMP.InventoryIsVerified || !ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                                                {
+                                                    <a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a>
+                                                }
+                                                else
+                                                {
+                                                    @treatmentBMP.TreatmentBMPName
+                                                }
+                                            </td>
                                             <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                             <td class="notes collapsed">@treatmentBMP.Notes</td>
                                             <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
@@ -472,7 +488,7 @@
                         <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSimplifiedStructuralBMPsUrl">Edit</a>
                     }
                 </h4>
-                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Detailed)
+                @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Detailed)
                 {
                     <div class="alert alert-info">
                         This WQMP is modeled by explicitly inventorying associated structural BMPs; any simplified BMPs entered here are informational only.
@@ -649,8 +665,11 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr>
-                                <th> </th>
-                                <th> </th>
+                                @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                                {
+                                    <th> </th>
+                                    <th> </th>
+                                }
                                 <th>Verification Date</th>
                                 <th>Last Edited</th>
                                 <th>Last Edited By</th>
@@ -664,8 +683,11 @@
                             @foreach (var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
                             {
                                 <tr>
-                                    <td style="padding-top: 8px"> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDeleteUrl(), new List<string>(), true)</td>
-                                    <td> <a class="gridButton" href="@waterQualityManagementPlanVerify.GetDetailUrl()" style=" padding: 3px 9px; margin:0;">View</a></td>
+                                    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                                    {
+                                        <td style="padding-top: 8px"> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDeleteUrl(), new List<string>(), true)</td>
+                                        <td> <a class="gridButton" href="@waterQualityManagementPlanVerify.GetDetailUrl()" style="padding: 3px 9px; margin: 0;">View</a></td>
+                                    }
                                     <td>@waterQualityManagementPlanVerify.VerificationDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>

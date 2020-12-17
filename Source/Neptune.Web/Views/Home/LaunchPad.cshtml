@@ -186,3 +186,29 @@
     { ViewPageContent.RenderPartialView(Html, ViewDataTyped.LaunchPadViewPageContentViewData); }
     <hr />
 }
+@if (ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <div class="col-xs-6 col-md-5 col-lg-4">
+                    <a href="@ViewDataTyped.ExploreBmpTypesUrl" class="btn btn-neptune launchPadActionButton">View BMP Types</a>
+                </div>
+                <div class="col-xs-6 col-md-7 col-lg-8">
+                    See details of the @ViewDataTyped.NumberOfBmpTypes different types of BMPs
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <div class="col-xs-6 col-md-5 col-lg-4">
+                    <a href="@ViewDataTyped.ViewWaterQualityManagementPlansUrl" class="btn btn-neptune launchPadActionButton">View WQMPs</a>
+                </div>
+                <div class="col-xs-6 col-md-7 col-lg-8">
+                    View a list of all Water Quality Management Plans.
+                </div>
+            </div>
+        </div>
+    </div>
+    }
