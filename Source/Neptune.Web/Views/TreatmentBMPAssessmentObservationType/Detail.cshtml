@@ -39,48 +39,50 @@
     </script>
 }
 
+@if
+ (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+{
+    <script>
+        function previewObservationType() {
 
-<script>
-    function previewObservationType() {
-
-        var postData = @Html.Raw(JObject.FromObject(ViewDataTyped.ViewModelForPreview).ToString(Formatting.None));
+            var postData = @Html.Raw(JObject.FromObject(ViewDataTyped.ViewModelForPreview).ToString(Formatting.None));
 
 
-        jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").empty();
-        jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").remove();
-        jQuery.ajax("@ViewDataTyped.PreviewUrl",
-            {
-                data: postData,
-                method: "POST",
-                error: function (jqXhr, status, error) {
-                    jQuery("#previewErrorContainer").remove();
-                    var listItems = _.chain(jqXhr.responseJSON)
-                        .values()
-                        .flatten()
-                        .map(function (x) { return "<li>" + x + "</li>"; })
-                        .value();
-                    jQuery(".formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
-                        "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
-                        "<p>There was a problem preparing the preview for your Observation Type.</p>" +
-                        "<ul>" +
-                        listItems.join("") +
-                        "</ul>" +
-                        "</div>");
-                },
-                success: function (data) {
-                    jQuery("#previewErrorContainer").remove();
-                    var modalContent = "<div class=\"previewModalContent\" style=\"width: 850px;\">" +
-                        "<p>This is a preview of the Observation Type in a Treatment BMP Assessment.</p>" +
-                        "<div class=\"formPage\" style=\" border: 1px solid #a8a8a8; border-radius: 4px; box-shadow: 5px 5px lightgray\">" +
-                        data +
-                        "</div>" +
-                        "</div>";
-                    createBootstrapAlert(modalContent, "Preview Observation Type", "Close");
-                    jQuery(".previewModalContent :input[type='submit']").prop("disabled", true);
-                }
-            });
-    };
-</script>
+            jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").empty();
+            jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").remove();
+            jQuery.ajax("@ViewDataTyped.PreviewUrl",
+                {
+                    data: postData,
+                    method: "POST",
+                    error: function(jqXhr, status, error) {
+                        jQuery("#previewErrorContainer").remove();
+                        var listItems = _.chain(jqXhr.responseJSON)
+                            .values()
+                            .flatten()
+                            .map(function(x) { return "<li>" + x + "</li>"; })
+                            .value();
+                        jQuery(".formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
+                            "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
+                            "<p>There was a problem preparing the preview for your Observation Type.</p>" +
+                            "<ul>" +
+                            listItems.join("") +
+                            "</ul>" +
+                            "</div>");
+                    },
+                    success: function(data) {
+                        jQuery("#previewErrorContainer").remove();
+                        var modalContent = "<div class=\"previewModalContent\" style=\"width: 850px;\">" +
+                            "<p>This is a preview of the Observation Type in a Treatment BMP Assessment.</p>" +
+                            "<div class=\"formPage\" style=\" border: 1px solid #a8a8a8; border-radius: 4px; box-shadow: 5px 5px lightgray\">" +
+                            data +
+                            "</div>" +
+                            "</div>";
+                        createBootstrapAlert(modalContent, "Preview Observation Type", "Close");
+                        jQuery(".previewModalContent :input[type='submit']").prop("disabled", true);
+                    }
+                });
+        };
+    </script>
 
 @section RightOfPageTitle
 {
@@ -89,7 +91,7 @@
     {
         <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.TreatmentBMPAssessmentObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
     }
-}
+}}
 
 <div id="previewErrorContainer"></div>
 

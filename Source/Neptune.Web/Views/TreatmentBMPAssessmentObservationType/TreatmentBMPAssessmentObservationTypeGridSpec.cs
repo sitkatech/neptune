@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
@@ -33,10 +32,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
     {
         public TreatmentBMPAssessmentObservationTypeGridSpec(Person currentPerson)
         {
-            var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new NeptuneAdminFeature().HasPermissionByPerson(currentPerson), true), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), new NeptuneAdminFeature().HasPermissionByPerson(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
-            Add(Models.FieldDefinition.TreatmentBMPAssessmentObservationType.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.TreatmentBMPAssessmentObservationTypeName) : UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPAssessmentObservationTypeName), 200, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.TreatmentBMPAssessmentObservationType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPAssessmentObservationTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.ObservationCollectionMethod.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.ObservationTargetType.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.ObservationThresholdType.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationThresholdType.ObservationThresholdTypeDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);

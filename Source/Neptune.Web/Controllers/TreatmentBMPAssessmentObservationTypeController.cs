@@ -70,7 +70,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
@@ -142,7 +142,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Detail(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -187,7 +187,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult DiscreteDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -197,7 +197,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult RateDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -207,7 +207,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult PassFailDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -217,7 +217,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult PercentageDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
