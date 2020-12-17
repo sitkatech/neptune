@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web;
-using LtInfo.Common;
+﻿using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System.Collections.Generic;
+using System.Web;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class WaterQualityManagementPlanVerificationGridSpec : GridSpec<Models.WaterQualityManagementPlanVerify>
+    public class WaterQualityManagementPlanVerificationGridSpec : GridSpec<WaterQualityManagementPlanVerify>
     {
         public WaterQualityManagementPlanVerificationGridSpec(Person currentPerson)
         {

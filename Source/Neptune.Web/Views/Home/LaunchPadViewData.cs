@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.Home
             CurrentPerson = currentPerson;
             IsLoggedIn = !CurrentPerson.IsAnonymousUser();
             IsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
-            IsUnassigned = CurrentPerson.Role == Models.Role.Unassigned;
+            IsUnassigned = !CurrentPerson.IsAnonymousUser() && CurrentPerson.Role == Models.Role.Unassigned;
             IsJurisdictionManager = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             Jurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
             NumberOfBmpTypes = numberOfBmpTypes;

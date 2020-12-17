@@ -1,22 +1,17 @@
-﻿@using LtInfo.Common
+﻿@using DocumentFormat.OpenXml.Wordprocessing
+@using LtInfo.Common
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
 
 @inherits LaunchPad
 
-@if (ViewDataTyped.IsLoggedIn)
+@if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
 {
     <div class="row">
         <div class="col-xs-12 launchPadHeader">
             <h2 id="welcome">Welcome @ViewDataTyped.CurrentPerson.FirstName,</h2>
-            @if (ViewDataTyped.IsUnassigned)
-            {
-            <p>
-                You do not have a role assigned. <a href="@ViewDataTyped.RequestSupportUrl">Request Support</a> or contact your jurisdiction manager to request a role.
-            </p>
-            }
-            else if (ViewDataTyped.IsAdmin)
+            @if (ViewDataTyped.IsAdmin)
             {
                 <p>
                     Your assigned Jurisdictions: You are an Administrator and therefore manage <a href="@ViewDataTyped.JurisdictionIndexUrl">all Jurisdictions</a>.
@@ -65,22 +60,6 @@
         <div class="col-xs-12">
             <h4>Common Tasks</h4>
         </div>
-        @if (ViewDataTyped.IsUnassigned)
-        {
-            <div class="col-xs-12 col-sm-6 launchPadAction">
-                <div class="row">
-                    <div class="col-xs-6 col-md-5 col-lg-4">
-                        <a class="btn btn-neptune" href="@ViewDataTyped.RequestSupportUrl">Request a Role</a>
-                    </div>
-                    <div class="col-xs-6 col-md-7 col-lg-8">
-                        You are not yet assigned a Role or associated with a jurisdiction; start here to request an appropriate role and jurisdiction assignment
-                    </div>
-                </div>
-            </div>
-
-        }
-        else
-        {
             <div class="col-xs-12 col-sm-6 launchPadAction">
                 <div class="row">
                     <div class="col-xs-6 col-md-5 col-lg-4">
@@ -144,7 +123,7 @@
                     </div>
                 </div>
             </div>
-        }
+        
         @if (ViewDataTyped.IsJurisdictionManager)
         {
             <div class="col-xs-12">
@@ -188,7 +167,29 @@
 }
 @if (ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
 {
+    
     <div class="row">
+        <div class="col-xs-12 launchPadHeader">
+
+            @if (ViewDataTyped.IsUnassigned)
+            {
+                <h2 id="welcome">Welcome, @ViewDataTyped.CurrentPerson.GetFullNameFirstLast()</h2>
+                <strong>
+                    You do not have a role assigned. <a href="@ViewDataTyped.RequestSupportUrl">Request Support</a> or contact your jurisdiction manager to request a role.
+                </strong>
+            }
+            else
+            {
+                <h2 id="welcome">Welcome</h2>
+            }
+        </div>
+        <div class="col-xs-12">
+            <p>
+                This website is not intended as a full inventory of facilities and O &amp; M activities. It is not intended as a standalone basis to assess compliance.
+                Jurisdictions may have records and utilize data systems that are not connected to this site.
+            </p>
+        </div>
+
         <div class="col-xs-12 col-sm-6 launchPadAction">
             <div class="row">
                 <div class="col-xs-6 col-md-5 col-lg-4">
