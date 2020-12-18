@@ -18,13 +18,18 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, true), 25, DhtmlxGridColumnFilterType.None);
             }
-            Add(string.Empty, x =>  x.GetEditUrlForGrid(currentPerson), 80, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty, x => x.OnlandVisualTrashAssessmentArea != null
-                ? DhtmlxGridHtmlHelpers.MakeModalDialogLink(
-                    BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area").ToString(),
-                    x.OnlandVisualTrashAssessmentArea.GetBeginOVTAUrl(), 500, "Begin OVTA", true, "Begin", "Cancel",
-                    new List<string>(), null, null)
-                : new HtmlString(""), 30, DhtmlxGridColumnFilterType.None);
+
+            if (currentPerson.IsJurisdictionEditorOrManagerOrAdmin())
+            {
+                Add(string.Empty, x => x.GetEditUrlForGrid(currentPerson), 80, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => x.OnlandVisualTrashAssessmentArea != null
+                    ? DhtmlxGridHtmlHelpers.MakeModalDialogLink(
+                        BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area")
+                            .ToString(),
+                        x.OnlandVisualTrashAssessmentArea.GetBeginOVTAUrl(), 500, "Begin OVTA", true, "Begin", "Cancel",
+                        new List<string>(), null, null)
+                    : new HtmlString(""), 30, DhtmlxGridColumnFilterType.None);
+            }
 
             if (showName)
             {

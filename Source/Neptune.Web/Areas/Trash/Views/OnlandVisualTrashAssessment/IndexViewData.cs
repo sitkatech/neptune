@@ -23,9 +23,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             ExportUrl = exportUrl;
             PageTitle = "All OVTAs";
             EntityName = $"{FieldDefinition.OnlandVisualTrashAssessment.GetFieldDefinitionLabelPluralized()}";
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            var userCanView = new OnlandVisualTrashAssessmentViewFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, true)
             {
                 ObjectNameSingular = "Assessment",
@@ -35,7 +32,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             GridName = "onlandVisualTrashAssessmentsGrid";
             GridDataUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OVTAGridJsonData());
-            AreaGridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(currentPerson,showDelete)
+            AreaGridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(currentPerson)
             {
                 ObjectNameSingular = "Area",
                 ObjectNamePlural = "Areas",

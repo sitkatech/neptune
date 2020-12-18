@@ -10,16 +10,21 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OnlandVisualTrashAssessmentAreaIndexGridSpec : GridSpec<Models.OnlandVisualTrashAssessmentArea>
     {
-        public OnlandVisualTrashAssessmentAreaIndexGridSpec(Person currentPerson, bool showDelete)
+        public OnlandVisualTrashAssessmentAreaIndexGridSpec(Person currentPerson)
         {
             if (currentPerson.IsManagerOrAdmin())
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, true), 25, DhtmlxGridColumnFilterType.None);
             }
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeModalDialogLink(
-                BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area").ToString(),
-                x.GetBeginOVTAUrl(), 500, "Begin OVTA", true, "Begin", "Cancel",
-                new List<string>(), null, null), 30, DhtmlxGridColumnFilterType.None);
+
+            if (currentPerson.IsJurisdictionEditorOrManagerOrAdmin())
+            {
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeModalDialogLink(
+                    BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area")
+                        .ToString(),
+                    x.GetBeginOVTAUrl(), 500, "Begin OVTA", true, "Begin", "Cancel",
+                    new List<string>(), null, null), 30, DhtmlxGridColumnFilterType.None);
+            }
 
             Add("Assessment Area Name",
                 x => x.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
