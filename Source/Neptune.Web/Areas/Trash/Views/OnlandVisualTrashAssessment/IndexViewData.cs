@@ -16,6 +16,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public string NewUrl { get; }
         public string ExportUrl { get; }
         public bool HasManagePermissions { get; }
+        public bool HasEditPermissions { get; }
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, string exportUrl)
             : base(currentPerson, neptunePage)
@@ -43,7 +44,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OnlandVisualTrashAssessmentAreaGridData());
             NewUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(null));
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-
+            HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }
