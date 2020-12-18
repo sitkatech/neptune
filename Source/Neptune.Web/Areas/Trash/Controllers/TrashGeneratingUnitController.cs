@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit;
+using Neptune.Web.Security.Shared;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -34,7 +35,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [JurisdictionEditFeature]
+        [AnonymousUnclassifiedFeature]
         public JsonResult AcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
@@ -63,7 +64,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [JurisdictionEditFeature]
+        [AnonymousUnclassifiedFeature]
         public JsonResult OVTABasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
@@ -101,7 +102,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
 
         [HttpGet]
-        [JurisdictionEditFeature]
+        [AnonymousUnclassifiedFeature]
         public JsonResult LoadBasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;

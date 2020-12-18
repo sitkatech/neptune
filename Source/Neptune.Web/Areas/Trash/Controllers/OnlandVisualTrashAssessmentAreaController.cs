@@ -13,13 +13,14 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Neptune.Web.Security.Shared;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class OnlandVisualTrashAssessmentAreaController : NeptuneBaseController
     {
         [HttpGet]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Detail(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;

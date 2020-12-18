@@ -12,11 +12,13 @@
 
 @section RightOfPageTitle
 {
-    <a class="btn btn-neptune" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Begin OVTA</a>
-  
-  
-        <a class="btn btn-neptune" href="@ViewDataTyped.ExportUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-map-marker") Export OVTA Areas</a>
+    @if (ViewDataTyped.HasManagePermissions)
+    {
+        <a class="btn btn-neptune" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Begin OVTA</a>
 
+
+        <a class="btn btn-neptune" href="@ViewDataTyped.ExportUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-map-marker") Export OVTA Areas</a>
+    }
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
