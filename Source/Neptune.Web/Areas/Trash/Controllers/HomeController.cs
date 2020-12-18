@@ -20,6 +20,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
+            RequiresJurisdictionsFeature.CheckForJurisdictions(CurrentPerson);
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
             var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID);
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
