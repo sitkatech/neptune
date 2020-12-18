@@ -26,25 +26,20 @@ namespace Neptune.Web.Areas.Trash.Views
         {
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
-                BuildTrashBMPsMenu(CurrentPerson),
                 BuildOVTAMenu(CurrentPerson),
-                BuildResultsMenu(CurrentPerson),
-                LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), CurrentPerson, "Delineation Map", "Group1"),
-                BuildManageMenu(CurrentPerson)
+                BuildResultsMenu(CurrentPerson)
             };
+
+            if (!CurrentPerson.IsAnonymousOrUnassigned())
+            {
+                TopLevelLtInfoMenuItems.Add(LtInfoMenuItem.MakeItem(
+                    new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), CurrentPerson,
+                    "Delineation Map", "Group1"));
+                TopLevelLtInfoMenuItems.Add(BuildManageMenu(CurrentPerson));
+            }
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
             TopLevelLtInfoMenuItems.SelectMany(x => x.ChildMenus).ToList().ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-dropdown-item" });
-
-        }
-
-        private static LtInfoMenuItem BuildTrashBMPsMenu(Person currentPerson)
-        {
-            var trashBMPsMenu = new LtInfoMenuItem("Trash BMPs");
-
-            trashBMPsMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Index()), currentPerson, "Home", "Group1"));
-
-            return trashBMPsMenu;
         }
 
         private LtInfoMenuItem BuildOVTAMenu(Person currentPerson)
@@ -52,14 +47,13 @@ namespace Neptune.Web.Areas.Trash.Views
             var ovtaMenu = new LtInfoMenuItem("OVTA");
 
             ovtaMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OnlandVisualTrashAssessmentController>(c => c.Index()), currentPerson, "View All OVTAs", "Group1"));
- 
-
+            
             return ovtaMenu;
         }
 
         private static LtInfoMenuItem BuildResultsMenu(Person currentPerson)
         {
-            return new LtInfoMenuItem(SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Index()), "Results", currentPerson.IsManagerOrAdmin(), true, null);
+            return new LtInfoMenuItem(SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Index()), "Results", true, true, null);
         }
 
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)

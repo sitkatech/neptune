@@ -9,6 +9,7 @@ using Neptune.Web.Areas.Trash.Views.Home;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Controllers
@@ -16,7 +17,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class HomeController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewAndRequiresJurisdictionsFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
