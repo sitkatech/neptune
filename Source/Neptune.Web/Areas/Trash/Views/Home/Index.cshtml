@@ -175,53 +175,56 @@
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
-<div class="row">
-    <div class="col-xs-12">
-        <h3>Common Tasks</h3>
-    </div>
+@if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Common Tasks</h3>
+        </div>
 
-    <div class="col-xs-12 col-sm-6 launchPadAction">
-        <div class="row">
-            <div class="col-xs-6 col-md-5 col-lg-4">
-                <a href="@ViewDataTyped.BeginOVTAUrl" class="btn btn-neptune launchPadActionButton"><span class="glyphicon glyphicon-plus"></span> Begin OVTA</a>
-            </div>
-            <div class="col-xs-6 col-md-7 col-lg-8">
-                Start here to begin a new On-land Visual Trash Assessment
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 launchPadAction">
-        <div class="row">
-            <div class="col-xs-6 col-md-5 col-lg-4">
-                <a href="@ViewDataTyped.AllOVTAsUrl" class="btn btn-neptune launchPadActionButton">View all OVTAs</a>
-            </div>
-            <div class="col-xs-6 col-md-7 col-lg-8">
-                See an overview grid of all On-land Visual Trash Assessments
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <div class="col-xs-6 col-md-5 col-lg-4">
+                    <a href="@ViewDataTyped.BeginOVTAUrl" class="btn btn-neptune launchPadActionButton"><span class="glyphicon glyphicon-plus"></span> Begin OVTA</a>
+                </div>
+                <div class="col-xs-6 col-md-7 col-lg-8">
+                    Start here to begin a new On-land Visual Trash Assessment
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 launchPadAction">
-        <div class="row">
-            <div class="col-xs-6 col-md-5 col-lg-4">
-                <a href="@ViewDataTyped.AddBMPUrl" class="btn btn-neptune launchPadActionButton">Add a BMP</a>
-            </div>
-            <div class="col-xs-6 col-md-7 col-lg-8">
-                Start here to add a new BMP
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <div class="col-xs-6 col-md-5 col-lg-4">
+                    <a href="@ViewDataTyped.AllOVTAsUrl" class="btn btn-neptune launchPadActionButton">View all OVTAs</a>
+                </div>
+                <div class="col-xs-6 col-md-7 col-lg-8">
+                    See an overview grid of all On-land Visual Trash Assessments
+                </div>
             </div>
         </div>
-    </div>
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <div class="col-xs-6 col-md-5 col-lg-4">
+                    <a href="@ViewDataTyped.AddBMPUrl" class="btn btn-neptune launchPadActionButton">Add a BMP</a>
+                </div>
+                <div class="col-xs-6 col-md-7 col-lg-8">
+                    Start here to add a new BMP
+                </div>
+            </div>
+        </div>
 
-    <div class="col-xs-12 col-sm-6 launchPadAction">
-        <div class="row">
-            <div class="col-xs-6 col-md-5 col-lg-4">
-                <a href="@ViewDataTyped.FindBMPUrl" class="btn btn-neptune launchPadActionButton">Record a BMP Visit</a>
-            </div>
-            <div class="col-xs-6 col-md-7 col-lg-8">
-                Locate a BMP and begin a Field Visit for it
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <div class="col-xs-6 col-md-5 col-lg-4">
+                    <a href="@ViewDataTyped.FindBMPUrl" class="btn btn-neptune launchPadActionButton">Record a BMP Visit</a>
+                </div>
+                <div class="col-xs-6 col-md-7 col-lg-8">
+                    Locate a BMP and begin a Field Visit for it
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
 
 <h3>Program Overview</h3>
 
