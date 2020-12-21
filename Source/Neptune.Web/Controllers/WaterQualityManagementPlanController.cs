@@ -145,7 +145,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
-                waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
+                waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, new ParcelGridSpec(),
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 new HRUCharacteristicsViewData(waterQualityManagementPlan,
