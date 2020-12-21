@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Controllers;
 using Neptune.Web.Areas.Trash.Views.Home;
@@ -20,8 +22,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
-            RequiresJurisdictionsFeature.CheckForJurisdictions(CurrentPerson);
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
+
+            if (!stormwaterJurisdictionsPersonCanView.Any())
+            {
+                throw new SitkaRecordNotAuthorizedException(
+                    "You are not assigned to any Jurisdictions. Please log out and log in as a different user or request additional permissions");
+            }
+
             var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID);
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
 

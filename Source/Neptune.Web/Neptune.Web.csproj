@@ -542,7 +542,8 @@
     <Compile Include="Models\QuickBMPModelExtensions.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
-    <Compile Include="Security\RequiresJurisdictionsFeature.cs" />
+    <Compile Include="Security\OnlandVisualTrashAssessmentAreaEditFeature.cs" />
+    <Compile Include="Security\StormwaterJurisdictionViewFeature.cs" />
     <Compile Include="Views\FieldVisit\BulkUploadTrashScreenVisit.cs" />
     <Compile Include="Views\FieldVisit\BulkUploadTrashScreenVisitViewData.cs" />
     <Compile Include="Views\FieldVisit\EditDateAndType.cs" />

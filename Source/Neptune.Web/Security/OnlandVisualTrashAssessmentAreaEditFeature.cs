@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows Viewing an OVTA Area")]
-    public class OnlandVisualTrashAssessmentAreaViewFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<OnlandVisualTrashAssessmentArea>
+    public class OnlandVisualTrashAssessmentAreaEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<OnlandVisualTrashAssessmentArea>
     {
         private readonly NeptuneFeatureWithContextImpl<OnlandVisualTrashAssessmentArea> _lakeTahoeInfoFeatureWithContextImpl;
 
-        public OnlandVisualTrashAssessmentAreaViewFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor})
+        public OnlandVisualTrashAssessmentAreaEditFeature()
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<OnlandVisualTrashAssessmentArea>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
@@ -23,9 +21,9 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessmentArea contextModelObject)
         {
-            if (person.IsAnonymousOrUnassigned() || person.IsAdministrator())
+            if (!HasPermissionByPerson(person))
             {
-                return new PermissionCheckResult();
+                return new PermissionCheckResult("Person does not have permission by role.");
             }
 
             if (person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID))
