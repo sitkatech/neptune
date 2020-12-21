@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[StormwaterJurisdiction](
 	[StormwaterJurisdictionID] [int] IDENTITY(1,1) NOT NULL,
 	[OrganizationID] [int] NOT NULL,
 	[StateProvinceID] [int] NOT NULL,
-	[StormwaterJurisdictionBMPPublicVisibilityTypeID] [int] NOT NULL,
+	[StormwaterJurisdictionPublicBMPVisibilityTypeID] [int] NOT NULL,
  CONSTRAINT [PK_StormwaterJurisdiction_StormwaterJurisdictionID] PRIMARY KEY CLUSTERED 
 (
 	[StormwaterJurisdictionID] ASC
@@ -28,7 +28,7 @@ REFERENCES [dbo].[StateProvince] ([StateProvinceID])
 GO
 ALTER TABLE [dbo].[StormwaterJurisdiction] CHECK CONSTRAINT [FK_StormwaterJurisdiction_StateProvince_StateProvinceID]
 GO
-ALTER TABLE [dbo].[StormwaterJurisdiction]  WITH CHECK ADD  CONSTRAINT [FK_StormwaterJurisdiction_StormwaterJurisdictionBMPPublicVisibilityType_StormwaterJurisdictionBMPPublicVisibilityTypeID] FOREIGN KEY([StormwaterJurisdictionBMPPublicVisibilityTypeID])
-REFERENCES [dbo].[StormwaterJurisdictionBMPPublicVisibilityType] ([StormwaterJurisdictionBMPPublicVisibilityTypeID])
+ALTER TABLE [dbo].[StormwaterJurisdiction]  WITH CHECK ADD  CONSTRAINT [FK_StormwaterJurisdiction_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeID] FOREIGN KEY([StormwaterJurisdictionPublicBMPVisibilityTypeID])
+REFERENCES [dbo].[StormwaterJurisdictionPublicBMPVisibilityType] ([StormwaterJurisdictionPublicBMPVisibilityTypeID])
 GO
-ALTER TABLE [dbo].[StormwaterJurisdiction] CHECK CONSTRAINT [FK_StormwaterJurisdiction_StormwaterJurisdictionBMPPublicVisibilityType_StormwaterJurisdictionBMPPublicVisibilityTypeID]
+ALTER TABLE [dbo].[StormwaterJurisdiction] CHECK CONSTRAINT [FK_StormwaterJurisdiction_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeID]
