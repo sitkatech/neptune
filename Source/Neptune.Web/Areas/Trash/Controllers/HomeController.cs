@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Controllers;
 using Neptune.Web.Areas.Trash.Views.Home;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Controllers
@@ -16,10 +19,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class HomeController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewAndRequiresJurisdictionsFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
+
+            if (!stormwaterJurisdictionsPersonCanView.Any())
+            {
+                throw new SitkaRecordNotAuthorizedException(
+                    "You are not assigned to any Jurisdictions. Please log out and log in as a different user or request additional permissions");
+            }
+
             var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID);
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
 

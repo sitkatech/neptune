@@ -23,7 +23,10 @@
 
 @section RightOfPageTitle
 {
-    @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", ViewDataTyped.ReturnToEditUrl, string.Format("Return to Edit On-land Visual Trash Assessment for {0}", ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName), 500, "Continue", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+    @if (ViewDataTyped.UserHasReturnToEditPermission)
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", ViewDataTyped.ReturnToEditUrl, string.Format("Return to Edit On-land Visual Trash Assessment for {0}", ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName), 500, "Continue", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+    }
 }
 
 <div class="row">

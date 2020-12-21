@@ -158,7 +158,7 @@ namespace Neptune.Web.Models
 
         public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanViewWithContext(this Person person, DatabaseEntities dbContext)
         {
-            if (person.IsAdministrator())
+            if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
             {
                 return dbContext.StormwaterJurisdictions;
             }
@@ -173,7 +173,7 @@ namespace Neptune.Web.Models
 
         public static IEnumerable<int> GetStormwaterJurisdictionIDsPersonCanViewWithContext(this Person person, DatabaseEntities dbContext)
         {
-            if (person.IsAdministrator())
+            if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
             {
                 return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID);
             }

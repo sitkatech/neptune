@@ -22,7 +22,17 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessment contextModelObject)
         {
-            return new OnlandVisualTrashAssessmentViewFeature().HasPermission(person, contextModelObject);
+            if (!HasPermissionByPerson(person))
+            {
+                return new PermissionCheckResult("Person does not have permission by role.");
+            }
+
+            if (person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID))
+            {
+                return new PermissionCheckResult();
+            }
+
+            return new PermissionCheckResult($"You do not have permission to view or manage OVTAs for {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
         }
     }
 }
