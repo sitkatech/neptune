@@ -583,16 +583,16 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(stormwaterBreadCrumbEntity, "StormwaterBreadCrumbEntity", primaryKey);
                     return stormwaterBreadCrumbEntity;
 
-                case "StormwaterJurisdictionBMPPublicVisibilityType":
-                    var stormwaterJurisdictionBMPPublicVisibilityType = StormwaterJurisdictionBMPPublicVisibilityType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(stormwaterJurisdictionBMPPublicVisibilityType, "StormwaterJurisdictionBMPPublicVisibilityType", primaryKey);
-                    return stormwaterJurisdictionBMPPublicVisibilityType;
-
                 case "StormwaterJurisdictionGeometry":
                     return StormwaterJurisdictionGeometries.GetStormwaterJurisdictionGeometry(primaryKey);
 
                 case "StormwaterJurisdictionPerson":
                     return StormwaterJurisdictionPeople.GetStormwaterJurisdictionPerson(primaryKey);
+
+                case "StormwaterJurisdictionPublicBMPVisibilityType":
+                    var stormwaterJurisdictionPublicBMPVisibilityType = StormwaterJurisdictionPublicBMPVisibilityType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(stormwaterJurisdictionPublicBMPVisibilityType, "StormwaterJurisdictionPublicBMPVisibilityType", primaryKey);
+                    return stormwaterJurisdictionPublicBMPVisibilityType;
 
                 case "StormwaterJurisdiction":
                     return StormwaterJurisdictions.GetStormwaterJurisdiction(primaryKey);

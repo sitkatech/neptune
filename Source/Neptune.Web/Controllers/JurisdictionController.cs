@@ -89,10 +89,10 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
-            var stormwaterJurisdictionPublicBMPVisibilityTypes = StormwaterJurisdictionBMPPublicVisibilityType.All
-                .OrderBy(x => x.StormwaterJurisdictionBMPPublicVisibilityTypeDisplayName)
-                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionBMPPublicVisibilityTypeID.ToString(CultureInfo.InvariantCulture),
-                    x => x.StormwaterJurisdictionBMPPublicVisibilityTypeDisplayName); ;
+            var stormwaterJurisdictionPublicBMPVisibilityTypes = StormwaterJurisdictionPublicBMPVisibilityType.All
+                .OrderBy(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName)
+                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName); ;
             var viewData = new EditViewData(stormwaterJurisdictionPublicBMPVisibilityTypes);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }

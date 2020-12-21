@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public int StormwaterJurisdictionID { get; set; }
 
         [Required(ErrorMessage = "Choose a Public BMP Visibility Type")]
-        public int? StormwaterJurisdictionBMPPublicVisibilityTypeID { get; set; }
+        public int? StormwaterJurisdictionPublicBMPVisibilityTypeID { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -21,14 +21,14 @@ namespace Neptune.Web.Views.Jurisdiction
         public EditViewModel(Models.StormwaterJurisdiction stormwaterJurisdiction)
         {
             StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
-            StormwaterJurisdictionBMPPublicVisibilityTypeID =
-                stormwaterJurisdiction.StormwaterJurisdictionBMPPublicVisibilityTypeID;
+            StormwaterJurisdictionPublicBMPVisibilityTypeID =
+                stormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityTypeID;
         }
 
         public void UpdateModel(Models.StormwaterJurisdiction stormwaterJurisdiction, Person currentPerson)
         {
-            stormwaterJurisdiction.StormwaterJurisdictionBMPPublicVisibilityTypeID =
-                StormwaterJurisdictionBMPPublicVisibilityTypeID.Value;
+            stormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityTypeID =
+                StormwaterJurisdictionPublicBMPVisibilityTypeID.Value;
         }
     }
 }
