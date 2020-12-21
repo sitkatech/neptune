@@ -37,7 +37,7 @@ namespace Neptune.Web.Controllers
 {
     public class JurisdictionController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [NeptuneAdminFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.Jurisdiction);
@@ -45,7 +45,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
+        [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<StormwaterJurisdiction> IndexGridJsonData()
         {
             var jurisdictions = GetJurisdictionsAndGridSpec(out var gridSpec);
