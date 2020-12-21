@@ -878,7 +878,7 @@ namespace Neptune.Web.Controllers
         }
 
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
