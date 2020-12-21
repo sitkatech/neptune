@@ -81,7 +81,7 @@ namespace Neptune.Web.Controllers
             var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToList();
             var parcelGeoJsonFeatureCollection = parcels.ToGeoJsonFeatureCollection();
-            var treatmentBMPs = waterQualityManagementPlan.TreatmentBMPs;
+            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlanPrimaryKey);
             var treatmentBmpGeoJsonFeatureCollection =
                 treatmentBMPs.ToGeoJsonFeatureCollection();
 
