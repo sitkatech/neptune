@@ -65,7 +65,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [NeptuneAdminFeature]
         public PartialViewResult Edit(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
@@ -74,7 +74,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [NeptuneAdminFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey, EditViewModel viewModel)
         {
