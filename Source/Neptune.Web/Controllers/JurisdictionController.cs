@@ -19,17 +19,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Jurisdiction;
-using Neptune.Web.Views.TreatmentBMP;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Views.TreatmentBMP;
 using Detail = Neptune.Web.Views.Jurisdiction.Detail;
 using DetailViewData = Neptune.Web.Views.Jurisdiction.DetailViewData;
+using Edit = Neptune.Web.Views.Jurisdiction.Edit;
+using EditViewData = Neptune.Web.Views.Jurisdiction.EditViewData;
+using EditViewModel = Neptune.Web.Views.Jurisdiction.EditViewModel;
 using Index = Neptune.Web.Views.Jurisdiction.Index;
 using IndexViewData = Neptune.Web.Views.Jurisdiction.IndexViewData;
 
@@ -57,6 +62,39 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new IndexGridSpec();
             return HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public PartialViewResult Edit(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
+        {
+            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            var viewModel = new EditViewModel(jurisdiction);
+            return ViewEdit(viewModel);
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Edit(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey, EditViewModel viewModel)
+        {
+            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEdit(viewModel);
+            }
+            viewModel.UpdateModel(jurisdiction, CurrentPerson);
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewEdit(EditViewModel viewModel)
+        {
+            var stormwaterJurisdictionPublicBMPVisibilityTypes = StormwaterJurisdictionBMPPublicVisibilityType.All
+                .OrderBy(x => x.StormwaterJurisdictionBMPPublicVisibilityTypeDisplayName)
+                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionBMPPublicVisibilityTypeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.StormwaterJurisdictionBMPPublicVisibilityTypeDisplayName); ;
+            var viewData = new EditViewData(stormwaterJurisdictionPublicBMPVisibilityTypes);
+            return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
         [NeptuneViewFeature]
