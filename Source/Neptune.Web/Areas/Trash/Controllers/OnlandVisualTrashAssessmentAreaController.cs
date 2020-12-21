@@ -21,6 +21,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     {
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         public ViewResult Detail(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
@@ -57,7 +58,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public PartialViewResult EditBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
@@ -67,7 +68,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditBasicsViewModel viewModel)
         {
@@ -85,7 +86,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         public ActionResult ConfirmEditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
@@ -95,7 +96,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         public ActionResult ConfirmEditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
            return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(c => c.EditLocation(onlandVisualTrashAssessmentAreaPrimaryKey)));
@@ -123,7 +124,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ViewResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
@@ -133,7 +134,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditLocationViewModel viewModel)
         {
@@ -261,7 +262,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         public PartialViewResult NewAssessment(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
@@ -278,7 +279,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [OnlandVisualTrashAssessmentAreaEditFeature]
         public ActionResult NewAssessment(
             OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {

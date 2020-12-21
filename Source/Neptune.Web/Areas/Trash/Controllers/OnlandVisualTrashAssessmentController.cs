@@ -28,6 +28,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     {
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [OnlandVisualTrashAssessmentViewFeature]
         public ViewResult Detail(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
@@ -59,6 +60,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+
+            if (!stormwaterJurisdictionIDsPersonCanView.Any())
+            {
+                throw new SitkaRecordNotAuthorizedException(
+                    "You are not assigned to any Jurisdictions. Please log out and log in as a different user or request additional permissions");
+            }
+
             var gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(CurrentPerson,true);
             var onlandVisualTrashAssessments = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList()
@@ -71,6 +79,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreaGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+
+            if (!stormwaterJurisdictionIDsPersonCanView.Any())
+            {
+                throw new SitkaRecordNotAuthorizedException(
+                    "You are not assigned to any Jurisdictions. Please log out and log in as a different user or request additional permissions");
+            }
+
             var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson);
             var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList()
                 .OrderByDescending(x => x.GetLastAssessmentDate()).ToList();
@@ -78,6 +93,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [AnonymousUnclassifiedFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonDataForAreaDetails(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessments = GetOVTAsAndGridSpec(out var gridSpec, CurrentPerson, onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject);
@@ -88,8 +104,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OnlandVisualTrashAssessmentIndexGridSpec gridSpec, Person currentPerson, OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, false);
             return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).OrderByDescending(x => x.CompletedDate).ToList();
         }

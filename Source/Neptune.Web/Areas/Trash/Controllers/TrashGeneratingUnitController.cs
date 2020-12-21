@@ -36,6 +36,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [StormwaterJurisdictionViewFeature]
         public JsonResult AcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
@@ -65,6 +66,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [StormwaterJurisdictionViewFeature]
         public JsonResult OVTABasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
@@ -103,6 +105,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [StormwaterJurisdictionViewFeature]
         public JsonResult LoadBasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
