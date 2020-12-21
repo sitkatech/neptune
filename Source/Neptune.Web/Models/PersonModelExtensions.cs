@@ -229,13 +229,13 @@ namespace Neptune.Web.Models
                     .StormwaterJurisdictionPublicBMPVisibilityTypeID)
                 {
                     case (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly:
-                        return waterQualityManagementPlan.TreatmentBMPs.Where(x => x.InventoryIsVerified).ToList();
+                        return waterQualityManagementPlan.TreatmentBMPs.Where(x => x.InventoryIsVerified).OrderBy(x => x.TreatmentBMPName).ToList();
                     default:
                         return new List<TreatmentBMP>();
                 }
             }
 
-            return waterQualityManagementPlan.TreatmentBMPs.ToList();
+            return waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
         }
     }
 }
