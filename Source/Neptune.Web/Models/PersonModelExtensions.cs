@@ -218,5 +218,24 @@ namespace Neptune.Web.Models
                 ? string.Empty
                 : $"StormwaterJurisdictionID NOT IN ({string.Join(",", stormwaterJurisdictionIDs)})";
         }
+
+        public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person, WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+
+            if (person.IsAnonymousOrUnassigned())
+            {
+                switch (waterQualityManagementPlan.StormwaterJurisdiction
+                    .StormwaterJurisdictionPublicBMPVisibilityTypeID)
+                {
+                    case (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly:
+                        return waterQualityManagementPlan.TreatmentBMPs.Where(x => x.InventoryIsVerified).OrderBy(x => x.TreatmentBMPName).ToList();
+                    default:
+                        return new List<TreatmentBMP>();
+                }
+            }
+
+            return waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
+        }
     }
 }

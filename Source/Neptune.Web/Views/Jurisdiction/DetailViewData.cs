@@ -25,6 +25,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Views.TreatmentBMP;
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.Jurisdiction
 {
@@ -35,6 +36,8 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly TreatmentBMPGridSpec TreatmentBMPGridSpec;
         public readonly string TreatmentBMPGridName;
         public readonly string TreatmentBMPGridDataUrl;
+        public readonly string EditStormwaterJurisdictionUrl;
+        public readonly bool UserHasJurisdictionEditPermissions;
 
         public readonly List<Person> UsersAssignedToJurisdiction;
 
@@ -45,7 +48,9 @@ namespace Neptune.Web.Views.Jurisdiction
             PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
-            
+            EditStormwaterJurisdictionUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Edit(stormwaterJurisdiction));
+
+
             TreatmentBMPGridSpec = new TreatmentBMPGridSpec(currentPerson, false, false)
             {
                 ObjectNameSingular = "Treatment BMP",
@@ -55,7 +60,10 @@ namespace Neptune.Web.Views.Jurisdiction
             TreatmentBMPGridName = "jurisdictionTreatmentBMPGrid";
             TreatmentBMPGridDataUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.JurisdictionTreatmentBMPGridJsonData(stormwaterJurisdiction));
 
-            UsersAssignedToJurisdiction = StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();           
+            UsersAssignedToJurisdiction = StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();   
+            UserHasJurisdictionEditPermissions = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
         }
+
+        
     }
 }
