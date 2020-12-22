@@ -57,7 +57,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult FindABMP()
         {
             var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
