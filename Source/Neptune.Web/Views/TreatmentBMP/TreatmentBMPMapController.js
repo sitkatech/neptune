@@ -140,6 +140,31 @@
             $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, legendSpan);
         };
 
+        $scope.refreshSelectedJurisdictionsLayer = function () {
+            if ($scope.selectedJurisdictionsLayerGeoJson) {
+                $scope.neptuneMap.map.removeLayer($scope.selectedJurisdictionsLayerGeoJson);
+            }
+
+            $scope.selectedJurisdictionsLayerGeoJson = L.geoJson(
+                $scope.AngularViewData.MapInitJson.JurisdictionLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+                        return _.includes($scope.selectedJurisdictionIDs,
+                                feature.properties.StormwaterJurisdictionID.toString());
+                    },
+                    style: function (feature) {
+                        return {
+                            color: $scope.AngularViewData.MapInitJson.JurisdictionLayerGeoJson.LayerColor,
+                            weight: 2,
+                            fillOpacity: 0 
+                        };
+                    }
+                });
+            
+            $scope.selectedJurisdictionsLayerGeoJson.addTo($scope.neptuneMap.map);
+        };
+
+        $scope.refreshSelectedJurisdictionsLayer();
         $scope.initializeTreatmentBMPClusteredLayer();
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
@@ -200,6 +225,7 @@
         };
 
         $scope.filterMapByJurisdiction = function () {
+            $scope.refreshSelectedJurisdictionsLayer();
             $scope.initializeTreatmentBMPClusteredLayer();
         };
 

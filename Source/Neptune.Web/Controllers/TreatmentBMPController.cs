@@ -64,10 +64,10 @@ namespace Neptune.Web.Controllers
             var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
-            var jurisdictionLayerGeoJson =
-                mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
-            jurisdictionLayerGeoJson.LayerOpacity = 0;
-            jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
+            //var jurisdictionLayerGeoJson =
+            //    mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
+            //jurisdictionLayerGeoJson.LayerOpacity = 0;
+            //jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
             var treatmentBMPTypeSimples = treatmentBmps.GroupBy(x => x.TreatmentBMPType)
                 .Select(x => new TreatmentBMPTypeSimple(x.Key)).ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
