@@ -190,8 +190,19 @@ namespace Neptune.Web.Models
             return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
 
-        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanManage(this Person person)
+        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person)
         {
+            //These users can technically see all Jurisdictions, just potentially not the BMPs inside them
+            if (person.IsAnonymousOrUnassigned())
+            {
+                var stormwaterJurisdictionIDsAnonymousPersonCanView = person.GetStormwaterJurisdictionsPersonCanView()
+                    .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID != (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
+                    .Select(x => x.StormwaterJurisdictionID);
+                
+                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && x.InventoryIsVerified).ToList();
+                return treatmentBMPs;
+            }
+            
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return treatmentBmps;

@@ -132,6 +132,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
                 feature.Properties.Add("TrashCaptureStatusTypeID", x.TrashCaptureStatusTypeID);
+                feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdiction.StormwaterJurisdictionID);
                 return feature;
             }));
             return featureCollection;
@@ -189,6 +190,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("TreatmentBMPID",treatmentBMP.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID);
+                feature.Properties.Add("StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdiction.StormwaterJurisdictionID);
                 onEachFeature?.Invoke(feature, treatmentBMP);
                 return feature;
             }));

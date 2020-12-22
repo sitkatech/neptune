@@ -7,6 +7,10 @@
             return m.TreatmentBMPTypeID;
         });
 
+        $scope.selectedJurisdictionIDs = _.map($scope.AngularViewData.Jurisdictions, function (m) {
+            return m.StormwaterJurisdictionID;
+        });
+
         $scope.visibleBMPIDs = [];
         $scope.activeTreatmentBMP = {};
 
@@ -38,7 +42,8 @@
                                     url: url,
                                     data: {
                                         SearchTerm: query,
-                                        TreatmentBMPTypeIDs: $scope.selectedTreatmentBMPTypeIDs
+                                        TreatmentBMPTypeIDs: $scope.selectedTreatmentBMPTypeIDs,
+                                        StormwaterJurisdictionIDs: $scope.selectedJurisdictionIDs
                                     },
                                     type: "POST",
                                     success: onSuccess,
@@ -79,7 +84,9 @@
                 {
                     filter: function (feature, layer) {
                         return _.includes($scope.selectedTreatmentBMPTypeIDs,
-                            feature.properties.TreatmentBMPTypeID.toString());
+                            feature.properties.TreatmentBMPTypeID.toString()) &&
+                            _.includes($scope.selectedJurisdictionIDs,
+                            feature.properties.StormwaterJurisdictionID.toString());
                     },
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
@@ -189,6 +196,10 @@
         };
 
         $scope.filterMapByBmpType = function () {
+            $scope.initializeTreatmentBMPClusteredLayer();
+        };
+
+        $scope.filterMapByJurisdiction = function () {
             $scope.initializeTreatmentBMPClusteredLayer();
         };
 
