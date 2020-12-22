@@ -57,21 +57,18 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult FindABMP()
         {
-            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
+            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView();
+            var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
-            var jurisdictionLayerGeoJson =
-                mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
-            jurisdictionLayerGeoJson.LayerOpacity = 0;
-            jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
             var treatmentBMPTypeSimples = treatmentBmps.GroupBy(x => x.TreatmentBMPType)
                 .Select(x => new TreatmentBMPTypeSimple(x.Key)).ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
             var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps,
-                treatmentBMPTypeSimples);
+                treatmentBMPTypeSimples, jurisdictions);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
 
@@ -79,7 +76,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanManage();
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView();
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount =
                 treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
@@ -564,7 +561,7 @@ namespace Neptune.Web.Controllers
                 viewModel);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult SummaryForMap(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -572,24 +569,25 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         [HttpGet]
         public ContentResult FindByName()
         {
             return new ContentResult();
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         [HttpPost]
         public JsonResult FindByName(FindABMPViewModel viewModel)
         {
             var searchString = viewModel.SearchTerm.Trim();
             var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs ?? new List<int>();
+            var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs ?? new List<int>();
             // ReSharper disable once InconsistentNaming
-            var allTreatmentBMPsMatchingSearchString =
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
-                    x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
-                         x.TreatmentBMPName.Contains(searchString)).ToList();
+            var allTreatmentBMPsMatchingSearchString = CurrentPerson.GetTreatmentBmpsPersonCanView()
+                .Where(x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
+                            stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdiction.StormwaterJurisdictionID) &&
+                            x.TreatmentBMPName.Contains(searchString)).ToList();
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {

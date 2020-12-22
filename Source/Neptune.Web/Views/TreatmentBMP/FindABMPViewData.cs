@@ -42,7 +42,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
 
         public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
-            List<Models.TreatmentBMP> treatmentBMPs, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
+            List<Models.TreatmentBMP> treatmentBMPs, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples, List<StormwaterJurisdictionSimple> jurisdictions)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Find a BMP";
@@ -53,9 +53,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl, treatmentBMPTypeSimples);
+            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl, treatmentBMPTypeSimples, jurisdictions);
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-
         }
     }
 
@@ -65,14 +64,18 @@ namespace Neptune.Web.Views.TreatmentBMP
         public List<TreatmentBMPSimple> TreatmentBMPs { get; }
         public string FindTreatmentBMPByNameUrl { get; }
         public List<TreatmentBMPTypeSimple> TreatmentBMPTypes { get; }
+        public List<StormwaterJurisdictionSimple> Jurisdictions { get; set; }
+
 
         public ViewDataForAngular(MapInitJson mapInitJson, List<Models.TreatmentBMP> treatmentBMPs,
-            string findTreatmentBMPByNameUrl, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
+            string findTreatmentBMPByNameUrl, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples, List<StormwaterJurisdictionSimple> jurisdictions)
         {
             MapInitJson = mapInitJson;
             TreatmentBMPs = treatmentBMPs.Select(x=>new TreatmentBMPSimple(x)).ToList();
             FindTreatmentBMPByNameUrl = findTreatmentBMPByNameUrl;
             TreatmentBMPTypes = treatmentBMPTypeSimples;
+            Jurisdictions = jurisdictions;
         }
+
     }
 }
