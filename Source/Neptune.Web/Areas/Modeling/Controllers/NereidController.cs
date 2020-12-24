@@ -263,7 +263,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
                 .ToList().Where(x => x.IsFullyParameterized())
-                .Select(x => x.ToTreatmentFacility(true)).ToList();
+                .Select(x => x.ToTreatmentFacility(false)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
 
@@ -392,7 +392,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
                 .ToList()
-                .Select(x => x.ToTreatmentFacility(true)).ToList();
+                .Select(x => x.ToTreatmentFacility(false)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
 

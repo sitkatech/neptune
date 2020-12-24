@@ -98,6 +98,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP);
             var lspcBasinKey = treatmentBMP.LSPCBasin?.LSPCBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
+            double? treatmentRate = null;
+            var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
 
             // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
             if (!isFullyParameterized || 
@@ -109,13 +111,10 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                     FacilityType = "NoTreatment",
                     ReferenceDataKey = lspcBasinKey,
                     DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches ?? .8,
+                    EliminateAllDryWeatherFlowOverride = modelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
                 };
             }
-
-            double? treatmentRate = null;
             
-            var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
-
             // treatment rate is an alias for four different fields, so we need to pick the one that's not null
             if (modelingAttribute.InfiltrationDischargeRate != null)
             {
