@@ -87,7 +87,10 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="col-xs-12 col-sm-4 col-md-6">
                 <div class="row">
                     <div class="col-xs-12 text-right">
-                        <div class="help-block" style="margin-top: 0;">Begin a Field Visit to update BMP information, assess or maintain the BMP</div>
+                        @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                        {
+                            <div class="help-block" style="margin-top: 0;">Begin a Field Visit to update BMP information, assess or maintain the BMP</div>
+                        }
                         <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
                         @if (ViewDataTyped.UserHasFieldVisitPermissions)
                         {

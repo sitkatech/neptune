@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using DocumentFormat.OpenXml.Office2010.PowerPoint
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.TreatmentBMP
@@ -52,13 +53,17 @@
     <style>
         .selected-bmp {
             background-color: #FFFF85;
-        }.selected-bmp:hover {
-            background-color: #FFFF85 !important;
-        } 
+        }
+
+            .selected-bmp:hover {
+                background-color: #FFFF85 !important;
+            }
+
         .list-group-item .help-block {
             margin-bottom: 0;
             font-size: 12px;
         }
+
         ul.list-group {
             max-height: 350px;
             overflow-y: auto;
@@ -67,15 +72,27 @@
             border-bottom: none;
         }
 
+        @@media (max-width: 991px) {
+            .mapDiv {
+                height: 350px;
+            }
+        }
+
+        @@media (min-width: 992px) {
+            .mapDiv {
+                height: 525px;
+            }
+        }
+
         li.list-group-item {
             color: #737373;
             cursor: pointer;
         }
 
-        li.list-group-item:hover {
-            background-color: #eee;
-            cursor: pointer;
-        }
+            li.list-group-item:hover {
+                background-color: #eee;
+                cursor: pointer;
+            }
 
         .panel.panelNeptune {
             border: none;
@@ -83,10 +100,12 @@
 
         .aligned-row {
             display: flex;
+            &::before
 
-            &::before {
-             display: block;
-            }
+        {
+            display: block;
+        }
+
         }
 
         .no-padding-centered-col {
@@ -95,7 +114,7 @@
             display: flex;
             align-items: center;
         }
-        </style>
+    </style>
 
 }
 
@@ -113,7 +132,7 @@
     <div class="row">
         <div class="col-sm-8 col-md-3">
             <div class="input-group">
-                <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by BMP name" autocomplete="off"/>
+                <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by BMP name" autocomplete="off" />
                 <span class="input-group-btn">
                     <a id="treatmentBMPFinderButton" class="btn btn-default">
                         <i class="glyphicon glyphicon-search"></i>
@@ -162,7 +181,7 @@
     <div class="row" style="margin-top: 10px;">
         <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
             <div id="mapContainer">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 525px; margin: 0">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" class="mapDiv" style="margin: 0">
                 </div>
             </div>
         </div>
@@ -195,15 +214,18 @@
 
         <div class="col-sm-8 col-md-12" id="mapSummaryResults"></div>
     </div>
-    <hr/>
-    <div class="row">
-        <div class="col-sm-12">
-            <h4 style="margin-top: 0;">Didn't find the BMP you were looking for?</h4>
-            <a href="@ViewDataTyped.AllBMPsUrl" class="btn btn-neptune btn">View list of All BMPs</a>
-            @if (ViewDataTyped.HasManagePermissions)
-            {
-                <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
-            }
+    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+    {
+        <hr/>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 style="margin-top: 0;">Didn't find the BMP you were looking for?</h4>
+                <a href="@ViewDataTyped.AllBMPsUrl" class="btn btn-neptune btn">View list of All BMPs</a>
+                @if (ViewDataTyped.HasManagePermissions)
+                {
+                    <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
+                }
+            </div>
         </div>
-    </div>
+    }
 </div>
