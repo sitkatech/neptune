@@ -56,10 +56,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaName, 120,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Maintenance Contact Name", x => x.MaintenanceContactName, 100);
             Add("Maintenance Contact Organization", x => x.MaintenanceContactOrganization, 120);
-            Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);
-            Add("Maintenance Contact Phone", x => x.MaintenanceContactPhone, 70);
+            
+            if (!currentPerson.IsAnonymousOrUnassigned())
+            {
+                Add("Maintenance Contact Name", x => x.MaintenanceContactName, 100);
+                Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);
+                Add("Maintenance Contact Phone", x => x.MaintenanceContactPhone, 70);
+            }
+            
             Add("# of Inventoried BMPs", x => currentPerson.GetInventoriedBMPsForWQMP(x).Count(), 100);
             Add("# of Simplified BMPs", x => x.QuickBMPs.Count, 100);
             Add("Modeling Approach", x => x.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName,
