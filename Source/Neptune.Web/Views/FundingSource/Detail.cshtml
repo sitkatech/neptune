@@ -87,7 +87,16 @@
                                 @foreach (var fundingEventFundingSource in ViewDataTyped.FundingSource.FundingEventFundingSources.OrderBy(x => x.FundingEvent.TreatmentBMP.TreatmentBMPName))
                                 {
                                     <tr>
-                                        <td>@Html.Raw(fundingEventFundingSource.FundingEvent.TreatmentBMP.GetDisplayNameAsUrl())</td>
+                                        <td>
+                                            @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() || fundingEventFundingSource.FundingEvent.TreatmentBMP.InventoryIsVerified)
+                                            {
+                                                @Html.Raw(fundingEventFundingSource.FundingEvent.TreatmentBMP.GetDisplayNameAsUrl())
+                                            }
+                                            else
+                                            {
+                                                @fundingEventFundingSource.FundingEvent.TreatmentBMP.TreatmentBMPName
+                                            }
+                                        </td>
                                         <th class="text-right">@fundingEventFundingSource.Amount.ToStringCurrency()</th>
                                     </tr>
                                 }

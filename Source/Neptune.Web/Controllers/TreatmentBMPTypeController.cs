@@ -36,7 +36,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPTypeController : NeptuneBaseController
     {
-        [AnonymousUnclassifiedFeature]
+        [NeptuneAdminFeature]
         public ViewResult Manage()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypesList);
@@ -44,7 +44,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
-        [AnonymousUnclassifiedFeature]
+        [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData()
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
@@ -135,7 +135,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();

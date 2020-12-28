@@ -75,24 +75,26 @@
 
 @section RightOfPageTitle
 {
+    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-right">
+                    <div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="pull-right">
-                <div>
-
-                    @if (ViewDataTyped.HasSavedWqmpDraft)
-                    {
-                        @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
-                    }
-                    else
-                    {
-                        <a class="btn btn-neptune" href="@ViewDataTyped.BeginOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
-                    }
+                        @if (ViewDataTyped.HasSavedWqmpDraft)
+                        {
+                            @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                        }
+                        else
+                        {
+                            <a class="btn btn-neptune" href="@ViewDataTyped.BeginOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.ParameterizationErrors.Any())
@@ -259,7 +261,7 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                                        {
+                                                                                            {
                                     ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
                                     ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
                                     ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
@@ -335,10 +337,13 @@
                     Locations
                 </div>
                 <div class="panel-body">
-                    <div>
-                        <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
-                        <a class="btn btn-neptune" href="@ViewDataTyped.EditInventoriedBMPsUrl">Add Treatment BMPs</a>
-                    </div>
+                    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                    {
+                        <div>
+                            <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
+                            <a class="btn btn-neptune" href="@ViewDataTyped.EditInventoriedBMPsUrl">Add Treatment BMPs</a>
+                        </div>
+                    }
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
                     <div class="row" style="margin-top: 12px;">
                         <label class="col-sm-5 control-label">Calculated Parcel Area:</label>
@@ -392,199 +397,201 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                BMPs
+<div class="col-xs-12">
+    <div class="panel panelNeptune">
+        <div class="panel-heading panelTitle">
+            BMPs
+        </div>
+        <div class="panel-body">
+            <h4>
+                Modeling Approach
+                @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string> { "btn", "btn-xs", "btn-neptune" }, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+            </h4>
+            <div class="col-xs-12">
+                @foreach (var waterQualityManagementPlanModelingApproach in ViewDataTyped.WaterQualityManagementPlanModelingApproaches)
+                {
+                    var selected = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID;
+                    var italicized = !selected ? "font-style:italic" : "";
+                    var checkmark = selected ? "<span class='glyphicon glyphicon-ok-sign' style='color:green'></span>".ToHTMLFormattedString() : null;
+                    <div class="row" style="margin-bottom: 20px;@italicized">
+                        <div class="col-sm-2" style="padding-right: 0; max-width: 100px">
+                            @checkmark
+                            <strong>@waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong>
+                        </div>
+                        <div class="col-sm-10">
+                            @waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
+                        </div>
+                    </div>
+                }
             </div>
-            <div class="panel-body">
-                <h4>
-                    Modeling Approach
-                    @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditModelingApproachUrl, "Edit Modeling Approach", new List<string> { "btn", "btn-xs", "btn-neptune" }, ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                </h4>
-                <div class="col-xs-12">
-                    @foreach (var waterQualityManagementPlanModelingApproach in ViewDataTyped.WaterQualityManagementPlanModelingApproaches)
-                    {
-                        var selected = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID;
-                        var italicized = !selected ? "font-style:italic" : "";
-                        var checkmark = selected ? "<span class='glyphicon glyphicon-ok-sign' style='color:green'></span>".ToHTMLFormattedString() : null;
-                        <div class="row" style="margin-bottom: 20px;@italicized">
-                            <div class="col-sm-2" style="padding-right: 0; max-width: 100px">
-                                @checkmark
-                                <strong>@waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong>
-                            </div>
-                            <div class="col-sm-10">
-                                @waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
-                            </div>
-                        </div>
-                    }
-                </div>
-                <h4 style="margin-top: 32px">
-                    Inventoried Structural BMPs
-                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                    {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditInventoriedBMPsUrl">Edit</a>
-                    }
-                </h4>
-                @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+            <h4 style="margin-top: 32px">
+                Inventoried Structural BMPs
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
-                    <div class="alert alert-info">
-                        This WQMP is modeled by entering simplified structural BMPs parameters; any explicitly inventoried BMPs entered here are not considered in modeling.
-                    </div>
+                    <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditInventoriedBMPsUrl">Edit</a>
                 }
-                <div>
-                    @if (ViewDataTyped.TreatmentBMPs.Any())
-                    {
-                        <div style="padding: 0 16px">
-                            <table id="treatmentBMPTable" class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th style="white-space: nowrap; border-top: none; min-width: 100px;"><label>Name</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('treatmentBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
-                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
-                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
-                                        <th style="border-top: none; min-width: 110px;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDelineationStatus)</th>
-                                        <th style="border-top: none; text-align: center"><label>Delineation Area (ac)</label></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @if (treatmentBMP.InventoryIsVerified || !ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
-                                                {
-                                                    <a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a>
-                                                }
-                                                else
-                                                {
-                                                    @treatmentBMP.TreatmentBMPName
-                                                }
-                                            </td>
-                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td class="notes collapsed">@treatmentBMP.Notes</td>
-                                            <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
-                                            <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
-                                            <td>@treatmentBMP.GetDelineationStatus()</td>
-                                            <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="systemText">No Structural BMPs in Detailed Inventory have been selected.</p>
-                    }
+            </h4>
+            @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+            {
+                <div class="alert alert-info">
+                    This WQMP is modeled by entering simplified structural BMPs parameters; any explicitly inventoried BMPs entered here are not considered in modeling.
                 </div>
-
-                <h4 style="margin-top: 32px">
-                    Simplified Structural BMPs
-                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                    {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSimplifiedStructuralBMPsUrl">Edit</a>
-                    }
-                </h4>
-                @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Detailed)
-                {
-                    <div class="alert alert-info">
-                        This WQMP is modeled by explicitly inventorying associated structural BMPs; any simplified BMPs entered here are informational only.
-                    </div>
-                }
-                <div>
-                    @if (ViewDataTyped.QuickBMPs.Any())
-                    {
-                        <div style="padding: 0 16px">
-                            <table id="quickBMPTable" class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th style="white-space: nowrap; border-top: none;min-width: 100px;"><label>Name</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
-                                        <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('quickBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
-                                        <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
-                                        <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
-                                        <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
-                                        <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                                    {
-                                        <tr>
-                                            <td>@quickBMP.QuickBMPName</td>
-                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                            <td class="notes collapsed">@quickBMP.QuickBMPNote</td>
-                                            <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentOfSiteTreated) : "")</td>
-                                            <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentCaptured) : "")</td>
-                                            <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentRetained) : "")</td>
-                                            <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(quickBMP)</td>
-                                        </tr>
-                                    }
-                                    <tr>
-                                        <td colspan="3" style="text-align: right; font-weight: bold">Total % Site Treated:</td>
-                                        <td colspan="1" style="text-align: right; font-weight:bold">@(string.Format("{0:0.#} %", ViewDataTyped.QuickBMPs.Sum(x => x.PercentOfSiteTreated)))</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="systemText">No Other Structural BMPs have been selected.</p>
-                    }
-                </div>
-
-                <h4 style="margin-top: 32px">
-                    Source Control BMPs
-                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                    {
-                        <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSourceControlBMPsUrl">Edit</a>
-                    }
-                </h4>
-
-                @if (ViewDataTyped.SourceControlBMPs.Any())
+            }
+            <div>
+                @if (ViewDataTyped.TreatmentBMPs.Any())
                 {
                     <div style="padding: 0 16px">
-                        <table class="table table-condensed">
-                            @foreach (var sourceControlBMPs in ViewDataTyped.SourceControlBMPs)
+                        <table id="treatmentBMPTable" class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th style="white-space: nowrap; border-top: none; min-width: 100px;"><label>Name</label></th>
+                                <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('treatmentBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
+                                <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForFullyParameterized)</th>
+                                <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
+                                <th style="border-top: none; min-width: 110px;">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDelineationStatus)</th>
+                                <th style="border-top: none; text-align: center"><label>Delineation Area (ac)</label></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                             {
-
-                                <thead>
-                                    <tr>
-                                        <th colspan="3" style="border-top: none; border-bottom: none"><h5 style="margin-top: 32px;">@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
-                                    </tr>
-                                    <tr>
-                                        <th style="white-space: nowrap; border-top: none"> Source Control Attribute</th>
-                                        <th style="white-space: nowrap; border-top: none"> Is Present</th>
-                                        <th style="white-space: nowrap; border-top: none"> Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var sourceControlBMP in sourceControlBMPs)
-                                    {
-
-                                        <tr>
-                                            <td> @sourceControlBMP.SourceControlBMPAttribute.SourceControlBMPAttributeName </td>
-                                            <td> @sourceControlBMP.IsPresent.ToYesNo()</td>
-                                            <td> @sourceControlBMP.SourceControlBMPNote</td>
-                                        </tr>
-
-                                    }
-                                </tbody>
+                                <tr>
+                                    <td>
+                                        @if (treatmentBMP.InventoryIsVerified || !ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                                        {
+                                            <a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a>
+                                        }
+                                        else
+                                        {
+                                            @treatmentBMP.TreatmentBMPName
+                                        }
+                                    </td>
+                                    <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                    <td class="notes collapsed">@treatmentBMP.Notes</td>
+                                    <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
+                                    <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
+                                    <td>@treatmentBMP.GetDelineationStatus()</td>
+                                    <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
+                                </tr>
                             }
+                            </tbody>
                         </table>
                     </div>
                 }
                 else
                 {
-                    <p class="systemText">No Source Control BMPs are present or have a note.</p>
+                    <p class="systemText">No Structural BMPs in Detailed Inventory have been selected.</p>
                 }
             </div>
+
+            <h4 style="margin-top: 32px">
+                Simplified Structural BMPs
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                {
+                    <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSimplifiedStructuralBMPsUrl">Edit</a>
+                }
+            </h4>
+            @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Detailed)
+            {
+                <div class="alert alert-info">
+                    This WQMP is modeled by explicitly inventorying associated structural BMPs; any simplified BMPs entered here are informational only.
+                </div>
+            }
+            <div>
+                @if (ViewDataTyped.QuickBMPs.Any())
+                {
+                    <div style="padding: 0 16px">
+                        <table id="quickBMPTable" class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th style="white-space: nowrap; border-top: none;min-width: 100px;"><label>Name</label></th>
+                                <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
+                                <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('quickBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
+                                <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                                <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                                <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                                <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
+                            {
+                                <tr>
+                                    <td>@quickBMP.QuickBMPName</td>
+                                    <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                    <td class="notes collapsed">@quickBMP.QuickBMPNote</td>
+                                    <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentOfSiteTreated) : "")</td>
+                                    <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentCaptured) : "")</td>
+                                    <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentRetained) : "")</td>
+                                    <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(quickBMP)</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="3" style="text-align: right; font-weight: bold">Total % Site Treated:</td>
+                                <td colspan="1" style="text-align: right; font-weight:bold">@(string.Format("{0:0.#} %", ViewDataTyped.QuickBMPs.Sum(x => x.PercentOfSiteTreated)))</td>
+                                <td colspan="3"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="systemText">No Other Structural BMPs have been selected.</p>
+                }
+            </div>
+
+            <h4 style="margin-top: 32px">
+                Source Control BMPs
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                {
+                    <a class="btn btn-xs btn-neptune" style="margin-left: 20px" href="@ViewDataTyped.EditSourceControlBMPsUrl">Edit</a>
+                }
+            </h4>
+
+            @if (ViewDataTyped.SourceControlBMPs.Any())
+            {
+                <div style="padding: 0 16px">
+                    <table class="table table-condensed">
+                        @foreach (var sourceControlBMPs in ViewDataTyped.SourceControlBMPs)
+                        {
+
+                            <thead>
+                            <tr>
+                                <th colspan="3" style="border-top: none; border-bottom: none"><h5 style="margin-top: 32px;">@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
+                            </tr>
+                            <tr>
+                                <th style="white-space: nowrap; border-top: none"> Source Control Attribute</th>
+                                <th style="white-space: nowrap; border-top: none"> Is Present</th>
+                                <th style="white-space: nowrap; border-top: none"> Notes</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var sourceControlBMP in sourceControlBMPs)
+                            {
+
+                                <tr>
+                                    <td> @sourceControlBMP.SourceControlBMPAttribute.SourceControlBMPAttributeName </td>
+                                    <td> @sourceControlBMP.IsPresent.ToYesNo()</td>
+                                    <td> @sourceControlBMP.SourceControlBMPNote</td>
+                                </tr>
+
+                            }
+                            </tbody>
+                        }
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="systemText">No Source Control BMPs are present or have a note.</p>
+            }
         </div>
     </div>
+</div>
+@if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+{
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
@@ -640,6 +647,7 @@
             </div>
         </div>
     </div>
+}
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">

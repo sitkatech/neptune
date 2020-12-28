@@ -160,7 +160,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">
-                        @if(!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                        @if(!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned && ViewDataTyped.CurrentPersonCanManage)
                         {
                             @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> {"btn", "btn-neptune", "btn-xs"}, null, null)
                             <span>&nbsp;&nbsp;</span>
