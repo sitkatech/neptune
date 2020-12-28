@@ -25,6 +25,8 @@ using Neptune.Web.Models;
 using Neptune.Web.Views.TreatmentBMP;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using LtInfo.Common.ModalDialog;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.Jurisdiction
@@ -36,7 +38,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly TreatmentBMPGridSpec TreatmentBMPGridSpec;
         public readonly string TreatmentBMPGridName;
         public readonly string TreatmentBMPGridDataUrl;
-        public readonly string EditStormwaterJurisdictionUrl;
+        public readonly HtmlString EditStormwaterJurisdictionLink;
         public readonly bool UserHasJurisdictionEditPermissions;
 
         public readonly List<Person> UsersAssignedToJurisdiction;
@@ -48,7 +50,7 @@ namespace Neptune.Web.Views.Jurisdiction
             PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
-            EditStormwaterJurisdictionUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Edit(stormwaterJurisdiction));
+            
 
 
             TreatmentBMPGridSpec = new TreatmentBMPGridSpec(currentPerson, false, false)
@@ -62,6 +64,12 @@ namespace Neptune.Web.Views.Jurisdiction
 
             UsersAssignedToJurisdiction = StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();   
             UserHasJurisdictionEditPermissions = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
+
+            EditStormwaterJurisdictionLink = UserHasJurisdictionEditPermissions
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Edit(stormwaterJurisdiction)),
+                    $"Edit Jurisdiction - {StormwaterJurisdiction.GetOrganizationDisplayName()}",
+                    true)
+                : new HtmlString(string.Empty);
         }
 
         

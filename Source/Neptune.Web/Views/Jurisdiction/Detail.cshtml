@@ -35,7 +35,13 @@
     <div class="col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditStormwaterJurisdictionUrl, string.Format("Edit {0} - {1}", FieldDefinition.Jurisdiction.GetFieldDefinitionLabel(), ViewDataTyped.StormwaterJurisdiction.GetOrganizationDisplayName()), ViewDataTyped.UserHasJurisdictionEditPermissions) Basics
+                Basics
+                @if (ViewDataTyped.UserHasJurisdictionEditPermissions)
+                {
+                    <span class="pull-right">
+                        @ViewDataTyped.EditStormwaterJurisdictionLink
+                    </span>
+                }
             </div>
             <div class="panel-body">
                 <div class="row">
