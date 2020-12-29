@@ -34,8 +34,10 @@ namespace Neptune.Web.Controllers
         [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
                 .Include(x => x.WaterQualityManagementPlanVerifies)
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
                 .ToList();
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
@@ -45,8 +47,10 @@ namespace Neptune.Web.Controllers
         [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlanVerifications = HttpRequestStorage.DatabaseEntities
                 .WaterQualityManagementPlanVerifies
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID))
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
                 .ThenByDescending(x => x.LastEditedDate).ToList();

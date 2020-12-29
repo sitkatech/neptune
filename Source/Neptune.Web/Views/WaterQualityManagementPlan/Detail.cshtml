@@ -75,7 +75,7 @@
 
 @section RightOfPageTitle
 {
-    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
     {
         <div class="row">
             <div class="col-xs-12">
@@ -337,7 +337,7 @@
                     Locations
                 </div>
                 <div class="panel-body">
-                    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                     {
                         <div>
                             <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
