@@ -361,6 +361,10 @@
                     @if (ViewDataTyped.WaterQualityManagementPlan.GetHRUCharacteristics().Any() && ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() != null)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
+                        if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+                        {
+                            <p class="systemText">Land Use Statistics are derived from the inventoried structural BMPs and may not exactly match the Calculated Parcel Area shown above.</p>
+                        }
                     }
                     else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
                     {
