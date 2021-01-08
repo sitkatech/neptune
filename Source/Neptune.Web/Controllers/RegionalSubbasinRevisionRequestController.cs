@@ -289,8 +289,12 @@ Please review it, make revisions, and close it at your earliest convenience. <a 
 <div style='font-size: 12px; font-family: Arial'>
 <strong>{subject}</strong><br />
 <br />
-The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {firstName} {lastName} ({organizationName}). <a href='{delineationMapUrl}'>Revise the delineation for BMP {bmpName} on the Delineation map</a>. 
-
+The Regional Subbasin Revision Request for BMP {bmpName} was just closed by {firstName} {lastName} ({organizationName}).
+<br /><br />
+The changes resulting from this update will be available for your use next Monday. At that time you will be able to revise the delineation for {bmpName}.
+<br /><br />
+<a href='{delineationMapUrl}'>Revise the delineation for BMP {bmpName} on the Delineation map</a>. 
+<br/><br />
  <div>Thanks for keeping the Regional Subbasin Network up to date within the Orange County Stormwater Tools.</div>
 </div>
 ";
