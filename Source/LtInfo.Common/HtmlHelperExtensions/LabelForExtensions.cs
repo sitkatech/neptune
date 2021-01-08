@@ -140,6 +140,7 @@ namespace LtInfo.Common.HtmlHelperExtensions
             AsGridHeader,
             HelpIconOnly,
             HelpIconWithLabel,
+            SitsOnDarkBackground
         }
 
         public const int DefaultPopupWidth = 300;
@@ -360,6 +361,7 @@ namespace LtInfo.Common.HtmlHelperExtensions
                 case DisplayStyle.HelpIconOnly:
                     return MvcHtmlString.Create(helpIconImgTag);
                 case DisplayStyle.HelpIconWithLabel:
+                case DisplayStyle.SitsOnDarkBackground:
                     var requiredAsterisk = hasRequiredAttribute ? " <sup>" + BootstrapHtmlHelpers.RequiredIcon + "</sup>" : string.Empty;
                     labelTag.InnerHtml = string.Format("{0}{1}{2}", helpIconImgTag, labelText, requiredAsterisk);
                     return MvcHtmlString.Create(labelTag.ToString(TagRenderMode.Normal));
@@ -371,7 +373,8 @@ namespace LtInfo.Common.HtmlHelperExtensions
         public static string GenerateHelpIconImgTag(string labelText, HtmlString fieldDefinitionDefinition, string urlToContent, int popupWidth, DisplayStyle displayStyle)
         {
             var helpIconImgTag = new TagBuilder("span");
-            helpIconImgTag.Attributes.Add("class", "helpicon glyphicon glyphicon-question-sign");
+            var backgroundClass = displayStyle == DisplayStyle.SitsOnDarkBackground ? "helpicon-white-background" : "";
+            helpIconImgTag.Attributes.Add("class", $"helpicon glyphicon glyphicon-question-sign {backgroundClass}");
             helpIconImgTag.Attributes.Add("title", string.Format("Click to get help on {0}", labelText));
             AddHelpToolTipPopupToHtmlTag(helpIconImgTag, labelText, urlToContent, popupWidth);
             if (displayStyle == DisplayStyle.AsGridHeader)
@@ -399,5 +402,5 @@ namespace LtInfo.Common.HtmlHelperExtensions
             labelTag.SetInnerText(linkText);
             return MvcHtmlString.Create(string.Format("{0} {1}", helpIconImgTag.ToString(TagRenderMode.Normal), labelTag.ToString(TagRenderMode.Normal)));
         }
-    }    
+    }
 }

@@ -11,10 +11,12 @@ namespace Neptune.Web.Views.Shared.ModeledPerformance
         public string AboutModelingBMPPerformanceURL { get; }
         public string ModelingResultsUrl { get; }
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
+        public string InflowLabel { get; }
 
         public ModeledPerformanceViewData(Models.TreatmentBMP treatmentBMP, Person person): base(person, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
+            InflowLabel = "To BMP";
             AboutModelingBMPPerformanceURL =
                 SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.AboutModelingBMPPerformance());
 
@@ -26,6 +28,7 @@ namespace Neptune.Web.Views.Shared.ModeledPerformance
         public ModeledPerformanceViewData(Models.WaterQualityManagementPlan waterQualityManagementPlan, Person currentPerson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
+            InflowLabel = "Site Runoff";
             AboutModelingBMPPerformanceURL =
                 SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.AboutModelingBMPPerformance());
 
