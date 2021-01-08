@@ -158,9 +158,9 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">
-                        @if(!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned && ViewDataTyped.CurrentPersonCanManage)
+                        @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned && ViewDataTyped.CurrentPersonCanManage)
                         {
-                            @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> {"btn", "btn-neptune", "btn-xs"}, null, null)
+                            @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> { "btn", "btn-neptune", "btn-xs" }, null, null)
                             <span>&nbsp;&nbsp;</span>
                         }
                         @Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")
@@ -287,7 +287,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                     </td>
                                     <td class="text-right">@(ViewDataTyped.TreatmentBMP.Watershed != null ? ViewDataTyped.TreatmentBMP.Watershed.WatershedName : string.Empty)</td>
                                 </tr>
-                            @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
+                                @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                                 {
                                     case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                         <tr>
@@ -565,12 +565,12 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                         </tr>
                                         break;
                                 }
-                            <tr>
-                                <td>
-                                    @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)
-                                </td>
-                                <td class="text-right">@ViewDataTyped.DisplayDryWeatherFlowOverride()</td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)
+                                    </td>
+                                    <td class="text-right">@ViewDataTyped.DisplayDryWeatherFlowOverride()</td>
+                                </tr>
                             </tbody>
                         </table>
                     }
@@ -611,49 +611,52 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
             </div>
         }
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
-                <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
-                    {
-                        <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                    }
+        @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+        {
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
+                    <span class="pull-right">
+                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
+                        {
+                            <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                        }
 
-                </span>
-            </div>
-            <div class="panel-body">
-                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.OtherDesignAttributes))
-                {
-                    <p class="systemText">
-                        This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
-                    </p>
-                }
-                else
-                {
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th>Attribute</th>
-                                <th class="text-right">Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().SortByOrderThenName())
-                            {
+                    </span>
+                </div>
+                <div class="panel-body">
+                    @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.OtherDesignAttributes))
+                    {
+                        <p class="systemText">
+                            This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
+                        </p>
+                    }
+                    else
+                    {
+                        <table class="table table-condensed">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @(ViewDataTyped.UserIsAdmin ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
-                                        <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
-                                    </td>
-                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    <th>Attribute</th>
+                                    <th class="text-right">Value</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
+                            </thead>
+                            <tbody>
+                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().SortByOrderThenName())
+                                {
+                                    <tr>
+                                        <td>
+                                            @(ViewDataTyped.UserIsAdmin ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
+                                            <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                        </td>
+                                        <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
             </div>
-        </div>
+        }
     </div>
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -791,7 +794,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
         {
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
-                    Land Use Statistics
+                    Drainage Area Land Uses
                 </div>
                 <div class="panel-body">
                     @if ((ViewDataTyped.TreatmentBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.TreatmentBMP.Delineation.IsVerified) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified))
