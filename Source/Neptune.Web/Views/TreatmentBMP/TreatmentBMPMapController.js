@@ -142,6 +142,7 @@
 
         $scope.refreshSelectedJurisdictionsLayer = function () {
             if ($scope.selectedJurisdictionsLayerGeoJson) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.selectedJurisdictionsLayerGeoJson);
                 $scope.neptuneMap.map.removeLayer($scope.selectedJurisdictionsLayerGeoJson);
             }
 
@@ -162,10 +163,16 @@
                 });
             
             $scope.selectedJurisdictionsLayerGeoJson.addTo($scope.neptuneMap.map);
+            var legendSpan = "<span><img src='/Content/img/legendImages/jurisdiction.png' height='20px' /> Jurisdictions</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.selectedJurisdictionsLayerGeoJson, legendSpan);
         };
 
         $scope.refreshSelectedJurisdictionsLayer();
         $scope.initializeTreatmentBMPClusteredLayer();
+
+        $scope.neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+            "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", true);
+
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
