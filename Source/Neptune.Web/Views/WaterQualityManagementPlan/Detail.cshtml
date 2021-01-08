@@ -238,52 +238,57 @@
                         </div>
                     </div>
                 }
-                <hr />
-                <div class="row">
-                    <label class="col-sm-5 control-label text-right">Maintenance Contact</label>
-                    <div class="col-sm-7">
-                        <address>
-                            @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName))
-                            {
-                                <strong>@ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName</strong><br />
-                            }
-                            @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactOrganization))
-                            {
-                                <strong>@ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactOrganization</strong><br />
-                            }
-                            @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress1))
-                            {
-                                @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress1<br />
-                            }
-                            @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress2))
-                            {
-                                @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress2<br />
-                            }
-                            @{
-                                var addressParts = new List<string>
-                                                                                            {
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
-                                };
-                            }
-                            @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
-                            {
-                                @(string.Join(", ", addressParts))<br />
-                            }
-                            @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactPhone))
-                            {
-                                @Html.Raw("Phone: ")
-                                @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactPhone<br />
-                            }
-                        </address>
+                @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                {
+                    <hr/>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Maintenance Contact</label>
+                        <div class="col-sm-7">
+                            <address>
+                                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName))
+                                {
+                                    <strong>@ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName</strong>
+                                    <br/>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactOrganization))
+                                {
+                                    <strong>@ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactOrganization</strong>
+                                    <br/>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress1))
+                                {
+                                    @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress1<br/>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress2))
+                                {
+                                    @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactAddress2<br/>
+                                }
+                                @{
+                                    var addressParts = new List<string>
+                                    {
+                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
+                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
+                                        ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
+                                    };
+                                }
+                                @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
+                                {
+                                    @(string.Join(", ", addressParts))<br/>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactPhone))
+                                {
+                                    @Html.Raw("Phone: ")
+                                    @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactPhone<br/>
+                                }
+                            </address>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Modeled Performance
+                @Html.LabelWithSugarFor(FieldDefinition.ModeledPerformance)
             </div>
             <div class="panel-body">
 
@@ -416,13 +421,14 @@
                 {
                     var selected = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID;
                     var italicized = !selected ? "font-style:italic" : "";
+                    var deliberatelyHardToReadTextColor = !selected ? "color:#c7c7c7" : "";
                     var checkmark = selected ? "<span class='glyphicon glyphicon-ok-sign' style='color:green'></span>".ToHTMLFormattedString() : null;
-                    <div class="row" style="margin-bottom: 20px;@italicized">
+                    <div class="row" style="margin-bottom: 20px;@deliberatelyHardToReadTextColor">
                         <div class="col-sm-2" style="padding-right: 0; max-width: 100px">
                             @checkmark
                             <strong>@waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName</strong>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-10" style="@italicized">
                             @waterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDescription
                         </div>
                     </div>

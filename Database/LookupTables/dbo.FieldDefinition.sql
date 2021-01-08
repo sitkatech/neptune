@@ -116,4 +116,6 @@ VALUES
 (112, 'FullyParameterized', 'Fully Parameterized?', 'Indicates whether all required attributes have been provided in order to calculate model results.', 1),
 (113, 'HydromodificationApplies', 'Hydromodification Controls Apply', '', 1),
 (114, 'DelineationStatus', N'Delineation Status', N'Indicates whether the delineation is verified or not.', 1),
-(115, 'DryWeatherFlowOverride', 'Dry Weather Flow Override?', 'Indicates if the modeled values for Dry Weather Flow have been overridden', 1)
+(115, 'DryWeatherFlowOverride', 'Dry Weather Flow Override?', 'Indicates if the modeled values for Dry Weather Flow have been overridden', 1),
+(116, 'ModeledPerformance', N'Modeled Performance', N'If the Detailed modeling approach is used, then this table represents the portion of the site that drains to inventoried BMPs; If the Simplified modeling approach is used, then this table represents the inventoried parcel(s)', 1)
+
