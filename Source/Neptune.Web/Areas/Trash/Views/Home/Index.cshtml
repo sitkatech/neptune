@@ -265,7 +265,7 @@
                         <label>
                             <div>
 
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18" /> BMP (Full Trash Capture)
                                 </span>
@@ -273,7 +273,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                                 </span>
@@ -293,7 +293,7 @@
                     <div id="treatmentBMPLegendLoadBased" style="display: none;">
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18" /> BMP (Full Trash Capture)
                                 </span>
@@ -301,7 +301,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                                 </span>
@@ -322,7 +322,7 @@
                         <label>
                             <div>
 
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18" /> BMP (Full Trash Capture)
                                 </span>
@@ -330,7 +330,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                                 </span>
@@ -338,7 +338,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), noneBmpOn)" ng-model="noneBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" height="18" /> BMP (No Trash Capture)
                                 </span>
@@ -346,7 +346,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), notProvidedBmpOn)" ng-model="notProvidedBmpOn">
+                                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)])" ng-model="bmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" height="18" /> BMP (Not Provided)
                                 </span>
@@ -356,7 +356,7 @@
                     <div id="parcelLegend" style="display: none;">
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullParcelOn)" ng-model="fullParcelOn">
+                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypeOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypeOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Full.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Full Trash Capture)
                                 </span>
@@ -364,7 +364,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialParcelOn)" ng-model="partialParcelOn">
+                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Partial.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Partial Trash Capture)
                                 </span>
@@ -372,7 +372,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), noneParcelOn)" ng-model="noneParcelOn">
+                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.None.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (No Trash Capture)
                                 </span>
@@ -380,7 +380,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), notProvidedParcelOn)" ng-model="notProvidedParcelOn">
+                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.NotProvided.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Not Provided)
                                 </span>

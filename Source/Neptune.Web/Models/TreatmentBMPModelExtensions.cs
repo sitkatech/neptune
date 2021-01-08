@@ -155,6 +155,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
                 feature.Properties.Add("TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID);
                 feature.Properties.Add("TrashCaptureStatus", trashCaptureStatusType.TrashCaptureStatusTypeName);
+                feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdiction.StormwaterJurisdictionID);
                 return feature;
             }));
             return featureCollection;
