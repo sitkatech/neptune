@@ -111,7 +111,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                     FacilityType = "NoTreatment",
                     ReferenceDataKey = lspcBasinKey,
                     DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches ?? .8,
-                    EliminateAllDryWeatherFlowOverride = modelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
+                    EliminateAllDryWeatherFlowOverride = modelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
                 };
             }
             
