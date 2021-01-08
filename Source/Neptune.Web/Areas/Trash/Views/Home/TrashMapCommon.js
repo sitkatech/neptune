@@ -207,8 +207,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         resultsControl.loadAreaBasedCalculationOnLoad();
         resultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.JurisdictionsGeoJson.features);
 
-        resultsControl.registerAdditionalHandler($scope.applyJurisdictionMask);
-        resultsControl.registerAdditionalHandler($scope.initializeTreatmentBMPClusteredLayer);
+        resultsControl.registerAdditionalHandler($scope.applyJurisdictionMaskAndRefreshTreatmentBMPClusteredLayer);
 
         resultsControl.registerAdditionalHandler(function (stormwaterJurisdictionID) {
             trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
@@ -345,10 +344,6 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     }
 
     // final map init
-    //$scope.fullBmpOn = false;
-    //$scope.partialBmpOn = false;
-    //$scope.fullParcelOn = false;
-    //$scope.partialParcelOn = false;
     $scope.bmpTrashCaptureStatusTypesOn = [];
     $scope.parcelTrashCaptureStatusTypesOn = [];
     _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
