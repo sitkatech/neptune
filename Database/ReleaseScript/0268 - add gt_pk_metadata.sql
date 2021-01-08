@@ -1,4 +1,5 @@
-drop table if exists dbo.gt_pk_metada
+drop table if exists dbo.gt_pk_metadata
+go
 
 CREATE TABLE [dbo].[gt_pk_metadata](
 	[table_schema] [varchar](32) NOT NULL,
