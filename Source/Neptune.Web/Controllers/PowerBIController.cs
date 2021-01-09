@@ -196,7 +196,25 @@ namespace Neptune.Web.Controllers
         [WebServiceNameAndDescriptionAttribute("Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
         public ContentResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
-            var jobjects = HttpRequestStorage.DatabaseEntities.NereidResults.ToList()
+            var jobjects = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x=>!x.IsBaselineCondition).ToList()
+                .Select(x =>
+                {
+                    var jobject = JObject.Parse(x.FullResponse);
+                    jobject["TreatmentBMPID"] = x.TreatmentBMPID;
+                    jobject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
+                    jobject["DelineationID"] = x.DelineationID;
+                    jobject["RegionalSubbasinID"] = x.RegionalSubbasinID;
+                    return jobject;
+                }).ToList();
+
+            return Content(new JArray(jobjects).ToString());
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        [WebServiceNameAndDescriptionAttribute("Baseline Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County in the Baseline Condition.")]
+        public ContentResult BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        {
+            var jobjects = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x=>x.IsBaselineCondition).ToList()
                 .Select(x =>
                 {
                     var jobject = JObject.Parse(x.FullResponse);

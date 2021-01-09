@@ -132,6 +132,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
                 feature.Properties.Add("TrashCaptureStatusTypeID", x.TrashCaptureStatusTypeID);
+                feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdiction.StormwaterJurisdictionID);
                 return feature;
             }));
             return featureCollection;
@@ -154,6 +155,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
                 feature.Properties.Add("TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID);
                 feature.Properties.Add("TrashCaptureStatus", trashCaptureStatusType.TrashCaptureStatusTypeName);
+                feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdiction.StormwaterJurisdictionID);
                 return feature;
             }));
             return featureCollection;
@@ -189,6 +191,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("TreatmentBMPID",treatmentBMP.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID);
+                feature.Properties.Add("StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdiction.StormwaterJurisdictionID);
                 onEachFeature?.Invoke(feature, treatmentBMP);
                 return feature;
             }));
@@ -342,6 +345,34 @@ namespace Neptune.Web.Models
                         x.UpstreamBMPID = null;
                     }
                 });
+            }
+        }
+
+        public static void UpdatedCentralizedBMPDelineationIfPresent(this TreatmentBMP treatmentBMP)
+        {
+            if (treatmentBMP.Delineation == null || treatmentBMP.Delineation.DelineationTypeID != (int) DelineationTypeEnum.Centralized)
+            {
+                return;
+            }
+
+            var updated4326Geometry =
+                treatmentBMP.GetCentralizedDelineationGeometry4326(HttpRequestStorage.DatabaseEntities);
+
+            if (updated4326Geometry == null || !updated4326Geometry.SpatialEquals(treatmentBMP.Delineation.DelineationGeometry4326))
+            {
+                var oldShape = treatmentBMP.Delineation.DelineationGeometry;
+                var newShape = treatmentBMP.GetCentralizedDelineationGeometry2771(HttpRequestStorage.DatabaseEntities);
+                if (updated4326Geometry != null)
+                {
+                    treatmentBMP.Delineation.DelineationGeometry = newShape;
+                    treatmentBMP.Delineation.DelineationGeometry4326 = updated4326Geometry;
+                    treatmentBMP.Delineation.IsVerified = false;
+                    treatmentBMP.Delineation.DateLastModified = DateTime.Now;
+                }
+                else
+                {
+                    treatmentBMP.Delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
+                }
             }
         }
 

@@ -19,13 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System.Linq;
 
 namespace Neptune.Web.Views.TreatmentBMPType
 {

@@ -6,16 +6,19 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
-using HtmlDiff;
+using LtInfo.Common;
 
 namespace Neptune.Web.Common
 {
     public static class NereidUtilities
     {
         public const double GPD_TO_CFS = 0.0000015;
+        public const int BASELINE_CUTOFF_YEAR = 2002;
 
         public static Graph BuildNetworkGraph(DatabaseEntities dbContext)
         {
@@ -95,14 +98,14 @@ namespace Neptune.Web.Common
 
             if (loadGeneratingUnit.DelineationID != null &&
                 loadGeneratingUnit.DelineationIsVerified == true &&
-                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
+                loadGeneratingUnit.RelationallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
             }
 
             // Parcel Boundaries of Detailed WQMPs should not be considered
             if (loadGeneratingUnit.WaterQualityManagementPlanID != null && 
-                loadGeneratingUnit.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+                loadGeneratingUnit.SpatiallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
                 return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
                     loadGeneratingUnit.OCSurveyCatchmentID);
@@ -238,7 +241,8 @@ namespace Neptune.Web.Common
                 {
                     WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
                     RegionalSubbasinID = x.RegionalSubbasinID.Value,
-                    OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID
+                    OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID,
+                    DateOfConstruction = x.WaterQualityManagementPlan.DateOfContruction
                 }).Distinct();
         }
 
@@ -341,9 +345,26 @@ namespace Neptune.Web.Common
 
             var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
                 .Content.ReadAsStringAsync().Result;
+            NereidResult<TResp> deserializeObject = null;
+            try
+            {
+                deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+            }
+            catch (JsonReaderException jre)
+            {
+                var resultLogFile = Path.GetTempFileName();
+                System.IO.File.WriteAllText(resultLogFile,postResultContentAsStringResult);
 
-            var deserializeObject = JsonConvert.DeserializeObject<NereidResult<TResp>>(postResultContentAsStringResult);
+                var requestLogFile = Path.GetTempFileName();
+                System.IO.File.WriteAllText(requestLogFile, postResultContentAsStringResult);
 
+                throw new Exception(
+                    $"Error deserializing result from Nereid. Raw result content logged at {resultLogFile}. Raw request content logged at {requestLogFile}",
+                    jre);
+            }
+
+            // ReSharper disable once PossibleNullReferenceException
+            // will not be null because of the catch-and-rethrow above
             var executing = deserializeObject.Status == NereidJobStatus.STARTED || deserializeObject.Status == NereidJobStatus.PENDING;
             var resultRoute = deserializeObject.ResultRoute;
 
@@ -368,7 +389,7 @@ namespace Neptune.Web.Common
 
                 if (continuePollingResponse.Detail != null)
                 {
-                    throw new Exception(deserializeObject.Detail.ToString());
+                    throw new Exception(continuePollingResponse.Detail.ToString());
                 }
 
                 if (continuePollingResponse.Status != NereidJobStatus.STARTED && continuePollingResponse.Status != NereidJobStatus.PENDING)
@@ -387,17 +408,19 @@ namespace Neptune.Web.Common
         }
 
         public static IEnumerable<NereidResult> TotalNetworkSolve(out string stackTrace,
-            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient)
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient, bool isBaselineCondition)
         {
             stackTrace = "";
             missingNodeIDs = new List<string>();
 
             graph = NereidUtilities.BuildNetworkGraph(dbContext);
 
-            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false);
+            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition);
 
+            var baselineConditionSqlParam = new SqlParameter("@isBaselineCondition", isBaselineCondition);
             dbContext.Database.ExecuteSqlCommand(
-                $"EXEC dbo.pDeleteNereidResults");
+                "EXEC dbo.pDeleteNereidResults @isBaselineCondition", baselineConditionSqlParam);
+
             dbContext.NereidResults.AddRange(nereidResults);
             // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
             dbContext.Database.CommandTimeout = 600;
@@ -408,7 +431,7 @@ namespace Neptune.Web.Common
 
         public static IEnumerable<NereidResult> DeltaSolve(out string stackTrace,
             out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext,
-            HttpClient httpClient, List<DirtyModelNode> dirtyModelNodes)
+            HttpClient httpClient, List<DirtyModelNode> dirtyModelNodes, bool isBaselineCondition)
         {
             stackTrace = "";
             missingNodeIDs = new List<string>();
@@ -447,18 +470,19 @@ namespace Neptune.Web.Common
 
             var deltaSubgraph = MakeSubgraphFromParentGraphAndNodes(graph, nodesForSubgraph);
 
-            var deltaNereidResults = NetworkSolveImpl(missingNodeIDs, deltaSubgraph, dbContext, httpClient, true);
+            var deltaNereidResults = NetworkSolveImpl(missingNodeIDs, deltaSubgraph, dbContext, httpClient, true, isBaselineCondition);
 
-            var existingNereidResults = dbContext.NereidResults.Local;
-            existingNereidResults.MergeUpsert(deltaNereidResults, existingNereidResults, (old, novel) =>
+            var allNereidResults = dbContext.NereidResults.Local;
+            var scenarioNereidResults =
+                dbContext.NereidResults.Where(x => x.IsBaselineCondition == isBaselineCondition).ToList();
+
+            scenarioNereidResults.MergeUpsert(deltaNereidResults, allNereidResults, (old, novel) =>
                 old.NodeID == novel.NodeID
             , (old, novel) =>
             {
                 old.FullResponse = novel.FullResponse;
                 old.LastUpdate = novel.LastUpdate;
             });
-                
-            dbContext.DirtyModelNodes.DeleteDirtyModelNode(dirtyModelNodes);
 
             dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();
@@ -467,7 +491,7 @@ namespace Neptune.Web.Common
         }
 
         private static List<NereidResult> NetworkSolveImpl(List<string> missingNodeIDs, Graph graph, DatabaseEntities dbContext,
-            HttpClient httpClient, bool sendPreviousResults)
+            HttpClient httpClient, bool sendPreviousResults, bool isBaselineCondition)
         {
             var solutionSequenceUrl =
                 $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
@@ -477,7 +501,7 @@ namespace Neptune.Web.Common
             var allwaterQualityManagementPlanNodes =
                 NereidUtilities.GetWaterQualityManagementPlanNodes(dbContext).ToList();
             var allModelingQuickBMPs = dbContext.QuickBMPs.Include(x => x.TreatmentBMPType)
-                .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
+                .GetFullyParameterized();
 
             var solutionSequenceResult =
                 NereidUtilities.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(
@@ -489,14 +513,8 @@ namespace Neptune.Web.Common
                 var previousModelResults = dbContext.NereidResults.ToList();
                 foreach (var node in graph.Nodes)
                 {
-                    // todo: this needs to be fixed to account for the fact that there are two result nodes for wqmps.
                     var previousNodeResults = previousModelResults.SingleOrDefault(x =>
-                        //node.TreatmentBMPID == x.TreatmentBMPID &&
-                        //node.WaterQualityManagementPlan?.WaterQualityManagementPlanID ==
-                        //x.WaterQualityManagementPlanID &&
-                        //node.Delineation?.DelineationID == x.DelineationID &&
-                        //node.RegionalSubbasinID == x.RegionalSubbasinID
-                        node.ID == x.NodeID
+                        node.ID == x.NodeID && x.IsBaselineCondition == isBaselineCondition
                         )?.FullResponse;
 
                     if (previousNodeResults != null)
@@ -516,12 +534,12 @@ namespace Neptune.Web.Common
                     var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                     SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
-                        allModelingQuickBMPs, out var notFoundNodes, httpClient);
+                        allModelingQuickBMPs, out var notFoundNodes, httpClient, isBaselineCondition);
                     missingNodeIDs.AddRange(notFoundNodes);
                 }
             }
 
-            var nereidResults = graph.Nodes.Where(x => x.Results != null).Select(x => new NereidResult(x.Results.ToString())
+            var nereidResults = graph.Nodes.Where(x => x.Results != null).Select(x => new NereidResult(x.Results.ToString(), isBaselineCondition)
             {
                 TreatmentBMPID = x.TreatmentBMPID,
                 DelineationID = x.Delineation?.DelineationID,
@@ -551,7 +569,7 @@ namespace Neptune.Web.Common
         public static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph,
             List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
             List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
-            List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes, HttpClient httpClient)
+            List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes, HttpClient httpClient, bool isBaselineCondition)
         {
             notFoundNodes = new List<string>();
 
@@ -572,13 +590,13 @@ namespace Neptune.Web.Common
                 delineationToIncludeIDs.Contains(x.DelineationID.GetValueOrDefault()) ||
                 regionalSubbasinToIncludeIDs.Contains(x.RegionalSubbasinID) ||
                 waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
-            ).ToList().Select(x => new LandSurface(x)).ToList();
+            ).ToList().Select(x => new LandSurface(x, isBaselineCondition)).ToList();
 
             var treatmentFacilities = allModelingBMPs
                 .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
                             // Don't create TreatmentFacilities for BMPs belonging to a Simple WQMP
                             x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
-                .Select(x => x.ToTreatmentFacility()).ToList();
+                .Select(x => x.ToTreatmentFacility(isBaselineCondition)).ToList();
 
             var filteredQuickBMPs = allModelingQuickBMPs
                 .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&
@@ -601,7 +619,8 @@ namespace Neptune.Web.Common
                         AreaPercentage = x.bmp.PercentOfSiteTreated,
                         CapturedPercentage = x.bmp.PercentCaptured ?? 0,
                         RetainedPercentage = x.bmp.PercentRetained ?? 0,
-                        FacilityType = x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
+                        // treat wqmps built after 2003 as if they don't exist.
+                        FacilityType = (isBaselineCondition && x.node.DateOfConstruction.HasValue && x.node.DateOfConstruction.Value.Year > BASELINE_CUTOFF_YEAR ) ? "NoTreatment" : x.bmp.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
                         EliminateAllDryWeatherFlowOverride = x.bmp.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
 
                     }).ToList();
@@ -626,9 +645,9 @@ namespace Neptune.Web.Common
             NereidResult<SolutionResponseObject> results = null;
             try
             {
-                results = NereidUtilities.RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(
+                results = RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(
                     solutionRequestObject, solveUrl,
-                    out var responseContent, httpClient);
+                    out _, httpClient);
             }
             catch (Exception e)
             {
@@ -645,6 +664,8 @@ namespace Neptune.Web.Common
                     { Request = solutionRequestObject, Response = results.Data };
             }
 
+            // literally this can't be null...
+            // ReSharper disable once PossibleNullReferenceException
             var previousResultsKeys = results.Data.PreviousResultsKeys;
             foreach (var dataLeafResult in results.Data.Results)
             {
@@ -842,5 +863,6 @@ namespace Neptune.Web.Common
         public int WaterQualityManagementPlanID { get; set; }
         public int RegionalSubbasinID { get; set; }
         public int OCSurveyCatchmentID { get; set; }
+        public DateTime? DateOfConstruction { get; set; }
     }
 }

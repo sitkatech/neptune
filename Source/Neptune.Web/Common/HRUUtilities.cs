@@ -15,13 +15,13 @@ namespace Neptune.Web.Common
             List<LoadGeneratingUnit> loadGeneratingUnits, ILog logger)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
-            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "HRU_Composite");
+            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "output_fc");
 
             var hruRequest = GetGPRecordSetLayer(loadGeneratingUnits);
 
             var serializeObject = new
             {
-                Input_Polygons = JsonConvert.SerializeObject(hruRequest),
+                input_fc = JsonConvert.SerializeObject(hruRequest),
                 returnZ = false,
                 returnM = false,
                 returnTrueCurves = false,
@@ -39,7 +39,7 @@ namespace Neptune.Web.Common
 
                 newHRUCharacteristics.AddRange(
                     esriGPRecordSetLayer
-                        .Features
+                        .Features.Where(x=>x.Attributes.ImperviousAcres!= null)
                         .Select(x =>
                         {
                             var hruCharacteristic = x.ToHRUCharacteristic();
@@ -62,9 +62,10 @@ namespace Neptune.Web.Common
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
                 Features = loadGeneratingUnits.GetHRURequestFeatures().ToList(),
+                DisplayFieldName = "",
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
-                SpatialReference = new EsriSpatialReference { wkid = CoordinateSystemHelper.NAD_83_CA_ZONE_VI_SRID },
+                SpatialReference = new EsriSpatialReference { wkid = 102646, latestWkid = 2230},
                 Fields = new List<EsriField>
                 {
                     new EsriField

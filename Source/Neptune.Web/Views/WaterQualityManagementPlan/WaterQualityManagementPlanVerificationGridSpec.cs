@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web;
-using LtInfo.Common;
+﻿using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System.Collections.Generic;
+using System.Web;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class WaterQualityManagementPlanVerificationGridSpec : GridSpec<Models.WaterQualityManagementPlanVerify>
+    public class WaterQualityManagementPlanVerificationGridSpec : GridSpec<WaterQualityManagementPlanVerify>
     {
         public WaterQualityManagementPlanVerificationGridSpec(Person currentPerson)
         {
@@ -21,7 +21,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ObjectNameSingular = "Water Quality Management Plan O&M Verification";
             ObjectNamePlural = "Water Quality Management Plan O&M Verifications";
             SaveFiltersInCookie = true;
-
+            var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             if (currentUserCanManage)
             {
                 Add(string.Empty, x =>
@@ -34,12 +34,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     DhtmlxGridColumnFilterType.None);
             }
 
-            Add(string.Empty,
-                x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View",
-                    new Dictionary<string, string> {{"class", "gridButton"}}), 60,
-                DhtmlxGridColumnFilterType.None);
+            if (!isAnonymousOrUnassigned)
+            {
+                Add(string.Empty,
+                    x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View",
+                        new Dictionary<string, string> {{"class", "gridButton"}}), 60,
+                    DhtmlxGridColumnFilterType.None);
+            }
             Add("WQMP Name", x => x.WaterQualityManagementPlan.GetDisplayNameAsUrl(), 300, DhtmlxGridColumnFilterType.Text);
-            Add("Jurisdiction", x => x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
+            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.WaterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()) : x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
             Add("Verification Date", x => x.VerificationDate, 150);
             Add("Last Edited Date", x => x.LastEditedDate, 150);
             Add("Last Edited By", x => x.LastEditedByPerson.GetFullNameFirstLast(), 150, DhtmlxGridColumnFilterType.SelectFilterStrict);

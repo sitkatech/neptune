@@ -99,8 +99,19 @@ namespace Neptune.Web.Models
 
         public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
         {
-            return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-                x.LoadGeneratingUnit.WaterQualityManagementPlanID == WaterQualityManagementPlanID);
+            if (WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproach.Simplified
+                .WaterQualityManagementPlanModelingApproachID)
+            {
+                return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
+                    x.LoadGeneratingUnit.WaterQualityManagementPlanID == WaterQualityManagementPlanID);
+            }
+            else
+            {
+                var treatmentBMPIDs = TreatmentBMPs.Where(x=>x.Delineation != null).Select(x => (int?) x.Delineation.DelineationID).ToList();
+                
+                return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
+                    treatmentBMPIDs.Contains(x.LoadGeneratingUnit.DelineationID));
+            }
         }
     }
 }

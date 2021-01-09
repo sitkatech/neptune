@@ -27,6 +27,7 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPType;
@@ -44,7 +45,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPAssessmentObservationTypeController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypesList);
@@ -60,7 +61,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessmentObservationType> ObservationTypeGridJsonData()
         {
             var gridSpec = new TreatmentBMPAssessmentObservationTypeGridSpec(CurrentPerson);
@@ -69,7 +70,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
@@ -141,7 +142,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Detail(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -149,7 +150,7 @@ namespace Neptune.Web.Controllers
             var viewData = new DetailViewData(CurrentPerson, treatmentBMPAssessmentObservationType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
-        
+
         [HttpGet]
         [NeptuneAdminFeature]
         public PartialViewResult DeleteObservationType(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
@@ -184,9 +185,9 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }
-        
+
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult DiscreteDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -196,7 +197,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult RateDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -206,7 +207,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult PassFailDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -216,7 +217,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult PercentageDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;

@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
@@ -32,6 +33,7 @@ namespace Neptune.Web.Views.FundingSource
     {
         public IndexGridSpec(Person currentPerson)
         {
+            var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             var fundingSourceEditFeature = new FundingSourceEditFeature();
             if (fundingSourceEditFeature.HasPermissionByPerson(currentPerson))
             {
@@ -39,7 +41,7 @@ namespace Neptune.Web.Views.FundingSource
             }
 
             Add(Models.FieldDefinition.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.GetDisplayName()), 320, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.Organization.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.Organization.GetDetailUrl(), a.Organization.GetDisplayName()), 300);
+            Add(Models.FieldDefinition.Organization.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.Organization.GetDisplayName()) : UrlTemplate.MakeHrefString(a.Organization.GetDetailUrl(), a.Organization.GetDisplayName()), 300);
             Add(Models.FieldDefinition.OrganizationType.ToGridHeaderString(), a => a.Organization.OrganizationType?.OrganizationTypeName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", a => a.FundingSourceDescription, 300);
             Add("Is Active", a => a.IsActive.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);

@@ -23,9 +23,9 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessment contextModelObject)
         {
-            if (!HasPermissionByPerson(person))
+            if (person.IsAnonymousOrUnassigned() || person.IsAdministrator())
             {
-                return new PermissionCheckResult("Person does not have permission by role.");
+                return new PermissionCheckResult();
             }
 
             if (person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID))

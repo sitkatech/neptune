@@ -93,14 +93,17 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
     public static class TreatmentFacilityExtensions
     {
-        public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP)
+        public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition)
         {
             var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP);
             var lspcBasinKey = treatmentBMP.LSPCBasin?.LSPCBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
-            
+            double? treatmentRate = null;
+            var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
 
-            if (!isFullyParameterized)
+            // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
+            if (!isFullyParameterized || 
+                (isBaselineCondition && treatmentBMP.YearBuilt.HasValue && treatmentBMP.YearBuilt.Value > NereidUtilities.BASELINE_CUTOFF_YEAR))
             {
                 return new TreatmentFacility
                 {
@@ -108,13 +111,10 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                     FacilityType = "NoTreatment",
                     ReferenceDataKey = lspcBasinKey,
                     DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches ?? .8,
+                    EliminateAllDryWeatherFlowOverride = modelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
                 };
             }
-
-            double? treatmentRate = null;
             
-            var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
-
             // treatment rate is an alias for four different fields, so we need to pick the one that's not null
             if (modelingAttribute.InfiltrationDischargeRate != null)
             {
@@ -187,7 +187,8 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool ?? double.PositiveInfinity,
+                //convert Days to Hours for this field.
+                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool * 24 ?? double.PositiveInfinity,
                 DiversionRate = modelingAttribute.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,

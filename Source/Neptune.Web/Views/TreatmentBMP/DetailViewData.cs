@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Configuration;
 using System.Web;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -120,12 +121,13 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool IsInSOC { get; }
         public bool IsFullyParameterized { get; }
 
-        public ModeledBMPPerformanceViewData ModeledBMPPerformanceViewData { get; }
+        public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
+        public bool CurrentPersonIsAnonymousOrUnassigned { get; }
 
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
-            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl, ModeledBMPPerformanceViewData modeledBMPPerformanceViewData)
+            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl, ModeledPerformanceViewData modeledPerformanceViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
@@ -137,6 +139,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x => x.Instructions(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
+            CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
@@ -163,7 +166,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
             MapServiceUrl = mapServiceUrl;
-            ModeledBMPPerformanceViewData = modeledBMPPerformanceViewData;
+            ModeledPerformanceViewData = modeledPerformanceViewData;
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00") ?? "-";
             DelineationStatus = TreatmentBMP.GetDelineationStatus();

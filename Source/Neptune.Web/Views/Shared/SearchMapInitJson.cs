@@ -28,12 +28,14 @@ namespace Neptune.Web.Views.Shared
     public class SearchMapInitJson : MapInitJson
     {
         public readonly LayerGeoJson SearchableLayerGeoJson;
+        public readonly LayerGeoJson JurisdictionLayerGeoJson;
 
         public SearchMapInitJson(string mapDivID, LayerGeoJson searchableLayerGeoJson)
             : base(mapDivID, DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
                 BoundingBox.MakeNewDefaultBoundingBox())
         {
             SearchableLayerGeoJson = searchableLayerGeoJson;
+            JurisdictionLayerGeoJson = Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
         }
 
         public SearchMapInitJson(string mapDivID, List<LayerGeoJson> layers, LayerGeoJson searchableLayerGeoJson)

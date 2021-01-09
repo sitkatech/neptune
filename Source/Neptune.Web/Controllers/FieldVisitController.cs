@@ -44,6 +44,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DocumentFormat.OpenXml.EMMA;
+using Neptune.Web.Security.Shared;
 using Newtonsoft.Json;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
@@ -63,11 +64,17 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [FieldVisitViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<vFieldVisitDetailed> FieldVisitGridJsonData(
             TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey?.EntityObject;
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
+            // don't let anonymous/unassigned see this grid
+            if (!new TreatmentBMPViewFeature().HasPermission(CurrentPerson, treatmentBMP).HasPermission)
+            {
+                throw new SitkaRecordNotAuthorizedException("You do not have permission to view the Field Visits for this BMP.");
+            }
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP, true);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
@@ -95,12 +102,19 @@ namespace Neptune.Web.Controllers
             TreatmentBMP treatmentBMP, bool detailPage)
         {
             gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
-            var stormwaterJurisdictionIDsPersonCanView = currentPerson.GetStormwaterJurisdictionIDsPersonCanView();
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds
-                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID));
-            return (treatmentBMP != null
-                ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
-                : fieldVisits).ToList();
+
+            if (treatmentBMP != null)
+            {
+                Check.Assert(new TreatmentBMPViewFeature().HasPermission(currentPerson, treatmentBMP).HasPermission, $"User {currentPerson.PersonID} does not have permission for BMP {treatmentBMP.TreatmentBMPID}");
+                return HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds
+                    .Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
+            }
+            else
+            {
+                var stormwaterJurisdictionIDsPersonCanView = currentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+                return HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds
+                    .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            }
         }
 
         [HttpGet]

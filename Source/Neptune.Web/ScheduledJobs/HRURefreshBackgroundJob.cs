@@ -23,8 +23,8 @@ namespace Neptune.Web.ScheduledJobs
         {
             NeptuneEnvironmentType.Prod,
             NeptuneEnvironmentType.Qa,
-            NeptuneEnvironmentType.Local
         };
+
         protected override void RunJobImplementation()
         {
             HRURefreshImpl();
@@ -84,6 +84,8 @@ namespace Neptune.Web.ScheduledJobs
                     break;
                 }
             }
+
+
 
 
             ExecuteModelIfNeeded(loadGeneratingUnitsToUpdate.Any());

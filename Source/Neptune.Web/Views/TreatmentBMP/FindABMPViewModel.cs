@@ -6,5 +6,6 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public string SearchTerm { get; set; }
         public List<int> TreatmentBMPTypeIDs { get; set; }
+        public List<int> StormwaterJurisdictionIDs { get; set; }
     }
 }

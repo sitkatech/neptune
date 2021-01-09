@@ -34,6 +34,9 @@ namespace Neptune.Web.Views.Jurisdiction
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.Organization.GetDisplayName()), 400, DhtmlxGridColumnFilterType.Html);
             Add("Number of Users", x => x.StormwaterJurisdictionPeople.Count, 80);
             Add("Number of BMPs", x => x.TreatmentBMPs.Count, 80, DhtmlxGridColumnAggregationType.Total);
+            Add("Public BMP Visibility",
+                x => x.StormwaterJurisdictionPublicBMPVisibilityType
+                    .StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
             // TODO: ModeledCatchment was a hold-over from LTInfo. We could display the count of BMPs with delineations instead.
             //Add("Number of Catchments", x => x.ModeledCatchments.Count, 80, DhtmlxGridColumnAggregationType.Total);

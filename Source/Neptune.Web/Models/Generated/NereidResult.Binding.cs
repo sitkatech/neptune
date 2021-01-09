@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NereidResult(int nereidResultID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, string fullResponse, DateTime? lastUpdate) : this()
+        public NereidResult(int nereidResultID, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, string fullResponse, DateTime? lastUpdate, bool isBaselineCondition) : this()
         {
             this.NereidResultID = nereidResultID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -40,17 +40,19 @@ namespace Neptune.Web.Models
             this.NodeID = nodeID;
             this.FullResponse = fullResponse;
             this.LastUpdate = lastUpdate;
+            this.IsBaselineCondition = isBaselineCondition;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NereidResult(string fullResponse) : this()
+        public NereidResult(string fullResponse, bool isBaselineCondition) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.NereidResultID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.FullResponse = fullResponse;
+            this.IsBaselineCondition = isBaselineCondition;
         }
 
 
@@ -59,7 +61,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static NereidResult CreateNewBlank()
         {
-            return new NereidResult(default(string));
+            return new NereidResult(default(string), default(bool));
         }
 
         /// <summary>
@@ -113,6 +115,7 @@ namespace Neptune.Web.Models
         public string NodeID { get; set; }
         public string FullResponse { get; set; }
         public DateTime? LastUpdate { get; set; }
+        public bool IsBaselineCondition { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NereidResultID; } set { NereidResultID = value; } }
 

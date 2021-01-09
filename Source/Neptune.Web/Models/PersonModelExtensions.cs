@@ -158,7 +158,7 @@ namespace Neptune.Web.Models
 
         public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanViewWithContext(this Person person, DatabaseEntities dbContext)
         {
-            if (person.IsAdministrator())
+            if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
             {
                 return dbContext.StormwaterJurisdictions;
             }
@@ -173,7 +173,7 @@ namespace Neptune.Web.Models
 
         public static IEnumerable<int> GetStormwaterJurisdictionIDsPersonCanViewWithContext(this Person person, DatabaseEntities dbContext)
         {
-            if (person.IsAdministrator())
+            if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
             {
                 return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID);
             }
@@ -190,8 +190,19 @@ namespace Neptune.Web.Models
             return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
 
-        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanManage(this Person person)
+        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person)
         {
+            //These users can technically see all Jurisdictions, just potentially not the BMPs inside them
+            if (person.IsAnonymousOrUnassigned())
+            {
+                var stormwaterJurisdictionIDsAnonymousPersonCanView = person.GetStormwaterJurisdictionsPersonCanView()
+                    .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID != (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
+                    .Select(x => x.StormwaterJurisdictionID);
+                
+                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && x.InventoryIsVerified).ToList();
+                return treatmentBMPs;
+            }
+            
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return treatmentBmps;
@@ -217,6 +228,25 @@ namespace Neptune.Web.Models
             return currentPerson.IsAdministrator()
                 ? string.Empty
                 : $"StormwaterJurisdictionID NOT IN ({string.Join(",", stormwaterJurisdictionIDs)})";
+        }
+
+        public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person, WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+
+            if (person.IsAnonymousOrUnassigned())
+            {
+                switch (waterQualityManagementPlan.StormwaterJurisdiction
+                    .StormwaterJurisdictionPublicBMPVisibilityTypeID)
+                {
+                    case (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly:
+                        return waterQualityManagementPlan.TreatmentBMPs.Where(x => x.InventoryIsVerified).OrderBy(x => x.TreatmentBMPName).ToList();
+                    default:
+                        return new List<TreatmentBMP>();
+                }
+            }
+
+            return waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
         }
     }
 }

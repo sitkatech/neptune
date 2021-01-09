@@ -27,6 +27,7 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.SortOrder;
 using Neptune.Web.Views.TreatmentBMPType;
@@ -134,7 +135,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
@@ -143,7 +144,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Detail(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;

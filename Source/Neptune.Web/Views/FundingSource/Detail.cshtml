@@ -50,7 +50,16 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-5 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinition.Organization)</div>
-                    <div class="col-xs-7">@ViewDataTyped.FundingSource.Organization.GetDisplayNameAsUrl()</div>
+                    <div class="col-xs-7">
+                        @if (ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+                        {
+                            @ViewDataTyped.FundingSource.Organization.GetDisplayName()
+                        }
+                        else
+                        {
+                            @ViewDataTyped.FundingSource.Organization.GetDisplayNameAsUrl()
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-5 fieldLabel text-right">Active?</div>
@@ -78,7 +87,16 @@
                                 @foreach (var fundingEventFundingSource in ViewDataTyped.FundingSource.FundingEventFundingSources.OrderBy(x => x.FundingEvent.TreatmentBMP.TreatmentBMPName))
                                 {
                                     <tr>
-                                        <td>@Html.Raw(fundingEventFundingSource.FundingEvent.TreatmentBMP.GetDisplayNameAsUrl())</td>
+                                        <td>
+                                            @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() || fundingEventFundingSource.FundingEvent.TreatmentBMP.InventoryIsVerified)
+                                            {
+                                                @Html.Raw(fundingEventFundingSource.FundingEvent.TreatmentBMP.GetDisplayNameAsUrl())
+                                            }
+                                            else
+                                            {
+                                                @fundingEventFundingSource.FundingEvent.TreatmentBMP.TreatmentBMPName
+                                            }
+                                        </td>
                                         <th class="text-right">@fundingEventFundingSource.Amount.ToStringCurrency()</th>
                                     </tr>
                                 }

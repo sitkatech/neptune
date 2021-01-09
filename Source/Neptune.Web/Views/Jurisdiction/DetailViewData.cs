@@ -25,6 +25,9 @@ using Neptune.Web.Models;
 using Neptune.Web.Views.TreatmentBMP;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using LtInfo.Common.ModalDialog;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.Jurisdiction
 {
@@ -35,6 +38,8 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly TreatmentBMPGridSpec TreatmentBMPGridSpec;
         public readonly string TreatmentBMPGridName;
         public readonly string TreatmentBMPGridDataUrl;
+        public readonly HtmlString EditStormwaterJurisdictionLink;
+        public readonly bool UserHasJurisdictionEditPermissions;
 
         public readonly List<Person> UsersAssignedToJurisdiction;
 
@@ -46,6 +51,8 @@ namespace Neptune.Web.Views.Jurisdiction
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
             
+
+
             TreatmentBMPGridSpec = new TreatmentBMPGridSpec(currentPerson, false, false)
             {
                 ObjectNameSingular = "Treatment BMP",
@@ -55,7 +62,16 @@ namespace Neptune.Web.Views.Jurisdiction
             TreatmentBMPGridName = "jurisdictionTreatmentBMPGrid";
             TreatmentBMPGridDataUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.JurisdictionTreatmentBMPGridJsonData(stormwaterJurisdiction));
 
-            UsersAssignedToJurisdiction = StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();           
+            UsersAssignedToJurisdiction = StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();   
+            UserHasJurisdictionEditPermissions = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
+
+            EditStormwaterJurisdictionLink = UserHasJurisdictionEditPermissions
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Edit(stormwaterJurisdiction)),
+                    $"Edit Jurisdiction - {StormwaterJurisdiction.GetOrganizationDisplayName()}",
+                    true)
+                : new HtmlString(string.Empty);
         }
+
+        
     }
 }

@@ -43,6 +43,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Security.Shared;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMP.Edit;
@@ -55,21 +57,18 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult FindABMP()
         {
-            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
+            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView();
+            var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
-            var jurisdictionLayerGeoJson =
-                mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
-            jurisdictionLayerGeoJson.LayerOpacity = 0;
-            jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
             var treatmentBMPTypeSimples = treatmentBmps.GroupBy(x => x.TreatmentBMPType)
                 .Select(x => new TreatmentBMPTypeSimple(x.Key)).ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
             var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps,
-                treatmentBMPTypeSimples);
+                treatmentBMPTypeSimples, jurisdictions);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
 
@@ -77,7 +76,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanManage();
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView();
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount =
                 treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
@@ -158,6 +157,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [AnonymousUnclassifiedFeature]
         [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -180,7 +180,7 @@ namespace Neptune.Web.Controllers
 
             IHaveHRUCharacteristics entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
 
-            var modeledBMPPerformanceViewData = new ModeledBMPPerformanceViewData(treatmentBMP, CurrentPerson);
+            var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(treatmentBMP, CurrentPerson);
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
                 verifiedUnverifiedUrl,
                 new HRUCharacteristicsViewData(entityWithHRUCharacteristics,
@@ -561,7 +561,7 @@ namespace Neptune.Web.Controllers
                 viewModel);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public PartialViewResult SummaryForMap(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -569,24 +569,25 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         [HttpGet]
         public ContentResult FindByName()
         {
             return new ContentResult();
         }
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         [HttpPost]
         public JsonResult FindByName(FindABMPViewModel viewModel)
         {
             var searchString = viewModel.SearchTerm.Trim();
             var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs ?? new List<int>();
+            var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs ?? new List<int>();
             // ReSharper disable once InconsistentNaming
-            var allTreatmentBMPsMatchingSearchString =
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
-                    x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
-                         x.TreatmentBMPName.Contains(searchString)).ToList();
+            var allTreatmentBMPsMatchingSearchString = CurrentPerson.GetTreatmentBmpsPersonCanView()
+                .Where(x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
+                            stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdiction.StormwaterJurisdictionID) &&
+                            x.TreatmentBMPName.Contains(searchString)).ToList();
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
@@ -875,7 +876,7 @@ namespace Neptune.Web.Controllers
         }
 
 
-        [NeptuneViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -977,6 +978,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
             // Need to re-executed model for updated BMPs since they may have been re-parameterized
+            // can safely ignore the new BMPs since they won't have delineations yet
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, HttpRequestStorage.DatabaseEntities);
 
             var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count} records updated!";
@@ -985,11 +987,11 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [TreatmentBMPViewFeature]
+        [AnonymousUnclassifiedFeature]
         public JsonResult GetModelResults(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var entityObject = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPModelResultSimple = new TreatmentBMPModelResultSimple(entityObject);
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(treatmentBMP);
             return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
         }
 

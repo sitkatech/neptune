@@ -9,6 +9,7 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.FundingSource;
 using Neptune.Web.Views.Shared;
 using Detail = Neptune.Web.Views.FundingSource.Detail;
@@ -24,7 +25,7 @@ namespace Neptune.Web.Controllers
 {
     public class FundingSourceController : NeptuneBaseController
     {
-        [FundingSourceViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FundingSourcesList);
@@ -32,7 +33,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [FundingSourceViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<FundingSource> IndexGridJsonData()
         {
             var gridSpec = new IndexGridSpec(CurrentPerson);
@@ -111,7 +112,7 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [FundingSourceViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Detail(FundingSourcePrimaryKey fundingSourcePrimaryKey)
         {
             var fundingSource = fundingSourcePrimaryKey.EntityObject;

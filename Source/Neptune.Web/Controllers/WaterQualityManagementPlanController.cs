@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Spatial;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
+﻿using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
+using Neptune.Web.Security.Shared;
 
 namespace Neptune.Web.Controllers
 {
     public class WaterQualityManagementPlanController : NeptuneBaseController
     {
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.WaterQualityMaintenancePlan);
@@ -32,26 +31,26 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
                 .Include(x => x.WaterQualityManagementPlanVerifies)
-                .Where(x =>
-                stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
+                .ToList();
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlanVerifications = HttpRequestStorage.DatabaseEntities
-                .WaterQualityManagementPlanVerifies.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan
-                    .StormwaterJurisdictionID))
+                .WaterQualityManagementPlanVerifies
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID))
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
                 .ThenByDescending(x => x.LastEditedDate).ToList();
@@ -78,7 +77,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [AnonymousUnclassifiedFeature]
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
@@ -86,7 +85,7 @@ namespace Neptune.Web.Controllers
             var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToList();
             var parcelGeoJsonFeatureCollection = parcels.ToGeoJsonFeatureCollection();
-            var treatmentBMPs = waterQualityManagementPlan.TreatmentBMPs;
+            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlanPrimaryKey);
             var treatmentBmpGeoJsonFeatureCollection =
                 treatmentBMPs.ToGeoJsonFeatureCollection();
 
@@ -101,9 +100,9 @@ namespace Neptune.Web.Controllers
                 }
             });
 
-            var boundingBoxGeometries = new List<DbGeometry>();
-            boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
-            boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
+            //var boundingBoxGeometries = new List<DbGeometry>();
+            //boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
+            //boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
@@ -150,19 +149,19 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan,
-                waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(),
+                waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, new ParcelGridSpec(),
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 new HRUCharacteristicsViewData(waterQualityManagementPlan,
                     ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()),
-                anyLspcBasins, dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches);
+                anyLspcBasins, dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(waterQualityManagementPlan, CurrentPerson));
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
@@ -291,7 +290,6 @@ namespace Neptune.Web.Controllers
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
             var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan);
             return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
@@ -321,7 +319,6 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditWqmpBmps(WaterQualityManagementPlan waterQualityManagementPlan,
             EditWqmpBmpsViewModel viewModel)
         {
-            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
             var viewData = new EditWqmpBmpsViewData(CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditWqmpBmps, EditWqmpBmpsViewData, EditWqmpBmpsViewModel>(viewData, viewModel);
         }
@@ -332,7 +329,6 @@ namespace Neptune.Web.Controllers
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
             var viewModel = new EditSimplifiedStructuralBMPsViewModel(waterQualityManagementPlan);
             return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
         }
@@ -406,7 +402,6 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditSourceControlBMPs(WaterQualityManagementPlan waterQualityManagementPlan,
             EditSourceControlBMPsViewModel viewModel)
         {
-            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
             var viewData = new EditSourceControlBMPsViewData(CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditSourceControlBMPs, EditSourceControlBMPsViewData, EditSourceControlBMPsViewModel>(viewData, viewModel);
         }
@@ -697,11 +692,19 @@ namespace Neptune.Web.Controllers
         public ActionResult EditModelingApproach(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditModelingApproachViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            
             if (!ModelState.IsValid)
             {
                 return ViewEditModelingApproach(viewModel);
             }
             viewModel.UpdateModel(waterQualityManagementPlan);
+
+            if (waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlan.WaterQualityManagementPlanBoundary, null);
+                NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+            }
+
             SetMessageForDisplay($"Modeling Approach successfully changed for {waterQualityManagementPlan.WaterQualityManagementPlanName}.");
             return new ModalDialogFormJsonResult();
         }
@@ -710,6 +713,14 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new EditModelingApproachViewData(WaterQualityManagementPlanModelingApproach.All);
             return RazorPartialView<EditModelingApproach, EditModelingApproachViewData, EditModelingApproachViewModel>(viewData, viewModel);
+        }
+
+        [AnonymousUnclassifiedFeature]
+        public JsonResult GetModelResults(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var modeledPerformanceResultSimple = new ModeledPerformanceResultSimple(waterQualityManagementPlan);
+            return Json(modeledPerformanceResultSimple, JsonRequestBehavior.AllowGet);
         }
     }
 }

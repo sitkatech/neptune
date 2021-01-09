@@ -11,6 +11,8 @@ CREATE TABLE [dbo].[HRUCharacteristic](
 	[Area] [float] NOT NULL,
 	[HRUCharacteristicLandUseCodeID] [int] NOT NULL,
 	[LoadGeneratingUnitID] [int] NOT NULL,
+	[BaselineImperviousAcres] [float] NOT NULL,
+	[BaselineHRUCharacteristicLandUseCodeID] [int] NOT NULL,
  CONSTRAINT [PK_HRUCharacteristic_HRUCharacteristicID] PRIMARY KEY CLUSTERED 
 (
 	[HRUCharacteristicID] ASC
@@ -22,6 +24,11 @@ ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharact
 REFERENCES [dbo].[HRUCharacteristicLandUseCode] ([HRUCharacteristicLandUseCodeID])
 GO
 ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeID]
+GO
+ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_HRUCharacteristicLandUseCodeID] FOREIGN KEY([BaselineHRUCharacteristicLandUseCodeID])
+REFERENCES [dbo].[HRUCharacteristicLandUseCode] ([HRUCharacteristicLandUseCodeID])
+GO
+ALTER TABLE [dbo].[HRUCharacteristic] CHECK CONSTRAINT [FK_HRUCharacteristic_HRUCharacteristicLandUseCodeID]
 GO
 ALTER TABLE [dbo].[HRUCharacteristic]  WITH CHECK ADD  CONSTRAINT [FK_HRUCharacteristic_LoadGeneratingUnit_LoadGeneratingUnitID] FOREIGN KEY([LoadGeneratingUnitID])
 REFERENCES [dbo].[LoadGeneratingUnit] ([LoadGeneratingUnitID])

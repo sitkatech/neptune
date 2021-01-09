@@ -22,7 +22,7 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, OnlandVisualTrashAssessmentArea contextModelObject)
         {
-            return new OnlandVisualTrashAssessmentAreaViewFeature().HasPermission(person, contextModelObject);
+            return new OnlandVisualTrashAssessmentAreaEditFeature().HasPermission(person, contextModelObject);
         }
     }
 }

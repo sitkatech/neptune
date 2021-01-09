@@ -22,6 +22,19 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)
         {
+            if (person.IsAnonymousOrUnassigned() &&
+                contextModelObject.StormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
+                (int) StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
+            {
+                return new PermissionCheckResult($"You don't have permission to view BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+            }
+
+            // verified BMPs are available for unassigned/anonymous users and therefore all users
+            if (contextModelObject.InventoryIsVerified)
+            {
+                return new PermissionCheckResult();
+            }
+
             var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
             if (!isAssignedToTreatmentBMP)
             {

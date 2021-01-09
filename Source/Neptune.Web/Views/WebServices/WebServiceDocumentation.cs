@@ -126,6 +126,11 @@ namespace Neptune.Web.Views.WebServices
                         c.ModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
                         c.ModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                ),
+                new SampleRouteEntry(MethodNameFromExpression(c =>
+                        c.BaselineModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                    new SitkaRoute<PowerBIController>(c =>
+                        c.BaselineModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
                 )
             };
             return webServiceRouteMap;

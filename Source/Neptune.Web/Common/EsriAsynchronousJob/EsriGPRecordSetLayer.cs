@@ -18,5 +18,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         public EsriSpatialReference SpatialReference { get; set; }
         [JsonProperty("features")]
         public List<T> Features { get; set; }
+        [JsonProperty("displayFieldName")]
+        public string DisplayFieldName { get; set; }
     }
 }

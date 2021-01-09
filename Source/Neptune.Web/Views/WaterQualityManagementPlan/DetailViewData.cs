@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
+using Neptune.Web.Views.Shared.ModeledPerformance;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -51,15 +52,22 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool AnyLSPCBasins { get; }
 
+        public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
+
+        public bool AnyDetailedBMPsNotFullyParameterized { get; }
+        public bool AllDetailedBMPsNotFullyParameterized { get; }
+        public bool UsesDetailedModelingApproach { get; }
+
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
+            List<Models.TreatmentBMP> treatmentBMPs,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
             HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins,
             List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
-            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches)
+            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -115,7 +123,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBmPs;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
 
-            TreatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
+            TreatmentBMPs = treatmentBMPs;
             QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs
                 .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
@@ -135,6 +143,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 : WaterQualityManagementPlan.TrashCaptureEffectiveness + "%";
 
             WaterQualityManagementPlanModelingApproaches = waterQualityManagementPlanModelingApproaches;
+            ModeledPerformanceViewData = modeledPerformanceViewData;
 
             FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
@@ -142,11 +151,35 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForFullyParameterized = Models.FieldDefinition.FullyParameterized;
             FieldDefinitionForDelineationStatus = Models.FieldDefinition.DelineationStatus;
             FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
-
-
-
+            
             AnyLSPCBasins = anyLspcBasins;
+
+            UsesDetailedModelingApproach = WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
+                                           WaterQualityManagementPlanModelingApproach.Detailed
+                                               .WaterQualityManagementPlanModelingApproachID;
+
+            if (UsesDetailedModelingApproach)
+            {
+                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !(x.IsFullyParameterized() && (x.Delineation?.IsVerified ?? false)));
+                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !(x.IsFullyParameterized() && (x.Delineation?.IsVerified ?? false)));
+                // this is redundant but I just want to make this perfectly clear.
+                AnySimpleBMPsNotFullyParameterized = false;
+                AllSimpleBMPsNotFullyParameterized = false;
+            }
+            else
+            {
+                AnySimpleBMPsNotFullyParameterized = QuickBMPs.Any(x => !x.IsFullyParameterized());
+                AllSimpleBMPsNotFullyParameterized = QuickBMPs.All(x => !x.IsFullyParameterized());
+                // this is redundant but I just want to make this perfectly clear.
+                AnyDetailedBMPsNotFullyParameterized = false;
+                    AllDetailedBMPsNotFullyParameterized = false;
+            }
         }
+
+        public bool AllSimpleBMPsNotFullyParameterized { get; set; }
+
+        public bool AnySimpleBMPsNotFullyParameterized { get; set; }
+
 
         public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
         {

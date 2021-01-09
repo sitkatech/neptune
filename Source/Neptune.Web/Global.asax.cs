@@ -60,6 +60,7 @@ namespace Neptune.Web
                 "~/Views/Shared/Location/{0}.cshtml",
                 "~/Views/Shared/UserJurisdictions/{0}.cshtml",
                 "~/Views/Shared/HRUCharacteristics/{0}.cshtml",
+                "~/Views/Shared/ModeledPerformance/{0}.cshtml",
                 "~/Views/FieldVisit/ObservationTypePreview/{0}.cshtml",
 
             } };

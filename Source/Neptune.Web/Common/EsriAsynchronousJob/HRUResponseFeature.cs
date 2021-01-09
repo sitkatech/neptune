@@ -16,10 +16,15 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         public HRUCharacteristic ToHRUCharacteristic()
         {
             var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.HRUCharacteristicLandUseCodeName == Attributes.LSPCLandUseDescription);
+            var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.HRUCharacteristicLandUseCodeName == Attributes.BaselineLandUseDescription);
 
-            var hruCharacteristic = new HRUCharacteristic(Attributes.HydrologicSoilGroup, Attributes.SlopePercentage,
-                Attributes.ImperviousAcres, DateTime.Now, Attributes.Area / CoordinateSystemHelper.SquareFeetToAcresDivisor,
-                hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID, Attributes.QueryFeatureID);
+            var hruCharacteristic = new HRUCharacteristic(Attributes.HydrologicSoilGroup, Attributes.SlopePercentage.GetValueOrDefault(),
+                Attributes.ImperviousAcres.GetValueOrDefault(), DateTime.Now,
+                Attributes.Acres.GetValueOrDefault(),
+                hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID, Attributes.QueryFeatureID,
+                Attributes.BaselineImperviousAcres.GetValueOrDefault(),
+                baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID);
+                
             return hruCharacteristic;
         }
     }

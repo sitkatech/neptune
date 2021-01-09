@@ -7,6 +7,10 @@
             return m.TreatmentBMPTypeID;
         });
 
+        $scope.selectedJurisdictionIDs = _.map($scope.AngularViewData.Jurisdictions, function (m) {
+            return m.StormwaterJurisdictionID;
+        });
+
         $scope.visibleBMPIDs = [];
         $scope.activeTreatmentBMP = {};
 
@@ -38,7 +42,8 @@
                                     url: url,
                                     data: {
                                         SearchTerm: query,
-                                        TreatmentBMPTypeIDs: $scope.selectedTreatmentBMPTypeIDs
+                                        TreatmentBMPTypeIDs: $scope.selectedTreatmentBMPTypeIDs,
+                                        StormwaterJurisdictionIDs: $scope.selectedJurisdictionIDs
                                     },
                                     type: "POST",
                                     success: onSuccess,
@@ -79,7 +84,9 @@
                 {
                     filter: function (feature, layer) {
                         return _.includes($scope.selectedTreatmentBMPTypeIDs,
-                            feature.properties.TreatmentBMPTypeID.toString());
+                            feature.properties.TreatmentBMPTypeID.toString()) &&
+                            _.includes($scope.selectedJurisdictionIDs,
+                            feature.properties.StormwaterJurisdictionID.toString());
                     },
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
@@ -133,7 +140,39 @@
             $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, legendSpan);
         };
 
+        $scope.refreshSelectedJurisdictionsLayer = function () {
+            if ($scope.selectedJurisdictionsLayerGeoJson) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.selectedJurisdictionsLayerGeoJson);
+                $scope.neptuneMap.map.removeLayer($scope.selectedJurisdictionsLayerGeoJson);
+            }
+
+            $scope.selectedJurisdictionsLayerGeoJson = L.geoJson(
+                $scope.AngularViewData.MapInitJson.JurisdictionLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+                        return _.includes($scope.selectedJurisdictionIDs,
+                                feature.properties.StormwaterJurisdictionID.toString());
+                    },
+                    style: function (feature) {
+                        return {
+                            color: $scope.AngularViewData.MapInitJson.JurisdictionLayerGeoJson.LayerColor,
+                            weight: 2,
+                            fillOpacity: 0 
+                        };
+                    }
+                });
+            
+            $scope.selectedJurisdictionsLayerGeoJson.addTo($scope.neptuneMap.map);
+            var legendSpan = "<span><img src='/Content/img/legendImages/jurisdiction.png' height='20px' /> Jurisdictions</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.selectedJurisdictionsLayerGeoJson, legendSpan);
+        };
+
+        $scope.refreshSelectedJurisdictionsLayer();
         $scope.initializeTreatmentBMPClusteredLayer();
+
+        $scope.neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+            "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", true);
+
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
@@ -189,6 +228,11 @@
         };
 
         $scope.filterMapByBmpType = function () {
+            $scope.initializeTreatmentBMPClusteredLayer();
+        };
+
+        $scope.filterMapByJurisdiction = function () {
+            $scope.refreshSelectedJurisdictionsLayer();
             $scope.initializeTreatmentBMPClusteredLayer();
         };
 

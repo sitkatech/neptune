@@ -31,10 +31,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public Models.TreatmentBMPType TreatmentBMPType { get; }
         public bool UserHasTreatmentBMPTypeManagePermissions { get; }
         public string ObservationTypeSortOrderUrl { get; set; }
+        public bool CurrentPersonIsAnonymousOrUnassigned { get; set; }
 
         public DetailViewData(Person currentPerson,
             Models.TreatmentBMPType treatmentBMPType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             TreatmentBMPType = treatmentBMPType;
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             PageTitle = treatmentBMPType.TreatmentBMPTypeName;
