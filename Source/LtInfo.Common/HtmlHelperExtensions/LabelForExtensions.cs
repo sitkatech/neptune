@@ -374,7 +374,7 @@ namespace LtInfo.Common.HtmlHelperExtensions
         {
             var helpIconImgTag = new TagBuilder("span");
             var backgroundClass = displayStyle == DisplayStyle.SitsOnDarkBackground ? "helpicon-white-background" : "";
-            helpIconImgTag.Attributes.Add("class", $"helpicon glyphicon glyphicon-question-sign {backgroundClass}");
+            helpIconImgTag.Attributes.Add("class", $"helpicon glyphicon glyphicon-question-sign {backgroundClass}".Trim());
             helpIconImgTag.Attributes.Add("title", string.Format("Click to get help on {0}", labelText));
             AddHelpToolTipPopupToHtmlTag(helpIconImgTag, labelText, urlToContent, popupWidth);
             if (displayStyle == DisplayStyle.AsGridHeader)
