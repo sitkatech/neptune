@@ -20,8 +20,8 @@ namespace Neptune.Web.Controllers
             var maintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords
                 .Include(x => x.FieldVisit)
                 .Include(x => x.FieldVisit.PerformedByPerson)
-                .Include(x => x.FieldVisit.PerformedByPerson.Organization)
                 .Include(x => x.TreatmentBMP)
+                .Include(x => x.TreatmentBMP.StormwaterJurisdiction)
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.MaintenanceRecordObservations)
                 .Include(x => x.MaintenanceRecordObservations.Select(y => y.MaintenanceRecordObservationValues))
