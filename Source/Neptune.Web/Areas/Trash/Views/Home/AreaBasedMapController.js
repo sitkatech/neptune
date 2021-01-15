@@ -37,7 +37,7 @@
 
             var latlng = event.latlng;
             $scope.neptuneMap.getFeatureInfo(layerName, [latlng.lng, latlng.lat]).then(function (response) {
-                if (response.features.length == 0) {
+                if (response.features == null || response.features == undefined || response.features.length == 0) {
                     return;
                 }
 
@@ -60,9 +60,21 @@
             var WQMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.WQMPUrlTemplate).ParameterReplace(properties.WaterQualityManagementPlanID);
 
             var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
-            var ovtaScore = "<strong>Governing OVTA Score:   </strong>";
+            var ovtaScore = "";
+
+            ovtaScore = "<strong>Governing OVTA Score:   </strong>";
             if (properties.AssessmentScore != "NotProvided") {
-                ovtaScore += "<a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.AssessmentScore + "</a><br>";
+                if (!$scope.AngularViewData.CurrentUserIsAnonymousOrUnassigned) {
+                    ovtaScore += "<a href='" +
+                        OVTAADetailUrl +
+                        "' target='_blank'>" +
+                        properties.AssessmentScore +
+                        "</a><br>";
+                } else {
+                    ovtaScore +=
+                        properties.AssessmentScore +
+                        "<br>";
+                }
             } else {
                 ovtaScore += "--<br>";
             }
@@ -87,7 +99,7 @@
             } else {
                 lastCalculatedDate += "--";
             }
-            
+
 
             return landUseType + ovtaScore + BMPName + WQMPName + stormwaterJurisdictionName + lastCalculatedDate;
         }

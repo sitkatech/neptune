@@ -580,14 +580,14 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         public JsonResult FindByName(FindABMPViewModel viewModel)
         {
-            var searchString = viewModel.SearchTerm.Trim();
+            var searchString = viewModel.SearchTerm.Trim().ToLower();
             var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs ?? new List<int>();
             var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs ?? new List<int>();
             // ReSharper disable once InconsistentNaming
             var allTreatmentBMPsMatchingSearchString = CurrentPerson.GetTreatmentBmpsPersonCanView()
                 .Where(x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
                             stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdiction.StormwaterJurisdictionID) &&
-                            x.TreatmentBMPName.Contains(searchString)).ToList();
+                            x.TreatmentBMPName.ToLower().Contains(searchString)).ToList();
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
