@@ -195,6 +195,15 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     $scope.applyJurisdictionMaskAndRefreshTreatmentBMPClusteredLayer = function (stormwaterJurisdictionID) {
         $scope.applyJurisdictionMask(stormwaterJurisdictionID);
         $scope.initializeTreatmentBMPClusteredLayer(stormwaterJurisdictionID);
+
+        if ($scope.filterBMPsByTrashCaptureStatusType !== null &&
+            $scope.filterBMPsByTrashCaptureStatusType !== undefined) {
+            _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
+                function (tcs) {
+                    $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, $scope.bmpTrashCaptureStatusTypesOn[tcs.TrashCaptureStatusTypeID], true);
+                });
+            $scope.rebuildMarkerClusterGroup();
+        }
     }
 
     // initialize results control
@@ -322,12 +331,6 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         $scope.neptuneMap.map.invalidateSize(false);
 
         $scope.applyJurisdictionMaskAndRefreshTreatmentBMPClusteredLayer(mapState.stormwaterJurisdictionID);
-
-        _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-            function (tcs) {
-                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, $scope.bmpTrashCaptureStatusTypesOn[tcs.TrashCaptureStatusTypeID], true);
-            });
-        $scope.rebuildMarkerClusterGroup();
 
         if (resultsControl) {
             resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);

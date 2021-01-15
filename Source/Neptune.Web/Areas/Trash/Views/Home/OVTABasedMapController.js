@@ -97,6 +97,19 @@
             setActiveImpl(layer, true);
         };
 
+        function setActiveImpl(layer, updateMap) {
+            if (updateMap) {
+                if (layer.getLatLng) {
+                    $scope.neptuneMap.map.panTo(layer.getLatLng());
+                } else {
+                    $scope.neptuneMap.map.panTo(layer.getCenter());
+                }
+            }
+
+            // multi-way binding
+            $scope.setSelectedMarker(layer);
+        }
+
         $scope.filterParcelsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
 
             // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
@@ -145,8 +158,19 @@
                             return o.properties.OnlandVisualTrashAssessmentAreaID ==
                                 properties.OnlandVisualTrashAssessmentAreaID;
                         });
-                        var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
-                        content += "<strong>Assessment Area:   </strong><a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.OnlandVisualTrashAssessmentAreaName + "</a><br/>";
+                        content += "<strong>Assessment Area:   </strong>"
+                        if (!$scope.AngularViewData.CurrentUserIsAnonymousOrUnassigned) {
+                            var OVTAADetailUrl =
+                                new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(
+                                    properties.OnlandVisualTrashAssessmentAreaID);
+                            content += "<a href='" +
+                                OVTAADetailUrl +
+                                "' target='_blank'>" +
+                                properties.OnlandVisualTrashAssessmentAreaName +
+                                "</a><br/>";
+                        } else {
+                            content += properties.OnlandVisualTrashAssessmentAreaName + "<br/>";
+                        }
                         for (var j = 0; j < filteredOVTAs.length; j++) {
                             content += createPopupContent(filteredOVTAs[j].properties);
                         }
@@ -176,11 +200,13 @@
             if (properties.Score != null && properties.CompletedDate != null) {
                 var date = new Date(properties.CompletedDate);
                 var lastCalculatedDate = "&nbsp;&nbsp;";
-                if (properties.CompletedDate != null) {
-                    lastCalculatedDate = "<a href='" + OVTADetailUrl + "' target='_blank'>" +
-                        date.toLocaleDateString() + "</a>, ";
-                } else {
-                    lastCalculatedDate = "Not Assessed";
+                if (!$scope.AngularViewData.CurrentUserIsAnonymousOrUnassigned) {
+                    if (properties.CompletedDate != null) {
+                        lastCalculatedDate = "<a href='" + OVTADetailUrl + "' target='_blank'>" +
+                            date.toLocaleDateString() + "</a>, ";
+                    } else {
+                        lastCalculatedDate = "Not Assessed";
+                    }
                 }
 
                 var type = "<strong>Type: </strong>";

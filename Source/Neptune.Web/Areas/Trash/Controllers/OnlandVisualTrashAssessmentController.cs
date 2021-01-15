@@ -27,8 +27,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class OnlandVisualTrashAssessmentController : NeptuneBaseController
     {
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [NeptuneViewFeature]
         public ViewResult Detail(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
@@ -48,7 +47,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
+        [NeptuneViewFeature]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson,
@@ -56,7 +55,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [AnonymousUnclassifiedFeature]
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
@@ -75,7 +74,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(onlandVisualTrashAssessments, gridSpec);
         }
 
-        [AnonymousUnclassifiedFeature]
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreaGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
@@ -92,7 +91,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea>(onlandVisualTrashAssessmentAreas, gridSpec);
         }
 
-        [AnonymousUnclassifiedFeature]
+        [NeptuneViewFeature]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonDataForAreaDetails(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
