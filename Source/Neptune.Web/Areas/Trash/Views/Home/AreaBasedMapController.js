@@ -61,13 +61,22 @@
 
             var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
             var ovtaScore = "";
-            if (!$scope.AngularViewData.CurrentUserIsAnonymousOrUnassigned) {
-                ovtaScore = "<strong>Governing OVTA Score:   </strong>";
-                if (properties.AssessmentScore != "NotProvided") {
-                    ovtaScore += "<a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.AssessmentScore + "</a><br>";
+
+            ovtaScore = "<strong>Governing OVTA Score:   </strong>";
+            if (properties.AssessmentScore != "NotProvided") {
+                if (!$scope.AngularViewData.CurrentUserIsAnonymousOrUnassigned) {
+                    ovtaScore += "<a href='" +
+                        OVTAADetailUrl +
+                        "' target='_blank'>" +
+                        properties.AssessmentScore +
+                        "</a><br>";
                 } else {
-                    ovtaScore += "--<br>";
+                    ovtaScore +=
+                        properties.AssessmentScore +
+                        "<br>";
                 }
+            } else {
+                ovtaScore += "--<br>";
             }
             var BMPName = "<strong>Governing BMP:   </strong>";
             if (properties.TreatmentBMPID) {
@@ -90,7 +99,7 @@
             } else {
                 lastCalculatedDate += "--";
             }
-            
+
 
             return landUseType + ovtaScore + BMPName + WQMPName + stormwaterJurisdictionName + lastCalculatedDate;
         }
