@@ -24,7 +24,8 @@ namespace Neptune.Web.Controllers
                     x.TreatmentBMPID,
                     x.TreatmentBMPName,
                     x.TreatmentBMPType.TreatmentBMPTypeName,
-                    FullyParameterized = x.IsFullyParameterized() ? "Yes" : "No"
+                    FullyParameterized = x.IsFullyParameterized() ? "Yes" : "No",
+                    IsReadyForMovedling = x.IsFullyParameterized() && x.HasVerifiedDelineationForModelingPurposes() ? "Yes" : "No"
                 });
 
             return new JsonResult()
