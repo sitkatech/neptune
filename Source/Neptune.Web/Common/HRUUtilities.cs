@@ -30,8 +30,8 @@ namespace Neptune.Web.Common
 
             var newHRUCharacteristics = new List<HRUCharacteristic>();
 
-            //try
-            //{
+            try
+            {
                 var esriGPRecordSetLayer = esriAsynchronousJobRunner
                 .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
                     // ReSharper disable once UnusedVariable
@@ -46,13 +46,12 @@ namespace Neptune.Web.Common
                             return hruCharacteristic;
                         }));
 
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    //logger.Warn(ex.Message, ex);
-            //    //logger.Warn($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
-            //}
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex.Message, ex);
+                logger.Warn($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
+            }
 
             return newHRUCharacteristics;
         }
