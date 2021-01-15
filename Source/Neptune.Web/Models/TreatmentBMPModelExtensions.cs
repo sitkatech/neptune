@@ -376,12 +376,21 @@ namespace Neptune.Web.Models
             }
         }
 
+        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP)
+        {
+            if (treatmentBMP.UpstreamBMP != null)
+            {
+                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes();
+            }
+
+            return treatmentBMP.Delineation?.IsVerified ?? false;
+        }
+
         public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
         {
-
-            if (treatmentBMP.Delineation == null && treatmentBMP.UpstreamBMP?.Delineation == null)
+            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes())
             {
-                return false; 
+                return false;
             }
 
             if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType == null)

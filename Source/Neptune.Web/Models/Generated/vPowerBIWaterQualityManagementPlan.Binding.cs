@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBIWaterQualityManagementPlan(int primaryKey, int waterQualityManagementPlanID, string waterQualityManagementPlanName, string organizationName, string waterQualityManagementPlanStatusDisplayName, string waterQualityManagementPlanDevelopmentTypeDisplayName, string waterQualityManagementPlanLandUseDisplayName, string waterQualityManagementPlanPermitTermDisplayName, int? approvalDate, int? dateOfConstruction, string hydromodificationAppliesDisplayName, string hydrologicSubareaName, decimal? recordedWQMPAreaInAcres, string trashCaptureStatusTypeDisplayName, int? trashCaptureEffectiveness) : this()
+        public vPowerBIWaterQualityManagementPlan(int primaryKey, int waterQualityManagementPlanID, string waterQualityManagementPlanName, string organizationName, string waterQualityManagementPlanStatusDisplayName, string waterQualityManagementPlanDevelopmentTypeDisplayName, string waterQualityManagementPlanLandUseDisplayName, string waterQualityManagementPlanPermitTermDisplayName, int? approvalDate, int? dateOfConstruction, string hydromodificationAppliesDisplayName, string hydrologicSubareaName, decimal? recordedWQMPAreaInAcres, string trashCaptureStatusTypeDisplayName, int? trashCaptureEffectiveness, string modelingApproach) : this()
         {
             this.PrimaryKey = primaryKey;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -42,6 +42,7 @@ namespace Neptune.Web.Models
             this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
             this.TrashCaptureStatusTypeDisplayName = trashCaptureStatusTypeDisplayName;
             this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
+            this.ModelingApproach = modelingApproach;
         }
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace Neptune.Web.Models
             this.RecordedWQMPAreaInAcres = vPowerBIWaterQualityManagementPlan.RecordedWQMPAreaInAcres;
             this.TrashCaptureStatusTypeDisplayName = vPowerBIWaterQualityManagementPlan.TrashCaptureStatusTypeDisplayName;
             this.TrashCaptureEffectiveness = vPowerBIWaterQualityManagementPlan.TrashCaptureEffectiveness;
+            this.ModelingApproach = vPowerBIWaterQualityManagementPlan.ModelingApproach;
             CallAfterConstructor(vPowerBIWaterQualityManagementPlan);
         }
 
@@ -84,5 +86,6 @@ namespace Neptune.Web.Models
         public decimal? RecordedWQMPAreaInAcres { get; set; }
         public string TrashCaptureStatusTypeDisplayName { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
+        public string ModelingApproach { get; set; }
     }
 }

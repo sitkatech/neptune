@@ -18,8 +18,8 @@ hydromod.HydromodificationAppliesDisplayName,
 hydrosub.HydrologicSubareaName,
 wqmp.RecordedWQMPAreaInAcres,
 trash.TrashCaptureStatusTypeDisplayName,
-wqmp.TrashCaptureEffectiveness
-
+wqmp.TrashCaptureEffectiveness,
+wqmpma.WaterQualityManagementPlanModelingApproachName as ModelingApproach
  from
 dbo.WaterQualityManagementPlan wqmp
 join dbo.StormwaterJurisdiction sj on wqmp.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
@@ -30,4 +30,5 @@ join dbo.WaterQualityManagementPlanLandUse land on wqmp.WaterQualityManagementPl
 left join dbo.WaterQualityManagementPlanPermitTerm term on wqmp.WaterQualityManagementPlanPermitTermID = term.WaterQualityManagementPlanPermitTermID
 left join dbo.HydromodificationApplies hydromod on wqmp.HydromodificationAppliesID = hydromod.HydromodificationAppliesID
 left join dbo.HydrologicSubarea hydrosub on wqmp.HydrologicSubareaID = hydrosub.HydrologicSubareaID
+left join dbo.WaterQualityManagementPlanModelingApproach wqmpma on wqmp.WaterQualityManagementPlanModelingApproachID = wqmpma.WaterQualityManagementPlanModelingApproachID
 join dbo.TrashCaptureStatusType trash on wqmp.TrashCaptureStatusTypeID = trash.TrashCaptureStatusTypeID

@@ -114,7 +114,6 @@ namespace Neptune.Web.Controllers
                                                 "capabilities are planned to include treatment accounted for in the Other Structural Facility interface.")]
         public JsonResult WaterQualityManagementPlanAttributeSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
-            // this to-list ought to be okay
             var data = HttpRequestStorage.DatabaseEntities.vPowerBIWaterQualityManagementPlans.ToList().Select(x => new
             {
                 x.WaterQualityManagementPlanID,
@@ -130,7 +129,8 @@ namespace Neptune.Web.Controllers
                 HydrologicSubarea = x.HydrologicSubareaName,
                 x.RecordedWQMPAreaInAcres,
                 TrashCaptureStatus = x.TrashCaptureStatusTypeDisplayName,
-                x.TrashCaptureEffectiveness
+                x.TrashCaptureEffectiveness,
+                x.ModelingApproach
             });
 
             return Json(data, JsonRequestBehavior.AllowGet);

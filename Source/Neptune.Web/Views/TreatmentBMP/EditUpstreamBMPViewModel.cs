@@ -34,6 +34,28 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             if (HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Any(x=>x.UpstreamBMPID == UpstreamBMPID))
                 yield return new ValidationResult("The BMP is already set as the Upstream BMP for another BMP");
+
+            if (IsClosedLoop())
+                yield return new ValidationResult("The choice of Upstream BMP would create a closed loop.");
+        }
+
+        private bool IsClosedLoop()
+        {
+            var upstreamBMPChoice = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Find(UpstreamBMPID);
+
+            var nextUpstream = upstreamBMPChoice.UpstreamBMP;
+
+            while (nextUpstream != null)
+            {
+                if (nextUpstream.UpstreamBMPID == UpstreamBMPID)
+                {
+                    return true;
+                }
+
+                nextUpstream = nextUpstream.UpstreamBMP;
+            }
+
+            return false;
         }
     }
 }
