@@ -8,6 +8,9 @@ GO
 Create Procedure dbo.pUpdateRegionalSubbasinIntersectionCache 
 As
 
+update dbo.RegionalSubbasin
+set IsInLSPCBasin = 0
+
 -- Cache whether overlaps with an LSPC basin
 update rsb
 set IsInLSPCBasin = 1
@@ -18,6 +21,23 @@ from dbo.RegionalSubbasin rsb
 update dbo.RegionalSubbasin 
 set IsInLSPCBasin = 0
 where IsInLSPCBasin is null
+
+-- store a reference to the largest intersecting LSPC basin per RSB
+Update rsb
+set rsb.LSPCBasinID = sub.LSPCBasinID
+from dbo.RegionalSubbasin rsb join
+(
+	select *, ROW_NUMBER() over (partition by RegionalSubbasinID order by IntersectArea desc) as RowNumber from
+	(
+		select 
+			RegionalSubbasinID,
+			lspc.LSPCBasinID,
+			rsb.CatchmentGeometry.STIntersection(LSPCBasinGeometry).STArea() as IntersectArea
+		from dbo.RegionalSubbasin rsb
+			inner join dbo.LSPCBasin lspc on rsb.CatchmentGeometry.STIntersects(LSPCBasinGeometry) = 1
+	) sub
+) sub on rsb.RegionalSubbasinID = sub.RegionalSubbasinID
+where sub.RowNumber = 1
 
 -- cache the containing RSB on BMP
 update tbmp

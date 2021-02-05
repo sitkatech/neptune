@@ -30,8 +30,8 @@ namespace Neptune.Web.ScheduledJobs
         // only runs in prod to avoid hitting OC Survey with multiple concurrent identical requests
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Prod,
-            //NeptuneEnvironmentType.Qa
+            //NeptuneEnvironmentType.Prod,
+            NeptuneEnvironmentType.Qa
         };
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person, bool queueLguRefresh)
@@ -107,9 +107,11 @@ namespace Neptune.Web.ScheduledJobs
             {
                 watershed.WatershedGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(watershed.WatershedGeometry);
             }
-            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pTreatmentBMPUpdateWatershed");
-
             dbContext.SaveChanges(person);
+            
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pTreatmentBMPUpdateWatershed");
+            dbContext.Database.CommandTimeout = 30000;
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
         }
 
         private static void ThrowIfDownstreamInvalid(DatabaseEntities dbContext)

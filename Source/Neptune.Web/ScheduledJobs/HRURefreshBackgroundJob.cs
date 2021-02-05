@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using Neptune.Web.Models;
 using Exception = System.Exception;
 
 namespace Neptune.Web.ScheduledJobs
@@ -23,6 +24,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             NeptuneEnvironmentType.Prod,
             NeptuneEnvironmentType.Qa,
+            NeptuneEnvironmentType.Local
         };
 
         protected override void RunJobImplementation()
@@ -41,7 +43,18 @@ namespace Neptune.Web.ScheduledJobs
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdate = DbContext.LoadGeneratingUnits.Where(x => !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null || x.IsEmptyResponseFromHRUService == true)).ToList();
+            var loadGeneratingUnitsToUpdate = GetLoadGeneratingUnitsToUpdate(DbContext).ToList();
+
+            if (!loadGeneratingUnitsToUpdate.Any())
+            {
+                var lgusWithEmptyResponseCount = DbContext.LoadGeneratingUnits.Count(x=>x.IsEmptyResponseFromHRUService == true);
+                if (lgusWithEmptyResponseCount > 100)
+                {
+                    DbContext.LoadGeneratingUnits.Where(x=>x.IsEmptyResponseFromHRUService == true).ForEach(x=> x.IsEmptyResponseFromHRUService = false);
+                    DbContext.SaveChangesWithNoAuditing();
+                    loadGeneratingUnitsToUpdate = GetLoadGeneratingUnitsToUpdate(DbContext).ToList();
+                }
+            }
 
             var loadGeneratingUnitsToUpdateGroupedByLSPCBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.LSPCBasin);
 
@@ -61,7 +74,9 @@ namespace Neptune.Web.ScheduledJobs
                             foreach (var loadGeneratingUnit in batch)
                             {
                                 loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
+
                             }
+                            Logger.Warn($"No data for LGUs with these IDs: {string.Join(", ", batch.Select(x => x.LoadGeneratingUnitID.ToString()))}");
                         }
 
                         DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics);
@@ -85,9 +100,6 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
 
-
-
-
             ExecuteModelIfNeeded(loadGeneratingUnitsToUpdate.Any());
 
             stopwatch.Stop();
@@ -107,9 +119,7 @@ namespace Neptune.Web.ScheduledJobs
 
                 // don't die if it takes longer than 30 seconds for this next query to come back
                 DbContext.Database.CommandTimeout = 600;
-                var loadGeneratingUnitsMissingHrus = DbContext.LoadGeneratingUnits.Any(x =>
-                    !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
-                      x.IsEmptyResponseFromHRUService == true));
+                var loadGeneratingUnitsMissingHrus = GetLoadGeneratingUnitsToUpdate(DbContext).Any();
 
                 if (!loadGeneratingUnitsMissingHrus)
                 {
@@ -135,6 +145,15 @@ namespace Neptune.Web.ScheduledJobs
                     BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
                 }
             }
+        }
+
+        private IQueryable<LoadGeneratingUnit> GetLoadGeneratingUnitsToUpdate(DatabaseEntities dbContext)
+        {
+            return dbContext.LoadGeneratingUnits.Where(x =>
+                x.RegionalSubbasin != null &&
+                x.LSPCBasinID == x.RegionalSubbasin.LSPCBasinID.Value &&
+                !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
+                  x.IsEmptyResponseFromHRUService == true));
         }
     }
 }

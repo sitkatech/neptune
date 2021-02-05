@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected LSPCBasin()
         {
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.RegionalSubbasins = new HashSet<RegionalSubbasin>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -69,7 +70,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return LoadGeneratingUnits.Any() || TreatmentBMPs.Any();
+            return LoadGeneratingUnits.Any() || RegionalSubbasins.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -84,6 +85,11 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
             }
 
+            if(RegionalSubbasins.Any())
+            {
+                dependentObjects.Add(typeof(RegionalSubbasin).Name);
+            }
+
             if(TreatmentBMPs.Any())
             {
                 dependentObjects.Add(typeof(TreatmentBMP).Name);
@@ -94,7 +100,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(RegionalSubbasin).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -124,6 +130,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in RegionalSubbasins.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in TreatmentBMPs.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -140,6 +151,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return LSPCBasinID; } set { LSPCBasinID = value; } }
 
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<RegionalSubbasin> RegionalSubbasins { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
 
         public static class FieldLengths

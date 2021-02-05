@@ -25,9 +25,11 @@ namespace Neptune.Web.Models
             Property(x => x.LastUpdate).HasColumnName(@"LastUpdate").HasColumnType("datetime").IsOptional();
             Property(x => x.IsWaitingForLGURefresh).HasColumnName(@"IsWaitingForLGURefresh").HasColumnType("bit").IsOptional();
             Property(x => x.IsInLSPCBasin).HasColumnName(@"IsInLSPCBasin").HasColumnType("bit").IsOptional();
+            Property(x => x.LSPCBasinID).HasColumnName(@"LSPCBasinID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasOptional(a => a.OCSurveyDownstreamCatchment).WithMany(b => b.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment).HasForeignKey(c => c.OCSurveyDownstreamCatchmentID).WillCascadeOnDelete(false); // FK_RegionalSubbasin_RegionalSubbasin_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID
+            HasOptional(a => a.LSPCBasin).WithMany(b => b.RegionalSubbasins).HasForeignKey(c => c.LSPCBasinID).WillCascadeOnDelete(false); // FK_RegionalSubbasin_LSPCBasin_LSPCBasinID
         }
     }
 }

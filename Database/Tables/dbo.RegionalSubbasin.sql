@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[RegionalSubbasin](
 	[LastUpdate] [datetime] NULL,
 	[IsWaitingForLGURefresh] [bit] NULL,
 	[IsInLSPCBasin] [bit] NULL,
+	[LSPCBasinID] [int] NULL,
  CONSTRAINT [PK_RegionalSubbasin_RegionalSubbasinID] PRIMARY KEY CLUSTERED 
 (
 	[RegionalSubbasinID] ASC
@@ -28,6 +29,11 @@ CREATE NONCLUSTERED INDEX [IX_RegionalSubbasin_OCSurveyDownstreamCatchmentID] ON
 (
 	[OCSurveyDownstreamCatchmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[RegionalSubbasin]  WITH CHECK ADD  CONSTRAINT [FK_RegionalSubbasin_LSPCBasin_LSPCBasinID] FOREIGN KEY([LSPCBasinID])
+REFERENCES [dbo].[LSPCBasin] ([LSPCBasinID])
+GO
+ALTER TABLE [dbo].[RegionalSubbasin] CHECK CONSTRAINT [FK_RegionalSubbasin_LSPCBasin_LSPCBasinID]
 GO
 ALTER TABLE [dbo].[RegionalSubbasin]  WITH CHECK ADD  CONSTRAINT [FK_RegionalSubbasin_RegionalSubbasin_OCSurveyDownstreamCatchmentID_OCSurveyCatchmentID] FOREIGN KEY([OCSurveyDownstreamCatchmentID])
 REFERENCES [dbo].[RegionalSubbasin] ([OCSurveyCatchmentID])
