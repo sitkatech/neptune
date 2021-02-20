@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
         public static HtmlString GetDisplayNameAsUrl(this RegionalSubbasin regionalSubbasin)
         {
 
-            return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID)}'>{regionalSubbasin.Watershed} - {regionalSubbasin.DrainID}</a>"); 
+            return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID)}'>{regionalSubbasin.Watershed} - {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}</a>"); 
         }
 
         public static List<int> TraceUpstreamCatchmentsReturnIDList(this RegionalSubbasin regionalSubbasin,

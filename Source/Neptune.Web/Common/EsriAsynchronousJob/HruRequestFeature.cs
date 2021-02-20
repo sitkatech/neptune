@@ -19,22 +19,22 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
         public HRURequestFeature(DbGeometry catchmentGeometry, HRURequestFeatureAttributes baseAttributes, int i)
         {
-            var coordinates = new List<double[]>();
             var rings = new List<List<double[]>>();
+            var catchmentGeometryExteriorRing = catchmentGeometry.ExteriorRing;
 
-            for (var j = 1; j <= catchmentGeometry.ExteriorRing.PointCount; j++)
-            {
-                var point = catchmentGeometry.ExteriorRing.PointAt(j);
-                var lon = point.XCoordinate.GetValueOrDefault();
-                var lat = point.YCoordinate.GetValueOrDefault();
-
-                coordinates.Add(new[] { lon, lat });
-            }
+            var exteriorRingCoordinates = GetRingCoordinates(catchmentGeometryExteriorRing);
 
             // need to account for interior rings
             // need to skip geometries with exterior rings I guess
 
-            rings.Add(coordinates);
+            rings.Add(exteriorRingCoordinates);
+
+            for (var j = 1; j <= catchmentGeometry.InteriorRingCount; j++)
+            {
+                var interiorRing = catchmentGeometry.InteriorRingAt(j);
+                var interiorRingCoordinates = GetRingCoordinates(interiorRing);
+                rings.Add(interiorRingCoordinates);
+            }
 
             Geometry = new EsriPolygonGeometry
             {
@@ -48,6 +48,21 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 Area = baseAttributes.Area,
                 Length = baseAttributes.Length
             };
+        }
+
+        private static List<double[]> GetRingCoordinates(DbGeometry catchmentGeometryExteriorRing)
+        {
+            var coordinates = new List<double[]>();
+            for (var j = 1; j <= catchmentGeometryExteriorRing.PointCount; j++)
+            {
+                var point = catchmentGeometryExteriorRing.PointAt(j);
+                var lon = point.XCoordinate.GetValueOrDefault();
+                var lat = point.YCoordinate.GetValueOrDefault();
+
+                coordinates.Add(new[] {lon, lat});
+            }
+
+            return coordinates;
         }
     }
 
