@@ -543,6 +543,7 @@
     <Compile Include="Models\ModelResultsDisplayHelper.cs" />
     <Compile Include="Models\QuickBMPModelExtensions.cs" />
     <Compile Include="Models\RegionalSubbasinRevisionRequest.cs" />
+    <Compile Include="Models\TreatmentBMPDetailed.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaEditFeature.cs" />

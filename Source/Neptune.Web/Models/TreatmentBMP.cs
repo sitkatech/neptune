@@ -113,6 +113,20 @@ namespace Neptune.Web.Models
             return string.Empty;
         }
 
+        public string GetCustomAttributeValue(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
+        {
+            if (CustomAttributes.Any())
+            {
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
+                    x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
+                if (customAttribute != null)
+                {
+                    return string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
+                }
+            }
+            return string.Empty;
+        }
+
         public DateTime? LastMaintainedDateTime()
         {
             if (!MaintenanceRecords.Any())
