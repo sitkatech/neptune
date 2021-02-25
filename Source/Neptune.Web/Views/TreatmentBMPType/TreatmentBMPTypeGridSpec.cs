@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         }
     }
 
-    public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<Models.TreatmentBMPDetailed>
+    public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<Models.vTreatmentBMPDetailedWithTreatmentBMPEntity>
     {
         public TreatmentBMPsInTreatmentBMPTypeGridSpec(Person currentPerson, bool showDelete, bool showEdit,
             Models.TreatmentBMPType treatmentBMPType)

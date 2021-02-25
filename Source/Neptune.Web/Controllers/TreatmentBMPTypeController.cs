@@ -153,7 +153,7 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPDetailed> TreatmentBMPsInTreatmentBMPTypeGridJsonData(TreatmentBMPTypePrimaryKey treatmentBmpTypePrimaryKey)
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity> TreatmentBMPsInTreatmentBMPTypeGridJsonData(TreatmentBMPTypePrimaryKey treatmentBmpTypePrimaryKey)
         {
             var treatmentBmpType = treatmentBmpTypePrimaryKey.EntityObject;
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
@@ -167,9 +167,9 @@ namespace Neptune.Web.Controllers
                     .Join(HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds,
                         x => x.TreatmentBMPID,
                         y => y.TreatmentBMPID,
-                        (x,y) => new TreatmentBMPDetailed(x, y))
+                        (x,y) => new vTreatmentBMPDetailedWithTreatmentBMPEntity(x, y))
                     .ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPDetailed>(treatmentBMPs, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
