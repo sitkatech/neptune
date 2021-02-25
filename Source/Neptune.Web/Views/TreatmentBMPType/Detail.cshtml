@@ -23,11 +23,16 @@
 @using LtInfo.Common
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Security
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.TreatmentBMPType.Detail
 @section JavascriptAndStylesContent
 {
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+
 }
 
 @section RightOfPageTitle
@@ -59,6 +64,16 @@
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
+                Treatment BMPs In This Treatment BMP Type
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:500px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
                 Applicable Observation Types
                 @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Any())
                 {
@@ -78,25 +93,25 @@
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
                             </tr>
                             <tbody>
-                            @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName())
-                            {
-                                <tr>
-                                    <td class="text-left">
-                                        @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
-                                        {
-                                            @TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()
-                                        }
-                                        else
-                                        {
-                                            @TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
-                                        }
-                                    </td>
-                                    <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
-                                    <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
-                                    <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
-                                    <td class="text-right">@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.Value.ToStringShortPercent() : "pass/fail")</td>
-                                </tr>
-                            }
+                                @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName())
+                                {
+                                    <tr>
+                                        <td class="text-left">
+                                            @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                                            {
+                                                @TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()
+                                            }
+                                            else
+                                            {
+                                                @TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
+                                            }
+                                        </td>
+                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
+                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                        <td class="text-right">@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.Value.ToStringShortPercent() : "pass/fail")</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -108,63 +123,63 @@
     @foreach (var purpose in CustomAttributeTypePurpose.All)
     {
         <div class="col-xs-12 col-sm-12">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                @purpose.CustomAttributeTypePurposeDisplayName
-                @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID))
-                {
-                    <span class="pull-right">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.AttributeTypeSortOrderUrl(purpose.CustomAttributeTypePurposeID), ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</span>
-                }
-            </div>
-            <div class="panel-body">
-                <div class="row"></div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        @{
-                            var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID).ToList();
-                        }
-                        @if (treatmentBMPTypeCustomAttributeTypes.Any())
-                        {
-                            <table class="table">
-                                <tr>
-                                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
-                                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
-                                    <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
-                                    <th class="text-right">@Html.Label("Required?")</th>
-                                    <th class="text-right">@Html.Label("Description")</th>
-                                </tr>
-                                <tbody>
-                                    @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes.SortByOrderThenName())
-                                    {
-                                        <tr>
-                                            
-                                            <td class="text-left">
-                                                @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
-                                                {
-                                                    @treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()
-                                                }
-                                                else
-                                                {
-                                                    @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
-                                                }
-                                            </td>
-                                            <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</td>
-                                            <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.GetMeasurementUnitDisplayName()</td>
-                                            <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.IsRequired.ToYesNo()</td>
-                                            <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <p class="systemText">No @(purpose.CustomAttributeTypePurposeDisplayName) are defined for this BMP Type.</p>
-                        }
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    @purpose.CustomAttributeTypePurposeDisplayName
+                    @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID))
+                    {
+                        <span class="pull-right">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.AttributeTypeSortOrderUrl(purpose.CustomAttributeTypePurposeID), ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</span>
+                    }
+                </div>
+                <div class="panel-body">
+                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            @{
+                                var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID).ToList();
+                            }
+                            @if (treatmentBMPTypeCustomAttributeTypes.Any())
+                            {
+                                <table class="table">
+                                    <tr>
+                                        <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
+                                        <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
+                                        <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
+                                        <th class="text-right">@Html.Label("Required?")</th>
+                                        <th class="text-right">@Html.Label("Description")</th>
+                                    </tr>
+                                    <tbody>
+                                        @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes.SortByOrderThenName())
+                                        {
+                                            <tr>
+
+                                                <td class="text-left">
+                                                    @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                                                    {
+                                                        @treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()
+                                                    }
+                                                    else
+                                                    {
+                                                        @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
+                                                    }
+                                                </td>
+                                                <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</td>
+                                                <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.GetMeasurementUnitDisplayName()</td>
+                                                <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.IsRequired.ToYesNo()</td>
+                                                <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <p class="systemText">No @(purpose.CustomAttributeTypePurposeDisplayName) are defined for this BMP Type.</p>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     }
 </div>

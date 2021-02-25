@@ -144,7 +144,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [AnonymousUnclassifiedFeature]
+        [NeptuneViewFeature]
         public ViewResult Detail(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
@@ -152,6 +152,26 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity> TreatmentBMPsInTreatmentBMPTypeGridJsonData(TreatmentBMPTypePrimaryKey treatmentBmpTypePrimaryKey)
+        {
+            var treatmentBmpType = treatmentBmpTypePrimaryKey.EntityObject;
+            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
+            var gridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(CurrentPerson, showDelete, showEdit, treatmentBmpType);
+            var treatmentBMPs = 
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                    .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID) && x.TreatmentBMPTypeID == treatmentBmpType.TreatmentBMPTypeID)
+                    .ToList()
+                    .Join(HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds,
+                        x => x.TreatmentBMPID,
+                        y => y.TreatmentBMPID,
+                        (x,y) => new vTreatmentBMPDetailedWithTreatmentBMPEntity(x, y))
+                    .ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity>(treatmentBMPs, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
 
         [HttpGet]
         [NeptuneAdminFeature]
