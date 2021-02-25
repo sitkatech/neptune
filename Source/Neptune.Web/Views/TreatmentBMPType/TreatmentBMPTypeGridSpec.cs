@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
@@ -128,6 +129,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
                     ? new HtmlString("<p class='systemText'>No Delineation Provided</p>")
                     : new HtmlString(x.vTreatmentBmpDetailed.DelineationTypeDisplayName), 130,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+
             foreach (var purpose in CustomAttributeTypePurpose.All)
             {
                 var attributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
@@ -141,9 +143,37 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
                 foreach (var customAttributeType in attributes.SortByOrderThenName())
                 {
-                    Add(customAttributeType.GetDisplayNameWithUnits(),
-                        x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
-                        DhtmlxGridColumnFilterType.Text);
+                    switch (customAttributeType.CustomAttributeType.CustomAttributeDataTypeID)
+                    {
+                        case (int)CustomAttributeDataTypeEnum.Decimal:
+                            Add(customAttributeType.GetDisplayNameWithUnits(),
+                                x => Decimal.TryParse(x.TreatmentBMP.GetCustomAttributeValue(customAttributeType),  out var decimalResult) ? decimalResult : (Decimal?)null , 130,
+                                DhtmlxGridColumnFormatType.Decimal);
+                            break;
+                        case (int)CustomAttributeDataTypeEnum.Integer:
+                            Add(customAttributeType.GetDisplayNameWithUnits(),
+                                x => Int32.TryParse(x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), out var intResult) ? intResult : (Int32?)null, 130);
+                            break;
+                        case (int)CustomAttributeDataTypeEnum.DateTime:
+                            Add(customAttributeType.GetDisplayNameWithUnits(),
+                                x => DateTime.TryParse(x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), out var dateResult) ? dateResult : (DateTime?)null, 130);
+                            break;
+                        case (int)CustomAttributeDataTypeEnum.MultiSelect:
+                            Add(customAttributeType.GetDisplayNameWithUnits(),
+                                x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                                DhtmlxGridColumnFilterType.SelectFilterStrict);
+                            break;
+                        case (int)CustomAttributeDataTypeEnum.PickFromList:
+                            Add(customAttributeType.GetDisplayNameWithUnits(),
+                                x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                                DhtmlxGridColumnFilterType.SelectFilterStrict);
+                            break;
+                        case (int)CustomAttributeDataTypeEnum.String:
+                            Add(customAttributeType.GetDisplayNameWithUnits(),
+                                x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                                DhtmlxGridColumnFilterType.Text);
+                            break;
+                    }
                 }
             }
             
