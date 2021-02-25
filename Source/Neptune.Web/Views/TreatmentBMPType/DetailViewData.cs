@@ -32,6 +32,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public bool UserHasTreatmentBMPTypeManagePermissions { get; }
         public string ObservationTypeSortOrderUrl { get; set; }
         public bool CurrentPersonIsAnonymousOrUnassigned { get; set; }
+        public TreatmentBMPsInTreatmentBMPTypeGridSpec GridSpec { get; }
+        public string GridName { get; }
+        public string GridDataUrl { get; }
 
         public DetailViewData(Person currentPerson,
             Models.TreatmentBMPType treatmentBMPType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
@@ -40,6 +43,11 @@ namespace Neptune.Web.Views.TreatmentBMPType
             TreatmentBMPType = treatmentBMPType;
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             PageTitle = treatmentBMPType.TreatmentBMPTypeName;
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            GridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(currentPerson, showDelete, showEdit, treatmentBMPType) { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
+            GridName = "treatmentBMPsGrid";
+            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(j => j.TreatmentBMPsInTreatmentBMPTypeGridJsonData(treatmentBMPType));
 
             UserHasTreatmentBMPTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 

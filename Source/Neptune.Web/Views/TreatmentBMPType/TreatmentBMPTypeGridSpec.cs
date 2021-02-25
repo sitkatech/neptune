@@ -28,6 +28,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System.Linq;
 using System.Web;
+using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Views.TreatmentBMPType
 {
@@ -127,12 +128,25 @@ namespace Neptune.Web.Views.TreatmentBMPType
                     ? new HtmlString("<p class='systemText'>No Delineation Provided</p>")
                     : new HtmlString(x.vTreatmentBmpDetailed.DelineationTypeDisplayName), 130,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            foreach (var customAttributeType in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
+            foreach (var purpose in CustomAttributeTypePurpose.All)
             {
-                Add(customAttributeType.GetDisplayName(),
-                    x => x.TreatmentBMP.GetCustomAttributeValueWithUnits(customAttributeType), 130,
-                    DhtmlxGridColumnFilterType.Text);
+                var attributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID ==
+                    purpose.CustomAttributeTypePurposeID).ToList();
+
+                if (!attributes.Any())
+                {
+                    continue;
+                }
+
+                foreach (var customAttributeType in attributes.SortByOrderThenName())
+                {
+                    Add(customAttributeType.GetDisplayNameWithUnits(),
+                        x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                        DhtmlxGridColumnFilterType.Text);
+                }
             }
+            
 
             if (!treatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
             {
@@ -140,23 +154,23 @@ namespace Neptune.Web.Views.TreatmentBMPType
             }
 
             Add(Models.FieldDefinition.Watershed.ToGridHeaderString(),
-                x => x.TreatmentBMP.Watershed.WatershedName, 20);
+                x => x.TreatmentBMP.Watershed?.WatershedName, 100);
             switch (treatmentBMPType.TreatmentBMPModelingType.ToEnum)
             {
                 case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation, 100);
                     Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.MediaBedFootprint, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MediaBedFootprint, 100);
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DesignMediaFiltrationRate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignMediaFiltrationRate, 100);
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup
-                            .UnderlyingHydrologicSoilGroupDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
+                            .UnderlyingHydrologicSoilGroupDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
                 case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
@@ -164,111 +178,111 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 case TreatmentBMPModelingTypeEnum.PermeablePavement:
                 case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.InfiltrationSurfaceArea.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.InfiltrationSurfaceArea, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.InfiltrationSurfaceArea, 100);
                     Add(Models.FieldDefinition.UnderlyingInfiltrationRate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingInfiltrationRate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingInfiltrationRate, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                 case TreatmentBMPModelingTypeEnum.SandFilters:
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.MediaBedFootprint, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MediaBedFootprint, 100);
                     Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DesignMediaFiltrationRate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignMediaFiltrationRate, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.WinterHarvestedWaterDemand, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WinterHarvestedWaterDemand, 100);
                     Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.SummerHarvestedWaterDemand, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.SummerHarvestedWaterDemand, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                 case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                     Add(Models.FieldDefinition.PermanentPoolOrWetlandVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.PermanentPoolorWetlandVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.PermanentPoolorWetlandVolume, 100);
                     Add(Models.FieldDefinition.DesignResidenceTimeForPermanentPool.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignResidenceTimeforPermanentPool, 100);
                     Add(Models.FieldDefinition.WaterQualityDetentionVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.WaterQualityDetentionVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WaterQualityDetentionVolume, 100);
                     Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume, 100);
                     Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.WinterHarvestedWaterDemand, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WinterHarvestedWaterDemand, 100);
                     Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.SummerHarvestedWaterDemand, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.SummerHarvestedWaterDemand, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation, 100);
                     Add(Models.FieldDefinition.EffectiveFootprint.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.EffectiveFootprint, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.EffectiveFootprint, 100);
                     Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume, 100);
                     Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup
-                            .UnderlyingHydrologicSoilGroupDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
+                            .UnderlyingHydrologicSoilGroupDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                     Add(Models.FieldDefinition.DesignDryWeatherTreatmentCapacity.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignDryWeatherTreatmentCapacity, 100);
                     Add(Models.FieldDefinition.AverageTreatmentFlowrate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.AverageTreatmentFlowrate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.AverageTreatmentFlowrate, 100);
                     Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.MonthsOfOperation
-                            .MonthsOfOperationDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MonthsOfOperation?
+                            .MonthsOfOperationDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.Drywell:
                     Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TotalEffectiveBMPVolume, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.InfiltrationDischargeRate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.InfiltrationDischargeRate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.InfiltrationDischargeRate, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
                 case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
                 case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
                     Add(Models.FieldDefinition.TreatmentRate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TreatmentRate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TreatmentRate, 100);
                     Add(Models.FieldDefinition.TimeOfConcentration.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration
-                            .TimeOfConcentrationDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TimeOfConcentration?
+                            .TimeOfConcentrationDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
                     Add(Models.FieldDefinition.DesignLowFlowDiversionCapacity.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignLowFlowDiversionCapacity, 100);
                     Add(Models.FieldDefinition.AverageDivertedFlowrate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.AverageDivertedFlowrate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.AverageDivertedFlowrate, 100);
                     Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.MonthsOfOperation
-                            .MonthsOfOperationDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MonthsOfOperation?
+                            .MonthsOfOperationDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                 case TreatmentBMPModelingTypeEnum.VegetatedSwale:
                     Add(Models.FieldDefinition.TimeOfConcentration.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TimeOfConcentration
-                            .TimeOfConcentrationDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TimeOfConcentration?
+                            .TimeOfConcentrationDisplayName, 100);
                     Add(Models.FieldDefinition.TreatmentRate.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.TreatmentRate, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TreatmentRate, 100);
                     Add(Models.FieldDefinition.WettedFootprint.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.WettedFootprint, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WettedFootprint, 100);
                     Add(Models.FieldDefinition.EffectiveRetentionDepth.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.EffectiveRetentionDepth, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.EffectiveRetentionDepth, 100);
                     Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup
-                            .UnderlyingHydrologicSoilGroupDisplayName, 20);
+                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
+                            .UnderlyingHydrologicSoilGroupDisplayName, 100);
                     break;
             }
 
             Add(Models.FieldDefinition.DryWeatherFlowOverride.ToGridHeaderString(),
-                x => x.TreatmentBMP.TreatmentBMPModelingAttribute.DryWeatherFlowOverride.DryWeatherFlowOverrideDisplayName, 20);
+                x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName, 100);
         }
     }
 }

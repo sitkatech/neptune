@@ -117,7 +117,7 @@ namespace Neptune.Web.Models
         {
             if (CustomAttributes.Any())
             {
-                var customAttribute = CustomAttributes.SingleOrDefault(x =>
+                var customAttribute = CustomAttributes.FirstOrDefault(x =>
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
