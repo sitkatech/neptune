@@ -92,6 +92,10 @@ namespace Neptune.Web.Views.TreatmentBMPType
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"),
                 x => x.vTreatmentBmpDetailed.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Year Built", x => x.TreatmentBMP.YearBuilt, 100, DhtmlxGridColumnFormatType.Date);
+            Add("ID in System of Record", x => x.TreatmentBMP.SystemOfRecordID, 100);
+            Add("Water Quality Management Plan", x => x.TreatmentBMP.WaterQualityManagementPlanID.HasValue ? 
+                x.TreatmentBMP.WaterQualityManagementPlan.GetDisplayNameAsUrl():
+                "<p></p>".ToHTMLFormattedString(), 170);
             Add("Notes", x => x.TreatmentBMP.Notes, 195);
             Add("Last Assessment Date", x => x.vTreatmentBmpDetailed.LatestAssessmentDate, 130);
             Add("Last Assessed Score",
@@ -132,6 +136,11 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
             foreach (var purpose in CustomAttributeTypePurpose.All)
             {
+                if (purpose == CustomAttributeTypePurpose.Maintenance)
+                {
+                    continue;
+                }
+
                 var attributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
                     x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID ==
                     purpose.CustomAttributeTypePurposeID).ToList();
@@ -194,10 +203,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation, 100);
                     Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString(),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MediaBedFootprint, 100);
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString(),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignMediaFiltrationRate, 100);
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
                     Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
                             .UnderlyingHydrologicSoilGroupDisplayName, 100);

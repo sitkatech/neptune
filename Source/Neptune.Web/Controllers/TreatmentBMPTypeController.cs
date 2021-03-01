@@ -162,6 +162,9 @@ namespace Neptune.Web.Controllers
             var gridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(CurrentPerson, showDelete, showEdit, treatmentBmpType);
             var treatmentBMPs = 
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                    .Include(x => x.WaterQualityManagementPlan)
+                    .Include(x => x.CustomAttributes)
+                    .Include(x => x.CustomAttributes.Select(y => y.CustomAttributeValues))
                     .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID) && x.TreatmentBMPTypeID == treatmentBmpType.TreatmentBMPTypeID)
                     .ToList()
                     .Join(HttpRequestStorage.DatabaseEntities.vTreatmentBMPDetaileds,
