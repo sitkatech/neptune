@@ -197,15 +197,15 @@ namespace Neptune.Web.Views.TreatmentBMPType
             switch (treatmentBMPType.TreatmentBMPModelingType.ToEnum)
             {
                 case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString("Total Effective BMP Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
-                    Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString("Storage Volume Below Lowest Outlet Elevation (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation, 100);
-                    Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString("Media Bed Footprint (sq ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MediaBedFootprint, 100);
-                    Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString("Design Media Filtration Rate (in/hr)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignMediaFiltrationRate, 100);
-                    Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
                             .UnderlyingHydrologicSoilGroupDisplayName, 100);
                     break;
@@ -214,111 +214,111 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
                 case TreatmentBMPModelingTypeEnum.PermeablePavement:
                 case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString("Total Effective BMP Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
-                    Add(Models.FieldDefinition.InfiltrationSurfaceArea.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.InfiltrationSurfaceArea.ToGridHeaderString("Infiltration Surface Area (sq ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.InfiltrationSurfaceArea, 100);
-                    Add(Models.FieldDefinition.UnderlyingInfiltrationRate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.UnderlyingInfiltrationRate.ToGridHeaderString("Underlying Infiltration Rate (in/hr)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingInfiltrationRate, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
                 case TreatmentBMPModelingTypeEnum.SandFilters:
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString("Total Effective BMP Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
-                    Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.MediaBedFootprint.ToGridHeaderString("Media Bed Footprint (sq ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MediaBedFootprint, 100);
-                    Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DesignMediaFiltrationRate.ToGridHeaderString("Design Media Filtration Rate (in/hr)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignMediaFiltrationRate, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString("Total Effective BMP Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
-                    Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WinterHarvestedWaterDemand, 100);
-                    Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString("Summer Harvested Water Demand (gpd)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.SummerHarvestedWaterDemand, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                 case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                    Add(Models.FieldDefinition.PermanentPoolOrWetlandVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.PermanentPoolOrWetlandVolume.ToGridHeaderString("Permanent Pool Or Wetland Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.PermanentPoolorWetlandVolume, 100);
-                    Add(Models.FieldDefinition.DesignResidenceTimeForPermanentPool.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DesignResidenceTimeForPermanentPool.ToGridHeaderString("Design Residence Time for Permanent Pool (days)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignResidenceTimeforPermanentPool, 100);
-                    Add(Models.FieldDefinition.WaterQualityDetentionVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.WaterQualityDetentionVolume.ToGridHeaderString("Water Quality Detention Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WaterQualityDetentionVolume, 100);
-                    Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume, 100);
-                    Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WinterHarvestedWaterDemand, 100);
-                    Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.SummerHarvestedWaterDemand.ToGridHeaderString("Summer Harvested Water Demand (gpd)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.SummerHarvestedWaterDemand, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString("Total Effective BMP Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
-                    Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation.ToGridHeaderString("Storage Volume Below Lowest Outlet Elevation (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation, 100);
-                    Add(Models.FieldDefinition.EffectiveFootprint.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.EffectiveFootprint.ToGridHeaderString("Effective Footprint (sq ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.EffectiveFootprint, 100);
-                    Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume, 100);
-                    Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
                             .UnderlyingHydrologicSoilGroupDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
-                    Add(Models.FieldDefinition.DesignDryWeatherTreatmentCapacity.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DesignDryWeatherTreatmentCapacity.ToGridHeaderString("Design Dry Weather Treatment Capacity (cfs)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignDryWeatherTreatmentCapacity, 100);
-                    Add(Models.FieldDefinition.AverageTreatmentFlowrate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.AverageTreatmentFlowrate.ToGridHeaderString("Average Treatment Flow Rate (cfs)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.AverageTreatmentFlowrate, 100);
-                    Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString("Months Operational"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MonthsOfOperation?
                             .MonthsOfOperationDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.Drywell:
-                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TotalEffectiveBMPVolume.ToGridHeaderString("Total Effective BMP Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TotalEffectiveBMPVolume, 100);
-                    Add(Models.FieldDefinition.InfiltrationDischargeRate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.InfiltrationDischargeRate.ToGridHeaderString("Infiltration Discharge Rate (cfs)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.InfiltrationDischargeRate, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
                 case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
                 case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
-                    Add(Models.FieldDefinition.TreatmentRate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TreatmentRate.ToGridHeaderString("Treatment Rate (cfs)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TreatmentRate, 100);
-                    Add(Models.FieldDefinition.TimeOfConcentration.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TimeOfConcentration.ToGridHeaderString("Time Of Concentration (mins)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TimeOfConcentration?
                             .TimeOfConcentrationDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
-                    Add(Models.FieldDefinition.DesignLowFlowDiversionCapacity.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.DesignLowFlowDiversionCapacity.ToGridHeaderString("Design Low Flow Diversion Capacity (gpd)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignLowFlowDiversionCapacity, 100);
-                    Add(Models.FieldDefinition.AverageDivertedFlowrate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.AverageDivertedFlowrate.ToGridHeaderString("Average Diverted Flow Rate (gpd)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.AverageDivertedFlowrate, 100);
-                    Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.MonthsOperational.ToGridHeaderString("Months Operational"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.MonthsOfOperation?
                             .MonthsOfOperationDisplayName, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
                 case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                    Add(Models.FieldDefinition.TimeOfConcentration.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TimeOfConcentration.ToGridHeaderString("Time Of Concentration (mins)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TimeOfConcentration?
                             .TimeOfConcentrationDisplayName, 100);
-                    Add(Models.FieldDefinition.TreatmentRate.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.TreatmentRate.ToGridHeaderString("Treatment Rate (cfs)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.TreatmentRate, 100);
-                    Add(Models.FieldDefinition.WettedFootprint.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.WettedFootprint.ToGridHeaderString("Wetted Footprint (sq ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WettedFootprint, 100);
-                    Add(Models.FieldDefinition.EffectiveRetentionDepth.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.EffectiveRetentionDepth.ToGridHeaderString("Effective Retention Depth (ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.EffectiveRetentionDepth, 100);
-                    Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString(),
+                    Add(Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?
                             .UnderlyingHydrologicSoilGroupDisplayName, 100);
                     break;
             }
 
-            Add(Models.FieldDefinition.DryWeatherFlowOverride.ToGridHeaderString(),
+            Add(Models.FieldDefinition.DryWeatherFlowOverride.ToGridHeaderString("Dry Weather Flow Override"),
                 x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName, 100);
         }
     }
