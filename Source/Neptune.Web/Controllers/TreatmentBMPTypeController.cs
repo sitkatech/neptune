@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel, null);
             }
-            var treatmentBMPType = new TreatmentBMPType(viewModel.TreatmentBMPTypeName, viewModel.TreatmentBMPTypeDescription, true);
+            var treatmentBMPType = new TreatmentBMPType(viewModel.TreatmentBMPTypeName, viewModel.TreatmentBMPTypeDescription, false);
             HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Add(treatmentBMPType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
