@@ -17,6 +17,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Cryptography;
 using System.Security.Principal;
@@ -39,6 +40,8 @@ namespace Neptune.Web
         public void Configuration(IAppBuilder app)
         {
             SitkaHttpApplication.Logger.Info("Owin Startup");
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             //System.IdentityModel.Tokens.JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
@@ -94,7 +97,7 @@ namespace Neptune.Web
                             claimsIdentity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
 
                         //map name claim to default name type
-                        //claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", claimsIdentity.FindFirst(KeystoneOpenIDClaimTypes.Name).Value.ToString()));
+                        claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", claimsIdentity.FindFirst(KeystoneOpenIDClaimTypes.Name).Value.ToString()));
 
                         if (claimsIdentity.IsAuthenticated) // we have a token and we can determine the person.
                         {
@@ -124,6 +127,18 @@ namespace Neptune.Web
                             // remember code verifier in cookie (adapted from OWIN nonce cookie)
                             // see: https://github.com/scottbrady91/Blog-Example-Classes/blob/master/AspNetFrameworkPkce/ScottBrady91.BlogExampleCode.AspNetPkce/Startup.cs#L85
                             RememberCodeVerifier(n, codeVerifier);
+                        }
+
+                        //https://identityserver.github.io/Documentation/docsv2/overview/mvcGettingStarted.html#adding-logout
+                        if (n.ProtocolMessage.RequestType == Microsoft.IdentityModel.Protocols.OpenIdConnect
+                            .OpenIdConnectRequestType.Logout)
+                        {
+                            var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
+
+                            if (idTokenHint != null)
+                            {
+                                n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
+                            }
                         }
 
                         return Task.CompletedTask;
