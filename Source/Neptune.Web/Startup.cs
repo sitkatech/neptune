@@ -9,6 +9,7 @@ using Microsoft.Owin;
 using Owin;
 using LtInfo.Common.Email;
 using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Neptune.Web;
@@ -16,7 +17,13 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
+using System.Net;
+using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Text;
+using IdentityModel;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Notifications;
 using Neptune.Web.ScheduledJobs;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -33,7 +40,7 @@ namespace Neptune.Web
         {
             SitkaHttpApplication.Logger.Info("Owin Startup");
 
-            System.IdentityModel.Tokens.JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            //System.IdentityModel.Tokens.JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -43,18 +50,25 @@ namespace Neptune.Web
                 CookieName = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_{NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType}"
             });
 
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
                 ClientId = NeptuneWebConfiguration.KeystoneOpenIDClientId,
                 Authority = NeptuneWebConfiguration.KeystoneOpenIDUrl,
                 RedirectUri = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot), // this has to match the keystone client redirect uri
                 PostLogoutRedirectUri = $"https://{NeptuneWebConfiguration.CanonicalHostNameRoot}/", // OpenID is super picky about this; url must match what Keystone has EXACTLY (Trailing slash and all)
-                ResponseType = "id_token token",
-                Scope = "openid all_claims keystone",
+                ResponseType = "code",
+                Scope = "openid profile offline_access keystone",
                 UseTokenLifetime = false,
                 SignInAsAuthenticationType = "Cookies",
-                ClientSecret = NeptuneWebConfiguration.KeystoneOpenIDClientSecret,
+                //ClientSecret = NeptuneWebConfiguration.KeystoneOpenIDClientSecret,
                 CallbackPath = new PathString("/Account/LogOn"),
+
+                RequireHttpsMetadata = false,
+                RedeemCode = true,
+                SaveTokens = true,
+                ResponseMode = "query",
 
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {
@@ -80,7 +94,7 @@ namespace Neptune.Web
                             claimsIdentity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
 
                         //map name claim to default name type
-                        claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", claimsIdentity.FindFirst(KeystoneOpenIDClaimTypes.Name).Value.ToString()));
+                        //claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", claimsIdentity.FindFirst(KeystoneOpenIDClaimTypes.Name).Value.ToString()));
 
                         if (claimsIdentity.IsAuthenticated) // we have a token and we can determine the person.
                         {
@@ -91,38 +105,93 @@ namespace Neptune.Web
                     },
                     RedirectToIdentityProvider = n =>
                     {
-                        //n.ProtocolMessage.RedirectUri = GetHomePage(); // dynamic home page for multiple subdomains
-                        //n.ProtocolMessage.PostLogoutRedirectUri = GetOuterPage(); // dynamic landing page for multiple subdomains
-                        if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
+                        if (n.ProtocolMessage.RequestType == Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectRequestType.Authentication)
                         {
-                            var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
+                            // generate code verifier and code challenge
+                            var codeVerifier = CryptoRandom.CreateUniqueId(32);
 
-                            if (idTokenHint != null)
+                            string codeChallenge;
+                            using (var sha256 = SHA256.Create())
                             {
-                                n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
-                            }
-                        }
-                        else if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
-                        {
-                            HttpContextBase context = (HttpContextBase)n.OwinContext.Environment["System.Web.HttpContextBase"];
-
-                            var postLogonDestination = NeptuneHelpers.PostLogonDestination(context.Request);
-
-                            if (postLogonDestination != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(postLogonDestination.Host))
-                            {
-                                n.Response.Cookies.Append("NeptuneReturnURL", postLogonDestination.ToString(), new CookieOptions() { Domain = CookieDomain});
+                                var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier));
+                                codeChallenge = Base64Url.Encode(challengeBytes);
                             }
 
+                            // set code_challenge parameter on authorization request
+                            n.ProtocolMessage.SetParameter("code_challenge", codeChallenge);
+                            n.ProtocolMessage.SetParameter("code_challenge_method", "S256");
+
+                            // remember code verifier in cookie (adapted from OWIN nonce cookie)
+                            // see: https://github.com/scottbrady91/Blog-Example-Classes/blob/master/AspNetFrameworkPkce/ScottBrady91.BlogExampleCode.AspNetPkce/Startup.cs#L85
+                            RememberCodeVerifier(n, codeVerifier);
                         }
 
+                        return Task.CompletedTask;
+                    },
+                    AuthorizationCodeReceived = n =>
+                    {
+                        // get code verifier from cookie
+                        // see: https://github.com/scottbrady91/Blog-Example-Classes/blob/master/AspNetFrameworkPkce/ScottBrady91.BlogExampleCode.AspNetPkce/Startup.cs#L102
+                        var codeVerifier = RetrieveCodeVerifier(n);
 
-                        return Task.FromResult(0);
+                        // attach code_verifier on token request
+                        n.TokenEndpointRequest.SetParameter("code_verifier", codeVerifier);
+
+                        return Task.CompletedTask;
                     }
                 }
 
             });
 
             ScheduledBackgroundJobBootstrapper.ConfigureHangfireAndScheduledBackgroundJobs(app);
+        }
+
+        private void RememberCodeVerifier(RedirectToIdentityProviderNotification<Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectMessage, OpenIdConnectAuthenticationOptions> n, string codeVerifier)
+        {
+            var properties = new AuthenticationProperties();
+            properties.Dictionary.Add("cv", codeVerifier);
+            n.Options.CookieManager.AppendResponseCookie(
+                n.OwinContext,
+                GetCodeVerifierKey(n.ProtocolMessage.State),
+                Convert.ToBase64String(Encoding.UTF8.GetBytes(n.Options.StateDataFormat.Protect(properties))),
+                new CookieOptions
+                {
+                    SameSite = SameSiteMode.None,
+                    HttpOnly = true,
+                    Secure = n.Request.IsSecure,
+                    Expires = DateTime.UtcNow + n.Options.ProtocolValidator.NonceLifetime
+                });
+        }
+
+        private string GetCodeVerifierKey(string state)
+        {
+            using (var hash = SHA256.Create())
+            {
+                return OpenIdConnectAuthenticationDefaults.CookiePrefix + "cv." + Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(state)));
+            }
+        }
+
+        private string RetrieveCodeVerifier(AuthorizationCodeReceivedNotification n)
+        {
+            string key = GetCodeVerifierKey(n.ProtocolMessage.State);
+
+            string codeVerifierCookie = n.Options.CookieManager.GetRequestCookie(n.OwinContext, key);
+            if (codeVerifierCookie != null)
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    SameSite = SameSiteMode.None,
+                    HttpOnly = true,
+                    Secure = n.Request.IsSecure
+                };
+
+                n.Options.CookieManager.DeleteCookie(n.OwinContext, key, cookieOptions);
+            }
+
+            var cookieProperties = n.Options.StateDataFormat.Unprotect(Encoding.UTF8.GetString(Convert.FromBase64String(codeVerifierCookie)));
+            cookieProperties.Dictionary.TryGetValue("cv", out var codeVerifier);
+
+            return codeVerifier;
         }
 
         public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims, IIdentity userIdentity)
