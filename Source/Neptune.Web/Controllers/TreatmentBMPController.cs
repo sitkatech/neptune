@@ -163,7 +163,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var mapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
-            var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
+            var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint4326);
             mapInitJson.Layers.Add(
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
             if (treatmentBMP.Delineation?.DelineationGeometry != null || treatmentBMP.UpstreamBMP?.Delineation?.DelineationGeometry != null)
@@ -230,7 +230,7 @@ namespace Neptune.Web.Controllers
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
             var boundingBox = treatmentBMP?.LocationPoint != null
-                ? new BoundingBox(treatmentBMP.LocationPoint)
+                ? new BoundingBox(treatmentBMP.LocationPoint4326)
                 : BoundingBox.MakeNewDefaultBoundingBox();
             var mapInitJson =
                 new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)

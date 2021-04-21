@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
         }
 
-        public TreatmentBMPDetailMapInitJson(string mapDivID, DbGeometry locationPoint) : base(mapDivID, locationPoint)
+        public TreatmentBMPDetailMapInitJson(string mapDivID, DbGeometry locationPointIn4326) : base(mapDivID, locationPointIn4326)
         {
         }
 

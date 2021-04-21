@@ -108,12 +108,12 @@ namespace Neptune.Web.Models
             MakeFromPoint(southwest, northeast);
         }
 
-        public BoundingBox (DbGeometry geometry) : this(GetPointsFromDbGeometry(geometry))
+        public BoundingBox (DbGeometry geometryIn4326) : this(GetPointsFromDbGeometry(geometryIn4326))
         {
         }
 
-        public BoundingBox(IEnumerable<DbGeometry> geometries)
-            : this(geometries.SelectMany(GetPointsFromDbGeometry).ToList())
+        public BoundingBox(IEnumerable<DbGeometry> geometriesIn4326)
+            : this(geometriesIn4326.SelectMany(GetPointsFromDbGeometry).ToList())
         {
         }
 
