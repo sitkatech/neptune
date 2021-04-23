@@ -43,8 +43,6 @@ namespace Neptune.Web
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            //System.IdentityModel.Tokens.JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "Cookies",
@@ -53,8 +51,10 @@ namespace Neptune.Web
                 CookieName = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_{NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType}"
             });
 
+            //Needed (at least in development) to allow Neptune to talk to upgraded keystone
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
+            //Most of the new openID for mvc pieces came from here https://www.scottbrady91.com/ASPNET/Refreshing-your-Legacy-ASPNET-IdentityServer-Client-Applications
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
                 ClientId = NeptuneWebConfiguration.KeystoneOpenIDClientId,
