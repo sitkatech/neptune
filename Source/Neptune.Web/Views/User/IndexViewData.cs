@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.User
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
             KeystoneUrl = NeptuneWebConfiguration.KeystoneUrl;
-            KeystoneRegisterUserUrl = $"{NeptuneWebConfiguration.KeystoneRegisterUrl}?ClientID={NeptuneWebConfiguration.KeystoneOpenIDClientId}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index()))}";
+            KeystoneRegisterUserUrl = $"{NeptuneWebConfiguration.KeystoneRegisterUrl}?ClientID={NeptuneWebConfiguration.KeystoneOpenIDClientId}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(x => x.LogOn()))}";
 
             InviteUserUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Invite());
             UserIsAdmin = new UserEditFeature().HasPermissionByPerson(currentPerson);

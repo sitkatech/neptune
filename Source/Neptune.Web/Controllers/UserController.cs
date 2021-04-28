@@ -280,6 +280,9 @@ namespace Neptune.Web.Controllers
         {
             var toolDisplayName = "Orange County Stormwater Tools";
             var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index(), NeptuneWebConfiguration.CanonicalHostNameRoot);
+            var loginUrl =
+                SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(x => x.LogOn(),
+                    NeptuneWebConfiguration.CanonicalHostName);
             var supportUrl = SitkaRoute<HelpController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Support(), NeptuneWebConfiguration.CanonicalHostNameRoot);
             var inviteModel = new KeystoneService.KeystoneInviteModel
             {
@@ -289,7 +292,7 @@ namespace Neptune.Web.Controllers
                 SiteName = toolDisplayName,
                 Subject = $"Invitation to the {toolDisplayName}",
                 WelcomeText = $"You have been invited by a colleague to create an account in the <a href=\"{homeUrl}\">{toolDisplayName}</a>. The {toolDisplayName} application is a collaborative effort of Orange County Public Works, MS4 Permittees, and other organizations.",
-                RedirectURL = homeUrl,
+                RedirectURL = loginUrl,
                 SupportBlock = $"If you have any questions, please visit our <a href=\"{supportUrl}\">support page</a>",
                 OrganizationGuid = viewModel.OrganizationGuid,
                 SignatureBlock = $"The {toolDisplayName} team"
