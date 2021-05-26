@@ -1,8 +1,14 @@
-﻿using Neptune.Web.Common;
+﻿using System.Globalization;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Neptune.Web.Controllers
 {
@@ -135,6 +141,33 @@ namespace Neptune.Web.Controllers
             });
 
             return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [WebServiceNameAndDescriptionAttribute("Water Quality Management Plan O&M Verifications", "An inventory of O&M Verification visits for Water Quality Management Plans (WQMPs)")]
+        public ActionResult WaterQualityManagementPlanOAndMVerifications([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        {
+            var data = HttpRequestStorage.DatabaseEntities.vPowerBIWaterQualityManagementPlanOAndMVerifications.ToList().Select(x => new
+                {
+                    WQMPID = x.PrimaryKey,
+                    x.WQMPName,
+                    x.Jurisdiction,
+                    VerificationDate = x.VerificationDate.ToString(CultureInfo.InvariantCulture),
+                    LastEditedDate = x.LastEditedDate.ToString(CultureInfo.InvariantCulture),
+                    x.LastEditedBy,
+                    x.TypeOfVerification,
+                    x.VisitStatus,
+                    x.VerificationStatus,
+                    x.SourceControlCondition,
+                    x.EnforcementOrFollowupActions,
+                    x.DraftOrFinalized
+                });
+
+            //JsonResult serializes ampersands to be their unicode values because it uses JavascriptSerializer
+            //JsonConvert does not
+            //Returning this way to protect the MANY ampersands we encounter in this particular method
+            return Content(JsonConvert.SerializeObject(data), "application/json");
         }
 
 

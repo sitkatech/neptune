@@ -16,7 +16,7 @@ select wqmp.WaterQualityManagementPlanID as PrimaryKey,
 	   wqmpv.EnforcementOrFollowupActions,
 	   case
 		when wqmpv.IsDraft = 1 then 'Draft' else 'Finalized'
-	   end as 'IsDraft'
+	   end as 'DraftOrFinalized'
 from dbo.WaterQualityManagementPlanVerify wqmpv
 join dbo.WaterQualityManagementPlanVerifyType wqmpvt on wqmpv.WaterQualityManagementPlanVerifyTypeID = wqmpvt.WaterQualityManagementPlanVerifyTypeID
 left join dbo.WaterQualityManagementPlanVerifyStatus wqmpvs on wqmpv.WaterQualityManagementPlanVerifyStatusID = wqmpvs.WaterQualityManagementPlanVerifyStatusID

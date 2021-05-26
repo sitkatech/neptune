@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBIWaterQualityManagementPlanOAndMVerification(int primaryKey, string wQMPName, string jurisdiction, DateTime verificationDate, DateTime lastEditedDate, string lastEditedBy, string typeOfVerification, string visitStatus, string verificationStatus, string sourceControlCondition, string enforcementOrFollowupActions, string isDraft) : this()
+        public vPowerBIWaterQualityManagementPlanOAndMVerification(int primaryKey, string wQMPName, string jurisdiction, DateTime verificationDate, DateTime lastEditedDate, string lastEditedBy, string typeOfVerification, string visitStatus, string verificationStatus, string sourceControlCondition, string enforcementOrFollowupActions, string draftOrFinalized) : this()
         {
             this.PrimaryKey = primaryKey;
             this.WQMPName = wQMPName;
@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
             this.VerificationStatus = verificationStatus;
             this.SourceControlCondition = sourceControlCondition;
             this.EnforcementOrFollowupActions = enforcementOrFollowupActions;
-            this.IsDraft = isDraft;
+            this.DraftOrFinalized = draftOrFinalized;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Neptune.Web.Models
             this.VerificationStatus = vPowerBIWaterQualityManagementPlanOAndMVerification.VerificationStatus;
             this.SourceControlCondition = vPowerBIWaterQualityManagementPlanOAndMVerification.SourceControlCondition;
             this.EnforcementOrFollowupActions = vPowerBIWaterQualityManagementPlanOAndMVerification.EnforcementOrFollowupActions;
-            this.IsDraft = vPowerBIWaterQualityManagementPlanOAndMVerification.IsDraft;
+            this.DraftOrFinalized = vPowerBIWaterQualityManagementPlanOAndMVerification.DraftOrFinalized;
             CallAfterConstructor(vPowerBIWaterQualityManagementPlanOAndMVerification);
         }
 
@@ -74,6 +74,6 @@ namespace Neptune.Web.Models
         public string VerificationStatus { get; set; }
         public string SourceControlCondition { get; set; }
         public string EnforcementOrFollowupActions { get; set; }
-        public string IsDraft { get; set; }
+        public string DraftOrFinalized { get; set; }
     }
 }
