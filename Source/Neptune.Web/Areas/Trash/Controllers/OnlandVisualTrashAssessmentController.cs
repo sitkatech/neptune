@@ -91,7 +91,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea>(onlandVisualTrashAssessmentAreas, gridSpec);
         }
 
-        [NeptuneViewFeature]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonDataForAreaDetails(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
