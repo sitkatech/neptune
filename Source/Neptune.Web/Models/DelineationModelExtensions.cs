@@ -1,4 +1,5 @@
-﻿using LtInfo.Common;
+﻿using System;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
@@ -13,6 +14,13 @@ namespace Neptune.Web.Models
 {
     public static class DelineationModelExtensions
     {
+        public static double? GetDelineationArea(this Delineation delineation)
+        {
+            return delineation?.DelineationGeometry.Area != null
+                ? (double?) Math.Round(delineation.DelineationGeometry.Area.Value * DbSpatialHelper.SquareMetersToAcres, 2)
+                : null;
+        }
+
         public static string GetDelineationAreaString(this Delineation delineation)
         {
             var delineationAcresAsString = (delineation?.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres)?.ToString("0.00");
