@@ -66,7 +66,7 @@ namespace Neptune.Web.Views.ManagerDashboard
                 }, 60,
                 DhtmlxGridColumnFilterType.None);
 
-            Add("BMP Name", x => UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
+            Add("BMP Name", x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => UrlTemplate.MakeHrefString(PersonModelExtensions.DetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 105,
