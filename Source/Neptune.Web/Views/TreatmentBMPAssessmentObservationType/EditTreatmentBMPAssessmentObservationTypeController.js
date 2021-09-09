@@ -56,7 +56,7 @@
         return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods, "ID", idToFind);
     };
 
-    $scope.updateCollectionMethod = function () {
+    $scope.updateCollectionMethod = function() {
         var observationCollectionMethod = $scope.getObservationCollectionMethod($scope.ObservationTypeCollectionMethodID);
         $scope.ObservationTypeCollectionMethodSelected = observationCollectionMethod;
 
