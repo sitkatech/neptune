@@ -1,5 +1,8 @@
 ﻿angular.module("NeptuneApp").controller("EditTreatmentBMPAssessmentObservationTypeController", function ($scope, $timeout, angularModelAndViewData) {
     $scope.AngularModel = angularModelAndViewData.AngularModel;
+    //Using this in a few places to help determine the Observation Type Schema
+    //Cast to string to appease Angular's select component 
+    $scope.ObservationTypeCollectionMethodID = $scope.AngularModel.ObservationTypeCollectionMethodID.toString();
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;   
 
     var newDiscreteObservationTypeSchema = {
@@ -53,7 +56,7 @@
         return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods, "ID", idToFind);
     };
 
-    $scope.updateCollectionMethod = function() {
+    $scope.updateCollectionMethod = function () {
         var observationCollectionMethod = $scope.getObservationCollectionMethod($scope.ObservationTypeCollectionMethodID);
         $scope.ObservationTypeCollectionMethodSelected = observationCollectionMethod;
 
