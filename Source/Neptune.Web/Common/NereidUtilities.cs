@@ -353,10 +353,10 @@ namespace Neptune.Web.Common
             catch (JsonReaderException jre)
             {
                 var resultLogFile = Path.GetTempFileName();
-                System.IO.File.WriteAllText(resultLogFile,postResultContentAsStringResult);
+                System.IO.File.WriteAllText(resultLogFile, postResultContentAsStringResult);
 
                 var requestLogFile = Path.GetTempFileName();
-                System.IO.File.WriteAllText(requestLogFile, postResultContentAsStringResult);
+                System.IO.File.WriteAllText(requestLogFile, serializedRequest);
 
                 throw new Exception(
                     $"Error deserializing result from Nereid. Raw result content logged at {resultLogFile}. Raw request content logged at {requestLogFile}",
