@@ -344,10 +344,13 @@ namespace Neptune.Web.Common
             NereidResult<TResp> responseObject = null;
             var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
             var requestStringContent = new StringContent(serializedRequest);
-            _logger.Info($"Executing Nereid request: {nereidRequestUrl} with json request:");
-            _logger.Info(serializedRequest);
+            _logger.Info($"Executing Nereid request: {nereidRequestUrl}");
+            var requestLogFile = Path.Combine(NeptuneWebConfiguration.NereidLogFileFolder.FullName, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
+            File.WriteAllText(requestLogFile, serializedRequest);
             var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
                 .Content.ReadAsStringAsync().Result;
+            var responseLogFile = Path.Combine(NeptuneWebConfiguration.NereidLogFileFolder.FullName, $"NereidResponse_{DateTime.Now:yyyyMMddHHmmss}.json");
+            File.WriteAllText(responseLogFile, postResultContentAsStringResult);
 
             NereidResult<TResp> deserializeObject = null;
             try
@@ -356,14 +359,8 @@ namespace Neptune.Web.Common
             }
             catch (JsonReaderException jre)
             {
-                var resultLogFile = Path.GetTempFileName();
-                System.IO.File.WriteAllText(resultLogFile, postResultContentAsStringResult);
-
-                var requestLogFile = Path.GetTempFileName();
-                System.IO.File.WriteAllText(requestLogFile, serializedRequest);
-
                 throw new Exception(
-                    $"Error deserializing result from Nereid. Raw result content logged at {resultLogFile}. Raw request content logged at {requestLogFile}",
+                    $"Error deserializing result from Nereid. Raw result content logged at {responseLogFile}. Raw request content logged at {requestLogFile}",
                     jre);
             }
 

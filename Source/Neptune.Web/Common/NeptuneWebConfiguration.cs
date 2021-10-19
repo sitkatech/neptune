@@ -72,6 +72,7 @@ namespace Neptune.Web.Common
             SitkaConfiguration.GetRequiredAppSetting("PathToFieldVisitUploadTemplate");
 
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
+        public static readonly DirectoryInfo NereidLogFileFolder = new DirectoryInfo(Path.Combine(NeptuneWebConfiguration.LogFileFolder.FullName, "NereidLogs"));
 
         public static readonly NeptuneEnvironment NeptuneEnvironment = NeptuneEnvironment.MakeNeptuneEnvironment(SitkaConfiguration.GetRequiredAppSetting("NeptuneEnvironment"));
 
