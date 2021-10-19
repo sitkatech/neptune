@@ -345,7 +345,7 @@ namespace Neptune.Web.Common
             var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
             var requestStringContent = new StringContent(serializedRequest);
             _logger.Info($"Executing Nereid request: {nereidRequestUrl} with json request:");
-            _logger.Info(requestStringContent);
+            _logger.Info(serializedRequest);
             var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
                 .Content.ReadAsStringAsync().Result;
 
