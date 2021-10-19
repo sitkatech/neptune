@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using log4net;
 using LtInfo.Common;
 
 namespace Neptune.Web.Common
@@ -19,6 +20,7 @@ namespace Neptune.Web.Common
     {
         public const double GPD_TO_CFS = 0.0000015;
         public const int BASELINE_CUTOFF_YEAR = 2002;
+        private static ILog _logger = LogManager.GetLogger(typeof(NereidUtilities));
 
         public static Graph BuildNetworkGraph(DatabaseEntities dbContext)
         {
@@ -342,9 +344,11 @@ namespace Neptune.Web.Common
             NereidResult<TResp> responseObject = null;
             var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
             var requestStringContent = new StringContent(serializedRequest);
-
+            _logger.Info($"Executing Nereid request: {nereidRequestUrl} with json request:");
+            _logger.Info(requestStringContent);
             var postResultContentAsStringResult = httpClient.PostAsync(nereidRequestUrl, requestStringContent).Result
                 .Content.ReadAsStringAsync().Result;
+
             NereidResult<TResp> deserializeObject = null;
             try
             {
