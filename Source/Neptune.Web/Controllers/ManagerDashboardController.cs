@@ -60,7 +60,14 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData(string gridName)
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x=>x.TreatmentBMPBenchmarkAndThresholds).GetProvisionalTreatmentBMPs(CurrentPerson);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
+                .Include(x => x.StormwaterJurisdiction)
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
+                .Include(x => x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(y => y.TreatmentBMPAssessmentObservationType))
+                .Include(x => x.TreatmentBMPImages)
+                .GetProvisionalTreatmentBMPs(CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
 
@@ -69,7 +76,11 @@ namespace Neptune.Web.Controllers
         {
             var gridSpec = new ProvisionalBMPDelineationsGridSpec(CurrentPerson , gridName);
             var bmpDelineations =
-                HttpRequestStorage.DatabaseEntities.Delineations.GetProvisionalBMPDelineations(CurrentPerson);
+                HttpRequestStorage.DatabaseEntities.Delineations
+                    .Include(x => x.TreatmentBMP)
+                    .Include(x => x.TreatmentBMP.TreatmentBMPType)
+                    .Include(x => x.TreatmentBMP.StormwaterJurisdiction)
+                    .GetProvisionalBMPDelineations(CurrentPerson);
                 return new GridJsonNetJObjectResult<Delineation>(bmpDelineations, gridSpec);
         }
     }
