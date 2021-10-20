@@ -26,6 +26,7 @@ using IdentityModel;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Notifications;
 using Neptune.Web.ScheduledJobs;
+using SameSiteMode = Microsoft.Owin.SameSiteMode;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Neptune.Web
