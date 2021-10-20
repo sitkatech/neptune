@@ -376,11 +376,16 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP)
+        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP, List<int> treatmentBmpiDsTraversed)
         {
             if (treatmentBMP.UpstreamBMP != null)
             {
-                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes();
+                if (treatmentBmpiDsTraversed.Contains(treatmentBMP.TreatmentBMPID))
+                {
+                    throw new OverflowException($"Infinite loop detected!  TreatmentBMPID {treatmentBMP.TreatmentBMPID} already in list of traversed TreatmentBMPIDs ({string.Join(", ", treatmentBmpiDsTraversed)})");
+                }
+                treatmentBmpiDsTraversed.Add(treatmentBMP.TreatmentBMPID);
+                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes(treatmentBmpiDsTraversed);
             }
 
             return treatmentBMP.Delineation?.IsVerified ?? false;
@@ -388,7 +393,7 @@ namespace Neptune.Web.Models
 
         public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
         {
-            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes())
+            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes(new List<int>()))
             {
                 return false;
             }

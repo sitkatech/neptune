@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Neptune.Web.Controllers
                     x.TreatmentBMPName,
                     x.TreatmentBMPType.TreatmentBMPTypeName,
                     FullyParameterized = x.IsFullyParameterized() ? "Yes" : "No",
-                    IsReadyForMovedling = x.IsFullyParameterized() && x.HasVerifiedDelineationForModelingPurposes() ? "Yes" : "No"
+                    IsReadyForMovedling = x.IsFullyParameterized() && x.HasVerifiedDelineationForModelingPurposes(new List<int>()) ? "Yes" : "No"
                 });
 
             return new JsonResult()
