@@ -34,11 +34,7 @@ namespace Neptune.Web.Controllers
         [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .Include(x => x.WaterQualityManagementPlanVerifies)
-                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
-                .ToList();
+            var waterQualityManagementPlans = CurrentPerson.GetWQMPsPersonCanView();
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
         }
@@ -78,6 +74,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [WaterQualityManagementPlanViewFeature]
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
@@ -162,6 +159,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [AnonymousUnclassifiedFeature]
+        [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
@@ -716,6 +714,7 @@ namespace Neptune.Web.Controllers
         }
 
         [AnonymousUnclassifiedFeature]
+        [WaterQualityManagementPlanViewFeature]
         public JsonResult GetModelResults(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;

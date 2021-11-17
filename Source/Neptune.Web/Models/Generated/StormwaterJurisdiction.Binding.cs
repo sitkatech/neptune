@@ -39,18 +39,19 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public StormwaterJurisdiction(int stormwaterJurisdictionID, int organizationID, int stateProvinceID, int stormwaterJurisdictionPublicBMPVisibilityTypeID) : this()
+        public StormwaterJurisdiction(int stormwaterJurisdictionID, int organizationID, int stateProvinceID, int stormwaterJurisdictionPublicBMPVisibilityTypeID, int stormwaterJurisdictionPublicWQMPVisibilityTypeID) : this()
         {
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OrganizationID = organizationID;
             this.StateProvinceID = stateProvinceID;
             this.StormwaterJurisdictionPublicBMPVisibilityTypeID = stormwaterJurisdictionPublicBMPVisibilityTypeID;
+            this.StormwaterJurisdictionPublicWQMPVisibilityTypeID = stormwaterJurisdictionPublicWQMPVisibilityTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public StormwaterJurisdiction(int organizationID, int stateProvinceID, int stormwaterJurisdictionPublicBMPVisibilityTypeID) : this()
+        public StormwaterJurisdiction(int organizationID, int stateProvinceID, int stormwaterJurisdictionPublicBMPVisibilityTypeID, int stormwaterJurisdictionPublicWQMPVisibilityTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.StormwaterJurisdictionID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -58,12 +59,13 @@ namespace Neptune.Web.Models
             this.OrganizationID = organizationID;
             this.StateProvinceID = stateProvinceID;
             this.StormwaterJurisdictionPublicBMPVisibilityTypeID = stormwaterJurisdictionPublicBMPVisibilityTypeID;
+            this.StormwaterJurisdictionPublicWQMPVisibilityTypeID = stormwaterJurisdictionPublicWQMPVisibilityTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public StormwaterJurisdiction(Organization organization, StateProvince stateProvince, StormwaterJurisdictionPublicBMPVisibilityType stormwaterJurisdictionPublicBMPVisibilityType) : this()
+        public StormwaterJurisdiction(Organization organization, StateProvince stateProvince, StormwaterJurisdictionPublicBMPVisibilityType stormwaterJurisdictionPublicBMPVisibilityType, StormwaterJurisdictionPublicWQMPVisibilityType stormwaterJurisdictionPublicWQMPVisibilityType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.StormwaterJurisdictionID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -73,14 +75,15 @@ namespace Neptune.Web.Models
             this.StateProvince = stateProvince;
             stateProvince.StormwaterJurisdictions.Add(this);
             this.StormwaterJurisdictionPublicBMPVisibilityTypeID = stormwaterJurisdictionPublicBMPVisibilityType.StormwaterJurisdictionPublicBMPVisibilityTypeID;
+            this.StormwaterJurisdictionPublicWQMPVisibilityTypeID = stormwaterJurisdictionPublicWQMPVisibilityType.StormwaterJurisdictionPublicWQMPVisibilityTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static StormwaterJurisdiction CreateNewBlank(Organization organization, StateProvince stateProvince, StormwaterJurisdictionPublicBMPVisibilityType stormwaterJurisdictionPublicBMPVisibilityType)
+        public static StormwaterJurisdiction CreateNewBlank(Organization organization, StateProvince stateProvince, StormwaterJurisdictionPublicBMPVisibilityType stormwaterJurisdictionPublicBMPVisibilityType, StormwaterJurisdictionPublicWQMPVisibilityType stormwaterJurisdictionPublicWQMPVisibilityType)
         {
-            return new StormwaterJurisdiction(organization, stateProvince, stormwaterJurisdictionPublicBMPVisibilityType);
+            return new StormwaterJurisdiction(organization, stateProvince, stormwaterJurisdictionPublicBMPVisibilityType, stormwaterJurisdictionPublicWQMPVisibilityType);
         }
 
         /// <summary>
@@ -235,6 +238,7 @@ namespace Neptune.Web.Models
         public int OrganizationID { get; set; }
         public int StateProvinceID { get; set; }
         public int StormwaterJurisdictionPublicBMPVisibilityTypeID { get; set; }
+        public int StormwaterJurisdictionPublicWQMPVisibilityTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return StormwaterJurisdictionID; } set { StormwaterJurisdictionID = value; } }
 
@@ -253,6 +257,7 @@ namespace Neptune.Web.Models
         public virtual Organization Organization { get; set; }
         public virtual StateProvince StateProvince { get; set; }
         public StormwaterJurisdictionPublicBMPVisibilityType StormwaterJurisdictionPublicBMPVisibilityType { get { return StormwaterJurisdictionPublicBMPVisibilityType.AllLookupDictionary[StormwaterJurisdictionPublicBMPVisibilityTypeID]; } }
+        public StormwaterJurisdictionPublicWQMPVisibilityType StormwaterJurisdictionPublicWQMPVisibilityType { get { return StormwaterJurisdictionPublicWQMPVisibilityType.AllLookupDictionary[StormwaterJurisdictionPublicWQMPVisibilityTypeID]; } }
 
         public static class FieldLengths
         {
