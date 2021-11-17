@@ -92,8 +92,12 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictionPublicBMPVisibilityTypes = StormwaterJurisdictionPublicBMPVisibilityType.All
                 .OrderBy(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName)
                 .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID.ToString(CultureInfo.InvariantCulture),
-                    x => x.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName); ;
-            var viewData = new EditViewData(stormwaterJurisdictionPublicBMPVisibilityTypes);
+                    x => x.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName);
+            var stormwaterJurisdictionPublicWQMPVisibilityTypes = StormwaterJurisdictionPublicWQMPVisibilityType.All
+                .OrderBy(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName)
+                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName);
+            var viewData = new EditViewData(stormwaterJurisdictionPublicBMPVisibilityTypes, stormwaterJurisdictionPublicWQMPVisibilityTypes);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

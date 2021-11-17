@@ -29,7 +29,7 @@ namespace Neptune.Web.UnitTestCommon
         {
             public static StormwaterJurisdiction Create()
             {
-                var jurisdiction = new StormwaterJurisdiction(TestOrganization.Create(), null, StormwaterJurisdictionPublicBMPVisibilityType.VerifiedOnly);
+                var jurisdiction = new StormwaterJurisdiction(TestOrganization.Create(), null, StormwaterJurisdictionPublicBMPVisibilityType.VerifiedOnly, StormwaterJurisdictionPublicWQMPVisibilityType.ActiveAndInactive);
                 return jurisdiction;
             }
         }

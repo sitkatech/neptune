@@ -26,10 +26,13 @@ namespace Neptune.Web.Views.Jurisdiction
     public class EditViewData : NeptuneUserControlViewData
     {
         public IEnumerable<SelectListItem> StormwaterJurisdictionPublicBMPVisibilityTypes{ get; }
+        public IEnumerable<SelectListItem> StormwaterJurisdictionPublicWQMPVisibilityTypes{ get; }
 
-        public EditViewData(IEnumerable<SelectListItem> stormwaterJurisdictionPublicBMPVisibilityTypes)
+        public EditViewData(IEnumerable<SelectListItem> stormwaterJurisdictionPublicBMPVisibilityTypes,
+            IEnumerable<SelectListItem> stormwaterJurisdictionPublicWQMPVisibilityTypes)
         {
             StormwaterJurisdictionPublicBMPVisibilityTypes = stormwaterJurisdictionPublicBMPVisibilityTypes;
+            StormwaterJurisdictionPublicWQMPVisibilityTypes = stormwaterJurisdictionPublicWQMPVisibilityTypes;
         }
     }
 }
