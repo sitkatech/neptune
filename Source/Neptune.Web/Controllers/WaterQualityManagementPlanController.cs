@@ -73,6 +73,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [AnonymousUnclassifiedFeature]
         [WaterQualityManagementPlanViewFeature]
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
@@ -157,6 +158,7 @@ namespace Neptune.Web.Controllers
 
 
         [HttpGet]
+        [AnonymousUnclassifiedFeature]
         [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
         {
@@ -711,6 +713,7 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditModelingApproach, EditModelingApproachViewData, EditModelingApproachViewModel>(viewData, viewModel);
         }
 
+        [AnonymousUnclassifiedFeature]
         [WaterQualityManagementPlanViewFeature]
         public JsonResult GetModelResults(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {

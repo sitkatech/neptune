@@ -37,7 +37,7 @@ namespace Neptune.Web.Security
             }
 
             var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
-            if (!isAssignedToTreatmentBMP)
+            if (!person.IsAnonymousOrUnassigned() && !isAssignedToTreatmentBMP)
             {
                 return new PermissionCheckResult($"You don't have permission to view WQMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
