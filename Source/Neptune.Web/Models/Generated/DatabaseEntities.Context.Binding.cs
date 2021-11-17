@@ -596,6 +596,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(stormwaterJurisdictionPublicBMPVisibilityType, "StormwaterJurisdictionPublicBMPVisibilityType", primaryKey);
                     return stormwaterJurisdictionPublicBMPVisibilityType;
 
+                case "StormwaterJurisdictionPublicWQMPVisibilityType":
+                    var stormwaterJurisdictionPublicWQMPVisibilityType = StormwaterJurisdictionPublicWQMPVisibilityType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(stormwaterJurisdictionPublicWQMPVisibilityType, "StormwaterJurisdictionPublicWQMPVisibilityType", primaryKey);
+                    return stormwaterJurisdictionPublicWQMPVisibilityType;
+
                 case "StormwaterJurisdiction":
                     return StormwaterJurisdictions.GetStormwaterJurisdiction(primaryKey);
 

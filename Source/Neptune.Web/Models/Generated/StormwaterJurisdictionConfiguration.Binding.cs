@@ -19,6 +19,7 @@ namespace Neptune.Web.Models
             Property(x => x.OrganizationID).HasColumnName(@"OrganizationID").HasColumnType("int").IsRequired();
             Property(x => x.StateProvinceID).HasColumnName(@"StateProvinceID").HasColumnType("int").IsRequired();
             Property(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID).HasColumnName(@"StormwaterJurisdictionPublicBMPVisibilityTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID).HasColumnName(@"StormwaterJurisdictionPublicWQMPVisibilityTypeID").HasColumnType("int").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.StormwaterJurisdictions).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_StormwaterJurisdiction_Organization_OrganizationID
