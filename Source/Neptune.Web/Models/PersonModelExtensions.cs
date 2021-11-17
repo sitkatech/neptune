@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Neptune.Web.Common;
@@ -206,6 +207,30 @@ namespace Neptune.Web.Models
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return treatmentBmps;
+        }
+
+        public static List<WaterQualityManagementPlan> GetWQMPsPersonCanView(this Person person)
+        {
+            //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
+            if (person.IsAnonymousOrUnassigned())
+            {
+                var stormwaterJurisdictionIDsAnonymousPersonCanView = person.GetStormwaterJurisdictionsPersonCanView()
+                    .Where(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID != (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
+                    .Select(x => x.StormwaterJurisdictionID);
+
+                var publicWaterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                    .Include(x => x.WaterQualityManagementPlanVerifies)
+                    .Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && 
+                                (x.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Active ||
+                                 x.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Inactive && x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID == (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive)).ToList();
+                return publicWaterQualityManagementPlans;
+            }
+
+            var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .Include(x => x.WaterQualityManagementPlanVerifies)
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            return waterQualityManagementPlans;
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson)

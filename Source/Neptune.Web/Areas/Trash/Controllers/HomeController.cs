@@ -40,9 +40,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var boundingBox = BoundingBox.GetBoundingBox(stormwaterJurisdictionsPersonCanView);
             var geoJsonForJurisdictions = StormwaterJurisdiction.ToGeoJsonFeatureCollection(stormwaterJurisdictionsPersonCanView);
-            var juridictionLayersGeoJson = new List<LayerGeoJson> { new LayerGeoJson(MapInitJsonHelpers.CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0m, LayerInitialVisibility.Hide) }.ToList(); var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox, juridictionLayersGeoJson) {LayerControlClass = "ovta-based-map-layer-control"};
-            var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox, juridictionLayersGeoJson) { LayerControlClass = "area-based-map-layer-control" };
-            var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox, juridictionLayersGeoJson) { LayerControlClass = "load-based-map-layer-control" };
+            var jurisdictionLayersGeoJson = new List<LayerGeoJson> { new LayerGeoJson(MapInitJsonHelpers.CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0m, LayerInitialVisibility.Hide) }.ToList(); var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox, jurisdictionLayersGeoJson) {LayerControlClass = "ovta-based-map-layer-control"};
+            var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox, jurisdictionLayersGeoJson) { LayerControlClass = "area-based-map-layer-control" };
+            var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox, jurisdictionLayersGeoJson) { LayerControlClass = "load-based-map-layer-control" };
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
             var viewData = new IndexViewData(CurrentPerson, neptunePage, ovtaBasedMapInitJson, areaBasedMapInitJson,
                 loadBasedMapInitJson, treatmentBmps, TrashCaptureStatusType.All, parcels, stormwaterJurisdictionsPersonCanView, geoJsonForJurisdictions);
