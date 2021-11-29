@@ -463,7 +463,7 @@ namespace Neptune.Web.Controllers
 
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [WaterQualityManagementPlanVerifyViewFeature]
         public ViewResult WqmpVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
@@ -613,22 +613,7 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteVerify(waterQualityManagementPlanVerify, viewModel);
             }
 
-            var waterQualityManagementPlanQuickBMP = HttpRequestStorage.DatabaseEntities
-                .WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
-                    x.WaterQualityManagementPlanVerifyID ==
-                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
-
-            var waterQualityManagementPlanTreatmentBMP = HttpRequestStorage.DatabaseEntities
-                .WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
-                    x.WaterQualityManagementPlanVerifyID ==
-                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
-
             var lastEditedDate = waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString();
-
-            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs
-                .DeleteWaterQualityManagementPlanVerifyQuickBMP(waterQualityManagementPlanQuickBMP);
-            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs
-                .DeleteWaterQualityManagementPlanVerifyTreatmentBMP(waterQualityManagementPlanTreatmentBMP);
 
             waterQualityManagementPlanVerify.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay($"Successfully deleted \"{lastEditedDate}\".");
