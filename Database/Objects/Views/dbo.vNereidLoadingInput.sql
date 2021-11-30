@@ -39,5 +39,7 @@ from
 		on d.TreatmentBMPID = bmp.TreatmentBMPID
 	left join dbo.WaterQualityManagementPlan bwqmp
 		on bmp.WaterQualityManagementPlanID = bwqmp.WaterQualityManagementPlanID
+  where
+	hru.Area > 0
 GO
 
