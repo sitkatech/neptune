@@ -29,13 +29,13 @@ namespace Neptune.Web.Common
             };
 
             var newHRUCharacteristics = new List<HRUCharacteristic>();
-
+            var rawResponse = string.Empty;
             try
             {
                 var esriGPRecordSetLayer = esriAsynchronousJobRunner
                 .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
                     // ReSharper disable once UnusedVariable
-                    serializeObject, out var rawResponse).Value;
+                    serializeObject, out rawResponse).Value;
 
                 newHRUCharacteristics.AddRange(
                     esriGPRecordSetLayer
@@ -51,6 +51,7 @@ namespace Neptune.Web.Common
             {
                 logger.Warn(ex.Message, ex);
                 logger.Warn($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
+                logger.Warn(rawResponse);
             }
 
             return newHRUCharacteristics;

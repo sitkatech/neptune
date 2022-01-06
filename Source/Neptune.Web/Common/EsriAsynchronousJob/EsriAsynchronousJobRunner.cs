@@ -103,7 +103,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 case EsriJobStatus.esriJobCancelled:
                     throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);
                 case EsriJobStatus.esriJobFailed:
-                    throw new EsriAsynchronousJobFailedException(jobStatusResponse);
+                    throw new EsriAsynchronousJobFailedException(jobStatusResponse, requestObject.ToString());
                 default:
                     // ReSharper disable once NotResolvedInText
                     throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
@@ -156,7 +156,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
     public class EsriAsynchronousJobFailedException : Exception
     {
-        public EsriAsynchronousJobFailedException(EsriJobStatusResponse jobStatusResponse): base($"{jobStatusResponse.jobId} failed. Last message: {jobStatusResponse.messages.Last().description}")
+        public EsriAsynchronousJobFailedException(EsriJobStatusResponse jobStatusResponse, string requestObjectString) : base($"{jobStatusResponse.jobId} failed. Last messages: {string.Join(", ", jobStatusResponse.messages.Select(x => x.description))}. Last request Oboject: {requestObjectString}")
         {
         }
     }
