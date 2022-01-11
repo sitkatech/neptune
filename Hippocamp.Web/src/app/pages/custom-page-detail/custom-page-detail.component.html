@@ -1,0 +1,52 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li *ngIf="isUserAnAdministrator()" class="breadcrumb-item" aria-current="page">
+            <a routerLink="/custom-pages">Custom Pages</a>
+        </li>
+        <li *ngIf="!isUserAnAdministrator()" class="breadcrumb-item" aria-current="page">
+            Custom Pages
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{customPageDisplayName}}</li>
+    </ol>
+</nav>
+
+<div *ngIf="isLoading" class="text-center">
+    <span class="fa fa-spinner loading-spinner"></span>
+</div>
+
+<div class="container mt-sm-4" *ngIf="!isLoading">
+    <app-alert-display></app-alert-display>
+    <ng-container *ngIf="!isEditing">
+        <div>
+            <h2 class="d-inline-block">{{customPageDisplayName}}</h2>
+        </div>
+        <div *ngIf="showEditButton()" class="customPageContent" style="position: relative; min-height: 60px;">
+            <div class="hoverEditButton">
+                <div style="margin-top: 10px">
+                    <button type="button" class="btn btn-hippocamp" (click)="enterEdit()">
+                        Edit
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="!emptyContent" [innerHtml]="customPageContent"></div>
+
+            <div *ngIf="emptyContent" class="hoverEmptySpace"></div>
+        </div>
+        <div *ngIf="!showEditButton()" [innerHtml]="customPageContent"></div>
+    </ng-container>
+    <div *ngIf="isEditing" [ngClass]="{'ckEditorDisabled':isUploadingImage()}">
+        <div *ngIf="isUploadingImage()">
+            <em>Please wait while the image is uploaded...</em>
+            <span class="mt-1 fa fa-spinner loading-spinner" style="float:right;"></span>
+        </div>
+        <ckeditor [editor]="Editor" [(ngModel)]="editedContent" (ready)="ckEditorReady($event)" [config]="ckConfig"></ckeditor>
+        <div style="float:right;" *ngIf="!isUploadingImage()">
+            <button type="button" class="btn btn-hippocamp mt-1 mr-1" (click)="saveEdit()">Save</button>
+            <button type="button" class="btn btn-secondary mt-1" (click)="cancelEdit()">Cancel</button>
+        </div>
+        <div *ngIf="isUploadingImage()">
+            <em>Please wait while the image is uploaded...</em>
+            <span class="mt-1 fa fa-spinner loading-spinner" style="float:right;"></span>
+        </div>
+    </div>
+</div>

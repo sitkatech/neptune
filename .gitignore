@@ -1,0 +1,10 @@
+.vs
+bin
+obj
+*.dbmdl
+*.jfm
+
+*.env
+*.user
+Hippocamp.Web/wwwroot/
+Hippocamp.API/.config

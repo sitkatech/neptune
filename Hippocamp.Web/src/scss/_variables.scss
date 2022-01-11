@@ -1,0 +1,63 @@
+$footer-height: 60px;
+
+$theme-colors: (
+        "primary": #F0644B,     // systemBlue
+        "secondary": #c4c4c4,   // lightGray
+        "info": #228be6,        // brightBlue
+        "light": #f5f5f5,       // offWhite
+        "muted": #dee2e6,       // footerGray
+        "danger": #ff0000,
+        "success": #00cc00,
+        "warning": #ffff9f,
+        "h4-styled": #194349,
+        "footer": #999999,
+        "header-background": #343b85,
+        "select": #1F4D3D,
+        "header-nav-link" : #fff,
+        "grid-header-background": #343b85,
+        "grid-accent-color": #0077f9,
+        "grid-hover-color": cornsilk,
+        "account-dropdown-text": #fff,
+        "header-gradient-start": transparent,
+        "header-gradient-end": transparent,
+);
+
+// this looks redundant, but we need to override the bootstrap variables in both ways.
+//Custom variables only need the one override
+$primary: #F0644B;
+$secondary: #c4c4c4;
+$info: #228be6;
+$light: #f5f5f5;
+$muted: #dee2e6;
+$danger: #ff0000;
+$success: #00cc00;
+$warning: #ffff9f;
+
+$account-dropdown-text: #fff;
+$button-border-and-background: #F0644B;
+$button-hover-text-color: #ffffff;
+$button-text-color: #f6d992;
+$button-hover-background: #f6d992;
+$button-toggle-hover: #637ca1;
+$footer: #999999;  
+$header-background: #F0644B;
+$header-gradient-start: transparent;
+$header-gradient-end: transparent;
+$header-nav-after-height: 0px;
+$header-nav-link: #fff;         
+$header-nav-link-font-weight: inherit;
+$h4-styled: #194349;
+$select: #1F4D3D;
+$select-and-nav-dropdown-hover: #87a1cc;
+$select-and-nav-hover:#87a1cc;
+$text-muted: darken(#d3d3d3, 15%);
+$text-warning: darken($warning, 20%);
+
+$font-family-sans-serif: 'Tahoma', sans-serif, 'Helvetica Neue', sans-serif;
+$font-size: 16px;
+$base-text: #000000;
+
+$card-cap-bg: #dfdfdf;
+
+$modal-header-background: #dfdfdf;
+$link-color: #205c90;

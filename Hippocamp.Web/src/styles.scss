@@ -1,0 +1,242 @@
+@import "scss/_variables.scss";
+
+// import Bootstrap AFTER variables
+@import "~bootstrap/scss/bootstrap";
+@import "~font-awesome/css/font-awesome.css";
+
+@import "scss/_grids.scss";
+@import "~leaflet/dist/leaflet.css";
+//@import "~leaflet-draw/dist/leaflet.draw.css";
+
+@import "scss/_sticky_footer.scss";
+@import "scss/_forms.scss";
+@import "scss/_custom-bootstrap.scss";
+
+//ckeditor css
+
+.image {
+  display:table;
+  clear: both;
+  text-align:center;
+  margin:1em auto;
+}
+
+.image>img {
+  display:block;
+  margin:0 auto;
+  max-width:100%;
+  min-width: 50px;
+}
+
+.image-style-side,
+.image-style-align-left,
+.image-style-align-center,
+.image-style-align-right {
+  max-width: 50%;
+}
+
+.image-style-side {
+  float: right;
+  margin-left: var(--ck-image-style-spacing);
+}
+
+.image-style-align-left {
+  float: left;
+  margin-right: var(--ck-image-style-spacing);
+}
+
+.image-style-align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-style-align-right {
+  float: right;
+  margin-left: var(--ck-image-style-spacing);
+}
+
+blockquote {
+  overflow: hidden;
+  padding-right: 1.5em;
+  padding-left: 1.5em;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  border-left: 5px solid #ccc;
+}
+
+figure.media {
+  clear:both;
+  margin: 1em 0;
+  display: block;
+  min-width:15em;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_visible {
+  //to account for in popover case
+  z-index:1061;
+}
+//end ckeditor css
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 98px;
+    height: 21px;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .switch input {display:none;}
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #6b6b6b;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 17px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: $button-border-and-background;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px $button-border-and-background;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(77px);
+    -ms-transform: translateX(7px);
+    transform: translateX(77px);
+  }
+  
+  /*------ ADDED CSS ---------*/
+  
+  .on, .off
+  {
+    color: white;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    font-size: 10px;
+  }
+
+  .on{
+    display: none;
+    color: $button-text-color;
+  }
+
+  
+  input:checked+ .slider .on
+  {display: block;}
+  
+  input:checked + .slider .off
+  {display: none;}
+  
+  /*--------- END --------*/
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;}
+
+
+  //Added leaflet css  
+  .leaflet-control-layers-close {
+    color: #0078A8 !important;
+    cursor:pointer;
+    float:right;
+    display:none;
+  }
+
+  .leaflet-control-layers-expanded .leaflet-control-layers-close {
+    display:block;
+  }
+
+  //End of added leaflet css
+
+  //NGB Popover
+
+  .popover {
+    max-width: 400px;
+  }
+
+  .popover-override
+  {
+    font-size: .75em;
+  }
+
+  .popover-override h3.popover-header {
+    background-color:#dfdfdf;
+    padding: 0.25em 0.5em;
+  }
+
+  .popover-override h3.popover-header .btn {
+    line-height: 1;
+  }
+
+  .popover-override .popover-body {
+    padding: 0.25em 0.5em;
+  }
+
+  hippocamp-field-definition-grid-header {
+    width:100%;
+  }
+
+  //End of NGB Popover
+
+  $hippocamp-primary: #F0644B;
+  $hippocamp-secondary: #EF8D7C;
+  $border-gray: #bdc3c7;
+
+  // AG Grids pinned bottom row
+  .ag-floating-bottom {
+    border-bottom: 1px solid $border-gray;
+    box-shadow: 0 5px 15px $border-gray;
+  }
+  
+  .ag-floating-bottom .ag-cell {
+    font-weight: bold;
+    padding: 0;
+  }
+
+  // AG Grids pagination
+  .ag-paging-panel .ag-paging-row-summary-panel, .ag-paging-panel .ag-paging-page-summary-panel {
+    color: #000;
+  }
+
+  // AG Grids filters
+  .ag-filter {
+    background-color: $hippocamp-secondary;
+  }
+
+  .ag-filter .ag-filter-body .ag-wrapper input {
+    margin-top: 4px;
+    padding: 4px;
+  }
+
+  .ag-filter .ag-filter-body .ag-wrapper input:focus {
+    border: 1px solid $hippocamp-primary;
+    box-shadow: 0 0 10px $hippocamp-primary;
+  }

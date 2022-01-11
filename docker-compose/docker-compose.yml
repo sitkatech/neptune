@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  hippocamp.api:
+    image: hippocamp/api
+    build:
+      context: ..
+      dockerfile: Hippocamp.API/Dockerfile

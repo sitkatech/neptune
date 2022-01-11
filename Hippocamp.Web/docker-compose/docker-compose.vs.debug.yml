@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  hippocamp.web:
+    build:
+      args:
+        source: ${DOCKER_BUILD_SOURCE}
+    image: hippocamp/web
+    ports:
+      - "8113:80"
+      - "8114:443"

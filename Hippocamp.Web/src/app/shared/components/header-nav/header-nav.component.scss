@@ -1,0 +1,52 @@
+@import "~src/scss/_variables.scss";
+
+.navbarLogo {
+    height: 80px;
+  }
+  
+  .footerLogo {
+    height: 50px;
+    float: right;
+    margin: 5px 0;
+  }
+  
+  a.signOut {
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+    z-index: 1021;
+  }
+  
+  .navbar.navbar-hippocamp
+  {
+    background-color: $header-background;
+  }
+
+  .navbar.navbar-hippocamp a.nav-link,
+  .navbar.navbar-hippocamp a.nav-link::before,
+  .navbar.navbar-hippocamp a.nav-link::after {
+    transition: all .5s;
+  }
+  
+  .navbar.navbar-hippocamp a.nav-link:hover {
+    color:$select-and-nav-hover;
+  }
+
+  nav .dropdown-item:hover {
+    background-color: $select-and-nav-dropdown-hover;
+  }
+
+  .navbar.navbar-hippocamp a.nav-link
+  {
+    color: $header-nav-link;
+  }
+
+  .welcomeUser{
+    @media screen and (min-width: 991px){
+      text-align:right;
+    }
+    @media screen and (max-width: 990px){
+      text-align:left;
+    }
+  }

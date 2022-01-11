@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  hippocamp.api:
+    build:
+      dockerfile: Hippocamp.API/LocalDockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - KEYSTONE_HOST=${KEYSTONE_HOST}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SITKA_EMAIL_REDIRECT=${SITKA_EMAIL_REDIRECT}
+      - WEB_URL=${WEB_URL}
+      - SECRET_PATH=${SECRET_PATH}
+      - KEYSTONE_REDIRECT_URL=${KEYSTONE_REDIRECT_URL}
+      - PlatformLongName=${PlatformLongName}
+      - LeadOrganizationLongName=${LeadOrganizationLongName}
+      - LeadOrganizationHomeUrl=${LeadOrganizationHomeUrl}
+      - LeadOrganizationEmail=${LeadOrganizationEmail}
+      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}

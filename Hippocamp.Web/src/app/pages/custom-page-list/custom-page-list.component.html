@@ -1,0 +1,52 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Custom Pages</li>
+    </ol>
+</nav>
+
+<div class="container mt-sm-4">  
+    <app-alert-display></app-alert-display>
+    <div class="row mb-0">
+        <div class="col">
+            <h2 class="d-inline-block">Custom Pages</h2>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col">
+            <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+        </div>
+    </div>
+    <div style="margin: 1rem 0 1rem 0;" class="float-right">
+        <hippocamp-clear-grid-filters-button class="mr-3" [grid]="pageGrid">
+        </hippocamp-clear-grid-filters-button>
+        <a class="float-right btn btn-hippocamp btn-md mr-1" routerLink="/custom-pages/create">New Custom Page</a>
+    </div>
+    <div class="table-responsive">
+        <ag-grid-angular #pageGrid style="width: 100%; height: 500px;" class="ag-theme-balham" [rowData]="rowData"
+        [columnDefs]="columnDefs" [pagination]="true" [suppressMenuHide]="true" [paginationPageSize]="100"
+        (firstDataRendered)="onFirstDataRendered($event)" (cellClicked)="onCellClicked($event)">
+    </ag-grid-angular>
+    </div>
+</div>
+
+<ng-template #deletePageModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Confirm Delete</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this page?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-hippocamp btn-sm" [disabled]="isPerformingAction" (click)="removePageByID()">
+            <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+            Confirm
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')"
+            [disabled]="isPerformingAction">
+            Cancel
+        </button>
+    </div>
+</ng-template>

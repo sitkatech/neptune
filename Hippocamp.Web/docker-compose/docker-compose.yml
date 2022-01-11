@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  hippocamp.web:
+    image: hippocamp/web
+    build:
+      args:
+        env: ${ENVIRONMENT}
+      context: ../..
+      dockerfile: Hippocamp.Web/Dockerfile
