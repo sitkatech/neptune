@@ -36,11 +36,11 @@ namespace Neptune.Web.Views.RegionalSubbasin
         public RegionalSubbasinGridSpec()
         {
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-
+            Add("RSB ID", x => x.RegionalSubbasinID.ToString(), 100, DhtmlxGridColumnFilterType.Numeric);
             Add("Drain ID", x => x.DrainID, 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Watershed", x => x.Watershed, 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Catchment ID in OC Survey", x => x.OCSurveyCatchmentID.ToString(), 250, DhtmlxGridColumnFilterType.None);
-            Add("Downstream Catchment ID in OC Survey", x => x.OCSurveyDownstreamCatchmentID.HasValue ? x.OCSurveyDownstreamCatchmentID.Value.ToString() : "Terminus", 250, DhtmlxGridColumnFilterType.None);
+            Add("Catchment ID in OC Survey", x => x.OCSurveyCatchmentID.ToString(), 250, DhtmlxGridColumnFilterType.Numeric);
+            Add("Downstream Catchment ID in OC Survey", x => x.OCSurveyDownstreamCatchmentID.HasValue ? x.OCSurveyDownstreamCatchmentID.Value.ToString() : "Terminus", 250, DhtmlxGridColumnFilterType.Numeric);
 
 
             Add("Last Updated", x => x.LastUpdate, 150, DhtmlxGridColumnFormatType.DateTime);
