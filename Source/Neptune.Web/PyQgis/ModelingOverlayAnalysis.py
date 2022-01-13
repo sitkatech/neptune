@@ -1,4 +1,4 @@
-### Authored by Nicholas Padinha for Sitka Technology Group, 2020
+### Authored by Sitka Technology Group, 2020
 
 import sys
 
@@ -251,21 +251,17 @@ if __name__ == '__main__':
 
     wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
 
-    lspc_rsb = union(lspcLayer, regionalSubbasinLayerClipped, memoryOutputName="lspc_rsb", context=PROCESSING_CONTEXT)
-    #raiseIfLayerInvalid(lspc_rsb)
-    lspc_rsb = bufferZero(lspc_rsb, "LSPC-RSB", context=PROCESSING_CONTEXT)
-
-    lspc_rsb_wqmp = union(lspc_rsb, wqmpLayerClipped, memoryOutputName="lspc_rsb_wqmp", context=PROCESSING_CONTEXT)
+    rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, memoryOutputName="rsb_wqmp", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb_delineation)
-    lspc_rsb_wqmp = bufferZero(lspc_rsb_wqmp, "LSPC-RSB-D", context=PROCESSING_CONTEXT)
+    rsb_wqmp = bufferZero(rsb_wqmp, "LSPC-RSB-D", context=PROCESSING_CONTEXT)
 
 
     # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
     if clip_layer is not None:
-        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
         masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
     else: 
-        masterOverlay = union(lspc_rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
 
     masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", context=PROCESSING_CONTEXT)
 

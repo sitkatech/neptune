@@ -1258,6 +1258,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PyQgis\ComputeTrashGeneratingUnits.py" />
+    <Content Include="PyQgis\ModelingOverlayAnalysis.py" />
+    <Content Include="PyQgis\pyqgis_utils.py" />
     <Content Include="PyQgis\TestModule.py" />
     <Content Include="PyQgis\TestPyqgis.py" />
     <Content Include="PyQgis\TestPyqgisMssql.py" />

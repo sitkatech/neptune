@@ -30,7 +30,8 @@ namespace Neptune.Web.ScheduledJobs
         // only runs in prod to avoid hitting OC Survey with multiple concurrent identical requests
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Prod
+            NeptuneEnvironmentType.Prod,
+            NeptuneEnvironmentType.QA
         };
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person, bool queueLguRefresh)
