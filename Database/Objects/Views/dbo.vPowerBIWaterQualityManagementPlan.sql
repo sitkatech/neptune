@@ -14,7 +14,7 @@ land.WaterQualityManagementPlanLandUseDisplayName,
 term.WaterQualityManagementPlanPermitTermDisplayName,
 DATEDIFF(second, {d '1970-01-01'}, wqmp.ApprovalDate) as ApprovalDate,
 DATEDIFF(second, {d '1970-01-01'}, wqmp.DateOfContruction) as DateOfConstruction,
-hydromod.HydromodificationAppliesDisplayName,
+hydromod.HydromodificationAppliesTypeDisplayName as HydromodificationAppliesDisplayName,
 hydrosub.HydrologicSubareaName,
 wqmp.RecordedWQMPAreaInAcres,
 trash.TrashCaptureStatusTypeDisplayName,
@@ -28,7 +28,7 @@ left join dbo.WaterQualityManagementPlanStatus stat on wqmp.WaterQualityManageme
 join dbo.WaterQualityManagementPlanDevelopmentType devel on wqmp.WaterQualityManagementPlanDevelopmentTypeID = devel.WaterQualityManagementPlanDevelopmentTypeID
 join dbo.WaterQualityManagementPlanLandUse land on wqmp.WaterQualityManagementPlanLandUseID = land.WaterQualityManagementPlanLandUseID
 left join dbo.WaterQualityManagementPlanPermitTerm term on wqmp.WaterQualityManagementPlanPermitTermID = term.WaterQualityManagementPlanPermitTermID
-left join dbo.HydromodificationApplies hydromod on wqmp.HydromodificationAppliesID = hydromod.HydromodificationAppliesID
+left join dbo.HydromodificationAppliesType hydromod on wqmp.HydromodificationAppliesTypeID = hydromod.HydromodificationAppliesTypeID
 left join dbo.HydrologicSubarea hydrosub on wqmp.HydrologicSubareaID = hydrosub.HydrologicSubareaID
 left join dbo.WaterQualityManagementPlanModelingApproach wqmpma on wqmp.WaterQualityManagementPlanModelingApproachID = wqmpma.WaterQualityManagementPlanModelingApproachID
 join dbo.TrashCaptureStatusType trash on wqmp.TrashCaptureStatusTypeID = trash.TrashCaptureStatusTypeID

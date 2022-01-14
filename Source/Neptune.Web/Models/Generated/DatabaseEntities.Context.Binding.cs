@@ -358,10 +358,10 @@ namespace Neptune.Web.Models
                 case "HydrologicSubarea":
                     return HydrologicSubareas.GetHydrologicSubarea(primaryKey);
 
-                case "HydromodificationApplies":
-                    var hydromodificationApplies = HydromodificationApplies.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(hydromodificationApplies, "HydromodificationApplies", primaryKey);
-                    return hydromodificationApplies;
+                case "HydromodificationAppliesType":
+                    var hydromodificationAppliesType = HydromodificationAppliesType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(hydromodificationAppliesType, "HydromodificationAppliesType", primaryKey);
+                    return hydromodificationAppliesType;
 
                 case "LandUseBlock":
                     return LandUseBlocks.GetLandUseBlock(primaryKey);

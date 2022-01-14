@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[MaintenanceContactState] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceContactZip] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[WaterQualityManagementPlanPermitTermID] [int] NULL,
-	[HydromodificationAppliesID] [int] NULL,
+	[HydromodificationAppliesTypeID] [int] NULL,
 	[DateOfContruction] [datetime] NULL,
 	[HydrologicSubareaID] [int] NULL,
 	[RecordNumber] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -46,10 +46,10 @@ REFERENCES [dbo].[HydrologicSubarea] ([HydrologicSubareaID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID]
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_HydromodificationApplies_HydromodificationAppliesID] FOREIGN KEY([HydromodificationAppliesID])
-REFERENCES [dbo].[HydromodificationApplies] ([HydromodificationAppliesID])
+ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_HydromodificationAppliesType_HydromodificationAppliesTypeID] FOREIGN KEY([HydromodificationAppliesTypeID])
+REFERENCES [dbo].[HydromodificationAppliesType] ([HydromodificationAppliesTypeID])
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_HydromodificationApplies_HydromodificationAppliesID]
+ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_HydromodificationAppliesType_HydromodificationAppliesTypeID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])

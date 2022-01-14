@@ -36,7 +36,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, DbGeometry waterQualityManagementPlanBoundary, int waterQualityManagementPlanModelingApproachID) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesTypeID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, DbGeometry waterQualityManagementPlanBoundary, int waterQualityManagementPlanModelingApproachID) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
             this.MaintenanceContactState = maintenanceContactState;
             this.MaintenanceContactZip = maintenanceContactZip;
             this.WaterQualityManagementPlanPermitTermID = waterQualityManagementPlanPermitTermID;
-            this.HydromodificationAppliesID = hydromodificationAppliesID;
+            this.HydromodificationAppliesTypeID = hydromodificationAppliesTypeID;
             this.DateOfContruction = dateOfContruction;
             this.HydrologicSubareaID = hydrologicSubareaID;
             this.RecordNumber = recordNumber;
@@ -238,7 +238,7 @@ namespace Neptune.Web.Models
         public string MaintenanceContactState { get; set; }
         public string MaintenanceContactZip { get; set; }
         public int? WaterQualityManagementPlanPermitTermID { get; set; }
-        public int? HydromodificationAppliesID { get; set; }
+        public int? HydromodificationAppliesTypeID { get; set; }
         public DateTime? DateOfContruction { get; set; }
         public int? HydrologicSubareaID { get; set; }
         public string RecordNumber { get; set; }
@@ -263,7 +263,7 @@ namespace Neptune.Web.Models
         public WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get { return WaterQualityManagementPlanStatusID.HasValue ? WaterQualityManagementPlanStatus.AllLookupDictionary[WaterQualityManagementPlanStatusID.Value] : null; } }
         public WaterQualityManagementPlanDevelopmentType WaterQualityManagementPlanDevelopmentType { get { return WaterQualityManagementPlanDevelopmentTypeID.HasValue ? WaterQualityManagementPlanDevelopmentType.AllLookupDictionary[WaterQualityManagementPlanDevelopmentTypeID.Value] : null; } }
         public WaterQualityManagementPlanPermitTerm WaterQualityManagementPlanPermitTerm { get { return WaterQualityManagementPlanPermitTermID.HasValue ? WaterQualityManagementPlanPermitTerm.AllLookupDictionary[WaterQualityManagementPlanPermitTermID.Value] : null; } }
-        public HydromodificationApplies HydromodificationApplies { get { return HydromodificationAppliesID.HasValue ? HydromodificationApplies.AllLookupDictionary[HydromodificationAppliesID.Value] : null; } }
+        public HydromodificationAppliesType HydromodificationAppliesType { get { return HydromodificationAppliesTypeID.HasValue ? HydromodificationAppliesType.AllLookupDictionary[HydromodificationAppliesTypeID.Value] : null; } }
         public virtual HydrologicSubarea HydrologicSubarea { get; set; }
         public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
         public WaterQualityManagementPlanModelingApproach WaterQualityManagementPlanModelingApproach { get { return WaterQualityManagementPlanModelingApproach.AllLookupDictionary[WaterQualityManagementPlanModelingApproachID]; } }

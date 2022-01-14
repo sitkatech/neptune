@@ -68,7 +68,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public DateTime? DateOfContruction { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.HydromodificationApplies)]
-        public int? HydromodificationAppliesID { get; set; }
+        public int? HydromodificationAppliesTypeID { get; set; }
 
         [DisplayName("Permit Term")]
         public int? WaterQualityManagementPlanPermitTermID { get; set; }
@@ -117,7 +117,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
             MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
             DateOfContruction = waterQualityManagementPlan.DateOfContruction;
-            HydromodificationAppliesID = waterQualityManagementPlan.HydromodificationAppliesID;
+            HydromodificationAppliesTypeID = waterQualityManagementPlan.HydromodificationAppliesTypeID;
             WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
             RecordNumber = waterQualityManagementPlan.RecordNumber;
@@ -148,7 +148,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
             waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
             waterQualityManagementPlan.DateOfContruction = DateOfContruction;
-            waterQualityManagementPlan.HydromodificationAppliesID = HydromodificationAppliesID;
+            waterQualityManagementPlan.HydromodificationAppliesTypeID = HydromodificationAppliesTypeID;
             waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
             waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
             waterQualityManagementPlan.RecordNumber = RecordNumber;

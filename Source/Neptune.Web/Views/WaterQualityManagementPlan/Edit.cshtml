@@ -106,19 +106,19 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.HydromodificationAppliesID)
+                        @Html.LabelWithSugarFor(m => m.HydromodificationAppliesTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @foreach (var hydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesType)
+                        @foreach (var hydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesTypes)
                         {
                             <div class="radio-inline">
                                 <label>
-                                    @Html.RadioButtonFor(m => m.HydromodificationAppliesID, hydromodificationAppliesType.HydromodificationAppliesID)
-                                    @hydromodificationAppliesType.HydromodificationAppliesDisplayName
+                                    @Html.RadioButtonFor(m => m.HydromodificationAppliesTypeID, hydromodificationAppliesType.HydromodificationAppliesTypeID)
+                                    @hydromodificationAppliesType.HydromodificationAppliesTypeDisplayName
                                 </label>
                             </div>
                         }
-                        @Html.ValidationMessageFor(m => m.HydromodificationAppliesID)
+                        @Html.ValidationMessageFor(m => m.HydromodificationAppliesTypeID)
                     </div>
                 </div>
                 <div class="form-group">

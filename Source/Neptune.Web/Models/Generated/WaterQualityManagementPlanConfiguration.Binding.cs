@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
             Property(x => x.MaintenanceContactState).HasColumnName(@"MaintenanceContactState").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.MaintenanceContactZip).HasColumnName(@"MaintenanceContactZip").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.WaterQualityManagementPlanPermitTermID).HasColumnName(@"WaterQualityManagementPlanPermitTermID").HasColumnType("int").IsOptional();
-            Property(x => x.HydromodificationAppliesID).HasColumnName(@"HydromodificationAppliesID").HasColumnType("int").IsOptional();
+            Property(x => x.HydromodificationAppliesTypeID).HasColumnName(@"HydromodificationAppliesTypeID").HasColumnType("int").IsOptional();
             Property(x => x.DateOfContruction).HasColumnName(@"DateOfContruction").HasColumnType("datetime").IsOptional();
             Property(x => x.HydrologicSubareaID).HasColumnName(@"HydrologicSubareaID").HasColumnType("int").IsOptional();
             Property(x => x.RecordNumber).HasColumnName(@"RecordNumber").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
