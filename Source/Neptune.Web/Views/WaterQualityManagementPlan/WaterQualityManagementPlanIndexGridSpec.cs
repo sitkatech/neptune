@@ -16,7 +16,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public WaterQualityManagementPlanIndexGridSpec(Person currentPerson)
         {
-            var fieldDefinitionWaterQualityManagementPlan = Models.FieldDefinition.WaterQualityManagementPlan;
+            var fieldDefinitionWaterQualityManagementPlan = FieldDefinitionType.WaterQualityManagementPlan;
             var waterQualityManagementPlanLabelSingular =
                 fieldDefinitionWaterQualityManagementPlan.GetFieldDefinitionLabel();
             ObjectNameSingular = waterQualityManagementPlanLabelSingular;
@@ -52,7 +52,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Approval Date", x => x.ApprovalDate, 120);
             Add("Date of Construction", x => x.DateOfContruction, 120);
-            Add(Models.FieldDefinition.HydromodificationApplies.ToGridHeaderString(), x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 130,
+            Add(FieldDefinitionType.HydromodificationApplies.ToGridHeaderString(), x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 130,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaName, 120,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
@@ -69,9 +69,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("# of Simplified BMPs", x => x.QuickBMPs.Count, 100);
             Add("Modeling Approach", x => x.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(Models.FieldDefinition.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => x.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
+            Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => x.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
             Add("# of Documents", x => x.WaterQualityManagementPlanDocuments.Count, 100);
-            Add(Models.FieldDefinition.HasAllRequiredDocuments.ToGridHeaderString(),
+            Add(FieldDefinitionType.HasAllRequiredDocuments.ToGridHeaderString(),
                 x => x.HasAllRequiredDocuments()
                     ? BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle", "Yes")
                     : new HtmlString("<span style='display:none;'>No</span>")
@@ -84,7 +84,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     ? "N/A" : x.GetLatestOandMVerificationDate()) :new HtmlString(!x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace()
                     ? $"<a href=\"{x.GetLatestOandMVerificationUrl()}\" alt=\"{x.GetLatestOandMVerificationDate()}\" title=\"{x.GetLatestOandMVerificationDate()}\" >{x.GetLatestOandMVerificationDate()}</a>"
                     : "N/A"), 100);
-            Add(Models.FieldDefinition.TrashCaptureStatus.ToGridHeaderString(),
+            Add(FieldDefinitionType.TrashCaptureStatus.ToGridHeaderString(),
                 x => x.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName, 130,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
         }

@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.NeptuneHomePageImage
     public class EditViewModel : FormViewModel
     {
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.PhotoCaption)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.PhotoCaption)]
         [StringLength(Models.NeptuneHomePageImage.FieldLengths.Caption)]
         public string Caption { get; set; }
 

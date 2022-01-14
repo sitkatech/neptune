@@ -19,39 +19,34 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.Web;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared
 {
     public class FieldDefinitionDetailsViewData : NeptuneUserControlViewData
     {
-        public readonly Models.FieldDefinition FieldDefinition;
-        private readonly FieldDefinitionData _fieldDefinitionData;
+        public readonly Models.FieldDefinitionType FieldDefinitionType;
+        private readonly Models.FieldDefinition _fieldDefinition;
         public readonly bool ShowEditLink;
 
-        public FieldDefinitionDetailsViewData(Models.FieldDefinition fieldDefinition, FieldDefinitionData fieldDefinitionData, bool showEditLink)
+        public FieldDefinitionDetailsViewData(Models.FieldDefinitionType fieldDefinitionType, Models.FieldDefinition fieldDefinition, bool showEditLink)
         {
-            FieldDefinition = fieldDefinition;
-            _fieldDefinitionData = fieldDefinitionData;
+            FieldDefinitionType = fieldDefinitionType;
+            _fieldDefinition = fieldDefinition;
             ShowEditLink = showEditLink;
         }
 
         public HtmlString GetFieldDefinition()
         {
-            if (_fieldDefinitionData != null && _fieldDefinitionData.FieldDefinitionDataValueHtmlString != null)
+            if (_fieldDefinition != null && _fieldDefinition.FieldDefinitionValueHtmlString != null)
             {
-               return _fieldDefinitionData.FieldDefinitionDataValueHtmlString;
+               return _fieldDefinition.FieldDefinitionValueHtmlString;
             }
-            return FieldDefinition.DefaultDefinitionHtmlString ?? new HtmlString(string.Format("{0} not yet defined.", FieldDefinition.GetFieldDefinitionLabel()));
+            return new HtmlString(string.Format("{0} not yet defined.", FieldDefinitionType.GetFieldDefinitionLabel()));
         }
 
         public string GetFieldDefinitionLabel()
         {
-            if (_fieldDefinitionData != null && !string.IsNullOrWhiteSpace(_fieldDefinitionData.FieldDefinitionLabel))
-            {
-               return _fieldDefinitionData.FieldDefinitionLabel;
-            }
-            return FieldDefinition.FieldDefinitionDisplayName;
+            return FieldDefinitionType.FieldDefinitionTypeDisplayName;
         }
     }
 }

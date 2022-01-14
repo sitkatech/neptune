@@ -70,7 +70,7 @@ namespace Neptune.Web.Views.FieldVisit
 
             if (!detailPage)
             {
-                Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+                Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             }
 
             if (!isAnonymousOrUnassigned)
@@ -88,7 +88,7 @@ namespace Neptune.Web.Views.FieldVisit
 
             Add("Field Visit Verified", x => x.IsFieldVisitVerified.ToYesNo(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => isAnonymousOrUnassigned || x.FieldVisitStatusID != FieldVisitStatus.InProgress.FieldVisitStatusID
+            Add(FieldDefinitionType.FieldVisitStatus.ToGridHeaderString(), x => isAnonymousOrUnassigned || x.FieldVisitStatusID != FieldVisitStatus.InProgress.FieldVisitStatusID
                     ? new HtmlString(x.FieldVisitStatusDisplayName)
                     : UrlTemplate.MakeHrefString(FieldVisitModelExtensions.WorkflowUrlTemplate.ParameterReplace(x.FieldVisitID),
                         x.FieldVisitStatusDisplayName), 85,

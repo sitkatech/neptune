@@ -41,64 +41,64 @@ namespace Neptune.Web.Controllers
         }
 
         [FieldDefinitionViewListFeature]
-        public GridJsonNetJObjectResult<FieldDefinition> IndexGridJsonData()
+        public GridJsonNetJObjectResult<FieldDefinitionType> IndexGridJsonData()
         {
             var actions = GetFieldDefinitionsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldDefinition>(actions, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldDefinitionType>(actions, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private static List<FieldDefinition> GetFieldDefinitionsAndGridSpec(out FieldDefinitionGridSpec gridSpec, Person currentPerson)
+        private static List<FieldDefinitionType> GetFieldDefinitionsAndGridSpec(out FieldDefinitionGridSpec gridSpec, Person currentPerson)
         {
             gridSpec = new FieldDefinitionGridSpec(new FieldDefinitionViewListFeature().HasPermissionByPerson(currentPerson));
-            return FieldDefinition.All.Where(x => new FieldDefinitionManageFeature().HasPermission(currentPerson, x).HasPermission).OrderBy(x => x.GetFieldDefinitionLabel()).ToList();
+            return FieldDefinitionType.All.Where(x => new FieldDefinitionManageFeature().HasPermission(currentPerson, x).HasPermission).OrderBy(x => x.GetFieldDefinitionLabel()).ToList();
         }
 
         [HttpGet]
         [FieldDefinitionManageFeature]
-        public ViewResult Edit(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey)
+        public ViewResult Edit(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
         {
-            var fieldDefinitionData = HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.GetFieldDefinitionDataByFieldDefinition(fieldDefinitionPrimaryKey);            
+            var fieldDefinitionData = HttpRequestStorage.DatabaseEntities.FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(fieldDefinitionTypePrimaryKey);            
             var viewModel = new EditViewModel(fieldDefinitionData);
-            return ViewEdit(fieldDefinitionPrimaryKey, viewModel);
+            return ViewEdit(fieldDefinitionTypePrimaryKey, viewModel);
         }
 
         [HttpPost]
         [FieldDefinitionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Edit(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey, EditViewModel viewModel)
+        public ActionResult Edit(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(fieldDefinitionPrimaryKey, viewModel);
+                return ViewEdit(fieldDefinitionTypePrimaryKey, viewModel);
             }
-            var fieldDefinitionData = HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.GetFieldDefinitionDataByFieldDefinition(fieldDefinitionPrimaryKey);
-            if (fieldDefinitionData == null)
+            var fieldDefinition = HttpRequestStorage.DatabaseEntities.FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(fieldDefinitionTypePrimaryKey);
+            if (fieldDefinition == null)
             {
-                fieldDefinitionData = new FieldDefinitionData(fieldDefinitionPrimaryKey.EntityObject);
-                HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.Add(fieldDefinitionData);
+                fieldDefinition = new FieldDefinition(fieldDefinitionTypePrimaryKey.EntityObject);
+                HttpRequestStorage.DatabaseEntities.FieldDefinitions.Add(fieldDefinition);
             }
 
-            viewModel.UpdateModel(fieldDefinitionData);
+            viewModel.UpdateModel(fieldDefinition);
             SetMessageForDisplay("Field Definition successfully saved.");
-            return RedirectToAction(new SitkaRoute<FieldDefinitionController>(x => x.Edit(fieldDefinitionData.FieldDefinition)));
+            return RedirectToAction(new SitkaRoute<FieldDefinitionController>(x => x.Edit(fieldDefinition.FieldDefinitionTypeID)));
         }
 
-        private ViewResult ViewEdit(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey, EditViewModel viewModel)
+        private ViewResult ViewEdit(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
         {
-            var viewData = new EditViewData(CurrentPerson, fieldDefinitionPrimaryKey.EntityObject);
+            var viewData = new EditViewData(CurrentPerson, fieldDefinitionTypePrimaryKey.EntityObject);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
         [FieldDefinitionViewFeature]
         [CrossAreaRoute]
-        public PartialViewResult FieldDefinitionDetails(int fieldDefinitionID)
+        public PartialViewResult FieldDefinitionDetails(int fieldDefinitionTypeID)
         {
-            var fieldDefinition = FieldDefinition.AllLookupDictionary[fieldDefinitionID];
-            var fieldDefinitionData = HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.SingleOrDefault(x => x.FieldDefinitionID == fieldDefinitionID);
-            var showEditLink = new FieldDefinitionManageFeature().HasPermission(CurrentPerson, fieldDefinition).HasPermission; 
-            var viewData = new FieldDefinitionDetailsViewData(fieldDefinition, fieldDefinitionData, showEditLink);
+            var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
+            var fieldDefinition = HttpRequestStorage.DatabaseEntities.FieldDefinitions.SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
+            var showEditLink = new FieldDefinitionManageFeature().HasPermission(CurrentPerson, fieldDefinitionType).HasPermission; 
+            var viewData = new FieldDefinitionDetailsViewData(fieldDefinitionType, fieldDefinition, showEditLink);
             return RazorPartialView<FieldDefinitionDetails, FieldDefinitionDetailsViewData>(viewData);
         }
     }

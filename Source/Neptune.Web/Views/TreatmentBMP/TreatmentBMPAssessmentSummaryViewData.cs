@@ -14,7 +14,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             
             PageTitle = "Recent Treatment BMP Assessments";
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             GridSpec = new TreatmentBMPAssessmentSummaryGridSpec() { ObjectNameSingular = "Recent Treatment BMP Assessment", ObjectNamePlural = "Recent Treatment BMP Assessments", SaveFiltersInCookie = true };
             GridName = "treatmentBMPsGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.TreatmentBMPAssessmentSummaryGridJsonData());

@@ -65,7 +65,7 @@
                             </select>
                             @Html.ValidationMessageFor(m => m.ObservationTypeCollectionMethodID)
                             <div class="help-block">
-                                <span ng-if="ObservationTypeCollectionMethodSelected == null">The @FieldDefinition.ObservationCollectionMethod.GetFieldDefinitionLabel() is the template used to define the Observation Type.</span>
+                                <span ng-if="ObservationTypeCollectionMethodSelected == null">The @FieldDefinitionType.ObservationCollectionMethod.GetFieldDefinitionLabel() is the template used to define the Observation Type.</span>
                                 <span ng-if="ObservationTypeCollectionMethodSelected != null">{{getObservationCollectionMethod(ObservationTypeCollectionMethodID).Definition}}</span>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                     <h4>Enter Data Collection Instructions</h4>
                     <div ng-if="ObservationTypeCollectionMethodSelected == null">
                         <div class="help-block">
-                            Select a @FieldDefinition.ObservationCollectionMethod.GetFieldDefinitionLabel() to enter the required Instructions
+                            Select a @FieldDefinitionType.ObservationCollectionMethod.GetFieldDefinitionLabel() to enter the required Instructions
                         </div>
                     </div>
                     <div ng-if="ObservationTypeCollectionMethodSelected != null">
@@ -172,7 +172,7 @@
                     <h4>Enter Labels and Units for Data Collection</h4>
                     <div ng-if="ObservationTypeCollectionMethodSelected == null">
                         <div class="help-block">
-                            Select a @FieldDefinition.ObservationCollectionMethod.GetFieldDefinitionLabel() to enter the required Labels and Units
+                            Select a @FieldDefinitionType.ObservationCollectionMethod.GetFieldDefinitionLabel() to enter the required Labels and Units
                         </div>
                     </div>
                     <div ng-if="ObservationTypeCollectionMethodSelected != null">
@@ -181,7 +181,7 @@
                     <div ng-if="selectedCollectionMethodIsDiscrete()">
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.PropertiesToObserve, true)
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
@@ -202,13 +202,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnitLabel, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Height, Count" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnit, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <select style="width: auto" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitTypeID"
@@ -222,13 +222,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MinimumNumberOfObservations, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MinimumNumberOfObservations, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MaximumNumberOfObservations)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MaximumNumberOfObservations" step="1" min="0" />
@@ -236,13 +236,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label" style="padding-left: 5px;">
-                                @Html.LabelWithSugarFor(FieldDefinition.MinimumValueOfEachObservation, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MinimumValueOfEachObservation, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MaximumValueOfEachObservation)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MaximumValueOfEachObservation)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MaximumValueOfObservations" />
@@ -255,7 +255,7 @@
                         <input type="hidden" name="@Html.NameFor(m => m.ObservationTargetTypeID)" value="@ViewDataTyped.PassFailObservationTargetTypeID" />
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.PropertiesToObserve, true)
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
@@ -288,7 +288,7 @@
                     <div ng-if="selectedCollectionMethodIsPercentage()">
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.PropertiesToObserve, true)
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
@@ -304,7 +304,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel, true)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnitLabel, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Percent Coverage" />

@@ -18,7 +18,7 @@
     @if (ViewDataTyped.CurrentPersonCanCreate)
     {
         <div class="pull-right">
-            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Add Plan", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")), ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
+            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Add Plan", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")), ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
         </div>
     }
 }

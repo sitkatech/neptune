@@ -10,7 +10,7 @@ namespace Neptune.Web.Views.FieldVisit
      
         public BulkUploadTrashScreenVisitViewData(Person currentPerson) : base(currentPerson, Models.NeptunePage.GetNeptunePageByPageType(NeptunePageType.BulkUploadFieldVisits), NeptuneArea.OCStormwaterTools)
         {
-            EntityName = Models.FieldDefinition.FieldVisit.GetFieldDefinitionLabel();
+            EntityName = FieldDefinitionType.FieldVisit.GetFieldDefinitionLabel();
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = "Bulk Upload Trash Screen Field Visits";
             TemplateDownloadUrl =

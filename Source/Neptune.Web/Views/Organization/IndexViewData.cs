@@ -39,14 +39,14 @@ namespace Neptune.Web.Views.Organization
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
+            EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = "All Organizations";
 
             var hasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new IndexGridSpec(currentPerson, hasOrganizationManagePermissions)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true
             };
 

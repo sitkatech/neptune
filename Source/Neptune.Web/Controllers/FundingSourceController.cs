@@ -75,7 +75,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fundingSource, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.FundingSources.Add(fundingSource);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {fundingSource.GetDisplayNameAsUrl()} succesfully created.");
+            SetMessageForDisplay($"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} {fundingSource.GetDisplayNameAsUrl()} succesfully created.");
 
             return new ModalDialogFormJsonResult();
         }
@@ -135,8 +135,8 @@ namespace Neptune.Web.Controllers
             var count = fundingSource.FundingEventFundingSources.Count;
             var totalAmount = fundingSource.FundingEventFundingSources.Sum(x => x.Amount).ToStringCurrency();
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete this {FieldDefinition.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'? Deleting this funding source will remove {count} Treatment BMP Funding Event records from the system, totaling {totalAmount}."
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()}", SitkaRoute<FundingSourceController>.BuildLinkFromExpression(x => x.Detail(fundingSource), "here"));
+                ? $"Are you sure you want to delete this {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'? Deleting this funding source will remove {count} Treatment BMP Funding Event records from the system, totaling {totalAmount}."
+                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}", SitkaRoute<FundingSourceController>.BuildLinkFromExpression(x => x.Detail(fundingSource), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);

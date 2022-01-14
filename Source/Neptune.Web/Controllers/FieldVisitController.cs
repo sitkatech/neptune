@@ -519,7 +519,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fieldVisit, allCustomAttributeTypes);
             if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
 
-            SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
+            SetMessageForDisplay($"{FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
 
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
                 c.EditMaintenanceRecord(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>

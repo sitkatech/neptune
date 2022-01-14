@@ -14,7 +14,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         [Required]
         [FieldDefinitionDisplay(
-            FieldDefinitionEnum.Jurisdiction)]
+            FieldDefinitionTypeEnum.Jurisdiction)]
         public StormwaterJurisdictionSimple StormwaterJurisdiction { get; set; }
 
         [DisplayName("Assessment Area")]

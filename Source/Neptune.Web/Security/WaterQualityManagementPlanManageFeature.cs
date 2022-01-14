@@ -28,7 +28,7 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult();
             }
 
-            return new PermissionCheckResult($"Person does not belong to the {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jurisdiction.");
+            return new PermissionCheckResult($"Person does not belong to the {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jurisdiction.");
         }
 
         public void DemandPermission(Person person, WaterQualityManagementPlan contextModelObject)

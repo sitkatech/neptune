@@ -31,7 +31,6 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel.Configuration;
 using System.Web;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 
@@ -80,38 +79,38 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public List<HtmlString> DelineationErrors { get; }
         public List<HtmlString> ParameterizationErrors { get; }
-        public Models.FieldDefinition FieldDefinitionForAverageDivertedFlowrate { get; }
-        public Models.FieldDefinition FieldDefinitionForAverageTreatmentFlowrate { get; }
-        public Models.FieldDefinition FieldDefinitionForDesignDryWeatherTreatmentCapacity { get; }
-        public Models.FieldDefinition FieldDefinitionForDesignLowFlowDiversionCapacity { get; }
-        public Models.FieldDefinition FieldDefinitionForDesignMediaFiltrationRate { get; }
-        public Models.FieldDefinition FieldDefinitionForDesignResidenceTimeforPermanentPool { get; }
-        public Models.FieldDefinition FieldDefinitionForDiversionRate { get; }
-        public Models.FieldDefinition FieldDefinitionForDrawdownTimeforWQDetentionVolume { get; }
-        public Models.FieldDefinition FieldDefinitionForEffectiveFootprint { get; }
-        public Models.FieldDefinition FieldDefinitionForEffectiveRetentionDepth { get; }
-        public Models.FieldDefinition FieldDefinitionForInfiltrationDischargeRate { get; }
-        public Models.FieldDefinition FieldDefinitionForInfiltrationSurfaceArea { get; }
-        public Models.FieldDefinition FieldDefinitionForMediaBedFootprint { get; }
-        public Models.FieldDefinition FieldDefinitionForMonthsofOperation { get; }
-        public Models.FieldDefinition FieldDefinitionForPermanentPoolorWetlandVolume { get; }
-        public Models.FieldDefinition FieldDefinitionForRoutingConfiguration { get; }
-        public Models.FieldDefinition FieldDefinitionForStorageVolumeBelowLowestOutletElevation { get; }
-        public Models.FieldDefinition FieldDefinitionForSummerHarvestedWaterDemand { get; }
-        public Models.FieldDefinition FieldDefinitionForTimeofConcentration { get; }
-        public Models.FieldDefinition FieldDefinitionForDrawdownTimeForDetentionVolume { get; }
-        public Models.FieldDefinition FieldDefinitionForTotalEffectiveBMPVolume { get; }
-        public Models.FieldDefinition FieldDefinitionForTotalEffectiveDrywellBMPVolume { get; }
-        public Models.FieldDefinition FieldDefinitionForTreatmentRate { get; }
-        public Models.FieldDefinition FieldDefinitionForUnderlyingHydrologicSoilGroupHSG { get; }
-        public Models.FieldDefinition FieldDefinitionForUnderlyingInfiltrationRate { get; }
-        public Models.FieldDefinition FieldDefinitionForUpstreamBMP { get; }
-        public Models.FieldDefinition FieldDefinitionForWaterQualityDetentionVolume { get; }
-        public Models.FieldDefinition FieldDefinitionForWettedFootprint { get; }
-        public Models.FieldDefinition FieldDefinitionForWinterHarvestedWaterDemand { get; }
-        public Models.FieldDefinition FieldDefinitionForWatershed { get; }
-        public Models.FieldDefinition FieldDefinitionForDesignStormwaterDepth { get; }
-        public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
+        public Models.FieldDefinitionType FieldDefinitionForAverageDivertedFlowrate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForAverageTreatmentFlowrate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDesignDryWeatherTreatmentCapacity { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDesignLowFlowDiversionCapacity { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDesignMediaFiltrationRate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDesignResidenceTimeforPermanentPool { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDiversionRate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDrawdownTimeforWQDetentionVolume { get; }
+        public Models.FieldDefinitionType FieldDefinitionForEffectiveFootprint { get; }
+        public Models.FieldDefinitionType FieldDefinitionForEffectiveRetentionDepth { get; }
+        public Models.FieldDefinitionType FieldDefinitionForInfiltrationDischargeRate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForInfiltrationSurfaceArea { get; }
+        public Models.FieldDefinitionType FieldDefinitionForMediaBedFootprint { get; }
+        public Models.FieldDefinitionType FieldDefinitionForMonthsofOperation { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPermanentPoolorWetlandVolume { get; }
+        public Models.FieldDefinitionType FieldDefinitionForRoutingConfiguration { get; }
+        public Models.FieldDefinitionType FieldDefinitionForStorageVolumeBelowLowestOutletElevation { get; }
+        public Models.FieldDefinitionType FieldDefinitionForSummerHarvestedWaterDemand { get; }
+        public Models.FieldDefinitionType FieldDefinitionForTimeofConcentration { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDrawdownTimeForDetentionVolume { get; }
+        public Models.FieldDefinitionType FieldDefinitionForTotalEffectiveBMPVolume { get; }
+        public Models.FieldDefinitionType FieldDefinitionForTotalEffectiveDrywellBMPVolume { get; }
+        public Models.FieldDefinitionType FieldDefinitionForTreatmentRate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForUnderlyingHydrologicSoilGroupHSG { get; }
+        public Models.FieldDefinitionType FieldDefinitionForUnderlyingInfiltrationRate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForUpstreamBMP { get; }
+        public Models.FieldDefinitionType FieldDefinitionForWaterQualityDetentionVolume { get; }
+        public Models.FieldDefinitionType FieldDefinitionForWettedFootprint { get; }
+        public Models.FieldDefinitionType FieldDefinitionForWinterHarvestedWaterDemand { get; }
+        public Models.FieldDefinitionType FieldDefinitionForWatershed { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDesignStormwaterDepth { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool HasModelingAttributes { get; }
         public Models.RegionalSubbasinRevisionRequest OpenRevisionRequest { get; }
         public string EditUpstreamBMPUrl { get; }
@@ -132,7 +131,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             TreatmentBMP = treatmentBMP;
             PageTitle = treatmentBMP.TreatmentBMPName;
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             MapInitJson = mapInitJson;
             ImageCarouselViewData = imageCarouselViewData;
@@ -186,38 +185,38 @@ namespace Neptune.Web.Views.TreatmentBMP
             
             HasModelingAttributes = TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null;
 
-            FieldDefinitionForAverageDivertedFlowrate = Models.FieldDefinition.AverageDivertedFlowrate;
-            FieldDefinitionForAverageTreatmentFlowrate = Models.FieldDefinition.AverageTreatmentFlowrate;
-            FieldDefinitionForDesignDryWeatherTreatmentCapacity = Models.FieldDefinition.DesignDryWeatherTreatmentCapacity;
-            FieldDefinitionForDesignLowFlowDiversionCapacity = Models.FieldDefinition.DesignLowFlowDiversionCapacity;
-            FieldDefinitionForDesignMediaFiltrationRate = Models.FieldDefinition.DesignMediaFiltrationRate;
-            FieldDefinitionForDesignResidenceTimeforPermanentPool = Models.FieldDefinition.DesignResidenceTimeForPermanentPool;
-            FieldDefinitionForDiversionRate = Models.FieldDefinition.DiversionRate;
-            FieldDefinitionForDrawdownTimeforWQDetentionVolume = Models.FieldDefinition.DrawdownTimeForWQDetentionVolume;
-            FieldDefinitionForEffectiveFootprint = Models.FieldDefinition.EffectiveFootprint;
-            FieldDefinitionForEffectiveRetentionDepth = Models.FieldDefinition.EffectiveRetentionDepth;
-            FieldDefinitionForInfiltrationDischargeRate = Models.FieldDefinition.InfiltrationDischargeRate;
-            FieldDefinitionForInfiltrationSurfaceArea = Models.FieldDefinition.InfiltrationSurfaceArea;
-            FieldDefinitionForMediaBedFootprint = Models.FieldDefinition.MediaBedFootprint;
-            FieldDefinitionForMonthsofOperation = Models.FieldDefinition.MonthsOperational;
-            FieldDefinitionForPermanentPoolorWetlandVolume = Models.FieldDefinition.PermanentPoolOrWetlandVolume;
-            FieldDefinitionForRoutingConfiguration = Models.FieldDefinition.RoutingConfiguration;
-            FieldDefinitionForStorageVolumeBelowLowestOutletElevation = Models.FieldDefinition.StorageVolumeBelowLowestOutletElevation;
-            FieldDefinitionForSummerHarvestedWaterDemand = Models.FieldDefinition.SummerHarvestedWaterDemand;
-            FieldDefinitionForTimeofConcentration = Models.FieldDefinition.TimeOfConcentration;
-            FieldDefinitionForDrawdownTimeForDetentionVolume = Models.FieldDefinition.DrawdownTimeForDetentionVolume;
-            FieldDefinitionForTotalEffectiveBMPVolume = Models.FieldDefinition.TotalEffectiveBMPVolume;
-            FieldDefinitionForTotalEffectiveDrywellBMPVolume = Models.FieldDefinition.TotalEffectiveDrywellBMPVolume;
-            FieldDefinitionForTreatmentRate = Models.FieldDefinition.TreatmentRate;
-            FieldDefinitionForUnderlyingHydrologicSoilGroupHSG = Models.FieldDefinition.UnderlyingHydrologicSoilGroupHSG;
-            FieldDefinitionForUnderlyingInfiltrationRate = Models.FieldDefinition.UnderlyingInfiltrationRate;
-            FieldDefinitionForUpstreamBMP = Models.FieldDefinition.UpstreamBMP;
-            FieldDefinitionForWaterQualityDetentionVolume = Models.FieldDefinition.WaterQualityDetentionVolume;
-            FieldDefinitionForWettedFootprint = Models.FieldDefinition.WettedFootprint;
-            FieldDefinitionForWinterHarvestedWaterDemand = Models.FieldDefinition.WinterHarvestedWaterDemand;
-            FieldDefinitionForWatershed = Models.FieldDefinition.Watershed;
-            FieldDefinitionForDesignStormwaterDepth = Models.FieldDefinition.DesignStormwaterDepth;
-            FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
+            FieldDefinitionForAverageDivertedFlowrate = FieldDefinitionType.AverageDivertedFlowrate;
+            FieldDefinitionForAverageTreatmentFlowrate = FieldDefinitionType.AverageTreatmentFlowrate;
+            FieldDefinitionForDesignDryWeatherTreatmentCapacity = FieldDefinitionType.DesignDryWeatherTreatmentCapacity;
+            FieldDefinitionForDesignLowFlowDiversionCapacity = FieldDefinitionType.DesignLowFlowDiversionCapacity;
+            FieldDefinitionForDesignMediaFiltrationRate = FieldDefinitionType.DesignMediaFiltrationRate;
+            FieldDefinitionForDesignResidenceTimeforPermanentPool = FieldDefinitionType.DesignResidenceTimeForPermanentPool;
+            FieldDefinitionForDiversionRate = FieldDefinitionType.DiversionRate;
+            FieldDefinitionForDrawdownTimeforWQDetentionVolume = FieldDefinitionType.DrawdownTimeForWQDetentionVolume;
+            FieldDefinitionForEffectiveFootprint = FieldDefinitionType.EffectiveFootprint;
+            FieldDefinitionForEffectiveRetentionDepth = FieldDefinitionType.EffectiveRetentionDepth;
+            FieldDefinitionForInfiltrationDischargeRate = FieldDefinitionType.InfiltrationDischargeRate;
+            FieldDefinitionForInfiltrationSurfaceArea = FieldDefinitionType.InfiltrationSurfaceArea;
+            FieldDefinitionForMediaBedFootprint = FieldDefinitionType.MediaBedFootprint;
+            FieldDefinitionForMonthsofOperation = FieldDefinitionType.MonthsOperational;
+            FieldDefinitionForPermanentPoolorWetlandVolume = FieldDefinitionType.PermanentPoolOrWetlandVolume;
+            FieldDefinitionForRoutingConfiguration = FieldDefinitionType.RoutingConfiguration;
+            FieldDefinitionForStorageVolumeBelowLowestOutletElevation = FieldDefinitionType.StorageVolumeBelowLowestOutletElevation;
+            FieldDefinitionForSummerHarvestedWaterDemand = FieldDefinitionType.SummerHarvestedWaterDemand;
+            FieldDefinitionForTimeofConcentration = FieldDefinitionType.TimeOfConcentration;
+            FieldDefinitionForDrawdownTimeForDetentionVolume = FieldDefinitionType.DrawdownTimeForDetentionVolume;
+            FieldDefinitionForTotalEffectiveBMPVolume = FieldDefinitionType.TotalEffectiveBMPVolume;
+            FieldDefinitionForTotalEffectiveDrywellBMPVolume = FieldDefinitionType.TotalEffectiveDrywellBMPVolume;
+            FieldDefinitionForTreatmentRate = FieldDefinitionType.TreatmentRate;
+            FieldDefinitionForUnderlyingHydrologicSoilGroupHSG = FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG;
+            FieldDefinitionForUnderlyingInfiltrationRate = FieldDefinitionType.UnderlyingInfiltrationRate;
+            FieldDefinitionForUpstreamBMP = FieldDefinitionType.UpstreamBMP;
+            FieldDefinitionForWaterQualityDetentionVolume = FieldDefinitionType.WaterQualityDetentionVolume;
+            FieldDefinitionForWettedFootprint = FieldDefinitionType.WettedFootprint;
+            FieldDefinitionForWinterHarvestedWaterDemand = FieldDefinitionType.WinterHarvestedWaterDemand;
+            FieldDefinitionForWatershed = FieldDefinitionType.Watershed;
+            FieldDefinitionForDesignStormwaterDepth = FieldDefinitionType.DesignStormwaterDepth;
+            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
 
             OpenRevisionRequest = TreatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);

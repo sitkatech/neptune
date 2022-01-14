@@ -9,10 +9,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular ViewDataForAngular { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
-        public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
-        public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
-        public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
-        public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPercentOfSiteTreated { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPercentCaptured { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPercentRetained { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
 
         public EditSimplifiedStructuralBMPsViewData(Person currentPerson,
             Models.WaterQualityManagementPlan waterQualityManagementPlan,
@@ -20,15 +20,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             int dryWeatherFlowOverrideDefaultID,
             int dryWeatherFlowOverrideYesID) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
             SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
             PageTitle = "Edit Simplified Structural BMPs";
-            FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
-            FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
-            FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
-            FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
+            FieldDefinitionForPercentOfSiteTreated = FieldDefinitionType.PercentOfSiteTreated;
+            FieldDefinitionForPercentCaptured = FieldDefinitionType.PercentCaptured;
+            FieldDefinitionForPercentRetained = FieldDefinitionType.PercentRetained;
+            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
 
             ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
 

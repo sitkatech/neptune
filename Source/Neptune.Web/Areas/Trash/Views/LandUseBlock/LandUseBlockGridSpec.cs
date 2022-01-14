@@ -19,7 +19,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlock
             Add("Land Use Type", x => x.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
             Add("Block Area", x => ((x.LandUseBlockGeometry.Area ?? 0) * DbSpatialHelper.SquareMetersToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
-            Add(Models.FieldDefinition.LoadingRate.ToGridHeaderString(), x => x.TrashGenerationRate.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100,
+            Add(FieldDefinitionType.LoadingRate.ToGridHeaderString(), x => x.TrashGenerationRate.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Land Use Description", x => x.LandUseDescription, 100, DhtmlxGridColumnFilterType.Text);
             Add("Median Household Income Residential", x => x.MedianHouseholdIncomeResidential.ToStringCurrency(), 100,

@@ -27,7 +27,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @if (ViewDataTyped.ShowEditLink)
 {
     <div class="pull-right">
-        <a href="@(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(t => t.Edit(ViewDataTyped.FieldDefinition)))" target="_blank">@DhtmlxGridHtmlHelpers.EditIconBootstrap</a>
+        <a href="@(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(t => t.Edit(ViewDataTyped.FieldDefinitionType)))" target="_blank">@DhtmlxGridHtmlHelpers.EditIconBootstrap</a>
     </div>
     <div class="clearfix"></div>
 }

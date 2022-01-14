@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.ManagerDashboard
                 DhtmlxGridColumnFormatType.Date);
             Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
                 DhtmlxGridColumnFormatType.Date);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),
+            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(),
                 x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }

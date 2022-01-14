@@ -35,14 +35,14 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
-            PageTitle = $"Manage {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            PageTitle = $"Manage {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
 
             NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true                
             };
 

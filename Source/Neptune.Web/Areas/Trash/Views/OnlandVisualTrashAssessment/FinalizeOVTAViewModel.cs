@@ -30,7 +30,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public DateTime AssessmentDate { get; set; }
 
         [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.OnlandVisualTrashAssessmentNotes)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.OnlandVisualTrashAssessmentNotes)]
         public string Notes { get; set; }
 
         [Required]

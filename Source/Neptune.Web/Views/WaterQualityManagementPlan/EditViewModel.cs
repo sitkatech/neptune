@@ -67,7 +67,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Date of Construction")]
         public DateTime? DateOfContruction { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.HydromodificationApplies)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.HydromodificationApplies)]
         public int? HydromodificationAppliesID { get; set; }
 
         [DisplayName("Permit Term")]
@@ -84,7 +84,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public decimal? RecordedWQMPAreaInAcres { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TrashCaptureStatus)]
         public int? TrashCaptureStatusTypeID { get; set; }
 
         [DisplayName("Trash Capture Effectiveness")]

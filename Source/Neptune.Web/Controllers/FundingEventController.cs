@@ -35,7 +35,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditFundingEventFundingSources(fundingEvent, viewModel);
             }
 
-            SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully updated.");
+            SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully updated.");
 
             return UpdateFundingEventFundingSources(viewModel, fundingEvent);
         }
@@ -77,7 +77,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.FundingEvents.Add(fundingEvent);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully added.");
+            SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully added.");
 
             return new ModalDialogFormJsonResult();
         }
@@ -124,14 +124,14 @@ namespace Neptune.Web.Controllers
             fundingEvent.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully deleted");
+            SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();
         }
 
         private ActionResult ViewDelete(ConfirmDialogFormViewModel viewModel, FundingEvent fundingEvent)
         {
             var confirmMessage =
-                $"Are you sure you want to delete this {FieldDefinition.FundingEvent.GetFieldDefinitionLabel()}? This will remove {fundingEvent.FundingEventFundingSources.Sum(x=>x.Amount).ToStringCurrency()} of expenditures from this BMP.";
+                $"Are you sure you want to delete this {FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()}? This will remove {fundingEvent.FundingEventFundingSources.Sum(x=>x.Amount).ToStringCurrency()} of expenditures from this BMP.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
                 viewModel);

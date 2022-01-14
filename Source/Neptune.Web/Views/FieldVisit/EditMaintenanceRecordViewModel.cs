@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string MaintenanceRecordDescription { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.MaintenanceRecordType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.MaintenanceRecordType)]
         public int? MaintenanceRecordTypeID { get; set; }
 
         /// <summary>

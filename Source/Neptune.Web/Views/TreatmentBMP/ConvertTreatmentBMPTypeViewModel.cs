@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMP
     public class ConvertTreatmentBMPTypeViewModel : FormViewModel
     {
         [Required(ErrorMessage = "Choose a BMP Type to convert to")]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TreatmentBMPType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TreatmentBMPType)]
         public int? TreatmentBMPTypeID { get; set; }
 
 

@@ -37,7 +37,7 @@
     <div class="col-sm-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, string.Format("Edit {0} - {1}", FieldDefinition.FundingSource.GetFieldDefinitionLabel(), ViewDataTyped.FundingSource.GetDisplayName()), ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, string.Format("Edit {0} - {1}", FieldDefinitionType.FundingSource.GetFieldDefinitionLabel(), ViewDataTyped.FundingSource.GetDisplayName()), ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -49,7 +49,7 @@
                     <div class="col-xs-7">@Html.Raw(ViewDataTyped.FundingSource.FundingSourceDescription.HtmlEncodeWithBreaks())</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-5 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinition.Organization)</div>
+                    <div class="col-xs-5 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinitionType.Organization)</div>
                     <div class="col-xs-7">
                         @if (ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
                         {
@@ -81,7 +81,7 @@
                         <div style="overflow-x: auto">
                             <table class="table table-striped table-condensed table-hover table-bordered">
                                 <tr>
-                                    <th>@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMP)</th>
+                                    <th>@Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMP)</th>
                                     <th style="text-align: right">Amount</th>
                                 </tr>
                                 @foreach (var fundingEventFundingSource in ViewDataTyped.FundingSource.FundingEventFundingSources.OrderBy(x => x.FundingEvent.TreatmentBMP.TreatmentBMPName))

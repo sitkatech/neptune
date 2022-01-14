@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.FundingSource
         {
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();
-            EntityName = $"{Models.FieldDefinition.FundingSource.GetFieldDefinitionLabel()}";
+            EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}";
             EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
 
             UserHasFundingSourceManagePermissions = new FundingSourceEditFeature().HasPermission(CurrentPerson, fundingSource).HasPermission;

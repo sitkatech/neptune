@@ -30,14 +30,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 x => x.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
                 DhtmlxGridColumnFilterType.Html);
 
-            Add(FieldDefinition.BaselineScore.ToGridHeaderString(), x => x.GetBaselineScoreAsHtmlString(), 150,
+            Add(FieldDefinitionType.BaselineScore.ToGridHeaderString(), x => x.GetBaselineScoreAsHtmlString(), 150,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add(FieldDefinition.ProgressScore.ToGridHeaderString(), x => x.GetProgressScoreAsHtmlString(), 150,
+            Add(FieldDefinitionType.ProgressScore.ToGridHeaderString(), x => x.GetProgressScoreAsHtmlString(), 150,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Number of Assessments Completed", x => x.OnlandVisualTrashAssessments.Count, 170,
                 DhtmlxGridColumnAggregationType.Total);
             Add("Last Assessment Date", x => x.GetLastAssessmentDate(), 120, DhtmlxGridColumnFormatType.Date);
-            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
+            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
         }
     }
 }

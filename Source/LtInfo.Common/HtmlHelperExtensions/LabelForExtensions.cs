@@ -343,7 +343,7 @@ namespace LtInfo.Common.HtmlHelperExtensions
             var fieldDefinitionDefinition = new HtmlString(string.Empty);
             if (fieldDefinitionData != null)
             {
-                fieldDefinitionDefinition = fieldDefinitionData.FieldDefinitionDataValueHtmlString;
+                fieldDefinitionDefinition = fieldDefinitionData.FieldDefinitionValueHtmlString;
             }
             var helpIconImgTag = GenerateHelpIconImgTag(labelText, fieldDefinitionDefinition, urlToContent, popupWidth, displayStyle);
             var labelTag = new TagBuilder("label");

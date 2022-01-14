@@ -103,12 +103,12 @@ namespace Neptune.Web.Controllers
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
-                new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
+                new LayerGeoJson(FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized(),
                     parcelGeoJsonFeatureCollection,
                     ParcelModelExtensions.ParcelColor,
                     1,
                     LayerInitialVisibility.Show),
-                new LayerGeoJson(FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
+                new LayerGeoJson(FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
                     treatmentBmpGeoJsonFeatureCollection,
                     "#935f59",
                     1,
@@ -432,7 +432,7 @@ namespace Neptune.Web.Controllers
             var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
 
             viewModel.UpdateModels(waterQualityManagementPlan);
-            SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
+            SetMessageForDisplay($"Successfully edited {FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
 
             var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
 
@@ -528,7 +528,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay(
-                $"Successfully updated {FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " + $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+                $"Successfully updated {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " + $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }

@@ -43,8 +43,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new DelineationOverlapConfiguration());
             modelBuilder.Configurations.Add(new DelineationStagingConfiguration());
             modelBuilder.Configurations.Add(new DirtyModelNodeConfiguration());
-            modelBuilder.Configurations.Add(new FieldDefinitionDataConfiguration());
-            modelBuilder.Configurations.Add(new FieldDefinitionDataImageConfiguration());
+            modelBuilder.Configurations.Add(new FieldDefinitionConfiguration());
             modelBuilder.Configurations.Add(new FieldVisitConfiguration());
             modelBuilder.Configurations.Add(new FileResourceConfiguration());
             modelBuilder.Configurations.Add(new FundingEventConfiguration());
@@ -146,8 +145,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<Delineation> Delineations { get; set; }
         public virtual DbSet<DelineationStaging> DelineationStagings { get; set; }
         public virtual DbSet<DirtyModelNode> DirtyModelNodes { get; set; }
-        public virtual DbSet<FieldDefinitionDataImage> FieldDefinitionDataImages { get; set; }
-        public virtual DbSet<FieldDefinitionData> FieldDefinitionDatas { get; set; }
+        public virtual DbSet<FieldDefinition> FieldDefinitions { get; set; }
         public virtual DbSet<FieldVisit> FieldVisits { get; set; }
         public virtual DbSet<FileResource> FileResources { get; set; }
         public virtual DbSet<FundingEventFundingSource> FundingEventFundingSources { get; set; }
@@ -296,16 +294,13 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(dryWeatherFlowOverride, "DryWeatherFlowOverride", primaryKey);
                     return dryWeatherFlowOverride;
 
-                case "FieldDefinitionDataImage":
-                    return FieldDefinitionDataImages.GetFieldDefinitionDataImage(primaryKey);
-
-                case "FieldDefinitionData":
-                    return FieldDefinitionDatas.GetFieldDefinitionData(primaryKey);
-
                 case "FieldDefinition":
-                    var fieldDefinition = FieldDefinition.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(fieldDefinition, "FieldDefinition", primaryKey);
-                    return fieldDefinition;
+                    return FieldDefinitions.GetFieldDefinition(primaryKey);
+
+                case "FieldDefinitionType":
+                    var fieldDefinitionType = FieldDefinitionType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(fieldDefinitionType, "FieldDefinitionType", primaryKey);
+                    return fieldDefinitionType;
 
                 case "FieldVisit":
                     return FieldVisits.GetFieldVisit(primaryKey);

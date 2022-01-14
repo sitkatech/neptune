@@ -117,7 +117,7 @@
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.WaterQualityManagementPlan.GetEditUrl(), string.Format("Edit {0} Basics", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.WaterQualityManagementPlan.GetEditUrl(), string.Format("Edit {0} Basics", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
                     </span>
                 }
             </div>
@@ -127,7 +127,7 @@
                     <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanName</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction")</label>
                     <div class="col-sm-7">
                         @if (ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
                         {
@@ -193,7 +193,7 @@
                     <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.DateOfContruction.ToStringDate()</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.HydromodificationApplies)</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.HydromodificationApplies)</label>
                     <div class="col-sm-7">
                         @if (ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies != null)
                         {
@@ -223,7 +223,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TrashCaptureStatus)</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.TrashCaptureStatus)</label>
                     <div class="col-sm-7">
                         @ViewDataTyped.WaterQualityManagementPlan.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName
                     </div>
@@ -288,7 +288,7 @@
         </div>
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @Html.LabelWithSugarFor(FieldDefinition.ModeledPerformance, LabelWithSugarForExtensions.DisplayStyle.SitsOnDarkBackground)
+                @Html.LabelWithSugarFor(FieldDefinitionType.ModeledPerformance, LabelWithSugarForExtensions.DisplayStyle.SitsOnDarkBackground)
             </div>
             <div class="panel-body">
 
@@ -373,15 +373,15 @@
                     }
                     else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
                     {
-                        <p class="systemText">No treatment area is provided for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
+                        <p class="systemText">No treatment area is provided for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
                     }
                     else if (!ViewDataTyped.AnyLSPCBasins)
                     {
-                        <p class="systemText">The @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel() boundary does not lie within any LSPC Basin; no Land Use Statistics will be calculated.</p>
+                        <p class="systemText">The @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel() boundary does not lie within any LSPC Basin; no Land Use Statistics will be calculated.</p>
                     }
                     else
                     {
-                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()</p>
+                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()</p>
                     }
                 </div>
 
@@ -391,7 +391,7 @@
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Associated @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()
+                Associated @FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized()
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
@@ -629,7 +629,7 @@
                             if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                             {
                                 <span>
-                                    @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), 850, "Save", "Cancel", new List<string>(), null, null)
+                                    @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), 850, "Save", "Cancel", new List<string>(), null, null)
                                     @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteUrl(), new List<string>(), true)
                                 </span>
                             }

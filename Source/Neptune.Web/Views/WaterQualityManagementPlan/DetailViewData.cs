@@ -44,12 +44,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
         public List<HtmlString> ParameterizationErrors { get; }
 
-        public Models.FieldDefinition FieldDefinitionForPercentOfSiteTreated { get; }
-        public Models.FieldDefinition FieldDefinitionForPercentCaptured { get; }
-        public Models.FieldDefinition FieldDefinitionForPercentRetained { get; }
-        public Models.FieldDefinition FieldDefinitionForFullyParameterized { get; }
-        public Models.FieldDefinition FieldDefinitionForDelineationStatus { get; }
-        public Models.FieldDefinition FieldDefinitionForDryWeatherFlowOverride { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPercentOfSiteTreated { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPercentCaptured { get; }
+        public Models.FieldDefinitionType FieldDefinitionForPercentRetained { get; }
+        public Models.FieldDefinitionType FieldDefinitionForFullyParameterized { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDelineationStatus { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool AnyLSPCBasins { get; }
 
         public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
@@ -72,7 +72,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = WaterQualityManagementPlan.WaterQualityManagementPlanName;
-            EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
 
             CurrentPersonCanManageWaterQualityManagementPlans = new WaterQualityManagementPlanManageFeature()
@@ -145,12 +145,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanModelingApproaches = waterQualityManagementPlanModelingApproaches;
             ModeledPerformanceViewData = modeledPerformanceViewData;
 
-            FieldDefinitionForPercentOfSiteTreated = Models.FieldDefinition.PercentOfSiteTreated;
-            FieldDefinitionForPercentCaptured = Models.FieldDefinition.PercentCaptured;
-            FieldDefinitionForPercentRetained = Models.FieldDefinition.PercentRetained;
-            FieldDefinitionForFullyParameterized = Models.FieldDefinition.FullyParameterized;
-            FieldDefinitionForDelineationStatus = Models.FieldDefinition.DelineationStatus;
-            FieldDefinitionForDryWeatherFlowOverride = Models.FieldDefinition.DryWeatherFlowOverride;
+            FieldDefinitionForPercentOfSiteTreated = FieldDefinitionType.PercentOfSiteTreated;
+            FieldDefinitionForPercentCaptured = FieldDefinitionType.PercentCaptured;
+            FieldDefinitionForPercentRetained = FieldDefinitionType.PercentRetained;
+            FieldDefinitionForFullyParameterized = FieldDefinitionType.FullyParameterized;
+            FieldDefinitionForDelineationStatus = FieldDefinitionType.DelineationStatus;
+            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
             
             AnyLSPCBasins = anyLspcBasins;
 

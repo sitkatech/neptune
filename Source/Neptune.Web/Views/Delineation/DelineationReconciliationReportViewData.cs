@@ -20,7 +20,7 @@ namespace Neptune.Web.Views.Delineation
         public DelineationReconciliationReportViewData(Person currentPerson, Models.NeptunePage neptunePage, DateTime? regionalSubbasinsLastUpdated) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             RegionalSubbasinsLastUpdated = regionalSubbasinsLastUpdated.HasValue ? regionalSubbasinsLastUpdated.ToStringDateTime() : "n/a";
-            EntityName = Models.FieldDefinition.Delineation.FieldDefinitionDisplayName;
+            EntityName = FieldDefinitionType.Delineation.FieldDefinitionTypeDisplayName;
             PageTitle = "Delineation Reconciliation";
 
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);

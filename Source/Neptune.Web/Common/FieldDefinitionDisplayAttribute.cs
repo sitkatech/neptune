@@ -30,9 +30,9 @@ namespace Neptune.Web.Common
     {
         public IFieldDefinition FieldDefinition { get; private set; }
 
-        public FieldDefinitionDisplayAttribute(FieldDefinitionEnum fieldDefinitionEnum) : base(Models.FieldDefinition.ToType(fieldDefinitionEnum).GetFieldDefinitionLabel())
+        public FieldDefinitionDisplayAttribute(FieldDefinitionTypeEnum fieldDefinitionTypeEnum) : base(FieldDefinitionType.ToType(fieldDefinitionTypeEnum).GetFieldDefinitionLabel())
         {
-            FieldDefinition = Models.FieldDefinition.ToType(fieldDefinitionEnum);
+            FieldDefinition = FieldDefinitionType.ToType(fieldDefinitionTypeEnum);
         }
     }
 }

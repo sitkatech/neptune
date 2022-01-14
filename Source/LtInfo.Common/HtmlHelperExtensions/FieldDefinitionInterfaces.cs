@@ -31,9 +31,8 @@ namespace LtInfo.Common.HtmlHelperExtensions
 
     public interface IFieldDefinitionData
     {
-        int FieldDefinitionDataID { get; }
-        string FieldDefinitionLabel { get; }
-        HtmlString FieldDefinitionDataValueHtmlString { get; }
+        int FieldDefinitionID { get; }
+        HtmlString FieldDefinitionValueHtmlString { get; }
     }
 
     public interface IFieldDefinitionDisplayAttribute

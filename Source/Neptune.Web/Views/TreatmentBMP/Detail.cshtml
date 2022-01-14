@@ -163,14 +163,14 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                             @ModalDialogFormHelper.ModalDialogFormLink("Change Type", ViewDataTyped.ChangeTreatmentBMPTypeUrl, "Change BMP Type", 600, "Convert", "Cancel", new List<string> { "btn", "btn-neptune", "btn-xs" }, null, null)
                             <span>&nbsp;&nbsp;</span>
                         }
-                        @Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")
+                        @Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMPType, "Type")
                     </label>
                     <div class="col-sm-7">
                         @ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetDisplayNameAsUrl()
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction")</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
                 </div>
                 <div class="row">
@@ -193,13 +193,13 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.SizingBasis)</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.SizingBasis)</label>
                     <div class="col-sm-7">
                         @ViewDataTyped.TreatmentBMP.SizingBasisType.SizingBasisTypeDisplayName
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TrashCaptureStatus)</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.TrashCaptureStatus)</label>
                     <div class="col-sm-7">
                         @ViewDataTyped.TreatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName
                     </div>
@@ -215,7 +215,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 }
                 <hr />
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.RequiredLifespanOfInstallation)</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.RequiredLifespanOfInstallation)</label>
                     <div class="col-sm-7">
                         @if (ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType == TreatmentBMPLifespanType.FixedEndDate)
                         {
@@ -230,7 +230,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
                 <div class="row">
                     <div class="col-sm-5 control-label text-right ">
-                        <label>@Html.LabelWithSugarFor(FieldDefinition.RequiredFieldVisitsPerYear)</label>
+                        <label>@Html.LabelWithSugarFor(FieldDefinitionType.RequiredFieldVisitsPerYear)</label>
                     </div>
                     <div class="col-sm-7">
                         @ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear.ToString()
@@ -238,7 +238,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
                 <div class="row">
                     <div class="col-sm-5 control-label text-right ">
-                        <label>@Html.LabelWithSugarFor(FieldDefinition.RequiredPostStormFieldVisitsPerYear)</label>
+                        <label>@Html.LabelWithSugarFor(FieldDefinitionType.RequiredPostStormFieldVisitsPerYear)</label>
                     </div>
                     <div class="col-sm-7">
                         @ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString()
@@ -708,7 +708,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         collapseClassIfUpstreamBMPDoesntExist = "collapse";
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-xs-4 control-label">
-                                <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.DelineationType)</p>
+                                <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinitionType.DelineationType)</p>
                             </div>
                             <div class="col-xs-4">
                                 <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
@@ -763,7 +763,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     <div class="row" style="margin-top: 10px;">
                         <div id="upstreamBMPInfo" class="col @collapseClassIfUpstreamBMPDoesntExist">
                             <label class="col-xs-4 control-label" style="margin-top: 8px">
-                                @Html.LabelWithSugarFor(FieldDefinition.UpstreamBMP)
+                                @Html.LabelWithSugarFor(FieldDefinitionType.UpstreamBMP)
                             </label>
                             @if (ViewDataTyped.OtherTreatmentBmpsExistInSubbasin)
                             {
@@ -804,7 +804,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     else if (ViewDataTyped.TreatmentBMP.Delineation == null && (ViewDataTyped.TreatmentBMP.UpstreamBMP == null || ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation == null))
                     {
                         <p class="systemText">
-                            No delineation is provided for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
+                            No delineation is provided for this @FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
                             @{
                                 if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
                                 {
@@ -827,7 +827,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     }
                     else
                     {
-                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()</p>
                     }
                 </div>
 
@@ -856,7 +856,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         @if (!ViewDataTyped.TreatmentBMP.FieldVisits.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
                         {
                             <p class="systemText">
-                                No @FieldDefinition.FieldVisit.GetFieldDefinitionLabelPluralized() for this BMP.
+                                No @FieldDefinitionType.FieldVisit.GetFieldDefinitionLabelPluralized() for this BMP.
                             </p>
                         }
                     </div>
@@ -898,7 +898,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                         <div style="overflow-x: auto">
                                             <table class="table table-striped table-condensed table-hover table-bordered">
                                                 <tr>
-                                                    <th>@Html.LabelWithSugarFor(FieldDefinition.FundingSource)</th>
+                                                    <th>@Html.LabelWithSugarFor(FieldDefinitionType.FundingSource)</th>
                                                     <th style="text-align: right">Amount</th>
                                                 </tr>
                                                 @foreach (var fundingEventFundingSource in fundingEvent.FundingEventFundingSources.OrderBy(x => x.FundingSource.GetDisplayName()))
@@ -1028,7 +1028,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                             }
                             else
                             {
-                                <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                                <p class="systemText">No documents have been uploaded for this @FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()</p>
                             }
                         </div>
                     </div>

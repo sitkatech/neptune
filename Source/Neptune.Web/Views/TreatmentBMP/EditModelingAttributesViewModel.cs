@@ -29,91 +29,91 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditModelingAttributesViewModel : FormViewModel, IValidatableObject
     {
-        [FieldDefinitionDisplay(FieldDefinitionEnum.AverageDivertedFlowrate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.AverageDivertedFlowrate)]
         public double? AverageDivertedFlowrate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.AverageTreatmentFlowrate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.AverageTreatmentFlowrate)]
         public double? AverageTreatmentFlowrate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DesignDryWeatherTreatmentCapacity)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DesignDryWeatherTreatmentCapacity)]
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DesignLowFlowDiversionCapacity)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DesignLowFlowDiversionCapacity)]
         public double? DesignLowFlowDiversionCapacity { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DesignMediaFiltrationRate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DesignMediaFiltrationRate)]
         public double? DesignMediaFiltrationRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DesignResidenceTimeForPermanentPool)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DesignResidenceTimeForPermanentPool)]
         public double? DesignResidenceTimeforPermanentPool { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DiversionRate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DiversionRate)]
         public double? DiversionRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DrawdownTimeForWQDetentionVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DrawdownTimeForWQDetentionVolume)]
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.EffectiveFootprint)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.EffectiveFootprint)]
         public double? EffectiveFootprint { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.EffectiveRetentionDepth)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.EffectiveRetentionDepth)]
         public double? EffectiveRetentionDepth { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.InfiltrationDischargeRate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.InfiltrationDischargeRate)]
         public double? InfiltrationDischargeRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.InfiltrationSurfaceArea)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.InfiltrationSurfaceArea)]
         public double? InfiltrationSurfaceArea { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.MediaBedFootprint)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.MediaBedFootprint)]
         public double? MediaBedFootprint { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.PermanentPoolOrWetlandVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.PermanentPoolOrWetlandVolume)]
         public double? PermanentPoolorWetlandVolume { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.RoutingConfiguration)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RoutingConfiguration)]
         public int? RoutingConfigurationID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.StorageVolumeBelowLowestOutletElevation)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.StorageVolumeBelowLowestOutletElevation)]
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.SummerHarvestedWaterDemand)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.SummerHarvestedWaterDemand)]
         public double? SummerHarvestedWaterDemand { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TimeOfConcentration)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TimeOfConcentration)]
         public int? TimeOfConcentrationID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DrawdownTimeForDetentionVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DrawdownTimeForDetentionVolume)]
         public double? DrawdownTimeForDetentionVolume { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TotalEffectiveBMPVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TotalEffectiveBMPVolume)]
         public double? TotalEffectiveBMPVolume { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TotalEffectiveDrywellBMPVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TotalEffectiveDrywellBMPVolume)]
         public double? TotalEffectiveDrywellBMPVolume { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TreatmentRate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TreatmentRate)]
         public double? TreatmentRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.UnderlyingHydrologicSoilGroupHSG)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.UnderlyingHydrologicSoilGroupHSG)]
         public int? UnderlyingHydrologicSoilGroupID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.UnderlyingInfiltrationRate)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.UnderlyingInfiltrationRate)]
         public double? UnderlyingInfiltrationRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.WaterQualityDetentionVolume)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.WaterQualityDetentionVolume)]
         public double? WaterQualityDetentionVolume { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.WettedFootprint)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.WettedFootprint)]
         public double? WettedFootprint { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.WinterHarvestedWaterDemand)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.WinterHarvestedWaterDemand)]
         public double? WinterHarvestedWaterDemand { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.MonthsOperational)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.MonthsOperational)]
         public int? MonthsOfOperationID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.DryWeatherFlowOverride)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DryWeatherFlowOverride)]
         public int? DryWeatherFlowOverrideID { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }

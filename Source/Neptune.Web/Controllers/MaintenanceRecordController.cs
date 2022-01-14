@@ -61,14 +61,14 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(viewModel);
             }
             maintenanceRecord.DeleteFull(HttpRequestStorage.DatabaseEntities);
-            SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully deleted");
+            SetMessageForDisplay($"{FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();
         }
 
         private ActionResult ViewDelete(ConfirmDialogFormViewModel viewModel)
         {
             var confirmMessage =
-                $"Are you sure you want to delete this {FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}?";
+                $"Are you sure you want to delete this {FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
                 viewModel);

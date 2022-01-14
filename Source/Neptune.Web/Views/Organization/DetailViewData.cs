@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.Organization
         public DetailViewData(Person currentPerson, Models.Organization organization) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Organization = organization;
-            EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
+            EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = organization.GetDisplayName();
             UserHasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
             UserHasCreateFundingSourcePermissions = new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);

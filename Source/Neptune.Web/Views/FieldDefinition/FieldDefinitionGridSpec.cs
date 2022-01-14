@@ -27,7 +27,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.FieldDefinition
 {
-    public class FieldDefinitionGridSpec : GridSpec<Models.FieldDefinition>
+    public class FieldDefinitionGridSpec : GridSpec<Models.FieldDefinitionType>
     {
         public FieldDefinitionGridSpec(bool hasManagePermissions)
         {            
@@ -40,12 +40,9 @@ namespace Neptune.Web.Views.FieldDefinition
                             new Dictionary<string, string> {{"target", "_blank"}}),
                     30);
             }
-            Add("Custom Label", a => a.HasCustomFieldLabel() ? a.GetFieldDefinitionData().FieldDefinitionLabel : string.Empty, 200);
-            Add("Default Label", a => a.FieldDefinitionDisplayName, 200);
-            Add("Has Custom Field Name?", a => a.HasCustomFieldLabel().ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Label", a => a.FieldDefinitionTypeDisplayName, 200);
             Add("Has Custom Field Definition?", a => a.HasCustomFieldDefinition().ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Custom Definition", a => a.HasCustomFieldDefinition() ? a.GetFieldDefinitionData().FieldDefinitionDataValueHtmlString.ToString() : string.Empty, 0);
-            Add("Default Definition", a => a.DefaultDefinitionHtmlString.ToString(), 0);
+            Add("Custom Definition", a => a.HasCustomFieldDefinition() ? a.GetFieldDefinitionData().FieldDefinitionValueHtmlString.ToString() : string.Empty, 0);
         }
     }
 }

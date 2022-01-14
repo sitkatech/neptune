@@ -24,24 +24,24 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static FieldDefinitionData GetFieldDefinitionDataByFieldDefinition(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, FieldDefinition fieldDefinition)
+        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(this IQueryable<FieldDefinition> fieldDefinitions, FieldDefinitionType fieldDefinitionType)
         {
-            return GetFieldDefinitionDataByFieldDefinition(fieldDefinitionDatas, fieldDefinition.FieldDefinitionID);
+            return GetFieldDefinitionByFieldDefinitionType(fieldDefinitions, fieldDefinitionType.FieldDefinitionTypeID);
         }
 
-        public static FieldDefinitionData GetFieldDefinitionDataByFieldDefinition(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, int fieldDefinitionID)
+        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(this IQueryable<FieldDefinition> fieldDefinitions, int fieldDefinitionTypeID)
         {
-            return fieldDefinitionDatas.SingleOrDefault(x => x.FieldDefinitionID == fieldDefinitionID);
+            return fieldDefinitions.SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
         }
 
-        public static FieldDefinitionData GetFieldDefinitionDataByFieldDefinition(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, FieldDefinitionEnum fieldDefinitionEnum)
+        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(this IQueryable<FieldDefinition> fieldDefinitions, FieldDefinitionTypeEnum fieldDefinitionTypeEnum)
         {
-            return fieldDefinitionDatas.SingleOrDefault(x => x.FieldDefinitionID == (int) fieldDefinitionEnum);
+            return fieldDefinitions.SingleOrDefault(x => x.FieldDefinitionTypeID == (int) fieldDefinitionTypeEnum);
         }
 
-        public static FieldDefinitionData GetFieldDefinitionDataByFieldDefinition(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey)
+        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(this IQueryable<FieldDefinition> fieldDefinitions, FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
         {
-            return fieldDefinitionDatas.SingleOrDefault(x => x.FieldDefinitionID == fieldDefinitionPrimaryKey.PrimaryKeyValue);
+            return fieldDefinitions.SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
         }
     }
 }

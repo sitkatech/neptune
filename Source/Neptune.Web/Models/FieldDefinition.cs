@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="FieldDefinition.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="FieldDefinitionData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,58 +18,16 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Data.Entity.Infrastructure.Pluralization;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using LtInfo.Common.HtmlHelperExtensions;
 
 namespace Neptune.Web.Models
 {
-    public partial class FieldDefinition : IFieldDefinition
+    public partial class FieldDefinition : IFieldDefinitionData
     {
-        private static readonly EnglishPluralizationService PluralizationService = new EnglishPluralizationService();
-
-        public bool HasDefinition()
+        public FieldDefinition(int fieldDefinitionID, string fieldDefinitionDataValue)
         {
-            var fieldDefinitionData = GetFieldDefinitionData();
-            return fieldDefinitionData != null && fieldDefinitionData.FieldDefinitionDataValueHtmlString != null;
-        }
-
-        public IFieldDefinitionData GetFieldDefinitionData()
-        {
-            return HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.GetFieldDefinitionDataByFieldDefinition(this);
-        }
-
-        public string GetFieldDefinitionLabel()
-        {
-            var fieldDefinitionData = GetFieldDefinitionData();
-            if (fieldDefinitionData != null && !string.IsNullOrWhiteSpace(fieldDefinitionData.FieldDefinitionLabel))
-            {
-                return fieldDefinitionData.FieldDefinitionLabel;
-            }
-            return FieldDefinitionDisplayName;
-        }
-
-        public bool HasCustomFieldLabel()
-        {
-            var fieldDefinitionData = GetFieldDefinitionData();
-            return fieldDefinitionData != null && !string.IsNullOrWhiteSpace(fieldDefinitionData.FieldDefinitionLabel);
-        }
-
-        public bool HasCustomFieldDefinition()
-        {
-            var fieldDefinitionData = GetFieldDefinitionData();
-            return fieldDefinitionData != null && fieldDefinitionData.FieldDefinitionDataValueHtmlString != null;
-        }
-
-        public string GetFieldDefinitionLabelPluralized()
-        {
-            return PluralizationService.Pluralize(GetFieldDefinitionLabel());
-        }
-
-        public string GetContentUrl()
-        {
-            return SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.FieldDefinitionDetails(FieldDefinitionID));
+            FieldDefinitionID = fieldDefinitionID;
+            FieldDefinitionValue = fieldDefinitionDataValue;
         }
     }
 }

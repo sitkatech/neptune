@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public ViewTreatmentBMPModelingAttributesViewData(Person currentPerson, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Modeling Attributes";
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             GridSpec = new ViewTreatmentBMPModelingAttributesGridSpec();
             GridName = "treatmentBMPModelingAttributeGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.ViewTreatmentBMPModelingAttributesGridJsonData());

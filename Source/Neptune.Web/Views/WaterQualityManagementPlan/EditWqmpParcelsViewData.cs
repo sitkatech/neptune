@@ -18,7 +18,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
-            EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Index());
             SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = waterQualityManagementPlan.GetDetailUrl();
@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 ParcelAddressByID = parcelsInViewModel.ToDictionary(x => x.ParcelID, x => x.ParcelAddress);
                 ParcelMapServiceLayerName = NeptuneWebConfiguration.ParcelLayerName;
                 MapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
-                ParcelFieldDefinitionLabel = Models.FieldDefinition.Parcel.GetFieldDefinitionLabel();
+                ParcelFieldDefinitionLabel = FieldDefinitionType.Parcel.GetFieldDefinitionLabel();
             }
         }
     }

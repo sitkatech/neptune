@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.TreatmentBMP
     public class EditUpstreamBMPViewModel: IValidatableObject
     {
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.UpstreamBMP)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.UpstreamBMP)]
         public int? UpstreamBMPID { get; set; }
 
         /// <summary>

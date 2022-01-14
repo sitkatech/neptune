@@ -52,13 +52,13 @@
                     <div class="col-sm-9">@ViewDataTyped.CustomAttributeType.CustomAttributeTypeName</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</label>
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.CustomAttributeDataType)</label>
                     <div class="col-sm-9">@ViewDataTyped.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</div>
                 </div>
                 @if (ViewDataTyped.CustomAttributeType.MeasurementUnitTypeID != null)
                 {
                     <div class="row">
-                        <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</label>
+                        <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnit)</label>
                         <div class="col-sm-9">@ViewDataTyped.CustomAttributeType.GetMeasurementUnitDisplayName()</div>
                     </div>
                 }               
@@ -74,7 +74,7 @@
                     <div class="col-sm-9">@ViewDataTyped.CustomAttributeType.IsRequired.ToYesNo()</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.AttributeTypePurpose)</label>
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.AttributeTypePurpose)</label>
                     <div class="col-sm-9">@ViewDataTyped.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName</div>
                 </div>
                 <div class="row">

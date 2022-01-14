@@ -48,11 +48,11 @@ namespace Neptune.Web.Views.Organization
         [DisplayName("Short Name")]
         public string OrganizationShortName { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.OrganizationType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.OrganizationType)]
         [Required]
         public int? OrganizationTypeID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.PrimaryContact)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.PrimaryContact)]
         public int? PrimaryContactPersonID { get; set; }
 
         [Url]

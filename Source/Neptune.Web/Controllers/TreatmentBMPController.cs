@@ -884,7 +884,7 @@ namespace Neptune.Web.Controllers
             {
                 {"Name", treatmentBMP.GetDisplayNameAsUrl().ToString()},
                 {
-                    $"{FieldDefinition.Jurisdiction.GetFieldDefinitionLabel()}",
+                    $"{FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabel()}",
                     treatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl().ToString()
                 },
                 {"Type", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName},

@@ -37,11 +37,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             IEnumerable<UnderlyingHydrologicSoilGroup> underlyingHydrologicSoilGroups,
             List<MonthsOfOperation> monthsOfOperation, List<DryWeatherFlowOverride> dryWeatherFlowOverride) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMP.GetDetailUrl();
-            PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Modeling Attributes";
+            PageTitle = $"Edit {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()} Modeling Attributes";
             TreatmentBMP = treatmentBMP;
             DryWeatherFlowOverride = dryWeatherFlowOverride.ToSelectList(x => x.DryWeatherFlowOverrideID.ToString(),
                 x => x.DryWeatherFlowOverrideDisplayName);

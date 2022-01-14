@@ -27,18 +27,18 @@ namespace Neptune.Web.Views.FieldDefinition
     public class EditViewData : NeptuneViewData
     {
         public readonly string FileBrowserImageUploadUrl;
-        public readonly Models.FieldDefinition FieldDefinition;
+        public readonly Models.FieldDefinitionType FieldDefinitionType;
         public readonly string CancelUrl;
 
-        public EditViewData(Person currentPerson, Models.FieldDefinition fieldDefinition) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditViewData(Person currentPerson, FieldDefinitionType fieldDefinitionType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Field Definitions";
             EntityUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.Index());
-            SubEntityName = fieldDefinition.FieldDefinitionDisplayName;
+            SubEntityName = fieldDefinitionType.FieldDefinitionTypeDisplayName;
             PageTitle = "Manage";
 
-            FieldDefinition = fieldDefinition;
-            FileBrowserImageUploadUrl = SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.CkEditorUploadFileResourceForFieldDefinition(FieldDefinition, null));
+            FieldDefinitionType = fieldDefinitionType;
+            FileBrowserImageUploadUrl = SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionType, null));
             CancelUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.Index());
         }
     }

@@ -87,11 +87,11 @@
                     <div class="col-xs-12">
                         <table class="table">
                             <tr>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAssessmentObservationType)</th>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</th>
-                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
-                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
-                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
+                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMPAssessmentObservationType)</th>
+                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.ObservationCollectionMethod)</th>
+                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinitionType.DefaultBenchmarkValue)</th>
+                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinitionType.DefaultThresholdValue)</th>
+                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinitionType.AssessmentScoreWeight)</th>
                             </tr>
                             <tbody>
                                 @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName())
@@ -143,9 +143,9 @@
                             {
                                 <table class="table">
                                     <tr>
-                                        <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
-                                        <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
-                                        <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
+                                        <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.CustomAttributeType)</th>
+                                        <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.CustomAttributeDataType)</th>
+                                        <th class="text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnit)</th>
                                         <th class="text-right">@Html.Label("Required?")</th>
                                         <th class="text-right">@Html.Label("Description")</th>
                                     </tr>

@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
         [MaxLength(Models.WaterQualityManagementPlanDocument.FieldLengths.Description)]
         public string Description { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.WaterQualityManagementPlanDocumentType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.WaterQualityManagementPlanDocumentType)]
         [Required]
         public int? WaterQualityManagementPlanDocumentTypeID { get; set; }
 

@@ -184,7 +184,7 @@ namespace Neptune.Web.Controllers
                 var isPrimaryContactForAnyOrganization = person.OrganizationsWhereYouAreThePrimaryContactPerson.Any();
                 confirmMessage = 
                     isPrimaryContactForAnyOrganization 
-                        ? $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.GetPrimaryContactOrganizations().Select(x =>$"<li>{x.OrganizationName}</li>"))}</ul>" 
+                        ? $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.GetPrimaryContactOrganizations().Select(x =>$"<li>{x.OrganizationName}</li>"))}</ul>" 
                         : $"Are you sure you want to inactivate user '{person.GetFullNameFirstLast()}'?";
                 var viewData = new ConfirmDialogFormViewData(confirmMessage, !isPrimaryContactForAnyOrganization);
                 return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
@@ -208,7 +208,7 @@ namespace Neptune.Web.Controllers
                 Check.Require(!person.OrganizationsWhereYouAreThePrimaryContactPerson.Any(),
                     $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {
                             person.FirstName
-                        } is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for one or more {FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}!");
+                        } is the {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for one or more {FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()}!");
             }
             if (!ModelState.IsValid)
             {
@@ -245,7 +245,7 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Load();
             viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Local);
-            SetMessageForDisplay($"Assigned {FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
+            SetMessageForDisplay($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();
         }
 

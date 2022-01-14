@@ -23,7 +23,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             ExportUrl = exportUrl;
             PageTitle = "All OVTAs";
-            EntityName = $"{FieldDefinition.OnlandVisualTrashAssessment.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.OnlandVisualTrashAssessment.GetFieldDefinitionLabelPluralized()}";
             GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, true)
             {
                 ObjectNameSingular = "Assessment",

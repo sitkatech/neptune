@@ -40,15 +40,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public string TreatmentBMPAssessmentObservationTypeName { get; set; }      
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationThresholdType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.ObservationThresholdType)]
         public int? ObservationThresholdTypeID { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationTargetType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.ObservationTargetType)]
         public int? ObservationTargetTypeID { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationCollectionMethod)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.ObservationCollectionMethod)]
         public int? ObservationTypeCollectionMethodID { get; set; }
 
         [Required]

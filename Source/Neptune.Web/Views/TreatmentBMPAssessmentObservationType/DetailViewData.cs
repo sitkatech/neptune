@@ -53,8 +53,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 
             TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true
             };
 

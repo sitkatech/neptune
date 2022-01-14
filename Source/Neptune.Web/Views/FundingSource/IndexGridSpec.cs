@@ -40,12 +40,12 @@ namespace Neptune.Web.Views.FundingSource
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), fundingSourceEditFeature.HasPermission(currentPerson, x).HasPermission, true), 30, DhtmlxGridColumnFilterType.None);
             }
 
-            Add(Models.FieldDefinition.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.GetDisplayName()), 320, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.Organization.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.Organization.GetDisplayName()) : UrlTemplate.MakeHrefString(a.Organization.GetDetailUrl(), a.Organization.GetDisplayName()), 300);
-            Add(Models.FieldDefinition.OrganizationType.ToGridHeaderString(), a => a.Organization.OrganizationType?.OrganizationTypeName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinitionType.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.GetDisplayName()), 320, DhtmlxGridColumnFilterType.Html);
+            Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.Organization.GetDisplayName()) : UrlTemplate.MakeHrefString(a.Organization.GetDetailUrl(), a.Organization.GetDisplayName()), 300);
+            Add(FieldDefinitionType.OrganizationType.ToGridHeaderString(), a => a.Organization.OrganizationType?.OrganizationTypeName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", a => a.FundingSourceDescription, 300);
             Add("Is Active", a => a.IsActive.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add($"# of {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}", a => a.GetAssociatedTreatmentBMPs(currentPerson).Count, 90);
+            Add($"# of {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}", a => a.GetAssociatedTreatmentBMPs(currentPerson).Count, 90);
         }
     }
 }

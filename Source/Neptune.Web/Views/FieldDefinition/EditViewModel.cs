@@ -19,9 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Web;
-using Neptune.Web.Models;
 using LtInfo.Common.Models;
 
 namespace Neptune.Web.Views.FieldDefinition
@@ -29,11 +27,7 @@ namespace Neptune.Web.Views.FieldDefinition
     public class EditViewModel : FormViewModel
     {
         [DisplayName("Custom Definition")]
-        public HtmlString FieldDefinitionDataValue { get; set; }
-
-        [DisplayName("Custom Label")]
-        [StringLength(FieldDefinitionData.FieldLengths.FieldDefinitionLabel)]
-        public string FieldDefinitionLabel { get; set; }
+        public HtmlString FieldDefinitionValue { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -42,16 +36,14 @@ namespace Neptune.Web.Views.FieldDefinition
         {
         }
 
-        public EditViewModel(FieldDefinitionData fieldDefinitionData)
+        public EditViewModel(Models.FieldDefinition fieldDefinition)
         {
-            FieldDefinitionDataValue = fieldDefinitionData?.FieldDefinitionDataValueHtmlString;
-            FieldDefinitionLabel = fieldDefinitionData?.FieldDefinitionLabel;
+            FieldDefinitionValue = fieldDefinition?.FieldDefinitionValueHtmlString;
         }
 
-        public void UpdateModel(FieldDefinitionData fieldDefinitionData)
+        public void UpdateModel(Models.FieldDefinition fieldDefinition)
         {
-            fieldDefinitionData.FieldDefinitionDataValueHtmlString = FieldDefinitionDataValue;
-            fieldDefinitionData.FieldDefinitionLabel = string.IsNullOrWhiteSpace(FieldDefinitionLabel) ? null : FieldDefinitionLabel;
+            fieldDefinition.FieldDefinitionValueHtmlString = FieldDefinitionValue;
         }
     }
 }

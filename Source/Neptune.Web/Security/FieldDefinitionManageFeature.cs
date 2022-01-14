@@ -24,22 +24,22 @@ using Neptune.Web.Models;
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("Manage Field Definitions")]
-    public class FieldDefinitionManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldDefinition>
+    public class FieldDefinitionManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldDefinitionType>
     {
-        private readonly NeptuneFeatureWithContextImpl<FieldDefinition> _neptuneFeatureWithContextImpl;
+        private readonly NeptuneFeatureWithContextImpl<FieldDefinitionType> _neptuneFeatureWithContextImpl;
 
         public FieldDefinitionManageFeature() : base(new List<Role> {Role.Admin, Role.SitkaAdmin})
         {
-            _neptuneFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<FieldDefinition>(this);
+            _neptuneFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<FieldDefinitionType>(this);
             ActionFilter = _neptuneFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, FieldDefinition contextModelObject)
+        public void DemandPermission(Person person, FieldDefinitionType contextModelObject)
         {
             _neptuneFeatureWithContextImpl.DemandPermission(person, contextModelObject);
         }
 
-        public PermissionCheckResult HasPermission(Person person, FieldDefinition contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, FieldDefinitionType contextModelObject)
         {
             if (HasPermissionByPerson(person))
             {

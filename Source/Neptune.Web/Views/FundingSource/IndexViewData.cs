@@ -37,13 +37,13 @@ namespace Neptune.Web.Views.FundingSource
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            PageTitle = $"All {Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized()}";
-            EntityName = $"{Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized()}";
+            PageTitle = $"All {FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}";
 
             GridSpec = new IndexGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.FundingSource.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true
             };
 

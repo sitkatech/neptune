@@ -131,23 +131,23 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteCustomAttributeType(CustomAttributeType customAttributeType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPTypeLabel = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
-            var treatmentBMPLabel = customAttributeType.CustomAttributes.Count == 1 ? FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPTypeLabel = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count == 1 ? FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPLabel = customAttributeType.CustomAttributes.Count == 1 ? FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
             string confirmMessage;
             if (customAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance)
             {
                 confirmMessage =
-                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributeType.CustomAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()}?";
+                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributeType.CustomAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
             }
             else
             {
                 
                 var maintenanceRecordCount = customAttributeType.MaintenanceRecordObservations.Select(x=>x.MaintenanceRecord).Count();
                 var maintenanceRecordLabel = maintenanceRecordCount == 1
-                    ? FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()
-                    : FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
+                    ? FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()
+                    : FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
                 confirmMessage =
-                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {maintenanceRecordCount} {maintenanceRecordLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()}?";
+                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {maintenanceRecordCount} {maintenanceRecordLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
             }
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
@@ -164,7 +164,7 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteCustomAttributeType(customAttributeType, viewModel);
             }
 
-            var message = $"{FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()} '{customAttributeType.CustomAttributeTypeName}' successfully deleted!";
+            var message = $"{FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()} '{customAttributeType.CustomAttributeTypeName}' successfully deleted!";
             customAttributeType.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();

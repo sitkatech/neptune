@@ -40,8 +40,8 @@
 <div class="row" ng-app="NeptuneApp" ng-controller="EditWqmpParcelsController">
     <div class="col-xs-12">
         <p>
-            Use the map or @FieldDefinition.Parcel.GetFieldDefinitionLabel() Number (APN) search to associate @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized() with this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().
-            Clicking a @FieldDefinition.Parcel.GetFieldDefinitionLabel() or selecting it in the search box will add it this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().
+            Use the map or @FieldDefinitionType.Parcel.GetFieldDefinitionLabel() Number (APN) search to associate @FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized() with this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel().
+            Clicking a @FieldDefinitionType.Parcel.GetFieldDefinitionLabel() or selecting it in the search box will add it this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel().
         </p>
     </div>
     <div class="col-xs-12 col-sm-8 col-sm-push-4">
@@ -77,7 +77,7 @@
                 <input type="text"
                        id="@ViewDataTyped.ViewDataForAngular.TypeAheadInputId"
                        class="typeahead form-control"
-                       placeholder="Search by Address or @FieldDefinition.Parcel.GetFieldDefinitionLabel() Number"
+                       placeholder="Search by Address or @FieldDefinitionType.Parcel.GetFieldDefinitionLabel() Number"
                        autocomplete="off"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" id="@string.Format("{0}Button", ViewDataTyped.ViewDataForAngular.TypeAheadInputId)" ng-click="selectFirstSuggestionFunction()">
@@ -86,15 +86,15 @@
                 </span>
             </div>
             <div class="alert alert-warning" ng-if="!AngularModel.ParcelIDs || AngularModel.ParcelIDs.length < 1">
-                No @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized() selected for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().
-                Select a @FieldDefinition.Parcel.GetFieldDefinitionLabel().
+                No @FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized() selected for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel().
+                Select a @FieldDefinitionType.Parcel.GetFieldDefinitionLabel().
             </div>
             <div ng-if="AngularModel.ParcelIDs.length >= 1">
                 <table class="table">
                     <thead>
                     <tr>
                         <th></th>
-                        <th>@FieldDefinition.Parcel.GetFieldDefinitionLabel() Number</th>
+                        <th>@FieldDefinitionType.Parcel.GetFieldDefinitionLabel() Number</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 x => x.SizingBasisTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.SizingBasisTypeDisplayName.ToString(CultureInfo.InvariantCulture));
 
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             if (treatmentBMP != null)
@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SubEntityUrl = treatmentBMP.GetDetailUrl();
                 TreatmentBMP = treatmentBMP;
             }
-            PageTitle = $"New {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
+            PageTitle = $"New {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()}";
 
             TrashCaptureStatusTypes = trashCaptureStatusTypes.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.TrashCaptureStatusTypeID.ToString(CultureInfo.InvariantCulture),

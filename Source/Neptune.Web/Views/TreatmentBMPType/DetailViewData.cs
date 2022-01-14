@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             TreatmentBMPType = treatmentBMPType;
-            EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            EntityName = FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             PageTitle = treatmentBMPType.TreatmentBMPTypeName;
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);

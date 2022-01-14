@@ -28,19 +28,19 @@ namespace Neptune.Web.Common
     {
         public string Documentation;
 
-        public WebServiceDocumentationAttribute(string formatString, FieldDefinitionEnum fieldDefinitionEnum)
+        public WebServiceDocumentationAttribute(string formatString, FieldDefinitionTypeEnum fieldDefinitionTypeEnum)
         {
-            Documentation = string.Format(formatString, FieldDefinition.ToType(fieldDefinitionEnum).GetFieldDefinitionLabel());
+            Documentation = string.Format(formatString, FieldDefinitionType.ToType(fieldDefinitionTypeEnum).GetFieldDefinitionLabel());
         }
 
-        public WebServiceDocumentationAttribute(string formatString, FieldDefinitionEnum fieldDefinitionEnum1, FieldDefinitionEnum fieldDefinitionEnum2)
+        public WebServiceDocumentationAttribute(string formatString, FieldDefinitionTypeEnum fieldDefinitionTypeEnum1, FieldDefinitionTypeEnum fieldDefinitionTypeEnum2)
         {
-            Documentation = string.Format(formatString, FieldDefinition.ToType(fieldDefinitionEnum1).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum2).GetFieldDefinitionLabel());
+            Documentation = string.Format(formatString, FieldDefinitionType.ToType(fieldDefinitionTypeEnum1).GetFieldDefinitionLabel(), FieldDefinitionType.ToType(fieldDefinitionTypeEnum2).GetFieldDefinitionLabel());
         }
 
-        public WebServiceDocumentationAttribute(string formatString, FieldDefinitionEnum fieldDefinitionEnum1, FieldDefinitionEnum fieldDefinitionEnum2, FieldDefinitionEnum fieldDefinitionEnum3, FieldDefinitionEnum fieldDefinitionEnum4)
+        public WebServiceDocumentationAttribute(string formatString, FieldDefinitionTypeEnum fieldDefinitionTypeEnum1, FieldDefinitionTypeEnum fieldDefinitionTypeEnum2, FieldDefinitionTypeEnum fieldDefinitionTypeEnum3, FieldDefinitionTypeEnum fieldDefinitionTypeEnum4)
         {
-            Documentation = string.Format(formatString, FieldDefinition.ToType(fieldDefinitionEnum1).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum2).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum3).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum4).GetFieldDefinitionLabel());
+            Documentation = string.Format(formatString, FieldDefinitionType.ToType(fieldDefinitionTypeEnum1).GetFieldDefinitionLabel(), FieldDefinitionType.ToType(fieldDefinitionTypeEnum2).GetFieldDefinitionLabel(), FieldDefinitionType.ToType(fieldDefinitionTypeEnum3).GetFieldDefinitionLabel(), FieldDefinitionType.ToType(fieldDefinitionTypeEnum4).GetFieldDefinitionLabel());
         }
 
         public WebServiceDocumentationAttribute(string s)

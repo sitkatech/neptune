@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.CustomAttributeType
             Models.CustomAttributeType customAttributeType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             CustomAttributeType = customAttributeType;
-            EntityName = Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabelPluralized();
+            EntityName = FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabelPluralized();
             PageTitle = customAttributeType.CustomAttributeTypeName;
 
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
@@ -51,8 +51,8 @@ namespace Neptune.Web.Views.CustomAttributeType
 
             TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true
             };
 

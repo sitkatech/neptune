@@ -196,13 +196,13 @@ namespace Neptune.Web.Controllers
         }
 
         /// <summary>
-        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionPrimaryKey, CkEditorImageUploadViewModel)"/>
+        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey, CkEditorImageUploadViewModel)"/>
         /// </summary>
         /// <returns></returns>
         [CrossAreaRoute]
         [HttpGet]
         [FieldDefinitionManageFeature]
-        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey)
+        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
         {
             return Content(String.Empty);
         }
@@ -211,12 +211,9 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         [FieldDefinitionManageFeature]
-        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey, CkEditorImageUploadViewModel viewModel)
+        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, CkEditorImageUploadViewModel viewModel)
         {
             var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
-            var fieldDefinition = fieldDefinitionPrimaryKey.EntityObject;
-            var image = new FieldDefinitionDataImage(fieldDefinition.GetFieldDefinitionData().FieldDefinitionDataID, fileResource.FileResourceID);
-            HttpRequestStorage.DatabaseEntities.FieldDefinitionDataImages.Add(image);
             return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
         }
 

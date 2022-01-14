@@ -33,10 +33,10 @@ namespace Neptune.Web.Views.CustomAttributeType
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
-            Add(Models.FieldDefinition.CustomAttributeType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.CustomAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.CustomAttributeDataType.ToGridHeaderString(), a => a.CustomAttributeDataType.CustomAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(Models.FieldDefinition.MeasurementUnit.ToGridHeaderString(), a => a.GetMeasurementUnitDisplayName(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(Models.FieldDefinition.AttributeTypePurpose.ToGridHeaderString(),
+            Add(FieldDefinitionType.CustomAttributeType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.CustomAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
+            Add(FieldDefinitionType.CustomAttributeDataType.ToGridHeaderString(), a => a.CustomAttributeDataType.CustomAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinitionType.MeasurementUnit.ToGridHeaderString(), a => a.GetMeasurementUnitDisplayName(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinitionType.AttributeTypePurpose.ToGridHeaderString(),
                 a => a.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName, 200,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Required?", a => a.IsRequired.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);

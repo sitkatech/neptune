@@ -71,7 +71,7 @@ namespace Neptune.Web.Models
             return jurisdictionsToShow.GroupBy(x => x.Organization.OrganizationType, (organizationType, jurisdictionList) =>
             {
                 return new LayerGeoJson(
-                    $"{organizationType.OrganizationTypeName} {FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}",
+                    $"{organizationType.OrganizationTypeName} {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}",
                     new FeatureCollection(jurisdictionList.Select(x =>
                     {
                         var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.StormwaterJurisdictionGeometry.Geometry4326);

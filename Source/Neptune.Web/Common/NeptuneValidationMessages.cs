@@ -25,20 +25,20 @@ namespace Neptune.Web.Common
 {
     public static class NeptuneValidationMessages
     {
-        public static readonly string PasswordRequiredForNewUser = $"{FieldDefinition.Password.GetFieldDefinitionLabel()} is required for new users";
-        public static readonly string MustEnterOldPasswordWhenChangingPassword = $"Old {FieldDefinition.Password.GetFieldDefinitionLabel()} is required when changing {FieldDefinition.Password.GetFieldDefinitionLabel()}";
-        public static readonly string OldPasswordProvidedIsNotCorrect = $"Old {FieldDefinition.Password.GetFieldDefinitionLabel()} is incorrect";
-        public static readonly string CantChangePasswordToBeSameAsOldPassword = $"Can't reset {FieldDefinition.Password.GetFieldDefinitionLabel()} to same as old {FieldDefinition.Password.GetFieldDefinitionLabel()}";
+        public static readonly string PasswordRequiredForNewUser = $"{FieldDefinitionType.Password.GetFieldDefinitionLabel()} is required for new users";
+        public static readonly string MustEnterOldPasswordWhenChangingPassword = $"Old {FieldDefinitionType.Password.GetFieldDefinitionLabel()} is required when changing {FieldDefinitionType.Password.GetFieldDefinitionLabel()}";
+        public static readonly string OldPasswordProvidedIsNotCorrect = $"Old {FieldDefinitionType.Password.GetFieldDefinitionLabel()} is incorrect";
+        public static readonly string CantChangePasswordToBeSameAsOldPassword = $"Can't reset {FieldDefinitionType.Password.GetFieldDefinitionLabel()} to same as old {FieldDefinitionType.Password.GetFieldDefinitionLabel()}";
         public static readonly string UpdateSectionIsDependentUponBasicsSection = "Your project's \"Basics\" page must be complete before you can begin updating this section.";
-        public static readonly string OrganizationNameUnique = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} name already exists";
-        public static readonly string OrganizationShortNameUnique = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} short name already exists";
-        public static readonly string OrganizationMustBeSetForNewUser = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} must be set for a new user";
+        public static readonly string OrganizationNameUnique = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()} name already exists";
+        public static readonly string OrganizationShortNameUnique = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()} short name already exists";
+        public static readonly string OrganizationMustBeSetForNewUser = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()} must be set for a new user";
         public const string LettersNumbersSpacesDashesAndUnderscoresOnly = "Only letters, numbers, spaces, dashes and underscores are allowed.";
         public const string LettersOnly = "Only letters are allowed.";
         public const string MoreThanOneProjectUpdateInProgress = "Cannot determine latest update state; more than one update is in progress!";
         public const string EmailAlreadyUsed = "Email already exists";
         public const string ExpectedFundingValuesCannotBothBeZeroOrEmpty = "Enter a Secured or Unsecured amount for each Funding Source, or remove Funding Sources with no funding amounts.";
-        public static readonly string FundingSourceNameUnique = $"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} name already exists.";
+        public static readonly string FundingSourceNameUnique = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} name already exists.";
     }
 }
 

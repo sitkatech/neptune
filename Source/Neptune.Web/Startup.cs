@@ -338,11 +338,11 @@ namespace Neptune.Web
         private static void SendNewOrganizationCreatedMessage(Person person, string loginName)
         {
             var organization = person.Organization;
-            var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.GetDisplayName()}";
+            var subject = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()} added: {person.Organization.GetDisplayName()}";
 
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
-    <strong>{FieldDefinition.Organization.GetFieldDefinitionLabel()} created:</strong> {organization.GetDisplayNameAsUrl()}<br />
+    <strong>{FieldDefinitionType.Organization.GetFieldDefinitionLabel()} created:</strong> {organization.GetDisplayNameAsUrl()}<br />
     <strong>Created on:</strong> {DateTime.Now}<br />
     <strong>Created because:</strong> New user logged in<br />
     <strong>New user:</strong> {person.GetFullNameFirstLast()} ({person.Email})<br />
@@ -351,9 +351,9 @@ namespace Neptune.Web
         You may want to <a href=""{
                     SitkaRoute<OrganizationController>.BuildAbsoluteUrlFromExpression(x => x.Detail(organization
                         .OrganizationID))
-                }"">add detail for this {FieldDefinition.Organization.GetFieldDefinitionLabel()}</a> such as its abbreviation, {
-                    FieldDefinition.OrganizationType.GetFieldDefinitionLabel()
-                }, website, logo, etc. This will make its {FieldDefinition.Organization.GetFieldDefinitionLabel()} summary page display better.
+                }"">add detail for this {FieldDefinitionType.Organization.GetFieldDefinitionLabel()}</a> such as its abbreviation, {
+                    FieldDefinitionType.OrganizationType.GetFieldDefinitionLabel()
+                }, website, logo, etc. This will make its {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} summary page display better.
     </p>
     <br />
     <br />

@@ -33,25 +33,25 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)</label>
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.PropertiesToObserve)</label>
                     <div class="col-sm-9">@ViewDataTyped.PropertiesToObserveFormatted</div>
                 </div>
                 <div class="row">
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel)</label>
+                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnitLabel)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteObservationTypeSchema.MeasurementUnitLabel</div>
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</label>
+                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MeasurementUnit)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.MeasurementUnitType.MeasurementUnitTypeDisplayName</div>
                 </div>
                 <div class="row">
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MinimumNumberOfObservations)</label>
+                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MinimumNumberOfObservations)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteObservationTypeSchema.MinimumNumberOfObservations</div>
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations)</label>
+                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MaximumNumberOfObservations)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteObservationTypeSchema.MaximumNumberOfObservations</div>
                 </div>
                 <div class="row">
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MinimumValueOfEachObservation)</label>
+                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MinimumValueOfEachObservation)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteObservationTypeSchema.MinimumValueOfObservations</div>
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MaximumValueOfEachObservation)</label>
+                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.MaximumValueOfEachObservation)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteObservationTypeSchema.MaximumValueOfObservations</div>
                 </div>           
         </div>

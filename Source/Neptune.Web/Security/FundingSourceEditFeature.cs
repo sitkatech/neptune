@@ -18,7 +18,7 @@ namespace Neptune.Web.Security
         {
             if (!HasPermissionByPerson(person))
             {
-                return new PermissionCheckResult($"You don't have permission to edit or delete {FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {contextModelObject.GetDisplayName()}");
+                return new PermissionCheckResult($"You don't have permission to edit or delete {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} {contextModelObject.GetDisplayName()}");
             }
 
             return new PermissionCheckResult();

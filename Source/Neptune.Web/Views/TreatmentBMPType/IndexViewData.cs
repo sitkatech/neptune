@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             List<Models.TreatmentBMPType> treatmentBMPTypes)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = "All BMP Types";
 
             TreatmentBMPTypes = treatmentBMPTypes;

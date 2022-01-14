@@ -42,10 +42,10 @@ namespace Neptune.Web.Views.CustomAttributeType
         public string CustomAttributeTypeName { get; set; }      
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.CustomAttributeDataType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.CustomAttributeDataType)]
         public int? CustomAttributeDataTypeID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.MeasurementUnit)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.MeasurementUnit)]
         public int? MeasurementUnitTypeID { get; set; }
 
         [DisplayName("Options")]
@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         public bool? IsRequired { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(Models.FieldDefinitionEnum.AttributeTypePurpose)]
+        [FieldDefinitionDisplay(Models.FieldDefinitionTypeEnum.AttributeTypePurpose)]
         public int? CustomAttributeTypePurposeID { get; set; }
 
         [DisplayName("Description")]

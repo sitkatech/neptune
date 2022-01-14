@@ -42,11 +42,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string TreatmentBMPName { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.Jurisdiction)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.Jurisdiction)]
         public int? StormwaterJurisdictionID { get; set; }
 
         [Required(ErrorMessage = "Choose a BMP Type")]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TreatmentBMPType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TreatmentBMPType)]
         public int? TreatmentBMPTypeID { get; set; }
 
         [DisplayName("Notes")]
@@ -66,22 +66,22 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Water Quality Management Plan")]
         public int? WaterQualityManagementPlanID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredLifespanOfInstallation)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RequiredLifespanOfInstallation)]
         public int? TreatmentBMPLifespanTypeID { get; set; }
 
         [DisplayName("Lifespan End Date")]
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredFieldVisitsPerYear)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RequiredFieldVisitsPerYear)]
         [Range(0, Int32.MaxValue, ErrorMessage = "Required Field Visits Per Year cannot be negative")]
         public int? RequiredFieldVisitsPerYear { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredPostStormFieldVisitsPerYear)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RequiredPostStormFieldVisitsPerYear)]
         [Range(0, Int32.MaxValue, ErrorMessage = "Required Post Storm Field Visits Per Year cannot be negative")]
         public int? RequiredPostStormFieldVisitsPerYear { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TrashCaptureStatus)]
         public int? TrashCaptureStatusTypeID { get; set; }
 
         [DisplayName("Trash Capture Effectiveness")]
@@ -89,7 +89,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public int? TrashCaptureEffectiveness { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.SizingBasis)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.SizingBasis)]
         public int? SizingBasisTypeID { get; set; }
 
         /// <summary>
