@@ -201,8 +201,6 @@
     <Compile Include="Models\Generated\NeptunePageImageConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\NeptunePageImagePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptunePagePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\NeptunePageRenderType.Binding.cs" />
-    <Compile Include="Models\Generated\NeptunePageRenderTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptunePageType.Binding.cs" />
     <Compile Include="Models\Generated\NeptunePageTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NereidResult.Binding.cs" />

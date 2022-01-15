@@ -6,7 +6,6 @@ CREATE TABLE [dbo].[NeptunePageType](
 	[NeptunePageTypeID] [int] NOT NULL,
 	[NeptunePageTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[NeptunePageTypeDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[NeptunePageRenderTypeID] [int] NOT NULL,
  CONSTRAINT [PK_NeptunePageType_NeptunePageTypeID] PRIMARY KEY CLUSTERED 
 (
 	[NeptunePageTypeID] ASC
@@ -20,9 +19,3 @@ CREATE TABLE [dbo].[NeptunePageType](
 	[NeptunePageTypeName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
-
-GO
-ALTER TABLE [dbo].[NeptunePageType]  WITH CHECK ADD  CONSTRAINT [FK_NeptunePageType_NeptunePageRenderType_NeptunePageRenderTypeID] FOREIGN KEY([NeptunePageRenderTypeID])
-REFERENCES [dbo].[NeptunePageRenderType] ([NeptunePageRenderTypeID])
-GO
-ALTER TABLE [dbo].[NeptunePageType] CHECK CONSTRAINT [FK_NeptunePageType_NeptunePageRenderType_NeptunePageRenderTypeID]

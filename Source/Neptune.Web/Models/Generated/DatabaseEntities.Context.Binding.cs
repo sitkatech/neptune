@@ -416,11 +416,6 @@ namespace Neptune.Web.Models
                 case "NeptunePageImage":
                     return NeptunePageImages.GetNeptunePageImage(primaryKey);
 
-                case "NeptunePageRenderType":
-                    var neptunePageRenderType = NeptunePageRenderType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(neptunePageRenderType, "NeptunePageRenderType", primaryKey);
-                    return neptunePageRenderType;
-
                 case "NeptunePage":
                     return NeptunePages.GetNeptunePage(primaryKey);
 

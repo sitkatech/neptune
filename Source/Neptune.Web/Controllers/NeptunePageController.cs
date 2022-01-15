@@ -77,7 +77,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditInDialog(EditViewModel viewModel, NeptunePage neptunePage)
         {
-            var ckEditorToolbar = neptunePage.NeptunePageType.NeptunePageRenderType == NeptunePageRenderType.PageContent ? CkEditorExtension.CkEditorToolbar.AllOnOneRowNoMaximize : CkEditorExtension.CkEditorToolbar.All;
+            var ckEditorToolbar = CkEditorExtension.CkEditorToolbar.AllOnOneRowNoMaximize;
             var viewData = new EditViewData(ckEditorToolbar,
                 SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.CkEditorUploadFileResource(neptunePage)));
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
