@@ -118,12 +118,12 @@
                             @Html.LabelWithSugarFor(m => m.HydromodificationAppliesTypeID)
                         </div>
                         <div class="col-xs-12 col-sm-9">
-                            @foreach (var HydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesTypes)
+                            @foreach (var hydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesTypes)
                             {
                                 <div class="radio-inline">
                                     <label>
-                                        @Html.RadioButtonFor(m => m.HydromodificationAppliesTypeID, HydromodificationAppliesType.HydromodificationAppliesTypeID)
-                                        @HydromodificationAppliesType.HydromodificationAppliesTypeDisplayName
+                                        @Html.RadioButtonFor(m => m.HydromodificationAppliesTypeID, hydromodificationAppliesType.HydromodificationAppliesTypeID)
+                                        @hydromodificationAppliesType.HydromodificationAppliesTypeDisplayName
                                     </label>
                                 </div>
                             }
