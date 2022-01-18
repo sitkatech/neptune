@@ -1,6 +1,7 @@
 export enum RoleEnum {
   Admin = 1,
-  Landowner = 2,
   Unassigned = 3,
-  Disabled = 4,
+  SitkaAdmin = 4,
+  JurisdictionManager = 5,
+  JurisdictionEditor = 6,
 }

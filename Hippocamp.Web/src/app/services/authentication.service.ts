@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { UserService } from './user/user.service';
-import { UserDetailedDto } from '../shared/models';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CookieStorageService } from '../shared/services/cookies/cookie-storage.service';
@@ -10,18 +9,19 @@ import { RoleEnum } from '../shared/models/enums/role.enum';
 import { AlertService } from '../shared/services/alert.service';
 import { Alert } from '../shared/models/alert';
 import { AlertContext } from '../shared/models/enums/alert-context.enum';
-import { UserCreateDto } from '../shared/models/user/user-create-dto';
 import { environment } from 'src/environments/environment';
+import { PersonCreateDto } from '../shared/generated/model/person-create-dto';
+import { PersonDto } from '../shared/generated/model/person-dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private currentUser: UserDetailedDto;
+  private currentUser: PersonDto;
 
   private getUserObservable: any;
 
-  private _currentUserSetSubject = new Subject<UserDetailedDto>();
+  private _currentUserSetSubject = new Subject<PersonDto>();
   public currentUserSetObservable = this._currentUserSetSubject.asObservable();
 
 
@@ -68,7 +68,7 @@ export class AuthenticationService {
         this.router.navigate(['/']);
       } else {
         this.alertService.clearAlerts();
-        const newUser = new UserCreateDto({
+        const newUser = new PersonCreateDto({
           FirstName: claims["given_name"],
           LastName: claims["family_name"],
           Email: claims["email"],
@@ -85,12 +85,12 @@ export class AuthenticationService {
     });
   }
 
-  private getUserCallback(user: UserDetailedDto) {
+  private getUserCallback(user: PersonDto) {
     this.currentUser = user;
     this._currentUserSetSubject.next(this.currentUser);
   }
 
-  public refreshUserInfo(user: UserDetailedDto) {
+  public refreshUserInfo(user: PersonDto) {
     this.getUserCallback(user);
   }
 
@@ -120,66 +120,37 @@ export class AuthenticationService {
   }
 
   public forcedLogout() {
-    if (!this.isCurrentUserBeingImpersonated(this.currentUser)) {
-      sessionStorage["authRedirectUrl"] = window.location.href;
-    }
+    sessionStorage["authRedirectUrl"] = window.location.href;
     this.logout();
   }
 
   public logout() {
-    if(this.isCurrentUserBeingImpersonated(this.currentUser)){
-      this.userService.stopImpersonation().subscribe(response => {
-        this.currentUser = response;
-        this._currentUserSetSubject.next(this.currentUser);
-        this.router.navigateByUrl("/").then(x => {
-          this.alertService.pushAlert(new Alert(`Finished impersonating.`, AlertContext.Success));
-        });
-      });
-    } else {
-      this.oauthService.logOut();
-      setTimeout(() => {
-        this.cookieStorageService.removeAll();
-      });
-    }
+    this.oauthService.logOut();
+    setTimeout(() => {
+      this.cookieStorageService.removeAll();
+    });
   }
 
-  public isCurrentUserBeingImpersonated(user: UserDetailedDto) : boolean {
-    var claims = this.oauthService.getIdentityClaims();
-    var globalID = claims["sub"];
-    return globalID != user?.UserGuid;
-  }
-
-  public isUserAnAdministrator(user: UserDetailedDto): boolean {
+  public isUserAnAdministrator(user: PersonDto): boolean {
     const role = user && user.Role
       ? user.Role.RoleID
       : null;
-    return role === RoleEnum.Admin;
+    return role === RoleEnum.Admin || role === RoleEnum.SitkaAdmin;
   }
 
   public isCurrentUserAnAdministrator(): boolean {
     return this.isUserAnAdministrator(this.currentUser);
   }
 
-  public isUserUnassigned(user: UserDetailedDto): boolean {
+  public isUserUnassigned(user: PersonDto): boolean {
     const role = user && user.Role
       ? user.Role.RoleID
       : null;
     return role === RoleEnum.Unassigned;
   }
 
-  public isUserRoleDisabled(user: UserDetailedDto): boolean {
-    const role = user && user.Role
-      ? user.Role.RoleID
-      : null;
-    return role === RoleEnum.Disabled;
-  }
-
   public isCurrentUserNullOrUndefined(): boolean {
     return !this.currentUser;
-  }
-
-  public hasCurrentUserAcknowledgedDisclaimer(): boolean {
-    return this.currentUser != null && this.currentUser.DisclaimerAcknowledgedDate != null;
   }
 
   public doesCurrentUserHaveOneOfTheseRoles(roleIDs: Array<number>): boolean {

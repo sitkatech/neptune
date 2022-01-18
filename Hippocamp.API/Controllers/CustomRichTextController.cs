@@ -16,17 +16,17 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("customRichText/{customRichTextTypeID}")]
-        public ActionResult<CustomRichTextDto> GetCustomRichText([FromRoute] int customRichTextTypeID)
+        public ActionResult<NeptunePageDto> GetCustomRichText([FromRoute] int customRichTextTypeID)
         {
-            var customRichTextDto = CustomRichText.GetByCustomRichTextTypeID(_dbContext, customRichTextTypeID);
+            var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(_dbContext, customRichTextTypeID);
             return RequireNotNullThrowNotFound(customRichTextDto, "CustomRichText", customRichTextTypeID);
         }
 
         [HttpPut("customRichText/{customRichTextTypeID}")]
         [AdminFeature]
-        public ActionResult<CustomRichTextDto> UpdateCustomRichText([FromRoute] int customRichTextTypeID, [FromBody] CustomRichTextDto customRichTextUpdateDto)
+        public ActionResult<NeptunePageDto> UpdateCustomRichText([FromRoute] int customRichTextTypeID, [FromBody] NeptunePageDto customRichTextUpdateDto)
         {
-            var customRichTextDto = CustomRichText.GetByCustomRichTextTypeID(_dbContext, customRichTextTypeID);
+            var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(_dbContext, customRichTextTypeID);
             if (ThrowNotFound(customRichTextDto, "CustomRichText", customRichTextTypeID, out var actionResult))
             {
                 return actionResult;
@@ -38,7 +38,7 @@ namespace Hippocamp.API.Controllers
             }
 
             var updatedCustomRichTextDto =
-                CustomRichText.UpdateCustomRichText(_dbContext, customRichTextTypeID, customRichTextUpdateDto);
+                NeptunePages.UpdateNeptunePage(_dbContext, customRichTextTypeID, customRichTextUpdateDto);
             return Ok(updatedCustomRichTextDto);
         }
     }

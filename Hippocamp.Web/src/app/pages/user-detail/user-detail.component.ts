@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { UserDetailedDto } from 'src/app/shared/models';
 import { UserService } from 'src/app/services/user/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -7,6 +6,7 @@ import { forkJoin } from 'rxjs';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
+import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 
 @Component({
     selector: 'template-user-detail',
@@ -16,9 +16,9 @@ import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
     private watchUserChangeSubscription: any;
-    private currentUser: UserDetailedDto;
+    private currentUser: PersonDto;
 
-    public user: UserDetailedDto;
+    public user: PersonDto;
 
     constructor(
         private route: ActivatedRoute,
@@ -42,21 +42,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
                 ).subscribe(([user]) => {
                     this.user = user instanceof Array
                         ? null
-                        : user as UserDetailedDto;
+                        : user as PersonDto;
                     this.cdr.detectChanges();
                 });
             }
         });
-    }
-
-    impersonateUser(userID: number) {
-        this.userService.impersonateUser(userID).subscribe(response => {
-            this.currentUser = response;
-            this.cdr.detectChanges();
-            this.router.navigateByUrl("/").then(x => {
-                this.alertService.pushAlert(new Alert(`Successfully impersonating user: ${this.currentUser.FullName}.`, AlertContext.Success));
-            });
-        })
     }
 
     ngOnDestroy() {

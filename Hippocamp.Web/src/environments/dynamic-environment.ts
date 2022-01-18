@@ -76,4 +76,8 @@ export class DynamicEnvironment {
     public get appInsightsInstrumentationKey() {
         return window.config.appInsightsInstrumentationKey;
     }
+
+    public get ocStormwaterToolsBaseUrl(){
+        return window.config.ocStormwaterToolsBaseUrl;
+    }
 }

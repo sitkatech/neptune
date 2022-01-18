@@ -1,6 +1,6 @@
 ﻿namespace Hippocamp.Models.DataTransferObjects
 {
-    public partial class CustomRichTextDto
+    public partial class NeptunePageDto
     {
         public bool IsEmptyContent { get; set; }
     }

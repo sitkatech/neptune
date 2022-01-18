@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '.';
 import { Observable } from 'rxjs';
-import { CustomRichTextDetailedDto } from '../models/custom-rich-text-detailed-dto';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { NeptunePageDto } from '../generated/model/neptune-page-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ export class CustomRichTextService {
 
   constructor(private apiService: ApiService, private httpClient: HttpClient) { }
 
-  public getCustomRichText(customRichTextTypeID: number): Observable<CustomRichTextDetailedDto> {
+  public getCustomRichText(customRichTextTypeID: number): Observable<NeptunePageDto> {
     return this.apiService.getFromApi(`/customRichText/${customRichTextTypeID}`)
   }
 
-  public updateCustomRichText(customRichTextTypeID: number, updateDto: CustomRichTextDetailedDto): Observable<CustomRichTextDetailedDto> {
+  public updateCustomRichText(customRichTextTypeID: number, updateDto: NeptunePageDto): Observable<NeptunePageDto> {
     return this.apiService.putToApi(`customRichText/${customRichTextTypeID}`, updateDto);
   }
 

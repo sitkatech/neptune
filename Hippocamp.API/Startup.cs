@@ -126,7 +126,6 @@ namespace Hippocamp.API
 
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
             services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<HippocampDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
-            services.AddScoped<ImpersonationService>();
             services.AddControllers();
 
             #region Swagger

@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { UserDetailedDto } from 'src/app/shared/models';
 import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 import { environment } from 'src/environments/environment';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginCallbackComponent } from '../../login-callback/login-callback.component';
+import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 
 @Component({
     selector: 'app-home-index',
@@ -14,7 +13,7 @@ import { LoginCallbackComponent } from '../../login-callback/login-callback.comp
 })
 export class HomeIndexComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
-    public currentUser: UserDetailedDto;
+    public currentUser: PersonDto;
 
     public richTextTypeID: number = CustomRichTextType.Homepage;
 
@@ -63,14 +62,6 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
         return this.currentUser.Role.RoleID === RoleEnum.Unassigned;
     }
 
-    public userRoleIsDisabled() {
-        if (!this.currentUser) {
-            return false; // doesn't exist != unassigned
-        }
-
-        return this.currentUser.Role.RoleID === RoleEnum.Disabled;
-    }
-
     public isUserAnAdministrator() {
         return this.authenticationService.isUserAnAdministrator(this.currentUser);
     }
@@ -113,5 +104,9 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
 
     public leadOrganizationHomeUrl(): string {
         return environment.leadOrganizationHomeUrl;
+    }
+
+    public requestSupportUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/Help/Support`;
     }
 }

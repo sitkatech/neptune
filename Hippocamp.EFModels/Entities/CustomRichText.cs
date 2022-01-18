@@ -4,29 +4,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hippocamp.EFModels.Entities
 {
-    public partial class CustomRichText
+    public static class NeptunePages
     {
-        public static CustomRichTextDto GetByCustomRichTextTypeID(HippocampDbContext dbContext, int customRichTextTypeID)
+        public static NeptunePageDto GetByNeptunePageTypeID(HippocampDbContext dbContext, int neptunePageID)
         {
-            var customRichText = dbContext.CustomRichTexts
-                .Include(x => x.CustomRichTextType)
-                .SingleOrDefault(x => x.CustomRichTextTypeID == customRichTextTypeID);
+            var neptunePage = dbContext.NeptunePages
+                .Include(x => x.NeptunePageType)
+                .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageID);
 
-            return customRichText?.AsDto();
+            return neptunePage?.AsDto();
         }
 
-        public static CustomRichTextDto UpdateCustomRichText(HippocampDbContext dbContext, int customRichTextTypeID,
-            CustomRichTextDto customRichTextUpdateDto)
+        public static NeptunePageDto UpdateNeptunePage(HippocampDbContext dbContext, int neptunePageID,
+            NeptunePageDto customRichTextUpdateDto)
         {
-            var customRichText = dbContext.CustomRichTexts
-                .SingleOrDefault(x => x.CustomRichTextTypeID == customRichTextTypeID);
+            var neptunePage = dbContext.NeptunePages
+                .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageID);
 
             // null check occurs in calling endpoint method.
-            customRichText.CustomRichTextContent = customRichTextUpdateDto.CustomRichTextContent;
+            neptunePage.NeptunePageContent = customRichTextUpdateDto.NeptunePageContent;
 
             dbContext.SaveChanges();
 
-            return customRichText.AsDto();
+            return neptunePage.AsDto();
         }
     }
 }

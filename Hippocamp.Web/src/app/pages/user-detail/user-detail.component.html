@@ -25,10 +25,6 @@
                         routerLink="/users/{{user?.UserID}}/edit">
                         <span class="fas fa-edit"></span> Edit
                     </a>
-                    <button *ngIf="currentUserIsAdmin()" class="btn btn-hippocamp btn-sm float-right mr-2"
-                        (click)="impersonateUser(user?.UserID)">
-                        <span class="fas fa-user"></span> Impersonate
-                    </button>
                     Basics
                 </div>
                 <div class="card-body">

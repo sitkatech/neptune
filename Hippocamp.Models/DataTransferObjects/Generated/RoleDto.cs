@@ -13,7 +13,6 @@ namespace Hippocamp.Models.DataTransferObjects
         public string RoleName { get; set; }
         public string RoleDisplayName { get; set; }
         public string RoleDescription { get; set; }
-        public int SortOrder { get; set; }
     }
 
     public partial class RoleSimpleDto
@@ -22,7 +21,6 @@ namespace Hippocamp.Models.DataTransferObjects
         public string RoleName { get; set; }
         public string RoleDisplayName { get; set; }
         public string RoleDescription { get; set; }
-        public int SortOrder { get; set; }
     }
 
 }

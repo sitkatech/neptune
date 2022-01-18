@@ -15,7 +15,6 @@ export class RoleDto {
     RoleName?: string;
     RoleDisplayName?: string;
     RoleDescription?: string;
-    SortOrder?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

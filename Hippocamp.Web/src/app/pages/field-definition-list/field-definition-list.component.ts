@@ -4,9 +4,8 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { ColDef } from 'ag-grid-community';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
-import { UserDetailedDto } from 'src/app/shared/models';
 import { AgGridAngular } from 'ag-grid-angular';
-import { FieldDefinitionDto } from 'src/app/shared/generated/model/models';
+import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
 
 @Component({
   selector: 'hippocamp-field-definition-list',
@@ -17,7 +16,7 @@ export class FieldDefinitionListComponent implements OnInit {
 
   @ViewChild("fieldDefinitionsGrid") fieldDefinitionsGrid: AgGridAngular;
   private watchUserChangeSubscription: any;
-  private currentUser: UserDetailedDto;
+  private currentUser: PersonDto;
 
   public fieldDefinitions: Array<FieldDefinitionDto>
   public richTextTypeID : number = CustomRichTextType.LabelsAndDefinitionsList;

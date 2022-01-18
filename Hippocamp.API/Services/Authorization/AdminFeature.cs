@@ -4,7 +4,7 @@ namespace Hippocamp.API.Services.Authorization
 {
     public class AdminFeature : BaseAuthorizationAttribute
     {
-        public AdminFeature() : base(new []{RoleEnum.Admin})
+        public AdminFeature() : base(new []{RoleEnum.Admin, RoleEnum.SitkaAdmin})
         {
         }
     }

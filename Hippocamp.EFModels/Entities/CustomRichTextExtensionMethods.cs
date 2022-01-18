@@ -2,11 +2,11 @@
 
 namespace Hippocamp.EFModels.Entities
 {
-    public static partial class CustomRichTextExtensionMethods
+    public static partial class NeptunePageExtensionMethods
     { 
-        static partial void DoCustomMappings(CustomRichText customRichText, CustomRichTextDto customRichTextDto)
+        static partial void DoCustomMappings(NeptunePage neptunePage, NeptunePageDto neptunePageDto)
         {
-            customRichTextDto.IsEmptyContent = string.IsNullOrWhiteSpace(customRichText.CustomRichTextContent);
+            neptunePageDto.IsEmptyContent = string.IsNullOrWhiteSpace(neptunePage.NeptunePageContent);
         }
     }
 }

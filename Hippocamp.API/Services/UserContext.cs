@@ -8,14 +8,14 @@ namespace Hippocamp.API.Services
 {
     public class UserContext
     {
-        public UserDto User { get; set; }
+        public PersonDto User { get; set; }
 
-        private UserContext(UserDto user)
+        private UserContext(PersonDto user)
         {
             User = user;
         }
 
-        public static UserDto GetUserFromHttpContext(HippocampDbContext dbContext, HttpContext httpContext)
+        public static PersonDto GetUserFromHttpContext(HippocampDbContext dbContext, HttpContext httpContext)
         {
 
             var claimsPrincipal = httpContext.User;
@@ -25,10 +25,8 @@ namespace Hippocamp.API.Services
             }
 
             var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
-            var keystoneUser = Hippocamp.EFModels.Entities.User.GetByUserGuid(dbContext, userGuid);
+            var keystoneUser = Hippocamp.EFModels.Entities.People.GetByPersonGuidAsDto(dbContext, userGuid);
 
-            keystoneUser = ImpersonationService.RetrieveImpersonatedUserIfImpersonating(dbContext, keystoneUser);
-            
             return keystoneUser;
         }
     }

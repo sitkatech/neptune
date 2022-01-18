@@ -8,10 +8,8 @@ import { UnauthenticatedComponent } from './pages/unauthenticated/unauthenticate
 import { SubscriptionInsufficientComponent } from './pages/subscription-insufficient/subscription-insufficient.component';
 import { NgProgressModule } from 'ngx-progressbar';
 import { RouterModule } from '@angular/router';
-import { WatershedDetailPopupComponent } from './components/watershed-detail-popup/watershed-detail-popup.component';
 import { LinkRendererComponent } from './components/ag-grid/link-renderer/link-renderer.component';
 import { FontAwesomeIconLinkRendererComponent } from './components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
-import { WatershedMapComponent } from './components/watershed-map/watershed-map.component';
 import { MultiLinkRendererComponent } from './components/ag-grid/multi-link-renderer/multi-link-renderer.component';
 import { CustomRichTextComponent } from './components/custom-rich-text/custom-rich-text.component'
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -31,8 +29,6 @@ import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters
         NotFoundComponent,
         UnauthenticatedComponent,
         SubscriptionInsufficientComponent,
-        WatershedMapComponent,
-        WatershedDetailPopupComponent,
         LinkRendererComponent,
         FontAwesomeIconLinkRendererComponent,
         MultiLinkRendererComponent,
@@ -58,7 +54,6 @@ import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters
         CommonModule,
         FormsModule,
         NotFoundComponent,
-        WatershedMapComponent,
         HeaderNavComponent,
         CustomRichTextComponent,
         FieldDefinitionComponent,
@@ -66,9 +61,7 @@ import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters
         CsvDownloadButtonComponent,
         ClearGridFiltersButtonComponent
     ],
-    entryComponents:[
-        WatershedDetailPopupComponent,
-    ]
+    entryComponents:[]
 })
 export class SharedModule {
     static forRoot(): ModuleWithProviders<SharedModule> {

@@ -18,13 +18,6 @@
         </span>
     </ngb-alert>
 
-    <ngb-alert *ngIf="userRoleIsDisabled()" [type]="'info'" [dismissible]="false">
-        <span>
-            Your account is currently disabled. Please <a routerLink="/help">Request Support</a> if you would like to
-            activate your account.
-        </span>
-    </ngb-alert>
-
     <app-alert-display></app-alert-display>
     <h1 class="text-primary mb-4">{{platformLongName()}}</h1>
     <div class="row mt-sm-4">
@@ -37,7 +30,7 @@
                 <div class="card-body" *ngIf="!currentUser">
                     <div class="row">
                         <div class="col">
-                            Log in to view your Water Account. Create an Account if you don't have one yet.
+                            Log in to view your Account. Create an Account if you don't have one yet.
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -60,7 +53,7 @@
                     </div>
                 </div>
                 <div class="card-body" *ngIf="currentUser">
-                    <a class="btn btn-hippocamp" routerLink="/help">Request Support</a>
+                    <a class="btn btn-hippocamp" href="{{requestSupportUrl()}}">Request Support</a>
                 </div>
             </div>
         </div>

@@ -1,13 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FieldDefinitionService } from 'src/app/shared/services/field-definition-service';
 import * as ClassicEditor from 'src/assets/main/ckeditor/ckeditor.js';
-import { UserDetailedDto } from 'src/app/shared/models';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
-import { FieldDefinitionDto } from 'src/app/shared/generated/model/models';
+import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
 
 @Component({
   selector: 'hippocamp-field-definition-edit',
@@ -16,7 +15,7 @@ import { FieldDefinitionDto } from 'src/app/shared/generated/model/models';
 })
 export class FieldDefinitionEditComponent implements OnInit {
   private watchUserChangeSubscription: any;
-  private currentUser: UserDetailedDto;
+  private currentUser: PersonDto;
 
   public fieldDefinition: FieldDefinitionDto;
   public Editor = ClassicEditor;

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Alert } from '../../models/alert';
-import { UserDetailedDto } from '../../models';
 import { FieldDefinitionService } from '../../services/field-definition-service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { AlertService } from '../../services/alert.service';
@@ -8,7 +7,7 @@ import * as ClassicEditor from 'src/assets/main/ckeditor/ckeditor.js';
 import { AlertContext } from '../../models/enums/alert-context.enum';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { FieldDefinitionTypeEnum } from '../../models/enums/field-definition-type.enum';
-import { FieldDefinitionDto } from '../../generated/model/models';
+import { FieldDefinitionDto, PersonDto } from '../../generated/model/models';
 
 
 declare var $ : any
@@ -33,7 +32,7 @@ export class FieldDefinitionComponent implements OnInit {
   public editedContent: string;
   public editor;
 
-  currentUser: UserDetailedDto;
+  currentUser: PersonDto;
 
   public ckConfig = {"removePlugins": ["MediaEmbed", "ImageUpload"]};
 

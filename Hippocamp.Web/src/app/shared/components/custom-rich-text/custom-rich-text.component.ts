@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { CustomRichTextService } from '../../services/custom-rich-text.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { UserDetailedDto } from '../../models/user/user-detailed-dto';
 import { AlertService } from '../../services/alert.service';
 import { Alert } from '../../models/alert';
 import { AlertContext } from '../../models/enums/alert-context.enum';
 import * as ClassicEditor from 'src/assets/main/ckeditor/ckeditor.js';
 import { environment } from 'src/environments/environment';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { CustomRichTextDetailedDto } from '../../models/custom-rich-text-detailed-dto';
+import { NeptunePageDto } from '../../generated/model/neptune-page-dto';
+import { PersonDto } from '../../generated/model/person-dto';
 
 @Component({
   selector: 'custom-rich-text',
@@ -26,7 +26,7 @@ export class CustomRichTextComponent implements OnInit {
   public editedContent: string;
   public editor;
 
-  currentUser: UserDetailedDto;
+  currentUser: PersonDto;
 
   //For media embed https://ckeditor.com/docs/ckeditor5/latest/api/module_media-embed_mediaembed-MediaEmbedConfig.html
   //Only some embeds will work, and if we want others to work we'll likely need to write some extra functions
@@ -43,9 +43,9 @@ export class CustomRichTextComponent implements OnInit {
     });
 
     this.customRichTextService.getCustomRichText(this.customRichTextTypeID).subscribe(x => {
-      this.customRichTextContent = this.sanitizer.bypassSecurityTrustHtml(x.CustomRichTextContent);
+      this.customRichTextContent = this.sanitizer.bypassSecurityTrustHtml(x.NeptunePageContent);
       this.isEmptyContent = x.IsEmptyContent;
-      this.editedContent = x.CustomRichTextContent;
+      this.editedContent = x.NeptunePageContent;
       this.isLoading = false;
     });
   }
@@ -78,10 +78,10 @@ export class CustomRichTextComponent implements OnInit {
   public saveEdit(): void {
     this.isEditing = false;
     this.isLoading = true;
-    const updateDto = new CustomRichTextDetailedDto({ CustomRichTextContent: this.editedContent });
+    const updateDto = new NeptunePageDto({ NeptunePageContent: this.editedContent });
     this.customRichTextService.updateCustomRichText(this.customRichTextTypeID, updateDto).subscribe(x => {
-      this.customRichTextContent = this.sanitizer.bypassSecurityTrustHtml(x.CustomRichTextContent);
-      this.editedContent = x.CustomRichTextContent;
+      this.customRichTextContent = this.sanitizer.bypassSecurityTrustHtml(x.NeptunePageContent);
+      this.editedContent = x.NeptunePageContent;
       this.isLoading = false;
     }, error => {
       this.isLoading = false;

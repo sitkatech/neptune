@@ -12,13 +12,10 @@ namespace Hippocamp.EFModels.Entities
     [Keyless]
     public partial class vGeoServerWatershed
     {
-        public int PrimaryKey { get; set; }
         public int WatershedID { get; set; }
-        [Required]
-        [StringLength(100)]
+        [StringLength(50)]
         public string WatershedName { get; set; }
-        [Required]
         [Column(TypeName = "geometry")]
-        public Geometry WatershedGeometry4326 { get; set; }
+        public Geometry WatershedGeometry { get; set; }
     }
 }

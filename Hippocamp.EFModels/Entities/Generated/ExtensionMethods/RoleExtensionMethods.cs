@@ -16,8 +16,7 @@ namespace Hippocamp.EFModels.Entities
                 RoleID = role.RoleID,
                 RoleName = role.RoleName,
                 RoleDisplayName = role.RoleDisplayName,
-                RoleDescription = role.RoleDescription,
-                SortOrder = role.SortOrder
+                RoleDescription = role.RoleDescription
             };
             DoCustomMappings(role, roleDto);
             return roleDto;
@@ -32,8 +31,7 @@ namespace Hippocamp.EFModels.Entities
                 RoleID = role.RoleID,
                 RoleName = role.RoleName,
                 RoleDisplayName = role.RoleDisplayName,
-                RoleDescription = role.RoleDescription,
-                SortOrder = role.SortOrder
+                RoleDescription = role.RoleDescription
             };
             DoCustomSimpleDtoMappings(role, roleSimpleDto);
             return roleSimpleDto;

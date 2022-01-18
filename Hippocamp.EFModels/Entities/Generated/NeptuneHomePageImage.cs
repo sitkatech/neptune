@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+#nullable disable
+
+namespace Hippocamp.EFModels.Entities
+{
+    [Table("NeptuneHomePageImage")]
+    public partial class NeptuneHomePageImage
+    {
+        [Key]
+        public int NeptuneHomePageImageID { get; set; }
+        public int FileResourceID { get; set; }
+        [Required]
+        [StringLength(300)]
+        public string Caption { get; set; }
+        public int SortOrder { get; set; }
+
+        [ForeignKey(nameof(FileResourceID))]
+        [InverseProperty("NeptuneHomePageImages")]
+        public virtual FileResource FileResource { get; set; }
+    }
+}

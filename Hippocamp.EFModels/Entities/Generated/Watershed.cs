@@ -12,16 +12,21 @@ namespace Hippocamp.EFModels.Entities
     [Table("Watershed")]
     public partial class Watershed
     {
+        public Watershed()
+        {
+            TreatmentBMPs = new HashSet<TreatmentBMP>();
+        }
+
         [Key]
         public int WatershedID { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string WatershedName { get; set; }
-        [Required]
         [Column(TypeName = "geometry")]
         public Geometry WatershedGeometry { get; set; }
-        [Required]
+        [StringLength(50)]
+        public string WatershedName { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry WatershedGeometry4326 { get; set; }
+
+        [InverseProperty(nameof(TreatmentBMP.Watershed))]
+        public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace Hippocamp.API.Controllers
             var fileResource = new FileResource
             {
                 CreateDate = DateTime.Now,
-                CreateUserID = userDto.UserID,
+                CreatePersonID = userDto.PersonID,
                 FileResourceData = bytes,
                 FileResourceGUID = fileResourceGuid,
                 FileResourceMimeTypeID = fileResourceMimeType.FileResourceMimeTypeID,

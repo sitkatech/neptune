@@ -15,8 +15,7 @@ namespace Hippocamp.EFModels.Entities
     {
         public Role()
         {
-            CustomPageRoles = new HashSet<CustomPageRole>();
-            Users = new HashSet<User>();
+            People = new HashSet<Person>();
         }
 
         [Key]
@@ -29,11 +28,8 @@ namespace Hippocamp.EFModels.Entities
         public string RoleDisplayName { get; set; }
         [StringLength(255)]
         public string RoleDescription { get; set; }
-        public int SortOrder { get; set; }
 
-        [InverseProperty(nameof(CustomPageRole.Role))]
-        public virtual ICollection<CustomPageRole> CustomPageRoles { get; set; }
-        [InverseProperty(nameof(User.Role))]
-        public virtual ICollection<User> Users { get; set; }
+        [InverseProperty(nameof(Person.Role))]
+        public virtual ICollection<Person> People { get; set; }
     }
 }

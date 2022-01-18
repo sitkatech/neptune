@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RoleEnum } from '../../models/enums/role.enum';
-import { Alert } from '../../models/alert';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,7 +26,7 @@ export class ManagerOnlyGuard implements CanActivate {
     return this.authenticationService.currentUserSetObservable
       .pipe(
         map(x => {
-          if (x.Role.RoleID == RoleEnum.Admin) {
+          if (x.Role.RoleID == RoleEnum.Admin || x.Role.RoleID == RoleEnum.SitkaAdmin) {
             return true;
           } else {
             return this.returnUnauthorized();

@@ -11,39 +11,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="!isUnassignedOrDisabled()">
-                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    View
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a routerLink="/watersheds" class="dropdown-item">
-                        Watersheds
-                    </a>
-                    <div *ngIf="viewPages.length > 0" class="dropdown-divider"></div>
-                    <a *ngFor="let viewPage of viewPages" routerLink="/custom-pages/{{ viewPage.CustomPageVanityUrl }}" class="dropdown-item">
-                        {{ viewPage.CustomPageDisplayName }}
-                    </a>
-                </div>
-            </li>
             <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
                 <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     Manage
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a routerLink="/users" class="dropdown-item">
+                    <a href="{{usersListUrl()}}" class="dropdown-item">
                         Users
                     </a>
                     <a routerLink="/labels-and-definitions" class="dropdown-item">
                         Labels and Definitions
-                    </a>
-                    <a routerLink="/custom-pages" class="dropdown-item">
-                        Custom Pages
-                    </a>
-                    <div *ngIf="managePages.length > 0"  class="dropdown-divider"></div>
-                    <a *ngFor="let managePage of managePages" routerLink="/custom-pages/{{ managePage.CustomPageVanityUrl }}" class="dropdown-item">
-                        {{ managePage.CustomPageDisplayName }}
                     </a>
                 </div>
             </li>
@@ -52,19 +30,8 @@
                     Learn More
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a routerLink="/platform-overview" class="dropdown-item">
-                        Platform Overview
-                    </a>
                     <a routerLink="/training" class="dropdown-item">
                         Training
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a routerLink="/disclaimer/false" class="dropdown-item">
-                        Disclaimer
-                    </a>
-                    <div *ngIf="learnMorePages.length > 0" class="dropdown-divider"></div>
-                    <a *ngFor="let learnMorePage of learnMorePages" routerLink="/custom-pages/{{ learnMorePage.CustomPageVanityUrl }}" class="dropdown-item">
-                        {{ learnMorePage.CustomPageDisplayName }}
                     </a>
                 </div>
             </li>
@@ -76,7 +43,7 @@
             <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()"> 
                 <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    {{isCurrentUserBeingImpersonated() ? 'Impersonating' : 'Welcome'}} {{getUserName()}}
+                    Welcome {{getUserName()}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a routerLink="/help" class="dropdown-item">

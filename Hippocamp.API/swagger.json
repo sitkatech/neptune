@@ -5,432 +5,6 @@
     "version": "1.0"
   },
   "paths": {
-    "/customPages": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "CustomPage"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/withRoles": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageWithRolesDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageWithRolesDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageWithRolesDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/getByID/{customPageID}": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "parameters": [
-          {
-            "name": "customPageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/getByURL/{customPageVanityURL}": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "parameters": [
-          {
-            "name": "customPageVanityURL",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/roles": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/getByURL/{customPageVanityURL}/roles": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "parameters": [
-          {
-            "name": "customPageVanityURL",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/getByID/{customPageID}/roles": {
-      "get": {
-        "tags": [
-          "CustomPage"
-        ],
-        "parameters": [
-          {
-            "name": "customPageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CustomPageRoleSimpleDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/customPages/{customPageID}": {
-      "put": {
-        "tags": [
-          "CustomPage"
-        ],
-        "parameters": [
-          {
-            "name": "customPageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomPageUpsertDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomPageDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "CustomPage"
-        ],
-        "parameters": [
-          {
-            "name": "customPageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/customRichText/{customRichTextTypeID}": {
       "get": {
         "tags": [
@@ -453,17 +27,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomRichTextDto"
+                  "$ref": "#/components/schemas/NeptunePageDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomRichTextDto"
+                  "$ref": "#/components/schemas/NeptunePageDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomRichTextDto"
+                  "$ref": "#/components/schemas/NeptunePageDto"
                 }
               }
             }
@@ -489,22 +63,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/CustomRichTextDto"
+                "$ref": "#/components/schemas/NeptunePageDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CustomRichTextDto"
+                "$ref": "#/components/schemas/NeptunePageDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CustomRichTextDto"
+                "$ref": "#/components/schemas/NeptunePageDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CustomRichTextDto"
+                "$ref": "#/components/schemas/NeptunePageDto"
               }
             }
           }
@@ -515,17 +89,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomRichTextDto"
+                  "$ref": "#/components/schemas/NeptunePageDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomRichTextDto"
+                  "$ref": "#/components/schemas/NeptunePageDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomRichTextDto"
+                  "$ref": "#/components/schemas/NeptunePageDto"
                 }
               }
             }
@@ -719,113 +293,6 @@
         }
       }
     },
-    "/impersonate/{userID}": {
-      "post": {
-        "tags": [
-          "Impersonation"
-        ],
-        "parameters": [
-          {
-            "name": "userID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/impersonate/stop-impersonation": {
-      "post": {
-        "tags": [
-          "Impersonation"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/menuItems": {
-      "get": {
-        "tags": [
-          "MenuItem"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MenuItemDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MenuItemDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MenuItemDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/roles": {
       "get": {
         "tags": [
@@ -873,22 +340,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserInviteDto"
+                "$ref": "#/components/schemas/PersonInviteDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserInviteDto"
+                "$ref": "#/components/schemas/PersonInviteDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserInviteDto"
+                "$ref": "#/components/schemas/PersonInviteDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserInviteDto"
+                "$ref": "#/components/schemas/PersonInviteDto"
               }
             }
           }
@@ -909,22 +376,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreateDto"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             }
           }
@@ -935,17 +402,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               }
             }
@@ -964,7 +431,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDto"
+                    "$ref": "#/components/schemas/PersonDto"
                   }
                 }
               },
@@ -972,7 +439,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDto"
+                    "$ref": "#/components/schemas/PersonDto"
                   }
                 }
               },
@@ -980,7 +447,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDto"
+                    "$ref": "#/components/schemas/PersonDto"
                   }
                 }
               }
@@ -1018,14 +485,14 @@
         }
       }
     },
-    "/users/{userID}": {
+    "/users/{personID}": {
       "get": {
         "tags": [
           "User"
         ],
         "parameters": [
           {
-            "name": "userID",
+            "name": "personID",
             "in": "path",
             "required": true,
             "schema": {
@@ -1040,17 +507,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               }
             }
@@ -1063,7 +530,7 @@
         ],
         "parameters": [
           {
-            "name": "userID",
+            "name": "personID",
             "in": "path",
             "required": true,
             "schema": {
@@ -1076,22 +543,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpsertDto"
+                "$ref": "#/components/schemas/PersonUpsertDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpsertDto"
+                "$ref": "#/components/schemas/PersonUpsertDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpsertDto"
+                "$ref": "#/components/schemas/PersonUpsertDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpsertDto"
+                "$ref": "#/components/schemas/PersonUpsertDto"
               }
             }
           }
@@ -1102,17 +569,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               }
             }
@@ -1141,205 +608,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/set-disclaimer-acknowledged-date": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/watersheds": {
-      "get": {
-        "tags": [
-          "Watershed"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WatershedDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WatershedDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WatershedDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/watersheds/{watershedID}": {
-      "get": {
-        "tags": [
-          "Watershed"
-        ],
-        "parameters": [
-          {
-            "name": "watershedID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/WatershedDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WatershedDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WatershedDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/watersheds/getBoundingBox": {
-      "post": {
-        "tags": [
-          "Watershed"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/WatershedIDListDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WatershedIDListDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WatershedIDListDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/WatershedIDListDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
+                  "$ref": "#/components/schemas/PersonDto"
                 }
               }
             }
@@ -1350,203 +629,6 @@
   },
   "components": {
     "schemas": {
-      "BoundingBoxDto": {
-        "type": "object",
-        "properties": {
-          "Left": {
-            "type": "number",
-            "format": "double"
-          },
-          "Bottom": {
-            "type": "number",
-            "format": "double"
-          },
-          "Right": {
-            "type": "number",
-            "format": "double"
-          },
-          "Top": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomPageDto": {
-        "type": "object",
-        "properties": {
-          "IsEmptyContent": {
-            "type": "boolean",
-            "readOnly": true
-          },
-          "CustomPageID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CustomPageDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "CustomPageVanityUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "CustomPageContent": {
-            "type": "string",
-            "nullable": true
-          },
-          "MenuItem": {
-            "$ref": "#/components/schemas/MenuItemDto"
-          },
-          "SortOrder": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomPageRoleSimpleDto": {
-        "type": "object",
-        "properties": {
-          "CustomPageRoleID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CustomPageID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "RoleID": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomPageUpsertDto": {
-        "required": [
-          "CustomPageDisplayName",
-          "CustomPageVanityUrl",
-          "MenuItemID",
-          "ViewableRoleIDs"
-        ],
-        "type": "object",
-        "properties": {
-          "CustomPageDisplayName": {
-            "pattern": "^[_a-zA-Z0-9\\-\\s]{1,100}$",
-            "type": "string"
-          },
-          "CustomPageVanityUrl": {
-            "pattern": "^[_a-zA-Z0-9\\-]{1,100}$",
-            "type": "string"
-          },
-          "CustomPageContent": {
-            "type": "string",
-            "nullable": true
-          },
-          "MenuItemID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "SortOrder": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "ViewableRoleIDs": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomPageWithRolesDto": {
-        "required": [
-          "CustomPageDisplayName",
-          "CustomPageID",
-          "CustomPageVanityUrl",
-          "MenuItem",
-          "ViewableRoles"
-        ],
-        "type": "object",
-        "properties": {
-          "CustomPageID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CustomPageDisplayName": {
-            "type": "string"
-          },
-          "CustomPageVanityUrl": {
-            "type": "string"
-          },
-          "CustomPageContent": {
-            "type": "string",
-            "nullable": true
-          },
-          "MenuItem": {
-            "$ref": "#/components/schemas/MenuItemDto"
-          },
-          "SortOrder": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "ViewableRoles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RoleDto"
-            }
-          },
-          "IsEmptyContent": {
-            "type": "boolean",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomRichTextDto": {
-        "type": "object",
-        "properties": {
-          "IsEmptyContent": {
-            "type": "boolean"
-          },
-          "CustomRichTextID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CustomRichTextType": {
-            "$ref": "#/components/schemas/CustomRichTextTypeDto"
-          },
-          "CustomRichTextContent": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CustomRichTextTypeDto": {
-        "type": "object",
-        "properties": {
-          "CustomRichTextTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CustomRichTextTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "CustomRichTextTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "FieldDefinitionDto": {
         "type": "object",
         "properties": {
@@ -1582,61 +664,176 @@
         },
         "additionalProperties": false
       },
-      "MenuItemDto": {
+      "FileResourceDto": {
         "type": "object",
         "properties": {
-          "MenuItemID": {
+          "FileResourceID": {
             "type": "integer",
             "format": "int32"
           },
-          "MenuItemName": {
+          "FileResourceMimeType": {
+            "$ref": "#/components/schemas/FileResourceMimeTypeDto"
+          },
+          "OriginalBaseFilename": {
             "type": "string",
             "nullable": true
           },
-          "MenuItemDisplayName": {
+          "OriginalFileExtension": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FileResourceData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "CreatePerson": {
+            "$ref": "#/components/schemas/PersonDto"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FileResourceMimeTypeDto": {
+        "type": "object",
+        "properties": {
+          "FileResourceMimeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceMimeTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeContentTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeIconSmallFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeIconNormalFilename": {
             "type": "string",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "RoleDto": {
+      "NeptunePageDto": {
         "type": "object",
         "properties": {
-          "RoleID": {
+          "IsEmptyContent": {
+            "type": "boolean"
+          },
+          "NeptunePageID": {
             "type": "integer",
             "format": "int32"
           },
-          "RoleName": {
+          "NeptunePageType": {
+            "$ref": "#/components/schemas/NeptunePageTypeDto"
+          },
+          "NeptunePageContent": {
             "type": "string",
             "nullable": true
-          },
-          "RoleDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "SortOrder": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
       },
-      "UnassignedUserReportDto": {
+      "NeptunePageTypeDto": {
         "type": "object",
         "properties": {
-          "Count": {
+          "NeptunePageTypeID": {
             "type": "integer",
             "format": "int32"
+          },
+          "NeptunePageTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NeptunePageTypeDisplayName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "UserCreateDto": {
+      "OrganizationDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationGuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryContactPerson": {
+            "$ref": "#/components/schemas/PersonDto"
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "LogoFileResource": {
+            "$ref": "#/components/schemas/FileResourceDto"
+          },
+          "OrganizationType": {
+            "$ref": "#/components/schemas/OrganizationTypeDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationTypeDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationTypeAbbreviation": {
+            "type": "string",
+            "nullable": true
+          },
+          "LegendColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsDefaultOrganizationType": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonCreateDto": {
         "required": [
           "ReceiveSupportEmails",
           "RoleID"
@@ -1681,17 +878,16 @@
         },
         "additionalProperties": false
       },
-      "UserDto": {
+      "PersonDto": {
         "type": "object",
         "properties": {
-          "UserID": {
+          "PersonID": {
             "type": "integer",
             "format": "int32"
           },
-          "UserGuid": {
+          "PersonGuid": {
             "type": "string",
-            "format": "uuid",
-            "nullable": true
+            "format": "uuid"
           },
           "FirstName": {
             "type": "string",
@@ -1726,13 +922,11 @@
             "format": "date-time",
             "nullable": true
           },
-          "DisclaimerAcknowledgedDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
           "IsActive": {
             "type": "boolean"
+          },
+          "Organization": {
+            "$ref": "#/components/schemas/OrganizationDto"
           },
           "ReceiveSupportEmails": {
             "type": "boolean"
@@ -1741,14 +935,12 @@
             "type": "string",
             "nullable": true
           },
-          "Company": {
-            "type": "string",
-            "nullable": true
+          "ReceiveRSBRevisionRequestEmails": {
+            "type": "boolean"
           },
-          "ImpersonatedUserGuid": {
+          "WebServiceAccessToken": {
             "type": "string",
-            "format": "uuid",
-            "nullable": true
+            "format": "uuid"
           },
           "FullName": {
             "type": "string",
@@ -1758,7 +950,7 @@
         },
         "additionalProperties": false
       },
-      "UserInviteDto": {
+      "PersonInviteDto": {
         "required": [
           "Email",
           "FirstName",
@@ -1783,7 +975,7 @@
         },
         "additionalProperties": false
       },
-      "UserUpsertDto": {
+      "PersonUpsertDto": {
         "required": [
           "ReceiveSupportEmails",
           "RoleID"
@@ -1820,30 +1012,34 @@
         },
         "additionalProperties": false
       },
-      "WatershedDto": {
+      "RoleDto": {
         "type": "object",
         "properties": {
-          "WatershedID": {
+          "RoleID": {
             "type": "integer",
             "format": "int32"
           },
-          "WatershedName": {
+          "RoleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleDescription": {
             "type": "string",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "WatershedIDListDto": {
+      "UnassignedUserReportDto": {
         "type": "object",
         "properties": {
-          "WatershedIDs": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
+          "Count": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

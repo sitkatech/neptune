@@ -21,10 +21,10 @@ namespace Hippocamp.EFModels.Entities
         [Key]
         public int FieldDefinitionTypeID { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(300)]
         public string FieldDefinitionTypeName { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(300)]
         public string FieldDefinitionTypeDisplayName { get; set; }
 
         [InverseProperty(nameof(FieldDefinition.FieldDefinitionType))]

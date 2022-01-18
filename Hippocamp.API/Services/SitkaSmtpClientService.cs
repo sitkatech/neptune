@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
-using Hippocamp.Models.DataTransferObjects.User;
 
 namespace Hippocamp.API.Services
 {

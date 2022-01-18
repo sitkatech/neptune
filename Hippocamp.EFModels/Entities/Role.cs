@@ -29,8 +29,9 @@ namespace Hippocamp.EFModels.Entities
     public enum RoleEnum
     {
         Admin = 1,
-        LandOwner = 2,
         Unassigned = 3,
-        Disabled = 4
+        SitkaAdmin = 4,
+        JurisdictionManager = 5,
+        JurisdictionEditor = 6,
     }
 }

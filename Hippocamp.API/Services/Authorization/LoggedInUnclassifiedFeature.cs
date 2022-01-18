@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Hippocamp.EFModels.Entities;
-using Hippocamp.Models.DataTransferObjects.User;
 
 namespace Hippocamp.API.Services.Authorization
 {

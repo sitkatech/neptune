@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+#nullable disable
+
+namespace Hippocamp.EFModels.Entities
+{
+    [Table("DirtyModelNode")]
+    public partial class DirtyModelNode
+    {
+        [Key]
+        public int DirtyModelNodeID { get; set; }
+        public int? TreatmentBMPID { get; set; }
+        public int? WaterQualityManagementPlanID { get; set; }
+        public int? RegionalSubbasinID { get; set; }
+        public int? DelineationID { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime CreateDate { get; set; }
+    }
+}

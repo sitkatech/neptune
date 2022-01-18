@@ -15,7 +15,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public string OriginalFileExtension { get; set; }
         public Guid FileResourceGUID { get; set; }
         public byte[] FileResourceData { get; set; }
-        public UserDto CreateUser { get; set; }
+        public PersonDto CreatePerson { get; set; }
         public DateTime CreateDate { get; set; }
     }
 
@@ -27,7 +27,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public string OriginalFileExtension { get; set; }
         public Guid FileResourceGUID { get; set; }
         public byte[] FileResourceData { get; set; }
-        public int CreateUserID { get; set; }
+        public int CreatePersonID { get; set; }
         public DateTime CreateDate { get; set; }
     }
 
