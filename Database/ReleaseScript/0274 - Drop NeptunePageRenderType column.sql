@@ -20,5 +20,5 @@ values
 	<li>Has the designation, Neptune XIV.</li>
 	<li>It is also the codename for the OCST Planning module.</li>
 </ul>'),
-(53, '<p>Help me please!</p>'),
+(53, '<p>Training content here</p>'),
 (54, '<p>A list of Labels in the system and their Definitions</p>')

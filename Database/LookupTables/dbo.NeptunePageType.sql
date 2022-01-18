@@ -52,5 +52,5 @@ values
 (50, 'AboutModelingBMPPerformance', 'About Modeling BMP Performance'),
 (51, 'BulkUploadFieldVisits', 'Bulk Upload Field Visits'),
 (52, 'HippocampHomePage', 'Hippocamp Home Page'),
-(53, 'HippocampHelp', 'Hippocamp Help'),
+(53, 'HippocampTraining', 'Hippocamp Training'),
 (54, 'HippocampLabelsAndDefinitionsList', 'Hippocamp Labels and Definitions List')
