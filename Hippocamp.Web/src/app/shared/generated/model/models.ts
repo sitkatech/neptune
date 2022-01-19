@@ -3,7 +3,6 @@ export * from '././field-definition-type-dto';
 export * from '././file-resource-dto';
 export * from '././file-resource-mime-type-dto';
 export * from '././neptune-page-dto';
-export * from '././neptune-page-render-type-dto';
 export * from '././neptune-page-type-dto';
 export * from '././organization-dto';
 export * from '././organization-type-dto';

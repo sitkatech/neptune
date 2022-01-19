@@ -5,7 +5,6 @@ model/file-resource-dto.ts
 model/file-resource-mime-type-dto.ts
 model/models.ts
 model/neptune-page-dto.ts
-model/neptune-page-render-type-dto.ts
 model/neptune-page-type-dto.ts
 model/organization-dto.ts
 model/organization-type-dto.ts
