@@ -18,5 +18,6 @@
         public string LeadOrganizationHomeUrl { get; set; }
         public string LeadOrganizationEmail { get; set; }
         public string APPINSIGHTS_INSTRUMENTATIONKEY { get; set; }
+        public string OcStormwaterToolsBaseUrl { get; set; }
     }
 }

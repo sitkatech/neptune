@@ -75,6 +75,7 @@ export class AuthenticationService {
           RoleID: RoleEnum.Unassigned,
           LoginName: claims["login_name"],
           UserGuid: claims["sub"],
+          OrganizationName: claims["organization_name"]
         });
 
         this.userService.createNewUser(newUser).subscribe(user => {

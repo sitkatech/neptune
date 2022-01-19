@@ -18,3 +18,4 @@ services:
       - LeadOrganizationHomeUrl=${LeadOrganizationHomeUrl}
       - LeadOrganizationEmail=${LeadOrganizationEmail}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
+      - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}

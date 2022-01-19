@@ -9,13 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { NeptunePageRenderTypeDto } from '././neptune-page-render-type-dto';
 
 export class NeptunePageTypeDto { 
     NeptunePageTypeID?: number;
     NeptunePageTypeName?: string;
     NeptunePageTypeDisplayName?: string;
-    NeptunePageRenderType?: NeptunePageRenderTypeDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

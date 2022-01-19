@@ -331,42 +331,6 @@
         }
       }
     },
-    "/users/invite": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonInviteDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonInviteDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonInviteDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonInviteDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/users": {
       "post": {
         "tags": [
@@ -418,71 +382,6 @@
             }
           }
         }
-      },
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PersonDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PersonDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PersonDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/unassigned-report": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnassignedUserReportDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnassignedUserReportDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnassignedUserReportDto"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/users/{personID}": {
@@ -501,68 +400,6 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PersonDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PersonDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PersonDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "parameters": [
-          {
-            "name": "personID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonUpsertDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonUpsertDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonUpsertDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonUpsertDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success",
@@ -834,20 +671,8 @@
         "additionalProperties": false
       },
       "PersonCreateDto": {
-        "required": [
-          "ReceiveSupportEmails",
-          "RoleID"
-        ],
         "type": "object",
         "properties": {
-          "LoginName": {
-            "type": "string",
-            "nullable": true
-          },
-          "UserGuid": {
-            "type": "string",
-            "format": "uuid"
-          },
           "FirstName": {
             "type": "string",
             "nullable": true
@@ -864,16 +689,18 @@
             "type": "string",
             "nullable": true
           },
-          "PhoneNumber": {
+          "RoleID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LoginName": {
             "type": "string",
             "nullable": true
           },
-          "RoleID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ReceiveSupportEmails": {
-            "type": "boolean"
+          "UserGuid": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -950,68 +777,6 @@
         },
         "additionalProperties": false
       },
-      "PersonInviteDto": {
-        "required": [
-          "Email",
-          "FirstName",
-          "LastName",
-          "RoleID"
-        ],
-        "type": "object",
-        "properties": {
-          "FirstName": {
-            "type": "string"
-          },
-          "LastName": {
-            "type": "string"
-          },
-          "Email": {
-            "type": "string"
-          },
-          "RoleID": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PersonUpsertDto": {
-        "required": [
-          "ReceiveSupportEmails",
-          "RoleID"
-        ],
-        "type": "object",
-        "properties": {
-          "FirstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "LastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "OrganizationName": {
-            "type": "string",
-            "nullable": true
-          },
-          "Email": {
-            "type": "string",
-            "nullable": true
-          },
-          "PhoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ReceiveSupportEmails": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
       "RoleDto": {
         "type": "object",
         "properties": {
@@ -1030,16 +795,6 @@
           "RoleDescription": {
             "type": "string",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UnassignedUserReportDto": {
-        "type": "object",
-        "properties": {
-          "Count": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
