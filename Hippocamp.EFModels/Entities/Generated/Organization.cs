@@ -15,6 +15,7 @@ namespace Hippocamp.EFModels.Entities
         {
             FundingSources = new HashSet<FundingSource>();
             People = new HashSet<Person>();
+            Projects = new HashSet<Project>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -48,6 +49,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<FundingSource> FundingSources { get; set; }
         [InverseProperty(nameof(Person.Organization))]
         public virtual ICollection<Person> People { get; set; }
+        [InverseProperty(nameof(Project.Organization))]
+        public virtual ICollection<Project> Projects { get; set; }
         [InverseProperty(nameof(TreatmentBMP.OwnerOrganization))]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }

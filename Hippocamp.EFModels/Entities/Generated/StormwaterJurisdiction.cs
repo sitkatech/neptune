@@ -18,6 +18,7 @@ namespace Hippocamp.EFModels.Entities
             LandUseBlocks = new HashSet<LandUseBlock>();
             OnlandVisualTrashAssessmentAreas = new HashSet<OnlandVisualTrashAssessmentArea>();
             OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
+            Projects = new HashSet<Project>();
             StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
             TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
@@ -54,6 +55,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         [InverseProperty(nameof(OnlandVisualTrashAssessment.StormwaterJurisdiction))]
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
+        [InverseProperty(nameof(Project.StormwaterJurisdiction))]
+        public virtual ICollection<Project> Projects { get; set; }
         [InverseProperty(nameof(StormwaterJurisdictionPerson.StormwaterJurisdiction))]
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         [InverseProperty(nameof(TrashGeneratingUnit4326.StormwaterJurisdiction))]

@@ -94,6 +94,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<PreliminarySourceIdentificationCategory> PreliminarySourceIdentificationCategories { get; set; }
         public virtual DbSet<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypes { get; set; }
         public virtual DbSet<PriorityLandUseType> PriorityLandUseTypes { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<ProjectStatus> ProjectStatuses { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
         public virtual DbSet<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
@@ -1249,6 +1251,51 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.PriorityLandUseTypeDisplayName).IsUnicode(false);
 
                 entity.Property(e => e.PriorityLandUseTypeName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Project>(entity =>
+            {
+                entity.Property(e => e.AdditionalContactInformation).IsUnicode(false);
+
+                entity.Property(e => e.ProjectDescription).IsUnicode(false);
+
+                entity.Property(e => e.ProjectName).IsUnicode(false);
+
+                entity.HasOne(d => d.CreatePerson)
+                    .WithMany(p => p.ProjectCreatePeople)
+                    .HasForeignKey(d => d.CreatePersonID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Person_CreatePersonID_PersonID");
+
+                entity.HasOne(d => d.Organization)
+                    .WithMany(p => p.Projects)
+                    .HasForeignKey(d => d.OrganizationID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.PrimaryContactPerson)
+                    .WithMany(p => p.ProjectPrimaryContactPeople)
+                    .HasForeignKey(d => d.PrimaryContactPersonID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Person_PrimaryContactPersonID_PersonID");
+
+                entity.HasOne(d => d.ProjectStatus)
+                    .WithMany(p => p.Projects)
+                    .HasForeignKey(d => d.ProjectStatusID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.StormwaterJurisdiction)
+                    .WithMany(p => p.Projects)
+                    .HasForeignKey(d => d.StormwaterJurisdictionID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProjectStatus>(entity =>
+            {
+                entity.Property(e => e.ProjectStatusID).ValueGeneratedNever();
+
+                entity.Property(e => e.ProjectStatusDisplayName).IsUnicode(false);
+
+                entity.Property(e => e.ProjectStatusName).IsUnicode(false);
             });
 
             modelBuilder.Entity<QuickBMP>(entity =>
