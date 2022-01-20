@@ -10,13 +10,16 @@
  * Do not edit the class manually.
  */
 
-export class CustomPageUpsertDto { 
-    CustomPageDisplayName: string;
-    CustomPageVanityUrl: string;
-    CustomPageContent?: string;
-    MenuItemID: number;
-    SortOrder?: number;
-    ViewableRoleIDs: Array<number>;
+export class OrganizationSimpleDto { 
+    OrganizationID?: number;
+    OrganizationGuid?: string;
+    OrganizationName?: string;
+    OrganizationShortName?: string;
+    PrimaryContactPersonID?: number;
+    IsActive?: boolean;
+    OrganizationUrl?: string;
+    LogoFileResourceID?: number;
+    OrganizationTypeID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

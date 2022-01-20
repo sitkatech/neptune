@@ -10,11 +10,12 @@
  * Do not edit the class manually.
  */
 
-export class UserInviteDto { 
-    FirstName: string;
-    LastName: string;
-    Email: string;
-    RoleID: number;
+export class StormwaterJurisdictionSimpleDto { 
+    StormwaterJurisdictionID?: number;
+    OrganizationID?: number;
+    StateProvinceID?: number;
+    StormwaterJurisdictionPublicBMPVisibilityTypeID?: number;
+    StormwaterJurisdictionPublicWQMPVisibilityTypeID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

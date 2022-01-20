@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 
-export class MenuItemDto { 
-    MenuItemID?: number;
-    MenuItemName?: string;
-    MenuItemDisplayName?: string;
+export class ProjectStatusSimpleDto { 
+    ProjectStatusID?: number;
+    ProjectStatusName?: string;
+    ProjectStatusDisplayName?: string;
+    ProjectStatusSortOrder?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

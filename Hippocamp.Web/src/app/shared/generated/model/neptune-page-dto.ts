@@ -12,10 +12,10 @@
 import { NeptunePageTypeDto } from '././neptune-page-type-dto';
 
 export class NeptunePageDto { 
-    IsEmptyContent?: boolean;
     NeptunePageID?: number;
     NeptunePageType?: NeptunePageTypeDto;
     NeptunePageContent?: string;
+    IsEmptyContent?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

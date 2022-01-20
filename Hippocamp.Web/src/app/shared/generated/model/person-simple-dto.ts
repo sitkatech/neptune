@@ -10,16 +10,24 @@
  * Do not edit the class manually.
  */
 
-export class UserCreateDto { 
-    LoginName?: string;
-    UserGuid?: string;
+export class PersonSimpleDto { 
+    PersonID?: number;
+    PersonGuid?: string;
     FirstName?: string;
     LastName?: string;
-    OrganizationName?: string;
     Email?: string;
-    PhoneNumber?: string;
-    RoleID: number;
-    ReceiveSupportEmails: boolean;
+    Phone?: string;
+    RoleID?: number;
+    CreateDate?: string;
+    UpdateDate?: string;
+    LastActivityDate?: string;
+    IsActive?: boolean;
+    OrganizationID?: number;
+    ReceiveSupportEmails?: boolean;
+    LoginName?: string;
+    ReceiveRSBRevisionRequestEmails?: boolean;
+    WebServiceAccessToken?: string;
+    readonly FullName?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
