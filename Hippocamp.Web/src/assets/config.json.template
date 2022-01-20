@@ -10,12 +10,8 @@
     
     "platformLongName": [TODO],
     "platformShortName": [TODO],
-    "leadOrganizationShortName": [TODO], 
-    "leadOrganizationLongName": [TODO], 
-    "leadOrganizationHomeUrl": [TODO],
 
     "faviconFilename": [TODO],
-    "leadOrganizationLogoFilename": [TODO],
     "ocStormwaterToolsBaseUrl": [TODO],
   
     "keystoneAuthConfiguration": {

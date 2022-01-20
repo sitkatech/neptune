@@ -66,24 +66,16 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         });
     }
 
-
     public platformShortName(): string{
         return environment.platformShortName;
     }
 	
-	public leadOrganizationShortName(): string{
-        return environment.leadOrganizationShortName;
-    }
-
-    public leadOrganizationHomeUrl(): string{
-        return environment.leadOrganizationHomeUrl;
-    }
-
-    public leadOrganizationLogoSrc(): string{
-        return `assets/main/logos/${environment.leadOrganizationLogoFilename}`;
-    }
-
     public usersListUrl(): string{
         return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
     }
+
+    public ocStormwaterToolsMainUrl(): string{
+        return environment.ocStormwaterToolsBaseUrl;
+    }
+
 }
