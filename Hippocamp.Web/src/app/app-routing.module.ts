@@ -10,11 +10,13 @@ import { CreateUserCallbackComponent } from './pages/create-user-callback/create
 import { FieldDefinitionListComponent } from './pages/field-definition-list/field-definition-list.component';
 import { FieldDefinitionEditComponent } from './pages/field-definition-edit/field-definition-edit.component';
 import { TrainingComponent } from './pages/training/training.component';
+import { AboutComponent } from './pages/about/about.component';
 
 const routes: Routes = [
   { path: "labels-and-definitions/:id", component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
+  { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "users/:id", component: UserDetailComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "create-user-callback", component: CreateUserCallbackComponent },
   { path: "not-found", component: NotFoundComponent },

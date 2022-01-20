@@ -84,16 +84,8 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         return `${environment.ocStormwaterToolsBaseUrl}/Organization/Index`;
     }
 
-    public aboutUrl(): string {
-        return `${environment.ocStormwaterToolsBaseUrl}/Home/About`;
-    }
-
     public requestSupportUrl(): string {
         return `${environment.ocStormwaterToolsBaseUrl}/Help/Support`;
-    }
-
-    public trainingUrl(): string {
-        return `${environment.ocStormwaterToolsBaseUrl}/Home/Training`;
     }
 
     public ocStormwaterToolsMainUrl(): string{
