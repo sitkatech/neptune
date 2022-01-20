@@ -53,24 +53,8 @@ export class DynamicEnvironment {
         return window.config.platformShortName;
     }
 
-    public get leadOrganizationLongName(){
-        return window.config.leadOrganizationLongName;
-    }
-
-    public get leadOrganizationShortName(){
-        return window.config.leadOrganizationShortName;
-    }
-
-    public get leadOrganizationHomeUrl(){
-        return window.config.leadOrganizationHomeUrl;
-    }
-
     public get faviconFilename(){
         return window.config.faviconFilename;
-    }
-
-    public get leadOrganizationLogoFilename(){
-        return window.config.leadOrganizationLogoFilename;
     }
 
     public get appInsightsInstrumentationKey() {

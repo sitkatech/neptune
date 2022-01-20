@@ -81,11 +81,7 @@ namespace Hippocamp.Web
             KeystoneAuthConfiguration = new KeystoneAuthConfigurationDto(configuration);
             PlatformLongName = configuration["PlatformLongName"];
             PlatformShortName = configuration["PlatformShortName"];
-            LeadOrganizationShortName = configuration["LeadOrganizationShortName"];
-            LeadOrganizationLongName = configuration["LeadOrganizationLongName"];
-            LeadOrganizationHomeUrl = configuration["LeadOrganizationHomeUrl"];
             FaviconFilename = configuration["FaviconFilename"];
-            LeadOrganizationLogoFilename = configuration["LeadOrganizationLogoFilename"];
             AppInsightsInstrumentationKey =  configuration["AppInsightsInstrumentationKey"];
             OcStormwaterToolsBaseUrl = configuration["OcStormwaterToolsBaseUrl"];
         }
@@ -108,16 +104,8 @@ namespace Hippocamp.Web
         public string PlatformLongName { get; set; }
         [JsonProperty("platformShortName")]
         public string PlatformShortName { get; set; }
-        [JsonProperty("leadOrganizationShortName")]
-        public string LeadOrganizationShortName { get; set; }
-        [JsonProperty("leadOrganizationLongName")]
-        public string LeadOrganizationLongName { get; set; }
-        [JsonProperty("leadOrganizationHomeUrl")]
-        public string LeadOrganizationHomeUrl { get; set; }
         [JsonProperty("faviconFilename")]
         public string FaviconFilename {get; set;}
-        [JsonProperty("leadOrganizationLogoFilename")]
-        public string LeadOrganizationLogoFilename { get; set;}
         [JsonProperty("appInsightsInstrumentationKey")]
         public string AppInsightsInstrumentationKey {get; set;}
         [JsonProperty("ocStormwaterToolsBaseUrl")]

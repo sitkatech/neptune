@@ -41,7 +41,7 @@ export class AppComponent {
             this.oauthService.tryLogin();
         });
 
-        this.titleService.setTitle(`${environment.leadOrganizationShortName} ${environment.platformShortName}`)
+        this.titleService.setTitle(`${environment.platformShortName}`)
         this.setAppFavicon();
     }
 
