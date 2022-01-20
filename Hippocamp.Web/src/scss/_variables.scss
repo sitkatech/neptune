@@ -1,19 +1,21 @@
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:700);
+
 $footer-height: 60px;
 
 $theme-colors: (
-        "primary": #F0644B,     // systemBlue
-        "secondary": #c4c4c4,   // lightGray
+        "primary": #0099ab,     // systemBlue
+        "secondary": #969491,   // lightGray
         "info": #228be6,        // brightBlue
         "light": #f5f5f5,       // offWhite
         "muted": #dee2e6,       // footerGray
-        "danger": #ff0000,
-        "success": #00cc00,
-        "warning": #ffff9f,
-        "h4-styled": #194349,
+        "danger": #a94442,
+        "success": #5cb85c,
+        "warning": #f0ad4e,
         "footer": #999999,
-        "header-background": #343b85,
-        "select": #1F4D3D,
-        "header-nav-link" : #fff,
+        "header-background": #0099ab,
+        "header-nav-link" : #77cfdc,
         "grid-header-background": #343b85,
         "grid-accent-color": #0077f9,
         "grid-hover-color": cornsilk,
@@ -24,40 +26,42 @@ $theme-colors: (
 
 // this looks redundant, but we need to override the bootstrap variables in both ways.
 //Custom variables only need the one override
-$primary: #F0644B;
-$secondary: #c4c4c4;
+$primary: #0099ab;
+$secondary: #969491;
 $info: #228be6;
 $light: #f5f5f5;
 $muted: #dee2e6;
-$danger: #ff0000;
-$success: #00cc00;
-$warning: #ffff9f;
+$danger: #a94442;
+$success: #5cb85c;
+$warning: #f0ad4e;
 
 $account-dropdown-text: #fff;
-$button-border-and-background: #F0644B;
+$button-border-and-background: #0099ab;
 $button-hover-text-color: #ffffff;
-$button-text-color: #f6d992;
-$button-hover-background: #f6d992;
-$button-toggle-hover: #637ca1;
+$button-text-color: #ffffff;
+$button-hover-background: #00c1d5;
+$button-toggle-hover: #00c1d5;
 $footer: #999999;  
-$header-background: #F0644B;
+$header-background: #0099ab;
 $header-gradient-start: transparent;
 $header-gradient-end: transparent;
 $header-nav-after-height: 0px;
-$header-nav-link: #fff;         
+$header-nav-link: #fff;                
 $header-nav-link-font-weight: inherit;
-$h4-styled: #194349;
-$select: #1F4D3D;
-$select-and-nav-dropdown-hover: #87a1cc;
-$select-and-nav-hover:#87a1cc;
+$select: #fff;
+$select-and-nav-dropdown-hover: #00c1d5;
+$select-and-nav-hover:#00c1d5;
 $text-muted: darken(#d3d3d3, 15%);
 $text-warning: darken($warning, 20%);
 
-$font-family-sans-serif: 'Tahoma', sans-serif, 'Helvetica Neue', sans-serif;
-$font-size: 16px;
-$base-text: #000000;
 
-$card-cap-bg: #dfdfdf;
+$font-family-sans-serif: 'Lato', sans-serif, 'Open Sans', sans-serif;
+$font-size: 15px;
+$base-text: #333;
 
-$modal-header-background: #dfdfdf;
+$card-cap-bg: #969491;
+$card-header: #fff;
+$card-body: #f9f9f9;
+
+$modal-header-background: #0099ab;
 $link-color: #205c90;

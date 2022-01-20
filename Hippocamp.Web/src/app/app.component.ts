@@ -101,5 +101,9 @@ export class AppComponent {
 
     setAppFavicon(){
         this._document.getElementById('appFavicon').setAttribute('href', "assets/main/favicons/" + environment.faviconFilename);
-     }
+    }
+
+    public legalUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/Legal`;
+    }
 }
