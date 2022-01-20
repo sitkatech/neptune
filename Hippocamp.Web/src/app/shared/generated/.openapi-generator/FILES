@@ -7,7 +7,12 @@ model/models.ts
 model/neptune-page-dto.ts
 model/neptune-page-type-dto.ts
 model/organization-dto.ts
+model/organization-simple-dto.ts
 model/organization-type-dto.ts
 model/person-create-dto.ts
 model/person-dto.ts
+model/person-simple-dto.ts
+model/project-simple-dto.ts
+model/project-status-simple-dto.ts
 model/role-dto.ts
+model/stormwater-jurisdiction-simple-dto.ts

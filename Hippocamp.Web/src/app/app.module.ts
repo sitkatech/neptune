@@ -33,6 +33,7 @@ import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { SharedModule } from './shared/shared.module';
 import { CookieStorageService } from './shared/services/cookies/cookie-storage.service';
 import { TrainingComponent } from './pages/training/training.component';
+import { ProjectListComponent } from './pages/project-list/project-list.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -51,7 +52,8 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     CreateUserCallbackComponent,
     FieldDefinitionListComponent,
     FieldDefinitionEditComponent,
-    TrainingComponent
+    TrainingComponent,
+    ProjectListComponent
   ],
   imports: [
     AppRoutingModule,
