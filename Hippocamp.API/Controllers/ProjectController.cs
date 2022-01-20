@@ -17,9 +17,18 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects")]
-        public ActionResult<List<ProjectSimpleDto>> getAllProjects()
+        [AdminFeature]
+        public ActionResult<List<ProjectSimpleDto>> GetAllProjects()
         {
             var projectSimpleDtos = Project.ListAsSimpleDtos(_dbContext);
+            return Ok(projectSimpleDtos);
+        }
+
+        [HttpGet("projects/{personID}")]
+        [JurisdictionManagerOrEditorFeature]
+        public ActionResult<List<ProjectSimpleDto>> GetProjectsByPersonID([FromRoute] int personID)
+        {
+            var projectSimpleDtos = Project.ListByPersonIDAsSimpleDtos(_dbContext, personID);
             return Ok(projectSimpleDtos);
         }
     }

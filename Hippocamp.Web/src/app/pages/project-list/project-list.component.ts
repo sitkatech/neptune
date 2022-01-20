@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { PersonDto } from 'src/app/shared/generated/model/person-dto';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 
 @Component({
   selector: 'hippocamp-project-list',
@@ -13,16 +16,48 @@ import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-
 export class ProjectListComponent implements OnInit {
   @ViewChild('projectsGrid') projectsGrid: AgGridAngular;
 
+  private watchUserChangeSubscription: any;
+  private currentUser: PersonDto;
+
   public projects: Array<ProjectSimpleDto>;
   public projectColumnDefs: Array<ColDef>;
   public defaultColDef: ColDef;
 
   constructor(
+    private authenticationService: AuthenticationService,
+    private cdr: ChangeDetectorRef,
     private projectService: ProjectService,
     private utilityFunctionsService: UtilityFunctionsService
   ) { }
 
   ngOnInit(): void {
+    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+      this.currentUser = currentUser;
+
+      this.createProjectGridColDefs();
+
+      if (this.isAdministrator()) {
+        this.projectService.getAllProjects().subscribe(projects => {
+          this.projects = projects;
+        });
+      }
+      if (this.isManagerOrEditor()) {
+        this.projectService.getProjectsByPersonID(this.currentUser.PersonID).subscribe(projects => {
+          this.projects = projects;
+        })
+      }
+
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy() {
+    this.watchUserChangeSubscription.unsubscribe();
+    this.authenticationService.dispose();
+    this.cdr.detach();
+  }
+
+  private createProjectGridColDefs() {
     this.projectColumnDefs = [
       { headerName: 'Project Name', field: 'ProjectName', width: 180 },
       { headerName: 'Organization', field: 'Organization.OrganizationName', width: 180 },
@@ -31,13 +66,17 @@ export class ProjectListComponent implements OnInit {
       this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
       { headerName: 'Project Description', field: 'ProjectDescription', width: 250 }
     ];
-
+    
     this.defaultColDef = {
       filter: true, sortable: true, resizable: true
-    }
+    };
+  }
 
-    this.projectService.getProjects().subscribe(projects => {
-      this.projects = projects;
-    });
+  public isAdministrator(): boolean {
+    return this.currentUser.Role.RoleID == RoleEnum.Admin || this.currentUser.Role.RoleID == RoleEnum.SitkaAdmin;
+  }
+
+  public isManagerOrEditor(): boolean {
+    return this.currentUser.Role.RoleID == RoleEnum.JurisdictionManager || this.currentUser.Role.RoleID == RoleEnum.JurisdictionEditor;
   }
 }

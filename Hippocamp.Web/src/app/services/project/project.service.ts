@@ -11,8 +11,13 @@ export class ProjectService {
 
   constructor(private apiService: ApiService) { }
 
-  getProjects(): Observable<Array<ProjectSimpleDto>> {
+  getAllProjects(): Observable<Array<ProjectSimpleDto>> {
     let route = `/projects`;
     return this.apiService.getFromApi(route);
-}
+  }
+
+  getProjectsByPersonID(personID: number): Observable<Array<ProjectSimpleDto>> {
+    let route = `/projects/${personID}`;
+    return this.apiService.getFromApi(route);
+  }
 }

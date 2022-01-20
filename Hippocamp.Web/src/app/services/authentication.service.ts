@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { UserService } from './user/user.service';
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, Subject, race } from 'rxjs';
+import { filter, first } from 'rxjs/operators';
 import { CookieStorageService } from '../shared/services/cookies/cookie-storage.service';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { RoleEnum } from '../shared/models/enums/role.enum';
@@ -97,6 +97,18 @@ export class AuthenticationService {
 
   dispose() {
     this.getUserObservable.unsubscribe();
+  }
+
+  public getCurrentUser(): Observable<PersonDto> {
+    return race(
+      new Observable(subscriber => {
+        if (this.currentUser) {
+          subscriber.next(this.currentUser);
+          subscriber.complete();
+        }
+      }),
+      this.currentUserSetObservable.pipe(first())
+    );
   }
 
   public isAuthenticated(): boolean {
