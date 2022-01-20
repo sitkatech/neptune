@@ -1,5 +1,5 @@
-<nav class="navbar navbar-hippocamp navbar-expand-lg navbar-dark stroke">
-    <a href="{{leadOrganizationHomeUrl()}}" class="navbar-brand" target="_blank">
+<nav class="navbar navbar-expand-xl navbar-hippocamp-secondary">
+    <a href="{{leadOrganizationHomeUrl()}}" class="navbar-brand navbar-logo pt-0" target="_blank">
         <img src="{{leadOrganizationLogoSrc()}}" class="navbarLogo" alt="{{leadOrganizationShortName()}}">
     </a>
     <a routerLink="/" routerLinkActive="active" class="navbar-brand nav-link">
@@ -9,11 +9,34 @@
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
+    <div class="flex-row navbar-collapse collapse float-right" id="navbar2">
+        <ul class="navbar-nav flex-column mt-lg-0 mr-sm-2 ml-3">
+            <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
+                <a href="javascript:void(0);" (click)="login()" routerLinkActive="active" class="nav-link">Sign In</a>
+            </li>
+            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()"> 
+                <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Welcome {{getUserName()}}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a routerLink="/help" class="dropdown-item">
+                        Get Help
+                    </a>
+                    <a href="javascript:void(0);" (click)="logout()" class="dropdown-item">Sign Out</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<nav class="navbar navbar-hippocamp navbar-expand-lg navbar-dark stroke">
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
-                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
+                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Manage
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -36,22 +59,6 @@
                 </div>
             </li>
         </ul>
-        <ul class="navbar-nav flex-column mt-2 mt-lg-0 mr-sm-2">
-            <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
-                <a href="javascript:void(0);" (click)="login()" routerLinkActive="active" class="nav-link">Sign In</a>
-            </li>
-            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()"> 
-                <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Welcome {{getUserName()}}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a routerLink="/help" class="dropdown-item">
-                        Get Help
-                    </a>
-                    <a href="javascript:void(0);" (click)="logout()" class="dropdown-item">Sign Out</a>
-                </div>
-            </li>
-        </ul>
+
     </div>
 </nav>

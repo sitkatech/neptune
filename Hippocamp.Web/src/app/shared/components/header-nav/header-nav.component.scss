@@ -1,15 +1,4 @@
 @import "~src/scss/_variables.scss";
-
-.navbarLogo {
-    height: 80px;
-  }
-  
-  .footerLogo {
-    height: 50px;
-    float: right;
-    margin: 5px 0;
-  }
-  
   a.signOut {
     cursor: pointer;
   }
@@ -18,35 +7,150 @@
     z-index: 1021;
   }
   
-  .navbar.navbar-hippocamp
-  {
+  .navbar.navbar-hippocamp {
     background-color: $header-background;
-  }
-
-  .navbar.navbar-hippocamp a.nav-link,
-  .navbar.navbar-hippocamp a.nav-link::before,
-  .navbar.navbar-hippocamp a.nav-link::after {
-    transition: all .5s;
   }
   
   .navbar.navbar-hippocamp a.nav-link:hover {
-    color:$select-and-nav-hover;
+    background-color: $select-and-nav-hover;
   }
 
   nav .dropdown-item:hover {
     background-color: $select-and-nav-dropdown-hover;
   }
 
-  .navbar.navbar-hippocamp a.nav-link
-  {
+  .navbar-logo {
+    img {
+      height: 100px;
+    }
+    padding: 0px;
+    float: left;
+    position: static;
+    z-index: 1025;
+    left: 0;
+    top: 0;
+  }
+
+  nav {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .navbar.navbar-hippocamp a.nav-link {
     color: $header-nav-link;
   }
 
-  .welcomeUser{
-    @media screen and (min-width: 991px){
-      text-align:right;
+  .welcomeUser {
+    @media screen and (min-width: 991px) {
+      justify-self: right;
+      text-align: right;
     }
-    @media screen and (max-width: 990px){
-      text-align:left;
+    @media screen and (max-width: 990px) {
+      text-align: left;
+    }
+  }
+
+  
+  // primary nav
+  .navbar.navbar-hippocamp{
+    background-color: $header-background;
+    height: 50px;
+
+    #navbar2 {
+      height: 100%;
+      ul {
+        height: 100%;
+      }
+      li {
+        height: 100%;
+        position: relative;
+      }
+    }
+
+    .dropdown-item{
+      padding: 0.25rem 0.75rem;
+    }
+        
+    a.nav-link {
+      color: $header-nav-link;
+      height: 100%;
+    }
+
+    .nav-item {
+      padding-left: 10px;
+      padding-bottom: 5px;
+    }
+
+    .dashboardItem{
+      a {
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+    }  
+  }
+
+  // secondary nav
+  .navbar.navbar-hippocamp-secondary{
+    background-color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    height: 100px;
+    
+    .dropdown-menu{
+      font-size: 16px;
+    }
+
+    .dropdown-item{
+      padding: 0.25rem 0.75rem;
+    }
+
+    a.nav-link {
+      color: $select-and-nav-hover;
+    }
+  }
+
+
+  //responsive adjustments
+
+  @media screen and (min-width: 1201px){
+    .navbar-hippocamp-secondary {
+      height: 100px;
+    }
+    .navbar-hippocamp {
+      height: 50px;
+    }
+    .navbar-responsive-header, .navbar-responsive-current-page {
+      display: none;
+    }
+    .dashboardItem{
+      text-align: left;
+    }
+    li.currentPage::after {
+      content: '';
+      position: absolute;
+      left: 42%;
+      top: 100%;
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 20px solid $button-hover-background;
+      clear: both;
+    }
+  }
+
+  @media screen and (max-width: 1200px){
+    .navbar-logo, .navbar-brand-primary {
+      display:none;
+    }
+    .navbar-hippocamp:not(.navbar-responsive-header), #navbar2{
+      padding: 0 !important;
+    }
+
+    .navbar-hippocamp {
+      .nav-item {
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
     }
   }
