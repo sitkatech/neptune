@@ -16,8 +16,8 @@ $theme-colors: (
         "footer": #999999,
         "header-background": #0099ab,
         "header-nav-link" : #77cfdc,
-        "grid-header-background": #343b85,
-        "grid-accent-color": #0077f9,
+        "grid-header-background": #0099ab,
+        "grid-accent-color": #00c1d5,
         "grid-hover-color": cornsilk,
         "account-dropdown-text": #fff,
         "header-gradient-start": transparent,
@@ -54,6 +54,7 @@ $select-and-nav-hover:#00c1d5;
 $text-muted: darken(#d3d3d3, 15%);
 $text-warning: darken($warning, 20%);
 
+$neptune-orange: #E49937;
 
 $font-family-sans-serif: 'Lato', sans-serif, 'Open Sans', sans-serif;
 $font-size: 15px;

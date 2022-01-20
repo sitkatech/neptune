@@ -1,7 +1,9 @@
-$hippocamp-primary: #F0644B;
-$border-gray: #bdc3c7;
-$background-gray: #c4c4c4;
-$hippocamp-yellow: #f6d992;
+@import "~src/scss/_variables.scss";
+
+$hippocamp-primary: $primary;
+$border-gray: $secondary;
+$background-gray: $muted;
+$hippocamp-orange: $neptune-orange;
 
 #filter-select-buttons input {
     display: none;
@@ -31,7 +33,7 @@ $hippocamp-yellow: #f6d992;
 }
 
 #filter-select-buttons label:hover {
-    color: $hippocamp-yellow;
+    color: $hippocamp-orange;
 }
 
 #filter-select-buttons input:checked+label {

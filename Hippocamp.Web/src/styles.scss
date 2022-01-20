@@ -206,9 +206,11 @@ figure.media {
 
   //End of NGB Popover
 
-  $hippocamp-primary: #F0644B;
-  $hippocamp-secondary: #EF8D7C;
-  $border-gray: #bdc3c7;
+  $hippocamp-primary: $primary;
+  $hippocamp-secondary: $secondary;
+  $hippocamp-orange: $neptune-orange;
+
+  $border-gray: $secondary;
 
   // AG Grids pinned bottom row
   .ag-floating-bottom {
@@ -228,7 +230,7 @@ figure.media {
 
   // AG Grids filters
   .ag-filter {
-    background-color: $hippocamp-secondary;
+    background-color: $hippocamp-primary;
   }
 
   .ag-filter .ag-filter-body .ag-wrapper input {
@@ -238,5 +240,9 @@ figure.media {
 
   .ag-filter .ag-filter-body .ag-wrapper input:focus {
     border: 1px solid $hippocamp-primary;
-    box-shadow: 0 0 10px $hippocamp-primary;
+    // box-shadow: 0 0 10px $hippocamp-primary;
+  }
+
+  h4, h5 {
+    color: $hippocamp-orange;
   }
