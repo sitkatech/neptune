@@ -208,6 +208,8 @@ figure.media {
 
   $hippocamp-primary: $primary;
   $hippocamp-secondary: $secondary;
+  $hippocamp-orange: $neptune-orange;
+
   $border-gray: $secondary;
 
   // AG Grids pinned bottom row
@@ -239,4 +241,8 @@ figure.media {
   .ag-filter .ag-filter-body .ag-wrapper input:focus {
     border: 1px solid $hippocamp-primary;
     // box-shadow: 0 0 10px $hippocamp-primary;
+  }
+
+  h4, h5 {
+    color: $hippocamp-orange;
   }
