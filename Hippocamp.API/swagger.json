@@ -293,6 +293,44 @@
         }
       }
     },
+    "/projects": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": [
@@ -571,9 +609,6 @@
       "NeptunePageDto": {
         "type": "object",
         "properties": {
-          "IsEmptyContent": {
-            "type": "boolean"
-          },
           "NeptunePageID": {
             "type": "integer",
             "format": "int32"
@@ -584,6 +619,9 @@
           "NeptunePageContent": {
             "type": "string",
             "nullable": true
+          },
+          "IsEmptyContent": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -641,6 +679,50 @@
           },
           "OrganizationType": {
             "$ref": "#/components/schemas/OrganizationTypeDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationSimpleDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationGuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "LogoFileResourceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OrganizationTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -777,6 +859,163 @@
         },
         "additionalProperties": false
       },
+      "PersonSimpleDto": {
+        "type": "object",
+        "properties": {
+          "PersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PersonGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "LastActivityDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ReceiveSupportEmails": {
+            "type": "boolean"
+          },
+          "LoginName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiveRSBRevisionRequestEmails": {
+            "type": "boolean"
+          },
+          "WebServiceAccessToken": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FullName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectSimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatePersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ProjectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalContactInformation": {
+            "type": "string",
+            "nullable": true
+          },
+          "Organization": {
+            "$ref": "#/components/schemas/OrganizationSimpleDto"
+          },
+          "StormwaterJurisdiction": {
+            "$ref": "#/components/schemas/StormwaterJurisdictionSimpleDto"
+          },
+          "ProjectStatus": {
+            "$ref": "#/components/schemas/ProjectStatusSimpleDto"
+          },
+          "PrimaryContactPerson": {
+            "$ref": "#/components/schemas/PersonSimpleDto"
+          },
+          "CreatePerson": {
+            "$ref": "#/components/schemas/PersonSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectStatusSimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProjectStatusDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProjectStatusSortOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "RoleDto": {
         "type": "object",
         "properties": {
@@ -795,6 +1034,32 @@
           "RoleDescription": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StormwaterJurisdictionSimpleDto": {
+        "type": "object",
+        "properties": {
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StateProvinceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionPublicBMPVisibilityTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionPublicWQMPVisibilityTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

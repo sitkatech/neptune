@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,20 @@ namespace Hippocamp.EFModels.Entities
 {
     public partial class Project
     {
-        public static IEnumerable<ProjectDto> ListAsDtos(HippocampDbContext dbContext)
+        private static IQueryable<Project> GetProjectsImpl(HippocampDbContext dbContext)
         {
-            var projectDtos = dbContext.Projects
-                .AsNoTracking()
-                .Select(x => x.AsDto());
+            return dbContext.Projects
+                .Include(x => x.Organization)
+                .Include(x => x.StormwaterJurisdiction)
+                .Include(x => x.ProjectStatus)
+                .Include(x => x.CreatePerson)
+                .Include(x => x.PrimaryContactPerson)
+                .AsNoTracking();
+        }
 
-            return projectDtos;
+        public static List<ProjectSimpleDto> ListAsSimpleDtos(HippocampDbContext dbContext)
+        {
+            return GetProjectsImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
         }
     }
 }

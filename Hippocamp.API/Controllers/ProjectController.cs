@@ -17,10 +17,10 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects")]
-        public ActionResult<List<ProjectDto>> getAllProjects()
+        public ActionResult<List<ProjectSimpleDto>> getAllProjects()
         {
-            var projectDtos = Project.ListAsDtos(_dbContext);
-            return Ok(projectDtos);
+            var projectSimpleDtos = Project.ListAsSimpleDtos(_dbContext);
+            return Ok(projectSimpleDtos);
         }
     }
 }
