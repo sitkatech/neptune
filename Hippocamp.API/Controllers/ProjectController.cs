@@ -31,5 +31,14 @@ namespace Hippocamp.API.Controllers
             var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDtos(_dbContext, personID);
             return Ok(projectSimpleDtos);
         }
+
+        [HttpPost("projects/new")]
+        public IActionResult New([FromBody] ProjectCreateDto projectCreateDto)
+        {
+            // validation here
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            Projects.CreateNew(_dbContext, projectCreateDto, personDto);
+            return Ok();
+        }
     }
 }
