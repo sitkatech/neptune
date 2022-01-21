@@ -36,5 +36,23 @@ namespace Hippocamp.EFModels.Entities
                 .Select(x => x.AsSimpleDto())
                 .ToList();
         }
+
+        public static void CreateNew(HippocampDbContext dbContext, ProjectCreateDto projectCreateDto, PersonDto personDto)
+        {
+            var project = new Project()
+            {
+                ProjectName = projectCreateDto.ProjectName,
+                OrganizationID = projectCreateDto.OrganizationID,
+                StormwaterJurisdictionID = projectCreateDto.StormwaterJurisdictionID,
+                ProjectStatusID = (int) ProjectStatusEnum.Draft,
+                PrimaryContactPersonID = projectCreateDto.PrimaryContactPersonID,
+                CreatePersonID = personDto.PersonID,
+                DateCreated = DateTime.UtcNow,
+                ProjectDescription = projectCreateDto.ProjectDescription,
+                AdditionalContactInformation = projectCreateDto.AdditionalContactInformation
+            };
+            dbContext.Add(project);
+            dbContext.SaveChanges();
+        }
     }
 }

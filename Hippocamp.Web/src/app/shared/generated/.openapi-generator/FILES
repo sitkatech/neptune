@@ -12,6 +12,7 @@ model/organization-type-dto.ts
 model/person-create-dto.ts
 model/person-dto.ts
 model/person-simple-dto.ts
+model/project-create-dto.ts
 model/project-simple-dto.ts
 model/project-status-simple-dto.ts
 model/role-dto.ts

@@ -10,6 +10,7 @@ export * from '././organization-type-dto';
 export * from '././person-create-dto';
 export * from '././person-dto';
 export * from '././person-simple-dto';
+export * from '././project-create-dto';
 export * from '././project-simple-dto';
 export * from '././project-status-simple-dto';
 export * from '././role-dto';
