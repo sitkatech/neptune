@@ -97,6 +97,12 @@ a:hover {
 .card-header
 {
   font-weight: bold;
+  color: $card-header;
+}
+
+.card-body
+{
+  background-color: $card-body;
 }
 
 .btn-hippocamp

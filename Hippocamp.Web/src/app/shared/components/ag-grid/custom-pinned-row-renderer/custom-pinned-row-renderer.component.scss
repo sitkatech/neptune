@@ -1,4 +1,6 @@
-$hippocamp-primary: #F0644B;
+@import "~src/scss/_variables.scss";
+
+$hippocamp-primary: $primary;
 
 div {
     background-color: $hippocamp-primary;

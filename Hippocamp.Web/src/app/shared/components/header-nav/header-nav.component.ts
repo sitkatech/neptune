@@ -15,6 +15,8 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
 
     public windowWidth: number;
 
+    public showCurrentPageHeader: boolean = true;
+
     @HostListener('window:resize', ['$event'])
     resize() {
         this.windowWidth = window.innerWidth;
@@ -35,6 +37,10 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         this.watchUserChangeSubscription.unsubscribe();
         this.authenticationService.dispose();
         this.cdr.detach();
+    }
+
+    public toggleCurrentPageHeader(){
+        this.showCurrentPageHeader = !this.showCurrentPageHeader;
     }
 
     public isAuthenticated(): boolean {
@@ -66,24 +72,24 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         });
     }
 
-
     public platformShortName(): string{
         return environment.platformShortName;
     }
 	
-	public leadOrganizationShortName(): string{
-        return environment.leadOrganizationShortName;
-    }
-
-    public leadOrganizationHomeUrl(): string{
-        return environment.leadOrganizationHomeUrl;
-    }
-
-    public leadOrganizationLogoSrc(): string{
-        return `assets/main/logos/${environment.leadOrganizationLogoFilename}`;
-    }
-
     public usersListUrl(): string{
         return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
     }
+
+    public organizationsIndexUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/Organization/Index`;
+    }
+
+    public requestSupportUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/Help/Support`;
+    }
+
+    public ocStormwaterToolsMainUrl(): string{
+        return environment.ocStormwaterToolsBaseUrl;
+    }
+
 }
