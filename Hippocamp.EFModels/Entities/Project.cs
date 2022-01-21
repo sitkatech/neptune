@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hippocamp.EFModels.Entities
 {
-    public partial class Project
+    public partial class Projects
     {
         private static IQueryable<Project> GetProjectsImpl(HippocampDbContext dbContext)
         {

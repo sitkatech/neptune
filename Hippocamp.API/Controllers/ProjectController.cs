@@ -20,7 +20,7 @@ namespace Hippocamp.API.Controllers
         [AdminFeature]
         public ActionResult<List<ProjectSimpleDto>> GetAllProjects()
         {
-            var projectSimpleDtos = Project.ListAsSimpleDtos(_dbContext);
+            var projectSimpleDtos = Projects.ListAsSimpleDtos(_dbContext);
             return Ok(projectSimpleDtos);
         }
 
@@ -28,7 +28,7 @@ namespace Hippocamp.API.Controllers
         [JurisdictionManagerOrEditorFeature]
         public ActionResult<List<ProjectSimpleDto>> GetProjectsByPersonID([FromRoute] int personID)
         {
-            var projectSimpleDtos = Project.ListByPersonIDAsSimpleDtos(_dbContext, personID);
+            var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDtos(_dbContext, personID);
             return Ok(projectSimpleDtos);
         }
     }
