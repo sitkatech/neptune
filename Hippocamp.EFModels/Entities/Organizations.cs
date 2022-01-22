@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Hippocamp.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hippocamp.EFModels.Entities
@@ -11,6 +13,15 @@ namespace Hippocamp.EFModels.Entities
         {
             return dbContext.Organizations
                 .AsNoTracking().SingleOrDefault(x => x.OrganizationName == organizationName);
+        }
+
+        public static List<OrganizationSimpleDto> ListAsSimpleDtos(HippocampDbContext dbContext)
+        {
+            var organizations = dbContext.Organizations
+                .AsNoTracking()
+                .Select(x => x.AsSimpleDto())
+                .ToList();
+            return organizations;
         }
     }
 }

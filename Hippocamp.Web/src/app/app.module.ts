@@ -35,6 +35,7 @@ import { CookieStorageService } from './shared/services/cookies/cookie-storage.s
 import { TrainingComponent } from './pages/training/training.component';
 import { ProjectListComponent } from './pages/project-list/project-list.component';
 import { AboutComponent } from './pages/about/about.component';
+import { ProjectNewComponent } from './pages/project-new/project-new.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -55,7 +56,8 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     FieldDefinitionEditComponent,
     TrainingComponent,
 	ProjectListComponent,
-	AboutComponent  ],
+	AboutComponent,
+ ProjectNewComponent  ],
   imports: [
     AppRoutingModule,
     BrowserModule,
