@@ -44,6 +44,7 @@ export class ProjectListComponent implements OnInit {
       if (this.isManagerOrEditor()) {
         this.projectService.getProjectsByPersonID(this.currentUser.PersonID).subscribe(projects => {
           this.projects = projects;
+          this.projectsGrid.columnApi.autoSizeAllColumns();
         })
       }
 
@@ -59,12 +60,12 @@ export class ProjectListComponent implements OnInit {
 
   private createProjectGridColDefs() {
     this.projectColumnDefs = [
-      { headerName: 'Project Name', field: 'ProjectName', width: 180 },
-      { headerName: 'Organization', field: 'Organization.OrganizationName', width: 180 },
-      { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.StormwaterJurisdictionID', width: 100 },
-      { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 100 },
+      { headerName: 'Project Name', field: 'ProjectName' },
+      { headerName: 'Organization', field: 'Organization.OrganizationName' },
+      { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.StormwaterJurisdictionID' },
+      { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName' },
       this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
-      { headerName: 'Project Description', field: 'ProjectDescription', width: 250 }
+      { headerName: 'Project Description', field: 'ProjectDescription' }
     ];
     
     this.defaultColDef = {
