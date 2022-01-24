@@ -32,7 +32,7 @@ namespace Hippocamp.EFModels.Entities
                 return ListAsSimpleDto(dbContext);
             }
 
-            var jurisdictionIDs = People.GetStormwaterJurisdictionIDsByPersonID(dbContext, personID);
+            var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
             return GetProjectsImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))

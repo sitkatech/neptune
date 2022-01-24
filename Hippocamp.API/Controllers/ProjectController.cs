@@ -18,7 +18,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("projects/{personID}")]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectSimpleDto>> GetProjectsByPersonID([FromRoute] int personID)
+        public ActionResult<List<ProjectSimpleDto>> GetByPersonID([FromRoute] int personID)
         {
             var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDto(_dbContext, personID);
             return Ok(projectSimpleDtos);
@@ -69,7 +69,7 @@ namespace Hippocamp.API.Controllers
         {
             if (personDto.Role.RoleID == (int) RoleEnum.JurisdictionEditor || personDto.Role.RoleID == (int) RoleEnum.JurisdictionManager)
             {
-                var stormwaterJurisdictionIDs = People.GetStormwaterJurisdictionIDsByPersonDto(_dbContext, personDto);
+                var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonDto(_dbContext, personDto);
                 return stormwaterJurisdictionIDs.Contains(stormwaterJurisdictionID);
             }
             return true;

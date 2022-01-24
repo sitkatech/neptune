@@ -72,13 +72,13 @@ namespace Hippocamp.EFModels.Entities
             return person?.AsDto();
         }
 
-        public static List<int> GetStormwaterJurisdictionIDsByPersonID(HippocampDbContext dbContext, int personID)
+        public static List<int> ListStormwaterJurisdictionIDsByPersonID(HippocampDbContext dbContext, int personID)
         {
             var personDto = GetByIDAsDto(dbContext, personID);
-            return GetStormwaterJurisdictionIDsByPersonDto(dbContext, personDto);
+            return ListStormwaterJurisdictionIDsByPersonDto(dbContext, personDto);
         }
 
-        public static List<int> GetStormwaterJurisdictionIDsByPersonDto(HippocampDbContext dbContext, PersonDto person)
+        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(HippocampDbContext dbContext, PersonDto person)
         {
             if (person.Role.RoleID == (int) RoleEnum.Admin || person.Role.RoleID == (int) RoleEnum.SitkaAdmin)
             {
