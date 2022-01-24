@@ -53,6 +53,11 @@ namespace Hippocamp.EFModels.Entities
             return persons;
         }
 
+        public static Person GetByID(HippocampDbContext dbContext, int personID)
+        {
+            return GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
+        }
+
         public static PersonDto GetByIDAsDto(HippocampDbContext dbContext, int personID)
         {
             var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
@@ -65,6 +70,25 @@ namespace Hippocamp.EFModels.Entities
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
 
             return person?.AsDto();
+        }
+
+        public static List<int> GetStormwaterJurisdictionIDsByPersonID(HippocampDbContext dbContext, int personID)
+        {
+            var personDto = GetByIDAsDto(dbContext, personID);
+            return GetStormwaterJurisdictionIDsByPersonDto(dbContext, personDto);
+        }
+
+        public static List<int> GetStormwaterJurisdictionIDsByPersonDto(HippocampDbContext dbContext, PersonDto person)
+        {
+            if (person.Role.RoleID == (int) RoleEnum.Admin || person.Role.RoleID == (int) RoleEnum.SitkaAdmin)
+            {
+                return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
+            }
+
+            return dbContext.StormwaterJurisdictionPeople
+                .Where(x => x.PersonID == person.PersonID)
+                .Select(x => x.StormwaterJurisdictionID)
+                .ToList();
         }
 
         private static IQueryable<Person> GetPersonImpl(HippocampDbContext dbContext)

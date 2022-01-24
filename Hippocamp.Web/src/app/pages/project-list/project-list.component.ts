@@ -36,17 +36,10 @@ export class ProjectListComponent implements OnInit {
 
       this.createProjectGridColDefs();
 
-      if (this.isAdministrator()) {
-        this.projectService.getAllProjects().subscribe(projects => {
-          this.projects = projects;
-        });
-      }
-      if (this.isManagerOrEditor()) {
-        this.projectService.getProjectsByPersonID(this.currentUser.PersonID).subscribe(projects => {
-          this.projects = projects;
-          this.projectsGrid.columnApi.autoSizeAllColumns();
-        })
-      }
+      this.projectService.getProjectsByPersonID(this.currentUser.PersonID).subscribe(projects => {
+        this.projects = projects;
+        this.projectsGrid.columnApi.autoSizeAllColumns();
+      });
 
       this.cdr.detectChanges();
     });
@@ -71,13 +64,5 @@ export class ProjectListComponent implements OnInit {
     this.defaultColDef = {
       filter: true, sortable: true, resizable: true
     };
-  }
-
-  public isAdministrator(): boolean {
-    return this.currentUser.Role.RoleID == RoleEnum.Admin || this.currentUser.Role.RoleID == RoleEnum.SitkaAdmin;
-  }
-
-  public isManagerOrEditor(): boolean {
-    return this.currentUser.Role.RoleID == RoleEnum.JurisdictionManager || this.currentUser.Role.RoleID == RoleEnum.JurisdictionEditor;
   }
 }

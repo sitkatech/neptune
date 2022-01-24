@@ -16,29 +16,63 @@ namespace Hippocamp.API.Controllers
         {
         }
 
-        [HttpGet("projects")]
-        [AdminFeature]
-        public ActionResult<List<ProjectSimpleDto>> GetAllProjects()
-        {
-            var projectSimpleDtos = Projects.ListAsSimpleDtos(_dbContext);
-            return Ok(projectSimpleDtos);
-        }
-
         [HttpGet("projects/{personID}")]
-        [JurisdictionManagerOrEditorFeature]
+        [JurisdictionEditFeature]
         public ActionResult<List<ProjectSimpleDto>> GetProjectsByPersonID([FromRoute] int personID)
         {
-            var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDtos(_dbContext, personID);
+            var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDto(_dbContext, personID);
             return Ok(projectSimpleDtos);
         }
 
         [HttpPost("projects/new")]
+        [JurisdictionEditFeature]
         public IActionResult New([FromBody] ProjectCreateDto projectCreateDto)
         {
-            // validation here
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
+            {
+                return BadRequest();
+            }
             Projects.CreateNew(_dbContext, projectCreateDto, personDto);
             return Ok();
+        }
+
+        [HttpPost("projects/{projectID}/update")]
+        [JurisdictionEditFeature]
+        public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectCreateDto projectCreateDto)
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
+            {
+                return BadRequest();
+            }
+            Projects.Update(_dbContext, projectID, projectCreateDto);
+            return Ok();
+        }
+
+        [HttpPost("projects/{projectID}/delete")]
+        [JurisdictionEditFeature]
+        public IActionResult Delete([FromRoute] int projectID)
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+
+            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            {
+                return BadRequest();
+            }
+            Projects.Delete(_dbContext, project);
+            return Ok();
+        }
+
+        private bool UserCanEditJurisdiction(PersonDto personDto, int stormwaterJurisdictionID)
+        {
+            if (personDto.Role.RoleID == (int) RoleEnum.JurisdictionEditor || personDto.Role.RoleID == (int) RoleEnum.JurisdictionManager)
+            {
+                var stormwaterJurisdictionIDs = People.GetStormwaterJurisdictionIDsByPersonDto(_dbContext, personDto);
+                return stormwaterJurisdictionIDs.Contains(stormwaterJurisdictionID);
+            }
+            return true;
         }
     }
 }

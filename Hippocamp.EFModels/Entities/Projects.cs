@@ -19,22 +19,30 @@ namespace Hippocamp.EFModels.Entities
                 .AsNoTracking();
         }
 
-        public static List<ProjectSimpleDto> ListAsSimpleDtos(HippocampDbContext dbContext)
+        public static List<ProjectSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
         {
             return GetProjectsImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
         }
 
-        public static List<ProjectSimpleDto> ListByPersonIDAsSimpleDtos(HippocampDbContext dbContext, int personID)
+        public static List<ProjectSimpleDto> ListByPersonIDAsSimpleDto(HippocampDbContext dbContext, int personID)
         {
-            var jurisdictionIDs = dbContext.StormwaterJurisdictionPeople
-                .Where(x => x.PersonID == personID)
-                .Select(x => x.StormwaterJurisdictionID)
-                .ToList();
+            var person = People.GetByID(dbContext, personID);
+            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
+            {
+                return ListAsSimpleDto(dbContext);
+            }
+
+            var jurisdictionIDs = People.GetStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
             return GetProjectsImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .Select(x => x.AsSimpleDto())
                 .ToList();
+        }
+
+        public static Project GetByID(HippocampDbContext dbContext, int projectID)
+        {
+            return GetProjectsImpl(dbContext).SingleOrDefault(x => x.ProjectID == projectID);
         }
 
         public static void CreateNew(HippocampDbContext dbContext, ProjectCreateDto projectCreateDto, PersonDto personDto)
@@ -52,6 +60,26 @@ namespace Hippocamp.EFModels.Entities
                 AdditionalContactInformation = projectCreateDto.AdditionalContactInformation
             };
             dbContext.Add(project);
+            dbContext.SaveChanges();
+        }
+
+        public static void Update(HippocampDbContext dbContext, int projectID, ProjectCreateDto projectEditDto)
+        {
+            var project = dbContext.Projects.Single(x => x.ProjectID == projectID);
+
+            project.ProjectName = projectEditDto.ProjectName;
+            project.OrganizationID = projectEditDto.OrganizationID;
+            project.StormwaterJurisdictionID = projectEditDto.StormwaterJurisdictionID;
+            project.PrimaryContactPersonID = projectEditDto.PrimaryContactPersonID;
+            project.ProjectDescription = projectEditDto.ProjectDescription;
+            project.AdditionalContactInformation = projectEditDto.AdditionalContactInformation;
+
+            dbContext.SaveChanges();
+        }
+
+        public static void Delete(HippocampDbContext dbContext, Project project)
+        {
+            dbContext.Projects.Remove(project);
             dbContext.SaveChanges();
         }
     }
