@@ -17,7 +17,7 @@
     <h2 class="d-inline-block">
       Create New Project
     </h2>
-    <form (ngSubmit)="onSubmit(createProjectForm)" #createProjectForm="ngForm" *ngIf="projectModel">
+    <form (ngSubmit)="onSubmit(createProjectForm)" #createProjectForm="ngForm" *ngIf="projectModel && stormwaterJurisdictions">
         <!-- project basics -->
         <div class="row mt-3">
             <div class="col-sm-3 control-label text-sm-right">
@@ -29,7 +29,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-sm-3 control-label text-sm-right">
-                <label class="required">Description</label>
+                <label>Description</label>
             </div>
             <div class="col-sm-7">
                 <textarea class="form-control" name="description" style="height: 100px" placeholder=""
@@ -50,6 +50,30 @@
                 </select>
             </div>
         </div>
+        <div class="row mt-3" *ngIf="stormwaterJurisdictions.length > 1; else singleJurisdictionDisplay">
+            <div class="col-sm-3 control-label text-sm-right">
+                <label class="required">Jurisdiction</label>
+            </div>
+            <div class="col-sm-7">
+                <select name="stormwater-jurisdiction" class="form-control" [(ngModel)]="projectModel.StormwaterJurisdictionID">
+                    <option *ngFor="let stormwaterJurisdiction of stormwaterJurisdictions" [value]="stormwaterJurisdiction.StormwaterJurisdictionID">
+                        {{stormwaterJurisdiction.Organization.OrganizationName}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <ng-template #singleJurisdictionDisplay>
+            <div class="row mt-3">
+                <div class="col-sm-3 control-label text-sm-right">
+                    <label>Jurisdiction</label>
+                </div>
+                <div class="col-sm-7 font-weight-bold">
+                    <div>
+                        {{stormwaterJurisdictions[0].Organization.OrganizationName}}
+                    </div>
+                </div>
+            </div>
+        </ng-template>
         <div class="row mt-3">
             <div class="col-sm-3 control-label text-sm-right">
                 <label class="required">Primary Contact</label>
@@ -62,7 +86,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-sm-3 control-label text-sm-right">
-                <label class="required">Additional Contact Information</label>
+                <label>Additional Contact Information</label>
             </div>
             <div class="col-sm-7">
                 <textarea class="form-control" name="description" style="height: 100px" placeholder=""
