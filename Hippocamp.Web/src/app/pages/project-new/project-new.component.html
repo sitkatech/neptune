@@ -18,8 +18,8 @@
       Create New Project
     </h2>
     <form (ngSubmit)="onSubmit(createProjectForm)" #createProjectForm="ngForm" *ngIf="projectModel && stormwaterJurisdictions">
-        <!-- project basics -->
-        <div class="row mt-3">
+        <h5 class="mt-4">Project Basics</h5>
+        <div class="row mt-4">
             <div class="col-sm-3 control-label text-sm-right">
                 <label class="required">Project Name</label>
             </div>
@@ -37,8 +37,8 @@
                 </textarea>
             </div>
         </div>
-        <!-- project contact information -->
-        <div class="row mt-3">
+        <h5 class="mt-4">Project Contact Information</h5>
+        <div class="row mt-4">
             <div class="col-sm-3 control-label text-sm-right">
                 <label class="required">Project Owner</label>
             </div>
@@ -90,7 +90,7 @@
             </div>
             <div class="col-sm-7">
                 <textarea class="form-control" name="description" style="height: 100px" placeholder=""
-                  [(ngModel)]="projectModel.ProjectDescription">
+                  [(ngModel)]="projectModel.AdditionalContactInformation">
                 </textarea>
             </div>
         </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/shared/services';
 import { Observable } from 'rxjs';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
 
 
 @Injectable({
@@ -14,5 +15,15 @@ export class ProjectService {
   getProjectsByPersonID(personID: number): Observable<Array<ProjectSimpleDto>> {
     let route = `/projects/${personID}`;
     return this.apiService.getFromApi(route);
+  }
+
+  newProject(projectModel: ProjectCreateDto) {
+    let route = `/projects/new`;
+    return this.apiService.postToApi(route, projectModel);
+  }
+
+  updateProject(projectID: number, projectModel: ProjectCreateDto) {
+    let route = `/projects/${projectID}/update`;
+    return this.apiService.postToApi(route, projectModel);
   }
 }

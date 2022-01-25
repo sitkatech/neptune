@@ -1,12 +1,17 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { Alert } from 'src/app/shared/models/alert';
+import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrganizationService } from 'src/app/services/organization/organization.service';
+import { ProjectService } from 'src/app/services/project/project.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
 import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
   selector: 'hippocamp-project-new',
@@ -24,10 +29,13 @@ export class ProjectNewComponent implements OnInit {
   public isLoadingSubmit = false;
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private router: Router,
     private cdr: ChangeDetectorRef,
+    private authenticationService: AuthenticationService,
+    private alertService: AlertService,
     private organizationService: OrganizationService,
-    private stormwaterJurisdictionService: StormwaterJurisdictionService
+    private stormwaterJurisdictionService: StormwaterJurisdictionService,
+    private projectService: ProjectService
   ) { }
 
   ngOnInit(): void {
@@ -61,5 +69,24 @@ export class ProjectNewComponent implements OnInit {
     this.watchUserChangeSubscription.unsubscribe();
     this.authenticationService.dispose();
     this.cdr.detach();
+  }
+
+  public onSubmit(createProjectForm: HTMLFormElement): void {
+    this.isLoadingSubmit = true;
+
+    this.projectService.newProject(this.projectModel)
+      .subscribe(() => {
+        this.isLoadingSubmit = false;
+        createProjectForm.reset();
+        
+        this.router.navigateByUrl("/projects").then(x => {
+          this.alertService.pushAlert(new Alert("Your project was successfully created.", AlertContext.Success));
+        });
+      }, error => {
+        this.isLoadingSubmit = false;
+        window.scroll(0,0);
+        this.cdr.detectChanges();
+      }
+    );
   }
 }

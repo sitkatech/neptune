@@ -38,7 +38,6 @@ export class ProjectListComponent implements OnInit {
 
       this.projectService.getProjectsByPersonID(this.currentUser.PersonID).subscribe(projects => {
         this.projects = projects;
-        this.projectsGrid.columnApi.autoSizeAllColumns();
       });
 
       this.cdr.detectChanges();
