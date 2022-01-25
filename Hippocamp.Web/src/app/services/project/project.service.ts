@@ -12,8 +12,13 @@ export class ProjectService {
 
   constructor(private apiService: ApiService) { }
 
+  getByID(projectID: number): Observable<ProjectSimpleDto> {
+    let route = `/projects/${projectID}`;
+    return this.apiService.getFromApi(route);
+  }
+
   getProjectsByPersonID(personID: number): Observable<Array<ProjectSimpleDto>> {
-    let route = `/projects/${personID}`;
+    let route = `/projects/${personID}/listByPersonID`;
     return this.apiService.getFromApi(route);
   }
 
@@ -25,5 +30,10 @@ export class ProjectService {
   updateProject(projectID: number, projectModel: ProjectCreateDto) {
     let route = `/projects/${projectID}/update`;
     return this.apiService.postToApi(route, projectModel);
+  }
+
+  deleteProject(projectID: number) {
+    let route = `/projects/${projectID}/delete`;
+    return this.apiService.deleteToApi(route);
   }
 }

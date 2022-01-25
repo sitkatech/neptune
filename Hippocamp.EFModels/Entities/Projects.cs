@@ -24,6 +24,16 @@ namespace Hippocamp.EFModels.Entities
             return GetProjectsImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
         }
 
+        public static Project GetByID(HippocampDbContext dbContext, int projectID)
+        {
+            return dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+        }
+
+        public static ProjectSimpleDto GetByIDAsSimpleDto(HippocampDbContext dbContext, int projectID)
+        {
+            return GetProjectsImpl(dbContext).SingleOrDefault(x => x.ProjectID == projectID).AsSimpleDto();
+        }
+
         public static List<ProjectSimpleDto> ListByPersonIDAsSimpleDto(HippocampDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
@@ -38,11 +48,6 @@ namespace Hippocamp.EFModels.Entities
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .Select(x => x.AsSimpleDto())
                 .ToList();
-        }
-
-        public static Project GetByID(HippocampDbContext dbContext, int projectID)
-        {
-            return GetProjectsImpl(dbContext).SingleOrDefault(x => x.ProjectID == projectID);
         }
 
         public static void CreateNew(HippocampDbContext dbContext, ProjectCreateDto projectCreateDto, PersonDto personDto)
@@ -63,10 +68,8 @@ namespace Hippocamp.EFModels.Entities
             dbContext.SaveChanges();
         }
 
-        public static void Update(HippocampDbContext dbContext, int projectID, ProjectCreateDto projectEditDto)
+        public static void Update(HippocampDbContext dbContext, Project project, ProjectCreateDto projectEditDto)
         {
-            var project = dbContext.Projects.Single(x => x.ProjectID == projectID);
-
             project.ProjectName = projectEditDto.ProjectName;
             project.OrganizationID = projectEditDto.OrganizationID;
             project.StormwaterJurisdictionID = projectEditDto.StormwaterJurisdictionID;

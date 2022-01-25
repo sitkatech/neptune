@@ -331,7 +331,47 @@
         }
       }
     },
-    "/projects/{personID}": {
+    "/projects/{projectID}": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{personID}/listByPersonID": {
       "get": {
         "tags": [
           "Project"
@@ -464,7 +504,7 @@
       }
     },
     "/projects/{projectID}/delete": {
-      "post": {
+      "delete": {
         "tags": [
           "Project"
         ],
