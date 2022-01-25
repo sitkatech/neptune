@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
             this.LandUseBlocks = new HashSet<LandUseBlock>();
             this.OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
             this.OnlandVisualTrashAssessmentAreas = new HashSet<OnlandVisualTrashAssessmentArea>();
+            this.Projects = new HashSet<Project>();
             this.StormwaterJurisdictionGeometries = new HashSet<StormwaterJurisdictionGeometry>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
@@ -92,7 +93,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DelineationStagings.Any() || LandUseBlocks.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || (StormwaterJurisdictionGeometry != null) || StormwaterJurisdictionPeople.Any() || TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
+            return DelineationStagings.Any() || LandUseBlocks.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || Projects.Any() || (StormwaterJurisdictionGeometry != null) || StormwaterJurisdictionPeople.Any() || TrashGeneratingUnits.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
         }
 
         /// <summary>
@@ -120,6 +121,11 @@ namespace Neptune.Web.Models
             if(OnlandVisualTrashAssessmentAreas.Any())
             {
                 dependentObjects.Add(typeof(OnlandVisualTrashAssessmentArea).Name);
+            }
+
+            if(Projects.Any())
+            {
+                dependentObjects.Add(typeof(Project).Name);
             }
 
             if((StormwaterJurisdictionGeometry != null))
@@ -157,7 +163,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionGeometry).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(DelineationStaging).Name, typeof(LandUseBlock).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(Project).Name, typeof(StormwaterJurisdictionGeometry).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TrashGeneratingUnit).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -198,6 +204,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in OnlandVisualTrashAssessmentAreas.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in Projects.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -246,6 +257,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<LandUseBlock> LandUseBlocks { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<StormwaterJurisdictionGeometry> StormwaterJurisdictionGeometries { get; set; }
         [NotMapped]
         public StormwaterJurisdictionGeometry StormwaterJurisdictionGeometry { get { return StormwaterJurisdictionGeometries.SingleOrDefault(); } set { StormwaterJurisdictionGeometries = new List<StormwaterJurisdictionGeometry>{value};} }
