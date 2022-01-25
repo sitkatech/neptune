@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
@@ -50,21 +51,29 @@ namespace Hippocamp.API.Controllers
         public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectCreateDto projectCreateDto)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
+            {
+                return actionResult;
+            }
             if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
             {
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
-            Projects.Update(_dbContext, projectID, projectCreateDto);
+            Projects.Update(_dbContext, project, projectCreateDto);
             return Ok();
         }
 
-        [HttpPost("projects/{projectID}/delete")]
+        [HttpDelete("projects/{projectID}/delete")]
         [JurisdictionEditFeature]
         public IActionResult Delete([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
-
+            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
+            {
+                return actionResult;
+            }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");

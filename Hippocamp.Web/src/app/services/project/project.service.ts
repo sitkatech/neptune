@@ -31,4 +31,9 @@ export class ProjectService {
     let route = `/projects/${projectID}/update`;
     return this.apiService.postToApi(route, projectModel);
   }
+
+  deleteProject(projectID: number) {
+    let route = `/projects/${projectID}/delete`;
+    return this.apiService.deleteToApi(route);
+  }
 }

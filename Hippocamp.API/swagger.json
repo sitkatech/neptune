@@ -504,7 +504,7 @@
       }
     },
     "/projects/{projectID}/delete": {
-      "post": {
+      "delete": {
         "tags": [
           "Project"
         ],
