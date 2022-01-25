@@ -7,7 +7,7 @@ namespace Hippocamp.EFModels.Entities
 {
     public partial class StormwaterJurisdictions
     {
-        private static IQueryable<StormwaterJurisdiction> getStormwaterJurisdictionsImpl(HippocampDbContext dbContext)
+        private static IQueryable<StormwaterJurisdiction> GetStormwaterJurisdictionsImpl(HippocampDbContext dbContext)
         {
             return dbContext.StormwaterJurisdictions
                 .Include(x => x.Organization);
@@ -15,7 +15,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<StormwaterJurisdictionSimpleDto> ListByIDsAsSimpleDto(HippocampDbContext dbContext, List<int> stormwaterJurisdictionIDs)
         {
-            return getStormwaterJurisdictionsImpl(dbContext)
+            return GetStormwaterJurisdictionsImpl(dbContext)
                 .Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .Select(x => x.AsSimpleDto())
                 .ToList();

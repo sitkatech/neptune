@@ -18,7 +18,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("projects/{personID}")]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectSimpleDto>> GetByPersonID([FromRoute] int personID)
+        public ActionResult<List<ProjectSimpleDto>> ListByPersonID([FromRoute] int personID)
         {
             var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDto(_dbContext, personID);
             return Ok(projectSimpleDtos);
@@ -31,7 +31,7 @@ namespace Hippocamp.API.Controllers
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
             {
-                return BadRequest();
+                return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
             Projects.CreateNew(_dbContext, projectCreateDto, personDto);
             return Ok();
@@ -44,7 +44,7 @@ namespace Hippocamp.API.Controllers
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
             {
-                return BadRequest();
+                return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
             Projects.Update(_dbContext, projectID, projectCreateDto);
             return Ok();
@@ -59,7 +59,7 @@ namespace Hippocamp.API.Controllers
 
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
-                return BadRequest();
+                return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
             Projects.Delete(_dbContext, project);
             return Ok();

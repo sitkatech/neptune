@@ -15,7 +15,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("organizations")]
-        public ActionResult<List<OrganizationSimpleDto>> GetAllOrganizations()
+        public ActionResult<List<OrganizationSimpleDto>> List()
         {
             var organizationSimpleDtos = Organizations.ListAsSimpleDtos(_dbContext);
             return Ok(organizationSimpleDtos);

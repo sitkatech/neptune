@@ -18,7 +18,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("jurisdictions/{personID}")]
         [JurisdictionEditFeature]
-        public ActionResult<List<StormwaterJurisdictionSimpleDto>> GetByPersonID([FromRoute] int personID)
+        public ActionResult<List<StormwaterJurisdictionSimpleDto>> ListByPersonID([FromRoute] int personID)
         {
             var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(_dbContext, personID);
             var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsSimpleDto(_dbContext, stormwaterJurisdictionIDs);
