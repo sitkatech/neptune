@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
         {
             this.FundingSources = new HashSet<FundingSource>();
             this.People = new HashSet<Person>();
+            this.Projects = new HashSet<Project>();
             this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TreatmentBMPsWhereYouAreTheOwnerOrganization = new HashSet<TreatmentBMP>();
         }
@@ -87,7 +88,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FundingSources.Any() || People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
+            return FundingSources.Any() || People.Any() || Projects.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
         }
 
         /// <summary>
@@ -107,6 +108,11 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(Person).Name);
             }
 
+            if(Projects.Any())
+            {
+                dependentObjects.Add(typeof(Project).Name);
+            }
+
             if((StormwaterJurisdiction != null))
             {
                 dependentObjects.Add(typeof(StormwaterJurisdiction).Name);
@@ -122,7 +128,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(Project).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -157,6 +163,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in Projects.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in StormwaterJurisdictions.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -183,6 +194,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<FundingSource> FundingSources { get; set; }
         public virtual ICollection<Person> People { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         [NotMapped]
         public StormwaterJurisdiction StormwaterJurisdiction { get { return StormwaterJurisdictions.SingleOrDefault(); } set { StormwaterJurisdictions = new List<StormwaterJurisdiction>{value};} }

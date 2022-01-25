@@ -77,6 +77,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
+            modelBuilder.Configurations.Add(new ProjectConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinRevisionRequestConfiguration());
@@ -179,6 +180,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
         public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
@@ -525,6 +527,14 @@ namespace Neptune.Web.Models
                     var priorityLandUseType = PriorityLandUseType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(priorityLandUseType, "PriorityLandUseType", primaryKey);
                     return priorityLandUseType;
+
+                case "Project":
+                    return Projects.GetProject(primaryKey);
+
+                case "ProjectStatus":
+                    var projectStatus = ProjectStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(projectStatus, "ProjectStatus", primaryKey);
+                    return projectStatus;
 
                 case "QuickBMP":
                     return QuickBMPs.GetQuickBMP(primaryKey);
