@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
@@ -12,6 +12,7 @@ import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
 import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 
 @Component({
   selector: 'hippocamp-project-new',
@@ -23,12 +24,14 @@ export class ProjectNewComponent implements OnInit {
   private watchUserChangeSubscription: any;
   public currentUser: PersonDto;
   
+  public projectID: number;
   public projectModel: ProjectCreateDto;
   public organizations: Array<OrganizationSimpleDto>;
   public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
   public isLoadingSubmit = false;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private authenticationService: AuthenticationService,
@@ -41,9 +44,17 @@ export class ProjectNewComponent implements OnInit {
   ngOnInit(): void {
     this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-
+      
       this.projectModel = new ProjectCreateDto();
-      this.projectModel.PrimaryContactPersonID = this.currentUser.PersonID;
+      const projectID = this.route.snapshot.paramMap.get("id");
+      if (projectID) {
+        this.projectID = parseInt(projectID);
+        this.projectService.getByID(this.projectID).subscribe(project => {
+          this.mapProjectSimpleDtoToProjectModel(project);
+        });
+      } else {
+        this.projectModel.PrimaryContactPersonID = this.currentUser.PersonID;
+      }
 
       forkJoin(
         this.organizationService.getAllOrganizations(),
@@ -71,22 +82,46 @@ export class ProjectNewComponent implements OnInit {
     this.cdr.detach();
   }
 
+  private mapProjectSimpleDtoToProjectModel(project: ProjectSimpleDto) {
+    this.projectModel.ProjectName = project.ProjectName;
+    this.projectModel.OrganizationID = project.OrganizationID;
+    this.projectModel.StormwaterJurisdictionID = project.StormwaterJurisdictionID;
+    this.projectModel.PrimaryContactPersonID = project.PrimaryContactPersonID;
+    this.projectModel.ProjectDescription = project.ProjectDescription;
+    this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
+  }
+
+  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string) {
+    
+      this.isLoadingSubmit = false;
+      createProjectForm.reset();
+      
+      this.router.navigateByUrl("/projects").then(x => {
+        this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
+      });
+  }
+
+  private onSubmitFailure() {
+    this.isLoadingSubmit = false;
+    window.scroll(0,0);
+    this.cdr.detectChanges();
+  }
+
   public onSubmit(createProjectForm: HTMLFormElement): void {
     this.isLoadingSubmit = true;
 
-    this.projectService.newProject(this.projectModel)
-      .subscribe(() => {
-        this.isLoadingSubmit = false;
-        createProjectForm.reset();
-        
-        this.router.navigateByUrl("/projects").then(x => {
-          this.alertService.pushAlert(new Alert("Your project was successfully created.", AlertContext.Success));
-        });
+    if (this.projectID) {
+      this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
+        this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.")
       }, error => {
-        this.isLoadingSubmit = false;
-        window.scroll(0,0);
-        this.cdr.detectChanges();
-      }
-    );
+        this.onSubmitFailure();
+      });
+    } else {
+      this.projectService.newProject(this.projectModel).subscribe(() => {
+        this.onSubmitSuccess(createProjectForm, "Your project was successfully created.")
+      }, error => {
+        this.onSubmitFailure();
+      });
+    }
   }
 }

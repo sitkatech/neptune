@@ -24,6 +24,11 @@ namespace Hippocamp.EFModels.Entities
             return GetProjectsImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
         }
 
+        public static ProjectSimpleDto GetByIDAsSimpleDto(HippocampDbContext dbContext, int projectID)
+        {
+            return GetProjectsImpl(dbContext).SingleOrDefault(x => x.ProjectID == projectID).AsSimpleDto();
+        }
+
         public static List<ProjectSimpleDto> ListByPersonIDAsSimpleDto(HippocampDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);

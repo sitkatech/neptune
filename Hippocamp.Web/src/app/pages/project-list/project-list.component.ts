@@ -7,6 +7,7 @@ import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
+import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 
 @Component({
   selector: 'hippocamp-project-list',
@@ -52,9 +53,16 @@ export class ProjectListComponent implements OnInit {
 
   private createProjectGridColDefs() {
     this.projectColumnDefs = [
+      { valueGetter: params => {
+          return { LinkValue: params.data.ProjectID, LinkDisplay: 'edit'};
+        }, cellRendererFramework: LinkRendererComponent,
+        cellRendererParams: {
+          inRouterLink: '/projects/edit/'
+        }
+      },
       { headerName: 'Project Name', field: 'ProjectName' },
       { headerName: 'Organization', field: 'Organization.OrganizationName' },
-      { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.StormwaterJurisdictionID' },
+      { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
       { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName' },
       this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
       { headerName: 'Project Description', field: 'ProjectDescription' }
