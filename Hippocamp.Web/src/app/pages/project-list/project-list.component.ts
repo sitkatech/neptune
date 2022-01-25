@@ -64,4 +64,8 @@ export class ProjectListComponent implements OnInit {
       filter: true, sortable: true, resizable: true
     };
   }
+
+  public exportToCsv() {
+    this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, 'projects.csv', null);
+  }
 }
