@@ -4,7 +4,7 @@
         <li class="breadcrumb-item" aria-current="page">
         <a routerLink="/projects">Projects</a>
         </li>
-        <div *ngIf="projectModel; then hasName else noName"></div>
+        <div *ngIf="projectModel?.ProjectName; then hasName else noName"></div>
         <ng-template #hasName>
             <li class="breadcrumb-item active" aria-current="page">
                 {{ projectModel.ProjectName }}
