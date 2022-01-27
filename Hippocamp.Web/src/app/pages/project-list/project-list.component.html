@@ -14,7 +14,8 @@
             <a class="btn btn-secondary mr-2" style="cursor: pointer;" (click)="exportToCsv()" placement="top" ngbTooltip="Download Projects as CSV"><i
                 class="fas fa-download"></i></a>
             <a class="btn btn-hippocamp" href="/projects/new">
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-plus"></i> &nbsp;
+                Add New Project
             </a>
         </div>
     </div>
@@ -27,7 +28,7 @@
 <ng-template #deleteProjectModal let-modal>
     <div class="modal-header">
         <h5 class="modal-title text-white" id="deleteProjectModalTitle">Warning</h5>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>

@@ -1,18 +1,14 @@
 <div class="sidebar-header p-2">
-    <table class="table table-sm table-borderless m-0">
-        <tbody>
-            <tr>
-                <td>Project Name:</td>
-                <div *ngIf="projectModel?.ProjectName; then hasName else noName"></div>
-                <ng-template #hasName>
-                    <td><strong>{{ projectModel.ProjectName }}</strong></td>
-                </ng-template>
-                <ng-template #noName>
-                    <td><strong>Project Name Here</strong></td>
-                </ng-template>       
-            </tr>
-        </tbody>
-    </table>
+    <div class="row m-2">
+        <p>Project Name: &nbsp;</p> 
+        <div *ngIf="projectModel?.ProjectName; then hasName else noName"></div>
+        <ng-template #hasName>
+            <p ><strong>{{ projectModel.ProjectName }}</strong></p>
+        </ng-template>
+        <ng-template #noName>
+            <p ><strong>Project Name Here</strong></p>
+        </ng-template>  
+    </div>
 </div>
 
 <div class="sidebar-card">
@@ -73,7 +69,7 @@
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding">
-                        <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+                        <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
                         Modeled Performance
                         </a>
                     </div>
