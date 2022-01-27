@@ -6,12 +6,10 @@
                 <div *ngIf="projectModel?.ProjectName; then hasName else noName"></div>
                 <ng-template #hasName>
                     <td><strong>{{ projectModel.ProjectName }}</strong></td>
-
                 </ng-template>
                 <ng-template #noName>
                     <td><strong>Project Name Here</strong></td>
-                </ng-template>
-                
+                </ng-template>       
             </tr>
         </tbody>
     </table>
