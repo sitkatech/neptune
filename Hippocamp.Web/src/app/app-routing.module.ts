@@ -15,14 +15,40 @@ import { AboutComponent } from './pages/about/about.component';
 import { ProjectNewComponent } from './pages/project-new/project-new.component';
 import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard';
 import { ProjectNewSidebarComponent } from './shared/components/project-new-sidebar/project-new-sidebar.component';
+import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
+import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
+import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
+
 const routes: Routes = [
   { path: "labels-and-definitions/:id", component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "projects", component: ProjectListComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
   { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
-    // { path: "", component: ProjectNewSidebarComponent }
-  ] },
-  { path: "projects/edit/:id", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
+    { path: "", redirectTo: 'instructions', pathMatch: 'full' },
+    { path: "instructions", component:  ProjectInstructionsComponent},
+    { path: "project-basics", component:  ProjectBasicsComponent},
+    { path: "stormwater-treatments", children: [
+      { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
+      { path: "treatment-bmps", component:  UnderConstructionComponent},
+      { path: "delineations", component:  UnderConstructionComponent},
+      { path: "modeled-performance", component:  UnderConstructionComponent},
+    ]},
+    { path: "attachments", component:  UnderConstructionComponent},
+    { path: "review", component:  UnderConstructionComponent},
+  ]},
+  { path: "projects/edit/:id", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
+    { path: "", redirectTo: 'instructions', pathMatch: 'full' },
+    { path: "instructions", component:  ProjectInstructionsComponent},
+    { path: "project-basics", component:  ProjectBasicsComponent},
+    { path: "stormwater-treatments", children: [
+      { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
+      { path: "treatment-bmps", component:  UnderConstructionComponent},
+      { path: "delineations", component:  UnderConstructionComponent},
+      { path: "modeled-performance", component:  UnderConstructionComponent},
+    ]},
+    { path: "attachments", component:  UnderConstructionComponent},
+    { path: "review", component:  UnderConstructionComponent},
+  ]},
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "users/:id", component: UserDetailComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },

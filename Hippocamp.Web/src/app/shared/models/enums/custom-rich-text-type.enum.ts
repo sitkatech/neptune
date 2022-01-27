@@ -3,5 +3,6 @@ export enum CustomRichTextType{
     Training = 53,
     LabelsAndDefinitionsList = 54,
     About = 55,
-    ProjectsList = 56
+    ProjectsList = 56,
+    ProjectInstructions = 57
 }

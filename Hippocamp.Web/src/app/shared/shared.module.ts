@@ -27,6 +27,7 @@ import { ToggleStatusComponent } from './components/toggle-status/toggle-status.
 import { OrderableAccordionComponent, OrderablePanel, OrderablePanelContent, OrderablePanelControls, OrderablePanelTitle, OrderablePanelToggle } from './components/orderable-accordion/orderable-accordion.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IconComponent } from './components/icon/icon.component';
+import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { IconComponent } from './components/icon/icon.component';
         OrderablePanelContent,
         IconComponent,
         ProgressIconComponent,
-        ProjectNewSidebarComponent
+        ProjectNewSidebarComponent,
+        UnderConstructionComponent
     ],
     imports: [
         CommonModule,

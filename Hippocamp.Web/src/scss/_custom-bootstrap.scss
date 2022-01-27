@@ -171,6 +171,11 @@ a:hover {
   border-top: 3px solid $primary;
   border-bottom: 3px solid $primary;
 
+  .card-body {
+    margin-top: 0;
+    padding: 0.65rem;
+  }
+
   .card-header {
       padding: 0;
       background: $card-body;

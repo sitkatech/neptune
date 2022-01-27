@@ -39,6 +39,8 @@ import { ProjectNewComponent } from './pages/project-new/project-new.component';
 import { ProgressIconComponent } from './shared/components/progress-icon/progress-icon.component';
 import { ProjectNewSidebarComponent } from './shared/components/project-new-sidebar/project-new-sidebar.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
+import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -60,7 +62,9 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     TrainingComponent,
 	  ProjectListComponent,
 	  AboutComponent,
-    ProjectNewComponent
+    ProjectNewComponent,
+    ProjectBasicsComponent,
+    ProjectInstructionsComponent
   ],
   imports: [
     AppRoutingModule,

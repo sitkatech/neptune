@@ -3,79 +3,91 @@
         <tbody>
             <tr>
                 <td>Project Name:</td>
-                <td><strong>Testing 123</strong></td>
+                <td><strong>Project Name Here</strong></td>
             </tr>
         </tbody>
     </table>
 </div>
 
 <div class="sidebar-card">
-    <div class="card-body icon-padding">
-        <a>
+    <div class="card-body">
+        <a [routerLink]="['instructions']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="icon-padding">
             <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
             Instructions
+        </a>
+    </div>
+    <div class="card-body">
+        <a [routerLink]="['project-basics']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="icon-padding">
+            <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+            Project Basics
         </a>
     </div>
     <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" [activeIds]="activeAccordionIds">
         <ngb-panel id="stormwaterTreatmentsPanel" cardClass="sidebar-card">
             <ng-template ngbPanelHeader let-opened="opened">
-                <button ngbPanelToggle class="btn icon-padding">
-                    <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
-                    <span>Stormwater Treatments</span>
-                    <hippocamp-toggle-status [opened]="opened" [closeOthers]="true" ></hippocamp-toggle-status>
-                </button>
+                <div class="card-body">
+                    <button ngbPanelToggle class="btn icon-padding">
+                        <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+                        <span>Stormwater Treatments</span>
+                        <hippocamp-toggle-status [opened]="opened" [closeOthers]="true" ></hippocamp-toggle-status>
+                    </button>
+                </div>
             </ng-template>
             <ng-template ngbPanelContent>
                 <div class="indented-pages">
 
-                    <div class="icon-padding">
-                        <!-- <a [routerLink]="['stormwater-treatments', 'treatment-bmps']"
+                    <div class="card-body">
+                        <a [routerLink]="['stormwater-treatments', 'treatment-bmps']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
-                        class="icon-padding"> -->
+                        class="icon-padding">
                         <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
                         Treatment BMPs
-                        <!-- </a> -->
+                        </a>
                     </div>
                     
-                    <div>
-                        <!-- <a [routerLink]="['stormwater-treatments', 'delineations']"
+                    <div class="card-body">
+                        <a [routerLink]="['stormwater-treatments', 'delineations']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
-                        class="icon-padding "
-                        > -->
+                        class="icon-padding">
                         <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
                         Delineations
-                        <!-- </a> -->
+                        </a>
                     </div>
 
-                    <div>
-                        <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
-                        <!-- <a [routerLink]="['stormwater-treatments', 'modeled-performance']"
+                    <div class="card-body">
+                        <a [routerLink]="['stormwater-treatments', 'modeled-performance']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
-                        class="icon-padding "
-                        > -->
+                        class="icon-padding">
+                        <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
                         Modeled Performance
-                        <!-- </a> -->
+                        </a>
                     </div>
                 </div>
             </ng-template>
         </ngb-panel>
     </ngb-accordion>
 
-    <div class="card-body icon-padding">
-        <!-- <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding"> -->
+    <div class="card-body">
+        <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding">
             <hippocamp-progress-icon></hippocamp-progress-icon>
             Attachments
-        <!-- </a> -->
+        </a>
     </div>
 
-    <div class="card-body icon-padding">
-        <!-- <a [routerLink]="['review']" routerLinkActive="active" class="icon-padding"> -->
+    <div class="card-body">
+        <a [routerLink]="['review']" routerLinkActive="active" class="icon-padding">
             <hippocamp-progress-icon></hippocamp-progress-icon>
             Review
-        <!-- </a> -->
+        </a>
     </div>
 
 </div>
