@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { PersonDto } from '../../generated/model/person-dto';
+import { ProjectCreateDto } from '../../generated/model/project-create-dto';
 
 @Component({
   selector: 'hippocamp-project-new-sidebar',
@@ -10,11 +11,10 @@ import { PersonDto } from '../../generated/model/person-dto';
   styleUrls: ['./project-new-sidebar.component.scss']
 })
 export class ProjectNewSidebarComponent implements OnInit, OnChanges {
+  @Input() projectModel : ProjectCreateDto;
 
   private currentUser: PersonDto;
-
-  public activeNavSection: string;
-
+  
   public activeAccordionIds: string[] = [];
 
   constructor(
@@ -30,8 +30,6 @@ export class ProjectNewSidebarComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.activeNavSection = this.getActiveNavSection();
-
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser
     })
@@ -41,19 +39,6 @@ export class ProjectNewSidebarComponent implements OnInit, OnChanges {
       this.activeAccordionIds = [ "stormwater-treatments" ];
     } 
 
-  }
-
-  getActiveNavSection(): string {
-    var routerUrl = this.router.url;
-    if(routerUrl.includes('section-a')) {
-      return "sectionA";
-    } else if(routerUrl.includes('section-b')) {
-      return "sectionB";
-    } else if(routerUrl.includes('section-c')){
-      return "sectionC";
-    } else {
-      return "sectionA";
-    }
   }
 
 }
