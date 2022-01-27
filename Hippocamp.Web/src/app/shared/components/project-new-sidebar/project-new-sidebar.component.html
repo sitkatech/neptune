@@ -1,0 +1,84 @@
+<div class="sidebar-header p-2">
+    <table class="table table-sm table-borderless m-0">
+        <tbody>
+            <tr>
+                <td>Project Name:</td>
+                <td><strong>Testing 123</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="sidebar-card">
+    <div class="card-body icon-padding">
+        <a>
+            <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+            Instructions
+        </a>
+    </div>
+    <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" [activeIds]="activeAccordionIds">
+        <ngb-panel id="stormwaterTreatmentsPanel" cardClass="sidebar-card">
+            <ng-template ngbPanelHeader let-opened="opened">
+                <button ngbPanelToggle class="btn icon-padding">
+                    <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+                    <span>Stormwater Treatments</span>
+                    <hippocamp-toggle-status [opened]="opened" [closeOthers]="true" ></hippocamp-toggle-status>
+                </button>
+            </ng-template>
+            <ng-template ngbPanelContent>
+                <div class="indented-pages">
+
+                    <div class="icon-padding">
+                        <!-- <a [routerLink]="['stormwater-treatments', 'treatment-bmps']"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        class="icon-padding"> -->
+                        <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
+                        Treatment BMPs
+                        <!-- </a> -->
+                    </div>
+                    
+                    <div>
+                        <!-- <a [routerLink]="['stormwater-treatments', 'delineations']"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        class="icon-padding "
+                        > -->
+                        <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+                        Delineations
+                        <!-- </a> -->
+                    </div>
+
+                    <div>
+                        <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+                        <!-- <a [routerLink]="['stormwater-treatments', 'modeled-performance']"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        class="icon-padding "
+                        > -->
+                        Modeled Performance
+                        <!-- </a> -->
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+
+    <div class="card-body icon-padding">
+        <!-- <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding"> -->
+            <hippocamp-progress-icon></hippocamp-progress-icon>
+            Attachments
+        <!-- </a> -->
+    </div>
+
+    <div class="card-body icon-padding">
+        <!-- <a [routerLink]="['review']" routerLinkActive="active" class="icon-padding"> -->
+            <hippocamp-progress-icon></hippocamp-progress-icon>
+            Review
+        <!-- </a> -->
+    </div>
+
+</div>
+
+
+<div class="nav-container"></div>

@@ -14,11 +14,14 @@ import { ProjectListComponent } from './pages/project-list/project-list.componen
 import { AboutComponent } from './pages/about/about.component';
 import { ProjectNewComponent } from './pages/project-new/project-new.component';
 import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard';
+import { ProjectNewSidebarComponent } from './shared/components/project-new-sidebar/project-new-sidebar.component';
 const routes: Routes = [
   { path: "labels-and-definitions/:id", component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "projects", component: ProjectListComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
-  { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
+  { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
+    // { path: "", component: ProjectNewSidebarComponent }
+  ] },
   { path: "projects/edit/:id", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },

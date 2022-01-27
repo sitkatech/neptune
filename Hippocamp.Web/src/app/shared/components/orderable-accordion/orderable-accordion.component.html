@@ -1,0 +1,29 @@
+<div cdkDropList [id]="id" [cdkDropListData]="itemGroup"
+     cdkDropListLockAxis="y" (cdkDropListDropped)="_onDrop($event)"
+     [cdkDropListConnectedTo]="dropListsService.dropListIDs"
+     [cdkDropListSortPredicate]="sortPredicate" [cdkDropListEnterPredicate]="enterPredicate">
+    <ng-template ngFor let-panel [ngForOf]="panels">
+        <div class="accordion-item card" cdkDrag [cdkDragData]="{ PanelID: panel.id, ItemGroup: itemGroup }">
+            <div role="tab" id="{{panel.id}}-header"
+                class="accordion-header panel-header card-header {{panel.bgTypeClass}} {{panel.textTypeClass}}">
+                <div class="group">
+                    <div class="drag-handle" cdkDragHandle>
+                        <manitobaefp-icon icon="grip-horizontal" titleText="Click and drag"></manitobaefp-icon>
+                    </div>
+                    <button type="button" class="btn btn-link" [orderablePanelToggle]="panel">
+                        <ng-template [ngTemplateOutlet]="panel.titleTemplate?.templateRef || null"
+                                     [ngTemplateOutletContext]="{$implicit: panel, opened: panel.isOpen}"></ng-template>
+                    </button>
+                </div>
+                <div class="group">
+                    <ng-template *ngTemplateOutlet="panel.controlsTemplate?.templateRef || null"></ng-template>
+                </div>
+            </div>
+            <div *ngIf="panel.isOpen" id="{{panel.id}}" role="tabpanel" [attr.aria-labelledby]="panel.id + '-header'">
+                <div class="card-body accordion-body">
+                    <ng-template *ngTemplateOutlet="panel.contentTemplate?.templateRef || null"></ng-template>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>

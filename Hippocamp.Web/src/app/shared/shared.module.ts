@@ -21,6 +21,12 @@ import { CustomPinnedRowRendererComponent } from './components/ag-grid/custom-pi
 import { CustomDropdownFilterComponent } from './components/custom-dropdown-filter/custom-dropdown-filter.component';
 import { CsvDownloadButtonComponent } from './components/csv-download-button/csv-download-button.component';
 import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters-button/clear-grid-filters-button.component';
+import { ProjectNewSidebarComponent } from './components/project-new-sidebar/project-new-sidebar.component';
+import { ProgressIconComponent } from './components/progress-icon/progress-icon.component';
+import { ToggleStatusComponent } from './components/toggle-status/toggle-status.component';
+import { OrderableAccordionComponent, OrderablePanel, OrderablePanelContent, OrderablePanelControls, OrderablePanelTitle, OrderablePanelToggle } from './components/orderable-accordion/orderable-accordion.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { IconComponent } from './components/icon/icon.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +44,17 @@ import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters
         CustomPinnedRowRendererComponent,
         CustomDropdownFilterComponent,
         CsvDownloadButtonComponent,
-        ClearGridFiltersButtonComponent
+        ClearGridFiltersButtonComponent,
+        ToggleStatusComponent,
+        OrderableAccordionComponent,
+        OrderablePanel,
+        OrderablePanelToggle,
+        OrderablePanelTitle,
+        OrderablePanelControls,
+        OrderablePanelContent,
+        IconComponent,
+        ProgressIconComponent,
+        ProjectNewSidebarComponent
     ],
     imports: [
         CommonModule,
@@ -47,7 +63,8 @@ import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters
         NgProgressModule,
         RouterModule,
         CKEditorModule,
-        NgbModule
+        NgbModule,
+        DragDropModule
     ],
     exports: [
         AlertDisplayComponent,
@@ -59,7 +76,17 @@ import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters
         FieldDefinitionComponent,
         FieldDefinitionGridHeaderComponent,
         CsvDownloadButtonComponent,
-        ClearGridFiltersButtonComponent
+        ClearGridFiltersButtonComponent,
+        ToggleStatusComponent,
+        OrderableAccordionComponent,
+        OrderablePanel,
+        OrderablePanelToggle,
+        OrderablePanelTitle,
+        OrderablePanelControls,
+        OrderablePanelContent,
+        IconComponent,
+        ProgressIconComponent,
+        ProjectNewSidebarComponent
     ],
     entryComponents:[]
 })

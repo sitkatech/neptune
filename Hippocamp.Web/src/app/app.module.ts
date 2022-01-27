@@ -36,6 +36,9 @@ import { TrainingComponent } from './pages/training/training.component';
 import { ProjectListComponent } from './pages/project-list/project-list.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ProjectNewComponent } from './pages/project-new/project-new.component';
+import { ProgressIconComponent } from './shared/components/progress-icon/progress-icon.component';
+import { ProjectNewSidebarComponent } from './shared/components/project-new-sidebar/project-new-sidebar.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -55,9 +58,10 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     FieldDefinitionListComponent,
     FieldDefinitionEditComponent,
     TrainingComponent,
-	ProjectListComponent,
-	AboutComponent,
- ProjectNewComponent  ],
+	  ProjectListComponent,
+	  AboutComponent,
+    ProjectNewComponent
+  ],
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -70,7 +74,8 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     BrowserAnimationsModule,
     AgGridModule.withComponents([]),
     SelectDropDownModule,
-    CKEditorModule
+    CKEditorModule,
+    DragDropModule
   ],  
   providers: [
     CookieService,

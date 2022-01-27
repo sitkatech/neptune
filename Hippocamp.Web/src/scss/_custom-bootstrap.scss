@@ -31,7 +31,7 @@ abbr[data-original-title] {
 
 // Maintain link color on hover
 a:hover {
-  color: #205c90;
+  color: $link-color;
 }
 
 // Spinner for loading
@@ -153,3 +153,54 @@ a:hover {
 {
   top:150px;
 }
+
+
+.accordion > .card {
+  overflow:visible
+  &:last-child {
+    margin-bottom:0;
+  }
+}
+
+
+.sidebar-card {
+  background: $card-body;
+  border: none;
+  margin-bottom: 0;
+  
+  border-top: 3px solid $primary;
+  border-bottom: 3px solid $primary;
+
+  .card-header {
+      padding: 0;
+      background: $card-body;
+      margin-bottom: 0 !important;
+      button {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding-top:0.5rem;
+        padding-bottom:0.5rem;
+        padding-right:1.5rem;
+        &.opened {
+          font-weight:700;
+          background:#fff;
+        }
+      }
+  }
+
+  .icon-padding {
+    position: relative;
+    padding-left: 30px;
+
+    hippocamp-progress-icon {
+      position: absolute;
+      left: 0;
+    }
+  }
+
+}
+
+
+
+

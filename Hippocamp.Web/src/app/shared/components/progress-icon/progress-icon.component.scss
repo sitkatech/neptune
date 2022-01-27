@@ -1,0 +1,33 @@
+@import "../../../../scss/_variables.scss";
+
+:host {
+    position:Absolute;
+    left:0;
+}
+
+hippocamp-icon {
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.complete {
+        background: $success;
+        color: #fff;
+        border-radius: 50%;
+    }
+    &.incomplete {
+        background: $warning;
+        color: #fff;
+        border-radius: 50%;
+    }
+    &.info {
+        background: $info;
+        color: #fff;
+        border-radius: 50%;
+    }
+}
+

@@ -1,0 +1,14 @@
+@import "~src/scss/_variables.scss";
+
+.sidebar-header {
+    background: $muted;
+    border-radius: 6px 6px 0 0;
+}
+
+.indented-pages {
+    padding-left: 1rem;
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+}

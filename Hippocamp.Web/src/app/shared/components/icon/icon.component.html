@@ -1,0 +1,7 @@
+<ng-container *ngIf="isLoadingSubmit">
+    <i class="fa fa-spinner loading-spinner"></i>
+</ng-container>
+<ng-container *ngIf="!isLoadingSubmit">
+    <i [class]="iconClass" *ngIf="iconFound" [title]="titleText"></i>
+    <span *ngIf="!iconFound" class="text-danger">Could not find icon "{{icon}}"</span>
+</ng-container>
