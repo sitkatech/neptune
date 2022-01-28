@@ -11,10 +11,10 @@
  */
 
 export class ProjectCreateDto { 
-    ProjectName?: string;
-    OrganizationID?: number;
-    StormwaterJurisdictionID?: number;
-    PrimaryContactPersonID?: number;
+    ProjectName: string;
+    OrganizationID: number;
+    StormwaterJurisdictionID: number;
+    PrimaryContactPersonID: number;
     ProjectDescription?: string;
     AdditionalContactInformation?: string;
     constructor(obj?: any) {

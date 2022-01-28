@@ -42,7 +42,7 @@ export class ProjectBasicsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const projectID = this.route.snapshot.paramMap.get("id");
+    const projectID = this.route.parent.snapshot.paramMap.get("id");
     this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
       this.projectModel = new ProjectCreateDto();

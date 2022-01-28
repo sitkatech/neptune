@@ -56,10 +56,10 @@ export class ProjectNewComponent implements OnInit {
         this.projectModel.PrimaryContactPersonID = this.currentUser.PersonID;
       }
 
-      forkJoin(
-        this.organizationService.getAllOrganizations(),
-        this.stormwaterJurisdictionService.getByPersonID(this.currentUser.PersonID)
-      ).subscribe(([organizations, stormwaterJurisdictions]) => {
+      forkJoin({
+        organizations: this.organizationService.getAllOrganizations(),
+        stormwaterJurisdictions: this.stormwaterJurisdictionService.getByPersonID(this.currentUser.PersonID)
+      }).subscribe(({organizations, stormwaterJurisdictions}) => {
         this.organizations = organizations;
         this.stormwaterJurisdictions = stormwaterJurisdictions;
 
@@ -90,6 +90,7 @@ export class ProjectNewComponent implements OnInit {
     this.projectModel.ProjectDescription = project.ProjectDescription;
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
   }
+
 
   private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string) {
     
