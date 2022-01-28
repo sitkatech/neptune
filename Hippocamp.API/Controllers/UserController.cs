@@ -34,6 +34,14 @@ namespace Hippocamp.API.Controllers
             return Ok(user);
         }
 
+        [HttpGet("users")]
+        [UserViewFeature]
+        public ActionResult<PersonSimpleDto> List([FromRoute] int personID)
+        {
+            var userList = People.ListAsSimpleDto(_dbContext);
+            return Ok(userList);
+        }
+
         [HttpGet("users/{personID}")]
         [UserViewFeature]
         public ActionResult<PersonDto> GetByPersonID([FromRoute] int personID)

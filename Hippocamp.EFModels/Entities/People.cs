@@ -53,6 +53,11 @@ namespace Hippocamp.EFModels.Entities
             return persons;
         }
 
+        public static List<PersonSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
+        {
+            return GetPersonImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
+        }
+
         public static Person GetByID(HippocampDbContext dbContext, int personID)
         {
             return GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);

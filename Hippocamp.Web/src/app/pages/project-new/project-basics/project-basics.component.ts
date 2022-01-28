@@ -13,6 +13,8 @@ import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-
 import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { PersonSimpleDto } from 'src/app/shared/generated/model/person-simple-dto';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'hippocamp-project-basics',
@@ -27,6 +29,7 @@ export class ProjectBasicsComponent implements OnInit {
   public projectID: number;
   public projectModel: ProjectCreateDto;
   public organizations: Array<OrganizationSimpleDto>;
+  public users: Array<PersonSimpleDto>;
   public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
   public isLoadingSubmit = false;
 
@@ -38,7 +41,8 @@ export class ProjectBasicsComponent implements OnInit {
     private alertService: AlertService,
     private organizationService: OrganizationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -57,10 +61,12 @@ export class ProjectBasicsComponent implements OnInit {
 
       forkJoin({
         organizations: this.organizationService.getAllOrganizations(),
-        stormwaterJurisdictions: this.stormwaterJurisdictionService.getByPersonID(this.currentUser.PersonID)
-      }).subscribe(({organizations, stormwaterJurisdictions}) => {
+        stormwaterJurisdictions: this.stormwaterJurisdictionService.getByPersonID(this.currentUser.PersonID),
+        users: this.userService.getUsers()
+      }).subscribe(({organizations, stormwaterJurisdictions, users}) => {
         this.organizations = organizations;
         this.stormwaterJurisdictions = stormwaterJurisdictions;
+        this.users = users
 
         if (stormwaterJurisdictions.length == 1) {
           this.projectModel.StormwaterJurisdictionID = stormwaterJurisdictions[0].StormwaterJurisdictionID;
