@@ -1178,11 +1178,18 @@
         "additionalProperties": false
       },
       "ProjectCreateDto": {
+        "required": [
+          "OrganizationID",
+          "PrimaryContactPersonID",
+          "ProjectName",
+          "StormwaterJurisdictionID"
+        ],
         "type": "object",
         "properties": {
           "ProjectName": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
           },
           "OrganizationID": {
             "type": "integer",
@@ -1197,10 +1204,14 @@
             "format": "int32"
           },
           "ProjectDescription": {
+            "maxLength": 500,
+            "minLength": 0,
             "type": "string",
             "nullable": true
           },
           "AdditionalContactInformation": {
+            "maxLength": 500,
+            "minLength": 0,
             "type": "string",
             "nullable": true
           }

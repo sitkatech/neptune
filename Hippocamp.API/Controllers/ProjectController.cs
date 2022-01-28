@@ -37,10 +37,21 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         public IActionResult New([FromBody] ProjectCreateDto projectCreateDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
+            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID.Value))
             {
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");
+            }
+
+            var projectNameAlreadyExists = _dbContext.Projects.Any(x => x.ProjectName == projectCreateDto.ProjectName);
+            if (projectNameAlreadyExists)
+            {
+                ModelState.AddModelError("ProjectName", $"A project with the name {projectCreateDto.ProjectName} already exists");
+                return BadRequest(ModelState);
             }
             Projects.CreateNew(_dbContext, projectCreateDto, personDto);
             return Ok();
@@ -50,13 +61,17 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectCreateDto projectCreateDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID))
+            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID.Value))
             {
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }

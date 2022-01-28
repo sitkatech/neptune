@@ -55,10 +55,10 @@ namespace Hippocamp.EFModels.Entities
             var project = new Project()
             {
                 ProjectName = projectCreateDto.ProjectName,
-                OrganizationID = projectCreateDto.OrganizationID,
-                StormwaterJurisdictionID = projectCreateDto.StormwaterJurisdictionID,
+                OrganizationID = projectCreateDto.OrganizationID.Value,
+                StormwaterJurisdictionID = projectCreateDto.StormwaterJurisdictionID.Value,
                 ProjectStatusID = (int) ProjectStatusEnum.Draft,
-                PrimaryContactPersonID = projectCreateDto.PrimaryContactPersonID,
+                PrimaryContactPersonID = projectCreateDto.PrimaryContactPersonID.Value,
                 CreatePersonID = personDto.PersonID,
                 DateCreated = DateTime.UtcNow,
                 ProjectDescription = projectCreateDto.ProjectDescription,
@@ -71,9 +71,9 @@ namespace Hippocamp.EFModels.Entities
         public static void Update(HippocampDbContext dbContext, Project project, ProjectCreateDto projectEditDto)
         {
             project.ProjectName = projectEditDto.ProjectName;
-            project.OrganizationID = projectEditDto.OrganizationID;
-            project.StormwaterJurisdictionID = projectEditDto.StormwaterJurisdictionID;
-            project.PrimaryContactPersonID = projectEditDto.PrimaryContactPersonID;
+            project.OrganizationID = projectEditDto.OrganizationID.Value;
+            project.StormwaterJurisdictionID = projectEditDto.StormwaterJurisdictionID.Value;
+            project.PrimaryContactPersonID = projectEditDto.PrimaryContactPersonID.Value;
             project.ProjectDescription = projectEditDto.ProjectDescription;
             project.AdditionalContactInformation = projectEditDto.AdditionalContactInformation;
 

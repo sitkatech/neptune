@@ -109,7 +109,6 @@ export class ProjectBasicsComponent implements OnInit {
 
   public onSubmit(createProjectForm: HTMLFormElement): void {
     this.isLoadingSubmit = true;
-    debugger;
 
     if (this.projectID) {
       this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
