@@ -30,7 +30,7 @@ export class JurisdictionManagerOrEditorOnlyGuard implements CanActivate {
       .pipe(
         map(x => {
           if (x.Role.RoleID == RoleEnum.Admin || x.Role.RoleID == RoleEnum.SitkaAdmin || 
-            RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor) {
+            x.Role.RoleID == RoleEnum.JurisdictionManager || x.Role.RoleID == RoleEnum.JurisdictionEditor) {
             return true;
           } else {
             return this.returnUnauthorized();

@@ -14,7 +14,6 @@ import { ProjectListComponent } from './pages/project-list/project-list.componen
 import { AboutComponent } from './pages/about/about.component';
 import { ProjectNewComponent } from './pages/project-new/project-new.component';
 import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard';
-import { ProjectNewSidebarComponent } from './shared/components/project-new-sidebar/project-new-sidebar.component';
 import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
 import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';

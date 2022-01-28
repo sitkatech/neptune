@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProjectNewSidebarComponent } from './project-new-sidebar.component';
+import { ProjectWizardSidebarComponent } from './project-wizard-sidebar.component';
 
 describe('ProjectNewSidebarComponent', () => {
-  let component: ProjectNewSidebarComponent;
-  let fixture: ComponentFixture<ProjectNewSidebarComponent>;
+  let component: ProjectWizardSidebarComponent;
+  let fixture: ComponentFixture<ProjectWizardSidebarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProjectNewSidebarComponent ]
+      declarations: [ ProjectWizardSidebarComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectNewSidebarComponent);
+    fixture = TestBed.createComponent(ProjectWizardSidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

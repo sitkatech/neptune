@@ -21,7 +21,7 @@ import { CustomPinnedRowRendererComponent } from './components/ag-grid/custom-pi
 import { CustomDropdownFilterComponent } from './components/custom-dropdown-filter/custom-dropdown-filter.component';
 import { CsvDownloadButtonComponent } from './components/csv-download-button/csv-download-button.component';
 import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters-button/clear-grid-filters-button.component';
-import { ProjectNewSidebarComponent } from './components/project-new-sidebar/project-new-sidebar.component';
+import { ProjectWizardSidebarComponent } from './components/project-wizard-sidebar/project-wizard-sidebar.component';
 import { ProgressIconComponent } from './components/progress-icon/progress-icon.component';
 import { ToggleStatusComponent } from './components/toggle-status/toggle-status.component';
 import { OrderableAccordionComponent, OrderablePanel, OrderablePanelContent, OrderablePanelControls, OrderablePanelTitle, OrderablePanelToggle } from './components/orderable-accordion/orderable-accordion.component';
@@ -55,7 +55,7 @@ import { UnderConstructionComponent } from './components/under-construction/unde
         OrderablePanelContent,
         IconComponent,
         ProgressIconComponent,
-        ProjectNewSidebarComponent,
+        ProjectWizardSidebarComponent,
         UnderConstructionComponent
     ],
     imports: [
@@ -88,7 +88,7 @@ import { UnderConstructionComponent } from './components/under-construction/unde
         OrderablePanelContent,
         IconComponent,
         ProgressIconComponent,
-        ProjectNewSidebarComponent
+        ProjectWizardSidebarComponent
     ],
     entryComponents:[]
 })
