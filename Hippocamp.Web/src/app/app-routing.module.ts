@@ -30,15 +30,7 @@ const routes: Routes = [
   { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
-    { path: "project-basics", component:  ProjectBasicsComponent},
-    // { path: "stormwater-treatments", children: [
-    //   { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
-    //   { path: "treatment-bmps", component:  UnderConstructionComponent},
-    //   { path: "delineations", component:  UnderConstructionComponent},
-    //   { path: "modeled-performance", component:  UnderConstructionComponent},
-    // ]},
-    // { path: "attachments", component:  UnderConstructionComponent},
-    // { path: "review", component:  UnderConstructionComponent},
+    { path: "project-basics", component:  ProjectBasicsComponent}
   ]},
   { path: `projects/edit/${routeParams.projectID}`, component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },

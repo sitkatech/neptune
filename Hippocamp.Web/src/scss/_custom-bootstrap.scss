@@ -198,6 +198,12 @@ a:hover {
     font-weight: 700;
   }
 
+  a.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    color: lighten($link-color, 30%);
+  }
+
   .icon-padding {
     position: relative;
     padding-left: 30px;
