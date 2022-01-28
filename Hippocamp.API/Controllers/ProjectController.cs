@@ -35,7 +35,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpPost("projects/new")]
         [JurisdictionEditFeature]
-        public IActionResult New([FromBody] ProjectCreateDto projectCreateDto)
+        public ActionResult<ProjectSimpleDto> New([FromBody] ProjectCreateDto projectCreateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -53,8 +53,8 @@ namespace Hippocamp.API.Controllers
                 ModelState.AddModelError("ProjectName", $"A project with the name {projectCreateDto.ProjectName} already exists");
                 return BadRequest(ModelState);
             }
-            Projects.CreateNew(_dbContext, projectCreateDto, personDto);
-            return Ok();
+            var project = Projects.CreateNew(_dbContext, projectCreateDto, personDto);
+            return Ok(project);
         }
 
         [HttpPost("projects/{projectID}/update")]

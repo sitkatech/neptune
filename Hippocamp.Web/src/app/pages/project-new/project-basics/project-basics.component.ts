@@ -42,7 +42,7 @@ export class ProjectBasicsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const projectID = this.route.parent.snapshot.paramMap.get("id");
+    const projectID = this.route.snapshot.paramMap.get("projectID");
     this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
       this.projectModel = new ProjectCreateDto();
@@ -90,12 +90,12 @@ export class ProjectBasicsComponent implements OnInit {
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
   }
 
-  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string) {
+  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string, projectID: number) {
     
       this.isLoadingSubmit = false;
-      createProjectForm.reset();
+      //createProjectForm.reset();
       
-      this.router.navigateByUrl("/projects").then(x => {
+      this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(x => {
         this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
       });
   }
@@ -110,13 +110,13 @@ export class ProjectBasicsComponent implements OnInit {
     this.isLoadingSubmit = true;
     if (this.projectID) {
       this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
-        this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.")
+        this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.", this.projectID)
       }, error => {
         this.onSubmitFailure();
       });
     } else {
-      this.projectService.newProject(this.projectModel).subscribe(() => {
-        this.onSubmitSuccess(createProjectForm, "Your project was successfully created.")
+      this.projectService.newProject(this.projectModel).subscribe(project => {
+        this.onSubmitSuccess(createProjectForm, "Your project was successfully created.", project.ProjectID)
       }, error => {
         this.onSubmitFailure();
       });

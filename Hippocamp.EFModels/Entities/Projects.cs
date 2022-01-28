@@ -50,7 +50,7 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        public static void CreateNew(HippocampDbContext dbContext, ProjectCreateDto projectCreateDto, PersonDto personDto)
+        public static ProjectSimpleDto CreateNew(HippocampDbContext dbContext, ProjectCreateDto projectCreateDto, PersonDto personDto)
         {
             var project = new Project()
             {
@@ -66,6 +66,8 @@ namespace Hippocamp.EFModels.Entities
             };
             dbContext.Add(project);
             dbContext.SaveChanges();
+            dbContext.Entry(project).Reload();
+            return GetByIDAsSimpleDto(dbContext, project.ProjectID);
         }
 
         public static void Update(HippocampDbContext dbContext, Project project, ProjectCreateDto projectEditDto)

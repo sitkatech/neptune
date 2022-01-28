@@ -46,7 +46,7 @@ export class ProjectNewComponent implements OnInit {
       this.currentUser = currentUser;
       
       this.projectModel = new ProjectCreateDto();
-      const projectID = this.route.snapshot.paramMap.get("id");
+      const projectID = this.route.snapshot.paramMap.get("projectID");
       if (projectID) {
         this.projectID = parseInt(projectID);
         this.projectService.getByID(this.projectID).subscribe(project => {

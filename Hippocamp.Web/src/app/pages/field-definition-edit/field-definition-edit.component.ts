@@ -37,7 +37,7 @@ export class FieldDefinitionEditComponent implements OnInit {
   ngOnInit() {
       this.watchUserChangeSubscription = this.authenticationService.currentUserSetObservable.subscribe(currentUser => {
           this.currentUser = currentUser;
-          const id = parseInt(this.route.snapshot.paramMap.get("id"));
+          const id = parseInt(this.route.snapshot.paramMap.get("definitionID"));
           if (id) {
               this.fieldDefinitionService.getFieldDefinition(id).subscribe(fieldDefinition => {
                 this.fieldDefinition = fieldDefinition;
