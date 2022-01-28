@@ -2,12 +2,12 @@
 
 namespace Hippocamp.Models.DataTransferObjects
 {
-    public partial class ProjectCreateDto
+    public class ProjectCreateDto
     {
         [Display(Name = "Project Name")]
         [Required]
         [StringLength(200, ErrorMessage = "Project Name cannot exceed 200 characters.")]
-        public string? ProjectName { get; set; }
+        public string ProjectName { get; set; }
         [Display(Name = "Organization")]
         [Required]
         public int? OrganizationID { get; set; }

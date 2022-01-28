@@ -14,8 +14,6 @@ import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { LinkRendererComponent } from './shared/components/ag-grid/link-renderer/link-renderer.component';
-
-
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeIconLinkRendererComponent } from './shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
 import { LoginCallbackComponent } from './pages/login-callback/login-callback.component';
@@ -29,18 +27,16 @@ import { HttpErrorInterceptor } from './shared/interceptors/httpErrorInterceptor
 import { environment } from 'src/environments/environment';
 import { AppInsightsService } from './shared/services/app-insights.service';
 import { GlobalErrorHandlerService } from './shared/services/global-error-handler.service';
-import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { SharedModule } from './shared/shared.module';
 import { CookieStorageService } from './shared/services/cookies/cookie-storage.service';
 import { TrainingComponent } from './pages/training/training.component';
 import { ProjectListComponent } from './pages/project-list/project-list.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ProjectNewComponent } from './pages/project-new/project-new.component';
-import { ProgressIconComponent } from './shared/components/progress-icon/progress-icon.component';
-import { ProjectNewSidebarComponent } from './shared/components/project-new-sidebar/project-new-sidebar.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
 import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -77,9 +73,10 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     FormsModule,
     BrowserAnimationsModule,
     AgGridModule.withComponents([]),
-    SelectDropDownModule,
     CKEditorModule,
-    DragDropModule
+    DragDropModule,
+    NgSelectModule,
+
   ],  
   providers: [
     CookieService,

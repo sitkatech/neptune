@@ -42,11 +42,10 @@ export class ProjectBasicsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const projectID = this.route.snapshot.paramMap.get("id");
     this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-      
       this.projectModel = new ProjectCreateDto();
-      const projectID = this.route.snapshot.paramMap.get("id");
       if (projectID) {
         this.projectID = parseInt(projectID);
         this.projectService.getByID(this.projectID).subscribe(project => {
@@ -109,7 +108,6 @@ export class ProjectBasicsComponent implements OnInit {
 
   public onSubmit(createProjectForm: HTMLFormElement): void {
     this.isLoadingSubmit = true;
-
     if (this.projectID) {
       this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
         this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.")

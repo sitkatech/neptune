@@ -27,11 +27,10 @@
             <label class="required">Project Owner</label>
         </div>
         <div class="col-sm-7">
-            <select name="organization" class="form-control" [(ngModel)]="projectModel.OrganizationID">
-                <option *ngFor="let organization of organizations" [value]="organization.OrganizationID">
-                    {{organization.OrganizationName}}
-                </option>
-            </select>
+            <ng-select [(ngModel)]="projectModel.OrganizationID"
+                [items]="organizations" bindLabel="OrganizationName" bindValue="OrganizationID" 
+                placeholder="Choose One" name="OrganizationID" required>
+            </ng-select>
         </div>
     </div>
     <div class="row mt-3" *ngIf="stormwaterJurisdictions.length > 1; else singleJurisdictionDisplay">
@@ -39,11 +38,10 @@
             <label class="required">Jurisdiction</label>
         </div>
         <div class="col-sm-7">
-            <select name="stormwater-jurisdiction" class="form-control" [(ngModel)]="projectModel.StormwaterJurisdictionID">
-                <option *ngFor="let stormwaterJurisdiction of stormwaterJurisdictions" [value]="stormwaterJurisdiction.StormwaterJurisdictionID">
-                    {{stormwaterJurisdiction.Organization.OrganizationName}}
-                </option>
-            </select>
+            <ng-select [(ngModel)]="projectModel.StormwaterJurisdictionID"
+                [items]="stormwaterJurisdictions" bindLabel="Organization.OrganizationName" bindValue="StormwaterJurisdictionID" 
+                placeholder="Choose One" name="StormwaterJurisdictionID" required>
+            </ng-select>
         </div>
     </div>
     <ng-template #singleJurisdictionDisplay>
