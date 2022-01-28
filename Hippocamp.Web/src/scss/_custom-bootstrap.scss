@@ -194,6 +194,10 @@ a:hover {
       }
   }
 
+  a.active {
+    font-weight: 700;
+  }
+
   .icon-padding {
     position: relative;
     padding-left: 30px;
