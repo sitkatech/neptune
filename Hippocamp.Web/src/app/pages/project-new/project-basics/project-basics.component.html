@@ -8,7 +8,8 @@
             <label class="required">Project Name</label>
         </div>
         <div class="col-sm-7">
-            <input type="text" class="form-control" name="project-name" [(ngModel)]="projectModel.ProjectName">
+            <input type="text" class="form-control" name="project-name" [(ngModel)]="projectModel.ProjectName"
+            [ngClass]='{"field-invalid": isFieldInvalid("ProjectName")}'>
         </div>
     </div>
     <div class="row mt-3">
@@ -29,7 +30,8 @@
         <div class="col-sm-7">
             <ng-select [(ngModel)]="projectModel.OrganizationID"
                 [items]="organizations" bindLabel="OrganizationName" bindValue="OrganizationID" 
-                placeholder="Choose One" name="OrganizationID" required>
+                placeholder="Choose One" name="OrganizationID" required
+                [ngClass]='{"field-invalid": isFieldInvalid("OrganizationID")}'>
             </ng-select>
         </div>
     </div>
@@ -40,7 +42,8 @@
         <div class="col-sm-7">
             <ng-select [(ngModel)]="projectModel.StormwaterJurisdictionID"
                 [items]="stormwaterJurisdictions" bindLabel="Organization.OrganizationName" bindValue="StormwaterJurisdictionID" 
-                placeholder="Choose One" name="StormwaterJurisdictionID" required>
+                placeholder="Choose One" name="StormwaterJurisdictionID" required
+                [ngClass]='{"field-invalid": this.isFieldInvalid("StormwaterJurisdictionID")}'>
             </ng-select>
         </div>
     </div>
@@ -63,7 +66,8 @@
         <div class="col-sm-7">
             <ng-select [(ngModel)]="projectModel.PrimaryContactPersonID"
                 [items]="users" bindLabel="FullName" bindValue="PersonID" 
-                placeholder="Choose One" name="PrimaryContactPerson" required>
+                placeholder="Choose One" name="PrimaryContactPerson" required
+                [ngClass]='{"field-invalid": this.isFieldInvalid("PrimaryContactPersonID")}'>
             </ng-select>
         </div>
     </div>

@@ -8,7 +8,7 @@ namespace Hippocamp.Models.DataTransferObjects
         [Required]
         [StringLength(200, ErrorMessage = "Project Name cannot exceed 200 characters.")]
         public string ProjectName { get; set; }
-        [Display(Name = "Organization")]
+        [Display(Name = "Project Owner")]
         [Required]
         public int? OrganizationID { get; set; }
         [Display(Name = "Jurisdiction")]

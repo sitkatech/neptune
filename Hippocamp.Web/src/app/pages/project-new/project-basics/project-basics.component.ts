@@ -31,6 +31,7 @@ export class ProjectBasicsComponent implements OnInit {
   public organizations: Array<OrganizationSimpleDto>;
   public users: Array<PersonSimpleDto>;
   public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
+  public invalidFields: Array<string> = [];
   public isLoadingSubmit = false;
 
   constructor(
@@ -96,6 +97,10 @@ export class ProjectBasicsComponent implements OnInit {
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
   }
 
+  public isFieldInvalid(fieldName: string) {
+    return this.invalidFields.indexOf(fieldName) > -1;
+  }
+
   private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string) {
     
       this.isLoadingSubmit = false;
@@ -106,7 +111,12 @@ export class ProjectBasicsComponent implements OnInit {
       });
   }
 
-  private onSubmitFailure() {
+  private onSubmitFailure(error) {
+    if (error.error?.errors) {
+      for (let key of Object.keys(error.error.errors)) {
+        this.invalidFields.push(key);
+      }
+    }
     this.isLoadingSubmit = false;
     window.scroll(0,0);
     this.cdr.detectChanges();
@@ -114,17 +124,20 @@ export class ProjectBasicsComponent implements OnInit {
 
   public onSubmit(createProjectForm: HTMLFormElement): void {
     this.isLoadingSubmit = true;
+    this.invalidFields = [];
+    this.alertService.clearAlerts();
+
     if (this.projectID) {
       this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
         this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.")
       }, error => {
-        this.onSubmitFailure();
+        this.onSubmitFailure(error);
       });
     } else {
       this.projectService.newProject(this.projectModel).subscribe(() => {
         this.onSubmitSuccess(createProjectForm, "Your project was successfully created.")
       }, error => {
-        this.onSubmitFailure();
+        this.onSubmitFailure(error);
       });
     }
   }
