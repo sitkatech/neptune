@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -26,6 +26,7 @@ export class ProjectListComponent implements OnInit {
   private watchUserChangeSubscription: any;
   private currentUser: PersonDto;
 
+  private gridApi: GridApi;
   public richTextTypeID = CustomRichTextType.ProjectsList;
   public projectColumnDefs: Array<ColDef>;
   public defaultColDef: ColDef;
@@ -62,6 +63,10 @@ export class ProjectListComponent implements OnInit {
     this.cdr.detach();
   }
 
+  public onGridReady(params) {
+    this.gridApi = params.api;
+  }
+
   private createProjectGridColDefs() {
     this.projectColumnDefs = [
       { 
@@ -73,8 +78,9 @@ export class ProjectListComponent implements OnInit {
       {
         cellRendererFramework: FontAwesomeIconLinkRendererComponent,
         cellRendererParams: { isSpan: true, fontawesomeIconName: 'trash', CssClasses: 'text-danger'},
-        width: 40,
+        width: 40, sortable: false, filter: false
       },
+      { headerName: 'Project ID', field: 'ProjectID' },
       { headerName: 'Project Name', field: 'ProjectName' },
       { headerName: 'Organization', field: 'Organization.OrganizationName' },
       { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
@@ -95,7 +101,10 @@ export class ProjectListComponent implements OnInit {
   }
 
   public exportToCsv() {
-    this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, 'projects.csv', null);
+    const columns = this.projectsGrid.columnApi.getAllGridColumns();
+    const columnIDsToDownload = columns.slice(2).map(x => x.getId());
+
+    this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, 'projects.csv', columnIDsToDownload);
   }
 
   public onCellClicked(event: any): void {

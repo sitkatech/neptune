@@ -18,7 +18,8 @@ export class JurisdictionManagerOrEditorOnlyGuard implements CanActivate {
     
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authenticationService.isCurrentUserNullOrUndefined()) {
-      if (this.authenticationService.isCurrentUserAnAdministrator()) {
+      if (this.authenticationService.doesCurrentUserHaveOneOfTheseRoles([RoleEnum.Admin, RoleEnum.SitkaAdmin, 
+        RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor])) {
         return true;
       } else {
         return this.returnUnauthorized();
@@ -29,7 +30,7 @@ export class JurisdictionManagerOrEditorOnlyGuard implements CanActivate {
       .pipe(
         map(x => {
           if (x.Role.RoleID == RoleEnum.Admin || x.Role.RoleID == RoleEnum.SitkaAdmin || 
-              x.Role.RoleID == RoleEnum.JurisdictionManager || x.Role.RoleID == RoleEnum.JurisdictionEditor) {
+            RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor) {
             return true;
           } else {
             return this.returnUnauthorized();
