@@ -55,7 +55,9 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<PersonSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
         {
-            return GetPersonImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
+            return GetPersonImpl(dbContext)
+                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
+                .Select(x => x.AsSimpleDto()).ToList();
         }
 
         public static Person GetByID(HippocampDbContext dbContext, int personID)

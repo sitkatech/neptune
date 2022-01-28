@@ -17,6 +17,7 @@ namespace Hippocamp.EFModels.Entities
         {
             return GetStormwaterJurisdictionsImpl(dbContext)
                 .Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID))
+                .OrderBy(x => x.Organization.OrganizationName)
                 .Select(x => x.AsSimpleDto())
                 .ToList();
         }

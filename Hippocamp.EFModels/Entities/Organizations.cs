@@ -19,6 +19,7 @@ namespace Hippocamp.EFModels.Entities
         {
             var organizations = dbContext.Organizations
                 .AsNoTracking()
+                .OrderBy(x => x.OrganizationName)
                 .Select(x => x.AsSimpleDto())
                 .ToList();
             return organizations;
