@@ -201,7 +201,7 @@ a:hover {
   a.disabled {
     pointer-events: none;
     cursor: not-allowed;
-    color: lighten($link-color, 30%);
+    color: $base-text;
   }
 
   .icon-padding {
