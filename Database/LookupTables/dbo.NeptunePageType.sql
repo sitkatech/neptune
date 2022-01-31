@@ -56,4 +56,5 @@ values
 (54, 'HippocampLabelsAndDefinitionsList', 'Hippocamp Labels and Definitions List'),
 (55, 'HippocampAbout', 'Hippocamp About Page'),
 (56, 'HippocampProjectsList', 'Hippocamp Projects List'),
-(57, 'HippocampProjectInstructions', 'Hippocamp Project Instructions Page')
+(57, 'HippocampProjectInstructions', 'Hippocamp Project Instructions Page'),
+(58, 'HippocampProjectBasics', 'Hippocamp Project Basics')
