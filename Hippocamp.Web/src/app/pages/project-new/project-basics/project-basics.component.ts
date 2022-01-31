@@ -101,13 +101,11 @@ export class ProjectBasicsComponent implements OnInit {
     return this.invalidFields.indexOf(fieldName) > -1;
   }
 
-  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string) {    
-      this.isLoadingSubmit = false;
-      //createProjectForm.reset();
-      
-      this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(x => {
-        this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
-      });
+  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string, projectID: number) {
+    this.isLoadingSubmit = false;    
+    this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(x => {
+      this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
+    });
   }
 
   private onSubmitFailure(error) {
