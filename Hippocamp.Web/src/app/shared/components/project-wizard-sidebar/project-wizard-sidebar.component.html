@@ -3,10 +3,10 @@
         <p>Project Name: &nbsp;</p> 
         <div *ngIf="projectModel?.ProjectName; then hasName else noName"></div>
         <ng-template #hasName>
-            <p ><strong>{{ projectModel.ProjectName }}</strong></p>
+            <p><strong>{{ projectModel.ProjectName }}</strong></p>
         </ng-template>
         <ng-template #noName>
-            <p ><strong>Project Name Here</strong></p>
+            <p><strong>Project Name Here</strong></p>
         </ng-template>  
     </div>
 </div>
@@ -46,9 +46,9 @@
 
                     <div class="card-body">
                         <a [routerLink]="['stormwater-treatments', 'treatment-bmps']"
-                        routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
-                        class="icon-padding">
+                        class="icon-padding"
+                        [ngClass]="{'disabled': !projectModel.ProjectName}">
                         <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
                         Treatment BMPs
                         </a>
@@ -58,7 +58,8 @@
                         <a [routerLink]="['stormwater-treatments', 'delineations']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
-                        class="icon-padding">
+                        class="icon-padding"
+                        [ngClass]="{'disabled': !projectModel.ProjectName}">
                         <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
                         Delineations
                         </a>
@@ -68,7 +69,8 @@
                         <a [routerLink]="['stormwater-treatments', 'modeled-performance']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
-                        class="icon-padding">
+                        class="icon-padding"
+                        [ngClass]="{'disabled': !projectModel.ProjectName}">
                         <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
                         Modeled Performance
                         </a>
@@ -79,14 +81,16 @@
     </ngb-accordion>
 
     <div class="card-body">
-        <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding">
+        <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding"
+            [ngClass]="{'disabled': !projectModel.ProjectName}">
             <hippocamp-progress-icon></hippocamp-progress-icon>
             Attachments
         </a>
     </div>
 
     <div class="card-body">
-        <a [routerLink]="['review']" routerLinkActive="active" class="icon-padding">
+        <a [routerLink]="['review']" routerLinkActive="active" class="icon-padding"
+            [ngClass]="{'disabled': !projectModel.ProjectName}">
             <hippocamp-progress-icon></hippocamp-progress-icon>
             Review
         </a>
@@ -94,5 +98,3 @@
 
 </div>
 
-
-<div class="nav-container"></div>

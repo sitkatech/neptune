@@ -22,7 +22,7 @@ export class ProjectService {
     return this.apiService.getFromApi(route);
   }
 
-  newProject(projectModel: ProjectCreateDto) {
+  newProject(projectModel: ProjectCreateDto): Observable<ProjectSimpleDto> {
     let route = `/projects/new`;
     return this.apiService.postToApi(route, projectModel);
   }

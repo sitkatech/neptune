@@ -18,24 +18,21 @@ import { ProjectInstructionsComponent } from './pages/project-new/project-instru
 import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 
+export const routeParams = {
+  definitionID: ':definitionID',
+  projectID: ':projectID'
+}
+
 const routes: Routes = [
-  { path: "labels-and-definitions/:id", component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+  { path: `labels-and-definitions/${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "projects", component: ProjectListComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
   { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
-    { path: "project-basics", component:  ProjectBasicsComponent},
-    { path: "stormwater-treatments", children: [
-      { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
-      { path: "treatment-bmps", component:  UnderConstructionComponent},
-      { path: "delineations", component:  UnderConstructionComponent},
-      { path: "modeled-performance", component:  UnderConstructionComponent},
-    ]},
-    { path: "attachments", component:  UnderConstructionComponent},
-    { path: "review", component:  UnderConstructionComponent},
+    { path: "project-basics", component:  ProjectBasicsComponent}
   ]},
-  { path: "projects/edit/:id", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
+  { path: `projects/edit/${routeParams.projectID}`, component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
     { path: "project-basics", component:  ProjectBasicsComponent},
@@ -50,7 +47,6 @@ const routes: Routes = [
   ]},
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
-  { path: "users/:id", component: UserDetailComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "create-user-callback", component: CreateUserCallbackComponent },
   { path: "not-found", component: NotFoundComponent },
   { path: 'subscription-insufficient', component: SubscriptionInsufficientComponent },
@@ -61,7 +57,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { 
+    relativeLinkResolution: 'legacy',
+    paramsInheritanceStrategy: 'always'
+   })],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule { }

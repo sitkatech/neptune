@@ -194,6 +194,16 @@ a:hover {
       }
   }
 
+  a.active {
+    font-weight: 700;
+  }
+
+  a.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    color: $base-text;
+  }
+
   .icon-padding {
     position: relative;
     padding-left: 30px;

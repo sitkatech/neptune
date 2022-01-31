@@ -1,8 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { Alert } from 'src/app/shared/models/alert';
-import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrganizationService } from 'src/app/services/organization/organization.service';
 import { ProjectService } from 'src/app/services/project/project.service';
@@ -35,9 +32,6 @@ export class ProjectNewComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService,
-    private organizationService: OrganizationService,
-    private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private projectService: ProjectService
   ) { }
 
@@ -46,31 +40,13 @@ export class ProjectNewComponent implements OnInit {
       this.currentUser = currentUser;
       
       this.projectModel = new ProjectCreateDto();
-      const projectID = this.route.snapshot.paramMap.get("id");
+      const projectID = this.route.snapshot.paramMap.get("projectID");
       if (projectID) {
         this.projectID = parseInt(projectID);
         this.projectService.getByID(this.projectID).subscribe(project => {
           this.mapProjectSimpleDtoToProjectModel(project);
         });
-      } else {
-        this.projectModel.PrimaryContactPersonID = this.currentUser.PersonID;
       }
-
-      forkJoin({
-        organizations: this.organizationService.getAllOrganizations(),
-        stormwaterJurisdictions: this.stormwaterJurisdictionService.getByPersonID(this.currentUser.PersonID)
-      }).subscribe(({organizations, stormwaterJurisdictions}) => {
-        this.organizations = organizations;
-        this.stormwaterJurisdictions = stormwaterJurisdictions;
-
-        if (stormwaterJurisdictions.length == 1) {
-          this.projectModel.StormwaterJurisdictionID = stormwaterJurisdictions[0].StormwaterJurisdictionID;
-        }
-      });
-
-      this.organizationService.getAllOrganizations().subscribe(organizations => {
-        this.organizations = organizations;
-      });
 
       this.cdr.detectChanges();
     });
@@ -91,38 +67,4 @@ export class ProjectNewComponent implements OnInit {
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
   }
 
-
-  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string) {
-    
-      this.isLoadingSubmit = false;
-      createProjectForm.reset();
-      
-      this.router.navigateByUrl("/projects").then(x => {
-        this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
-      });
-  }
-
-  private onSubmitFailure() {
-    this.isLoadingSubmit = false;
-    window.scroll(0,0);
-    this.cdr.detectChanges();
-  }
-
-  public onSubmit(createProjectForm: HTMLFormElement): void {
-    this.isLoadingSubmit = true;
-
-    if (this.projectID) {
-      this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
-        this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.")
-      }, error => {
-        this.onSubmitFailure();
-      });
-    } else {
-      this.projectService.newProject(this.projectModel).subscribe(() => {
-        this.onSubmitSuccess(createProjectForm, "Your project was successfully created.")
-      }, error => {
-        this.onSubmitFailure();
-      });
-    }
-  }
 }
