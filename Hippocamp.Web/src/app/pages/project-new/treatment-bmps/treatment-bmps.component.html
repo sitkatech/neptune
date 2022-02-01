@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-sm-8 col-md-9 offset-sm-4 offset-md-3">
+        <p>Select a Treatment BMP from the list or click a location on the map to explore.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let treatmentBMP of treatmentBMPs"
+                [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
+                (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
+                {{treatmentBMP.TreatmentBMPName}}
+                <p class="small mb-0">Type #{{treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName}}</p>
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
+        <div id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
+    </div>
+</div>
+<div class="row mt-4" *ngIf="selectedListItem">
+    <div class="col-12" style="background-color:#eee; background-clip:content-box">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-4 mt-4">
+                <h2 class="ml-3">{{selectedDto.TreatmentBMPName}}</h2>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mt-4 mb-lg-4">
+                <p class="ml-3"><strong>Type</strong> {{selectedDto.TreatmentBMPType.TreatmentBMPTypeName}}</p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mt-4 mb-lg-4">
+                <p class="ml-3"><strong>Latitude</strong> {{selectedDto.Latitude}}</p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 mt-4 mb-lg-4">
+                <p class="ml-3"><strong>Longitude</strong> {{selectedDto.Longitude}}</p>
+            </div>
+        </div>
+    </div>
+</div>

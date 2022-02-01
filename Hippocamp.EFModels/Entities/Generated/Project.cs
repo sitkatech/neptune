@@ -12,6 +12,11 @@ namespace Hippocamp.EFModels.Entities
     [Index(nameof(ProjectName), Name = "AK_Project_ProjectName", IsUnique = true)]
     public partial class Project
     {
+        public Project()
+        {
+            TreatmentBMPs = new HashSet<TreatmentBMP>();
+        }
+
         [Key]
         public int ProjectID { get; set; }
         [Required]
@@ -44,5 +49,7 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(StormwaterJurisdictionID))]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        [InverseProperty(nameof(TreatmentBMP.Project))]
+        public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

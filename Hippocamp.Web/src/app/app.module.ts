@@ -37,6 +37,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
 import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -60,7 +61,8 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
 	  AboutComponent,
     ProjectNewComponent,
     ProjectBasicsComponent,
-    ProjectInstructionsComponent
+    ProjectInstructionsComponent,
+    TreatmentBmpsComponent,
   ],
   imports: [
     AppRoutingModule,
