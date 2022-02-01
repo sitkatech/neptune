@@ -3,11 +3,10 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[ProjectStatus]
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -16,106 +15,122 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public abstract partial class ProjectStatus : IHavePrimaryKey
+    // Table [dbo].[ProjectStatus] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[ProjectStatus]")]
+    public partial class ProjectStatus : IHavePrimaryKey, ICanDeleteFull
     {
-        public static readonly ProjectStatusDraft Draft = ProjectStatusDraft.Instance;
-
-        public static readonly List<ProjectStatus> All;
-        public static readonly ReadOnlyDictionary<int, ProjectStatus> AllLookupDictionary;
-
         /// <summary>
-        /// Static type constructor to coordinate static initialization order
+        /// Default Constructor; only used by EF
         /// </summary>
-        static ProjectStatus()
+        protected ProjectStatus()
         {
-            All = new List<ProjectStatus> { Draft };
-            AllLookupDictionary = new ReadOnlyDictionary<int, ProjectStatus>(All.ToDictionary(x => x.ProjectStatusID));
+            this.Projects = new HashSet<Project>();
         }
 
         /// <summary>
-        /// Protected constructor only for use in instantiating the set of static lookup values that match database
+        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        protected ProjectStatus(int projectStatusID, string projectStatusName, string projectStatusDisplayName, int projectStatusSortOrder)
+        public ProjectStatus(int projectStatusID, string projectStatusName, string projectStatusDisplayName, int projectStatusSortOrder) : this()
         {
-            ProjectStatusID = projectStatusID;
-            ProjectStatusName = projectStatusName;
-            ProjectStatusDisplayName = projectStatusDisplayName;
-            ProjectStatusSortOrder = projectStatusSortOrder;
+            this.ProjectStatusID = projectStatusID;
+            this.ProjectStatusName = projectStatusName;
+            this.ProjectStatusDisplayName = projectStatusDisplayName;
+            this.ProjectStatusSortOrder = projectStatusSortOrder;
+        }
+
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public ProjectStatus(string projectStatusName, string projectStatusDisplayName, int projectStatusSortOrder) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.ProjectStatusID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.ProjectStatusName = projectStatusName;
+            this.ProjectStatusDisplayName = projectStatusDisplayName;
+            this.ProjectStatusSortOrder = projectStatusSortOrder;
+        }
+
+
+        /// <summary>
+        /// Creates a "blank" object of this type and populates primitives with defaults
+        /// </summary>
+        public static ProjectStatus CreateNewBlank()
+        {
+            return new ProjectStatus(default(string), default(string), default(int));
+        }
+
+        /// <summary>
+        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
+        /// </summary>
+        /// <returns></returns>
+        public bool HasDependentObjects()
+        {
+            return Projects.Any();
+        }
+
+        /// <summary>
+        /// Active Dependent type names of this object
+        /// </summary>
+        public List<string> DependentObjectNames() 
+        {
+            var dependentObjects = new List<string>();
+            
+            if(Projects.Any())
+            {
+                dependentObjects.Add(typeof(Project).Name);
+            }
+            return dependentObjects.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ProjectStatus).Name, typeof(Project).Name};
+
+
+        /// <summary>
+        /// Delete just the entity 
+        /// </summary>
+        public void Delete(DatabaseEntities dbContext)
+        {
+            dbContext.ProjectStatuses.Remove(this);
+        }
+        
+        /// <summary>
+        /// Delete entity plus all children
+        /// </summary>
+        public void DeleteFull(DatabaseEntities dbContext)
+        {
+            DeleteChildren(dbContext);
+            Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in Projects.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
-        public int ProjectStatusID { get; private set; }
-        public string ProjectStatusName { get; private set; }
-        public string ProjectStatusDisplayName { get; private set; }
-        public int ProjectStatusSortOrder { get; private set; }
+        public int ProjectStatusID { get; set; }
+        public string ProjectStatusName { get; set; }
+        public string ProjectStatusDisplayName { get; set; }
+        public int ProjectStatusSortOrder { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return ProjectStatusID; } }
+        public int PrimaryKey { get { return ProjectStatusID; } set { ProjectStatusID = value; } }
 
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public bool Equals(ProjectStatus other)
+        public virtual ICollection<Project> Projects { get; set; }
+
+        public static class FieldLengths
         {
-            if (other == null)
-            {
-                return false;
-            }
-            return other.ProjectStatusID == ProjectStatusID;
+            public const int ProjectStatusName = 50;
+            public const int ProjectStatusDisplayName = 50;
         }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ProjectStatus);
-        }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override int GetHashCode()
-        {
-            return ProjectStatusID;
-        }
-
-        public static bool operator ==(ProjectStatus left, ProjectStatus right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(ProjectStatus left, ProjectStatus right)
-        {
-            return !Equals(left, right);
-        }
-
-        public ProjectStatusEnum ToEnum { get { return (ProjectStatusEnum)GetHashCode(); } }
-
-        public static ProjectStatus ToType(int enumValue)
-        {
-            return ToType((ProjectStatusEnum)enumValue);
-        }
-
-        public static ProjectStatus ToType(ProjectStatusEnum enumValue)
-        {
-            switch (enumValue)
-            {
-                case ProjectStatusEnum.Draft:
-                    return Draft;
-                default:
-                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
-            }
-        }
-    }
-
-    public enum ProjectStatusEnum
-    {
-        Draft = 1
-    }
-
-    public partial class ProjectStatusDraft : ProjectStatus
-    {
-        private ProjectStatusDraft(int projectStatusID, string projectStatusName, string projectStatusDisplayName, int projectStatusSortOrder) : base(projectStatusID, projectStatusName, projectStatusDisplayName, projectStatusSortOrder) {}
-        public static readonly ProjectStatusDraft Instance = new ProjectStatusDraft(1, @"Draft", @"Draft", 10);
     }
 }

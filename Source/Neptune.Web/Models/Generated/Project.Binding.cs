@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Project()
         {
-
+            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
         /// <summary>
@@ -76,6 +76,8 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.Projects.Add(this);
             this.ProjectStatusID = projectStatus.ProjectStatusID;
+            this.ProjectStatus = projectStatus;
+            projectStatus.Projects.Add(this);
             this.PrimaryContactPersonID = primaryContactPerson.PersonID;
             this.PrimaryContactPerson = primaryContactPerson;
             primaryContactPerson.ProjectsWhereYouAreThePrimaryContactPerson.Add(this);
@@ -99,7 +101,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -109,13 +111,17 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(TreatmentBMPs.Any())
+            {
+                dependentObjects.Add(typeof(TreatmentBMP).Name);
+            }
             return dependentObjects.Distinct().ToList();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -131,8 +137,19 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in TreatmentBMPs.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -149,9 +166,10 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
+        public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        public ProjectStatus ProjectStatus { get { return ProjectStatus.AllLookupDictionary[ProjectStatusID]; } }
+        public virtual ProjectStatus ProjectStatus { get; set; }
         public virtual Person CreatePerson { get; set; }
         public virtual Person PrimaryContactPerson { get; set; }
 

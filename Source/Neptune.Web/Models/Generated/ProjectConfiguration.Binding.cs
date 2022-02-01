@@ -29,6 +29,7 @@ namespace Neptune.Web.Models
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.Projects).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Project_Organization_OrganizationID
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.Projects).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_Project_StormwaterJurisdiction_StormwaterJurisdictionID
+            HasRequired(a => a.ProjectStatus).WithMany(b => b.Projects).HasForeignKey(c => c.ProjectStatusID).WillCascadeOnDelete(false); // FK_Project_ProjectStatus_ProjectStatusID
             HasRequired(a => a.PrimaryContactPerson).WithMany(b => b.ProjectsWhereYouAreThePrimaryContactPerson).HasForeignKey(c => c.PrimaryContactPersonID).WillCascadeOnDelete(false); // FK_Project_Person_PrimaryContactPersonID_PersonID
             HasRequired(a => a.CreatePerson).WithMany(b => b.ProjectsWhereYouAreTheCreatePerson).HasForeignKey(c => c.CreatePersonID).WillCascadeOnDelete(false); // FK_Project_Person_CreatePersonID_PersonID
         }

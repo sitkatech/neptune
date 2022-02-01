@@ -288,6 +288,8 @@
     <Compile Include="Models\Generated\ProjectConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\ProjectPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\ProjectStatus.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectStatus.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ProjectStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\ProjectStatusPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\QuickBMP.Binding.cs" />
     <Compile Include="Models\Generated\QuickBMP.DatabaseContextExtensions.cs" />

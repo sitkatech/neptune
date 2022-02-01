@@ -30,6 +30,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[PrecipitationZoneID] [int] NULL,
 	[UpstreamBMPID] [int] NULL,
 	[RegionalSubbasinID] [int] NULL,
+	[ProjectID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -66,6 +67,11 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Pr
 REFERENCES [dbo].[PrecipitationZone] ([PrecipitationZoneID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_PrecipitationZone_PrecipitationZoneID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Project_ProjectID] FOREIGN KEY([ProjectID])
+REFERENCES [dbo].[Project] ([ProjectID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Project_ProjectID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_SizingBasisType_SizingBasisTypeID] FOREIGN KEY([SizingBasisTypeID])
 REFERENCES [dbo].[SizingBasisType] ([SizingBasisTypeID])
