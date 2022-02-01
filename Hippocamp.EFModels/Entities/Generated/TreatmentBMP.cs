@@ -71,6 +71,7 @@ namespace Hippocamp.EFModels.Entities
         public int? PrecipitationZoneID { get; set; }
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
+        public int? ProjectID { get; set; }
 
         [ForeignKey(nameof(InventoryVerifiedByPersonID))]
         [InverseProperty(nameof(Person.TreatmentBMPs))]
@@ -84,6 +85,9 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(PrecipitationZoneID))]
         [InverseProperty("TreatmentBMPs")]
         public virtual PrecipitationZone PrecipitationZone { get; set; }
+        [ForeignKey(nameof(ProjectID))]
+        [InverseProperty("TreatmentBMPs")]
+        public virtual Project Project { get; set; }
         [ForeignKey(nameof(SizingBasisTypeID))]
         [InverseProperty("TreatmentBMPs")]
         public virtual SizingBasisType SizingBasisType { get; set; }
