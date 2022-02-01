@@ -17,6 +17,7 @@ import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenti
 import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
 import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
+import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -38,7 +39,7 @@ const routes: Routes = [
     { path: "project-basics", component:  ProjectBasicsComponent},
     { path: "stormwater-treatments", children: [
       { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
-      { path: "treatment-bmps", component:  UnderConstructionComponent},
+      { path: "treatment-bmps", component:  TreatmentBmpsComponent},
       { path: "delineations", component:  UnderConstructionComponent},
       { path: "modeled-performance", component:  UnderConstructionComponent},
     ]},
