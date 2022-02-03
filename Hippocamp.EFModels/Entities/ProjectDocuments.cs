@@ -13,6 +13,7 @@ namespace Hippocamp.EFModels.Entities
             return dbContext.ProjectDocuments
                 .Include(x => x.Project)
                 .Include(x => x.FileResource)
+                    .ThenInclude(x => x.FileResourceMimeType)
                 .AsNoTracking();
         }
 
@@ -38,7 +39,7 @@ namespace Hippocamp.EFModels.Entities
                 FileResource = fileResource,
                 DisplayName = projectDocumentUpsertDto.DisplayName,
                 DocumentDescription = projectDocumentUpsertDto.DocumentDescription,
-                UploadDate = DateTime.Now.Date
+                UploadDate = DateTime.Now
             };
 
             dbContext.ProjectDocuments.Add(projectDocument);

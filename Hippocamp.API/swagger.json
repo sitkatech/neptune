@@ -1138,6 +1138,45 @@
         },
         "additionalProperties": false
       },
+      "FileResourceSimpleDto": {
+        "type": "object",
+        "properties": {
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceMimeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OriginalBaseFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "OriginalFileExtension": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FileResourceData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "CreatePersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "NeptunePageDto": {
         "type": "object",
         "properties": {
@@ -1532,6 +1571,9 @@
           "DocumentDescription": {
             "type": "string",
             "nullable": true
+          },
+          "FileResource": {
+            "$ref": "#/components/schemas/FileResourceSimpleDto"
           }
         },
         "additionalProperties": false

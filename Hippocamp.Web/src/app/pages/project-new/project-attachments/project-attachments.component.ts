@@ -8,6 +8,7 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -31,6 +32,8 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   public invalidFields: Array<string> = [];
 
   public fileName: string;
+  
+  private mainAppApiUrl = environment.mainAppApiUrl;
 
   private acceptedFileTypes: Array<string> = ["PDF", "ZIP", "DOC", "DOCX", "XLS", "XLSX", "JPG", "PNG"];
 
@@ -94,6 +97,10 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.fileUpload.nativeElement.click();
   }
 
+  public getFileLinkValue(attachment: ProjectDocumentSimpleDto): string {
+    return `${this.mainAppApiUrl}/FileResource/${attachment.FileResource.FileResourceGUID}`;
+  }
+
   public isFieldInvalid(fieldName: string) {
     return this.invalidFields.indexOf(fieldName) > -1;
   }
@@ -101,7 +108,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   refreshAttachments(): void {
     this.projectService.getAttachmentsByProjectID(this.projectID).subscribe(attachments => {
       this.attachments = attachments;
-      console.log(this.attachments);
       this.cdr.detectChanges();
     });
   }

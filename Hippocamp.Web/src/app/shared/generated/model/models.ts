@@ -2,6 +2,7 @@ export * from '././field-definition-dto';
 export * from '././field-definition-type-dto';
 export * from '././file-resource-dto';
 export * from '././file-resource-mime-type-dto';
+export * from '././file-resource-simple-dto';
 export * from '././neptune-page-dto';
 export * from '././neptune-page-type-dto';
 export * from '././organization-dto';

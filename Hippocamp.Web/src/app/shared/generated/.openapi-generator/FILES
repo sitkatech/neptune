@@ -3,6 +3,7 @@ model/field-definition-dto.ts
 model/field-definition-type-dto.ts
 model/file-resource-dto.ts
 model/file-resource-mime-type-dto.ts
+model/file-resource-simple-dto.ts
 model/models.ts
 model/neptune-page-dto.ts
 model/neptune-page-type-dto.ts

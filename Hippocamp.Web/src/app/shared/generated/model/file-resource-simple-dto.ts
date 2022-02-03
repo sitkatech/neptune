@@ -9,16 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { FileResourceSimpleDto } from '././file-resource-simple-dto';
 
-export class ProjectDocumentSimpleDto { 
-    ProjectDocumentID?: number;
+export class FileResourceSimpleDto { 
     FileResourceID?: number;
-    ProjectID?: number;
-    DisplayName?: string;
-    UploadDate?: string;
-    DocumentDescription?: string;
-    FileResource?: FileResourceSimpleDto;
+    FileResourceMimeTypeID?: number;
+    OriginalBaseFilename?: string;
+    OriginalFileExtension?: string;
+    FileResourceGUID?: string;
+    FileResourceData?: string;
+    CreatePersonID?: number;
+    CreateDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
