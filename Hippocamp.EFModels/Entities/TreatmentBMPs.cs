@@ -14,7 +14,17 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.Watershed);
         }
-        
+
+        private static IQueryable<TreatmentBMPModelingAttribute> GetTreatmentBMPModelingAttributesImpl(HippocampDbContext dbContext)
+        {
+            return dbContext.TreatmentBMPModelingAttributes
+                .Include(x => x.RoutingConfiguration)
+                .Include(x => x.TimeOfConcentration)
+                .Include(x => x.UnderlyingHydrologicSoilGroup)
+                .Include(x => x.MonthsOfOperation)
+                .Include(x => x.DryWeatherFlowOverride);
+        }
+
         public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
         {
             var treatmentBMPUpsertDtos = GetTreatmentBMPsImpl(dbContext)
@@ -32,6 +42,14 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
 
             return treatmentBMPDisplayDtos;
+        }
+
+        public static TreatmentBMPModelingAttribute GetModelingAttributeByTreatmentBMPID(HippocampDbContext dbContext, int treatmentBMPID)
+        {
+            var treatmentBMPModelingAttribute = GetTreatmentBMPModelingAttributesImpl(dbContext)
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+
+            return treatmentBMPModelingAttribute;
         }
     }
 }

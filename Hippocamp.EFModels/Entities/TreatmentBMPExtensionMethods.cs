@@ -17,7 +17,37 @@ namespace Hippocamp.EFModels.Entities
                 StormwaterJurisdictionName = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName,
                 Longitude = treatmentBMP.Longitude,
                 Latitude = treatmentBMP.Latitude,
-                Notes = treatmentBMP.Notes
+                Notes = treatmentBMP.Notes,
+
+                //AverageDivertedFlowrate
+                //AverageTreatmentFlowrate
+                //DesignDryWeatherTreatmentCapacity
+                //DesignLowFlowDiversionCapacity
+                //DesignMediaFiltrationRate
+                //DesignResidenceTimeforPermanentPool
+                //DiversionRate
+                //DrawdownTimeforWQDetentionVolume
+                //EffectiveFootprint
+                //EffectiveRetentionDepth
+                //InfiltrationDischargeRate
+                //InfiltrationSurfaceArea
+                //MediaBedFootprint
+                //PermanentPoolorWetlandVolume
+                //RoutingConfigurationID
+                //StorageVolumeBelowLowestOutletElevation
+                //SummerHarvestedWaterDemand
+                //TimeOfConcentrationID
+                //DrawdownTimeForDetentionVolume
+                //TotalEffectiveBMPVolume
+                //TotalEffectiveDrywellBMPVolume
+                //TreatmentRate
+                //UnderlyingHydrologicSoilGroupID
+                //UnderlyingInfiltrationRate
+                //WaterQualityDetentionVolume
+                //WettedFootprint
+                //WinterHarvestedWaterDemand
+                //MonthsOfOperationID
+                //DryWeatherFlowOverrideID
             };
 
             return treatmentBMPUpsertDto;
