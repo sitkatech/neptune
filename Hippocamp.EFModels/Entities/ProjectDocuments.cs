@@ -24,6 +24,16 @@ namespace Hippocamp.EFModels.Entities
                 .SingleOrDefault(x => x.ProjectDocumentID == projectDocumentID);
         }
 
+        public static ProjectDocument GetByIDWithTracking(HippocampDbContext dbContext, int projectDocumentID)
+        {
+            return dbContext.ProjectDocuments
+                .Include(x => x.Project)
+                    .ThenInclude(x => x.StormwaterJurisdiction)
+                .Include(x => x.FileResource)
+                    .ThenInclude(x => x.FileResourceMimeType)
+                .SingleOrDefault(x => x.ProjectDocumentID == projectDocumentID);
+        }
+
         public static List<ProjectDocumentSimpleDto> ListByProjectIDAsSimpleDto(HippocampDbContext dbContext, int projectID)
         {
             return GetProjectDocumentsImpl(dbContext)
@@ -50,16 +60,10 @@ namespace Hippocamp.EFModels.Entities
             return projectDocument;
         }
 
-        public static ProjectDocument Update(HippocampDbContext dbContext, ProjectDocument projectDocument, ProjectDocumentUpsertDto projectDocumentUpsertDto, FileResource fileResource)
+        public static ProjectDocument Update(HippocampDbContext dbContext, ProjectDocument projectDocument, ProjectDocumentUpdateDto projectDocumentUpdateDto)
         {
-            if (fileResource != null)
-            {
-                projectDocument.FileResource = fileResource;
-                projectDocument.UploadDate = DateTime.Now;
-            }
-            
-            projectDocument.DisplayName = projectDocumentUpsertDto.DisplayName;
-            projectDocument.DocumentDescription = projectDocumentUpsertDto.DocumentDescription;
+            projectDocument.DisplayName = projectDocumentUpdateDto.DisplayName;
+            projectDocument.DocumentDescription = projectDocumentUpdateDto.DocumentDescription;
 
             dbContext.SaveChanges(); 
             dbContext.Entry(projectDocument).Reload();

@@ -10,6 +10,8 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { environment } from 'src/environments/environment';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -19,9 +21,11 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   @ViewChild('fileUpload') fileUpload: any;
   @ViewChild('deleteAttachmentModal') deleteAttachmentModal: any;
+  @ViewChild('editAttachmentModal') editAttachmentModal: any
 
   public currentUser: PersonDto;
-  
+  public richTextTypeID = CustomRichTextType.ProjectAttachments;
+
   public projectID: number;
   public model: ProjectDocumentUpsertDto;
   public attachments: Array<ProjectDocumentSimpleDto>;
@@ -36,10 +40,14 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   public fileName: string;
   private modalReference: NgbModalRef;
   private isLoadingDelete = false;
+  private isLoadingUpdate = false;
   private mainAppApiUrl = environment.mainAppApiUrl;
 
   private acceptedFileTypes: Array<string> = ["PDF", "ZIP", "DOC", "DOCX", "XLS", "XLSX", "JPG", "PNG"];
-  attachmentIDToRemove: number;
+  public attachmentIDToRemove: number;
+
+  public editModel: ProjectDocumentUpdateDto;
+  public editAttachmentID: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -94,7 +102,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     if (!file) {
       return ""
     }
-
     return file.name;
   }
 
@@ -109,8 +116,18 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   public isFieldInvalid(fieldName: string) {
     return this.invalidFields.indexOf(fieldName) > -1;
   }
-  
-  private launchModal(modalContent: any, attachmentIDToRemove: number): void {
+
+  private mapProjectDocumentSimpleDtoToUpdate(projectDocumentSimpleDto: ProjectDocumentSimpleDto): ProjectDocumentUpdateDto {
+    let projectDocumentUpdateDto = new ProjectDocumentUpdateDto()
+
+    projectDocumentUpdateDto.DisplayName = projectDocumentSimpleDto.DisplayName;
+    projectDocumentUpdateDto.ProjectID = projectDocumentSimpleDto.ProjectID;
+    projectDocumentUpdateDto.DocumentDescription = projectDocumentSimpleDto.DocumentDescription;
+
+    return projectDocumentUpdateDto;
+  }
+
+  public launchDeleteModal(modalContent: any, attachmentIDToRemove: number): void {
     this.attachmentIDToRemove = attachmentIDToRemove;
     this.modalReference = this.modalService.open(
       modalContent, 
@@ -119,8 +136,23 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
       });
   }
 
+  public launchEditModal(modalContent: any, attachment: ProjectDocumentSimpleDto): void {
+    this.editAttachmentID = attachment.ProjectDocumentID;
+    this.editModel = this.mapProjectDocumentSimpleDtoToUpdate(attachment);
+
+    this.modalReference = this.modalService.open(
+      modalContent, 
+      { 
+        ariaLabelledBy: 'editAttachmentModal', beforeDismiss: () => this.checkIfUpdating(), backdrop: 'static', keyboard: false
+      });
+  }
+
   private checkIfDeleting(): boolean {
     return this.isLoadingDelete;
+  }
+
+  private checkIfUpdating(): boolean {
+    return this.isLoadingUpdate;
   }
 
   public deleteAttachment() { 
@@ -160,18 +192,34 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
     this.projectService.addAttachmentByProjectID(this.projectID, this.model)
       .subscribe(response => {
-        this.onSubmitSuccess(addAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully added.", this.projectID);
+        this.onSubmitSuccess(addAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully added.");
       }, error => {
         this.onSubmitFailure(error);
       });
   }
 
-  private onSubmitSuccess(addAttachmentForm: HTMLFormElement, successMessage: string, projectID: number) {
+  public onEditSubmit(editAttachmentForm: HTMLFormElement): void {
+    this.isLoadingSubmit = true;
+    this.isLoadingUpdate = true;
+    this.invalidFields = [];
+    this.alertService.clearAlerts();
+
+    this.projectService.updateAttachmentByID(this.editAttachmentID, this.editModel)
+      .subscribe(response => {
+        this.isLoadingUpdate = false;
+        this.modalReference.close('editAttachmentModal');
+        this.onSubmitSuccess(editAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully updated.");
+      }, error => {
+        this.onSubmitFailure(error);
+      });
+  }
+
+  private onSubmitSuccess(addAttachmentForm: HTMLFormElement, successMessage: string) {
     this.resetAttachmentForm(addAttachmentForm);
-    this.isLoadingSubmit = false;    
-    this.router.navigateByUrl(`/projects/edit/${projectID}/attachments`).then(() => {
-      this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
-    });
+    this.isLoadingSubmit = false;
+    this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
+    window.scroll(0,0);
+    this.cdr.detectChanges();
   }
 
   private onSubmitFailure(error) {

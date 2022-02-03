@@ -95,17 +95,20 @@ namespace Hippocamp.API.Controllers
             return Ok(projectDocuments);
         }
 
+        [HttpGet("projects/attachments/{attachmentID}")]
+        [JurisdictionEditFeature]
+        public ActionResult<ProjectDocumentSimpleDto> GetAttachmentByID([FromRoute] int attachmentID)
+        {
+            var projectDocument = ProjectDocuments.GetByID(_dbContext, attachmentID);
+            return Ok(projectDocument.AsSimpleDto());
+        }
+
         [HttpPost("projects/{projectID}/attachments")]
         [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
         [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDocumentSimpleDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (projectDocumentUpsertDto.DisplayName == null || projectDocumentUpsertDto.DisplayName == "null" || projectDocumentUpsertDto.DisplayName == "undefined")
             {
                 return BadRequest("Display Name is required");
@@ -129,23 +132,11 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpPut("projects/attachments/{attachmentID}")]
-        [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
         [JurisdictionEditFeature]
-        public async Task<ActionResult<ProjectDocumentSimpleDto>> UpdateAttachment([FromRoute] int attachmentID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
+        public ActionResult<ProjectDocumentSimpleDto> UpdateAttachment([FromRoute] int attachmentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (projectDocumentUpsertDto.DisplayName == null || projectDocumentUpsertDto.DisplayName == "null" || projectDocumentUpsertDto.DisplayName == "undefined")
-            {
-                return BadRequest("Display Name is required");
-            }
-
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDocument = ProjectDocuments.GetByID(_dbContext, attachmentID);
+            var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;
@@ -154,14 +145,8 @@ namespace Hippocamp.API.Controllers
             {
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
-            FileResource fileResource = null;
-            if (projectDocumentUpsertDto.FileResource != null)
-            {
-                fileResource = await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, _dbContext, HttpContext);
-                _dbContext.FileResources.Add(fileResource);
-            }
 
-            var updatedProjectDocument = ProjectDocuments.Update(_dbContext, projectDocument, projectDocumentUpsertDto, fileResource);
+            var updatedProjectDocument = ProjectDocuments.Update(_dbContext, projectDocument, projectDocumentUpdateDto);
 
             return Ok(updatedProjectDocument.AsSimpleDto());
         }

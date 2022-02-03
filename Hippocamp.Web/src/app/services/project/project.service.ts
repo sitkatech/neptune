@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
+import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 
 
 @Injectable({
@@ -47,6 +48,11 @@ export class ProjectService {
     return this.apiService.getFromApi(route);
   }
 
+  getAttachmentByID(attachmentID: number): Observable<ProjectDocumentSimpleDto> {
+    let route = `/projects/attachments/${attachmentID}`;
+    return this.apiService.getFromApi(route);
+  }
+
   addAttachmentByProjectID(projectID: number, attachment: ProjectDocumentUpsertDto): Observable<ProjectDocumentSimpleDto> {
     // we need to do it this way because the apiService.postToApi does a json.stringify, which won't work for input type="file"
     let formData = new FormData();
@@ -71,27 +77,9 @@ export class ProjectService {
     return result;
   }
 
-  updateAttachmentByID(attachmentID: number, attachmentUpsert: ProjectDocumentUpsertDto): Observable<ProjectDocumentSimpleDto> {
-    // we need to do it this way because the apiService.putToApi does a json.stringify, which won't work for input type="file"
-    let formData = new FormData();
-    formData.append("DisplayName", attachmentUpsert.DisplayName);
-    if(attachmentUpsert.DocumentDescription !== undefined) {
-      formData.append("DocumentDescription", attachmentUpsert.DocumentDescription);
-    }
-    formData.append("FileResource", attachmentUpsert.FileResource);
-    
-    const mainAppApiUrl = environment.mainAppApiUrl;
-    const route = `${mainAppApiUrl}/projects/attachments/${attachmentID}/`;
-    var result = this.httpClient.put<any>(route, formData)
-    .pipe(
-      map((response: any) => {
-        return this.apiService.handleResponse(response);
-      }),
-      catchError((error: any) => {
-        return this.apiService.handleError(error);
-      })
-    );
-    return result;
+  updateAttachmentByID(attachmentID: number, attachmentUpdate: ProjectDocumentUpdateDto): Observable<ProjectDocumentSimpleDto> {
+    let route = `/projects/attachments/${attachmentID}`;
+    return this.apiService.putToApi(route, attachmentUpdate);
   }
 
   deleteAttachmentByID(attachmentID: number) {
