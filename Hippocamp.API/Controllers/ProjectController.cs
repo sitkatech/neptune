@@ -171,7 +171,7 @@ namespace Hippocamp.API.Controllers
         public IActionResult DeleteAttachment([FromRoute] int attachmentID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDocument = _dbContext.ProjectDocuments.SingleOrDefault(x => x.ProjectDocumentID == attachmentID);
+            var projectDocument = ProjectDocuments.GetProjectDocumentsImpl(_dbContext).SingleOrDefault(x => x.ProjectDocumentID == attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;

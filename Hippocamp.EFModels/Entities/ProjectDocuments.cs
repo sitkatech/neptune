@@ -8,10 +8,11 @@ namespace Hippocamp.EFModels.Entities
 {
     public class ProjectDocuments
     {
-        private static IQueryable<ProjectDocument> GetProjectDocumentsImpl(HippocampDbContext dbContext)
+        public static IQueryable<ProjectDocument> GetProjectDocumentsImpl(HippocampDbContext dbContext)
         {
             return dbContext.ProjectDocuments
                 .Include(x => x.Project)
+                    .ThenInclude(x => x.StormwaterJurisdiction)
                 .Include(x => x.FileResource)
                     .ThenInclude(x => x.FileResourceMimeType)
                 .AsNoTracking();

@@ -9,6 +9,7 @@ import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { environment } from 'src/environments/environment';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -17,6 +18,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   @ViewChild('fileUpload') fileUpload: any;
+  @ViewChild('deleteAttachmentModal') deleteAttachmentModal: any;
 
   public currentUser: PersonDto;
   
@@ -32,10 +34,12 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   public invalidFields: Array<string> = [];
 
   public fileName: string;
-  
+  private modalReference: NgbModalRef;
+  private isLoadingDelete = false;
   private mainAppApiUrl = environment.mainAppApiUrl;
 
   private acceptedFileTypes: Array<string> = ["PDF", "ZIP", "DOC", "DOCX", "XLS", "XLSX", "JPG", "PNG"];
+  attachmentIDToRemove: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,7 +47,8 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     private authenticationService: AuthenticationService,
     private projectService: ProjectService,
     private cdr: ChangeDetectorRef,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -103,6 +108,34 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
   public isFieldInvalid(fieldName: string) {
     return this.invalidFields.indexOf(fieldName) > -1;
+  }
+  
+  private launchModal(modalContent: any, attachmentIDToRemove: number): void {
+    this.attachmentIDToRemove = attachmentIDToRemove;
+    this.modalReference = this.modalService.open(
+      modalContent, 
+      { 
+        ariaLabelledBy: 'deleteAttachmentModal', beforeDismiss: () => this.checkIfDeleting(), backdrop: 'static', keyboard: false
+      });
+  }
+
+  private checkIfDeleting(): boolean {
+    return this.isLoadingDelete;
+  }
+
+  public deleteAttachment() { 
+    this.isLoadingDelete = true;
+
+    this.projectService.deleteAttachmentByID(this.attachmentIDToRemove).subscribe(() => {
+      this.isLoadingDelete = false;
+      this.modalReference.close();
+      this.alertService.pushAlert(new Alert('Attachment was successfully deleted.', AlertContext.Success, true));
+      this.refreshAttachments();
+    }, error => {
+      this.isLoadingDelete = false;
+      window.scroll(0,0);
+      this.cdr.detectChanges();
+    });
   }
 
   refreshAttachments(): void {

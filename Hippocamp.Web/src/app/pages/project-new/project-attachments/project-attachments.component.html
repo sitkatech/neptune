@@ -109,8 +109,10 @@
                         {{attachment.DisplayName}}
                     </div>
                     <div class="col-1">
-                        <!-- <span class="float-right" (click)="launchModal(removeAccountModalContent, currentAccount.Account)"><i class="fas fa-trash remove-account"
-                            title="Remove Account from Accounts you manage"></i></span> -->
+                        <span class="float-right" (click)="launchModal(deleteAttachmentModal, attachment.ProjectDocumentID)">
+                                <hippocamp-icon icon="delete" class="file" title="Delete Attachment" container="body">
+                                </hippocamp-icon>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -133,3 +135,26 @@
         </div>
     </div>
 </div>
+
+<ng-template #deleteAttachmentModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-white" id="deleteAttachmentModalTitle">Delete Attachment</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>
+            Are you sure you wish to delete this attachment?
+            <br/>
+            This action cannot be undone
+        </p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-sm" (click)="deleteAttachment()">
+                <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
+                Delete
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
+        </div>
+    </div>
+</ng-template>
