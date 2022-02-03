@@ -13,7 +13,14 @@ model/person-create-dto.ts
 model/person-dto.ts
 model/person-simple-dto.ts
 model/project-create-dto.ts
+model/project-document-dto.ts
+model/project-dto.ts
 model/project-simple-dto.ts
+model/project-status-dto.ts
 model/project-status-simple-dto.ts
 model/role-dto.ts
+model/state-province-dto.ts
+model/stormwater-jurisdiction-dto.ts
+model/stormwater-jurisdiction-public-bmp-visibility-type-dto.ts
+model/stormwater-jurisdiction-public-wqmp-visibility-type-dto.ts
 model/stormwater-jurisdiction-simple-dto.ts

@@ -38,6 +38,7 @@ import { ProjectBasicsComponent } from './pages/project-new/project-basics/proje
 import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
+import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -63,6 +64,7 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     ProjectBasicsComponent,
     ProjectInstructionsComponent,
     TreatmentBmpsComponent,
+    ProjectAttachmentsComponent,
   ],
   imports: [
     AppRoutingModule,
