@@ -18,7 +18,8 @@
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input"
                                     id="fileResource"
-                                    #fileUpload (change)="fileEvent()" />    
+                                    #fileUpload (change)="fileEvent()"
+                                    [ngClass]='{"field-invalid": isFieldInvalid("FileResource")}' />    
                                 <label class="custom-file-label"
                                     for="fileResource">
                                     {{getFileName()}}
@@ -76,7 +77,8 @@
                                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                                 Save
                             </button>
-                            <button type="reset" class="btn btn-secondary ml-1" [disabled]="isLoadingSubmit">
+                            <button type="reset" class="btn btn-secondary ml-1" [disabled]="isLoadingSubmit"
+                                (click)="resetAttachmentForm(addAttachmentForm)">
                                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                                 Clear
                             </button>

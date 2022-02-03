@@ -130,8 +130,7 @@ export class ApiService {
                 this.alertService.pushNotFoundUnauthorizedAlert();
                 this.router.navigate(["/"]);
             } else if (error.error && typeof error.error === 'string') {
-                this.alertService.pushNotFoundUnauthorizedAlert();
-                this.alertService.pushAlert(new Alert(error.error));
+                this.alertService.pushAlert(new Alert(error.error, AlertContext.Danger));
             } else if (error.error && error.status === 404) {
                 // let the caller handle not found appropriate to whatever it was doing
             } else if (error.error && !(error.error instanceof ProgressEvent)) {

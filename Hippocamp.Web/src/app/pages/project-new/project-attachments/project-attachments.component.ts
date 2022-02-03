@@ -55,7 +55,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.cdr.detach();
   }
-
   
   fileEvent() {
     let file = this.getFile();
@@ -63,7 +62,8 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.displayErrors = false;
     this.requiredFileIsUploaded = true;
 
-    if (file && file.name.split(".").pop().toUpperCase() != "DOCX") {
+    if (file && !this.acceptedFileTypes.includes(file.name.split(".").pop().toUpperCase())) {
+      this.invalidFields.push("FileResource");
       this.displayFileErrors = true;
     } else {
       this.displayFileErrors = false;
@@ -92,6 +92,17 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.fileUpload.nativeElement.click();
   }
 
+  public isFieldInvalid(fieldName: string) {
+    return this.invalidFields.indexOf(fieldName) > -1;
+  }
+
+  resetAttachmentForm(addAttachmentForm: HTMLFormElement): void {
+    addAttachmentForm.reset();
+    //clear file field manually
+    this.fileUpload.nativeElement.value = "";
+    this.model.FileResource = null;
+  }
+
   public onSubmit(addAttachmentForm: HTMLFormElement): void {
     this.isLoadingSubmit = true;
     this.invalidFields = [];
@@ -105,14 +116,8 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public isFieldInvalid(fieldName: string) {
-    return this.invalidFields.indexOf(fieldName) > -1;
-  }
-
   private onSubmitSuccess(addAttachmentForm: HTMLFormElement, successMessage: string, projectID: number) {
-    addAttachmentForm.reset();
-    //clear file field manually
-    this.fileUpload.nativeElement.value = "";
+    this.resetAttachmentForm(addAttachmentForm);
     this.isLoadingSubmit = false;    
     this.router.navigateByUrl(`/projects/edit/${projectID}/attachments`).then(() => {
       this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));

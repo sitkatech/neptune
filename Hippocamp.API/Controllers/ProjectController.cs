@@ -106,6 +106,11 @@ namespace Hippocamp.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (projectDocumentUpsertDto.DisplayName == null || projectDocumentUpsertDto.DisplayName == "null" || projectDocumentUpsertDto.DisplayName == "undefined")
+            {
+                return BadRequest("Display Name is required");
+            }
+
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
@@ -133,6 +138,12 @@ namespace Hippocamp.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if (projectDocumentUpsertDto.DisplayName == null || projectDocumentUpsertDto.DisplayName == "null" || projectDocumentUpsertDto.DisplayName == "undefined")
+            {
+                return BadRequest("Display Name is required");
+            }
+
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectDocument = ProjectDocuments.GetByID(_dbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
