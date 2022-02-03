@@ -60,7 +60,7 @@ export class TreatmentBmpsComponent implements OnInit {
   public selectedListItem: number;
   public selectedListItemDetails: { [key: string]: any } = {};
   public selectedObjectLayer: Layer;
-  public selectedDto: TreatmentBMPUpsertDto;
+  public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: GeoJSON<any>;
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
@@ -224,14 +224,14 @@ export class TreatmentBmpsComponent implements OnInit {
     this.selectedListItem = treatmentBMPID;
     let selectedNumber = null;
     let selectedAttributes = null;
-    this.selectedDto = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     selectedAttributes = [
-      `<strong>Type:</strong> ${this.selectedDto.TreatmentBMPTypeName}`,
-      `<strong>Latitude:</strong> ${this.selectedDto.Latitude}`,
-      `<strong>Longitude:</strong> ${this.selectedDto.Longitude}`
+      `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
+      `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
+      `<strong>Longitude:</strong> ${this.selectedTreatmentBMP.Longitude}`
     ];
 
-    if (this.selectedDto) {
+    if (this.selectedTreatmentBMP) {
       this.selectedObjectLayer = new L.GeoJSON(feature, {
         pointToLayer: (feature, latlng) => {
           return L.marker(latlng, { icon: this.markerIconSelected, zIndexOffset: 1000 });
