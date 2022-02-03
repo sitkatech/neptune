@@ -630,6 +630,46 @@
         }
       }
     },
+    "/treatmentBMPs/{projectID}/getByProjectID": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": [
@@ -1403,6 +1443,48 @@
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPUpsertDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "WatershedName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

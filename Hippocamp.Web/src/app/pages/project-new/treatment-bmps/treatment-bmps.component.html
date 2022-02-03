@@ -10,7 +10,7 @@
                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                 (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
                 {{treatmentBMP.TreatmentBMPName}}
-                <p class="small mb-0">Type #{{treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName}}</p>
+                <p class="small mb-0">Type: {{treatmentBMP.TreatmentBMPTypeName}}</p>
             </li>
         </ul>
     </div>
@@ -25,7 +25,7 @@
                 <h2 class="ml-3">{{selectedDto.TreatmentBMPName}}</h2>
             </div>
             <div class="col-xs-12 col-sm-6 col-lg-4 mt-4 mb-lg-4">
-                <p class="ml-3"><strong>Type</strong> {{selectedDto.TreatmentBMPType.TreatmentBMPTypeName}}</p>
+                <p class="ml-3"><strong>Type</strong> {{selectedDto.TreatmentBMPTypeName}}</p>
             </div>
             <div class="col-xs-12 col-sm-6 col-lg-4 mt-4 mb-lg-4">
                 <p class="ml-3"><strong>Latitude</strong> {{selectedDto.Latitude}}</p>

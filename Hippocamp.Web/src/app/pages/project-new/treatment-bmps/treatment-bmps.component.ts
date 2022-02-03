@@ -1,4 +1,4 @@
-import { AfterViewInit, ApplicationRef, Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as L from 'leaflet';
 import {
   Control, FitBoundsOptions,
@@ -19,6 +19,9 @@ import 'leaflet.fullscreen';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { BoundingBoxDto } from 'src/app/shared/models/bounding-box-dto';
 import { Feature } from 'geojson';
+import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
+import { ActivatedRoute } from '@angular/router';
+import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 
 declare var $: any
 
@@ -30,20 +33,13 @@ declare var $: any
 export class TreatmentBmpsComponent implements OnInit {
 
   public mapID: string = 'poolDetailMap';
-
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
-
-  public treatmentBMPs: Array<TreatmentBMPUpsertDto> = [];
-
+  public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
-
-  public onEachFeatureCallback?: (feature, layer) => void;
-
   public zoomMapToDefaultExtent: boolean = true;
-
   public mapHeight: string = '400px';
-
   public defaultFitBoundsOptions?: FitBoundsOptions = null;
+  public onEachFeatureCallback?: (feature, layer) => void;
 
   @Output()
   public afterSetControl: EventEmitter<Control.Layers> = new EventEmitter();
@@ -55,7 +51,6 @@ export class TreatmentBmpsComponent implements OnInit {
   public onMapMoveEnd: EventEmitter<LeafletEvent> = new EventEmitter();
 
   public component: any;
-
   public map: Map;
   public featureLayer: any;
   public layerControl: Control.Layers;
@@ -70,38 +65,25 @@ export class TreatmentBmpsComponent implements OnInit {
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
+  public projectID: number;
 
   constructor(
-//    private treatmentBMPService: TreatmentBMPService,
+    private treatmentBMPService: TreatmentBMPService,
     private appRef: ApplicationRef,
-    private compileService: CustomCompileService
+    private compileService: CustomCompileService,
+    private route: ActivatedRoute,
   ) {
   }
 
   public ngOnInit(): void {
-    const treatmentBMPsFromApi = [];
-    const treatmentBMP1 = new TreatmentBMPUpsertDto();
-    treatmentBMP1.TreatmentBMPID = 1;
-    treatmentBMP1.TreatmentBMPName = "BMP 1";
-    treatmentBMP1.TreatmentBMPType = { TreatmentBMPTypeID: 1, TreatmentBMPTypeName: "Type 1"};
-    treatmentBMP1.Longitude = -117.76;
-    treatmentBMP1.Latitude = 33.53;
-    treatmentBMPsFromApi.push(treatmentBMP1)
-    const treatmentBMP2 = new TreatmentBMPUpsertDto();
-    treatmentBMP2.TreatmentBMPID = 2;
-    treatmentBMP2.TreatmentBMPName = "BMP 2";
-    treatmentBMP2.TreatmentBMPType = { TreatmentBMPTypeID: 1, TreatmentBMPTypeName: "Type 1"};
-    treatmentBMP2.Longitude = -117.96;
-    treatmentBMP2.Latitude = 33.63;
-    treatmentBMPsFromApi.push(treatmentBMP2)
-    const treatmentBMP3 = new TreatmentBMPUpsertDto();
-    treatmentBMP3.TreatmentBMPID = 3;
-    treatmentBMP3.TreatmentBMPName = "BMP 3";
-    treatmentBMP3.TreatmentBMPType = { TreatmentBMPTypeID: 2, TreatmentBMPTypeName: "Type 2"};
-    treatmentBMP3.Longitude = -117.86;
-    treatmentBMP3.Latitude = 33.73;
-    treatmentBMPsFromApi.push(treatmentBMP3)
-    this.treatmentBMPs = treatmentBMPsFromApi;
+    const projectID = this.route.snapshot.paramMap.get("projectID");
+    if (projectID) {
+      this.projectID = parseInt(projectID);
+      const bmps = this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
+        this.treatmentBMPs = treatmentBMPs;
+        this.updateMapLayers();
+      })
+    }
 
     // Default bounding box
     this.boundingBox = new BoundingBoxDto();
@@ -127,7 +109,7 @@ export class TreatmentBmpsComponent implements OnInit {
     this.compileService.configure(this.appRef);
   }
 
-  public ngAfterViewInit(): void {
+  public updateMapLayers(): void {
 
     const mapOptions: MapOptions = {
       // center: [46.8797, -110],
@@ -182,7 +164,6 @@ export class TreatmentBmpsComponent implements OnInit {
         return treatmentBMPGeoJson;
       })  
     }
-    
   }
 
   private mapTreatmentBMPToFeature(x: TreatmentBMPUpsertDto) {
@@ -195,7 +176,7 @@ export class TreatmentBmpsComponent implements OnInit {
       "properties": {
         TreatmentBMPID: x.TreatmentBMPID,
         TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPType: x.TreatmentBMPType,
+        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
         Latitude: x.Latitude,
         Longitude: x.Longitude
       }
@@ -245,7 +226,7 @@ export class TreatmentBmpsComponent implements OnInit {
     let selectedAttributes = null;
     this.selectedDto = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     selectedAttributes = [
-      `<strong>Type:</strong> ${this.selectedDto.TreatmentBMPType}`,
+      `<strong>Type:</strong> ${this.selectedDto.TreatmentBMPTypeName}`,
       `<strong>Latitude:</strong> ${this.selectedDto.Latitude}`,
       `<strong>Longitude:</strong> ${this.selectedDto.Longitude}`
     ];
@@ -261,19 +242,4 @@ export class TreatmentBmpsComponent implements OnInit {
       this.selectedListItemDetails.attributes = selectedAttributes;
     }
   }
-}
-
-class TreatmentBMPUpsertDto
-{
-  TreatmentBMPID: number;
-  TreatmentBMPName: string;
-  Latitude: number;
-  Longitude: number;
-  TreatmentBMPType: TreatmentBMPTypeSimpleDto;
-}
-
-class TreatmentBMPTypeSimpleDto
-{
-  TreatmentBMPTypeID: number;
-  TreatmentBMPTypeName: string;
 }

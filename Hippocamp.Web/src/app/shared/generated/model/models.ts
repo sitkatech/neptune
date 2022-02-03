@@ -15,3 +15,4 @@ export * from '././project-simple-dto';
 export * from '././project-status-simple-dto';
 export * from '././role-dto';
 export * from '././stormwater-jurisdiction-simple-dto';
+export * from '././treatment-bmp-upsert-dto';
