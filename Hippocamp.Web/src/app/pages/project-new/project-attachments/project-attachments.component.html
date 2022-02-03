@@ -90,3 +90,33 @@
         </div>
     </div>
 </div>
+
+<div class="row mt-2 mb-4" *ngIf="attachments && attachments.length > 0">
+    <div class="col-lg-6 mb-4" *ngFor="let attachment of attachments">
+        <div class="card h-100 mr-4 mt-2 mb-2">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-11 card-header-name">
+                        {{attachment.DisplayName}}
+                    </div>
+                    <div class="col-1">
+                        <!-- <span class="float-right" (click)="launchModal(removeAccountModalContent, currentAccount.Account)"><i class="fas fa-trash remove-account"
+                            title="Remove Account from Accounts you manage"></i></span> -->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-6 label text-right"><strong>Uploaded On: </strong></div>
+                    <div class="col-12 col-sm-6 text-left">{{attachment.UploadDate | date:'shortDate'}}</div>
+                    <div class="col-12 col-sm-6 label text-right"><strong>File Type: </strong></div>
+                    <div class="col-12 col-sm-6 text-left"></div>
+                    <div class="col-12 col-sm-6 label text-right"><strong>Description: </strong></div>
+                    <div class="col-12 col-sm-6 text-left">{{attachment.DocumentDescription}}</div>
+                    
+                </div>
+      
+            </div>
+        </div>
+    </div>
+</div>

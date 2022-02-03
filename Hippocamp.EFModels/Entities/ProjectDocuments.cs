@@ -22,11 +22,11 @@ namespace Hippocamp.EFModels.Entities
                 .SingleOrDefault(x => x.ProjectDocumentID == projectDocumentID);
         }
 
-        public static List<ProjectDocumentDto> ListByProjectID(HippocampDbContext dbContext, int projectID)
+        public static List<ProjectDocumentSimpleDto> ListByProjectIDAsSimpleDto(HippocampDbContext dbContext, int projectID)
         {
             return GetProjectDocumentsImpl(dbContext)
                 .Where(x => x.ProjectID == projectID)
-                .Select(x => x.AsDto())
+                .Select(x => x.AsSimpleDto())
                 .ToList();
         }
 
@@ -38,7 +38,7 @@ namespace Hippocamp.EFModels.Entities
                 FileResource = fileResource,
                 DisplayName = projectDocumentUpsertDto.DisplayName,
                 DocumentDescription = projectDocumentUpsertDto.DocumentDescription,
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now.Date
             };
 
             dbContext.ProjectDocuments.Add(projectDocument);

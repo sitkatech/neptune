@@ -9,13 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ProjectDto } from '././project-dto';
-import { FileResourceDto } from '././file-resource-dto';
 
-export class ProjectDocumentDto { 
+export class ProjectDocumentSimpleDto { 
     ProjectDocumentID?: number;
-    FileResource?: FileResourceDto;
-    Project?: ProjectDto;
+    FileResourceID?: number;
+    ProjectID?: number;
     DisplayName?: string;
     UploadDate?: string;
     DocumentDescription?: string;

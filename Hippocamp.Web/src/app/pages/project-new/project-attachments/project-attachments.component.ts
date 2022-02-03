@@ -7,6 +7,7 @@ import { ProjectDocumentUpsertDto } from 'src/app/shared/models/project-document
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -20,6 +21,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   
   public projectID: number;
   public model: ProjectDocumentUpsertDto;
+  public attachments: Array<ProjectDocumentSimpleDto>;
 
   public isLoadingSubmit: boolean = false;
   public requiredFileIsUploaded: boolean = false;
@@ -47,9 +49,9 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.model.ProjectID = this.projectID;
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-
       this.cdr.detectChanges();
     });
+    this.refreshAttachments();
   }
 
   ngOnDestroy() {
@@ -96,11 +98,20 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     return this.invalidFields.indexOf(fieldName) > -1;
   }
 
+  refreshAttachments(): void {
+    this.projectService.getAttachmentsByProjectID(this.projectID).subscribe(attachments => {
+      this.attachments = attachments;
+      console.log(this.attachments);
+      this.cdr.detectChanges();
+    });
+  }
+
   resetAttachmentForm(addAttachmentForm: HTMLFormElement): void {
     addAttachmentForm.reset();
     //clear file field manually
     this.fileUpload.nativeElement.value = "";
     this.model.FileResource = null;
+    this.refreshAttachments();
   }
 
   public onSubmit(addAttachmentForm: HTMLFormElement): void {

@@ -3,11 +3,11 @@ import { ApiService } from 'src/app/shared/services';
 import { Observable } from 'rxjs';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
-import { ProjectDocumentDto } from 'src/app/shared/generated/model/project-document-dto';
 import { ProjectDocumentUpsertDto } from 'src/app/shared/models/project-document-upsert-dto';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
+import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 
 
 @Injectable({
@@ -42,12 +42,12 @@ export class ProjectService {
     return this.apiService.deleteToApi(route);
   }
 
-  getAttachmentsByID(projectID: number): Observable<ProjectDocumentDto> {
+  getAttachmentsByProjectID(projectID: number): Observable<Array<ProjectDocumentSimpleDto>> {
     let route = `/projects/${projectID}/attachments`;
     return this.apiService.getFromApi(route);
   }
 
-  addAttachmentByProjectID(projectID: number, attachment: ProjectDocumentUpsertDto): Observable<ProjectDocumentDto> {
+  addAttachmentByProjectID(projectID: number, attachment: ProjectDocumentUpsertDto): Observable<ProjectDocumentSimpleDto> {
     // we need to do it this way because the apiService.postToApi does a json.stringify, which won't work for input type="file"
     let formData = new FormData();
     formData.append("ProjectID", attachment.ProjectID.toString());
@@ -71,7 +71,7 @@ export class ProjectService {
     return result;
   }
 
-  updateAttachmentByID(attachmentID: number, attachmentUpsert: ProjectDocumentUpsertDto): Observable<ProjectDocumentDto> {
+  updateAttachmentByID(attachmentID: number, attachmentUpsert: ProjectDocumentUpsertDto): Observable<ProjectDocumentSimpleDto> {
     // we need to do it this way because the apiService.putToApi does a json.stringify, which won't work for input type="file"
     let formData = new FormData();
     formData.append("DisplayName", attachmentUpsert.DisplayName);

@@ -84,14 +84,14 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("projects/{projectID}/attachments")]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectDocumentDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
+        public ActionResult<List<ProjectDocumentSimpleDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
         {
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
                 return actionResult;
             }
-            var projectDocuments = ProjectDocuments.ListByProjectID(_dbContext, projectID);
+            var projectDocuments = ProjectDocuments.ListByProjectIDAsSimpleDto(_dbContext, projectID);
             return Ok(projectDocuments);
         }
 

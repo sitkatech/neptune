@@ -544,7 +544,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectDocumentDto"
+                    "$ref": "#/components/schemas/ProjectDocumentSimpleDto"
                   }
                 }
               },
@@ -552,7 +552,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectDocumentDto"
+                    "$ref": "#/components/schemas/ProjectDocumentSimpleDto"
                   }
                 }
               },
@@ -560,7 +560,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectDocumentDto"
+                    "$ref": "#/components/schemas/ProjectDocumentSimpleDto"
                   }
                 }
               }
@@ -1506,34 +1506,6 @@
         },
         "additionalProperties": false
       },
-      "ProjectDocumentDto": {
-        "type": "object",
-        "properties": {
-          "ProjectDocumentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResource": {
-            "$ref": "#/components/schemas/FileResourceDto"
-          },
-          "Project": {
-            "$ref": "#/components/schemas/ProjectDto"
-          },
-          "DisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "UploadDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "DocumentDescription": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ProjectDocumentSimpleDto": {
         "type": "object",
         "properties": {
@@ -1558,47 +1530,6 @@
             "format": "date-time"
           },
           "DocumentDescription": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProjectDto": {
-        "type": "object",
-        "properties": {
-          "ProjectID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectName": {
-            "type": "string",
-            "nullable": true
-          },
-          "Organization": {
-            "$ref": "#/components/schemas/OrganizationDto"
-          },
-          "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionDto"
-          },
-          "ProjectStatus": {
-            "$ref": "#/components/schemas/ProjectStatusDto"
-          },
-          "PrimaryContactPerson": {
-            "$ref": "#/components/schemas/PersonDto"
-          },
-          "CreatePerson": {
-            "$ref": "#/components/schemas/PersonDto"
-          },
-          "DateCreated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "ProjectDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "AdditionalContactInformation": {
             "type": "string",
             "nullable": true
           }
@@ -1666,28 +1597,6 @@
         },
         "additionalProperties": false
       },
-      "ProjectStatusDto": {
-        "type": "object",
-        "properties": {
-          "ProjectStatusID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectStatusName": {
-            "type": "string",
-            "nullable": true
-          },
-          "ProjectStatusDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "ProjectStatusSortOrder": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "ProjectStatusSimpleDto": {
         "type": "object",
         "properties": {
@@ -1726,82 +1635,6 @@
             "nullable": true
           },
           "RoleDescription": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "StateProvinceDto": {
-        "type": "object",
-        "properties": {
-          "StateProvinceID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "StateProvinceName": {
-            "type": "string",
-            "nullable": true
-          },
-          "StateProvinceAbbreviation": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "StormwaterJurisdictionDto": {
-        "type": "object",
-        "properties": {
-          "StormwaterJurisdictionID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Organization": {
-            "$ref": "#/components/schemas/OrganizationDto"
-          },
-          "StateProvince": {
-            "$ref": "#/components/schemas/StateProvinceDto"
-          },
-          "StormwaterJurisdictionPublicBMPVisibilityType": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionPublicBMPVisibilityTypeDto"
-          },
-          "StormwaterJurisdictionPublicWQMPVisibilityType": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionPublicWQMPVisibilityTypeDto"
-          }
-        },
-        "additionalProperties": false
-      },
-      "StormwaterJurisdictionPublicBMPVisibilityTypeDto": {
-        "type": "object",
-        "properties": {
-          "StormwaterJurisdictionPublicBMPVisibilityTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "StormwaterJurisdictionPublicBMPVisibilityTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "StormwaterJurisdictionPublicWQMPVisibilityTypeDto": {
-        "type": "object",
-        "properties": {
-          "StormwaterJurisdictionPublicWQMPVisibilityTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "StormwaterJurisdictionPublicWQMPVisibilityTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName": {
             "type": "string",
             "nullable": true
           }
