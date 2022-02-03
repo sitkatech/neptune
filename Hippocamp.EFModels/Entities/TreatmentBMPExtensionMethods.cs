@@ -3,7 +3,7 @@
 
 namespace Hippocamp.EFModels.Entities
 {
-    public static partial class TreatmentBMPUpsertDtoExtensionMethods
+    public static partial class TreatmentBMPExtensionMethods
     {
         public static TreatmentBMPUpsertDto AsUpsertDto(this TreatmentBMP treatmentBMP)
         {
@@ -21,6 +21,19 @@ namespace Hippocamp.EFModels.Entities
             };
 
             return treatmentBMPUpsertDto;
+        }
+
+        public static TreatmentBMPDisplayDto AsDisplayDto(this TreatmentBMP treatmentBMP)
+        {
+            var treatmentBMPDisplayDto = new TreatmentBMPDisplayDto()
+            {
+                TreatmentBMPName = treatmentBMP.TreatmentBMPName,
+                TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName,
+                Longitude = treatmentBMP.Longitude,
+                Latitude = treatmentBMP.Latitude
+            };
+
+            return treatmentBMPDisplayDto;
         }
     }
 }

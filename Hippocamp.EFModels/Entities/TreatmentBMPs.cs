@@ -24,5 +24,14 @@ namespace Hippocamp.EFModels.Entities
 
             return treatmentBMPUpsertDtos;
         }
+
+        public static List<TreatmentBMPDisplayDto> ListAsDisplayDto(HippocampDbContext dbContext)
+        {
+            var treatmentBMPDisplayDtos = GetTreatmentBMPsImpl(dbContext)
+                .Select(x => x.AsDisplayDto())
+                .ToList();
+
+            return treatmentBMPDisplayDtos;
+        }
     }
 }
