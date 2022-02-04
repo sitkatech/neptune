@@ -28,21 +28,21 @@ namespace Hippocamp.Models.DataTransferObjects
         public double? InfiltrationSurfaceArea { get; set; }
         public double? MediaBedFootprint { get; set; }
         public double? PermanentPoolorWetlandVolume { get; set; }
-        public int? RoutingConfigurationID { get; set; }
+        public RoutingConfigurationDto? RoutingConfiguration { get; set; }
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
         public double? SummerHarvestedWaterDemand { get; set; }
-        public int? TimeOfConcentrationID { get; set; }
+        public TimeOfConcentrationDto? TimeOfConcentration { get; set; }
         public double? DrawdownTimeForDetentionVolume { get; set; }
         public double? TotalEffectiveBMPVolume { get; set; }
         public double? TotalEffectiveDrywellBMPVolume { get; set; }
         public double? TreatmentRate { get; set; }
-        public int? UnderlyingHydrologicSoilGroupID { get; set; }
+        public UnderlyingHydrologicSoilGroupDto? UnderlyingHydrologicSoilGroup { get; set; }
         public double? UnderlyingInfiltrationRate { get; set; }
         public double? WaterQualityDetentionVolume { get; set; }
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
-        public int? MonthsOfOperationID { get; set; }
-        public int? DryWeatherFlowOverrideID { get; set; }
+        public MonthsOfOperationDto? MonthsOfOperation { get; set; }
+        public DryWeatherFlowOverrideDto? DryWeatherFlowOverride { get; set; }
 
     }
 }

@@ -20,6 +20,35 @@ export class TreatmentBMPUpsertDto {
     Longitude?: number;
     Latitude?: number;
     Notes?: string;
+    AverageDivertedFlowrate?: number;
+    AverageTreatmentFlowrate?: number;
+    DesignDryWeatherTreatmentCapacity?: number;
+    DesignLowFlowDiversionCapacity?: number;
+    DesignMediaFiltrationRate?: number;
+    DesignResidenceTimeforPermanentPool?: number;
+    DiversionRate?: number;
+    DrawdownTimeforWQDetentionVolume?: number;
+    EffectiveFootprint?: number;
+    EffectiveRetentionDepth?: number;
+    InfiltrationDischargeRate?: number;
+    InfiltrationSurfaceArea?: number;
+    MediaBedFootprint?: number;
+    PermanentPoolorWetlandVolume?: number;
+    RoutingConfigurationID?: number;
+    StorageVolumeBelowLowestOutletElevation?: number;
+    SummerHarvestedWaterDemand?: number;
+    TimeOfConcentrationID?: number;
+    DrawdownTimeForDetentionVolume?: number;
+    TotalEffectiveBMPVolume?: number;
+    TotalEffectiveDrywellBMPVolume?: number;
+    TreatmentRate?: number;
+    UnderlyingHydrologicSoilGroupID?: number;
+    UnderlyingInfiltrationRate?: number;
+    WaterQualityDetentionVolume?: number;
+    WettedFootprint?: number;
+    WinterHarvestedWaterDemand?: number;
+    MonthsOfOperationID?: number;
+    DryWeatherFlowOverrideID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

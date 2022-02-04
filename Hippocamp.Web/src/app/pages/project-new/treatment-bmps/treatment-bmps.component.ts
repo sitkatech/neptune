@@ -90,6 +90,7 @@ export class TreatmentBmpsComponent implements OnInit {
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID)
       }).subscribe(({treatmentBMPs, boundingBox}) => {
         this.treatmentBMPs = treatmentBMPs;
+        console.log(this.treatmentBMPs);
         this.boundingBox = boundingBox;
 
         this.updateMapLayers();

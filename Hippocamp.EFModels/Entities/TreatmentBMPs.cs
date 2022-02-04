@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Hippocamp.EFModels.Entities
 {
@@ -12,7 +14,8 @@ namespace Hippocamp.EFModels.Entities
             return dbContext.TreatmentBMPs
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
                 .Include(x => x.TreatmentBMPType)
-                .Include(x => x.Watershed);
+                .Include(x => x.Watershed)
+                .AsNoTracking();
         }
 
         private static IQueryable<TreatmentBMPModelingAttribute> GetTreatmentBMPModelingAttributesImpl(HippocampDbContext dbContext)
@@ -22,14 +25,26 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.TimeOfConcentration)
                 .Include(x => x.UnderlyingHydrologicSoilGroup)
                 .Include(x => x.MonthsOfOperation)
-                .Include(x => x.DryWeatherFlowOverride);
+                .Include(x => x.DryWeatherFlowOverride)
+                .AsNoTracking();
         }
 
         public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
         {
-            var treatmentBMPUpsertDtos = GetTreatmentBMPsImpl(dbContext)
-                .Where(x => x.ProjectID == projectID)
-                .Select(x => x.AsUpsertDto())
+            var treatmentBMPs = GetTreatmentBMPsImpl(dbContext)
+                .Where(x => x.ProjectID == projectID).ToList();
+
+            var treatmentBMPIDs = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
+
+            var treatmentBMPModelingAttributes = GetTreatmentBMPModelingAttributesImpl(dbContext)
+                .Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToList();
+
+            var treatmentBMPUpsertDtos = treatmentBMPs
+                .GroupJoin(treatmentBMPModelingAttributes,
+                    x => x.TreatmentBMPID,
+                    y => y.TreatmentBMPID,
+                    (x, y) => new {TreatmentBMP = x, TreatmentBmpModelingAttribute = y.SingleOrDefault()})
+                .Select(x => x.TreatmentBMP.AsUpsertDtoWithModelingAttributes(x.TreatmentBmpModelingAttribute))
                 .ToList();
 
             return treatmentBMPUpsertDtos;

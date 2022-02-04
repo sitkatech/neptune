@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 
-export class StormwaterJurisdictionPublicBMPVisibilityTypeDto { 
-    StormwaterJurisdictionPublicBMPVisibilityTypeID?: number;
-    StormwaterJurisdictionPublicBMPVisibilityTypeName?: string;
-    StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName?: string;
+export class ProjectDocumentUpdateDto { 
+    ProjectID: number;
+    DisplayName: string;
+    DocumentDescription?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

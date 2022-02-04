@@ -1201,6 +1201,24 @@
         },
         "additionalProperties": false
       },
+      "DryWeatherFlowOverrideDto": {
+        "type": "object",
+        "properties": {
+          "DryWeatherFlowOverrideID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DryWeatherFlowOverrideName": {
+            "type": "string",
+            "nullable": true
+          },
+          "DryWeatherFlowOverrideDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "FieldDefinitionDto": {
         "type": "object",
         "properties": {
@@ -1338,6 +1356,28 @@
           "CreateDate": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MonthsOfOperationDto": {
+        "type": "object",
+        "properties": {
+          "MonthsOfOperationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MonthsOfOperationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MonthsOfOperationDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MonthsOfOperationNereidAlias": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1873,6 +1913,24 @@
         },
         "additionalProperties": false
       },
+      "RoutingConfigurationDto": {
+        "type": "object",
+        "properties": {
+          "RoutingConfigurationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "RoutingConfigurationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoutingConfigurationDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "StormwaterJurisdictionSimpleDto": {
         "type": "object",
         "properties": {
@@ -1898,6 +1956,24 @@
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeOfConcentrationDto": {
+        "type": "object",
+        "properties": {
+          "TimeOfConcentrationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TimeOfConcentrationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TimeOfConcentrationDisplayName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2011,10 +2087,8 @@
             "format": "double",
             "nullable": true
           },
-          "RoutingConfigurationID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+          "RoutingConfiguration": {
+            "$ref": "#/components/schemas/RoutingConfigurationDto"
           },
           "StorageVolumeBelowLowestOutletElevation": {
             "type": "number",
@@ -2026,10 +2100,8 @@
             "format": "double",
             "nullable": true
           },
-          "TimeOfConcentrationID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+          "TimeOfConcentration": {
+            "$ref": "#/components/schemas/TimeOfConcentrationDto"
           },
           "DrawdownTimeForDetentionVolume": {
             "type": "number",
@@ -2051,10 +2123,8 @@
             "format": "double",
             "nullable": true
           },
-          "UnderlyingHydrologicSoilGroupID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+          "UnderlyingHydrologicSoilGroup": {
+            "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
           },
           "UnderlyingInfiltrationRate": {
             "type": "number",
@@ -2076,14 +2146,28 @@
             "format": "double",
             "nullable": true
           },
-          "MonthsOfOperationID": {
+          "MonthsOfOperation": {
+            "$ref": "#/components/schemas/MonthsOfOperationDto"
+          },
+          "DryWeatherFlowOverride": {
+            "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UnderlyingHydrologicSoilGroupDto": {
+        "type": "object",
+        "properties": {
+          "UnderlyingHydrologicSoilGroupID": {
             "type": "integer",
-            "format": "int32",
+            "format": "int32"
+          },
+          "UnderlyingHydrologicSoilGroupName": {
+            "type": "string",
             "nullable": true
           },
-          "DryWeatherFlowOverrideID": {
-            "type": "integer",
-            "format": "int32",
+          "UnderlyingHydrologicSoilGroupDisplayName": {
+            "type": "string",
             "nullable": true
           }
         },
