@@ -57,7 +57,9 @@ export class ProjectService {
     // we need to do it this way because the apiService.postToApi does a json.stringify, which won't work for input type="file"
     let formData = new FormData();
     formData.append("ProjectID", attachment.ProjectID.toString());
-    formData.append("DisplayName", attachment.DisplayName);
+    if(attachment.DisplayName !== undefined) {
+      formData.append("DisplayName", attachment.DisplayName);
+    }
     if(attachment.DocumentDescription !== undefined) {
       formData.append("DocumentDescription", attachment.DocumentDescription);
     }

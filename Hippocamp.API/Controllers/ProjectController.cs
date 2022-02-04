@@ -109,11 +109,6 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDocumentSimpleDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {
-            if (projectDocumentUpsertDto.DisplayName == null || projectDocumentUpsertDto.DisplayName == "null" || projectDocumentUpsertDto.DisplayName == "undefined")
-            {
-                return BadRequest("Display Name is required");
-            }
-
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
