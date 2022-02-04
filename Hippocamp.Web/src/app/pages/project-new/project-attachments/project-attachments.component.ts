@@ -143,7 +143,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.modalReference = this.modalService.open(
       modalContent, 
       { 
-        ariaLabelledBy: 'editAttachmentModal', beforeDismiss: () => this.checkIfUpdating(), backdrop: 'static', keyboard: false
+        ariaLabelledBy: 'editAttachmentModal', beforeDismiss: () => this.checkIfUpdating(), backdrop: 'static', keyboard: false, size: 'lg'
       });
   }
 

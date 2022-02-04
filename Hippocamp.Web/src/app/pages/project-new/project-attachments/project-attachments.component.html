@@ -157,11 +157,11 @@
             This action cannot be undone
         </p>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-sm" (click)="deleteAttachment()">
+            <button type="button" class="btn btn-danger btn-md" (click)="deleteAttachment()">
                 <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
                 Delete
             </button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
+            <button type="button" class="btn btn-secondary btn-md" (click)="modal.close('Cancel click')">Cancel</button>
         </div>
     </div>
 </ng-template>
@@ -200,11 +200,11 @@
                     <i class="fas fa-bolt"></i> Required field
                 </div>
                 <div class="col-sm-8 text-right">
-                    <button type="submit" class="btn btn-hippocamp ml-2" [disabled]="isLoadingSubmit">
+                    <button type="submit" class="btn btn-hippocamp btn-md ml-2" [disabled]="isLoadingSubmit">
                         <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                         Save
                     </button>
-                    <button type="button" class="btn btn-secondary ml-2" (click)="modal.close('Cancel click')">Cancel</button>
+                    <button type="button" class="btn btn-secondary btn-md ml-2" (click)="modal.close('Cancel click')">Cancel</button>
                 </div>
             </div>
     
