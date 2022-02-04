@@ -112,12 +112,12 @@ export class ApiService {
 
 
 
-    handleResponse(response: any): Observable<any> {
+    public handleResponse(response: any): Observable<any> {
         this.busyService.setBusy(false);
         return response;
     }
 
-    private handleError(error: any, supressErrorMessage = false, clearBusyGlobally = true): Observable<any> {
+    public handleError(error: any, supressErrorMessage = false, clearBusyGlobally = true): Observable<any> {
         if (clearBusyGlobally) {
             this.busyService.setBusy(false);
         }
@@ -130,8 +130,7 @@ export class ApiService {
                 this.alertService.pushNotFoundUnauthorizedAlert();
                 this.router.navigate(["/"]);
             } else if (error.error && typeof error.error === 'string') {
-                this.alertService.pushNotFoundUnauthorizedAlert();
-                this.alertService.pushAlert(new Alert(error.error));
+                this.alertService.pushAlert(new Alert(error.error, AlertContext.Danger));
             } else if (error.error && error.status === 404) {
                 // let the caller handle not found appropriate to whatever it was doing
             } else if (error.error && !(error.error instanceof ProgressEvent)) {

@@ -36,7 +36,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("users")]
         [UserViewFeature]
-        public ActionResult<PersonSimpleDto> List([FromRoute] int personID)
+        public ActionResult<PersonSimpleDto> List()
         {
             var userList = People.ListAsSimpleDto(_dbContext);
             return Ok(userList);

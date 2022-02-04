@@ -22,8 +22,6 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./project-basics.component.scss']
 })
 export class ProjectBasicsComponent implements OnInit {
-
-  private watchUserChangeSubscription: any;
   public currentUser: PersonDto;
   
   public projectID: number;
@@ -48,7 +46,7 @@ export class ProjectBasicsComponent implements OnInit {
 
   ngOnInit(): void {
     const projectID = this.route.snapshot.paramMap.get("projectID");
-    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
       this.projectModel = new ProjectCreateDto();
       if (projectID) {
@@ -74,17 +72,11 @@ export class ProjectBasicsComponent implements OnInit {
         }
       });
 
-      this.organizationService.getAllOrganizations().subscribe(organizations => {
-        this.organizations = organizations;
-      });
-
       this.cdr.detectChanges();
     });
   }
 
   ngOnDestroy() {
-    this.watchUserChangeSubscription.unsubscribe();
-    this.authenticationService.dispose();
     this.cdr.detach();
   }
 
@@ -103,7 +95,7 @@ export class ProjectBasicsComponent implements OnInit {
 
   private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string, projectID: number) {
     this.isLoadingSubmit = false;    
-    this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(x => {
+    this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(() => {
       this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
     });
   }

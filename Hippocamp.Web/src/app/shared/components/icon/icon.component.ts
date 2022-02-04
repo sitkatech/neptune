@@ -56,6 +56,10 @@ export class IconComponent implements OnInit, OnChanges {
         this.iconClass = "far fa-calendar";
         break;
       }
+      case 'file': {
+        this.iconClass = "fas fa-folder-open";
+        break;
+      }
       case 'spinner' : {
         this.iconClass = "fas fa-spinner loading-spinner";
         break;

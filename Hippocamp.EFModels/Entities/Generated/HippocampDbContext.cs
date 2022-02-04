@@ -95,6 +95,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypes { get; set; }
         public virtual DbSet<PriorityLandUseType> PriorityLandUseTypes { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<ProjectDocument> ProjectDocuments { get; set; }
         public virtual DbSet<ProjectStatus> ProjectStatuses { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
@@ -1286,6 +1287,23 @@ namespace Hippocamp.EFModels.Entities
                 entity.HasOne(d => d.StormwaterJurisdiction)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.StormwaterJurisdictionID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProjectDocument>(entity =>
+            {
+                entity.Property(e => e.DisplayName).IsUnicode(false);
+
+                entity.Property(e => e.DocumentDescription).IsUnicode(false);
+
+                entity.HasOne(d => d.FileResource)
+                    .WithMany(p => p.ProjectDocuments)
+                    .HasForeignKey(d => d.FileResourceID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectDocuments)
+                    .HasForeignKey(d => d.ProjectID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
