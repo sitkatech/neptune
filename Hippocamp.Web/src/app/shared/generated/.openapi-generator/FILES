@@ -3,6 +3,7 @@ model/field-definition-dto.ts
 model/field-definition-type-dto.ts
 model/file-resource-dto.ts
 model/file-resource-mime-type-dto.ts
+model/file-resource-simple-dto.ts
 model/models.ts
 model/neptune-page-dto.ts
 model/neptune-page-type-dto.ts
@@ -13,6 +14,7 @@ model/person-create-dto.ts
 model/person-dto.ts
 model/person-simple-dto.ts
 model/project-create-dto.ts
+model/project-document-simple-dto.ts
 model/project-simple-dto.ts
 model/project-status-simple-dto.ts
 model/role-dto.ts

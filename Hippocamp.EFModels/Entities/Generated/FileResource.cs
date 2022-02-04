@@ -19,6 +19,7 @@ namespace Hippocamp.EFModels.Entities
             OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
             OnlandVisualTrashAssessmentObservationPhotos = new HashSet<OnlandVisualTrashAssessmentObservationPhoto>();
             Organizations = new HashSet<Organization>();
+            ProjectDocuments = new HashSet<ProjectDocument>();
             TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
             TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
@@ -59,6 +60,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         [InverseProperty(nameof(Organization.LogoFileResource))]
         public virtual ICollection<Organization> Organizations { get; set; }
+        [InverseProperty(nameof(ProjectDocument.FileResource))]
+        public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         [InverseProperty(nameof(TreatmentBMPAssessmentPhoto.FileResource))]
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         [InverseProperty(nameof(TreatmentBMPDocument.FileResource))]

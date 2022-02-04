@@ -18,6 +18,7 @@ import { ProjectInstructionsComponent } from './pages/project-new/project-instru
 import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
+import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -43,7 +44,7 @@ const routes: Routes = [
       { path: "delineations", component:  UnderConstructionComponent},
       { path: "modeled-performance", component:  UnderConstructionComponent},
     ]},
-    { path: "attachments", component:  UnderConstructionComponent},
+    { path: "attachments", component:  ProjectAttachmentsComponent},
     { path: "review", component:  UnderConstructionComponent},
   ]},
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
