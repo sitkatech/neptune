@@ -17,11 +17,14 @@ import {
   LeafletEvent} from 'leaflet';
 import 'leaflet.fullscreen';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
-import { BoundingBoxDto } from 'src/app/shared/models/bounding-box-dto';
+import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { Feature } from 'geojson';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { ActivatedRoute } from '@angular/router';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
+import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
+import { forkJoin } from 'rxjs';
 
 declare var $: any
 
@@ -66,9 +69,11 @@ export class TreatmentBmpsComponent implements OnInit {
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
   public projectID: number;
+  public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
+    private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
@@ -79,18 +84,17 @@ export class TreatmentBmpsComponent implements OnInit {
     const projectID = this.route.snapshot.paramMap.get("projectID");
     if (projectID) {
       this.projectID = parseInt(projectID);
-      const bmps = this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
-        this.treatmentBMPs = treatmentBMPs;
-        this.updateMapLayers();
-      })
-    }
 
-    // Default bounding box
-    this.boundingBox = new BoundingBoxDto();
-    this.boundingBox.Left = -117.96363830566408;
-    this.boundingBox.Bottom = 33.444047234512354;
-    this.boundingBox.Right = -117.23030090332033;
-    this.boundingBox.Top = 33.73005042840439;
+      forkJoin({
+        treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
+        boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID)
+      }).subscribe(({treatmentBMPs, boundingBox}) => {
+        this.treatmentBMPs = treatmentBMPs;
+        this.boundingBox = boundingBox;
+
+        this.updateMapLayers();
+      });
+    }
 
     this.tileLayers = Object.assign({}, {
       "Aerial": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -138,7 +142,11 @@ export class TreatmentBmpsComponent implements OnInit {
     });
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
-    this.registerClickEvents()
+    this.registerClickEvents();
+    
+    if (this.treatmentBMPs.length > 0) {
+      this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+    }
   }
 
   public buildMarker(iconUrl: string, iconRetinaUrl: string): any {
