@@ -632,22 +632,22 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Success",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectDocumentSimpleDto"
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectDocumentSimpleDto"
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectDocumentSimpleDto"
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
                 }
               }
             }
@@ -1872,6 +1872,43 @@
           }
         },
         "additionalProperties": false
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "Errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "Type": {
+            "type": "string",
+            "nullable": true
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true
+          },
+          "Status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "Instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
       }
     }
   }

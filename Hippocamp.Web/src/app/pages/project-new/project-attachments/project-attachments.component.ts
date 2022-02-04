@@ -157,6 +157,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
   public deleteAttachment() { 
     this.isLoadingDelete = true;
+    this.alertService.clearAlerts();
 
     this.projectService.deleteAttachmentByID(this.attachmentIDToRemove).subscribe(() => {
       this.isLoadingDelete = false;
