@@ -24,5 +24,14 @@ namespace Hippocamp.API.Controllers
             var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsSimpleDto(_dbContext, stormwaterJurisdictionIDs);
             return Ok(stormwaterJurisdictionSimpleDtos);
         }
+
+        [HttpGet("jurisdictions/{projectID}/getBoundingBoxByProjectID")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<BoundingBoxDto>> GetBoundingBoxByProjectID([FromRoute] int projectID)
+        {
+            var stormwaterJurisdictionID = Projects.GetByID(_dbContext, projectID).StormwaterJurisdictionID;
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(_dbContext, stormwaterJurisdictionID);
+            return Ok(boundingBoxDto);
+        }
     }
 }

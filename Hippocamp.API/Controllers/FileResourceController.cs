@@ -93,8 +93,15 @@ namespace Hippocamp.API.Controllers
                 case "BMP":
                 case "GIF":
                 case "JPEG":
+                case "PDF":
                 case "PJPEG":
+                case "ZIP":
                     return File(fileResource.FileResourceData, fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName);
+                case "Word (DOCX)":
+                case "Word (DOC)":
+                case "Excel (XLS)":
+                case "Excel (XLSX)":
+                    return File(fileResource.FileResourceData, fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName, fileResource.OriginalBaseFilename);
                 default:
                     throw new NotSupportedException("Only image uploads are supported at this time.");
             }

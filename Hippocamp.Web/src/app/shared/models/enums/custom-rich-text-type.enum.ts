@@ -4,5 +4,7 @@ export enum CustomRichTextType{
     LabelsAndDefinitionsList = 54,
     About = 55,
     ProjectsList = 56,
-    ProjectInstructions = 57
+    ProjectInstructions = 57,
+    ProjectAttachments = 59,
+    TreatmentBMPs = 60
 }

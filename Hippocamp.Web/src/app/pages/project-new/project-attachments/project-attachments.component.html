@@ -1,0 +1,213 @@
+<h2 class="d-inline-block">
+    Project Attachments
+</h2>
+<div class="col-12">
+    <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+</div>
+
+<div class="row mt-2">
+    <div class="col">
+        <div class="card mr-4">
+            <div class="card-header">
+                Add Attachment
+            </div>
+            <div class="card-body">
+                <form (ngSubmit)="onSubmit(addAttachmentForm)" #addAttachmentForm="ngForm">
+                    <div class="row mt-4">
+                        <div class="col-sm-3 control-label text-sm-right">
+                            <label class="required">File</label>
+                        </div>
+                        <div class="input-group col-sm-7">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input"
+                                    id="fileResource"
+                                    #fileUpload (change)="fileEvent()"
+                                    [ngClass]='{"field-invalid": isFieldInvalid("FileResource")}' />    
+                                <label class="custom-file-label"
+                                    for="fileResource">
+                                    {{getFileName()}}
+                                </label>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-hippocamp input-group-append" type="button"
+                                    (click)="openFileUpload()">
+                                    <hippocamp-icon icon="file" class="file" container="body">
+                                    </hippocamp-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-7">
+                            <em class="text-small mt-2">Allowed extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png. Max file size: 25 MB.</em>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-7">
+                            <em class="text-danger mt-2" *ngIf="displayFileErrors">File must be one of: pdf, zip, doc, docx, xls, xlsx, jpg, png</em>
+                        </div>
+                    </div>
+                
+                    <div class="row mt-4">
+                        <div class="col-sm-3 control-label text-sm-right">
+                            <label class="required">Display Name</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="display-name" [(ngModel)]="model.DisplayName" required
+                            [ngClass]='{"field-invalid": isFieldInvalid("DisplayName")}'>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3 control-label text-sm-right">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <textarea class="form-control" name="description" style="height: 100px" placeholder=""
+                                [(ngModel)]="model.DocumentDescription">
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-sm-2">
+                            <i class="fas fa-bolt"></i> Required field
+                        </div>
+                        <div class="col-sm-8 text-right">
+                            <button type="submit" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                                Save
+                            </button>
+                            <button type="reset" class="btn btn-secondary ml-1" [disabled]="isLoadingSubmit"
+                                (click)="resetAttachmentForm(addAttachmentForm)">
+                                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+            
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+        <h5 class="d-inline-block">
+            Attachments Added
+        </h5>
+
+    </div>
+</div>
+
+<div class="row mt-2 mb-4" *ngIf="attachments && attachments.length > 0">
+    <div class="col-lg-6 mb-4" *ngFor="let attachment of attachments">
+        <div class="card h-100 mr-4 mt-2 mb-2">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-10 card-header-name">
+                        {{attachment.DisplayName}}
+                    </div>
+                    <div class="col-2">
+                        <span class="float-right ml-2" (click)="launchDeleteModal(deleteAttachmentModal, attachment.ProjectDocumentID)">
+                            <hippocamp-icon icon="delete" class="delete-attachment" ngbTooltip="Delete Attachment" container="body">
+                            </hippocamp-icon>
+                        </span>
+                        <span class="float-right ml-2" (click)="launchEditModal(editAttachmentModal, attachment)">
+                            <hippocamp-icon icon="edit" class="edit-attachment" ngbTooltip="Edit Attachment" container="body">
+                            </hippocamp-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-4 label text-right"><strong>File: </strong></div>
+                    <div class="col-12 col-sm-8 text-left"><a href={{getFileLinkValue(attachment)}}>{{attachment.FileResource.OriginalBaseFilename}}</a>
+                        <em *ngIf="!attachment.FileResource" class="text-muted">Not Available</em>
+                    </div>
+                    <div class="col-12 col-sm-4 label text-right"><strong>Uploaded On: </strong></div>
+                    <div class="col-12 col-sm-8 text-left">{{attachment.UploadDate | date:'shortDate'}}</div>
+                    <div class="col-12 col-sm-4 label text-right"><strong>File Type: </strong></div>
+                    <div class="col-12 col-sm-8 text-left">{{attachment.FileResource.OriginalFileExtension}}</div>
+                    <div class="col-12 col-sm-4 label text-right"><strong>Description: </strong></div>
+                    <div class="col-12 col-sm-8 text-left">{{attachment.DocumentDescription}}</div>
+
+                </div>
+      
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #deleteAttachmentModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-white" id="deleteAttachmentModalTitle">Delete Attachment</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>
+            Are you sure you wish to delete this attachment?
+            <br/>
+            This action cannot be undone
+        </p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-sm" (click)="deleteAttachment()">
+                <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
+                Delete
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editAttachmentModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-white" id="selectAccountModalTitle">Edit Attachment</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form (ngSubmit)="onEditSubmit(editAttachmentForm)" #editAttachmentForm="ngForm">
+            <div class="row mt-4">
+                <div class="col-sm-3 control-label text-sm-right">
+                    <label class="required">Display Name</label>
+                </div>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" name="display-name" [(ngModel)]="editModel.DisplayName" required
+                    [ngClass]='{"field-invalid": isFieldInvalid("DisplayName")}'>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-3 control-label text-sm-right">
+                    <label>Description</label>
+                </div>
+                <div class="col-sm-7">
+                    <textarea class="form-control" name="description" style="height: 100px" placeholder=""
+                        [(ngModel)]="editModel.DocumentDescription">
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-sm-2">
+                    <i class="fas fa-bolt"></i> Required field
+                </div>
+                <div class="col-sm-8 text-right">
+                    <button type="submit" class="btn btn-hippocamp ml-2" [disabled]="isLoadingSubmit">
+                        <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" (click)="modal.close('Cancel click')">Cancel</button>
+                </div>
+            </div>
+    
+        </form>
+    </div>
+</ng-template>

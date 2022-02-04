@@ -14,6 +14,7 @@ namespace Hippocamp.EFModels.Entities
     {
         public Project()
         {
+            ProjectDocuments = new HashSet<ProjectDocument>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -49,6 +50,8 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(StormwaterJurisdictionID))]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        [InverseProperty(nameof(ProjectDocument.Project))]
+        public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         [InverseProperty(nameof(TreatmentBMP.Project))]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }

@@ -1,3 +1,11 @@
+<h2 class="d-inline-block">
+    Proposed Treatment BMPs
+</h2>
+<div class="row">
+    <div class="col-md-9 mb-4">
+        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-8 col-md-9 offset-sm-4 offset-md-3">
         <p>Select a Treatment BMP from the list or click a location on the map to explore.</p>
@@ -21,7 +29,7 @@
 <div class="mt-4 card" *ngIf="selectedTreatmentBMP">
     <div class="card-body bg-white">
         <div class="row">
-            <div class="col-md-6 order-md-last">
+            <div class="col-lg-4 order-lg-last">
                 <div class="row d-flex">
                     <div class="col-auto ml-auto">
                         <a class="btn btn-outline-info mr-2" placement="top" ngbTooltip="Edit feature coming soon">
@@ -33,31 +41,33 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="row">
-                    <div class="col-sm-4 font-weight-bold text-sm-right">Name</div>
-                    <div class="col-sm-8">{{selectedTreatmentBMP.TreatmentBMPName}}</div>
-                    <div class="col-sm-4 font-weight-bold text-sm-right">Type</div>
-                    <div class="col-sm-8">{{selectedTreatmentBMP.TreatmentBMPTypeName}}</div>
+                    <div class="col-lg-2 col-sm-3 font-weight-bold text-sm-right">Name</div>
+                    <div class="col-lg-10 col-sm-9">{{selectedTreatmentBMP.TreatmentBMPName}}</div>
+                    <div class="col-lg-2 col-sm-3 font-weight-bold text-sm-right">Type</div>
+                    <div class="col-lg-10 col-sm-9">{{selectedTreatmentBMP.TreatmentBMPTypeName}}</div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-xl-5">
-               <div class="row mt-2">
-                    <div class="col-12 mb-2">
+               <div class="row mt-3">
+                    <div class="col-12">
                         <h5 class="border-bottom p-2">Location</h5>
                     </div>
-                    <div class="col-sm-4 text-sm-right font-weight-bold">Latitude</div>
-                    <div class="col-sm-8">{{selectedTreatmentBMP.Latitude}}</div>
-                    <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Longitude</div>
-                    <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.Longitude}}</div>
-                    <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Watershed</div>
-                    <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
+                    <div class="col-xl-5 col-sm-3 text-sm-right font-weight-bold">Latitude</div>
+                    <div class="col-xl-7 col-sm-9">{{selectedTreatmentBMP.Latitude}}</div>
+                    <div class="col-xl-5 col-sm-3 mt-1 font-weight-bold text-sm-right">Longitude</div>
+                    <div class="col-xl-7 col-sm-9 mt-1">{{selectedTreatmentBMP.Longitude}}</div>
+                    <div class="col-xl-5 col-sm-3 mt-1 font-weight-bold text-sm-right">Delination Area</div>
+                    <div class="col-xl-7 col-sm-9 mt-1 font-italic">not available</div>
+                    <div class="col-xl-5 col-sm-3 mt-1 font-weight-bold text-sm-right">Watershed</div>
+                    <div class="col-xl-7 col-sm-9 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
                </div>
             </div>
             <div class="col-xl-7">
-                <div class="row mt-2">
+                <div class="row mt-3">
                     <div class="col-12">
                         <h5 class="border-bottom p-2">Modeling Attributes</h5>
                     </div>
