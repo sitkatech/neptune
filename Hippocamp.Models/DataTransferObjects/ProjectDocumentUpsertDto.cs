@@ -19,7 +19,7 @@ namespace Hippocamp.Models.DataTransferObjects
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var acceptableExtensions = new List<string>{ "pdf", "zip", "doc", "docx", "xls", "xlsx", "jpg", "png" };
+            var acceptableExtensions = new List<string>{ ".pdf", ".zip", ".doc", ".docx", ".xls", ".xlsx", ".jpg", ".png" };
             var file = ((ProjectDocumentUpsertDto)validationContext.ObjectInstance).FileResource;
             var extension = Path.GetExtension(file.FileName);
             var size = file.Length;
