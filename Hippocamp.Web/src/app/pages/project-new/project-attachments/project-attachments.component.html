@@ -1,8 +1,10 @@
 <h2 class="d-inline-block">
     Project Attachments
 </h2>
-<div class="col-12">
-    <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+<div class="row mt-2 mb-2 mr-2">
+    <div class="col-12">
+        <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+    </div>
 </div>
 
 <div class="row mt-2">
@@ -112,11 +114,11 @@
                         {{attachment.DisplayName}}
                     </div>
                     <div class="col-2">
-                        <span class="float-right ml-2" (click)="launchDeleteModal(deleteAttachmentModal, attachment.ProjectDocumentID)">
+                        <span class="float-right ml-3" (click)="launchDeleteModal(deleteAttachmentModal, attachment.ProjectDocumentID)">
                             <hippocamp-icon icon="delete" class="delete-attachment" ngbTooltip="Delete Attachment" container="body">
                             </hippocamp-icon>
                         </span>
-                        <span class="float-right ml-2" (click)="launchEditModal(editAttachmentModal, attachment)">
+                        <span class="float-right ml-3" (click)="launchEditModal(editAttachmentModal, attachment)">
                             <hippocamp-icon icon="edit" class="edit-attachment" ngbTooltip="Edit Attachment" container="body">
                             </hippocamp-icon>
                         </span>
@@ -157,11 +159,11 @@
             This action cannot be undone
         </p>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-sm" (click)="deleteAttachment()">
+            <button type="button" class="btn btn-danger btn-md" (click)="deleteAttachment()">
                 <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
                 Delete
             </button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
+            <button type="button" class="btn btn-secondary btn-md" (click)="modal.close('Cancel click')">Cancel</button>
         </div>
     </div>
 </ng-template>
@@ -200,11 +202,11 @@
                     <i class="fas fa-bolt"></i> Required field
                 </div>
                 <div class="col-sm-8 text-right">
-                    <button type="submit" class="btn btn-hippocamp ml-2" [disabled]="isLoadingSubmit">
+                    <button type="submit" class="btn btn-hippocamp btn-md ml-2" [disabled]="isLoadingSubmit">
                         <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                         Save
                     </button>
-                    <button type="button" class="btn btn-secondary ml-2" (click)="modal.close('Cancel click')">Cancel</button>
+                    <button type="button" class="btn btn-secondary btn-md ml-2" (click)="modal.close('Cancel click')">Cancel</button>
                 </div>
             </div>
     

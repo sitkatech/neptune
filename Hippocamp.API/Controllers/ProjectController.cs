@@ -6,6 +6,7 @@ using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
 using Hippocamp.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -104,8 +105,6 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpPost("projects/{projectID}/attachments")]
-        [RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDocumentSimpleDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {

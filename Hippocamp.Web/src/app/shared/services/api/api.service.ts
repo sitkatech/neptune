@@ -137,13 +137,13 @@ export class ApiService {
                 if (error.error.errors) {
                     for (const key of Object.keys(error.error.errors)) {
                         // FIXME: will break if errror.error[key] is not a string[]
-                        const newLocal = new Alert((error.error.errors[key] as string[]).map((fe: string) => { return key + ": " + fe; }).join(","), AlertContext.Danger);
+                        const newLocal = new Alert((error.error.errors[key] as string[]).map((fe: string) => { return key + ": " + fe; }).join(", "), AlertContext.Danger);
                         this.alertService.pushAlert(newLocal);
                     }
                 } else {
                     for (const key of Object.keys(error.error)) {
                         // FIXME: will break if errror.error[key] is not a string[]
-                        const newLocal = new Alert((error.error[key] as string[]).map((fe: string) => { return key + ": " + fe; }).join(","), AlertContext.Danger);
+                        const newLocal = new Alert((error.error[key] as string[]).map((fe: string) => { return key + ": " + fe; }).join(", "), AlertContext.Danger);
                         this.alertService.pushAlert(newLocal);
                     }
                 }

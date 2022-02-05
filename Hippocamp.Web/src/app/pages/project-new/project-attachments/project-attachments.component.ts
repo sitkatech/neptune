@@ -143,7 +143,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.modalReference = this.modalService.open(
       modalContent, 
       { 
-        ariaLabelledBy: 'editAttachmentModal', beforeDismiss: () => this.checkIfUpdating(), backdrop: 'static', keyboard: false
+        ariaLabelledBy: 'editAttachmentModal', beforeDismiss: () => this.checkIfUpdating(), backdrop: 'static', keyboard: false, size: 'lg'
       });
   }
 
@@ -157,6 +157,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
   public deleteAttachment() { 
     this.isLoadingDelete = true;
+        this.alertService.clearAlerts();
 
     this.projectService.deleteAttachmentByID(this.attachmentIDToRemove).subscribe(() => {
       this.isLoadingDelete = false;

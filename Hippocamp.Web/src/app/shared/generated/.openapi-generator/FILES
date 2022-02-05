@@ -16,6 +16,7 @@ model/person-dto.ts
 model/person-simple-dto.ts
 model/project-create-dto.ts
 model/project-document-simple-dto.ts
+model/project-document-update-dto.ts
 model/project-simple-dto.ts
 model/project-status-simple-dto.ts
 model/role-dto.ts
