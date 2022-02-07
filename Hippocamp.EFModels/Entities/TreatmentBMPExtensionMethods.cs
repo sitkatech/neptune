@@ -61,6 +61,7 @@ namespace Hippocamp.EFModels.Entities
                 TreatmentBMPName = treatmentBMP.TreatmentBMPName,
                 TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
                 TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName,
+                TreatmentBMPModelingTypeID = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID,
                 WatershedName = treatmentBMP.Watershed.WatershedName,
                 StormwaterJurisdictionName = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName,
                 Longitude = treatmentBMP.Longitude,

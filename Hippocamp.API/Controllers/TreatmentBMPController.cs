@@ -30,5 +30,13 @@ namespace Hippocamp.API.Controllers
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListAsDisplayDto(_dbContext);
             return Ok(treatmentBMPDisplayDtos);
         }
+
+        [HttpGet("treatmentBMPs/types")]
+        [JurisdictionEditFeature]
+        public ActionResult<TreatmentBMPTypeSimpleDto> ListTypes([FromRoute] int projectID)
+        {
+            var treatmentBMPTypeSimpleDtos = TreatmentBMPs.ListTypesAsSimpleDto(_dbContext);
+            return Ok(treatmentBMPTypeSimpleDtos);
+        }
     }
 }

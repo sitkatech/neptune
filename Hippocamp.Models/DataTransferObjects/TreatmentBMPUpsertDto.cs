@@ -9,6 +9,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public string TreatmentBMPName { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public string? TreatmentBMPTypeName { get; set; }
+        public int? TreatmentBMPModelingTypeID { get; set; }
         public string? StormwaterJurisdictionName { get; set; }
         public string? WatershedName { get; set; }
         public double Longitude { get; set; }

@@ -1017,6 +1017,46 @@
         }
       }
     },
+    "/treatmentBMPs/types": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": [
@@ -1978,6 +2018,32 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPTypeSimpleDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsAnalyzedInModelingModule": {
+            "type": "boolean"
+          },
+          "TreatmentBMPModelingTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPUpsertDto": {
         "type": "object",
         "properties": {
@@ -1995,6 +2061,11 @@
           },
           "TreatmentBMPTypeName": {
             "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPModelingTypeID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "StormwaterJurisdictionName": {

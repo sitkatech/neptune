@@ -59,12 +59,10 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static TreatmentBMPModelingAttribute GetModelingAttributeByTreatmentBMPID(HippocampDbContext dbContext, int treatmentBMPID)
+        public static List<TreatmentBMPTypeSimpleDto> ListTypesAsSimpleDto(HippocampDbContext dbContext)
         {
-            var treatmentBMPModelingAttribute = GetTreatmentBMPModelingAttributesImpl(dbContext)
-                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
-
-            return treatmentBMPModelingAttribute;
+            var treatmentBMPTypeSimpleDtos = dbContext.TreatmentBMPTypes.Select(x => x.AsSimpleDto()).ToList();
+            return treatmentBMPTypeSimpleDtos;
         }
     }
 }

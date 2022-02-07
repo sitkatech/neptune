@@ -9,12 +9,18 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MonthsOfOperationDto } from '././months-of-operation-dto';
+import { TimeOfConcentrationDto } from '././time-of-concentration-dto';
+import { UnderlyingHydrologicSoilGroupDto } from '././underlying-hydrologic-soil-group-dto';
+import { DryWeatherFlowOverrideDto } from '././dry-weather-flow-override-dto';
+import { RoutingConfigurationDto } from '././routing-configuration-dto';
 
 export class TreatmentBMPUpsertDto { 
     TreatmentBMPID?: number;
     TreatmentBMPName?: string;
     TreatmentBMPTypeID?: number;
     TreatmentBMPTypeName?: string;
+    TreatmentBMPModelingTypeID?: number;
     StormwaterJurisdictionName?: string;
     WatershedName?: string;
     Longitude?: number;
@@ -34,21 +40,21 @@ export class TreatmentBMPUpsertDto {
     InfiltrationSurfaceArea?: number;
     MediaBedFootprint?: number;
     PermanentPoolorWetlandVolume?: number;
-    RoutingConfigurationID?: number;
+    RoutingConfiguration?: RoutingConfigurationDto;
     StorageVolumeBelowLowestOutletElevation?: number;
     SummerHarvestedWaterDemand?: number;
-    TimeOfConcentrationID?: number;
+    TimeOfConcentration?: TimeOfConcentrationDto;
     DrawdownTimeForDetentionVolume?: number;
     TotalEffectiveBMPVolume?: number;
     TotalEffectiveDrywellBMPVolume?: number;
     TreatmentRate?: number;
-    UnderlyingHydrologicSoilGroupID?: number;
+    UnderlyingHydrologicSoilGroup?: UnderlyingHydrologicSoilGroupDto;
     UnderlyingInfiltrationRate?: number;
     WaterQualityDetentionVolume?: number;
     WettedFootprint?: number;
     WinterHarvestedWaterDemand?: number;
-    MonthsOfOperationID?: number;
-    DryWeatherFlowOverrideID?: number;
+    MonthsOfOperation?: MonthsOfOperationDto;
+    DryWeatherFlowOverride?: DryWeatherFlowOverrideDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
