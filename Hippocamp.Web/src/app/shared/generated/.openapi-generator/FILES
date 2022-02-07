@@ -1,11 +1,13 @@
 .gitignore
 model/bounding-box-dto.ts
+model/dry-weather-flow-override-dto.ts
 model/field-definition-dto.ts
 model/field-definition-type-dto.ts
 model/file-resource-dto.ts
 model/file-resource-mime-type-dto.ts
 model/file-resource-simple-dto.ts
 model/models.ts
+model/months-of-operation-dto.ts
 model/neptune-page-dto.ts
 model/neptune-page-type-dto.ts
 model/organization-dto.ts
@@ -20,5 +22,9 @@ model/project-document-update-dto.ts
 model/project-simple-dto.ts
 model/project-status-simple-dto.ts
 model/role-dto.ts
+model/routing-configuration-dto.ts
 model/stormwater-jurisdiction-simple-dto.ts
+model/time-of-concentration-dto.ts
+model/treatment-bmp-type-simple-dto.ts
 model/treatment-bmp-upsert-dto.ts
+model/underlying-hydrologic-soil-group-dto.ts

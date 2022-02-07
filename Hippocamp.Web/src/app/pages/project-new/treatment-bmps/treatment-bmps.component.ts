@@ -25,6 +25,8 @@ import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { forkJoin } from 'rxjs';
+import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-type-simple-dto';
+import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-bmp-modeling-type.enum';
 
 declare var $: any
 
@@ -70,6 +72,123 @@ export class TreatmentBmpsComponent implements OnInit {
 
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
+  public treatmentBMPTypes: Array<TreatmentBMPTypeSimpleDto>;
+  public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
+
+  public modelingAttributesByModelingType = {
+    [TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
+      'MediaBedFootprint', 'DesignMediaFiltrationRate', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.BioretentionWithNoUnderdrain]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
+    ],
+    [TreatmentBMPModelingType.BioretentionWithUnderdrainAndImperviousLiner]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'MediaBedFootprint', 'DesignMediaFiltrationRate',
+    ],
+    [TreatmentBMPModelingType.CisternsForHarvestAndUse]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'WinterHarvestedWaterDemand', 'SummerHarvestedWaterDemand'
+    ],
+    [TreatmentBMPModelingType.ConstructedWetland]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'PermanentPoolorWetlandVolume', 'DesignResidenceTimeforPermanentPool',
+      'WaterQualityDetentionVolume', 'DrawdownTimeforWQDetentionVolume', 'WinterHarvestedWaterDemand', 'SummerHarvestedWaterDemand'
+    ],
+    [TreatmentBMPModelingType.DryExtendedDetentionBasin]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
+      'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.DryWeatherTreatmentSystems]: 
+    ['DesignDryWeatherTreatmentCapacity', 'AverageTreatmentFlowrate', 'MonthsOfOperation'],
+    [TreatmentBMPModelingType.Drywell]: 
+    ['RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveDrywellBMPVolume', 'InfiltrationDischargeRate'],
+    [TreatmentBMPModelingType.FlowDurationControlBasin]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
+      'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.FlowDurationControlTank]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
+      'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.HydrodynamicSeparator]: 
+    ['TreatmentRate', 'TimeOfConcentration'],
+    [TreatmentBMPModelingType.InfiltrationBasin]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
+    ],
+    [TreatmentBMPModelingType.InfiltrationTrench]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
+    ],
+    [TreatmentBMPModelingType.LowFlowDiversions]: 
+    ['DesignLowFlowDiversionCapacity', 'AverageDivertedFlowrate', 'MonthsOfOperation'],
+    [TreatmentBMPModelingType.PermeablePavement]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
+    ],
+    [TreatmentBMPModelingType.ProprietaryBiotreatment]: 
+    ['TreatmentRate', 'TimeOfConcentration'],
+    [TreatmentBMPModelingType.ProprietaryTreatmentControl]: 
+    ['TreatmentRate', 'TimeOfConcentration'],
+    [TreatmentBMPModelingType.SandFilters]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
+      'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.UndergroundInfiltration]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
+    ],
+    [TreatmentBMPModelingType.VegetatedFilterStrip]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TreatmentRate', 'WettedFootprint',
+      'EffectiveRetentionDepth', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.VegetatedSwale]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TreatmentRate', 'WettedFootprint',
+      'EffectiveRetentionDepth', 'UnderlyingHydrologicSoilGroup'
+    ],
+    [TreatmentBMPModelingType.WetDetentionBasin]: 
+    [
+      'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'PermanentPoolorWetlandVolume', 'DesignResidenceTimeforPermanentPool',
+      'WaterQualityDetentionVolume', 'DrawdownTimeforWQDetentionVolume', 'WinterHarvestedWaterDemand', 'SummerHarvestedWaterDemand'
+    ]
+  };
+
+  public modelingAttributeFieldsDisplayNames = {
+    AverageDivertedFlowrate: 'Average Diverted Flowrate',
+    AverageTreatmentFlowrate: 'Average Treatment Flowrate',
+    DesignDryWeatherTreatmentCapacity: 'Design Dry Weather Treatment Capacity',
+    DesignLowFlowDiversionCapacity: 'Design Low Flow Diversion Capacity',
+    DesignMediaFiltrationRate: 'Design Media Filtration Rate',
+    DesignResidenceTimeforPermanentPool: 'Design Residence Time for Permanent Pool',
+    DiversionRate: 'Diversion Rate',
+    DrawdownTimeforWQDetentionVolume: 'Drawdown Time for WQ Detention Volume',
+    EffectiveFootprint: 'Effective Footprint',
+    EffectiveRetentionDepth: 'Effective Retention Depth',
+    InfiltrationDischargeRate: 'Infiltration Discharge Rate',
+    InfiltrationSurfaceArea: 'Infiltration Surface Area',
+    MediaBedFootprint: 'Media Bed Footprint',
+    PermanentPoolorWetlandVolume: 'Permanent Pool or Wetland Volume',
+    StorageVolumeBelowLowestOutletElevation: 'Storage Volume Below Lowest Outlet Elevation',
+    SummerHarvestedWaterDemand: 'Summer Harvested Water Demand',
+    DrawdownTimeForDetentionVolume: 'Drawdown Time for Detention Volume',
+    TotalEffectiveBMPVolume: 'Total Effective BMP Volume',
+    TotalEffectiveDrywellBMPVolume: 'Total Effective Drywell BMP Volume',
+    TreatmentRate: 'Treatment Rate',
+    UnderlyingInfiltrationRate: 'Underlying Infiltration Rate',
+    WaterQualityDetentionVolume: 'Water Quality Detention Volume',
+    WettedFootprint: 'Wetted Footprint',
+    WinterHarvestedWaterDemand: 'Winter Harvested Water Demand',
+  }
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
@@ -87,11 +206,12 @@ export class TreatmentBmpsComponent implements OnInit {
 
       forkJoin({
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-        boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID)
-      }).subscribe(({treatmentBMPs, boundingBox}) => {
+        boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
+        treatmentBMPTypes: this.treatmentBMPService.getTypes()
+      }).subscribe(({treatmentBMPs, boundingBox, treatmentBMPTypes}) => {
         this.treatmentBMPs = treatmentBMPs;
-        console.log(this.treatmentBMPs);
         this.boundingBox = boundingBox;
+        this.treatmentBMPTypes = treatmentBMPTypes;
 
         this.updateMapLayers();
       });
@@ -250,5 +370,13 @@ export class TreatmentBmpsComponent implements OnInit {
       this.selectedListItemDetails.title = `${selectedNumber}`;
       this.selectedListItemDetails.attributes = selectedAttributes;
     }
+  }
+
+  public getModelingTypeFieldsToDisplay(modelingTypeID: number) {
+    return this.modelingAttributesByModelingType[modelingTypeID];
+  }
+
+  public getFieldDisplayName(fieldName: string) {
+    return this.modelingAttributeFieldsDisplayNames[fieldName];
   }
 }
