@@ -43,7 +43,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("users/{personID}")]
-        [UserViewFeature]
+        [UserViewDetailFeature]
         public ActionResult<PersonDto> GetByPersonID([FromRoute] int personID)
         {
             var userDto = People.GetByIDAsDto(_dbContext, personID);
