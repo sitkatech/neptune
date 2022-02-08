@@ -14,6 +14,7 @@ import {
   Layer,
   DomEvent,
   DomUtil,
+  WMSOptions,
   LeafletEvent} from 'leaflet';
 import 'leaflet.fullscreen';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
@@ -28,6 +29,7 @@ import { forkJoin } from 'rxjs';
 import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-type-simple-dto';
 import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-bmp-modeling-type.enum';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
+import { environment } from 'src/environments/environment';
 
 declare var $: any
 
@@ -242,7 +244,28 @@ export class TreatmentBmpsComponent implements OnInit {
       }),
     }, this.tileLayers);
 
-    this.overlayLayers = [];
+
+    let regionalSubbasinsWMSOptions = ({
+      layers: "OCStormwater:RegionalSubbasins",
+      transparent: true,
+      format: "image/png",
+      tiled: true
+    } as WMSOptions);
+
+    this.overlayLayers = Object.assign({
+        "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions)
+    }, this.overlayLayers);
+
+    let jurisdictionsWMSOptions = ({
+      layers: "OCStormwater:Jurisdictions",
+      transparent: true,
+      format: "image/png",
+      tiled: true
+    } as WMSOptions);
+
+    this.overlayLayers = Object.assign({
+        "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions)
+    }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
   }
