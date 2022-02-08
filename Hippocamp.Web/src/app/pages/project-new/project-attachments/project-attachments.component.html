@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-sm-7">
                             <textarea class="form-control" name="description" style="height: 100px" placeholder=""
-                                [(ngModel)]="model.DocumentDescription">
+                                [(ngModel)]="model.DocumentDescription" [ngClass]='{"field-invalid": isFieldInvalid("DocumentDescription")}'>
                             </textarea>
                         </div>
                     </div>

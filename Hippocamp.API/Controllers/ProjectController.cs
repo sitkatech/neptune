@@ -105,6 +105,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpPost("projects/{projectID}/attachments")]
+        [RequestSizeLimit(26214400)]
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDocumentSimpleDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {

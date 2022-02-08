@@ -153,6 +153,7 @@ namespace Hippocamp.API
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseRouting();
             app.UseCors(policy =>
             {

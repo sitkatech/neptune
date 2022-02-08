@@ -12,9 +12,9 @@ namespace Hippocamp.Models.DataTransferObjects
         [Required]
         public IFormFile FileResource { get; set; }
         [Required]
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Display Name has a maximum length of 200 characters")]
         public string DisplayName { get; set; }
-        [StringLength(500)]
+        [StringLength(500, ErrorMessage = "Description has a maximum length of 500 characters")]
         public string DocumentDescription { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -25,10 +25,10 @@ namespace Hippocamp.Models.DataTransferObjects
             var size = file.Length;
 
             if (extension == null || !acceptableExtensions.Contains(extension.ToLower()))
-                yield return new ValidationResult("File extension is not valid.", new[] { "FileResource" });
+                yield return new ValidationResult("File extension is not valid", new[] { "FileResource" });
 
             if (size > 26214400)
-                yield return new ValidationResult("File size is greater than 25MB.", new[] { "FileResource" });
+                yield return new ValidationResult("File size is greater than 25MB", new[] { "FileResource" });
         }
     }
 }
