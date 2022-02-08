@@ -9,11 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MonthsOfOperationDto } from '././months-of-operation-dto';
-import { TimeOfConcentrationDto } from '././time-of-concentration-dto';
-import { UnderlyingHydrologicSoilGroupDto } from '././underlying-hydrologic-soil-group-dto';
-import { DryWeatherFlowOverrideDto } from '././dry-weather-flow-override-dto';
-import { RoutingConfigurationDto } from '././routing-configuration-dto';
 
 export class TreatmentBMPUpsertDto { 
     TreatmentBMPID?: number;
@@ -40,21 +35,21 @@ export class TreatmentBMPUpsertDto {
     InfiltrationSurfaceArea?: number;
     MediaBedFootprint?: number;
     PermanentPoolorWetlandVolume?: number;
-    RoutingConfiguration?: RoutingConfigurationDto;
     StorageVolumeBelowLowestOutletElevation?: number;
     SummerHarvestedWaterDemand?: number;
-    TimeOfConcentration?: TimeOfConcentrationDto;
     DrawdownTimeForDetentionVolume?: number;
     TotalEffectiveBMPVolume?: number;
     TotalEffectiveDrywellBMPVolume?: number;
     TreatmentRate?: number;
-    UnderlyingHydrologicSoilGroup?: UnderlyingHydrologicSoilGroupDto;
     UnderlyingInfiltrationRate?: number;
     WaterQualityDetentionVolume?: number;
     WettedFootprint?: number;
     WinterHarvestedWaterDemand?: number;
-    MonthsOfOperation?: MonthsOfOperationDto;
-    DryWeatherFlowOverride?: DryWeatherFlowOverrideDto;
+    RoutingConfigurationID?: number;
+    TimeOfConcentrationID?: number;
+    UnderlyingHydrologicSoilGroupID?: number;
+    MonthsOfOperationID?: number;
+    DryWeatherFlowOverrideID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

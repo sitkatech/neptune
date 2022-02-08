@@ -1086,151 +1086,6 @@
         }
       }
     },
-    "/treatmentBMPs/timesOfConcentration": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/TimeOfConcentrationDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TimeOfConcentrationDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TimeOfConcentrationDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/routingConfiguration": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RoutingConfigurationDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RoutingConfigurationDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RoutingConfigurationDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/monthsOfOperation": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MonthsOfOperationDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MonthsOfOperationDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MonthsOfOperationDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/underlyingHydrologicSoilGroup": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/dryWeatherFlowOverride": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/users": {
       "post": {
         "tags": [
@@ -1415,24 +1270,6 @@
         },
         "additionalProperties": false
       },
-      "DryWeatherFlowOverrideDto": {
-        "type": "object",
-        "properties": {
-          "DryWeatherFlowOverrideID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "DryWeatherFlowOverrideName": {
-            "type": "string",
-            "nullable": true
-          },
-          "DryWeatherFlowOverrideDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "FieldDefinitionDto": {
         "type": "object",
         "properties": {
@@ -1570,28 +1407,6 @@
           "CreateDate": {
             "type": "string",
             "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "MonthsOfOperationDto": {
-        "type": "object",
-        "properties": {
-          "MonthsOfOperationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "MonthsOfOperationName": {
-            "type": "string",
-            "nullable": true
-          },
-          "MonthsOfOperationDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "MonthsOfOperationNereidAlias": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2127,24 +1942,6 @@
         },
         "additionalProperties": false
       },
-      "RoutingConfigurationDto": {
-        "type": "object",
-        "properties": {
-          "RoutingConfigurationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "RoutingConfigurationName": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoutingConfigurationDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "StormwaterJurisdictionSimpleDto": {
         "type": "object",
         "properties": {
@@ -2174,24 +1971,6 @@
         },
         "additionalProperties": false
       },
-      "TimeOfConcentrationDto": {
-        "type": "object",
-        "properties": {
-          "TimeOfConcentrationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "TimeOfConcentrationName": {
-            "type": "string",
-            "nullable": true
-          },
-          "TimeOfConcentrationDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "TreatmentBMPModelingAttributeDropdownItemDto": {
         "type": "object",
         "properties": {
@@ -2203,7 +1982,7 @@
             "type": "string",
             "nullable": true
           },
-          "ItemType": {
+          "FieldName": {
             "type": "string",
             "nullable": true
           }
@@ -2350,9 +2129,6 @@
             "format": "double",
             "nullable": true
           },
-          "RoutingConfiguration": {
-            "$ref": "#/components/schemas/RoutingConfigurationDto"
-          },
           "StorageVolumeBelowLowestOutletElevation": {
             "type": "number",
             "format": "double",
@@ -2362,9 +2138,6 @@
             "type": "number",
             "format": "double",
             "nullable": true
-          },
-          "TimeOfConcentration": {
-            "$ref": "#/components/schemas/TimeOfConcentrationDto"
           },
           "DrawdownTimeForDetentionVolume": {
             "type": "number",
@@ -2386,9 +2159,6 @@
             "format": "double",
             "nullable": true
           },
-          "UnderlyingHydrologicSoilGroup": {
-            "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
-          },
           "UnderlyingInfiltrationRate": {
             "type": "number",
             "format": "double",
@@ -2409,28 +2179,29 @@
             "format": "double",
             "nullable": true
           },
-          "MonthsOfOperation": {
-            "$ref": "#/components/schemas/MonthsOfOperationDto"
-          },
-          "DryWeatherFlowOverride": {
-            "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UnderlyingHydrologicSoilGroupDto": {
-        "type": "object",
-        "properties": {
-          "UnderlyingHydrologicSoilGroupID": {
+          "RoutingConfigurationID": {
             "type": "integer",
-            "format": "int32"
-          },
-          "UnderlyingHydrologicSoilGroupName": {
-            "type": "string",
+            "format": "int32",
             "nullable": true
           },
-          "UnderlyingHydrologicSoilGroupDisplayName": {
-            "type": "string",
+          "TimeOfConcentrationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UnderlyingHydrologicSoilGroupID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MonthsOfOperationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DryWeatherFlowOverrideID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },

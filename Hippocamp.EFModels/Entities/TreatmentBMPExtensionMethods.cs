@@ -17,37 +17,7 @@ namespace Hippocamp.EFModels.Entities
                 StormwaterJurisdictionName = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName,
                 Longitude = treatmentBMP.Longitude,
                 Latitude = treatmentBMP.Latitude,
-                Notes = treatmentBMP.Notes,
-
-                //AverageDivertedFlowrate
-                //AverageTreatmentFlowrate
-                //DesignDryWeatherTreatmentCapacity
-                //DesignLowFlowDiversionCapacity
-                //DesignMediaFiltrationRate
-                //DesignResidenceTimeforPermanentPool
-                //DiversionRate
-                //DrawdownTimeforWQDetentionVolume
-                //EffectiveFootprint
-                //EffectiveRetentionDepth
-                //InfiltrationDischargeRate
-                //InfiltrationSurfaceArea
-                //MediaBedFootprint
-                //PermanentPoolorWetlandVolume
-                //RoutingConfigurationID
-                //StorageVolumeBelowLowestOutletElevation
-                //SummerHarvestedWaterDemand
-                //TimeOfConcentrationID
-                //DrawdownTimeForDetentionVolume
-                //TotalEffectiveBMPVolume
-                //TotalEffectiveDrywellBMPVolume
-                //TreatmentRate
-                //UnderlyingHydrologicSoilGroupID
-                //UnderlyingInfiltrationRate
-                //WaterQualityDetentionVolume
-                //WettedFootprint
-                //WinterHarvestedWaterDemand
-                //MonthsOfOperationID
-                //DryWeatherFlowOverrideID
+                Notes = treatmentBMP.Notes
             };
 
             return treatmentBMPUpsertDto;
@@ -81,21 +51,21 @@ namespace Hippocamp.EFModels.Entities
                 InfiltrationSurfaceArea = treatmentBMPModelingAttribute?.InfiltrationSurfaceArea,
                 MediaBedFootprint = treatmentBMPModelingAttribute?.MediaBedFootprint,
                 PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute?.PermanentPoolorWetlandVolume,
-                RoutingConfiguration = treatmentBMPModelingAttribute?.RoutingConfiguration?.AsDto(),
+                RoutingConfigurationID = treatmentBMPModelingAttribute?.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = treatmentBMPModelingAttribute?.SummerHarvestedWaterDemand,
-                TimeOfConcentration = treatmentBMPModelingAttribute?.TimeOfConcentration?.AsDto(),
+                TimeOfConcentrationID = treatmentBMPModelingAttribute?.TimeOfConcentrationID,
                 DrawdownTimeForDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeForDetentionVolume,
                 TotalEffectiveBMPVolume = treatmentBMPModelingAttribute?.TotalEffectiveBMPVolume,
                 TotalEffectiveDrywellBMPVolume = treatmentBMPModelingAttribute?.TotalEffectiveDrywellBMPVolume,
                 TreatmentRate = treatmentBMPModelingAttribute?.TreatmentRate,
-                UnderlyingHydrologicSoilGroup = treatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?.AsDto(),
+                UnderlyingHydrologicSoilGroupID = treatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroupID,
                 UnderlyingInfiltrationRate = treatmentBMPModelingAttribute?.UnderlyingInfiltrationRate,
                 WaterQualityDetentionVolume = treatmentBMPModelingAttribute?.WaterQualityDetentionVolume,
                 WettedFootprint = treatmentBMPModelingAttribute?.WettedFootprint,
                 WinterHarvestedWaterDemand = treatmentBMPModelingAttribute?.WinterHarvestedWaterDemand,
-                MonthsOfOperation = treatmentBMPModelingAttribute?.MonthsOfOperation?.AsDto(),
-                DryWeatherFlowOverride = treatmentBMPModelingAttribute?.DryWeatherFlowOverride?.AsDto()
+                MonthsOfOperationID = treatmentBMPModelingAttribute?.MonthsOfOperationID,
+                DryWeatherFlowOverrideID = treatmentBMPModelingAttribute?.DryWeatherFlowOverrideID
             };
 
             return treatmentBMPUpsertDto;

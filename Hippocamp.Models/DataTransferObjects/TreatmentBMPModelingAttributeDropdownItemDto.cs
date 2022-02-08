@@ -4,17 +4,17 @@
     {
         public int ItemID { get; set; }
         public string ItemName { get; set; }
-        public string ItemType { get; set; }
+        public string FieldName { get; set; }
 
         public TreatmentBMPModelingAttributeDropdownItemDto()
         {
         }
 
-        public TreatmentBMPModelingAttributeDropdownItemDto(int itemID, string itemName, string itemType)
+        public TreatmentBMPModelingAttributeDropdownItemDto(int itemID, string itemName, string fieldName)
         {
             ItemID = itemID;
             ItemName = itemName;
-            ItemType = itemType;
+            FieldName = fieldName;
         }
     }
 }

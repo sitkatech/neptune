@@ -13,7 +13,7 @@
 export class TreatmentBMPModelingAttributeDropdownItemDto { 
     ItemID?: number;
     ItemName?: string;
-    ItemType?: string;
+    FieldName?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

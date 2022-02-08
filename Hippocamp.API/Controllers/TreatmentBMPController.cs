@@ -48,45 +48,5 @@ namespace Hippocamp.API.Controllers
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
             return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
         }
-
-        [HttpGet("treatmentBMPs/timesOfConcentration")]
-        [JurisdictionEditFeature]
-        public ActionResult<TimeOfConcentrationDto> ListTimesOfConcentration()
-        {
-            var timesOfConcentrationDtos = TreatmentBMPs.ListTimesOfConcentrationAsDto(_dbContext);
-            return Ok(timesOfConcentrationDtos);
-        }
-
-        [HttpGet("treatmentBMPs/routingConfiguration")]
-        [JurisdictionEditFeature]
-        public ActionResult<RoutingConfigurationDto> ListRoutingConfigurations()
-        {
-            var routingConfigurationDtos = TreatmentBMPs.ListRoutingConfigurationsAsDto(_dbContext);
-            return Ok(routingConfigurationDtos);
-        }
-
-        [HttpGet("treatmentBMPs/monthsOfOperation")]
-        [JurisdictionEditFeature]
-        public ActionResult<MonthsOfOperationDto> ListMonthsOfOperation()
-        {
-            var monthsOfOperationDtos = TreatmentBMPs.ListMonthsOfOperationAsDto(_dbContext);
-            return Ok(monthsOfOperationDtos);
-        }
-
-        [HttpGet("treatmentBMPs/underlyingHydrologicSoilGroup")]
-        [JurisdictionEditFeature]
-        public ActionResult<UnderlyingHydrologicSoilGroupDto> ListUnderlyingHydrologicSoilGroups()
-        {
-            var underlyingHydrologicSoilGroupDtos = TreatmentBMPs.ListUnderlyingHydrologicSoilGroupsAsDto(_dbContext);
-            return Ok(underlyingHydrologicSoilGroupDtos);
-        }
-
-        [HttpGet("treatmentBMPs/dryWeatherFlowOverride")]
-        [JurisdictionEditFeature]
-        public ActionResult<DryWeatherFlowOverrideDto> ListDryWeatherFlowOverrides()
-        {
-            var dryWeatherFlowOverrideDtos = TreatmentBMPs.ListDryWeatherFlowOverridesAsDto(_dbContext);
-            return Ok(dryWeatherFlowOverrideDtos);
-        }
     }
 }
