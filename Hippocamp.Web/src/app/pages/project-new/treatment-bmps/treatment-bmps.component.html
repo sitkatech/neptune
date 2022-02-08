@@ -53,7 +53,7 @@
                         <label class="fon">Type</label>
                     </div>
                     <div class="col-lg-10 col-sm-9">
-                        <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID"
+                        <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
                             [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
                             name="treatment-bmp-type" required>
                         </ng-select>

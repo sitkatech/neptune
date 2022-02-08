@@ -385,7 +385,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
   }
 
-  public getModelingAttributeFieldsToDisplay(treatmentBMPID: number) {
+  public getModelingAttributeFieldsToDisplay(treatmentBMPID: number): Array<string> {
     return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPID];
   }
 
@@ -399,5 +399,9 @@ export class TreatmentBmpsComponent implements OnInit {
 
   public isFieldWithDropdown(fieldName: string): boolean {
     return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
+  }
+
+  public updateModelingTypeOnTypeChange(selectedType: TreatmentBMPTypeSimpleDto) {
+    this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
   }
 }
