@@ -1,4 +1,6 @@
-﻿using Hippocamp.API.Services;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
 using Hippocamp.Models.DataTransferObjects;
@@ -33,10 +35,58 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("treatmentBMPs/types")]
         [JurisdictionEditFeature]
-        public ActionResult<TreatmentBMPTypeSimpleDto> ListTypes([FromRoute] int projectID)
+        public ActionResult<TreatmentBMPTypeSimpleDto> ListTypes()
         {
             var treatmentBMPTypeSimpleDtos = TreatmentBMPs.ListTypesAsSimpleDto(_dbContext);
             return Ok(treatmentBMPTypeSimpleDtos);
+        }
+
+        [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
+        [JurisdictionEditFeature]
+        public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems([FromRoute] int projectID)
+        {
+            var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
+            return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
+        }
+
+        [HttpGet("treatmentBMPs/timesOfConcentration")]
+        [JurisdictionEditFeature]
+        public ActionResult<TimeOfConcentrationDto> ListTimesOfConcentration()
+        {
+            var timesOfConcentrationDtos = TreatmentBMPs.ListTimesOfConcentrationAsDto(_dbContext);
+            return Ok(timesOfConcentrationDtos);
+        }
+
+        [HttpGet("treatmentBMPs/routingConfiguration")]
+        [JurisdictionEditFeature]
+        public ActionResult<RoutingConfigurationDto> ListRoutingConfigurations()
+        {
+            var routingConfigurationDtos = TreatmentBMPs.ListRoutingConfigurationsAsDto(_dbContext);
+            return Ok(routingConfigurationDtos);
+        }
+
+        [HttpGet("treatmentBMPs/monthsOfOperation")]
+        [JurisdictionEditFeature]
+        public ActionResult<MonthsOfOperationDto> ListMonthsOfOperation()
+        {
+            var monthsOfOperationDtos = TreatmentBMPs.ListMonthsOfOperationAsDto(_dbContext);
+            return Ok(monthsOfOperationDtos);
+        }
+
+        [HttpGet("treatmentBMPs/underlyingHydrologicSoilGroup")]
+        [JurisdictionEditFeature]
+        public ActionResult<UnderlyingHydrologicSoilGroupDto> ListUnderlyingHydrologicSoilGroups()
+        {
+            var underlyingHydrologicSoilGroupDtos = TreatmentBMPs.ListUnderlyingHydrologicSoilGroupsAsDto(_dbContext);
+            return Ok(underlyingHydrologicSoilGroupDtos);
+        }
+
+        [HttpGet("treatmentBMPs/dryWeatherFlowOverride")]
+        [JurisdictionEditFeature]
+        public ActionResult<DryWeatherFlowOverrideDto> ListDryWeatherFlowOverrides()
+        {
+            var dryWeatherFlowOverrideDtos = TreatmentBMPs.ListDryWeatherFlowOverridesAsDto(_dbContext);
+            return Ok(dryWeatherFlowOverrideDtos);
         }
     }
 }

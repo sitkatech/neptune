@@ -25,6 +25,7 @@ model/role-dto.ts
 model/routing-configuration-dto.ts
 model/stormwater-jurisdiction-simple-dto.ts
 model/time-of-concentration-dto.ts
+model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
 model/treatment-bmp-type-simple-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/underlying-hydrologic-soil-group-dto.ts

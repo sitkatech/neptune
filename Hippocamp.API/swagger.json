@@ -1022,17 +1022,6 @@
         "tags": [
           "TreatmentBMP"
         ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -1050,6 +1039,191 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/modelingAttributeDropdownItems": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/timesOfConcentration": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeOfConcentrationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeOfConcentrationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeOfConcentrationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/routingConfiguration": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutingConfigurationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutingConfigurationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutingConfigurationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/monthsOfOperation": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthsOfOperationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthsOfOperationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthsOfOperationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/underlyingHydrologicSoilGroup": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnderlyingHydrologicSoilGroupDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/dryWeatherFlowOverride": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DryWeatherFlowOverrideDto"
                 }
               }
             }
@@ -2012,6 +2186,24 @@
             "nullable": true
           },
           "TimeOfConcentrationDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPModelingAttributeDropdownItemDto": {
+        "type": "object",
+        "properties": {
+          "ItemID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ItemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ItemType": {
             "type": "string",
             "nullable": true
           }

@@ -23,6 +23,7 @@ export * from '././role-dto';
 export * from '././routing-configuration-dto';
 export * from '././stormwater-jurisdiction-simple-dto';
 export * from '././time-of-concentration-dto';
+export * from '././treatment-bmp-modeling-attribute-dropdown-item-dto';
 export * from '././treatment-bmp-type-simple-dto';
 export * from '././treatment-bmp-upsert-dto';
 export * from '././underlying-hydrologic-soil-group-dto';

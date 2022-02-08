@@ -27,6 +27,7 @@ import { StormwaterJurisdictionService } from 'src/app/services/stormwater-juris
 import { forkJoin } from 'rxjs';
 import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-type-simple-dto';
 import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-bmp-modeling-type.enum';
+import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
 
 declare var $: any
 
@@ -71,11 +72,12 @@ export class TreatmentBmpsComponent implements OnInit {
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
   public projectID: number;
-  public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
+  public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
   public treatmentBMPTypes: Array<TreatmentBMPTypeSimpleDto>;
+  public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
   public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
 
-  public modelingAttributesByModelingType = {
+  public static modelingAttributesByModelingType = {
     [TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain]: 
     [
       'RoutingConfiguration', 'DiversionRate', 'TimeOfConcentration', 'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
@@ -163,7 +165,7 @@ export class TreatmentBmpsComponent implements OnInit {
     ]
   };
 
-  public modelingAttributeFieldsDisplayNames = {
+  public static modelingAttributeFieldsDisplayNames = {
     AverageDivertedFlowrate: 'Average Diverted Flowrate',
     AverageTreatmentFlowrate: 'Average Treatment Flowrate',
     DesignDryWeatherTreatmentCapacity: 'Design Dry Weather Treatment Capacity',
@@ -188,7 +190,16 @@ export class TreatmentBmpsComponent implements OnInit {
     WaterQualityDetentionVolume: 'Water Quality Detention Volume',
     WettedFootprint: 'Wetted Footprint',
     WinterHarvestedWaterDemand: 'Winter Harvested Water Demand',
-  }
+    TimeOfConcentration: "Time of Concentration",
+    RoutingConfiguration: "Routing Configuration",
+    MonthsOfOperation: "Months of Operation",
+    UnderlyingHydrologicSoilGroup: "Underlying Hydrologic Soil Group",
+    DryWeatherFlowOverride: "Dry Weather Flow Override"
+  };
+
+  public static modelingAttributeFieldsWithDropdown = [
+    "TimeOfConcentration", "RoutingConfiguration", "MonthsOfOperation", "UnderlyingHydrologicSoilGroup", "DryWeatherFlowOverride"
+  ];
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
@@ -207,11 +218,13 @@ export class TreatmentBmpsComponent implements OnInit {
       forkJoin({
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-        treatmentBMPTypes: this.treatmentBMPService.getTypes()
-      }).subscribe(({treatmentBMPs, boundingBox, treatmentBMPTypes}) => {
+        treatmentBMPTypes: this.treatmentBMPService.getTypes(),
+        modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
+      }).subscribe(({treatmentBMPs, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems}) => {
         this.treatmentBMPs = treatmentBMPs;
         this.boundingBox = boundingBox;
         this.treatmentBMPTypes = treatmentBMPTypes;
+        this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
 
         this.updateMapLayers();
       });
@@ -372,11 +385,19 @@ export class TreatmentBmpsComponent implements OnInit {
     }
   }
 
-  public getModelingTypeFieldsToDisplay(modelingTypeID: number) {
-    return this.modelingAttributesByModelingType[modelingTypeID];
+  public getModelingAttributeFieldsToDisplay(treatmentBMPID: number) {
+    return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPID];
   }
 
   public getFieldDisplayName(fieldName: string) {
-    return this.modelingAttributeFieldsDisplayNames[fieldName];
+    return TreatmentBmpsComponent.modelingAttributeFieldsDisplayNames[fieldName];
+  }
+
+  public getModelingAttributeDropdownItemsByFieldName(fieldName: string): Array<TreatmentBMPModelingAttributeDropdownItemDto> {
+    return this.modelingAttributeDropdownItems.filter(x => x.ItemType == fieldName);
+  }
+
+  public isFieldWithDropdown(fieldName: string): boolean {
+    return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
   }
 }

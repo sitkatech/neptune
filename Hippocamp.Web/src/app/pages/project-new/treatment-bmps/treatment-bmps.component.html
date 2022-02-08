@@ -1,10 +1,8 @@
 <h2 class="d-inline-block">
     Proposed Treatment BMPs
 </h2>
-<div class="row">
-    <div class="col-md-9 mb-4">
-        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
-    </div>
+<div>
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <div class="row">
     <div class="col-sm-8 col-md-9 offset-sm-4 offset-md-3">
@@ -85,56 +83,20 @@
                         <h5 class="border-bottom p-2">Modeling Attributes</h5>
                     </div>
                 </div>
-                <div class="row mt-2" *ngFor="let field of getModelingTypeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)"
-                    [ngSwitch]="field">
-                    <ng-container *ngSwitchCase="'RoutingConfiguration'">
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <label>Routing Configuration</label>
-                        </div>
-                        <div class="col-sm-8 font-italic">
-                            dropdown here
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'UnderlyingHydrologicSoilGroup'">
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <label>Underlying Hydrologic Soil Group</label>
-                        </div>
-                        <div class="col-sm-8 font-italic">
-                            dropdown here
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'MonthsOfOperation'">
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <label>Months of Operation</label>
-                        </div>
-                        <div class="col-sm-8 font-italic">
-                            dropdown here
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'DryWeatherFlowOverride'">
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <label>Dry Weather Flow Override</label>
-                        </div>
-                        <div class="col-sm-8 font-italic">
-                            dropdown here
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'TimeOfConcentration'">
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <label>Time of Concentration</label>
-                        </div>
-                        <div class="col-sm-8 font-italic">
-                            dropdown here
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchDefault>
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <label>{{getFieldDisplayName(field)}}</label>
-                        </div>
+                <div class="row mt-2" *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
+                    <div class="col-sm-4 control-label font-weight-bold text-sm-right">
+                        <label>{{getFieldDisplayName(fieldName)}}</label>
+                    </div>
+                    <div class="col-sm-8 p-0" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
+                        <ng-select [(ngModel)]="selectedTreatmentBMP[fieldName]"
+                            [items]="getModelingAttributeDropdownItemsByFieldName(fieldName)" bindLabel="ItemID" bindValue="ItemName" required>
+                        </ng-select>
+                    </div>
+                    <ng-template #numericModelingAttributeField>
                         <div class="col-xs-4">
-                            <input type="text" class="form-control" [name]="field" [(ngModel)]="selectedTreatmentBMP[field]">
+                            <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]">
                         </div>
-                    </ng-container>
+                    </ng-template>
                 </div>
             </div>
         </div>
