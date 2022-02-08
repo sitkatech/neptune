@@ -5,6 +5,7 @@ export enum CustomRichTextType{
     About = 55,
     ProjectsList = 56,
     ProjectInstructions = 57,
+    ProjectBasics = 58,
     ProjectAttachments = 59,
     TreatmentBMPs = 60
 }
