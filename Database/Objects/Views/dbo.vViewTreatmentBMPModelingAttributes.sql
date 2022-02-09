@@ -34,6 +34,7 @@ left join dbo.PrecipitationZone pz on tb.PrecipitationZoneID = pz.PrecipitationZ
 left join dbo.Watershed ws on tb.WatershedID = ws.WatershedID
 left join dbo.Delineation d on d.TreatmentBMPID = tb.TreatmentBMPID
 left join dbo.DelineationType dt on dt.DelineationTypeID = d.DelineationTypeID
+where tb.ProjectID is null
 GO
 
 

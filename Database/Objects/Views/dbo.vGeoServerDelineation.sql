@@ -61,6 +61,7 @@ from
 		on t.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 	left join dbo.Organization o
 		on sj.OrganizationID = o.OrganizationID
+	where t.ProjectID is null
 
 union all
 

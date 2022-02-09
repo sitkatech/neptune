@@ -32,4 +32,4 @@ from
 		on bmp.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 	join dbo.Organization o
 		on sj.OrganizationID = o.OrganizationID
-where ty.TreatmentBMPModelingTypeID is not null
+where ty.TreatmentBMPModelingTypeID is not null and bmp.ProjectID is null

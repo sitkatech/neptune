@@ -1386,7 +1386,7 @@ namespace Neptune.Web.Controllers
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView().ToList();
 
-            var currentPersonTrashScreens = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.StormwaterJurisdiction)
+            var currentPersonTrashScreens = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Include(x => x.StormwaterJurisdiction)
                 .Include(x => x.StormwaterJurisdiction.Organization)
                 .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
                             stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();

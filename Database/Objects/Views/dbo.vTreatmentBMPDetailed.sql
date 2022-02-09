@@ -58,5 +58,6 @@ left join
 	from dbo.TreatmentBMPBenchmarkAndThreshold tbbt
 	group by tbbt.TreatmentBMPID, tbbt.TreatmentBMPTypeID
 ) enteredBandT on tb.TreatmentBMPID = enteredBandT.TreatmentBMPID
+where tb.ProjectID is null
 
 GO

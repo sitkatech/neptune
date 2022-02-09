@@ -49,7 +49,7 @@ namespace Neptune.Web.Controllers
         public ViewResult DelineationMap(int? treatmentBMPID)
         {
             var treatmentBMP = treatmentBMPID.HasValue
-                ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(
+                ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().GetTreatmentBMP(
                     treatmentBMPID.Value)
                 : null;
 
@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().ToList();
             var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID);
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.Delineations).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Include(x => x.Delineations).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", treatmentBMPs, BoundingBox.GetBoundingBox(stormwaterJurisdictionsPersonCanView));
             var bulkUploadTreatmentBMPDelineationsUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(x => x.UpdateDelineationGeometry());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl);

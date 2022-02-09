@@ -53,7 +53,7 @@ namespace Neptune.Web.Models
 
         public static IEnumerable<TreatmentBMP> GetTreatmentBMPs(this RegionalSubbasin regionalSubbasin)
         {
-            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs()
                 .Where(x => regionalSubbasin.CatchmentGeometry.Contains(x.LocationPoint));
         }
     }
