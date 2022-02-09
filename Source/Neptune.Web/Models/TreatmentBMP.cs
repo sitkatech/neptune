@@ -32,17 +32,17 @@ namespace Neptune.Web.Models
     {
         public bool CanView(Person person)
         {
-            return person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
+            return ProjectID == null && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
         public bool CanEdit(Person person)
         {
-            return person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
+            return ProjectID == null && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
         public bool CanDelete(Person person)
         {
-            return person.IsManagerOrAdmin() && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
+            return ProjectID == null && person.IsManagerOrAdmin() && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
         public string GetAuditDescriptionString()
