@@ -1,4 +1,6 @@
-﻿using Hippocamp.API.Services;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
 using Hippocamp.Models.DataTransferObjects;
@@ -29,6 +31,22 @@ namespace Hippocamp.API.Controllers
         {
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListAsDisplayDto(_dbContext);
             return Ok(treatmentBMPDisplayDtos);
+        }
+
+        [HttpGet("treatmentBMPs/types")]
+        [JurisdictionEditFeature]
+        public ActionResult<TreatmentBMPTypeSimpleDto> ListTypes()
+        {
+            var treatmentBMPTypeSimpleDtos = TreatmentBMPs.ListTypesAsSimpleDto(_dbContext);
+            return Ok(treatmentBMPTypeSimpleDtos);
+        }
+
+        [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
+        [JurisdictionEditFeature]
+        public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems([FromRoute] int projectID)
+        {
+            var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
+            return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
         }
     }
 }

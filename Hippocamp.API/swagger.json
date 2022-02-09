@@ -1017,6 +1017,75 @@
         }
       }
     },
+    "/treatmentBMPs/types": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/modelingAttributeDropdownItems": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": [
@@ -1902,6 +1971,50 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPModelingAttributeDropdownItemDto": {
+        "type": "object",
+        "properties": {
+          "ItemID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ItemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FieldName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPTypeSimpleDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsAnalyzedInModelingModule": {
+            "type": "boolean"
+          },
+          "TreatmentBMPModelingTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPUpsertDto": {
         "type": "object",
         "properties": {
@@ -1919,6 +2032,11 @@
           },
           "TreatmentBMPTypeName": {
             "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPModelingTypeID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "StormwaterJurisdictionName": {
@@ -1939,6 +2057,151 @@
           },
           "Notes": {
             "type": "string",
+            "nullable": true
+          },
+          "AverageDivertedFlowrate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "AverageTreatmentFlowrate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignDryWeatherTreatmentCapacity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignLowFlowDiversionCapacity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignMediaFiltrationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignResidenceTimeforPermanentPool": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DiversionRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DrawdownTimeforWQDetentionVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "EffectiveFootprint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "EffectiveRetentionDepth": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "InfiltrationDischargeRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "InfiltrationSurfaceArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MediaBedFootprint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PermanentPoolorWetlandVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "StorageVolumeBelowLowestOutletElevation": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerHarvestedWaterDemand": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DrawdownTimeForDetentionVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TotalEffectiveBMPVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TotalEffectiveDrywellBMPVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TreatmentRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "UnderlyingInfiltrationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WaterQualityDetentionVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WettedFootprint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterHarvestedWaterDemand": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "RoutingConfigurationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TimeOfConcentrationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UnderlyingHydrologicSoilGroupID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MonthsOfOperationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DryWeatherFlowOverrideID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },

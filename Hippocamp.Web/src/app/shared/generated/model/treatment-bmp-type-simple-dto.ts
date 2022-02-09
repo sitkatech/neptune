@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 
-export class StormwaterJurisdictionPublicBMPVisibilityTypeDto { 
-    StormwaterJurisdictionPublicBMPVisibilityTypeID?: number;
-    StormwaterJurisdictionPublicBMPVisibilityTypeName?: string;
-    StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName?: string;
+export class TreatmentBMPTypeSimpleDto { 
+    TreatmentBMPTypeID?: number;
+    TreatmentBMPTypeName?: string;
+    TreatmentBMPTypeDescription?: string;
+    IsAnalyzedInModelingModule?: boolean;
+    TreatmentBMPModelingTypeID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

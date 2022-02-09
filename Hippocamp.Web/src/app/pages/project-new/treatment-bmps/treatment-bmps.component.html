@@ -1,10 +1,8 @@
 <h2 class="d-inline-block">
     Proposed Treatment BMPs
 </h2>
-<div class="row">
-    <div class="col-md-9 mb-4">
-        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
-    </div>
+<div class="mb-4">
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <div class="row">
     <div class="col-sm-8 col-md-9 offset-sm-4 offset-md-3">
@@ -29,13 +27,13 @@
 <div class="mt-4 card" *ngIf="selectedTreatmentBMP">
     <div class="card-body bg-white">
         <div class="row">
-            <div class="col-lg-4 order-lg-last">
+            <div class="col-sm-4 order-sm-last">
                 <div class="row d-flex">
-                    <div class="col-auto ml-auto">
-                        <a class="btn btn-outline-info mr-2" placement="top" ngbTooltip="Edit feature coming soon">
-                            <i class="fa fa-edit"></i>&nbsp; Edit
+                    <div class="col-auto ml-auto text-right">
+                        <a class="btn btn-sm btn-outline-info mt-2 mb-2" placement="top" ngbTooltip="Edit location feature coming soon">
+                            <i class="fa fa-edit"></i>&nbsp; Edit Location
                         </a>
-                        <a class="btn btn-outline-danger" placement="top" ngbTooltip="Delete feature coming soon">
+                        <a class="btn btn-sm btn-outline-danger ml-2" placement="top" ngbTooltip="Delete feature coming soon">
                             <i class="fa fa-trash"></i>&nbsp; Delete
                         </a>
                     </div>
@@ -43,10 +41,23 @@
             </div>
             <div class="col-sm-8">
                 <div class="row">
-                    <div class="col-lg-2 col-sm-3 font-weight-bold text-sm-right">Name</div>
-                    <div class="col-lg-10 col-sm-9">{{selectedTreatmentBMP.TreatmentBMPName}}</div>
-                    <div class="col-lg-2 col-sm-3 font-weight-bold text-sm-right">Type</div>
-                    <div class="col-lg-10 col-sm-9">{{selectedTreatmentBMP.TreatmentBMPTypeName}}</div>
+                    <div class="col-lg-2 col-sm-3 control-label font-weight-bold text-sm-right">
+                        <label class="fon">Name</label>
+                    </div>
+                    <div class="col-lg-10 col-sm-9">
+                        <input type="text" class="form-control" name="treatment-bmp-name" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPName">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-lg-2 col-sm-3 control-label font-weight-bold text-sm-right">
+                        <label class="fon">Type</label>
+                    </div>
+                    <div class="col-lg-10 col-sm-9">
+                        <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
+                            [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
+                            name="treatment-bmp-type" required>
+                        </ng-select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,7 +82,24 @@
                     <div class="col-12">
                         <h5 class="border-bottom p-2">Modeling Attributes</h5>
                     </div>
-                    <div class="col-sm-12 font-italic">Coming soon!</div>
+                </div>
+                <div class="row p-2" *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
+                    <div class="col-sm-4 control-label font-weight-bold text-sm-right">
+                        <label>{{getFieldDisplayName(fieldName)}}</label>
+                    </div>
+                    <div class="col-sm-7 p-0" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
+                        <select class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]">
+                            <option [value]="" disabled hidden>Select a {{getFieldDisplayName(fieldName)}}</option>
+                            <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(fieldName)" [value]="dropdownItem.ItemID">
+                                {{dropdownItem.ItemName}}
+                            </option>
+                        </select>
+                    </div>
+                    <ng-template #numericModelingAttributeField>
+                        <div class="col-xs-4">
+                            <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]">
+                        </div>
+                    </ng-template>
                 </div>
             </div>
         </div>

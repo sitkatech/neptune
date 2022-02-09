@@ -10,11 +10,10 @@
  * Do not edit the class manually.
  */
 
-export class ProjectStatusDto { 
-    ProjectStatusID?: number;
-    ProjectStatusName?: string;
-    ProjectStatusDisplayName?: string;
-    ProjectStatusSortOrder?: number;
+export class TreatmentBMPModelingAttributeDropdownItemDto { 
+    ItemID?: number;
+    ItemName?: string;
+    FieldName?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

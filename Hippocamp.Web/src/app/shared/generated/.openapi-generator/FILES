@@ -21,4 +21,6 @@ model/project-simple-dto.ts
 model/project-status-simple-dto.ts
 model/role-dto.ts
 model/stormwater-jurisdiction-simple-dto.ts
+model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
+model/treatment-bmp-type-simple-dto.ts
 model/treatment-bmp-upsert-dto.ts
