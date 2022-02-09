@@ -27,7 +27,12 @@ namespace Neptune.Web.Models
     {
         public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(this IQueryable<TreatmentBMP> treatmentBMP, Person currentPerson)
         {
-            return treatmentBMP.Where(x => x.InventoryIsVerified == false).ToList().Where(x => x.CanView(currentPerson)).OrderBy(x => x.TreatmentBMPName).ToList();
+            return treatmentBMP.GetNonPlanningModuleBMPs().Where(x => x.InventoryIsVerified == false).ToList().Where(x => x.CanView(currentPerson)).OrderBy(x => x.TreatmentBMPName).ToList();
+        }
+
+        public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(this IQueryable<TreatmentBMP> treatmentBMP)
+        {
+            return treatmentBMP.Where(x => x.ProjectID == null);
         }
     }
 

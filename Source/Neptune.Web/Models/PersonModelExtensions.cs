@@ -200,12 +200,12 @@ namespace Neptune.Web.Models
                     .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID != (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
                     .Select(x => x.StormwaterJurisdictionID);
                 
-                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && x.InventoryIsVerified).ToList();
+                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && x.InventoryIsVerified).ToList();
                 return treatmentBMPs;
             }
             
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
-            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return treatmentBmps;
         }
 

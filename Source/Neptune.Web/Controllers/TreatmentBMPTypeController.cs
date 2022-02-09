@@ -161,7 +161,7 @@ namespace Neptune.Web.Controllers
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(CurrentPerson, showDelete, showEdit, treatmentBmpType);
             var treatmentBMPs = 
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs()
                     .Include(x => x.WaterQualityManagementPlan)
                     .Include(x => x.CustomAttributes)
                     .Include(x => x.CustomAttributes.Select(y => y.CustomAttributeValues))
