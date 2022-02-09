@@ -21,7 +21,7 @@ namespace Neptune.Web.Controllers
                                             "which attributes are missing for a specific facility.")]
         public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
-            var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+            var data = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs()
                 .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x => new
                 {
                     x.TreatmentBMPID,

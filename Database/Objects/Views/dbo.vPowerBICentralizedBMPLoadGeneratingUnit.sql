@@ -12,4 +12,4 @@ from
 		on d.DelineationGeometry.STContains(lgu.LoadGeneratingUnitGeometry) = 1
 	join TreatmentBMP bmp
 		on d.TreatmentBMPID = bmp.TreatmentBMPID
-where d.DelineationTypeID = 1
+where d.DelineationTypeID = 1 and bmp.ProjectID is null

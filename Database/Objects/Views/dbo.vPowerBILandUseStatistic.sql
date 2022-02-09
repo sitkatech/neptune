@@ -36,3 +36,4 @@ from
 		on rsb.RegionalSubbasinID = lgu.RegionalSubbasinID
 	left join dbo.LSPCBasin lspc
 		on lspc.LSPCBasinID = lgu.LSPCBasinID
+	where t.ProjectID is null
