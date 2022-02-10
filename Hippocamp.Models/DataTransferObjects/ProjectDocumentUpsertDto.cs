@@ -27,8 +27,8 @@ namespace Hippocamp.Models.DataTransferObjects
             if (extension == null || !acceptableExtensions.Contains(extension.ToLower()))
                 yield return new ValidationResult("File extension is not valid", new[] { "FileResource" });
 
-            if (size > 26214400)
-                yield return new ValidationResult("File size is greater than 25MB", new[] { "FileResource" });
+            if (size > 30 * 104 * 1024)
+                yield return new ValidationResult("File size is greater than 30MB", new[] { "FileResource" });
         }
     }
 }

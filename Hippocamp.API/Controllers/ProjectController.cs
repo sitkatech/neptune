@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hippocamp.API.Services;
@@ -105,7 +104,8 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpPost("projects/{projectID}/attachments")]
-        [RequestSizeLimit(26214400)]
+        [RequestSizeLimit(30 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 30 * 1024 * 1024), ProducesResponseType(StatusCodes.Status413RequestEntityTooLarge)]
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDocumentSimpleDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {
