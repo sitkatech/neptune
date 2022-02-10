@@ -48,5 +48,20 @@ namespace Hippocamp.API.Controllers
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
             return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
         }
+
+        [HttpPut("treatmentBMPs")]
+        [JurisdictionEditFeature]
+        public ActionResult MergeTreatmentBMPs(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
+        {
+            var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID != 0).ToList();
+            TreatmentBMPs.MergeUpdatedAndDeletedTreatmentBMPs(_dbContext, updatedTreatmentBMPs);
+
+            var newTreatmentBMPs = treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID == 0).ToList();
+            TreatmentBMPs.MergeNewTreatmentBMPs(_dbContext, newTreatmentBMPs);
+
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
     }
 }
