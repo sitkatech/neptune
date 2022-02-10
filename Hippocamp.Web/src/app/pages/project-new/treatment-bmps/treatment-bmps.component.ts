@@ -79,6 +79,7 @@ export class TreatmentBmpsComponent implements OnInit {
   public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
   public treatmentBMPTypes: Array<TreatmentBMPTypeSimpleDto>;
   public treatmentBMPModel: TreatmentBMPUpsertDto;
+  public isLoadingSubmit = false;
 
   public static modelingAttributesByModelingType = {
     [TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain]: 
@@ -411,8 +412,8 @@ export class TreatmentBmpsComponent implements OnInit {
     this.treatmentBMPModel = Object.assign({}, this.selectedTreatmentBMP);
   }
 
-  public getModelingAttributeFieldsToDisplay(treatmentBMPID: number): Array<string> {
-    return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPID];
+  public getModelingAttributeFieldsToDisplay(treatmentBMPModelingTypeID: number): Array<string> {
+    return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPModelingTypeID];
   }
 
   public getFieldDisplayName(fieldName: string) {
@@ -431,56 +432,10 @@ export class TreatmentBmpsComponent implements OnInit {
     this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
   }
 
-  public onTreatmentBMPSave(editTreatmentBMPForm: HTMLFormElement): void {
-    var treatmentBMPToUpdate = this.treatmentBMPs.filter(x => x.TreatmentBMPID == this.treatmentBMPModel.TreatmentBMPID)[0];
-    if (treatmentBMPToUpdate) {
-      this.updateTreatmentBMPFromModel(treatmentBMPToUpdate);
-    } else {
-      var newTreatmentBMP = new TreatmentBMPUpsertDto();
-      this.updateTreatmentBMPFromModel(newTreatmentBMP);
-      // set defaults here
-      this.treatmentBMPs.push(newTreatmentBMP);
-    }
-  }
-
-  private updateTreatmentBMPFromModel(treatmentBMP: TreatmentBMPUpsertDto) {
-    treatmentBMP.TreatmentBMPName = this.treatmentBMPModel.TreatmentBMPName;
-    treatmentBMP.TreatmentBMPTypeID = this.treatmentBMPModel.TreatmentBMPTypeID;
-    treatmentBMP.TreatmentBMPTypeName = this.treatmentBMPModel.TreatmentBMPTypeName;
-    treatmentBMP.TreatmentBMPModelingTypeID = this.treatmentBMPModel.TreatmentBMPModelingTypeID;
-    treatmentBMP.StormwaterJurisdictionName = this.treatmentBMPModel.StormwaterJurisdictionName;
-    treatmentBMP.WatershedName = this.treatmentBMPModel.WatershedName;
-    treatmentBMP.Longitude = this.treatmentBMPModel.Longitude;
-    treatmentBMP.Latitude = this.treatmentBMPModel.Latitude;
-    treatmentBMP.Notes = this.treatmentBMPModel.Notes;
-    treatmentBMP.AverageDivertedFlowrate = this.treatmentBMPModel.AverageDivertedFlowrate;
-    treatmentBMP.AverageTreatmentFlowrate = this.treatmentBMPModel.AverageTreatmentFlowrate;
-    treatmentBMP.DesignDryWeatherTreatmentCapacity = this.treatmentBMPModel.DesignDryWeatherTreatmentCapacity;
-    treatmentBMP.DesignLowFlowDiversionCapacity = this.treatmentBMPModel.DesignLowFlowDiversionCapacity;
-    treatmentBMP.DesignMediaFiltrationRate = this.treatmentBMPModel.DesignMediaFiltrationRate;
-    treatmentBMP.DesignResidenceTimeforPermanentPool = this.treatmentBMPModel.DesignResidenceTimeforPermanentPool;
-    treatmentBMP.DiversionRate = this.treatmentBMPModel.DiversionRate;
-    treatmentBMP.DrawdownTimeforWQDetentionVolume = this.treatmentBMPModel.DrawdownTimeforWQDetentionVolume;
-    treatmentBMP.EffectiveFootprint = this.treatmentBMPModel.EffectiveFootprint;
-    treatmentBMP.EffectiveRetentionDepth = this.treatmentBMPModel.EffectiveRetentionDepth;
-    treatmentBMP.InfiltrationDischargeRate = this.treatmentBMPModel.InfiltrationDischargeRate;
-    treatmentBMP.InfiltrationSurfaceArea = this.treatmentBMPModel.InfiltrationSurfaceArea;
-    treatmentBMP.MediaBedFootprint = this.treatmentBMPModel.MediaBedFootprint;
-    treatmentBMP.PermanentPoolorWetlandVolume = this.treatmentBMPModel.PermanentPoolorWetlandVolume;
-    treatmentBMP.StorageVolumeBelowLowestOutletElevation = this.treatmentBMPModel.StorageVolumeBelowLowestOutletElevation;
-    treatmentBMP.SummerHarvestedWaterDemand = this.treatmentBMPModel.SummerHarvestedWaterDemand;
-    treatmentBMP.DrawdownTimeForDetentionVolume = this.treatmentBMPModel.DrawdownTimeForDetentionVolume;
-    treatmentBMP.TotalEffectiveBMPVolume = this.treatmentBMPModel.TotalEffectiveBMPVolume;
-    treatmentBMP.TotalEffectiveDrywellBMPVolume = this.treatmentBMPModel.TotalEffectiveDrywellBMPVolume;
-    treatmentBMP.TreatmentRate = this.treatmentBMPModel.TreatmentRate;
-    treatmentBMP.UnderlyingInfiltrationRate = this.treatmentBMPModel.UnderlyingInfiltrationRate;
-    treatmentBMP.WaterQualityDetentionVolume = this.treatmentBMPModel.WaterQualityDetentionVolume;
-    treatmentBMP.WettedFootprint = this.treatmentBMPModel.WettedFootprint;
-    treatmentBMP.WinterHarvestedWaterDemand = this.treatmentBMPModel.WinterHarvestedWaterDemand;
-    treatmentBMP.RoutingConfigurationID = this.treatmentBMPModel.RoutingConfigurationID;
-    treatmentBMP.TimeOfConcentrationID = this.treatmentBMPModel.TimeOfConcentrationID;
-    treatmentBMP.UnderlyingHydrologicSoilGroupID = this.treatmentBMPModel.UnderlyingHydrologicSoilGroupID;
-    treatmentBMP.MonthsOfOperationID = this.treatmentBMPModel.MonthsOfOperationID;
-    treatmentBMP.DryWeatherFlowOverrideID = this.treatmentBMPModel.DryWeatherFlowOverrideID;
+  public onSubmit() {
+    this.isLoadingSubmit = true;
+    this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
+      this.isLoadingSubmit = false;
+    });
   }
 }

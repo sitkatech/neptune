@@ -147,29 +147,31 @@ namespace Hippocamp.EFModels.Entities
                 (x, y) => x.TreatmentBMPModelingAttributeID == y.TreatmentBMPModelingAttributeID);
         }
 
-        public static void MergeUpdatedAndDeletedTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
+        public static void MergeUpdatedAndDeletedTreatmentBMPsByProjectID(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, int projectID)
         {
             // update TreatmentBMP and TreatmentBMPModelingAttribute records
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos
                 .Select(TreatmentBMPFromUpsertDto);
 
-            var existingTreatmentBMPs = dbContext.TreatmentBMPs.ToList();
-            existingTreatmentBMPs.MergeUpdate(updatedTreatmentBMPs, 
+            var existingProjectTreatmentBMPs = dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).ToList();
+            existingProjectTreatmentBMPs.MergeUpdate(updatedTreatmentBMPs, 
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>
                 {
                     x.TreatmentBMPID = y.TreatmentBMPID;
                     x.TreatmentBMPName = y.TreatmentBMPName;
                     x.TreatmentBMPTypeID = y.TreatmentBMPTypeID;
-                    x.LocationPoint4326 = y.LocationPoint;
+                    //x.LocationPoint4326 = y.LocationPoint;
                     x.Notes = y.Notes;
                 });
 
             var updatedTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos
                 .Select(TreatmentBMPModelingAttributeFromUpsertDto);
 
-            var existingTreatmentBMPModelingAttributes = dbContext.TreatmentBMPModelingAttributes.ToList();
-            existingTreatmentBMPModelingAttributes.MergeUpdate(updatedTreatmentBMPModelingAttributes,
+            var existingProjectTreatmentBMPIDs = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
+            var existingProjectTreatmentBMPModelingAttributes = dbContext.TreatmentBMPModelingAttributes
+                .Where(x => existingProjectTreatmentBMPIDs.Contains(x.TreatmentBMPID)).ToList();
+            existingProjectTreatmentBMPModelingAttributes.MergeUpdate(updatedTreatmentBMPModelingAttributes,
                 (x, y) => x.TreatmentBMPModelingAttributeID == y.TreatmentBMPModelingAttributeID,
                 (x, y) =>
                 {
@@ -205,14 +207,15 @@ namespace Hippocamp.EFModels.Entities
                     x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
                 });
 
-            // delete TreatmentBMPModelingAttribute records, and then TreatmentBMP records
+            // delete TreatmentBMPModelingAttribute records
             var allTreatmentBMPModelingAttributesInDatabase = dbContext.TreatmentBMPModelingAttributes;
-            existingTreatmentBMPModelingAttributes.MergeDelete(updatedTreatmentBMPModelingAttributes, 
+            existingProjectTreatmentBMPModelingAttributes.MergeDelete(updatedTreatmentBMPModelingAttributes, 
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID, 
                 allTreatmentBMPModelingAttributesInDatabase);
 
+            // delete TreatmentBMP records
             var allTreatmentBMPsInDatabase = dbContext.TreatmentBMPs;
-            existingTreatmentBMPs.MergeDelete(updatedTreatmentBMPs,
+            existingProjectTreatmentBMPs.MergeDelete(updatedTreatmentBMPs,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 allTreatmentBMPsInDatabase);
         }

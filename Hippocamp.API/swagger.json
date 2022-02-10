@@ -1015,10 +1015,81 @@
             }
           }
         }
-      },
+      }
+    },
+    "/treatmentBMPs/types": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/modelingAttributeDropdownItems": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/{projectID}": {
       "put": {
         "tags": [
           "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -1059,75 +1130,6 @@
         "responses": {
           "200": {
             "description": "Success"
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/types": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/modelingAttributeDropdownItems": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
-                }
-              }
-            }
           }
         }
       }
