@@ -19,6 +19,7 @@ import { ProjectBasicsComponent } from './pages/project-new/project-basics/proje
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
 import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
+import { DelineationsComponent } from './pages/project-new/delineations/delineations.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -41,7 +42,7 @@ const routes: Routes = [
     { path: "stormwater-treatments", children: [
       { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
       { path: "treatment-bmps", component:  TreatmentBmpsComponent},
-      { path: "delineations", component:  UnderConstructionComponent},
+      { path: "delineations", component:  DelineationsComponent},
       { path: "modeled-performance", component:  UnderConstructionComponent},
     ]},
     { path: "attachments", component:  ProjectAttachmentsComponent},
