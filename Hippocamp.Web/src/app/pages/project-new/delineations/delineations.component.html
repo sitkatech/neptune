@@ -1,0 +1,45 @@
+<h2 class="d-inline-block">
+    Proposed Treatment BMPs
+</h2>
+<div class="mb-4">
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</div>
+<div class="row">
+    <div class="col-sm-8 col-md-9 offset-sm-4 offset-md-3">
+        <p>Select a Treatment BMP from the list or click a location on the map to explore.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
+    </div>
+</div>
+<div class="mt-4 card">
+    <div class="card-body bg-white">
+        <div class="row">
+            <div class="col-12 table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Treatment BMP</th>
+                            <th>Delineation Area</th>
+                            <th>Distributed?</th>
+                            <th>Centralized?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let treatmentBMP of treatmentBMPs"
+                            class="selectable"
+                            [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
+                            (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
+                            <td>{{treatmentBMP.TreatmentBMPName}}</td>
+                            <td>Not yet provided</td>
+                            <td><button class="btn btn-hippocamp btn-disabled" placement="top" ngbTooltip="Draw on Map feature coming soon">Draw on Map</button></td>
+                            <td><button class="btn btn-hippocamp btn-disabled" placement="top" ngbTooltip="Trace Network feature coming soon">Trace Network</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
