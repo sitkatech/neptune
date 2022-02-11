@@ -56,13 +56,14 @@ namespace Hippocamp.API.Controllers
         {
 
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID > 0).ToList();
-            var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == projectID).ToList();
+            var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).ToList();
+            var existingProjectTreatmentBMPModelingAttributes = _dbContext.TreatmentBMPModelingAttributes.Where(x => existingProjectTreatmentBMPs.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID)).ToList();
             var allTreatmentBMPsInDatabase = _dbContext.TreatmentBMPs;
             var allTreatmentBMPModelingAttributesInDatabase = _dbContext.TreatmentBMPModelingAttributes;
-            TreatmentBMPs.MergeUpdatedAndDeletedTreatmentBMPsByProjectID(updatedTreatmentBMPs, existingProjectTreatmentBMPs, allTreatmentBMPsInDatabase, allTreatmentBMPModelingAttributesInDatabase);
+            TreatmentBMPs.MergeUpdatedAndDeletedTreatmentBMPsByProjectID(updatedTreatmentBMPs, existingProjectTreatmentBMPs, allTreatmentBMPsInDatabase, allTreatmentBMPModelingAttributesInDatabase, existingProjectTreatmentBMPModelingAttributes);
 
             var newTreatmentBMPs = treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID <= 0).ToList();
-            TreatmentBMPs.MergeNewTreatmentBMPs(_dbContext, newTreatmentBMPs, existingProjectTreatmentBMPs, allTreatmentBMPsInDatabase, allTreatmentBMPModelingAttributesInDatabase);
+            TreatmentBMPs.MergeNewTreatmentBMPs(_dbContext, newTreatmentBMPs, existingProjectTreatmentBMPs, allTreatmentBMPsInDatabase, allTreatmentBMPModelingAttributesInDatabase, existingProjectTreatmentBMPModelingAttributes);
 
             _dbContext.SaveChanges();
 

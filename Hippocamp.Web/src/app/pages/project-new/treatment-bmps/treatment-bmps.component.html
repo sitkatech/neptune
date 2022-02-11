@@ -12,12 +12,12 @@
 <div class="row">
     <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
         <ul class="list-group">
-            <li class="list-group-item" *ngFor="let treatmentBMP of treatmentBMPs"
+            <li class="list-group-item font-weight-bold" *ngFor="let treatmentBMP of treatmentBMPs"
                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                 (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
                 {{treatmentBMP.TreatmentBMPName ?? "New Treatment BMP"}}
-                <p class="small mb-0">
-                    Type: {{treatmentBMP.TreatmentBMPTypeID ? getTypeNameByID(treatmentBMP.TreatmentBMPTypeID) : "Not Selected"}}
+                <p class="small mb-0 mt-1">
+                    Type: {{treatmentBMP.TreatmentBMPTypeID ? getTypeNameByTypeID(treatmentBMP.TreatmentBMPTypeID) : "Not Selected"}}
                 </p>
             </li>
         </ul>
@@ -55,10 +55,15 @@
                         <label>Type</label>
                     </div>
                     <div class="col-lg-10 col-sm-9">
-                        <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
-                            [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
-                            name="type" required>
-                        </ng-select>
+                        <div class="font-weight-bold" *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0; else treatmentBMPTypeSelect">
+                            {{getTypeNameByTypeID(selectedTreatmentBMP.TreatmentBMPTypeID)}}
+                        </div>
+                        <ng-template #treatmentBMPTypeSelect>
+                            <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
+                                [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
+                                name="type" required>
+                            </ng-select>
+                        </ng-template>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -150,7 +155,7 @@
     </div>
 </ng-template>
 <div class="row m-1 mt-3">
-    <button class="btn btn-hippocamp ml-auto" [disabled]="true" (click)="onSubmit()">
+    <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit()">
         <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
         Save
     </button>

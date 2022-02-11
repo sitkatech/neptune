@@ -31,6 +31,9 @@ import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-
 import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
 import { environment } from 'src/environments/environment';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Alert } from 'src/app/shared/models/alert';
+import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 declare var $: any
 
@@ -214,7 +217,8 @@ export class TreatmentBmpsComponent implements OnInit {
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private alertService: AlertService
   ) {
   }
 
@@ -389,7 +393,7 @@ export class TreatmentBmpsComponent implements OnInit {
     if (this.selectedListItem) {
       this.selectedListItem = null;
       this.selectedListItemDetails = {};
-      this.map.removeLayer(this.selectedObjectLayer);
+      // this.map.removeLayer(this.selectedObjectLayer);
       this.selectedObjectLayer = null;
     }
     this.selectedListItem = treatmentBMPID;
@@ -422,7 +426,7 @@ export class TreatmentBmpsComponent implements OnInit {
     return TreatmentBmpsComponent.modelingAttributeFieldsDisplayNames[fieldName];
   }
 
-  public getTypeNameByID(typeID: number) {
+  public getTypeNameByTypeID(typeID: number) {
     return this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName;
   }
 
@@ -465,6 +469,8 @@ export class TreatmentBmpsComponent implements OnInit {
     newTreatmentBMP.TreatmentBMPID = this.newTreatmentBMPIndex;
     this.newTreatmentBMPIndex--;
 
+    console.log(newTreatmentBMP);
+
     this.treatmentBMPs.push(newTreatmentBMP);
     this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
     document.getElementById("treatmentBMPDetails").scrollIntoView();
@@ -472,8 +478,16 @@ export class TreatmentBmpsComponent implements OnInit {
 
   public onSubmit() {
     this.isLoadingSubmit = true;
+    this.alertService.clearAlerts();
+    window.scroll(0,0);
+
     this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
       this.isLoadingSubmit = false;
+      this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success, true));
+
+      this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
+        this.treatmentBMPs = treatmentBMPs;
+      })
     });
   }
 }

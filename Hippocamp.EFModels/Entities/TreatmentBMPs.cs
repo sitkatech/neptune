@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hippocamp.API.Util;
 using Hippocamp.Models.DataTransferObjects;
@@ -15,6 +16,7 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.Watershed)
+                .Include(x => x.OwnerOrganization)
                 .AsNoTracking();
         }
 
@@ -81,14 +83,14 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPModelingAttributeDropdownItemDtos;
         }
 
-        public static void MergeNewTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingProjectTreatmentBMPs, DbSet<TreatmentBMP> allTreatmentBMPsInDatabase, DbSet<TreatmentBMPModelingAttribute> allTreatmentBMPModelingAttributesInDatabase)
+        public static void MergeNewTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingProjectTreatmentBMPs, DbSet<TreatmentBMP> allTreatmentBMPsInDatabase, DbSet<TreatmentBMPModelingAttribute> allTreatmentBMPModelingAttributesInDatabase, List<TreatmentBMPModelingAttribute> existingProjectTreatmentBmpModelingAttributes)
         {
             // merge new Treatment BMPs
             var newTreatmentBMPs = treatmentBMPUpsertDtos
                 .Select(TreatmentBMPFromUpsertDto);
 
             existingProjectTreatmentBMPs.MergeNew(newTreatmentBMPs, allTreatmentBMPsInDatabase,
-                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID);
+                (x, y) => x.TreatmentBMPName == y.TreatmentBMPName);
             
             dbContext.SaveChanges();
 
@@ -101,12 +103,11 @@ namespace Hippocamp.EFModels.Entities
 
             // merge new TreatmentBMPModelingAttributeIDs
             var newTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos.Select(TreatmentBMPModelingAttributeFromUpsertDto);
-            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
-            existingProjectTreatmentBMPModelingAttributes.MergeNew(newTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
+            existingProjectTreatmentBmpModelingAttributes.MergeNew(newTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID);
         }
 
-        public static void MergeUpdatedAndDeletedTreatmentBMPsByProjectID(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingProjectTreatmentBMPs, DbSet<TreatmentBMP> allTreatmentBMPsInDatabase, DbSet<TreatmentBMPModelingAttribute> allTreatmentBMPModelingAttributesInDatabase)
+        public static void MergeUpdatedAndDeletedTreatmentBMPsByProjectID(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingProjectTreatmentBMPs, DbSet<TreatmentBMP> allTreatmentBMPsInDatabase, DbSet<TreatmentBMPModelingAttribute> allTreatmentBMPModelingAttributesInDatabase, List<TreatmentBMPModelingAttribute> existingProjectTreatmentBMPModelingAttributes)
         {
             // update TreatmentBMP and TreatmentBMPModelingAttribute records
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos
@@ -117,7 +118,6 @@ namespace Hippocamp.EFModels.Entities
                 (x, y) =>
                 {
                     x.TreatmentBMPName = y.TreatmentBMPName;
-                    x.TreatmentBMPTypeID = y.TreatmentBMPTypeID;
                     x.LocationPoint4326 = y.LocationPoint4326;
                     x.Notes = y.Notes;
                 });
@@ -125,12 +125,10 @@ namespace Hippocamp.EFModels.Entities
             var updatedTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos
                 .Select(TreatmentBMPModelingAttributeFromUpsertDto).ToList();
 
-            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
             existingProjectTreatmentBMPModelingAttributes.MergeUpdate(updatedTreatmentBMPModelingAttributes,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>
                 {
-                    x.TreatmentBMPID = y.TreatmentBMPID;
                     x.AverageDivertedFlowrate = y.AverageDivertedFlowrate;
                     x.AverageTreatmentFlowrate = y.AverageTreatmentFlowrate;
                     x.DesignDryWeatherTreatmentCapacity = y.DesignDryWeatherTreatmentCapacity;
@@ -183,9 +181,8 @@ namespace Hippocamp.EFModels.Entities
 
         public static TreatmentBMP TreatmentBMPFromUpsertDto(TreatmentBMPUpsertDto treatmentBMPUpsertDto)
         {
-            return new()
+            var treatmentBMP = new TreatmentBMP()
             {
-                TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID,
                 TreatmentBMPName = treatmentBMPUpsertDto.TreatmentBMPName,
                 TreatmentBMPTypeID = treatmentBMPUpsertDto.TreatmentBMPTypeID,
                 // grab project data instead of hard-coding
@@ -198,6 +195,13 @@ namespace Hippocamp.EFModels.Entities
                 TrashCaptureStatusTypeID = 4,
                 SizingBasisTypeID = 4
             };
+
+            if (treatmentBMPUpsertDto.TreatmentBMPID > 0)
+            {
+                treatmentBMP.TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID;
+            }
+
+            return treatmentBMP;
         }
 
         public static TreatmentBMPModelingAttribute TreatmentBMPModelingAttributeFromUpsertDto(TreatmentBMPUpsertDto treatmentBMPUpsertDto)
