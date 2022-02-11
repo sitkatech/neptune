@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ApplicationRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import {
   Control, FitBoundsOptions,
@@ -30,6 +30,7 @@ import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatm
 import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-bmp-modeling-type.enum';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
 import { environment } from 'src/environments/environment';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 declare var $: any
 
@@ -39,6 +40,7 @@ declare var $: any
   styleUrls: ['./treatment-bmps.component.scss']
 })
 export class TreatmentBmpsComponent implements OnInit {
+  @ViewChild('deleteTreatmentBMPModal') deleteTreatmentBMPModal
 
   public mapID: string = 'poolDetailMap';
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
@@ -78,7 +80,8 @@ export class TreatmentBmpsComponent implements OnInit {
   public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
   public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
   public treatmentBMPTypes: Array<TreatmentBMPTypeSimpleDto>;
-  public treatmentBMPModel: TreatmentBMPUpsertDto;
+  public newTreatmentBMPIndex = 0;
+  private modalReference: NgbModalRef;
   public isLoadingSubmit = false;
 
   public static modelingAttributesByModelingType = {
@@ -211,6 +214,7 @@ export class TreatmentBmpsComponent implements OnInit {
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
+    private modalService: NgbModal
   ) {
   }
 
@@ -398,7 +402,7 @@ export class TreatmentBmpsComponent implements OnInit {
       `<strong>Longitude:</strong> ${this.selectedTreatmentBMP.Longitude}`
     ];
 
-    if (this.selectedTreatmentBMP) {
+    if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
       this.selectedObjectLayer = new L.GeoJSON(feature, {
         pointToLayer: (feature, latlng) => {
           return L.marker(latlng, { icon: this.markerIconSelected, zIndexOffset: 1000 });
@@ -408,8 +412,6 @@ export class TreatmentBmpsComponent implements OnInit {
       this.selectedListItemDetails.title = `${selectedNumber}`;
       this.selectedListItemDetails.attributes = selectedAttributes;
     }
-
-    this.treatmentBMPModel = Object.assign({}, this.selectedTreatmentBMP);
   }
 
   public getModelingAttributeFieldsToDisplay(treatmentBMPModelingTypeID: number): Array<string> {
@@ -432,7 +434,39 @@ export class TreatmentBmpsComponent implements OnInit {
     this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
   }
 
+  private launchModal(modalContent: any, modalTitle: string): void {
+    this.modalReference = this.modalService.open(
+      modalContent, 
+      { ariaLabelledBy: modalTitle, backdrop: 'static', keyboard: false }
+    );
+  }
+
+  public onDelete() {
+    this.launchModal(this.deleteTreatmentBMPModal, 'deleteTreatmentBMPModalTitle');
+  }
+
+  public deleteTreatmentBMP() {
+    const index = this.treatmentBMPs.indexOf(this.selectedTreatmentBMP);
+    this.treatmentBMPs.splice(index, 1);
+    this.modalReference.close();
+  
+    this.selectedTreatmentBMP = null;
+    if (this.treatmentBMPs.length > 0) {
+      this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+    } 
+  }
+
+  public addTreatmentBMP() {
+    var newTreatmentBMP = new TreatmentBMPUpsertDto;
+    newTreatmentBMP.TreatmentBMPID = this.newTreatmentBMPIndex;
+    this.newTreatmentBMPIndex--;
+
+    this.treatmentBMPs.push(newTreatmentBMP);
+    this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
+  }
+
   public onSubmit() {
+    debugger;
     this.isLoadingSubmit = true;
     this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
       this.isLoadingSubmit = false;

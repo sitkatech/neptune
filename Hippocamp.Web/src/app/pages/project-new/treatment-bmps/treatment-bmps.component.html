@@ -1,13 +1,13 @@
 <h2 class="d-inline-block">
     Proposed Treatment BMPs
 </h2>
-<div class="mb-4">
+<div class="row mb-2">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
-<div class="row">
-    <div class="col-sm-8 col-md-9 offset-sm-4 offset-md-3">
-        <p>Select a Treatment BMP from the list or click a location on the map to explore.</p>
-    </div>
+<div class="row m-1 mb-3">
+    <button class="btn btn-hippocamp ml-auto" (click)="addTreatmentBMP()">
+        Add New Treatment BMP
+    </button>
 </div>
 <div class="row">
     <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
@@ -33,7 +33,7 @@
                         <a class="btn btn-sm btn-outline-info mt-2 mb-2" placement="top" ngbTooltip="Edit location feature coming soon">
                             <i class="fa fa-edit"></i>&nbsp; Edit Location
                         </a>
-                        <a class="btn btn-sm btn-outline-danger ml-2" placement="top" ngbTooltip="Delete feature coming soon">
+                        <a class="btn btn-sm btn-outline-danger ml-2" (click)="onDelete()">
                             <i class="fa fa-trash"></i>&nbsp; Delete
                         </a>
                     </div>
@@ -129,3 +129,24 @@
         Save
     </button>
 </div>
+<ng-template #deleteTreatmentBMPModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-white" id="deleteTreatmentBMPModalTitle">Warning</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>
+            You are about to delete {{selectedTreatmentBMP.TreatmentBMPName}}.
+        </p>
+        <p>Are you sure you wish to proceed?</p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-sm" (click)="deleteTreatmentBMP()">
+                <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
+                Delete
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
+        </div>
+    </div>
+</ng-template>
