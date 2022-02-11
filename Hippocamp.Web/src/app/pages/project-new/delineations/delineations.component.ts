@@ -2,6 +2,7 @@ import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet.fullscreen';
+import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
 import { DelineationService } from 'src/app/services/delineation.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
@@ -107,20 +108,12 @@ export class DelineationsComponent implements OnInit {
       tiled: true
     } as L.WMSOptions);
 
-    this.overlayLayers = Object.assign({
-        "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions)
-    }, this.overlayLayers);
-
     let jurisdictionsWMSOptions = ({
       layers: "OCStormwater:Jurisdictions",
       transparent: true,
       format: "image/png",
       tiled: true,
     } as L.WMSOptions);
-
-    this.overlayLayers = Object.assign({
-        "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions)
-    }, this.overlayLayers);
 
     let verifiedDelineationsWMSOptions = ({
       layers: "OCStormwater:Delineations",
@@ -131,6 +124,8 @@ export class DelineationsComponent implements OnInit {
     } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
+      "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
+      "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
   }, this.overlayLayers);
 
@@ -147,9 +142,11 @@ export class DelineationsComponent implements OnInit {
       layers: [
         this.tileLayers["Aerial"],
       ],
-      fullscreenControl: true
+      fullscreenControl: true,
+      gestureHandling: true
     } as L.MapOptions;
     this.map = L.map(this.mapID, mapOptions);
+    L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
     this.map.on('load', (event: L.LeafletEvent) => {
       this.afterLoadMap.emit(event);
