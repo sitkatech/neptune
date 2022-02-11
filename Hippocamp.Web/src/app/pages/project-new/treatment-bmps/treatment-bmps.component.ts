@@ -422,6 +422,10 @@ export class TreatmentBmpsComponent implements OnInit {
     return TreatmentBmpsComponent.modelingAttributeFieldsDisplayNames[fieldName];
   }
 
+  public getTypeNameByID(typeID: number) {
+    return this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName;
+  }
+
   public getModelingAttributeDropdownItemsByFieldName(fieldName: string): Array<TreatmentBMPModelingAttributeDropdownItemDto> {
     return this.modelingAttributeDropdownItems.filter(x => x.FieldName == fieldName);
   }
@@ -463,10 +467,10 @@ export class TreatmentBmpsComponent implements OnInit {
 
     this.treatmentBMPs.push(newTreatmentBMP);
     this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
+    document.getElementById("treatmentBMPDetails").scrollIntoView();
   }
 
   public onSubmit() {
-    debugger;
     this.isLoadingSubmit = true;
     this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
       this.isLoadingSubmit = false;

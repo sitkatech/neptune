@@ -1,7 +1,7 @@
 <h2 class="d-inline-block">
     Proposed Treatment BMPs
 </h2>
-<div class="row mb-2">
+<div class="row m-1">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <div class="row m-1 mb-3">
@@ -15,8 +15,10 @@
             <li class="list-group-item" *ngFor="let treatmentBMP of treatmentBMPs"
                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                 (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
-                {{treatmentBMP.TreatmentBMPName}}
-                <p class="small mb-0">Type: {{treatmentBMP.TreatmentBMPTypeName}}</p>
+                {{treatmentBMP.TreatmentBMPName ?? "New Treatment BMP"}}
+                <p class="small mb-0">
+                    Type: {{treatmentBMP.TreatmentBMPTypeID ? getTypeNameByID(treatmentBMP.TreatmentBMPTypeID) : "Not Selected"}}
+                </p>
             </li>
         </ul>
     </div>
@@ -24,7 +26,7 @@
         <div id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
     </div>
 </div>
-<div class="card mt-4" *ngIf="selectedTreatmentBMP; else noTreatmentBMPs">
+<div class="card mt-4" id="treatmentBMPDetails" *ngIf="selectedTreatmentBMP; else noTreatmentBMPs">
     <div class="card-body bg-white">
         <div class="row">
             <div class="col-sm-4 order-sm-last">
@@ -77,15 +79,22 @@
                     <div class="col-12">
                         <h5 class="border-bottom p-2">Location</h5>
                     </div>
-                    <div class="col-xl-5 col-sm-3 text-sm-right font-weight-bold">Latitude</div>
-                    <div class="col-xl-7 col-sm-9">{{selectedTreatmentBMP.Latitude}}</div>
-                    <div class="col-xl-5 col-sm-3 mt-1 font-weight-bold text-sm-right">Longitude</div>
-                    <div class="col-xl-7 col-sm-9 mt-1">{{selectedTreatmentBMP.Longitude}}</div>
-                    <div class="col-xl-5 col-sm-3 mt-1 font-weight-bold text-sm-right">Delination Area</div>
-                    <div class="col-xl-7 col-sm-9 mt-1 font-italic">not available</div>
-                    <div class="col-xl-5 col-sm-3 mt-1 font-weight-bold text-sm-right">Watershed</div>
-                    <div class="col-xl-7 col-sm-9 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
-            </div>
+                    <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
+                        <div class="col-sm-4 text-sm-right font-weight-bold mt-1">Latitude</div>
+                        <div class="col-sm-8">{{selectedTreatmentBMP.Latitude}}</div>
+                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Longitude</div>
+                        <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.Longitude}}</div>
+                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Delination Area</div>
+                        <div class="col-sm-8 mt-1 font-italic">not available</div>
+                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Watershed</div>
+                        <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
+                    </ng-container>
+                    <ng-template #noLocationSelected>
+                        <div class="font-italic ml-3">
+                           Use the "Edit Location" button to select a location for this Treatment BMP.
+                        </div>
+                    </ng-template>
+                </div>
             </div>
             <div class="col-xl-7">
                 <div class="row mt-3">
@@ -93,24 +102,41 @@
                         <h5 class="border-bottom p-2">Modeling Attributes</h5>
                     </div>
                 </div>
-                <div class="row p-2" *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
-                    <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                        <label>{{getFieldDisplayName(fieldName)}}</label>
-                    </div>
-                    <div class="col-sm-7 p-0" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
-                        <select class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
-                            <option [value]="" disabled hidden>Select a {{getFieldDisplayName(fieldName)}}</option>
-                            <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(fieldName)" [value]="dropdownItem.ItemID">
-                                {{dropdownItem.ItemName}}
-                            </option>
-                        </select>
-                    </div>
-                    <ng-template #numericModelingAttributeField>
-                        <div class="col-xs-4">
-                            <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
+                <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
+                    <div class="row p-2" 
+                        *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
+                        <div class="col-sm-4 control-label font-weight-bold text-sm-right pr-1">
+                            <label>{{getFieldDisplayName(fieldName)}}</label>
+                            <a routerLink="/labels-and-definitions" target="_blank">
+                                <i class="fas fa-question-circle small d-inline-block d-sm-none ml-3"></i>
+                            </a>
                         </div>
-                    </ng-template>
-                </div>
+                        <div class="col-sm-1 d-none d-sm-inline-block p-0">
+                            <a routerLink="/labels-and-definitions" target="_blank" style="cursor:pointer"
+                                placement="top" ngbTooltip="Learn about {{getFieldDisplayName(fieldName)}}">
+                                <i class="fas fa-question-circle small ml-1"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 p-0" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
+                            <select class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
+                                <option [value]="" disabled hidden>Select a {{getFieldDisplayName(fieldName)}}</option>
+                                <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(fieldName)" [value]="dropdownItem.ItemID">
+                                    {{dropdownItem.ItemName}}
+                                </option>
+                            </select>
+                        </div>
+                        <ng-template #numericModelingAttributeField>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
+                            </div>
+                        </ng-template>
+                    </div>
+                </ng-container>
+                <ng-template #noTypeSelected>
+                    <div class="font-italic">
+                        Modeling Attributes will display once a Treatment BMP Type is selected.
+                     </div>
+                </ng-template>
             </div>
         </div>
     </div>
@@ -124,7 +150,7 @@
     </div>
 </ng-template>
 <div class="row m-1 mt-3">
-    <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit()">
+    <button class="btn btn-hippocamp ml-auto" [disabled]="true" (click)="onSubmit()">
         <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
         Save
     </button>
