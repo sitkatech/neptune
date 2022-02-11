@@ -23,7 +23,7 @@
         </ul>
     </div>
     <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
-        <div id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
+        <div id={{mapID}} class="location-card" [style.height]="mapHeight" [style.cursor]="isEditingLocation ? 'crosshair' : ''"></div>
     </div>
 </div>
 <div class="card mt-4" id="treatmentBMPDetails" *ngIf="selectedTreatmentBMP; else noTreatmentBMPs">
@@ -32,17 +32,17 @@
             <div class="col-sm-4 order-sm-last">
                 <div class="row d-flex">
                     <div class="col-auto ml-auto text-right">
-                        <a class="btn btn-sm btn-outline-info mt-2 mb-2" placement="top" ngbTooltip="Edit location feature coming soon">
-                            <i class="fa fa-edit"></i>&nbsp; Edit Location
+                        <a class="btn btn-outline-info mt-2 mb-2" (click)="isEditingLocation = !isEditingLocation">
+                            <i class="fa fa-edit"></i>&nbsp; {{isEditingLocation ? "Save Location" : "Set Location"}}
                         </a>
-                        <a class="btn btn-sm btn-outline-danger ml-2" (click)="onDelete()">
+                        <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
                             <i class="fa fa-trash"></i>&nbsp; Delete
                         </a>
                     </div>
                 </div>
             </div>
             <div class="col-sm-8">
-                <div class="row mt-1">
+                <div class="row mt-2">
                     <div class="col-lg-2 col-sm-3 control-labelf font-weight-bold text-sm-right">
                         <label>Name</label>
                     </div>
