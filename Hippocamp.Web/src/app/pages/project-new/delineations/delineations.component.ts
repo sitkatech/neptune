@@ -2,6 +2,7 @@ import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet.fullscreen';
+import * as esri from 'esri-leaflet'
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
 import { DelineationService } from 'src/app/services/delineation.service';
@@ -113,6 +114,7 @@ export class DelineationsComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
+      styles: "jurisdiction_orange"
     } as L.WMSOptions);
 
     let verifiedDelineationsWMSOptions = ({
@@ -125,6 +127,7 @@ export class DelineationsComponent implements OnInit {
 
     this.overlayLayers = Object.assign({
       "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
+      "<span>Stormwater Network <br/> <img src='../../assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
   }, this.overlayLayers);
