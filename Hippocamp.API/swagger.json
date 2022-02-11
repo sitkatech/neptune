@@ -1321,6 +1321,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "DelineationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "Geometry": {
             "type": "string",
             "nullable": true
