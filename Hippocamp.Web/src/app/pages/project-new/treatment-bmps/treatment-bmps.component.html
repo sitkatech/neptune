@@ -32,11 +32,11 @@
             <div class="col-sm-4 order-sm-last">
                 <div class="row d-flex">
                     <div class="col-auto ml-auto text-right">
-                        <a class="btn btn-outline-info mt-2 mb-2" (click)="isEditingLocation = !isEditingLocation">
-                            <i class="fa fa-edit"></i>&nbsp; {{isEditingLocation ? "Save Location" : "Set Location"}}
+                        <a class="btn mt-2btn-outline-info  mb-2" (click)="updateIsEditingLocation()">
+                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Set Location"}}
                         </a>
                         <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
-                            <i class="fa fa-trash"></i>&nbsp; Delete
+                            <i class="fa fa-trash mr-1"></i> Delete
                         </a>
                     </div>
                 </div>

@@ -18,6 +18,7 @@ import {
   LeafletEvent
 } from 'leaflet';
 import 'leaflet.fullscreen';
+import * as esri from 'esri-leaflet';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { Feature } from 'geojson';
@@ -264,10 +265,6 @@ export class TreatmentBmpsComponent implements OnInit {
       tiled: true
     } as WMSOptions);
 
-    this.overlayLayers = Object.assign({
-      "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions)
-    }, this.overlayLayers);
-
     let jurisdictionsWMSOptions = ({
       layers: "OCStormwater:Jurisdictions",
       transparent: true,
@@ -276,7 +273,9 @@ export class TreatmentBmpsComponent implements OnInit {
     } as WMSOptions);
 
     this.overlayLayers = Object.assign({
-      "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions)
+      "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
+      "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
+      "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" })
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
@@ -303,6 +302,21 @@ export class TreatmentBmpsComponent implements OnInit {
       this.onMapMoveEnd.emit(event);
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
+    this.updateTreatmentBMPsLayer();
+    this.setControl();
+    this.registerClickEvents();
+
+    if (this.treatmentBMPs.length > 0) {
+      this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+    }
+  }
+
+  public updateTreatmentBMPsLayer() {
+    if (this.treatmentBMPsLayer) {
+      this.map.removeLayer(this.treatmentBMPsLayer);
+      this.treatmentBMPsLayer = null;
+    }
+
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: function (feature, latlng) {
@@ -310,12 +324,6 @@ export class TreatmentBmpsComponent implements OnInit {
       }.bind(this)
     });
     this.treatmentBMPsLayer.addTo(this.map);
-    this.setControl();
-    this.registerClickEvents();
-
-    if (this.treatmentBMPs.length > 0) {
-      this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
-    }
   }
 
   public buildMarker(iconUrl: string, iconRetinaUrl: string): any {
@@ -412,7 +420,9 @@ export class TreatmentBmpsComponent implements OnInit {
     if (this.selectedListItem) {
       this.selectedListItem = null;
       this.selectedListItemDetails = {};
-      this.map.removeLayer(this.selectedObjectMarker);
+      if (this.selectedObjectMarker) {
+        this.map.removeLayer(this.selectedObjectMarker);
+      }
       this.selectedObjectMarker = null;
 
     }
@@ -431,7 +441,7 @@ export class TreatmentBmpsComponent implements OnInit {
         { lat: this.selectedTreatmentBMP.Latitude, lng: this.selectedTreatmentBMP.Longitude },
         { icon: this.markerIconSelected, zIndexOffset: 1000 });
 
-      this.selectedObjectMarker.addTo(this.map).bringToFront();
+      this.selectedObjectMarker.addTo(this.map);
       this.selectedListItemDetails.title = `${selectedNumber}`;
       this.selectedListItemDetails.attributes = selectedAttributes;
     }
@@ -459,6 +469,14 @@ export class TreatmentBmpsComponent implements OnInit {
 
   public updateModelingTypeOnTypeChange(selectedType: TreatmentBMPTypeSimpleDto) {
     this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
+  }
+
+  public updateIsEditingLocation() {
+    if (this.isEditingLocation) {
+      this.updateTreatmentBMPsLayer();
+    }
+
+    this.isEditingLocation = !this.isEditingLocation;
   }
 
   private launchModal(modalContent: any, modalTitle: string): void {

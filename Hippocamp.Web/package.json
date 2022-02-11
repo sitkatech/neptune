@@ -45,6 +45,7 @@
     "bootstrap": "^4.4.1",
     "color-scheme": "^1.0.1",
     "core-js": "^3.6.5",
+    "esri-leaflet": "^3.0.4",
     "font-awesome": "^4.7.0",
     "google-palette": "^1.1.0",
     "iso8601-js-period": "^0.2.1",
