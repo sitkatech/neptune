@@ -1,4 +1,5 @@
 export * from '././bounding-box-dto';
+export * from '././delineation-upsert-dto';
 export * from '././field-definition-dto';
 export * from '././field-definition-type-dto';
 export * from '././file-resource-dto';

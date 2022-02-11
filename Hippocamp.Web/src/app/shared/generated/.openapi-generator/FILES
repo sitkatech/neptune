@@ -1,5 +1,6 @@
 .gitignore
 model/bounding-box-dto.ts
+model/delineation-upsert-dto.ts
 model/field-definition-dto.ts
 model/field-definition-type-dto.ts
 model/file-resource-dto.ts

@@ -16,9 +16,11 @@ import {
   LeafletEvent} from 'leaflet';
 import 'leaflet.fullscreen';
 import { forkJoin } from 'rxjs';
+import { DelineationService } from 'src/app/services/delineation.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
+import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
@@ -36,6 +38,8 @@ export class DelineationsComponent implements OnInit {
   public mapID: string = 'delineationsMap';
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+  public delineations: DelineationUpsertDto[];
+  public selectedDelineationStyle: string = 'parcel_yellow';npm
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '400px';
@@ -62,6 +66,7 @@ export class DelineationsComponent implements OnInit {
   public selectedObjectLayer: Layer;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: GeoJSON<any>;
+  public delineationsLayer: GeoJSON<any>;
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
@@ -70,6 +75,7 @@ export class DelineationsComponent implements OnInit {
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
+    private delineationService: DelineationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
@@ -84,9 +90,12 @@ export class DelineationsComponent implements OnInit {
 
       forkJoin({
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
+        delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-      }).subscribe(({treatmentBMPs, boundingBox}) => {
+      }).subscribe(({treatmentBMPs, delineations, boundingBox}) => {
         this.treatmentBMPs = treatmentBMPs;
+        this.delineations = delineations;
+        debugger;
         this.boundingBox = boundingBox;
 
         this.updateMapLayers();
@@ -164,6 +173,10 @@ export class DelineationsComponent implements OnInit {
       this.onMapMoveEnd.emit(event);
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
+    const delineationGeoJsons = this.mapDelineationsToGeoJson(this.delineations);
+    debugger;
+    this.delineationsLayer = new GeoJSON(delineationGeoJsons, {});
+    this.delineationsLayer.addTo(this.map);
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: function (feature, latlng) {
@@ -217,6 +230,28 @@ export class DelineationsComponent implements OnInit {
         TreatmentBMPTypeName: x.TreatmentBMPTypeName,
         Latitude: x.Latitude,
         Longitude: x.Longitude
+      }
+    };
+  }
+
+  private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
+    return {
+      type: "FeatureCollection",
+      features: delineations.map(x => {
+        let delineationGeoJson = 
+        this.mapDelineationToFeature(x);
+        return delineationGeoJson;
+      })  
+    }
+  }
+
+  private mapDelineationToFeature(x: DelineationUpsertDto) {
+    return {
+      "type": "Feature",
+      "geometry": JSON.parse(x.Geometry),
+      "properties": {
+        DelineationID: x.DelineationID,
+        TreatmentBMPID: x.TreatmentBMPID
       }
     };
   }
