@@ -22,13 +22,5 @@ namespace Hippocamp.API.Controllers
             var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
             return Ok(DelineationUpsertDtos);
         }
-
-        //[HttpGet("Delineations")]
-        //[JurisdictionEditFeature]
-        //public ActionResult<DelineationUpsertDto> List([FromRoute] int projectID)
-        //{
-        //    var DelineationDisplayDtos = Delineations.ListAsDisplayDto(_dbContext);
-        //    return Ok(DelineationDisplayDtos);
-        //}
     }
 }

@@ -1,19 +1,6 @@
 import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
-import {
-  Control, FitBoundsOptions,
-  GeoJSON,
-  marker,
-  map,
-  Map,
-  MapOptions,
-  tileLayer,
-  Layer,
-  DomEvent,
-  DomUtil,
-  WMSOptions,
-  LeafletEvent} from 'leaflet';
 import 'leaflet.fullscreen';
 import { forkJoin } from 'rxjs';
 import { DelineationService } from 'src/app/services/delineation.service';
@@ -36,37 +23,36 @@ declare var $:any
 export class DelineationsComponent implements OnInit {
 
   public mapID: string = 'delineationsMap';
-  public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: DelineationUpsertDto[];
-  public selectedDelineationStyle: string = 'parcel_yellow';npm
-  public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '400px';
-  public defaultFitBoundsOptions?: FitBoundsOptions = null;
+  public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
   public onEachFeatureCallback?: (feature, layer) => void;
 
   @Output()
-  public afterSetControl: EventEmitter<Control.Layers> = new EventEmitter();
+  public afterSetControl: EventEmitter<L.Control.Layers> = new EventEmitter();
 
   @Output()
-  public afterLoadMap: EventEmitter<LeafletEvent> = new EventEmitter();
+  public afterLoadMap: EventEmitter<L.LeafletEvent> = new EventEmitter();
 
   @Output()
-  public onMapMoveEnd: EventEmitter<LeafletEvent> = new EventEmitter();
+  public onMapMoveEnd: EventEmitter<L.LeafletEvent> = new EventEmitter();
 
   public component: any;
-  public map: Map;
+  public map: L.Map;
   public featureLayer: any;
-  public layerControl: Control.Layers;
+  public layerControl: L.Control.Layers;
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
   private boundingBox: BoundingBoxDto;
   public selectedListItem: number;
-  public selectedObjectLayer: Layer;
+  public selectedDelineation: DelineationUpsertDto;
+  public selectedDelineationLayer: L.Layer;
+  public selectedTreatmentBMPLayer: L.Layer;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
-  public treatmentBMPsLayer: GeoJSON<any>;
-  public delineationsLayer: GeoJSON<any>;
+  public treatmentBMPsLayer: L.GeoJSON<any>;
+  public delineationsLayer: L.GeoJSON<any>;
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
@@ -95,7 +81,6 @@ export class DelineationsComponent implements OnInit {
       }).subscribe(({treatmentBMPs, delineations, boundingBox}) => {
         this.treatmentBMPs = treatmentBMPs;
         this.delineations = delineations;
-        debugger;
         this.boundingBox = boundingBox;
 
         this.updateMapLayers();
@@ -103,13 +88,13 @@ export class DelineationsComponent implements OnInit {
     }
 
     this.tileLayers = Object.assign({}, {
-      "Aerial": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      "Aerial": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Aerial',
       }),
-      "Street": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      "Street": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Aerial',
       }),
-      "Terrain": tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      "Terrain": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Terrain',
       }),
     }, this.tileLayers);
@@ -120,10 +105,10 @@ export class DelineationsComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true
-    } as WMSOptions);
+    } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
-        "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions)
+        "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions)
     }, this.overlayLayers);
 
     let jurisdictionsWMSOptions = ({
@@ -131,10 +116,10 @@ export class DelineationsComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-    } as WMSOptions);
+    } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
-        "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions)
+        "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions)
     }, this.overlayLayers);
 
     let verifiedDelineationsWMSOptions = ({
@@ -143,10 +128,10 @@ export class DelineationsComponent implements OnInit {
       format: "image/png",
       tiled: true,
       cql_filter: "DelineationStatus = 'Verified'"
-    } as WMSOptions);
+    } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
-      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
+      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
   }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
@@ -154,7 +139,7 @@ export class DelineationsComponent implements OnInit {
 
   public updateMapLayers(): void {
 
-    const mapOptions: MapOptions = {
+    const mapOptions: L.MapOptions = {
       // center: [46.8797, -110],
       // zoom: 6,
       minZoom: 9,
@@ -163,24 +148,25 @@ export class DelineationsComponent implements OnInit {
         this.tileLayers["Aerial"],
       ],
       fullscreenControl: true
-    } as MapOptions;
-    this.map = map(this.mapID, mapOptions);
+    } as L.MapOptions;
+    this.map = L.map(this.mapID, mapOptions);
 
-    this.map.on('load', (event: LeafletEvent) => {
+    this.map.on('load', (event: L.LeafletEvent) => {
       this.afterLoadMap.emit(event);
     });
-    this.map.on("moveend", (event: LeafletEvent) => {
+    this.map.on("moveend", (event: L.LeafletEvent) => {
       this.onMapMoveEnd.emit(event);
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
+    
     const delineationGeoJsons = this.mapDelineationsToGeoJson(this.delineations);
-    debugger;
-    this.delineationsLayer = new GeoJSON(delineationGeoJsons, {});
+    this.delineationsLayer = new L.GeoJSON(delineationGeoJsons, {});
     this.delineationsLayer.addTo(this.map);
+    
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
-    this.treatmentBMPsLayer = new GeoJSON(treatmentBMPsGeoJson, {
+    this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: function (feature, latlng) {
-        return marker(latlng, { icon: this.markerIcon})
+        return L.marker(latlng, { icon: this.markerIcon})
       }.bind(this)
     });
     this.treatmentBMPsLayer.addTo(this.map);
@@ -188,7 +174,7 @@ export class DelineationsComponent implements OnInit {
     this.registerClickEvents();
     
     if (this.treatmentBMPs.length > 0) {
-      this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+      this.selectFeatureImpl(this.treatmentBMPs[0].TreatmentBMPID);
     }
   }
 
@@ -257,7 +243,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   public setControl(): void {
-    this.layerControl = new Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
+    this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
       .addTo(this.map);
     this.afterSetControl.emit(this.layerControl);
   }
@@ -266,9 +252,9 @@ export class DelineationsComponent implements OnInit {
     var leafletControlLayersSelector = ".leaflet-control-layers";
     var closeButtonClass = "leaflet-control-layers-close";
 
-    var closem = DomUtil.create("a", closeButtonClass);
+    var closem = L.DomUtil.create("a", closeButtonClass);
     closem.innerHTML = "Close";
-    DomEvent.on(closem,
+    L.DomEvent.on(closem,
       "click",
       function () {
         $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
@@ -276,34 +262,67 @@ export class DelineationsComponent implements OnInit {
 
     $(leafletControlLayersSelector).append(closem);
 
-    this.treatmentBMPsLayer.on("click", (event: LeafletEvent) => {
-      this.selectTreatmentBMPImpl(event.propagatedFrom.feature);
-    })
+    this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
+      this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
+    });
+
+    this.delineationsLayer.on("click", (event: L.LeafletEvent) => {
+      this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
+    });
   }
 
-  public selectTreatmentBMP(treatmentBMPID: number) {
-    const feature = this.mapTreatmentBMPToFeature(this.treatmentBMPs.find(x => x.TreatmentBMPID === treatmentBMPID));
-    this.selectTreatmentBMPImpl(feature);
-  }
-
-  private selectTreatmentBMPImpl(feature: any) {
-    const treatmentBMPID = feature.properties.TreatmentBMPID;
+  private selectFeatureImpl(treatmentBMPID: number) {
     if (this.selectedListItem) {
       this.selectedListItem = null;
-      this.map.removeLayer(this.selectedObjectLayer);
-      this.selectedObjectLayer = null;
+      this.map.removeLayer(this.selectedTreatmentBMPLayer);
+      this.selectedTreatmentBMPLayer = null;
     }
+
+    if (this.selectedDelineation) {
+      this.map.removeLayer(this.selectedDelineationLayer);
+      this.selectedDelineationLayer = null;
+      this.selectedDelineation = null;
+    }
+
+    this.selectedDelineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    if (this.selectedDelineation) {
+      const feature = this.mapDelineationToFeature(this.selectedDelineation);
+      this.selectedDelineationLayer = new L.GeoJSON(feature, {
+        style: (feature) => {
+          return {
+            color:'yellow'
+          }
+        }
+      })
+      this.selectedDelineationLayer.addTo(this.map).bringToFront();
+    }
+
     this.selectedListItem = treatmentBMPID;
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
 
     if (this.selectedTreatmentBMP) {
-      this.selectedObjectLayer = new L.GeoJSON(feature, {
+      const feature = this.mapTreatmentBMPToFeature(this.selectedTreatmentBMP);
+      this.selectedTreatmentBMPLayer = new L.GeoJSON(feature, {
         pointToLayer: (feature, latlng) => {
           return L.marker(latlng, { icon: this.markerIconSelected, zIndexOffset: 1000 });
         }
-      });;
-      this.selectedObjectLayer.addTo(this.map).bringToFront();
+      });
+      this.selectedTreatmentBMPLayer.addTo(this.map).bringToFront();
     }
+  }
+
+  public treatmentBMPHasDelineation (treatmentBMPID: number) {
+    return this.delineations?.some(x => x.TreatmentBMPID == treatmentBMPID);
+  }
+
+  public getDelineationAreaForTreatmentBMP (treatmentBMPID: number) {
+      let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+
+      if (delineation == null || delineation == undefined) {
+        return "Not provided yet"
+      }
+
+      return `${delineation.DelineationArea} ac`;
   }
 
 }

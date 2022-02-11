@@ -13,6 +13,7 @@
 export class DelineationUpsertDto { 
     DelineationID?: number;
     DelineationTypeID?: number;
+    DelineationArea?: number;
     Geometry?: string;
     TreatmentBMPID?: number;
     constructor(obj?: any) {
