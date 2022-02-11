@@ -59,4 +59,5 @@ values
 (57, 'HippocampProjectInstructions', 'Hippocamp Project Instructions Page'),
 (58, 'HippocampProjectBasics', 'Hippocamp Project Basics'),
 (59, 'HippocampProjectAttachments', 'Hippocamp Project Attachments'),
-(60, 'HippocampTreatmentBMPs', 'Hippocamp Treatment BMPs')
+(60, 'HippocampTreatmentBMPs', 'Hippocamp Treatment BMPs'),
+(61, 'HippocampDelineations', 'Hippocamp Delineations')
