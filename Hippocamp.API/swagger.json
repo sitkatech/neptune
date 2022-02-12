@@ -2064,6 +2064,12 @@
         "additionalProperties": false
       },
       "TreatmentBMPUpsertDto": {
+        "required": [
+          "Latitude",
+          "Longitude",
+          "TreatmentBMPName",
+          "TreatmentBMPTypeID"
+        ],
         "type": "object",
         "properties": {
           "TreatmentBMPID": {
@@ -2071,8 +2077,7 @@
             "format": "int32"
           },
           "TreatmentBMPName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "TreatmentBMPTypeID": {
             "type": "integer",

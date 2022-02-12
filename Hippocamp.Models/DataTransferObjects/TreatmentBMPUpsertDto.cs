@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using NetTopologySuite.Geometries;
 
 namespace Hippocamp.Models.DataTransferObjects
@@ -6,14 +7,22 @@ namespace Hippocamp.Models.DataTransferObjects
     public class TreatmentBMPUpsertDto
     {
         public int TreatmentBMPID { get; set; }
-        public string TreatmentBMPName { get; set; }
-        public int TreatmentBMPTypeID { get; set; }
+        [Required]
+        [Display(Name="Name")]
+        public string? TreatmentBMPName { get; set; }
+        [Required]
+        [Display(Name = "Type")]
+        public int? TreatmentBMPTypeID { get; set; }
         public string TreatmentBMPTypeName { get; set; }
         public int? TreatmentBMPModelingTypeID { get; set; }
         public string StormwaterJurisdictionName { get; set; }
         public string WatershedName { get; set; }
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
+        [Required]
+        [Display(Name = "Longitude")]
+        public double? Longitude { get; set; }
+        [Required]
+        [Display(Name = "Latitude")]
+        public double? Latitude { get; set; }
         public string Notes { get; set; }
         public double? AverageDivertedFlowrate { get; set; }
         public double? AverageTreatmentFlowrate { get; set; }

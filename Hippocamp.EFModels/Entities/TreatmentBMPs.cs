@@ -83,15 +83,21 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPModelingAttributeDropdownItemDtos;
         }
 
-        public static void MergeNewTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingProjectTreatmentBMPs, DbSet<TreatmentBMP> allTreatmentBMPsInDatabase, DbSet<TreatmentBMPModelingAttribute> allTreatmentBMPModelingAttributesInDatabase, List<TreatmentBMPModelingAttribute> existingProjectTreatmentBmpModelingAttributes)
+        public static void MergeProjectTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, Project project)
         {
+            var existingProjectTreatmentBMPs = dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
+            var existingProjectTreatmentBMPModelingAttributes = dbContext.TreatmentBMPModelingAttributes.Where(x => existingProjectTreatmentBMPs.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID)).ToList();
+            
+            var allTreatmentBMPsInDatabase = dbContext.TreatmentBMPs;
+            var allTreatmentBMPModelingAttributesInDatabase = dbContext.TreatmentBMPModelingAttributes;
+
             // merge new Treatment BMPs
             var newTreatmentBMPs = treatmentBMPUpsertDtos
-                .Select(TreatmentBMPFromUpsertDto);
+                .Select(x => TreatmentBMPFromUpsertDtoAndProject(x, project));
 
             existingProjectTreatmentBMPs.MergeNew(newTreatmentBMPs, allTreatmentBMPsInDatabase,
                 (x, y) => x.TreatmentBMPName == y.TreatmentBMPName);
-            
+
             dbContext.SaveChanges();
 
             // update upsert dtos with new TreatmentBMPIDs
@@ -103,15 +109,12 @@ namespace Hippocamp.EFModels.Entities
 
             // merge new TreatmentBMPModelingAttributeIDs
             var newTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos.Select(TreatmentBMPModelingAttributeFromUpsertDto);
-            existingProjectTreatmentBmpModelingAttributes.MergeNew(newTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
+            existingProjectTreatmentBMPModelingAttributes.MergeNew(newTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID);
-        }
 
-        public static void MergeUpdatedAndDeletedTreatmentBMPsByProjectID(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingProjectTreatmentBMPs, DbSet<TreatmentBMP> allTreatmentBMPsInDatabase, DbSet<TreatmentBMPModelingAttribute> allTreatmentBMPModelingAttributesInDatabase, List<TreatmentBMPModelingAttribute> existingProjectTreatmentBMPModelingAttributes)
-        {
             // update TreatmentBMP and TreatmentBMPModelingAttribute records
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos
-                .Select(TreatmentBMPFromUpsertDto);
+                .Select(x => TreatmentBMPFromUpsertDtoAndProject(x, project));
 
             existingProjectTreatmentBMPs.MergeUpdate(updatedTreatmentBMPs, 
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
@@ -169,27 +172,25 @@ namespace Hippocamp.EFModels.Entities
             existingProjectTreatmentBMPs.MergeDelete(updatedTreatmentBMPs,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 allTreatmentBMPsInDatabase);
+
+            dbContext.SaveChanges();
         }
 
         private static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)
         {
-            return new Point(longitude, latitude)
-            {
-                SRID = 4326
-            };
+            return new Point(longitude, latitude) { SRID = 4326 };
         }
 
-        public static TreatmentBMP TreatmentBMPFromUpsertDto(TreatmentBMPUpsertDto treatmentBMPUpsertDto)
+        public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
         {
             var treatmentBMP = new TreatmentBMP()
             {
                 TreatmentBMPName = treatmentBMPUpsertDto.TreatmentBMPName,
-                TreatmentBMPTypeID = treatmentBMPUpsertDto.TreatmentBMPTypeID,
-                // grab project data instead of hard-coding
-                ProjectID = 1,
-                StormwaterJurisdictionID = 12,
-                OwnerOrganizationID = 1,
-                LocationPoint4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude, treatmentBMPUpsertDto.Longitude),
+                TreatmentBMPTypeID = treatmentBMPUpsertDto.TreatmentBMPTypeID.Value,
+                ProjectID = project.ProjectID,
+                StormwaterJurisdictionID = project.StormwaterJurisdictionID,
+                OwnerOrganizationID = project.OrganizationID,
+                LocationPoint4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value),
                 Notes = treatmentBMPUpsertDto.Notes,
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = 4,

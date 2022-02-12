@@ -334,7 +334,7 @@ export class TreatmentBmpsComponent implements OnInit {
       "properties": {
         TreatmentBMPID: x.TreatmentBMPID,
         TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPTypeName: this.getTypeNameByTypeID(x.TreatmentBMPTypeID),
+        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
         Latitude: x.Latitude,
         Longitude: x.Longitude
       }
