@@ -32,7 +32,7 @@
             <div class="col-sm-4 order-sm-last">
                 <div class="row d-flex">
                     <div class="col-auto ml-auto text-right">
-                        <a class="btn mt-2btn-outline-info  mb-2" (click)="updateIsEditingLocation()">
+                        <a class="btn mt-2 btn-outline-info  mb-2" (click)="toggleIsEditingLocation()">
                             <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Set Location"}}
                         </a>
                         <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
@@ -110,28 +110,19 @@
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
                     <div class="row p-2" 
                         *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
-                        <div class="col-sm-4 control-label font-weight-bold text-sm-right pr-1">
-                            <label>{{getFieldDisplayName(fieldName)}}</label>
-                            <a routerLink="/labels-and-definitions" target="_blank">
-                                <i class="fas fa-question-circle small d-inline-block d-sm-none ml-3"></i>
-                            </a>
+                        <div class="col-sm-4 control-label font-weight-bold text-sm-right">
+                            <field-definition *ngIf="fieldDefinitionTypeEnum[fieldName]; else noFieldDefinition"
+                                [fieldDefinitionType]="fieldName"></field-definition>
                         </div>
-                        <div class="col-sm-1 d-none d-sm-inline-block p-0">
-                            <a routerLink="/labels-and-definitions" target="_blank" style="cursor:pointer"
-                                placement="top" ngbTooltip="Learn about {{getFieldDisplayName(fieldName)}}">
-                                <i class="fas fa-question-circle small ml-1"></i>
-                            </a>
-                        </div>
-                        <div class="col-sm-6 p-0" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
+                        <div class="col-sm-6" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
                             <select class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
-                                <option [value]="" disabled hidden>Select a {{getFieldDisplayName(fieldName)}}</option>
                                 <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(fieldName)" [value]="dropdownItem.ItemID">
                                     {{dropdownItem.ItemName}}
                                 </option>
                             </select>
                         </div>
                         <ng-template #numericModelingAttributeField>
-                            <div class="col-xs-4">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
                             </div>
                         </ng-template>

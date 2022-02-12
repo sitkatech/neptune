@@ -36,6 +36,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { FieldDefinitionTypeEnum } from 'src/app/shared/models/enums/field-definition-type.enum';
 
 declare var $: any
 
@@ -83,6 +84,7 @@ export class TreatmentBmpsComponent implements OnInit {
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
   public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
+  public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
   public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
   public treatmentBMPTypes: Array<TreatmentBMPTypeSimpleDto>;
   public newTreatmentBMPIndex = 0;
@@ -178,38 +180,6 @@ export class TreatmentBmpsComponent implements OnInit {
       ]
   };
 
-  public static modelingAttributeFieldsDisplayNames = {
-    AverageDivertedFlowrate: 'Average Diverted Flowrate',
-    AverageTreatmentFlowrate: 'Average Treatment Flowrate',
-    DesignDryWeatherTreatmentCapacity: 'Design Dry Weather Treatment Capacity',
-    DesignLowFlowDiversionCapacity: 'Design Low Flow Diversion Capacity',
-    DesignMediaFiltrationRate: 'Design Media Filtration Rate',
-    DesignResidenceTimeforPermanentPool: 'Design Residence Time for Permanent Pool',
-    DiversionRate: 'Diversion Rate',
-    DrawdownTimeforWQDetentionVolume: 'Drawdown Time for WQ Detention Volume',
-    EffectiveFootprint: 'Effective Footprint',
-    EffectiveRetentionDepth: 'Effective Retention Depth',
-    InfiltrationDischargeRate: 'Infiltration Discharge Rate',
-    InfiltrationSurfaceArea: 'Infiltration Surface Area',
-    MediaBedFootprint: 'Media Bed Footprint',
-    PermanentPoolorWetlandVolume: 'Permanent Pool or Wetland Volume',
-    StorageVolumeBelowLowestOutletElevation: 'Storage Volume Below Lowest Outlet Elevation',
-    SummerHarvestedWaterDemand: 'Summer Harvested Water Demand',
-    DrawdownTimeForDetentionVolume: 'Drawdown Time for Detention Volume',
-    TotalEffectiveBMPVolume: 'Total Effective BMP Volume',
-    TotalEffectiveDrywellBMPVolume: 'Total Effective Drywell BMP Volume',
-    TreatmentRate: 'Treatment Rate',
-    UnderlyingInfiltrationRate: 'Underlying Infiltration Rate',
-    WaterQualityDetentionVolume: 'Water Quality Detention Volume',
-    WettedFootprint: 'Wetted Footprint',
-    WinterHarvestedWaterDemand: 'Winter Harvested Water Demand',
-    TimeOfConcentrationID: "Time of Concentration",
-    RoutingConfigurationID: "Routing Configuration",
-    MonthsOfOperationID: "Months of Operation",
-    UnderlyingHydrologicSoilGroupID: "Underlying Hydrologic Soil Group",
-    DryWeatherFlowOverrideID: "Dry Weather Flow Override"
-  };
-
   public static modelingAttributeFieldsWithDropdown = [
     "TimeOfConcentrationID", "RoutingConfigurationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID"
   ];
@@ -269,8 +239,9 @@ export class TreatmentBmpsComponent implements OnInit {
       layers: "OCStormwater:Jurisdictions",
       transparent: true,
       format: "image/png",
-      tiled: true
-    } as WMSOptions);
+      tiled: true,
+      styles: "jurisdiction_orange"
+    } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
       "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
@@ -282,7 +253,6 @@ export class TreatmentBmpsComponent implements OnInit {
   }
 
   public updateMapLayers(): void {
-
     const mapOptions: MapOptions = {
       // center: [46.8797, -110],
       // zoom: 6,
@@ -321,7 +291,10 @@ export class TreatmentBmpsComponent implements OnInit {
     this.treatmentBMPsLayer = new GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: function (feature, latlng) {
         return marker(latlng, { icon: this.markerIcon })
-      }.bind(this)
+      }.bind(this),
+      filter: (feature) => {
+        return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
+      }
     });
     this.treatmentBMPsLayer.addTo(this.map);
   }
@@ -361,7 +334,7 @@ export class TreatmentBmpsComponent implements OnInit {
       "properties": {
         TreatmentBMPID: x.TreatmentBMPID,
         TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
+        TreatmentBMPTypeName: this.getTypeNameByTypeID(x.TreatmentBMPTypeID),
         Latitude: x.Latitude,
         Longitude: x.Longitude
       }
@@ -411,8 +384,10 @@ export class TreatmentBmpsComponent implements OnInit {
   }
 
   public selectTreatmentBMP(treatmentBMPID: number) {
+    this.isEditingLocation = false;
     const feature = this.mapTreatmentBMPToFeature(this.treatmentBMPs.find(x => x.TreatmentBMPID === treatmentBMPID));
     this.selectTreatmentBMPImpl(feature);
+    this.updateTreatmentBMPsLayer();
   }
 
   private selectTreatmentBMPImpl(feature: any) {
@@ -451,12 +426,8 @@ export class TreatmentBmpsComponent implements OnInit {
     return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPModelingTypeID];
   }
 
-  public getFieldDisplayName(fieldName: string) {
-    return TreatmentBmpsComponent.modelingAttributeFieldsDisplayNames[fieldName];
-  }
-
   public getTypeNameByTypeID(typeID: number) {
-    return this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName;
+    return (this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName) ?? -1;
   }
 
   public getModelingAttributeDropdownItemsByFieldName(fieldName: string): Array<TreatmentBMPModelingAttributeDropdownItemDto> {
@@ -471,11 +442,8 @@ export class TreatmentBmpsComponent implements OnInit {
     this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
   }
 
-  public updateIsEditingLocation() {
-    if (this.isEditingLocation) {
-      this.updateTreatmentBMPsLayer();
-    }
-
+  public toggleIsEditingLocation() {
+    this.updateTreatmentBMPsLayer();
     this.isEditingLocation = !this.isEditingLocation;
   }
 
@@ -505,8 +473,6 @@ export class TreatmentBmpsComponent implements OnInit {
     var newTreatmentBMP = new TreatmentBMPUpsertDto;
     newTreatmentBMP.TreatmentBMPID = this.newTreatmentBMPIndex;
     this.newTreatmentBMPIndex--;
-
-    console.log(newTreatmentBMP);
 
     this.treatmentBMPs.push(newTreatmentBMP);
     this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
