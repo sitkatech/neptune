@@ -5,6 +5,7 @@ using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -43,10 +44,22 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
         [JurisdictionEditFeature]
-        public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems([FromRoute] int projectID)
+        public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems()
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
             return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
+        }
+
+        [HttpPut("treatmentBMPs/{projectID}")]
+        [JurisdictionEditFeature]
+        public ActionResult MergeTreatmentBMPs(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, [FromRoute] int projectID)
+        {
+            // project validation here
+            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+
+            TreatmentBMPs.MergeProjectTreatmentBMPs(_dbContext, treatmentBMPUpsertDtos, project);
+
+            return Ok();
         }
     }
 }

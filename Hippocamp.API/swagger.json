@@ -1091,17 +1091,6 @@
         "tags": [
           "TreatmentBMP"
         ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -1122,6 +1111,65 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/{projectID}": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
@@ -2110,6 +2158,12 @@
         "additionalProperties": false
       },
       "TreatmentBMPUpsertDto": {
+        "required": [
+          "Latitude",
+          "Longitude",
+          "TreatmentBMPName",
+          "TreatmentBMPTypeID"
+        ],
         "type": "object",
         "properties": {
           "TreatmentBMPID": {
@@ -2117,8 +2171,7 @@
             "format": "int32"
           },
           "TreatmentBMPName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "TreatmentBMPTypeID": {
             "type": "integer",
