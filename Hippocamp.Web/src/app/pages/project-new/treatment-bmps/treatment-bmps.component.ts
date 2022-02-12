@@ -297,6 +297,12 @@ export class TreatmentBmpsComponent implements OnInit {
       }
     });
     this.treatmentBMPsLayer.addTo(this.map);
+
+    if (!this.isEditingLocation)
+      this.treatmentBMPsLayer.on("click", (event: LeafletEvent) => {
+        this.selectTreatmentBMPImpl(event.propagatedFrom.feature);
+        this.updateTreatmentBMPsLayer();
+    });
   }
 
   public buildMarker(iconUrl: string, iconRetinaUrl: string): any {
@@ -360,10 +366,6 @@ export class TreatmentBmpsComponent implements OnInit {
       });
 
     $(leafletControlLayersSelector).append(closem);
-
-    this.treatmentBMPsLayer.on("click", (event: LeafletEvent) => {
-      this.selectTreatmentBMPImpl(event.propagatedFrom.feature);
-    });
 
     this.map.on("click", (event: LeafletEvent) => {
       if (!this.isEditingLocation) {
@@ -443,8 +445,8 @@ export class TreatmentBmpsComponent implements OnInit {
   }
 
   public toggleIsEditingLocation() {
-    this.updateTreatmentBMPsLayer();
     this.isEditingLocation = !this.isEditingLocation;
+    this.updateTreatmentBMPsLayer();
   }
 
   private launchModal(modalContent: any, modalTitle: string): void {
