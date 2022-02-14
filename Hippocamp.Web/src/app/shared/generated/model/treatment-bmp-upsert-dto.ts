@@ -12,14 +12,14 @@
 
 export class TreatmentBMPUpsertDto { 
     TreatmentBMPID?: number;
-    TreatmentBMPName?: string;
-    TreatmentBMPTypeID?: number;
+    TreatmentBMPName: string;
+    TreatmentBMPTypeID: number;
     TreatmentBMPTypeName?: string;
     TreatmentBMPModelingTypeID?: number;
     StormwaterJurisdictionName?: string;
     WatershedName?: string;
-    Longitude?: number;
-    Latitude?: number;
+    Longitude: number;
+    Latitude: number;
     Notes?: string;
     AverageDivertedFlowrate?: number;
     AverageTreatmentFlowrate?: number;

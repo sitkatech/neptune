@@ -15,6 +15,7 @@ model/organization-type-dto.ts
 model/person-create-dto.ts
 model/person-dto.ts
 model/person-simple-dto.ts
+model/problem-details.ts
 model/project-create-dto.ts
 model/project-document-simple-dto.ts
 model/project-document-update-dto.ts

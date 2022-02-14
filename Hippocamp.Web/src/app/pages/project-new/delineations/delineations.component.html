@@ -30,7 +30,7 @@
                             <td>{{treatmentBMP.TreatmentBMPName}}</td>
                             <td [class.font-italic]="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)" >{{getDelineationAreaForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}</td>
                             <td><button class="btn btn-hippocamp btn-disabled" placement="top" ngbTooltip="Draw on Map feature coming soon">Draw on Map</button></td>
-                            <td><button class="btn btn-hippocamp btn-disabled" placement="top" ngbTooltip="Trace Network feature coming soon">Trace Network</button></td>
+                            <td><button class="btn btn-hippocamp" (click)="getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMP.TreatmentBMPID)">Trace Network</button></td>
                         </tr>
                     </tbody>
                 </table>

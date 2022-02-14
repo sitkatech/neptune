@@ -13,6 +13,7 @@ export * from '././organization-type-dto';
 export * from '././person-create-dto';
 export * from '././person-dto';
 export * from '././person-simple-dto';
+export * from '././problem-details';
 export * from '././project-create-dto';
 export * from '././project-document-simple-dto';
 export * from '././project-document-update-dto';

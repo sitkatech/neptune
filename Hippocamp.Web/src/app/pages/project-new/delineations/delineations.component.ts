@@ -2,6 +2,7 @@ import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet.fullscreen';
+import 'leaflet-draw';
 import * as esri from 'esri-leaflet'
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
@@ -165,9 +166,9 @@ export class DelineationsComponent implements OnInit {
     
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
-      pointToLayer: function (feature, latlng) {
+      pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: this.markerIcon})
-      }.bind(this)
+      }
     });
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
@@ -323,6 +324,26 @@ export class DelineationsComponent implements OnInit {
       }
 
       return `${delineation.DelineationArea} ac`;
+  }
+
+  public getUpstreamRSBCatchmentForTreatmentBMP (treatmentBMPID: number) {
+    if (this.selectedDelineation) {
+      this.map.removeLayer(this.selectedDelineationLayer);
+      this.selectedDelineationLayer = null;
+      this.selectedDelineation = null;
+    }
+
+    this.treatmentBMPService.getUpstreamRSBCatchmentGeoJSON(treatmentBMPID).subscribe(result => {
+      debugger;
+      this.selectedDelineationLayer = new L.GeoJSON(result, {
+        style: (feature) => {
+          return {
+            color:'yellow'
+          }
+        }
+      })
+      this.selectedDelineationLayer.addTo(this.map).bringToFront();
+    })
   }
 
 }
