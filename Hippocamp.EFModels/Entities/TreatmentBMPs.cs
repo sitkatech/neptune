@@ -20,6 +20,11 @@ namespace Hippocamp.EFModels.Entities
                 .AsNoTracking();
         }
 
+        public static TreatmentBMP GetByTreatmentBMPID (HippocampDbContext dbContext, int treatmentBMPID)
+        {
+            return dbContext.TreatmentBMPs.SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+        }
+
         public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
         {
             var treatmentBMPs = GetTreatmentBMPsImpl(dbContext)

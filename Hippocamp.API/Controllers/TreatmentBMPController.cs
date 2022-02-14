@@ -83,5 +83,20 @@ namespace Hippocamp.API.Controllers
 
             return Ok();
         }
+
+        [HttpGet("treatmentBMPs/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON")]
+        [JurisdictionEditFeature]
+        public ActionResult<string> GetUpstreamRSBCatchmentGeoJSONForTreatmentBMP([FromRoute] int treatmentBMPID)
+        {
+            var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID);
+            if (ThrowNotFound(treatmentBMP, "TreatmentBMP", treatmentBMPID, out var actionResult))
+            {
+                return actionResult;
+            }
+
+            var regionalSubbasin = RegionalSubbasins.GetFirstByContainsGeometry(_dbContext, treatmentBMP.LocationPoint);
+
+            return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSON(_dbContext, regionalSubbasin.RegionalSubbasinID));
+        }
     }
 }

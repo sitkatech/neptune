@@ -30,6 +30,11 @@ export class TreatmentBMPService {
     return this.apiService.getFromApi(route);
   }
 
+  getUpstreamRSBCatchmentGeoJSON(treatmentBMPID: Number): Observable<string> {
+    let route = `treatmentBMPs/${treatmentBMPID}/upstreamRSBCatchmentGeoJSON`;
+    return this.apiService.getFromApi(route);
+  }
+
   mergeTreatmentBMPs(treamentBMPs: Array<TreatmentBMPUpsertDto>, projectID: number) {
     let route = `treatmentBMPs/${projectID}`;
     return this.apiService.putToApi(route, treamentBMPs);

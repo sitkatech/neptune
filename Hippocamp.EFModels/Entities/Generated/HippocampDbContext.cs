@@ -194,6 +194,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
         public virtual DbSet<vRegionalSubbasinLGUInput> vRegionalSubbasinLGUInputs { get; set; }
+        public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vStormwaterJurisdictionOrganizationMapping> vStormwaterJurisdictionOrganizationMappings { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
         public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }
@@ -2581,6 +2582,11 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vRegionalSubbasinLGUInput");
 
                 entity.Property(e => e.RSBID).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<vRegionalSubbasinUpstreamCatchmentGeometry4326>(entity =>
+            {
+                entity.ToView("vRegionalSubbasinUpstreamCatchmentGeometry4326");
             });
 
             modelBuilder.Entity<vStormwaterJurisdictionOrganizationMapping>(entity =>
