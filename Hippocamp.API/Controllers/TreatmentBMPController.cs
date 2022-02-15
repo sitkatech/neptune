@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
@@ -54,10 +55,31 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult MergeTreatmentBMPs(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, [FromRoute] int projectID)
         {
-            // project validation here
             var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            if (project == null)
+            {
+                return BadRequest();
+            }
 
-            TreatmentBMPs.MergeProjectTreatmentBMPs(_dbContext, treatmentBMPUpsertDtos, project);
+            var existingTreatmentBMPs = _dbContext.TreatmentBMPs.ToList();
+            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos)
+            {
+                var namingConflicts = existingTreatmentBMPs
+                    .Where(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName && x.TreatmentBMPID != treatmentBMPUpsertDto.TreatmentBMPID)
+                    .ToList();
+
+                if (namingConflicts.Count > 0)
+                {
+                    ModelState.AddModelError("TreatmentBMPName", 
+                        $"A Treatment BMP with the name {treatmentBMPUpsertDto.TreatmentBMPName} already exists. Treatment BMP names must be unique.");
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            TreatmentBMPs.MergeProjectTreatmentBMPs(_dbContext, treatmentBMPUpsertDtos, existingTreatmentBMPs, project);
 
             return Ok();
         }

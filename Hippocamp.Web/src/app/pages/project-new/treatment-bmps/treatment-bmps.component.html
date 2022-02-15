@@ -26,14 +26,14 @@
         <div id={{mapID}} class="location-card" [style.height]="mapHeight" [style.cursor]="isEditingLocation ? 'crosshair' : ''"></div>
     </div>
 </div>
-<div class="card mt-4" id="treatmentBMPDetails" *ngIf="selectedTreatmentBMP; else noTreatmentBMPs">
+<div class="card mt-4" *ngIf="selectedTreatmentBMP; else noTreatmentBMPs">
     <div class="card-body bg-white">
         <div class="row">
             <div class="col-sm-4 order-sm-last">
                 <div class="row d-flex">
                     <div class="col-auto ml-auto text-right">
                         <a class="btn mt-2 btn-outline-info  mb-2" (click)="toggleIsEditingLocation()">
-                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Update Location"}}
+                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Finish Editing Location" : "Edit Location"}}
                         </a>
                         <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
                             <i class="fa fa-trash mr-1"></i> Delete
@@ -110,8 +110,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
-                    <div class="row p-2" 
-                        *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
+                    <div class="row p-2" *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
                         <div class="col-sm-4 control-label font-weight-bold text-sm-right">
                             <field-definition [fieldDefinitionType]="fieldName"></field-definition>
                         </div>
@@ -127,9 +126,9 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
                                     <div class="input-group-append">
-                                      <span class="input-group-text">{{getModelingAttributeDisplayUnitsByField(fieldName)}}</span>
+                                    <span class="input-group-text">{{getModelingAttributeDisplayUnitsByField(fieldName)}}</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </ng-template>
                     </div>

@@ -82,9 +82,9 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPModelingAttributeDropdownItemDtos;
         }
 
-        public static void MergeProjectTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, Project project)
+        public static void MergeProjectTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingTreatmentBMPs, Project project)
         {
-            var existingProjectTreatmentBMPs = dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
+            var existingProjectTreatmentBMPs = existingTreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
             var existingProjectTreatmentBMPModelingAttributes = dbContext.TreatmentBMPModelingAttributes.Where(x => existingProjectTreatmentBMPs.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID)).ToList();
             
             var allTreatmentBMPsInDatabase = dbContext.TreatmentBMPs;
@@ -219,7 +219,6 @@ namespace Hippocamp.EFModels.Entities
                 PermanentPoolorWetlandVolume = treatmentBMPUpsertDto.PermanentPoolorWetlandVolume,
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPUpsertDto.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = treatmentBMPUpsertDto.SummerHarvestedWaterDemand,
-                TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID,
                 DrawdownTimeForDetentionVolume = treatmentBMPUpsertDto.DrawdownTimeForDetentionVolume,
                 TotalEffectiveBMPVolume = treatmentBMPUpsertDto.TotalEffectiveBMPVolume,
                 TotalEffectiveDrywellBMPVolume = treatmentBMPUpsertDto.TotalEffectiveDrywellBMPVolume,
@@ -231,7 +230,7 @@ namespace Hippocamp.EFModels.Entities
                 WinterHarvestedWaterDemand = treatmentBMPUpsertDto.WinterHarvestedWaterDemand,
                 MonthsOfOperationID = treatmentBMPUpsertDto.MonthsOfOperationID,
                 DryWeatherFlowOverrideID = treatmentBMPUpsertDto.DryWeatherFlowOverrideID
-            };
+        };
 
             var modelingTypeIDsWithoutAdditionalFields = new List<int>()
             {
@@ -245,10 +244,10 @@ namespace Hippocamp.EFModels.Entities
             }
 
             treatmentBMPModelingAttribute.RoutingConfigurationID = (int)RoutingConfigurationEnum.Online;
-            treatmentBMPModelingAttribute.TimeOfConcentrationID = (int)TimeOfConcentrationEnum.FiveMinutes;
-            treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroupID = (int) UnderlyingHydrologicSoilGroupEnum.D;
+            treatmentBMPModelingAttribute.TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID;
+            treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroupID = treatmentBMPUpsertDto.UnderlyingHydrologicSoilGroupID;
 
+            return treatmentBMPModelingAttribute;
         }
-
     }
 }
