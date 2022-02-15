@@ -16,6 +16,9 @@ import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { DelineationTypeEnum } from 'src/app/shared/models/enums/delineation-type.enum';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { Alert } from 'src/app/shared/models/alert';
+import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 
 declare var $:any
 
@@ -83,6 +86,7 @@ export class DelineationsComponent implements OnInit {
   private drawControl: L.Control.Draw;
   public drawDelineationChosen: boolean = false;
   private newDelineatonID: number = -1;
+  public isLoadingSubmit: boolean = false;
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
@@ -91,6 +95,7 @@ export class DelineationsComponent implements OnInit {
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
+    private alertService: AlertService
   ) {
   }
 
@@ -306,6 +311,7 @@ export class DelineationsComponent implements OnInit {
     });
     this.map
     .on(L.Draw.Event.CREATED, (event) => {
+      this.isPerformingDrawAction = false;
       const layer = (event as L.DrawEvents.Created).layer;
       var delineationUpsertDto = this.delineations.filter(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID)[0];
       if (delineationUpsertDto == null) {
@@ -320,23 +326,27 @@ export class DelineationsComponent implements OnInit {
       delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
       delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
       this.selectedDelineation = delineationUpsertDto;
-
       layer.feature = this.mapDelineationToFeature(delineationUpsertDto);
+      if (layer.getLayers) {
+        layer.getLayers().forEach((l) => {
+            this.editableDelineationFeatureGroup.addLayer(l);
+        });
+      } else {
+          this.editableDelineationFeatureGroup.addLayer(layer);
+      }
       layer.on('click', (e) => {
         this.selectFeatureImpl(layer.feature.properties.TreatmentBMPID);
       })
-      this.editableDelineationFeatureGroup.addLayer(layer);
       this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
-      this.isPerformingDrawAction = false;
     })
     .on(L.Draw.Event.EDITED, (event) => {
+      this.isPerformingDrawAction = false;
         const layers = (event as L.DrawEvents.Edited).layers;
         layers.eachLayer((layer) => {
             var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
             delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
             delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
         });
-        this.isPerformingDrawAction = false;
     })
     .on(L.Draw.Event.DELETED, (event) => {
         // const layers = (event as L.DrawEvents.Deleted).layers;
@@ -449,6 +459,22 @@ export class DelineationsComponent implements OnInit {
     });
 
     this.delineations = this.delineations.concat(newDelineation);
+  }
+
+  public onSubmit() {
+    this.isLoadingSubmit = true;
+    
+    //We need a fully qualified geojson string and above we are just getting the geometry
+    //Possible can remove the update above if we are always going to do it here
+    this.editableDelineationFeatureGroup.eachLayer((layer) => {
+      var delineationUpsertDto = this.delineations.filter(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)[0];
+      delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
+    });
+
+    this.delineationService.mergeDelineations(this.delineations, this.projectID).subscribe(() => {
+      this.isLoadingSubmit = false;
+      this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
+    });
   }
 
 }

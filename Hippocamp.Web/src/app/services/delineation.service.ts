@@ -16,4 +16,9 @@ export class DelineationService {
     let route = `/delineations/${projectID}/getByProjectID`;
     return this.apiService.getFromApi(route);
   }
+
+  mergeDelineations(delineations: Array<DelineationUpsertDto>, projectID: number) {
+    let route = `delineations/${projectID}`;
+    return this.apiService.putToApi(route, delineations);
+  }
 }

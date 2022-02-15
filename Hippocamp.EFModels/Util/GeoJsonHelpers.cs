@@ -16,17 +16,21 @@ namespace Hippocamp.API.Util
 
             geoJsonStrings.ForEach(geoJsonString =>
             {
-                using (var stringReader = new StringReader(geoJsonString))
-                using (var jsonReader = new JsonTextReader(stringReader))
-                {
-                    var geometryFactory = new GeometryFactory();
-                    var reader = new GeoJsonReader(geometryFactory, new JsonSerializerSettings());
-                    var feature = reader.Read<Feature>(jsonReader);
-                    returnList.Add(feature);
-                }
+                returnList.Add(GetFeatureFromGeoJson(geoJsonString));
             });
 
             return returnList;
+        }
+
+        public static Feature GetFeatureFromGeoJson(string geoJsonString)
+        {
+            using (var stringReader = new StringReader(geoJsonString))
+            using (var jsonReader = new JsonTextReader(stringReader))
+            {
+                var geometryFactory = new GeometryFactory();
+                var reader = new GeoJsonReader(geometryFactory, new JsonSerializerSettings());
+                return reader.Read<Feature>(jsonReader);
+            }
         }
 
         public static IEnumerable<string> GetGeoJsonsFromGeometries(IEnumerable<Geometry> geometries)

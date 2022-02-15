@@ -44,6 +44,13 @@ PROJCS[""NAD83(HARN) / California zone 6"",
             return geom;
         }
 
+        public static Geometry ProjectTo2771(this Geometry geometry)
+        {
+            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[2771]);
+            var transformation = new CoordinateTransformationFactory().CreateFromCoordinateSystems(GeographicCoordinateSystem.WGS84, targetCoordinateSystem);
+            return Transform(geometry, transformation.MathTransform, 2771);
+        }
+
         public static Geometry ProjectTo4326(this Geometry geometry)
         {
             var sourceCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[geometry.SRID]);
