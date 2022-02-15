@@ -68,5 +68,10 @@ namespace Hippocamp.EFModels.Entities
 
             return delineation;
         }
+        
+        public static DelineationUpsertDto GetByDelineationID(HippocampDbContext dbContext, int delineationID)
+        {
+            return GetDelineationsImpl(dbContext).SingleOrDefault(x => x.DelineationID == delineationID).AsUpsertDto();
+        }
     }
 }
