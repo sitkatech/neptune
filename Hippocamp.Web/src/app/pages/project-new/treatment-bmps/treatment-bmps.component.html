@@ -33,7 +33,7 @@
                 <div class="row d-flex">
                     <div class="col-auto ml-auto text-right">
                         <a class="btn mt-2 btn-outline-info  mb-2" (click)="toggleIsEditingLocation()">
-                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Set Location"}}
+                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Update Location"}}
                         </a>
                         <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
                             <i class="fa fa-trash mr-1"></i> Delete
@@ -52,7 +52,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-2 col-sm-3 control-label font-weight-bold text-sm-right">
-                        <label>Type</label>
+                        <field-definition [fieldDefinitionType]="'TreatmentBMPType'"></field-definition>
                     </div>
                     <div class="col-lg-10 col-sm-9">
                         <div class="font-weight-bold" *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0; else treatmentBMPTypeSelect">
@@ -91,7 +91,9 @@
                         <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.Longitude}}</div>
                         <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Delination Area</div>
                         <div class="col-sm-8 mt-1 font-italic">not available</div>
-                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Watershed</div>
+                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">
+                            <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
+                        </div>
                         <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
                     </ng-container>
                     <ng-template #noLocationSelected>
@@ -111,8 +113,7 @@
                     <div class="row p-2" 
                         *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
                         <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                            <field-definition *ngIf="fieldDefinitionTypeEnum[fieldName]; else noFieldDefinition"
-                                [fieldDefinitionType]="fieldName"></field-definition>
+                            <field-definition [fieldDefinitionType]="fieldName"></field-definition>
                         </div>
                         <div class="col-sm-6" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
                             <select class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
@@ -123,7 +124,12 @@
                         </div>
                         <ng-template #numericModelingAttributeField>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
+                                    <div class="input-group-append">
+                                      <span class="input-group-text">{{getModelingAttributeDisplayUnitsByField(fieldName)}}</span>
+                                    </div>
+                                  </div>
                             </div>
                         </ng-template>
                     </div>

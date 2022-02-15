@@ -52,7 +52,10 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<TreatmentBMPTypeSimpleDto> ListTypesAsSimpleDto(HippocampDbContext dbContext)
         {
-            var treatmentBMPTypeSimpleDtos = dbContext.TreatmentBMPTypes.Select(x => x.AsSimpleDto()).ToList();
+            var treatmentBMPTypeSimpleDtos = dbContext.TreatmentBMPTypes
+                .OrderBy(x => x.TreatmentBMPTypeName)
+                .Select(x => x.AsSimpleDto())
+                .ToList();
             return treatmentBMPTypeSimpleDtos;
         }
 
@@ -63,10 +66,6 @@ namespace Hippocamp.EFModels.Entities
             var timeOfConcentrationDropdownItemDtos = dbContext.TimeOfConcentrations.Select(x =>
                 new TreatmentBMPModelingAttributeDropdownItemDto(x.TimeOfConcentrationID, x.TimeOfConcentrationDisplayName, "TimeOfConcentrationID"));
             treatmentBMPModelingAttributeDropdownItemDtos.AddRange(timeOfConcentrationDropdownItemDtos);
-
-            var routingConfigurationDropdownItemDtos = dbContext.RoutingConfigurations.Select(x =>
-                new TreatmentBMPModelingAttributeDropdownItemDto(x.RoutingConfigurationID, x.RoutingConfigurationDisplayName, "RoutingConfigurationID"));
-            treatmentBMPModelingAttributeDropdownItemDtos.AddRange(routingConfigurationDropdownItemDtos);
 
             var monthsOfOperationDropdownItemDtos = dbContext.MonthsOfOperations.Select(x =>
                 new TreatmentBMPModelingAttributeDropdownItemDto(x.MonthsOfOperationID, x.MonthsOfOperationDisplayName, "MonthsOfOperationID"));
@@ -92,10 +91,10 @@ namespace Hippocamp.EFModels.Entities
             var allTreatmentBMPModelingAttributesInDatabase = dbContext.TreatmentBMPModelingAttributes;
 
             // merge new Treatment BMPs
-            var newTreatmentBMPs = treatmentBMPUpsertDtos
+            var updatedTreatmentBMPs = treatmentBMPUpsertDtos
                 .Select(x => TreatmentBMPFromUpsertDtoAndProject(x, project));
 
-            existingProjectTreatmentBMPs.MergeNew(newTreatmentBMPs, allTreatmentBMPsInDatabase,
+            existingProjectTreatmentBMPs.MergeNew(updatedTreatmentBMPs, allTreatmentBMPsInDatabase,
                 (x, y) => x.TreatmentBMPName == y.TreatmentBMPName);
 
             dbContext.SaveChanges();
@@ -108,14 +107,11 @@ namespace Hippocamp.EFModels.Entities
             }
 
             // merge new TreatmentBMPModelingAttributeIDs
-            var newTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos.Select(TreatmentBMPModelingAttributeFromUpsertDto);
-            existingProjectTreatmentBMPModelingAttributes.MergeNew(newTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
+            var updatedTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos.Select(TreatmentBMPModelingAttributeFromUpsertDto);
+            existingProjectTreatmentBMPModelingAttributes.MergeNew(updatedTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID);
 
             // update TreatmentBMP and TreatmentBMPModelingAttribute records
-            var updatedTreatmentBMPs = treatmentBMPUpsertDtos
-                .Select(x => TreatmentBMPFromUpsertDtoAndProject(x, project));
-
             existingProjectTreatmentBMPs.MergeUpdate(updatedTreatmentBMPs, 
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>
@@ -124,9 +120,6 @@ namespace Hippocamp.EFModels.Entities
                     x.LocationPoint4326 = y.LocationPoint4326;
                     x.Notes = y.Notes;
                 });
-
-            var updatedTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos
-                .Select(TreatmentBMPModelingAttributeFromUpsertDto).ToList();
 
             existingProjectTreatmentBMPModelingAttributes.MergeUpdate(updatedTreatmentBMPModelingAttributes,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
@@ -193,8 +186,8 @@ namespace Hippocamp.EFModels.Entities
                 LocationPoint4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value),
                 Notes = treatmentBMPUpsertDto.Notes,
                 InventoryIsVerified = false,
-                TrashCaptureStatusTypeID = 4,
-                SizingBasisTypeID = 4
+                TrashCaptureStatusTypeID = (int)TrashCaptureStatusTypeEnum.NotProvided,
+                SizingBasisTypeID = (int)SizingBasisTypeEnum.NotProvided
             };
 
             if (treatmentBMPUpsertDto.TreatmentBMPID > 0)
@@ -207,7 +200,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static TreatmentBMPModelingAttribute TreatmentBMPModelingAttributeFromUpsertDto(TreatmentBMPUpsertDto treatmentBMPUpsertDto)
         {
-            return new()
+            var treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute()
             {
                 TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID,
                 AverageDivertedFlowrate = treatmentBMPUpsertDto.AverageDivertedFlowrate,
@@ -224,7 +217,6 @@ namespace Hippocamp.EFModels.Entities
                 InfiltrationSurfaceArea = treatmentBMPUpsertDto.InfiltrationSurfaceArea,
                 MediaBedFootprint = treatmentBMPUpsertDto.MediaBedFootprint,
                 PermanentPoolorWetlandVolume = treatmentBMPUpsertDto.PermanentPoolorWetlandVolume,
-                RoutingConfigurationID = treatmentBMPUpsertDto.RoutingConfigurationID,
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPUpsertDto.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = treatmentBMPUpsertDto.SummerHarvestedWaterDemand,
                 TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID,
@@ -240,6 +232,22 @@ namespace Hippocamp.EFModels.Entities
                 MonthsOfOperationID = treatmentBMPUpsertDto.MonthsOfOperationID,
                 DryWeatherFlowOverrideID = treatmentBMPUpsertDto.DryWeatherFlowOverrideID
             };
+
+            var modelingTypeIDsWithoutAdditionalFields = new List<int>()
+            {
+                (int)TreatmentBMPModelingTypeEnum.HydrodynamicSeparator, (int)TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment, (int)TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl, 
+                (int)TreatmentBMPModelingTypeEnum.LowFlowDiversions, (int)TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems
+            };
+
+            if (modelingTypeIDsWithoutAdditionalFields.Contains(treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.Value))
+            {
+                return treatmentBMPModelingAttribute;
+            }
+
+            treatmentBMPModelingAttribute.RoutingConfigurationID = (int)RoutingConfigurationEnum.Online;
+            treatmentBMPModelingAttribute.TimeOfConcentrationID = (int)TimeOfConcentrationEnum.FiveMinutes;
+            treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroupID = (int) UnderlyingHydrologicSoilGroupEnum.D;
+
         }
 
     }

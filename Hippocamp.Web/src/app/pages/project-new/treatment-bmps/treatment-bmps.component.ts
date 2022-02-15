@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import {
   Control, FitBoundsOptions,
@@ -37,6 +37,8 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { FieldDefinitionTypeEnum } from 'src/app/shared/models/enums/field-definition-type.enum';
+import { PersonDto } from 'src/app/shared/generated/model/person-dto';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 declare var $: any
 
@@ -45,7 +47,7 @@ declare var $: any
   templateUrl: './treatment-bmps.component.html',
   styleUrls: ['./treatment-bmps.component.scss']
 })
-export class TreatmentBmpsComponent implements OnInit {
+export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   @ViewChild('deleteTreatmentBMPModal') deleteTreatmentBMPModal
 
   public mapID: string = 'poolDetailMap';
@@ -81,6 +83,9 @@ export class TreatmentBmpsComponent implements OnInit {
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
+  private watchUserChangeSubscription: any;
+  private currentUser: PersonDto;
+  
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
   public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
@@ -180,76 +185,115 @@ export class TreatmentBmpsComponent implements OnInit {
       ]
   };
 
+  public static modelingAttributeDisplayUnitsByField = {
+    AverageDivertedFlowrate: 'gpd',
+    AverageTreatmentFlowrate: 'cfs',
+    DesignDryWeatherTreatmentCapacity: 'cfs',
+    DesignLowFlowDiversionCapacity: 'gpd',
+    DesignMediaFiltrationRate: 'in/hr',
+    DesignResidenceTimeforPermanentPool: 'days',
+    DiversionRate: 'cfs',
+    DrawdownTimeForDetentionVolume: 'hrs',
+    DrawdownTimeforWQDetentionVolume: 'hrs',
+    EffectiveFootprint: 'sq ft',
+    EffectiveRetentionDepth: 'ft',
+    InfiltrationDischargeRate: 'cfs',
+    InfiltrationSurfaceArea: 'sq ft',
+    MediaBedFootprint: 'sq ft',
+    PermanentPoolorWetlandVolume: 'cu ft',
+    StorageVolumeBelowLowestOutletElevation: 'cu ft',
+    SummerHarvestedWaterDemand: 'gpd',
+    TotalEffectiveBMPVolume: 'cu ft',
+    TotalEffectiveDrywellBMPVolume: 'cu ft',
+    TreatmentRate: 'cfs',
+    UnderlyingInfiltrationRate: 'in/hr',
+    WaterQualityDetentionVolume: 'cu ft',
+    WettedFootprint: 'sq ft',
+    WinterHarvestedWaterDemand: 'gpd',
+  }
+
   public static modelingAttributeFieldsWithDropdown = [
     "TimeOfConcentrationID", "RoutingConfigurationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID"
   ];
 
   constructor(
+    private cdr: ChangeDetectorRef,
+    private authenticationService: AuthenticationService,
     private treatmentBMPService: TreatmentBMPService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {
   }
 
   public ngOnInit(): void {
-    const projectID = this.route.snapshot.paramMap.get("projectID");
-    if (projectID) {
-      this.projectID = parseInt(projectID);
+    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+      this.currentUser = currentUser;
 
-      forkJoin({
-        treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-        boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-        treatmentBMPTypes: this.treatmentBMPService.getTypes(),
-        modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
-      }).subscribe(({ treatmentBMPs, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
-        this.treatmentBMPs = treatmentBMPs;
-        this.boundingBox = boundingBox;
-        this.treatmentBMPTypes = treatmentBMPTypes;
-        this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
+      const projectID = this.route.snapshot.paramMap.get("projectID");
+      if (projectID) {
+        this.projectID = parseInt(projectID);
 
-        this.updateMapLayers();
-      });
-    }
+        forkJoin({
+          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
+          boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
+          treatmentBMPTypes: this.treatmentBMPService.getTypes(),
+          modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
+        }).subscribe(({ treatmentBMPs, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+          this.treatmentBMPs = treatmentBMPs;
+          this.boundingBox = boundingBox;
+          this.treatmentBMPTypes = treatmentBMPTypes;
+          this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
 
-    this.tileLayers = Object.assign({}, {
-      "Aerial": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Aerial',
-      }),
-      "Street": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Aerial',
-      }),
-      "Terrain": tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Terrain',
-      }),
-    }, this.tileLayers);
+          this.updateMapLayers();
+        });
+      }
+
+      this.tileLayers = Object.assign({}, {
+        "Aerial": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Aerial',
+        }),
+        "Street": tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Aerial',
+        }),
+        "Terrain": tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Terrain',
+        }),
+      }, this.tileLayers);
 
 
-    let regionalSubbasinsWMSOptions = ({
-      layers: "OCStormwater:RegionalSubbasins",
-      transparent: true,
-      format: "image/png",
-      tiled: true
-    } as WMSOptions);
+      let regionalSubbasinsWMSOptions = ({
+        layers: "OCStormwater:RegionalSubbasins",
+        transparent: true,
+        format: "image/png",
+        tiled: true
+      } as WMSOptions);
 
-    let jurisdictionsWMSOptions = ({
-      layers: "OCStormwater:Jurisdictions",
-      transparent: true,
-      format: "image/png",
-      tiled: true,
-      styles: "jurisdiction_orange"
-    } as L.WMSOptions);
+      let jurisdictionsWMSOptions = ({
+        layers: "OCStormwater:Jurisdictions",
+        transparent: true,
+        format: "image/png",
+        tiled: true,
+        styles: "jurisdiction_orange"
+      } as L.WMSOptions);
 
-    this.overlayLayers = Object.assign({
-      "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
-      "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
-      "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" })
-    }, this.overlayLayers);
+      this.overlayLayers = Object.assign({
+        "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
+        "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
+        "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" })
+      }, this.overlayLayers);
 
-    this.compileService.configure(this.appRef);
+      this.compileService.configure(this.appRef);
+    });
+  }
+
+  ngOnDestroy() {
+    this.watchUserChangeSubscription.unsubscribe();
+    this.authenticationService.dispose();
+    this.cdr.detach();
   }
 
   public updateMapLayers(): void {
@@ -335,7 +379,7 @@ export class TreatmentBmpsComponent implements OnInit {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [x.Longitude, x.Latitude]
+        "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
       },
       "properties": {
         TreatmentBMPID: x.TreatmentBMPID,
@@ -401,8 +445,8 @@ export class TreatmentBmpsComponent implements OnInit {
         this.map.removeLayer(this.selectedObjectMarker);
       }
       this.selectedObjectMarker = null;
-
     }
+
     this.selectedListItem = treatmentBMPID;
     let selectedNumber = null;
     let selectedAttributes = null;
@@ -426,6 +470,10 @@ export class TreatmentBmpsComponent implements OnInit {
 
   public getModelingAttributeFieldsToDisplay(treatmentBMPModelingTypeID: number): Array<string> {
     return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPModelingTypeID];
+  }
+
+  public getModelingAttributeDisplayUnitsByField(fieldName: string): string {
+    return TreatmentBmpsComponent.modelingAttributeDisplayUnitsByField[fieldName];
   }
 
   public getTypeNameByTypeID(typeID: number) {
@@ -479,6 +527,8 @@ export class TreatmentBmpsComponent implements OnInit {
     this.treatmentBMPs.push(newTreatmentBMP);
     this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
     document.getElementById("treatmentBMPDetails").scrollIntoView();
+
+    this.isEditingLocation = true;
   }
 
   public onSubmit() {
@@ -493,6 +543,10 @@ export class TreatmentBmpsComponent implements OnInit {
       this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
         this.treatmentBMPs = treatmentBMPs;
       })
+    }, error => {
+      this.isLoadingSubmit = false;
+      window.scroll(0,0);
+      this.cdr.detectChanges();
     });
   }
 }
