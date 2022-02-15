@@ -33,7 +33,8 @@
             "styles": [
               "src/styles.scss",
               "node_modules/leaflet.fullscreen/Control.FullScreen.css",
-              "node_modules/leaflet-gesture-handling/dist/leaflet-gesture-handling.css"
+              "node_modules/leaflet-gesture-handling/dist/leaflet-gesture-handling.css",
+              "node_modules/leaflet-draw/dist/leaflet.draw.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.slim.min.js",
