@@ -283,7 +283,6 @@ export class DelineationsComponent implements OnInit {
 
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
-      debugger;
       var drawOptions = Object.assign({}, this.defaultDrawControlOption);
       if (this.selectedDelineation == null) {
         drawOptions.edit = false;
@@ -296,17 +295,15 @@ export class DelineationsComponent implements OnInit {
       return;
     }
     this.drawControl.remove();
-    // this.drawControl.setDrawingOptions({
-    //   polygon: {
-    //     shapeOptions: this.selectedStyle
-    //   }
-    // });
   }
 
   public setControl(): void {
     this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
       .addTo(this.map);
     
+    L.EditToolbar.Delete.include({
+      removeAllLayers: false
+    });
     this.map
     .on(L.Draw.Event.CREATED, (event) => {
       const layer = (event as L.DrawEvents.Created).layer;
@@ -346,7 +343,6 @@ export class DelineationsComponent implements OnInit {
         // layers.eachLayer((layer) => {
         //     this.editableFootprintLayers.removeLayer(layer);
         // });
-        debugger;
         this.isPerformingDrawAction = false;
     })
     .on(L.Draw.Event.DRAWSTART, () => {
