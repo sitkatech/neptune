@@ -66,6 +66,7 @@ export class DelineationsComponent implements OnInit {
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.Delineations;
 
+  private isPerformingDrawAction: boolean = false;
   private defaultDrawControlOption: L.Control.DrawConstructorOptions = {
       draw: {
         polyline: false,
@@ -75,7 +76,8 @@ export class DelineationsComponent implements OnInit {
         circlemarker: false,
       },
       edit: {
-        featureGroup: this.editableDelineationFeatureGroup
+        featureGroup: this.editableDelineationFeatureGroup,
+        remove: true
       }
     };
   private drawControl: L.Control.Draw;
@@ -328,6 +330,7 @@ export class DelineationsComponent implements OnInit {
       })
       this.editableDelineationFeatureGroup.addLayer(layer);
       this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+      this.isPerformingDrawAction = false;
     })
     .on(L.Draw.Event.EDITED, (event) => {
         const layers = (event as L.DrawEvents.Edited).layers;
@@ -336,17 +339,21 @@ export class DelineationsComponent implements OnInit {
             delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
             delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
         });
+        this.isPerformingDrawAction = false;
     })
-    // .on(L.Draw.Event.DELETED, (event) => {
-    //     const layers = (event as L.DrawEvents.Deleted).layers;
-    //     layers.eachLayer((layer) => {
-    //         this.editableFootprintLayers.removeLayer(layer);
-    //     });
-    // })
-    // .on(L.Draw.Event.DRAWSTART, () => {
-    //     // this.isDrawingIncomplete = true;
-    // })
+    .on(L.Draw.Event.DELETED, (event) => {
+        // const layers = (event as L.DrawEvents.Deleted).layers;
+        // layers.eachLayer((layer) => {
+        //     this.editableFootprintLayers.removeLayer(layer);
+        // });
+        debugger;
+        this.isPerformingDrawAction = false;
+    })
+    .on(L.Draw.Event.DRAWSTART, () => {
+        this.isPerformingDrawAction = true;
+    })
     .on(L.Draw.Event.EDITSTART, () => {
+      this.isPerformingDrawAction = true;
       // no edit started event, so here's a janky solution...
       setTimeout(() => {
         this.editableDelineationFeatureGroup.eachLayer(layer => {
@@ -358,9 +365,9 @@ export class DelineationsComponent implements OnInit {
         })}, 10
       )
     })
-    // .on(L.Draw.Event.DELETESTART, () => {
-    //     // this.isDrawingIncomplete = true;
-    // });
+    .on(L.Draw.Event.DELETESTART, () => {
+        this.isPerformingDrawAction = true;
+    });
     this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
   }
@@ -385,6 +392,10 @@ export class DelineationsComponent implements OnInit {
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
+    if (this.isPerformingDrawAction) {
+      return;
+    }
+
     this.drawControl.remove();
     if (this.selectedListItem) {
       this.selectedListItem = null;
