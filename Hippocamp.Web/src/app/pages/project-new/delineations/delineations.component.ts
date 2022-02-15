@@ -305,14 +305,16 @@ export class DelineationsComponent implements OnInit {
     //   // this.afterLayerAdd.emit();
     //   // this.transformDrawnLayerToGeoJSON();
     // })
-    // .on(L.Draw.Event.EDITED, (event) => {
-    //     const layers = (event as L.DrawEvents.Edited).layers;
-    //     layers.eachLayer((layer) => {
-    //         this.selectedEditableLayers.addLayer(layer);
-    //     });
-    //     // this.afterLayerAdd.emit();
-    //     // this.transformDrawnLayerToGeoJSON();
-    // })
+    .on(L.Draw.Event.EDITED, (event) => {
+        const layers = (event as L.DrawEvents.Edited).layers;
+        layers.eachLayer((layer) => {
+            var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
+            delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
+            delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
+        });
+        // this.afterLayerAdd.emit();
+        // this.transformDrawnLayerToGeoJSON();
+    })
     // .on(L.Draw.Event.DELETED, (event) => {
     //     const layers = (event as L.DrawEvents.Deleted).layers;
     //     layers.eachLayer((layer) => {
