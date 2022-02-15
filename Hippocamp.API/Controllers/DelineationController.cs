@@ -15,7 +15,7 @@ namespace Hippocamp.API.Controllers
         {
         }
 
-        [HttpGet("Delineations/{projectID}/getByProjectID")]
+        [HttpGet("delineations/{projectID}/getByProjectID")]
         [JurisdictionEditFeature]
         public ActionResult<DelineationUpsertDto> GetByProjectID([FromRoute] int projectID)
         {
