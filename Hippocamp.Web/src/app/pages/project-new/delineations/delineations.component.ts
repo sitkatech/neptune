@@ -273,6 +273,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
+    debugger;
     if (this.selectedListItem) {
       this.selectedListItem = null;
       this.map.removeLayer(this.selectedTreatmentBMPLayer);
@@ -334,7 +335,6 @@ export class DelineationsComponent implements OnInit {
     }
 
     this.treatmentBMPService.getUpstreamRSBCatchmentGeoJSON(treatmentBMPID).subscribe(result => {
-      debugger;
       this.selectedDelineationLayer = new L.GeoJSON(result, {
         style: (feature) => {
           return {
