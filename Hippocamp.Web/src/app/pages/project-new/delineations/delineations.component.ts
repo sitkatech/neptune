@@ -54,7 +54,6 @@ export class DelineationsComponent implements OnInit {
   public selectedDelineation: DelineationUpsertDto;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
-  public delineationsEditableFeatureGroup: L.GeoJSON<any>;
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
@@ -145,7 +144,7 @@ export class DelineationsComponent implements OnInit {
       // center: [46.8797, -110],
       // zoom: 6,
       minZoom: 9,
-      maxZoom: 20,
+      maxZoom: 19,
       layers: [
         this.tileLayers["Aerial"],
       ],
@@ -163,9 +162,8 @@ export class DelineationsComponent implements OnInit {
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
     
-    const delineationGeoJsons = this.mapDelineationsToGeoJson(this.delineations);
-    this.delineationsEditableFeatureGroup = new L.GeoJSON(delineationGeoJsons, {});
-    this.delineationsEditableFeatureGroup.addTo(this.map);
+    this.editableDelineationFeatureGroup = this.addFeatureCollectionToEditableFeatureGroup(this.mapDelineationsToGeoJson(this.delineations));
+    this.editableDelineationFeatureGroup.addTo(this.map);
     
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
@@ -246,19 +244,19 @@ export class DelineationsComponent implements OnInit {
     };
   }
 
-  public addFeatureCollectionToEditableFeatureGroup (delineationJsons : any[]) {
-    L.geoJson(delineationJsons, {
-        onEachFeature: function (feature, layer) {
+  public addFeatureCollectionToEditableFeatureGroup (delineationJsons : any) {
+    return L.geoJson(delineationJsons, {
+        onEachFeature: (feature, layer) => {
             if (layer.getLayers) {
-                layer.getLayers().forEach(function (l) {
-                    this.editableFeatureGroup.addLayer(l);
+                layer.getLayers().forEach((l) => {
+                    this.editableDelineationFeatureGroup.addLayer(l);
                 });
             } else {
-                this.editableFeatureGroup.addLayer(layer);
+                this.editableDelineationFeatureGroup.addLayer(layer);
             }
             this.selectFeatureImpl(feature.properties.TreatmentBMPID);
         }
-    }).bind(this);
+    });
 };
 
   public addOrRemoveDrawControl(turnOn: boolean) {
@@ -311,14 +309,10 @@ export class DelineationsComponent implements OnInit {
     this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
       this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
     });
-
-    this.delineationsEditableFeatureGroup.on("click", (event: L.LeafletEvent) => {
-      this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
-    });
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
-    this.drawControl.remove();
+    //this.drawControl.remove();
     if (this.selectedListItem) {
       this.selectedListItem = null;
     }
@@ -328,7 +322,7 @@ export class DelineationsComponent implements OnInit {
     }
 
     this.selectedDelineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-    this.delineationsEditableFeatureGroup.eachLayer(layer => {
+    this.editableDelineationFeatureGroup.eachLayer(layer => {
       if (this.selectedDelineation == null || this.selectedDelineation.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setStyle({
           color:'blue'
@@ -343,7 +337,7 @@ export class DelineationsComponent implements OnInit {
     this.selectedListItem = treatmentBMPID;
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
 
-    this.treatmentBMPsLayer.eachLayer(layer => {
+    this.treatmentBMPsLayer?.eachLayer(layer => {
       debugger;
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(this.markerIcon).setZIndexOffset(1000);
