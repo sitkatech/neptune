@@ -46,6 +46,7 @@ export class DelineationsComponent implements OnInit {
   public component: any;
   public map: L.Map;
   public featureLayer: any;
+  public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
   public layerControl: L.Control.Layers;
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
@@ -60,8 +61,19 @@ export class DelineationsComponent implements OnInit {
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.Delineations;
 
+  private defaultDrawControlOption: L.Control.DrawConstructorOptions = {
+      draw: {
+        polyline: false,
+        rectangle : false,
+        circle: false,
+        marker: false,
+        circlemarker: false,
+      },
+      edit: {
+        featureGroup: this.editableDelineationFeatureGroup
+      }
+    };
   private drawControl: L.Control.Draw;
-  public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
   public drawDelineationChosen: boolean = false;
 
   constructor(
@@ -254,26 +266,24 @@ export class DelineationsComponent implements OnInit {
             } else {
                 this.editableDelineationFeatureGroup.addLayer(layer);
             }
-            this.selectFeatureImpl(feature.properties.TreatmentBMPID);
+            layer.on('click', (e) => {
+              this.selectFeatureImpl(feature.properties.TreatmentBMPID);
+            })
         }
     });
 };
 
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
-      var delineationDrawOptions = {
-        draw: {
-          polyline: false,
-          rectangle : false,
-          circle: false,
-          marker: false,
-          circlemarker: false,
-        },
-        edit: this.selectedDelineation?.Geometry != null ? {
-          featureGroup: this.editableDelineationFeatureGroup
-        } : false
-      };
-      this.drawControl = new L.Control.Draw(delineationDrawOptions);
+      var drawOptions = Object.assign({}, this.defaultDrawControlOption);
+      debugger;
+      if (this.selectedDelineation == null) {
+        drawOptions.edit = false;
+      }
+      if (this.selectedDelineation != null) {
+        drawOptions.draw = false;
+      }
+      this.drawControl = new L.Control.Draw(drawOptions);
       this.drawControl.addTo(this.map);
       return;
     }
@@ -288,6 +298,7 @@ export class DelineationsComponent implements OnInit {
   public setControl(): void {
     this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
       .addTo(this.map);
+    this
     this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
   }
@@ -312,7 +323,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
-    //this.drawControl.remove();
+    this.drawControl.remove();
     if (this.selectedListItem) {
       this.selectedListItem = null;
     }
@@ -338,7 +349,6 @@ export class DelineationsComponent implements OnInit {
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
 
     this.treatmentBMPsLayer?.eachLayer(layer => {
-      debugger;
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(this.markerIcon).setZIndexOffset(1000);
         return;
