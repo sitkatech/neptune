@@ -305,7 +305,7 @@ export class DelineationsComponent implements OnInit {
   public setControl(): void {
     this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
       .addTo(this.map);
-    
+
     L.EditToolbar.Delete.include({
       removeAllLayers: false
     });
@@ -349,10 +349,13 @@ export class DelineationsComponent implements OnInit {
         });
     })
     .on(L.Draw.Event.DELETED, (event) => {
-        // const layers = (event as L.DrawEvents.Deleted).layers;
-        // layers.eachLayer((layer) => {
-        //     this.editableFootprintLayers.removeLayer(layer);
-        // });
+        const layers = (event as L.DrawEvents.Deleted).layers;
+        layers.eachLayer((layer) => {
+          var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
+          delineationUpsertDto.Geometry = null;
+          delineationUpsertDto.DelineationArea = null;
+          this.editableDelineationFeatureGroup.removeLayer(layer);
+        });
         this.isPerformingDrawAction = false;
     })
     .on(L.Draw.Event.DRAWSTART, () => {
@@ -471,7 +474,7 @@ export class DelineationsComponent implements OnInit {
       delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
     });
 
-    this.delineationService.mergeDelineations(this.delineations, this.projectID).subscribe(() => {
+    this.delineationService.mergeDelineations(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
       this.isLoadingSubmit = false;
       this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
     });
