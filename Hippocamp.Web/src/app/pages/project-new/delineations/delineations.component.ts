@@ -57,7 +57,12 @@ export class DelineationsComponent implements OnInit {
   public treatmentBMPsLayer: L.GeoJSON<any>;
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
-
+  private delineationDefaultStyle = {
+    color: 'blue'
+  }
+  private delineationSelectedStyle = {
+    color: 'yellow'
+  }
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.Delineations;
 
@@ -75,6 +80,7 @@ export class DelineationsComponent implements OnInit {
     };
   private drawControl: L.Control.Draw;
   public drawDelineationChosen: boolean = false;
+  private newDelineatonID: number = -1;
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
@@ -275,6 +281,7 @@ export class DelineationsComponent implements OnInit {
 
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
+      debugger;
       var drawOptions = Object.assign({}, this.defaultDrawControlOption);
       if (this.selectedDelineation == null) {
         drawOptions.edit = false;
@@ -299,12 +306,29 @@ export class DelineationsComponent implements OnInit {
       .addTo(this.map);
     
     this.map
-    // .on(L.Draw.Event.CREATED, (event) => {
-    //   const layer = (event as L.DrawEvents.Created).layer;
-    //   this.selectedEditableLayers.addLayer(layer).setStyle(this.selectedStyle);
-    //   // this.afterLayerAdd.emit();
-    //   // this.transformDrawnLayerToGeoJSON();
-    // })
+    .on(L.Draw.Event.CREATED, (event) => {
+      const layer = (event as L.DrawEvents.Created).layer;
+      var delineationUpsertDto = this.delineations.filter(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID)[0];
+      if (delineationUpsertDto == null) {
+        delineationUpsertDto = new DelineationUpsertDto({
+          DelineationID : this.newDelineatonID,
+          TreatmentBMPID : this.selectedTreatmentBMP.TreatmentBMPID,
+          DelineationTypeID : DelineationTypeEnum.Distributed
+        });
+        this.delineations = this.delineations.concat(delineationUpsertDto);
+        this.newDelineatonID--;
+      }
+      delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+      delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
+      this.selectedDelineation = delineationUpsertDto;
+
+      layer.feature = this.mapDelineationToFeature(delineationUpsertDto);
+      layer.on('click', (e) => {
+        this.selectFeatureImpl(layer.feature.properties.TreatmentBMPID);
+      })
+      this.editableDelineationFeatureGroup.addLayer(layer);
+      this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+    })
     .on(L.Draw.Event.EDITED, (event) => {
         const layers = (event as L.DrawEvents.Edited).layers;
         layers.eachLayer((layer) => {
@@ -312,8 +336,6 @@ export class DelineationsComponent implements OnInit {
             delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
             delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
         });
-        // this.afterLayerAdd.emit();
-        // this.transformDrawnLayerToGeoJSON();
     })
     // .on(L.Draw.Event.DELETED, (event) => {
     //     const layers = (event as L.DrawEvents.Deleted).layers;
@@ -375,14 +397,10 @@ export class DelineationsComponent implements OnInit {
     this.selectedDelineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     this.editableDelineationFeatureGroup.eachLayer(layer => {
       if (this.selectedDelineation == null || this.selectedDelineation.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-        layer.setStyle({
-          color:'blue'
-        });
+        layer.setStyle(this.delineationDefaultStyle);
         return;
       }
-      layer.setStyle({
-        color:'yellow'
-      }).bringToFront();
+      layer.setStyle(this.delineationSelectedStyle).bringToFront();
     })
 
     this.selectedListItem = treatmentBMPID;
