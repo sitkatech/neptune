@@ -1,6 +1,7 @@
 import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
+import 'leaflet-draw';
 import 'leaflet.fullscreen';
 import * as esri from 'esri-leaflet'
 import { GestureHandling } from "leaflet-gesture-handling";
@@ -14,6 +15,7 @@ import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
+import { DelineationTypeEnum } from 'src/app/shared/models/enums/delineation-type.enum';
 
 declare var $:any
 
@@ -60,6 +62,10 @@ export class DelineationsComponent implements OnInit {
 
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.Delineations;
+
+  private drawControl: L.Control.Draw;
+  public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
+  public drawDelineationChosen: boolean = false;
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
@@ -234,7 +240,7 @@ export class DelineationsComponent implements OnInit {
   private mapDelineationToFeature(x: DelineationUpsertDto) {
     return {
       "type": "Feature",
-      "geometry": JSON.parse(x.Geometry),
+      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
       "properties": {
         DelineationID: x.DelineationID,
         TreatmentBMPID: x.TreatmentBMPID
@@ -242,9 +248,36 @@ export class DelineationsComponent implements OnInit {
     };
   }
 
+  public addOrRemoveDrawControl(turnOn: boolean) {
+    if (turnOn) {
+      var delineationDrawOptions = {
+        draw: {
+          polyline: false,
+          rectangle : false,
+          circle: false,
+          marker: false,
+          circlemarker: false,
+        },
+        edit: this.selectedDelineation?.Geometry != null ? {
+          featureGroup: this.editableDelineationFeatureGroup
+        } : false
+      };
+      this.drawControl = new L.Control.Draw(delineationDrawOptions);
+      this.drawControl.addTo(this.map);
+      return;
+    }
+    this.drawControl.remove();
+    // this.drawControl.setDrawingOptions({
+    //   polygon: {
+    //     shapeOptions: this.selectedStyle
+    //   }
+    // });
+  }
+
   public setControl(): void {
     this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
       .addTo(this.map);
+    this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
   }
 
@@ -272,6 +305,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
+    this.drawControl.remove();
     if (this.selectedListItem) {
       this.selectedListItem = null;
       this.map.removeLayer(this.selectedTreatmentBMPLayer);
@@ -295,6 +329,13 @@ export class DelineationsComponent implements OnInit {
         }
       })
       this.selectedDelineationLayer.addTo(this.map).bringToFront();
+      if (this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Distributed) {
+        this.selectedDelineationLayer.eachLayer(layer => {
+          this.editableDelineationFeatureGroup.addLayer(layer);
+        })
+        this.addOrRemoveDrawControl(true);
+      }
+
     }
 
     this.selectedListItem = treatmentBMPID;
@@ -318,11 +359,24 @@ export class DelineationsComponent implements OnInit {
   public getDelineationAreaForTreatmentBMP (treatmentBMPID: number) {
       let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
 
-      if (delineation == null || delineation == undefined) {
+      if (delineation?.DelineationArea == null ) {
         return "Not provided yet"
       }
 
       return `${delineation.DelineationArea} ac`;
+  }
+
+  public drawDelineationForTreatmentBMP(treatmentBMPID: number) {
+    if (this.delineations.some(x => x.TreatmentBMPID == treatmentBMPID)) {
+      return;
+    }
+
+    var newDelineation = new DelineationUpsertDto({
+      DelineationTypeID : DelineationTypeEnum.Distributed,
+      TreatmentBMPID : treatmentBMPID
+    });
+
+    this.delineations = this.delineations.concat(newDelineation);
   }
 
 }
