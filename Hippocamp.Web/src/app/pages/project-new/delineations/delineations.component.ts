@@ -271,12 +271,11 @@ export class DelineationsComponent implements OnInit {
             })
         }
     });
-};
+  };
 
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
       var drawOptions = Object.assign({}, this.defaultDrawControlOption);
-      debugger;
       if (this.selectedDelineation == null) {
         drawOptions.edit = false;
       }
@@ -298,7 +297,46 @@ export class DelineationsComponent implements OnInit {
   public setControl(): void {
     this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
       .addTo(this.map);
-    this
+    
+    this.map
+    // .on(L.Draw.Event.CREATED, (event) => {
+    //   const layer = (event as L.DrawEvents.Created).layer;
+    //   this.selectedEditableLayers.addLayer(layer).setStyle(this.selectedStyle);
+    //   // this.afterLayerAdd.emit();
+    //   // this.transformDrawnLayerToGeoJSON();
+    // })
+    // .on(L.Draw.Event.EDITED, (event) => {
+    //     const layers = (event as L.DrawEvents.Edited).layers;
+    //     layers.eachLayer((layer) => {
+    //         this.selectedEditableLayers.addLayer(layer);
+    //     });
+    //     // this.afterLayerAdd.emit();
+    //     // this.transformDrawnLayerToGeoJSON();
+    // })
+    // .on(L.Draw.Event.DELETED, (event) => {
+    //     const layers = (event as L.DrawEvents.Deleted).layers;
+    //     layers.eachLayer((layer) => {
+    //         this.editableFootprintLayers.removeLayer(layer);
+    //     });
+    // })
+    // .on(L.Draw.Event.DRAWSTART, () => {
+    //     // this.isDrawingIncomplete = true;
+    // })
+    .on(L.Draw.Event.EDITSTART, () => {
+      // no edit started event, so here's a janky solution...
+      setTimeout(() => {
+        this.editableDelineationFeatureGroup.eachLayer(layer => {
+          if (layer.feature.properties.TreatmentBMPID == this.selectedDelineation.TreatmentBMPID) {
+            layer.editing.enable();
+            return;
+          }
+          layer.editing.disable();
+        })}, 10
+      )
+    })
+    // .on(L.Draw.Event.DELETESTART, () => {
+    //     // this.isDrawingIncomplete = true;
+    // });
     this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
   }
@@ -356,6 +394,7 @@ export class DelineationsComponent implements OnInit {
       layer.setIcon(this.markerIconSelected);
       layer.setZIndexOffset(10000);
     })
+    this.addOrRemoveDrawControl(true);
   }
 
   public treatmentBMPHasDelineation (treatmentBMPID: number) {
