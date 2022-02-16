@@ -355,16 +355,7 @@ export class DelineationsComponent implements OnInit {
       delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
       this.selectedDelineation = delineationUpsertDto;
       layer.feature = this.mapDelineationToFeature(delineationUpsertDto);
-      if (layer.getLayers) {
-        layer.getLayers().forEach((l) => {
-            this.delineationFeatureGroup.addLayer(l);
-        });
-      } else {
-          this.delineationFeatureGroup.addLayer(layer);
-      }
-      layer.on('click', (e) => {
-        this.selectFeatureImpl(layer.feature.properties.TreatmentBMPID);
-      })
+      this.addFeatureCollectionToFeatureGroup(layer.toGeoJSON(), this.delineationFeatureGroup); 
       this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
     })
     .on(L.Draw.Event.EDITED, (event) => {
@@ -389,7 +380,11 @@ export class DelineationsComponent implements OnInit {
           var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
           delineationUpsertDto.Geometry = null;
           delineationUpsertDto.DelineationArea = null;
-          this.delineationFeatureGroup.removeLayer(layer);
+          this.delineationFeatureGroup.eachLayer(l => {
+            if (l.feature.properties.TreatmentBMPID == layer.feature.properties.TreatmentBMPID) {
+              this.delineationFeatureGroup.removeLayer(l);
+            }
+          });
         });
         this.isPerformingDrawAction = false;
     })
