@@ -49,6 +49,7 @@ export class DelineationsComponent implements OnInit {
   public component: any;
   public map: L.Map;
   public featureLayer: any;
+  public delineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
   public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
   public layerControl: L.Control.Layers;
   public tileLayers: { [key: string]: any } = {};
@@ -61,10 +62,18 @@ export class DelineationsComponent implements OnInit {
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
   private delineationDefaultStyle = {
-    color: 'blue'
+    color: 'blue',
+    fillOpacity: 0.2,
+    opacity: 1
   }
   private delineationSelectedStyle = {
-    color: 'yellow'
+    color: 'yellow',
+    fillOpacity: 0.2,
+    opacity: 1
+  }
+  private delineationTransparentStyle = {
+    fillOpacity: 0,
+    opacity: 0
   }
   public projectID: number;
   public customRichTextTypeID = CustomRichTextType.Delineations;
@@ -201,8 +210,9 @@ export class DelineationsComponent implements OnInit {
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
 
+    this.delineationFeatureGroup.addTo(this.map);
     this.editableDelineationFeatureGroup.addTo(this.map);
-    this.addFeatureCollectionToEditableFeatureGroup(this.mapDelineationsToGeoJson(this.delineations));
+    this.addFeatureCollectionToFeatureGroup(this.mapDelineationsToGeoJson(this.delineations), this.delineationFeatureGroup);
     
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
@@ -283,22 +293,26 @@ export class DelineationsComponent implements OnInit {
     };
   }
 
-  public addFeatureCollectionToEditableFeatureGroup (delineationJsons : any) {
-    L.geoJson(delineationJsons, {
+  public addFeatureCollectionToFeatureGroup (featureJsons : any, featureGroup : L.FeatureGroup) {
+    L.geoJson(featureJsons, {
         onEachFeature: (feature, layer) => {
-            if (layer.getLayers) {
-                layer.getLayers().forEach((l) => {
-                    this.editableDelineationFeatureGroup.addLayer(l);
-                });
-            } else {
-                this.editableDelineationFeatureGroup.addLayer(layer);
-            }
+            this.addLayersToFeatureGroup(layer, featureGroup);
             layer.on('click', (e) => {
               this.selectFeatureImpl(feature.properties.TreatmentBMPID);
             })
         }
     });
   };
+
+  private addLayersToFeatureGroup(layer: any, featureGroup: L.FeatureGroup) {
+    if (layer.getLayers) {
+      layer.getLayers().forEach((l) => {
+        featureGroup.addLayer(l);
+      });
+    } else {
+      featureGroup.addLayer(layer);
+    }
+  }
 
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
@@ -343,10 +357,10 @@ export class DelineationsComponent implements OnInit {
       layer.feature = this.mapDelineationToFeature(delineationUpsertDto);
       if (layer.getLayers) {
         layer.getLayers().forEach((l) => {
-            this.editableDelineationFeatureGroup.addLayer(l);
+            this.delineationFeatureGroup.addLayer(l);
         });
       } else {
-          this.editableDelineationFeatureGroup.addLayer(layer);
+          this.delineationFeatureGroup.addLayer(layer);
       }
       layer.on('click', (e) => {
         this.selectFeatureImpl(layer.feature.properties.TreatmentBMPID);
@@ -360,7 +374,14 @@ export class DelineationsComponent implements OnInit {
             var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
             delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
             delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
+            this.delineationFeatureGroup.eachLayer(l => {
+              if (l.feature.properties.TreatmentBMPID == layer.feature.properties.TreatmentBMPID) {
+                this.delineationFeatureGroup.removeLayer(l);
+              }
+            });
+            this.addFeatureCollectionToFeatureGroup(layer.toGeoJSON(), this.delineationFeatureGroup); 
         });
+        this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
     })
     .on(L.Draw.Event.DELETED, (event) => {
         const layers = (event as L.DrawEvents.Deleted).layers;
@@ -368,7 +389,7 @@ export class DelineationsComponent implements OnInit {
           var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
           delineationUpsertDto.Geometry = null;
           delineationUpsertDto.DelineationArea = null;
-          this.editableDelineationFeatureGroup.removeLayer(layer);
+          this.delineationFeatureGroup.removeLayer(layer);
         });
         this.isPerformingDrawAction = false;
     })
@@ -377,16 +398,6 @@ export class DelineationsComponent implements OnInit {
     })
     .on(L.Draw.Event.EDITSTART, () => {
       this.isPerformingDrawAction = true;
-      // no edit started event, so here's a janky solution...
-      setTimeout(() => {
-        this.editableDelineationFeatureGroup.eachLayer(layer => {
-          if (layer.feature.properties.TreatmentBMPID == this.selectedDelineation.TreatmentBMPID) {
-            layer.editing.enable();
-            return;
-          }
-          layer.editing.disable();
-        })}, 10
-      )
     })
     .on(L.Draw.Event.DELETESTART, () => {
         this.isPerformingDrawAction = true;
@@ -425,16 +436,21 @@ export class DelineationsComponent implements OnInit {
     }
 
     if (this.selectedDelineation) {
+      this.editableDelineationFeatureGroup.clearLayers();
       this.selectedDelineation = null;
     }
 
     this.selectedDelineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-    this.editableDelineationFeatureGroup.eachLayer(layer => {
+    this.delineationFeatureGroup.eachLayer(layer => {
       if (this.selectedDelineation == null || this.selectedDelineation.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setStyle(this.delineationDefaultStyle);
         return;
       }
-      layer.setStyle(this.delineationSelectedStyle).bringToFront();
+      this.addFeatureCollectionToFeatureGroup(layer.toGeoJSON(), this.editableDelineationFeatureGroup);
+      this.editableDelineationFeatureGroup.eachLayer(l => {
+        l.setStyle(this.delineationSelectedStyle).bringToFront();
+      });
+      layer.setStyle(this.delineationTransparentStyle);
     })
 
     this.selectedListItem = treatmentBMPID;
@@ -483,7 +499,7 @@ export class DelineationsComponent implements OnInit {
     
     //We need a fully qualified geojson string and above we are just getting the geometry
     //Possible can remove the update above if we are always going to do it here
-    this.editableDelineationFeatureGroup.eachLayer((layer) => {
+    this.delineationFeatureGroup.eachLayer((layer) => {
       var delineationUpsertDto = this.delineations.filter(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)[0];
       delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
     });
