@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet-draw';
@@ -29,7 +29,9 @@ declare var $:any
 })
 export class DelineationsComponent implements OnInit {
 
+  @ViewChild('mapDiv') mapDiv : ElementRef;
   public mapID: string = 'delineationsMap';
+  public drawMapClicked: boolean = false;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: DelineationUpsertDto[];
   public zoomMapToDefaultExtent: boolean = true;
@@ -317,10 +319,9 @@ export class DelineationsComponent implements OnInit {
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
       var drawOptions = Object.assign({}, this.defaultDrawControlOption);
-      if (this.selectedDelineation == null) {
+      if (this.selectedDelineation?.Geometry == null) {
         drawOptions.edit = false;
-      }
-      if (this.selectedDelineation != null) {
+      } else {
         drawOptions.draw = false;
       }
       this.drawControl = new L.Control.Draw(drawOptions);
@@ -461,6 +462,14 @@ export class DelineationsComponent implements OnInit {
       this.map.panTo(layer.getLatLng());
     })
     this.addOrRemoveDrawControl(true);
+    if (this.drawMapClicked) {
+      if (this.selectedDelineation?.Geometry != null) {
+        $('.leaflet-draw-edit-edit').get(0).click();
+      } else {
+        $('.leaflet-draw-draw-polygon').get(0).click();
+      }
+    }
+    this.drawMapClicked = false;
   }
 
   public treatmentBMPHasDelineation (treatmentBMPID: number) {
@@ -478,6 +487,12 @@ export class DelineationsComponent implements OnInit {
   }
 
   public drawDelineationForTreatmentBMP(treatmentBMPID: number) {
+    this.drawMapClicked = true;
+    const rect = this.mapDiv.nativeElement.getBoundingClientRect();
+    if (rect.top < 0 || rect.bottom > window.innerHeight){
+      this.mapDiv.nativeElement.scrollIntoView();
+
+    }
     if (this.delineations.some(x => x.TreatmentBMPID == treatmentBMPID)) {
       return;
     }
