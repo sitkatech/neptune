@@ -186,9 +186,9 @@ export class DelineationsComponent implements OnInit {
       this.onMapMoveEnd.emit(event);
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
-    
-    this.editableDelineationFeatureGroup = this.addFeatureCollectionToEditableFeatureGroup(this.mapDelineationsToGeoJson(this.delineations));
+
     this.editableDelineationFeatureGroup.addTo(this.map);
+    this.addFeatureCollectionToEditableFeatureGroup(this.mapDelineationsToGeoJson(this.delineations));
     
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
@@ -270,7 +270,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   public addFeatureCollectionToEditableFeatureGroup (delineationJsons : any) {
-    return L.geoJson(delineationJsons, {
+    L.geoJson(delineationJsons, {
         onEachFeature: (feature, layer) => {
             if (layer.getLayers) {
                 layer.getLayers().forEach((l) => {
