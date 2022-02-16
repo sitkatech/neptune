@@ -77,11 +77,18 @@ export class DelineationsComponent implements OnInit {
         circle: false,
         marker: false,
         circlemarker: false,
+        polygon: {
+          allowIntersection: false, // Restricts shapes to simple polygons
+          drawError: {
+            color: '#E1E100', // Color the shape will turn when intersects
+            message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
+          }
+        }
       },
       edit: {
         featureGroup: this.editableDelineationFeatureGroup,
         remove: true
-      }
+      },
     };
   private drawControl: L.Control.Draw;
   public drawDelineationChosen: boolean = false;
