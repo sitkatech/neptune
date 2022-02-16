@@ -304,7 +304,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
       minZoom: 9,
       maxZoom: 17,
       layers: [
-        this.tileLayers["Aerial"],
+        this.tileLayers["Terrain"],
       ],
       fullscreenControl: true
     } as MapOptions;
