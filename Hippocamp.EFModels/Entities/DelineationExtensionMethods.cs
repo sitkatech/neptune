@@ -27,4 +27,16 @@ namespace Hippocamp.EFModels.Entities
                 : null;
         }
     }
+
+    public static partial class vRegionalSubbasinUpstreamCatchmentGeometry4326ExtensionMethods
+    {
+        public static GeometryGeoJSONAndAreaDto AsGeometryGeoJSONAndAreaDto(this vRegionalSubbasinUpstreamCatchmentGeometry4326 regionalSubbasinUpstreamCatchmentGeometry4326)
+        {
+            return new GeometryGeoJSONAndAreaDto()
+            {
+                GeometryGeoJSON = regionalSubbasinUpstreamCatchmentGeometry4326.UpstreamCatchGeometry4326GeoJson,
+                Area = Math.Round(regionalSubbasinUpstreamCatchmentGeometry4326.UpstreamCatchmentGeometry4326.ProjectTo2771().Area * DbSpatialHelper.SquareMetersToAcres, 2)
+            };
+        }
+    }
 }

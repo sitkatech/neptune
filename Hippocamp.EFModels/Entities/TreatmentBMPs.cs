@@ -123,6 +123,7 @@ namespace Hippocamp.EFModels.Entities
                 {
                     x.TreatmentBMPName = y.TreatmentBMPName;
                     x.LocationPoint4326 = y.LocationPoint4326;
+                    x.LocationPoint = y.LocationPoint;
                     x.Notes = y.Notes;
                 });
 
@@ -181,6 +182,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
         {
+            var locationPointGeometry = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value);
             var treatmentBMP = new TreatmentBMP()
             {
                 TreatmentBMPName = treatmentBMPUpsertDto.TreatmentBMPName,
@@ -188,7 +190,8 @@ namespace Hippocamp.EFModels.Entities
                 ProjectID = project.ProjectID,
                 StormwaterJurisdictionID = project.StormwaterJurisdictionID,
                 OwnerOrganizationID = project.OrganizationID,
-                LocationPoint4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value),
+                LocationPoint4326 = locationPointGeometry,
+                LocationPoint = locationPointGeometry.ProjectTo2771(),
                 Notes = treatmentBMPUpsertDto.Notes,
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = (int)TrashCaptureStatusTypeEnum.NotProvided,

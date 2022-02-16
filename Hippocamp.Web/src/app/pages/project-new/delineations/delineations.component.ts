@@ -21,7 +21,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 
-declare var $:any
+declare var $: any
 
 @Component({
   selector: 'hippocamp-delineations',
@@ -30,7 +30,7 @@ declare var $:any
 })
 export class DelineationsComponent implements OnInit {
 
-  @ViewChild('mapDiv') mapDiv : ElementRef;
+  @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'delineationsMap';
   public drawMapClicked: boolean = false;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
@@ -83,35 +83,32 @@ export class DelineationsComponent implements OnInit {
   public customRichTextTypeID = CustomRichTextType.Delineations;
 
   private isPerformingDrawAction: boolean = false;
-  private defaultDrawControlOption: L.Control.DrawConstructorOptions = {
-      draw: {
-        polyline: false,
-        rectangle : false,
-        circle: false,
-        marker: false,
-        circlemarker: false,
-        polygon: {
-          allowIntersection: false, // Restricts shapes to simple polygons
-          drawError: {
-            color: '#E1E100', // Color the shape will turn when intersects
-            message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
-          }
-        }
-      },
-      edit: {
-        featureGroup: this.editableDelineationFeatureGroup,
-        remove: true,
-        poly: {
-          allowIntersection: false, // Restricts shapes to simple polygons
-          drawError: {
-            color: '#E1E100', // Color the shape will turn when intersects
-            message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
-          }
-        }
-      },
-    };
+  private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
+    polyline: false,
+    rectangle: false,
+    circle: false,
+    marker: false,
+    circlemarker: false,
+    polygon: {
+      allowIntersection: false, // Restricts shapes to simple polygons
+      drawError: {
+        color: '#E1E100', // Color the shape will turn when intersects
+        message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
+      }
+    }
+  }
+  private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
+    featureGroup: this.editableDelineationFeatureGroup,
+    remove: true,
+    poly: {
+      allowIntersection: false, // Restricts shapes to simple polygons
+      drawError: {
+        color: '#E1E100', // Color the shape will turn when intersects
+        message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
+      }
+    }
+  }
   private drawControl: L.Control.Draw;
-  public drawDelineationChosen: boolean = false;
   private newDelineatonID: number = -1;
   public isLoadingSubmit: boolean = false;
 
@@ -135,7 +132,7 @@ export class DelineationsComponent implements OnInit {
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
         delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-      }).subscribe(({treatmentBMPs, delineations, boundingBox}) => {
+      }).subscribe(({ treatmentBMPs, delineations, boundingBox }) => {
         this.treatmentBMPs = treatmentBMPs;
         this.delineations = delineations;
         this.boundingBox = boundingBox;
@@ -185,7 +182,7 @@ export class DelineationsComponent implements OnInit {
       "<span>Stormwater Network <br/> <img src='../../assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
-  }, this.overlayLayers);
+    }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
   }
@@ -194,7 +191,7 @@ export class DelineationsComponent implements OnInit {
 
     const mapOptions: L.MapOptions = {
       minZoom: 9,
-      maxZoom: 19,
+      maxZoom: 18,
       layers: [
         this.tileLayers["Terrain"],
       ],
@@ -215,17 +212,17 @@ export class DelineationsComponent implements OnInit {
     this.delineationFeatureGroup.addTo(this.map);
     this.editableDelineationFeatureGroup.addTo(this.map);
     this.resetDelineationFeatureGroups();
-    
+
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: this.markerIcon})
+        return L.marker(latlng, { icon: this.markerIcon })
       }
     });
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
     this.registerClickEvents();
-    
+
     if (this.treatmentBMPs.length > 0) {
       this.selectFeatureImpl(this.treatmentBMPs[0].TreatmentBMPID);
     }
@@ -249,10 +246,10 @@ export class DelineationsComponent implements OnInit {
     return {
       type: "FeatureCollection",
       features: treatmentBMPs.map(x => {
-        let treatmentBMPGeoJson = 
-        this.mapTreatmentBMPToFeature(x);
+        let treatmentBMPGeoJson =
+          this.mapTreatmentBMPToFeature(x);
         return treatmentBMPGeoJson;
-      })  
+      })
     }
   }
 
@@ -277,10 +274,10 @@ export class DelineationsComponent implements OnInit {
     return {
       type: "FeatureCollection",
       features: delineations.map(x => {
-        let delineationGeoJson = 
-        this.mapDelineationToFeature(x);
+        let delineationGeoJson =
+          this.mapDelineationToFeature(x);
         return delineationGeoJson;
-      })  
+      })
     }
   }
 
@@ -295,14 +292,14 @@ export class DelineationsComponent implements OnInit {
     };
   }
 
-  public addFeatureCollectionToFeatureGroup (featureJsons : any, featureGroup : L.FeatureGroup) {
+  public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
     L.geoJson(featureJsons, {
-        onEachFeature: (feature, layer) => {
-            this.addLayersToFeatureGroup(layer, featureGroup);
-            layer.on('click', (e) => {
-              this.selectFeatureImpl(feature.properties.TreatmentBMPID);
-            })
-        }
+      onEachFeature: (feature, layer) => {
+        this.addLayersToFeatureGroup(layer, featureGroup);
+        layer.on('click', (e) => {
+          this.selectFeatureImpl(feature.properties.TreatmentBMPID);
+        })
+      }
     });
   };
 
@@ -318,11 +315,18 @@ export class DelineationsComponent implements OnInit {
 
   public addOrRemoveDrawControl(turnOn: boolean) {
     if (turnOn) {
-      var drawOptions = Object.assign({}, this.defaultDrawControlOption);
-      if (this.selectedDelineation?.Geometry == null) {
+      var drawOptions = {
+        draw: Object.assign({}, this.defaultDrawControlSpec),
+        edit: Object.assign({}, this.defaultEditControlSpec)
+      };
+      if (this.selectedDelineation?.Geometry == null || this.drawMapClicked) {
         drawOptions.edit = false;
-      } else {
+      }
+      else {
         drawOptions.draw = false;
+        if (this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
+          drawOptions.edit.edit = false;
+        }
       }
       this.drawControl = new L.Control.Draw(drawOptions);
       this.drawControl.addTo(this.map);
@@ -338,69 +342,59 @@ export class DelineationsComponent implements OnInit {
     L.EditToolbar.Delete.include({
       removeAllLayers: false
     });
+
     this.map
-    .on(L.Draw.Event.CREATED, (event) => {
-      this.isPerformingDrawAction = false;
-      const layer = (event as L.DrawEvents.Created).layer;
-      var delineationUpsertDto = this.delineations.filter(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID)[0];
-      if (delineationUpsertDto == null) {
-        delineationUpsertDto = new DelineationUpsertDto({
-          DelineationID : this.newDelineatonID,
-          TreatmentBMPID : this.selectedTreatmentBMP.TreatmentBMPID,
-          DelineationTypeID : DelineationTypeEnum.Distributed
-        });
-        this.delineations = this.delineations.concat(delineationUpsertDto);
-        this.newDelineatonID--;
-      }
-      delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
-      delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
-      this.selectedDelineation = delineationUpsertDto;
-      layer.feature = this.mapDelineationToFeature(delineationUpsertDto);
-      this.addFeatureCollectionToFeatureGroup(layer.toGeoJSON(), this.delineationFeatureGroup); 
-      this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
-    })
-    .on(L.Draw.Event.EDITED, (event) => {
-      this.isPerformingDrawAction = false;
+      .on(L.Draw.Event.CREATED, (event) => {
+        this.isPerformingDrawAction = false;
+        const layer = (event as L.DrawEvents.Created).layer;
+        var delineationUpsertDto = this.delineations.filter(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID)[0];
+        if (delineationUpsertDto == null) {
+          delineationUpsertDto = new DelineationUpsertDto({
+            DelineationID: this.newDelineatonID,
+            TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID
+          });
+          this.delineations = this.delineations.concat(delineationUpsertDto);
+          this.newDelineatonID--;
+        }
+        delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
+        delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+        delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
+        this.resetDelineationFeatureGroups();
+        this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+      })
+      .on(L.Draw.Event.EDITED, (event) => {
+        this.isPerformingDrawAction = false;
         const layers = (event as L.DrawEvents.Edited).layers;
         layers.eachLayer((layer) => {
-            var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
-            delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
-            delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
-            this.delineationFeatureGroup.eachLayer(l => {
-              if (l.feature.properties.TreatmentBMPID == layer.feature.properties.TreatmentBMPID) {
-                this.delineationFeatureGroup.removeLayer(l);
-              }
-            });
-            this.addFeatureCollectionToFeatureGroup(layer.toGeoJSON(), this.delineationFeatureGroup); 
+          var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
+          delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+          delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         });
+        this.resetDelineationFeatureGroups();
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
-    })
-    .on(L.Draw.Event.DELETED, (event) => {
+      })
+      .on(L.Draw.Event.DELETED, (event) => {
+        this.isPerformingDrawAction = false;
         const layers = (event as L.DrawEvents.Deleted).layers;
         layers.eachLayer((layer) => {
           var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
           delineationUpsertDto.Geometry = null;
           delineationUpsertDto.DelineationArea = null;
-          this.delineationFeatureGroup.eachLayer(l => {
-            if (l.feature.properties.TreatmentBMPID == layer.feature.properties.TreatmentBMPID) {
-              this.delineationFeatureGroup.removeLayer(l);
-            }
-          });
         });
+        this.resetDelineationFeatureGroups();
+        this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+      })
+      .on(L.Draw.Event.DRAWSTART, () => {
+        if (this.selectedDelineation != null && this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
+          this.editableDelineationFeatureGroup.clearLayers();
+        }
+      })
+      .on(L.Draw.Event.TOOLBAROPENED, () => {
+        this.isPerformingDrawAction = true;
+      })
+      .on(L.Draw.Event.TOOLBARCLOSED, () => {
         this.isPerformingDrawAction = false;
-    })
-    .on(L.Draw.Event.DRAWSTART, () => {
-        this.isPerformingDrawAction = true;
-    })
-    .on(L.Draw.Event.EDITSTART, () => {
-      this.isPerformingDrawAction = true;
-    })
-    .on(L.Draw.Event.DELETESTART, () => {
-        this.isPerformingDrawAction = true;
-    })
-    .on(L.Draw.Event.TOOLBARCLOSED, () => {
-      this.isPerformingDrawAction = false;
-    });
+      });
     this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
   }
@@ -465,8 +459,9 @@ export class DelineationsComponent implements OnInit {
       this.map.panTo(layer.getLatLng());
     })
     this.addOrRemoveDrawControl(true);
+
     if (this.drawMapClicked) {
-      if (this.selectedDelineation?.Geometry != null) {
+      if (this.selectedDelineation?.Geometry != null && this.selectedDelineation?.DelineationTypeID != DelineationTypeEnum.Centralized) {
         $('.leaflet-draw-edit-edit').get(0).click();
       } else {
         $('.leaflet-draw-draw-polygon').get(0).click();
@@ -475,42 +470,46 @@ export class DelineationsComponent implements OnInit {
     this.drawMapClicked = false;
   }
 
-  public treatmentBMPHasDelineationGeometry (treatmentBMPID: number) {
+  public treatmentBMPHasDelineationGeometry(treatmentBMPID: number) {
     return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0]?.Geometry;
   }
 
-  public getDelineationAreaForTreatmentBMP (treatmentBMPID: number) {
-      let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+  public getDelineationAreaForTreatmentBMP(treatmentBMPID: number) {
+    let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
 
-      if (delineation?.DelineationArea == null ) {
-        return "Not provided yet"
-      }
+    if (delineation?.DelineationArea == null) {
+      return "Not provided yet"
+    }
 
-      return `${delineation.DelineationArea} ac`;
+    return `${delineation.DelineationArea} ac`;
   }
 
   public drawDelineationForTreatmentBMP(treatmentBMPID: number) {
     this.drawMapClicked = true;
-    const rect = this.mapDiv.nativeElement.getBoundingClientRect();
-    if (rect.top < 0 || rect.bottom > window.innerHeight){
-      this.mapDiv.nativeElement.scrollIntoView();
+    this.scrollToMapIfNecessary();
 
-    }
     if (this.delineations.some(x => x.TreatmentBMPID == treatmentBMPID)) {
       return;
     }
 
     var newDelineation = new DelineationUpsertDto({
-      DelineationTypeID : DelineationTypeEnum.Distributed,
-      TreatmentBMPID : treatmentBMPID
+      DelineationTypeID: DelineationTypeEnum.Distributed,
+      TreatmentBMPID: treatmentBMPID
     });
 
     this.delineations = this.delineations.concat(newDelineation);
   }
 
+  private scrollToMapIfNecessary() {
+    const rect = this.mapDiv.nativeElement.getBoundingClientRect();
+    if (rect.top < 0 || rect.bottom > window.innerHeight) {
+      this.mapDiv.nativeElement.scrollIntoView();
+    }
+  }
+
   public onSubmit() {
     this.isLoadingSubmit = true;
-    window.scroll(0,0);
+    window.scroll(0, 0);
     //We need a fully qualified geojson string and above we are just getting the geometry
     //Possible can remove the update above if we are always going to do it here
     this.delineationFeatureGroup.eachLayer((layer) => {
@@ -535,24 +534,22 @@ export class DelineationsComponent implements OnInit {
     this.delineationFeatureGroup.clearLayers();
     this.addFeatureCollectionToFeatureGroup(this.mapDelineationsToGeoJson(this.delineations), this.delineationFeatureGroup);
   }
-  // public getUpstreamRSBCatchmentForTreatmentBMP (treatmentBMPID: number) {
-  //   if (this.selectedDelineation) {
-  //     this.map.removeLayer(this.selectedDelineationLayer);
-  //     this.selectedDelineationLayer = null;
-  //     this.selectedDelineation = null;
-  //   }
 
-  //   this.treatmentBMPService.getUpstreamRSBCatchmentGeoJSON(treatmentBMPID).subscribe(result => {
-  //     debugger;
-  //     this.selectedDelineationLayer = new L.GeoJSON(result, {
-  //       style: (feature) => {
-  //         return {
-  //           color:'yellow'
-  //         }
-  //       }
-  //     })
-  //     this.selectedDelineationLayer.addTo(this.map).bringToFront();
-  //   })
-  // }
-
+  public getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMPID: number) {
+    this.treatmentBMPService.getUpstreamRSBCatchmentGeoJSON(treatmentBMPID).subscribe(result => {
+      let currentDelineationForTreatmentBMP = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+      if (currentDelineationForTreatmentBMP == null) {
+        currentDelineationForTreatmentBMP = new DelineationUpsertDto({
+          TreatmentBMPID: treatmentBMPID
+        });
+        this.delineations = this.delineations.concat(currentDelineationForTreatmentBMP);
+      }
+      currentDelineationForTreatmentBMP.DelineationTypeID = DelineationTypeEnum.Centralized;
+      currentDelineationForTreatmentBMP.Geometry = result.GeometryGeoJSON;
+      currentDelineationForTreatmentBMP.DelineationArea = result.Area;
+      this.resetDelineationFeatureGroups();
+      this.scrollToMapIfNecessary();
+      this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+    })
+  }
 }

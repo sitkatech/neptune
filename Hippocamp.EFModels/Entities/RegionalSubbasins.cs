@@ -16,9 +16,9 @@ namespace Hippocamp.EFModels.Entities
             return dbContext.vRegionalSubbasinUpstreamCatchmentGeometry4326s.SingleOrDefault(x => x.PrimaryKey == regionalSubbasinID)?.UpstreamCatchmentGeometry4326;
         }
 
-        public static string GetUpstreamCatchmentGeometry4326GeoJSON (HippocampDbContext dbContext, int regionalSubbasinID)
+        public static GeometryGeoJSONAndAreaDto GetUpstreamCatchmentGeometry4326GeoJSONAndArea (HippocampDbContext dbContext, int regionalSubbasinID)
         {
-            return dbContext.vRegionalSubbasinUpstreamCatchmentGeometry4326s.SingleOrDefault(x => x.PrimaryKey == regionalSubbasinID)?.UpstreamCatchGeometry4326GeoJson;
+            return dbContext.vRegionalSubbasinUpstreamCatchmentGeometry4326s.SingleOrDefault(x => x.PrimaryKey == regionalSubbasinID)?.AsGeometryGeoJSONAndAreaDto();
         }
     }
 }

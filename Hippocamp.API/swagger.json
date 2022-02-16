@@ -1255,17 +1255,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
                 }
               }
             }
@@ -1621,6 +1621,20 @@
           "CreateDate": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GeometryGeoJSONAndAreaDto": {
+        "type": "object",
+        "properties": {
+          "GeometryGeoJSON": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
