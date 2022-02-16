@@ -57,6 +57,7 @@ export class DelineationsComponent implements OnInit {
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
   private boundingBox: BoundingBoxDto;
+  private squareMetersToAcreDivisor: number = 4047;
   public selectedListItem: number;
   public selectedDelineation: DelineationUpsertDto;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
@@ -138,7 +139,7 @@ export class DelineationsComponent implements OnInit {
         this.delineations = delineations;
         this.boundingBox = boundingBox;
 
-        this.updateMapLayers();
+        this.initializeMap();
       });
     }
 
@@ -188,15 +189,13 @@ export class DelineationsComponent implements OnInit {
     this.compileService.configure(this.appRef);
   }
 
-  public updateMapLayers(): void {
+  public initializeMap(): void {
 
     const mapOptions: L.MapOptions = {
-      // center: [46.8797, -110],
-      // zoom: 6,
       minZoom: 9,
       maxZoom: 19,
       layers: [
-        this.tileLayers["Aerial"],
+        this.tileLayers["Terrain"],
       ],
       fullscreenControl: true,
       gestureHandling: true
@@ -214,7 +213,7 @@ export class DelineationsComponent implements OnInit {
 
     this.delineationFeatureGroup.addTo(this.map);
     this.editableDelineationFeatureGroup.addTo(this.map);
-    this.addFeatureCollectionToFeatureGroup(this.mapDelineationsToGeoJson(this.delineations), this.delineationFeatureGroup);
+    this.resetDelineationFeatureGroups();
     
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
@@ -353,7 +352,7 @@ export class DelineationsComponent implements OnInit {
         this.newDelineatonID--;
       }
       delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
-      delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
+      delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
       this.selectedDelineation = delineationUpsertDto;
       layer.feature = this.mapDelineationToFeature(delineationUpsertDto);
       this.addFeatureCollectionToFeatureGroup(layer.toGeoJSON(), this.delineationFeatureGroup); 
@@ -365,7 +364,7 @@ export class DelineationsComponent implements OnInit {
         layers.eachLayer((layer) => {
             var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
             delineationUpsertDto.Geometry = layer.toGeoJSON().geometry;
-            delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 4047).toFixed(2);
+            delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
             this.delineationFeatureGroup.eachLayer(l => {
               if (l.feature.properties.TreatmentBMPID == layer.feature.properties.TreatmentBMPID) {
                 this.delineationFeatureGroup.removeLayer(l);
@@ -475,8 +474,8 @@ export class DelineationsComponent implements OnInit {
     this.drawMapClicked = false;
   }
 
-  public treatmentBMPHasDelineation (treatmentBMPID: number) {
-    return this.delineations?.some(x => x.TreatmentBMPID == treatmentBMPID);
+  public treatmentBMPHasDelineationGeometry (treatmentBMPID: number) {
+    return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0]?.Geometry;
   }
 
   public getDelineationAreaForTreatmentBMP (treatmentBMPID: number) {
@@ -510,7 +509,7 @@ export class DelineationsComponent implements OnInit {
 
   public onSubmit() {
     this.isLoadingSubmit = true;
-    
+    window.scroll(0,0);
     //We need a fully qualified geojson string and above we are just getting the geometry
     //Possible can remove the update above if we are always going to do it here
     this.delineationFeatureGroup.eachLayer((layer) => {
@@ -520,8 +519,19 @@ export class DelineationsComponent implements OnInit {
 
     this.delineationService.mergeDelineations(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
       this.isLoadingSubmit = false;
+      this.alertService.clearAlerts();
       this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
+      this.delineationService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
+        this.delineations = delineations;
+        this.resetDelineationFeatureGroups();
+        this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+      });
     });
   }
 
+  private resetDelineationFeatureGroups() {
+    this.editableDelineationFeatureGroup.clearLayers();
+    this.delineationFeatureGroup.clearLayers();
+    this.addFeatureCollectionToFeatureGroup(this.mapDelineationsToGeoJson(this.delineations), this.delineationFeatureGroup);
+  }
 }
