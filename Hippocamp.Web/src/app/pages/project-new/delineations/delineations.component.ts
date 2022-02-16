@@ -397,6 +397,9 @@ export class DelineationsComponent implements OnInit {
     })
     .on(L.Draw.Event.DELETESTART, () => {
         this.isPerformingDrawAction = true;
+    })
+    .on(L.Draw.Event.TOOLBARCLOSED, () => {
+      this.isPerformingDrawAction = false;
     });
     this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
