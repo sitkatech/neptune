@@ -5,6 +5,8 @@ using Hippocamp.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hippocamp.API.Controllers
 {
@@ -15,12 +17,24 @@ namespace Hippocamp.API.Controllers
         {
         }
 
-        [HttpGet("Delineations/{projectID}/getByProjectID")]
+        [HttpGet("delineations/{projectID}/getByProjectID")]
         [JurisdictionEditFeature]
         public ActionResult<DelineationUpsertDto> GetByProjectID([FromRoute] int projectID)
         {
             var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
             return Ok(DelineationUpsertDtos);
+        }
+
+        [HttpPut("delineations/{projectID}")]
+        [JurisdictionEditFeature]
+        public ActionResult MergeDelineations(List<DelineationUpsertDto> delineationUpsertDtos, [FromRoute] int projectID)
+        {
+            // project validation here
+            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+
+            Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
+
+            return Ok();
         }
     }
 }

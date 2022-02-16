@@ -6,7 +6,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <div id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
+        <div #mapDiv id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
     </div>
 </div>
 <div class="mt-4 card">
@@ -28,8 +28,8 @@
                             [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                             (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
                             <td>{{treatmentBMP.TreatmentBMPName}}</td>
-                            <td [class.font-italic]="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)" >{{getDelineationAreaForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}</td>
-                            <td><button class="btn btn-hippocamp btn-disabled" placement="top" ngbTooltip="Draw on Map feature coming soon">Draw on Map</button></td>
+                            <td [class.font-italic]="!treatmentBMPHasDelineationGeometry(treatmentBMP.TreatmentBMPID)" >{{getDelineationAreaForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}</td>
+                            <td><button class="btn btn-hippocamp" (click)="drawDelineationForTreatmentBMP(treatmentBMP.TreatmentBMPID)">Draw on Map</button></td>
                             <td><button class="btn btn-hippocamp btn-disabled" placement="top" ngbTooltip="Trace Network feature coming soon">Trace Network</button></td>
                         </tr>
                     </tbody>
@@ -37,4 +37,10 @@
             </div>
         </div>
     </div>
+</div>
+<div class="row m-1 mt-3">
+    <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit()">
+        <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+        Save
+    </button>
 </div>
