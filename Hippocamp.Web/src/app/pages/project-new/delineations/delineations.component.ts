@@ -458,6 +458,7 @@ export class DelineationsComponent implements OnInit {
       }
       layer.setIcon(this.markerIconSelected);
       layer.setZIndexOffset(10000);
+      this.map.panTo(layer.getLatLng());
     })
     this.addOrRemoveDrawControl(true);
   }
