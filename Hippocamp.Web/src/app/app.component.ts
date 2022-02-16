@@ -89,7 +89,6 @@ export class AppComponent {
                     //         console.warn('Your session has been terminated!');
                     //         this.cookieStorageService.removeAll();
                     //     }
-                    //     debugger;
                     //     this.ignoreSessionTerminated = false;
                     //     break;
                 }
