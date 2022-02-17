@@ -41,6 +41,8 @@ import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { TimeOfConcentrationEnum } from 'src/app/shared/models/enums/time-of-concentration.enum';
 import { UnderlyingHydrologicSoilGroupEnum } from 'src/app/shared/models/enums/underlying-hydrologic-soil-group.enum';
+import { DelineationService } from 'src/app/services/delineation.service';
+import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 
 declare var $: any
 
@@ -216,11 +218,13 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   public static modelingAttributeFieldsWithDropdown = [ "TimeOfConcentrationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID" ];
+  public delineations: DelineationUpsertDto[];
 
   constructor(
     private cdr: ChangeDetectorRef,
     private authenticationService: AuthenticationService,
     private treatmentBMPService: TreatmentBMPService,
+    private delineationService: DelineationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
@@ -240,11 +244,13 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
 
         forkJoin({
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
+          delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
           treatmentBMPTypes: this.treatmentBMPService.getTypes(),
           modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
-        }).subscribe(({ treatmentBMPs, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+        }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
           this.treatmentBMPs = treatmentBMPs;
+          this.delineations = delineations
           this.boundingBox = boundingBox;
           this.treatmentBMPTypes = treatmentBMPTypes;
           this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
@@ -539,6 +545,20 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
     document.getElementById(this.mapID).scrollIntoView();
 
     this.isEditingLocation = true;
+  }
+
+  public treatmentBMPHasDelineation(treatmentBMPID: number) {
+    return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0] != null;
+  }
+
+  public getDelineationAreaForTreatmentBMP(treatmentBMPID: number) {
+    let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+
+    if (delineation?.DelineationArea == null) {
+      return "Not provided yet"
+    }
+
+    return `${delineation.DelineationArea} ac`;
   }
 
   public onSubmit() {

@@ -89,8 +89,8 @@
                         <div class="col-sm-8">{{selectedTreatmentBMP.Latitude}}</div>
                         <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Longitude</div>
                         <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.Longitude}}</div>
-                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Delination Area</div>
-                        <div class="col-sm-8 mt-1 font-italic">not available</div>
+                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Delineation Area</div>
+                        <div class="col-sm-8 mt-1" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">{{getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID)}}</div>
                         <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">
                             <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
                         </div>
