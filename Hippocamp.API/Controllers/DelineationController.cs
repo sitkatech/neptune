@@ -31,6 +31,10 @@ namespace Hippocamp.API.Controllers
         {
             // project validation here
             var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            if (project == null)
+            {
+                return BadRequest();
+            }
 
             Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
 

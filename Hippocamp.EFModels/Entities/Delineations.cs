@@ -52,8 +52,6 @@ namespace Hippocamp.EFModels.Entities
             var delineationGeometry = !string.IsNullOrWhiteSpace(delineationUpsertDto.Geometry) ? GeoJsonHelpers.GetFeatureFromGeoJson(delineationUpsertDto.Geometry) : null;
             var delineation = new Delineation()
             {
-                //DelineationOverlapOverlappingDelineations
-                //DelineationOverlapDelineations
                 DelineationTypeID = delineationUpsertDto.DelineationTypeID,
                 DelineationGeometry4326 = delineationGeometry != null ? delineationGeometry.Geometry : null,
                 DelineationGeometry = delineationGeometry != null ? delineationGeometry.Geometry.ProjectTo2771() : null,

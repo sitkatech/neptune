@@ -109,7 +109,7 @@ export class DelineationsComponent implements OnInit {
     }
   }
   private drawControl: L.Control.Draw;
-  private newDelineatonID: number = -1;
+  private newDelineationID: number = -1;
   public isLoadingSubmit: boolean = false;
 
   constructor(
@@ -350,11 +350,11 @@ export class DelineationsComponent implements OnInit {
         var delineationUpsertDto = this.delineations.filter(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID)[0];
         if (delineationUpsertDto == null) {
           delineationUpsertDto = new DelineationUpsertDto({
-            DelineationID: this.newDelineatonID,
+            DelineationID: this.newDelineationID,
             TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID
           });
           this.delineations = this.delineations.concat(delineationUpsertDto);
-          this.newDelineatonID--;
+          this.newDelineationID--;
         }
         delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
         delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
