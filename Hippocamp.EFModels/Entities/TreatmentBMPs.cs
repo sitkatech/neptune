@@ -5,6 +5,7 @@ using Hippocamp.API.Util;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
+using static Hippocamp.EFModels.Entities.DelineationType;
 
 namespace Hippocamp.EFModels.Entities
 {
@@ -99,6 +100,8 @@ namespace Hippocamp.EFModels.Entities
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos
                 .Select(x => TreatmentBMPFromUpsertDtoAndProject(x, project));
 
+            var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326)))).Select(x => x.TreatmentBMPID).ToList();
+
             existingProjectTreatmentBMPs.MergeNew(updatedTreatmentBMPs, allTreatmentBMPsInDatabase,
                 (x, y) => x.TreatmentBMPName == y.TreatmentBMPName);
 
@@ -171,6 +174,12 @@ namespace Hippocamp.EFModels.Entities
             existingProjectTreatmentBMPs.MergeDelete(updatedTreatmentBMPs,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 allTreatmentBMPsInDatabase);
+
+            if (treatmentBMPsWhoseLocationChanged.Any())
+            {
+                var centralizedDelineationsToDelete = dbContext.Delineations.Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized && treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ToList();
+                dbContext.Delineations.RemoveRange(centralizedDelineationsToDelete);
+            }
 
             dbContext.SaveChanges();
         }
