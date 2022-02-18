@@ -496,7 +496,9 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   public updateModelingTypeOnTypeChange(selectedType: TreatmentBMPTypeSimpleDto) {
-    this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
+    if (selectedType) {
+      this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
+    }
   }
 
   public toggleIsEditingLocation() {
