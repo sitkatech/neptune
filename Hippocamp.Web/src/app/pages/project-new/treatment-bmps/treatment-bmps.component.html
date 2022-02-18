@@ -1,4 +1,4 @@
-<h2 class="d-inline-block">
+<h2 class="d-inline-block mt-md-0 mt-4">
     Proposed Treatment BMPs
 </h2>
 <div class="row m-1">
@@ -33,7 +33,7 @@
                 <div class="row d-flex">
                     <div class="col-auto ml-auto text-right">
                         <a class="btn mt-2 btn-outline-info  mb-2" (click)="toggleIsEditingLocation()">
-                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Finish Editing Location" : "Edit Location"}}
+                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Edit Location"}}
                         </a>
                         <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
                             <i class="fa fa-trash mr-1"></i> Delete
@@ -43,19 +43,19 @@
             </div>
             <div class="col-sm-8">
                 <div class="row mt-2">
-                    <div class="col-lg-2 col-sm-3 control-labelf font-weight-bold text-sm-right">
+                    <div class="col-lg-3 control-label font-weight-bold text-lg-right">
                         <label>Name</label>
                     </div>
-                    <div class="col-lg-10 col-sm-9">
+                    <div class="col-lg-9">
                         <input type="text" class="form-control" name="name" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPName">
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-lg-2 col-sm-3 control-label font-weight-bold text-sm-right">
-                        <field-definition [fieldDefinitionType]="'TreatmentBMPType'"></field-definition>
+                    <div class="col-lg-3 control-label font-weight-bold text-lg-right">
+                        <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
                     </div>
-                    <div class="col-lg-10 col-sm-9">
-                        <div class="font-weight-bold" *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0; else treatmentBMPTypeSelect">
+                    <div class="col-lg-9">
+                        <div *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0; else treatmentBMPTypeSelect">
                             {{getTypeNameByTypeID(selectedTreatmentBMP.TreatmentBMPTypeID)}}
                         </div>
                         <ng-template #treatmentBMPTypeSelect>
@@ -67,10 +67,10 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-lg-2 col-sm-3 control-label font-weight-bold text-sm-right">
-                        <label>Notes</label>
+                    <div class="col-lg-3 control-label d text-lg-right">
+                        <label><span class="font-weight-bold">Notes</span><span class="font-italic"> (optional)</span></label>
                     </div>
-                    <div class="col-lg-10 col-sm-9">
+                    <div class="col-lg-9">
                         <textarea class="form-control" name="notes" style="height: 60px" placeholder=""
                             [(ngModel)]="selectedTreatmentBMP.Notes">
                         </textarea>
