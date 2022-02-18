@@ -98,7 +98,7 @@ namespace Hippocamp.EFModels.Entities
 
             // merge new Treatment BMPs
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos
-                .Select(x => TreatmentBMPFromUpsertDtoAndProject(x, project));
+                .Select(x => TreatmentBMPFromUpsertDtoAndProject(dbContext, x, project));
 
             var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326)))).Select(x => x.TreatmentBMPID).ToList();
 
@@ -127,6 +127,7 @@ namespace Hippocamp.EFModels.Entities
                     x.TreatmentBMPName = y.TreatmentBMPName;
                     x.LocationPoint4326 = y.LocationPoint4326;
                     x.LocationPoint = y.LocationPoint;
+                    x.WatershedID = y.WatershedID;
                     x.Notes = y.Notes;
                 });
 
@@ -189,9 +190,15 @@ namespace Hippocamp.EFModels.Entities
             return new Point(longitude, latitude) { SRID = 4326 };
         }
 
-        public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
+        public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(HippocampDbContext dbContext, TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
         {
-            var locationPointGeometry = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value);
+            
+            var locationPointGeometry4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value);
+            var locationPoint = locationPointGeometry4326.ProjectTo2771();
+
+            var watershed = dbContext.Watersheds.FirstOrDefault(x => x.WatershedGeometry.Contains(locationPoint));
+
+
             var treatmentBMP = new TreatmentBMP()
             {
                 TreatmentBMPName = treatmentBMPUpsertDto.TreatmentBMPName,
@@ -199,8 +206,9 @@ namespace Hippocamp.EFModels.Entities
                 ProjectID = project.ProjectID,
                 StormwaterJurisdictionID = project.StormwaterJurisdictionID,
                 OwnerOrganizationID = project.OrganizationID,
-                LocationPoint4326 = locationPointGeometry,
-                LocationPoint = locationPointGeometry.ProjectTo2771(),
+                LocationPoint4326 = locationPointGeometry4326,
+                LocationPoint = locationPoint,
+                WatershedID = watershed?.WatershedID,
                 Notes = treatmentBMPUpsertDto.Notes,
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = (int)TrashCaptureStatusTypeEnum.NotProvided,
