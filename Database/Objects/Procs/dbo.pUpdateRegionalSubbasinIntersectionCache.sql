@@ -9,32 +9,32 @@ Create Procedure dbo.pUpdateRegionalSubbasinIntersectionCache
 As
 
 update dbo.RegionalSubbasin
-set IsInLSPCBasin = 0
+set IsInModelBasin = 0
 
--- Cache whether overlaps with an LSPC basin
+-- Cache whether overlaps with an Model basin
 update rsb
-set IsInLSPCBasin = 1
+set IsInModelBasin = 1
 from dbo.RegionalSubbasin rsb
-	join dbo.LSPCBasin lspc
-	on rsb.CatchmentGeometry.STIntersects(lspc.LSPCBasinGeometry) = 1
+	join dbo.ModelBasin Model
+	on rsb.CatchmentGeometry.STIntersects(Model.ModelBasinGeometry) = 1
 
 update dbo.RegionalSubbasin 
-set IsInLSPCBasin = 0
-where IsInLSPCBasin is null
+set IsInModelBasin = 0
+where IsInModelBasin is null
 
--- store a reference to the largest intersecting LSPC basin per RSB
+-- store a reference to the largest intersecting Model basin per RSB
 Update rsb
-set rsb.LSPCBasinID = sub.LSPCBasinID
+set rsb.ModelBasinID = sub.ModelBasinID
 from dbo.RegionalSubbasin rsb join
 (
 	select *, ROW_NUMBER() over (partition by RegionalSubbasinID order by IntersectArea desc) as RowNumber from
 	(
 		select 
 			RegionalSubbasinID,
-			lspc.LSPCBasinID,
-			rsb.CatchmentGeometry.STIntersection(LSPCBasinGeometry).STArea() as IntersectArea
+			Model.ModelBasinID,
+			rsb.CatchmentGeometry.STIntersection(ModelBasinGeometry).STArea() as IntersectArea
 		from dbo.RegionalSubbasin rsb
-			inner join dbo.LSPCBasin lspc on rsb.CatchmentGeometry.STIntersects(LSPCBasinGeometry) = 1
+			inner join dbo.ModelBasin Model on rsb.CatchmentGeometry.STIntersects(ModelBasinGeometry) = 1
 	) sub
 ) sub on rsb.RegionalSubbasinID = sub.RegionalSubbasinID
 where sub.RowNumber = 1

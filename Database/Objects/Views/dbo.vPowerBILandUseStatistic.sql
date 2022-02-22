@@ -11,7 +11,7 @@ select
 	hru.ImperviousAcres,
 	hru.Area,
 	luc.HRUCharacteristicLandUseCodeDisplayName,
-	lgu.LSPCBasinID,
+	lgu.ModelBasinID,
 	rsb.Watershed as WatershedName,
 	rsb.OCSurveyCatchmentID as CatchIDN,
 	rsb.OCSurveyDownstreamCatchmentID as DownCatchIDN,
@@ -20,9 +20,9 @@ select
 	lgu.WaterQualityManagementPlanID,
 	lgu.RegionalSubbasinID,
 	lgu.LoadGeneratingUnitID,
-	lspc.LSPCBasinName,
+	Model.ModelBasinName,
 	luc.HRUCharacteristicLandUseCodeName as LandUse,
-	concat(lspc.LSPCBasinKey, '-', luc.HRUCharacteristicLandUseCodeName, '-', hru.HydrologicSoilGroup, '-', hru.SlopePercentage) as SurfaceKey
+	concat(Model.ModelBasinKey, '-', luc.HRUCharacteristicLandUseCodeName, '-', hru.HydrologicSoilGroup, '-', hru.SlopePercentage) as SurfaceKey
 from
 	dbo.HRUCharacteristic hru left join dbo.LoadGeneratingUnit lgu
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID
@@ -34,6 +34,6 @@ from
 		on hru.HRUCharacteristicLandUseCodeID = luc.HRUCharacteristicLandUseCodeID
 	left join dbo.RegionalSubbasin rsb
 		on rsb.RegionalSubbasinID = lgu.RegionalSubbasinID
-	left join dbo.LSPCBasin lspc
-		on lspc.LSPCBasinID = lgu.LSPCBasinID
+	left join dbo.ModelBasin Model
+		on Model.ModelBasinID = lgu.ModelBasinID
 	where t.ProjectID is null

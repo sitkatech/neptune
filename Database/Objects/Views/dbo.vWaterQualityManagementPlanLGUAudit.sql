@@ -2,8 +2,8 @@
 -- -its ID,
 -- -a bit telling whether the LGUs are populated, (LoadGeneratingUnitsPopulated)
 -- -a bit telling whether the Boundary is defined, (BoundaryIsDefined)
--- -and an int telling how mnay LSPC basins it intersects (CountOfIntersectingLSPCBasins)
--- The upshot is that LoadGeneratingUnitsPopulated should = BoundaryIsDefined AND CountOfIntersectingLSPCBasins
+-- -and an int telling how mnay Model basins it intersects (CountOfIntersectingModelBasins)
+-- The upshot is that LoadGeneratingUnitsPopulated should = BoundaryIsDefined AND CountOfIntersectingModelBasins
 
 drop view if exists dbo.vWaterQualityManagementPlanLGUAudit
 GO
@@ -23,7 +23,7 @@ select
 		when WaterQualityManagementPlanBoundary is not null then 1
 		else 0
 	end as bit) as BoundaryIsDefined,
-	IsNull(lspcCount.CountOfLSPCs, 0) as CountOfIntersectingLSPCBasins
+	IsNull(ModelCount.CountOfModels, 0) as CountOfIntersectingModelBasins
 from dbo.WaterQualityManagementPlan wqmp
 	left join (
 		select
@@ -35,12 +35,12 @@ from dbo.WaterQualityManagementPlan wqmp
 	left join (
 		select
 			WaterQualityManagementPlanID,
-			count(*) as CountOfLSPCs
+			count(*) as CountOfModels
 		from dbo.WaterQualityManagementPlan wqmp
-			left join dbo.LSPCBasin lspc
-				on lspc.LSPCBasinGeometry.STIntersects(wqmp.WaterQualityManagementPlanBoundary)  = 1
-		where LSPCBasinID is not null
+			left join dbo.ModelBasin Model
+				on Model.ModelBasinGeometry.STIntersects(wqmp.WaterQualityManagementPlanBoundary)  = 1
+		where ModelBasinID is not null
 		group by WaterQualityManagementPlanID
-	) lspcCount on wqmp.WaterQualityManagementPlanID = lspcCount.WaterQualityManagementPlanID
+	) ModelCount on wqmp.WaterQualityManagementPlanID = ModelCount.WaterQualityManagementPlanID
 
 go

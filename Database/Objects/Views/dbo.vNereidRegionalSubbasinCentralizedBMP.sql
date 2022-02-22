@@ -17,5 +17,5 @@ from dbo.Delineation d
 		on bmp.RegionalSubbasinID = rsb.RegionalSubbasinID
 where
 	DelineationTypeID = 1 
-	and rsb.IsInLSPCBasin = 1 
+	and rsb.IsInModelBasin = 1 
 GO

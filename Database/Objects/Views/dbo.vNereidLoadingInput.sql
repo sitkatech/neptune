@@ -9,7 +9,7 @@ select
 	lgu.WaterQualityManagementPlanID,
 	rsb.RegionalSubbasinID, -- don't actually need this but it felt silly to leave it off
 	OCSurveyCatchmentID,
-	LSPCBasinKey,
+	ModelBasinKey,
 	hrucode.HRUCharacteristicLandUseCodeName as LandUseCode,
 	basehrucode.HRUCharacteristicLandUseCodeName as BaselineLandUseCode,
 	HydrologicSoilGroup,
@@ -25,8 +25,8 @@ from
 		on hru.LoadGeneratingUnitID = lgu.LoadGeneratingUnitID
 	join dbo.RegionalSubbasin rsb
 		on lgu.RegionalSubbasinID = rsb.RegionalSubbasinID
-	join dbo.LSPCBasin lspc
-		on lgu.LSPCBasinID = lspc.LSPCBasinID
+	join dbo.ModelBasin Model
+		on lgu.ModelBasinID = Model.ModelBasinID
 	join dbo.HRUCharacteristicLandUseCode hrucode
 		on hru.HRUCharacteristicLandUseCodeID = hrucode.HRUCharacteristicLandUseCodeID
 	join dbo.HRUCharacteristicLandUseCode basehrucode
