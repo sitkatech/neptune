@@ -5,7 +5,7 @@ GO
 CREATE TABLE [dbo].[LoadGeneratingUnit](
 	[LoadGeneratingUnitID] [int] IDENTITY(1,1) NOT NULL,
 	[LoadGeneratingUnitGeometry] [geometry] NOT NULL,
-	[LSPCBasinID] [int] NULL,
+	[ModelBasinID] [int] NULL,
 	[RegionalSubbasinID] [int] NULL,
 	[DelineationID] [int] NULL,
 	[WaterQualityManagementPlanID] [int] NULL,
@@ -22,10 +22,10 @@ REFERENCES [dbo].[Delineation] ([DelineationID])
 GO
 ALTER TABLE [dbo].[LoadGeneratingUnit] CHECK CONSTRAINT [FK_LoadGeneratingUnit_Delineation_DelineationID]
 GO
-ALTER TABLE [dbo].[LoadGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_LoadGeneratingUnit_LSPCBasin_LSPCBasinID] FOREIGN KEY([LSPCBasinID])
-REFERENCES [dbo].[LSPCBasin] ([LSPCBasinID])
+ALTER TABLE [dbo].[LoadGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_LoadGeneratingUnit_ModelBasin_ModelBasinID] FOREIGN KEY([ModelBasinID])
+REFERENCES [dbo].[ModelBasin] ([ModelBasinID])
 GO
-ALTER TABLE [dbo].[LoadGeneratingUnit] CHECK CONSTRAINT [FK_LoadGeneratingUnit_LSPCBasin_LSPCBasinID]
+ALTER TABLE [dbo].[LoadGeneratingUnit] CHECK CONSTRAINT [FK_LoadGeneratingUnit_ModelBasin_ModelBasinID]
 GO
 ALTER TABLE [dbo].[LoadGeneratingUnit]  WITH CHECK ADD  CONSTRAINT [FK_LoadGeneratingUnit_RegionalSubbasin_RegionalSubbasinID] FOREIGN KEY([RegionalSubbasinID])
 REFERENCES [dbo].[RegionalSubbasin] ([RegionalSubbasinID])

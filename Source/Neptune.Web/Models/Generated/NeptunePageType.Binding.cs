@@ -73,6 +73,9 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeHippocampProjectsList HippocampProjectsList = NeptunePageTypeHippocampProjectsList.Instance;
         public static readonly NeptunePageTypeHippocampProjectInstructions HippocampProjectInstructions = NeptunePageTypeHippocampProjectInstructions.Instance;
         public static readonly NeptunePageTypeHippocampProjectBasics HippocampProjectBasics = NeptunePageTypeHippocampProjectBasics.Instance;
+        public static readonly NeptunePageTypeHippocampProjectAttachments HippocampProjectAttachments = NeptunePageTypeHippocampProjectAttachments.Instance;
+        public static readonly NeptunePageTypeHippocampTreatmentBMPs HippocampTreatmentBMPs = NeptunePageTypeHippocampTreatmentBMPs.Instance;
+        public static readonly NeptunePageTypeHippocampDelineations HippocampDelineations = NeptunePageTypeHippocampDelineations.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -82,7 +85,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics, HippocampProjectAttachments, HippocampTreatmentBMPs, HippocampDelineations };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -178,10 +181,14 @@ namespace Neptune.Web.Models
                     return FundingSourcesList;
                 case NeptunePageTypeEnum.HippocampAbout:
                     return HippocampAbout;
+                case NeptunePageTypeEnum.HippocampDelineations:
+                    return HippocampDelineations;
                 case NeptunePageTypeEnum.HippocampHomePage:
                     return HippocampHomePage;
                 case NeptunePageTypeEnum.HippocampLabelsAndDefinitionsList:
                     return HippocampLabelsAndDefinitionsList;
+                case NeptunePageTypeEnum.HippocampProjectAttachments:
+                    return HippocampProjectAttachments;
                 case NeptunePageTypeEnum.HippocampProjectBasics:
                     return HippocampProjectBasics;
                 case NeptunePageTypeEnum.HippocampProjectInstructions:
@@ -190,6 +197,8 @@ namespace Neptune.Web.Models
                     return HippocampProjectsList;
                 case NeptunePageTypeEnum.HippocampTraining:
                     return HippocampTraining;
+                case NeptunePageTypeEnum.HippocampTreatmentBMPs:
+                    return HippocampTreatmentBMPs;
                 case NeptunePageTypeEnum.HomeAdditionalInfo:
                     return HomeAdditionalInfo;
                 case NeptunePageTypeEnum.HomeMapInfo:
@@ -324,7 +333,10 @@ namespace Neptune.Web.Models
         HippocampAbout = 55,
         HippocampProjectsList = 56,
         HippocampProjectInstructions = 57,
-        HippocampProjectBasics = 58
+        HippocampProjectBasics = 58,
+        HippocampProjectAttachments = 59,
+        HippocampTreatmentBMPs = 60,
+        HippocampDelineations = 61
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -655,5 +667,23 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeHippocampProjectBasics(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
         public static readonly NeptunePageTypeHippocampProjectBasics Instance = new NeptunePageTypeHippocampProjectBasics(58, @"HippocampProjectBasics", @"Hippocamp Project Basics");
+    }
+
+    public partial class NeptunePageTypeHippocampProjectAttachments : NeptunePageType
+    {
+        private NeptunePageTypeHippocampProjectAttachments(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeHippocampProjectAttachments Instance = new NeptunePageTypeHippocampProjectAttachments(59, @"HippocampProjectAttachments", @"Hippocamp Project Attachments");
+    }
+
+    public partial class NeptunePageTypeHippocampTreatmentBMPs : NeptunePageType
+    {
+        private NeptunePageTypeHippocampTreatmentBMPs(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeHippocampTreatmentBMPs Instance = new NeptunePageTypeHippocampTreatmentBMPs(60, @"HippocampTreatmentBMPs", @"Hippocamp Treatment BMPs");
+    }
+
+    public partial class NeptunePageTypeHippocampDelineations : NeptunePageType
+    {
+        private NeptunePageTypeHippocampDelineations(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeHippocampDelineations Instance = new NeptunePageTypeHippocampDelineations(61, @"HippocampDelineations", @"Hippocamp Delineations");
     }
 }

@@ -25,14 +25,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidLoadingInput(int primaryKey, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int lSPCBasinKey, string landUseCode, string baselineLandUseCode, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, double baselineImperviousAcres, bool? delineationIsVerified, int? spatiallyAssociatedModelingApproach, int? relationallyAssociatedModelingApproach) : this()
+        public vNereidLoadingInput(int primaryKey, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int modelBasinKey, string landUseCode, string baselineLandUseCode, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, double baselineImperviousAcres, bool? delineationIsVerified, int? spatiallyAssociatedModelingApproach, int? relationallyAssociatedModelingApproach) : this()
         {
             this.PrimaryKey = primaryKey;
             this.DelineationID = delineationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.RegionalSubbasinID = regionalSubbasinID;
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
-            this.LSPCBasinKey = lSPCBasinKey;
+            this.ModelBasinKey = modelBasinKey;
             this.LandUseCode = landUseCode;
             this.BaselineLandUseCode = baselineLandUseCode;
             this.HydrologicSoilGroup = hydrologicSoilGroup;
@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanID = vNereidLoadingInput.WaterQualityManagementPlanID;
             this.RegionalSubbasinID = vNereidLoadingInput.RegionalSubbasinID;
             this.OCSurveyCatchmentID = vNereidLoadingInput.OCSurveyCatchmentID;
-            this.LSPCBasinKey = vNereidLoadingInput.LSPCBasinKey;
+            this.ModelBasinKey = vNereidLoadingInput.ModelBasinKey;
             this.LandUseCode = vNereidLoadingInput.LandUseCode;
             this.BaselineLandUseCode = vNereidLoadingInput.BaselineLandUseCode;
             this.HydrologicSoilGroup = vNereidLoadingInput.HydrologicSoilGroup;
@@ -76,7 +76,7 @@ namespace Neptune.Web.Models
         public int? WaterQualityManagementPlanID { get; set; }
         public int RegionalSubbasinID { get; set; }
         public int OCSurveyCatchmentID { get; set; }
-        public int LSPCBasinKey { get; set; }
+        public int ModelBasinKey { get; set; }
         public string LandUseCode { get; set; }
         public string BaselineLandUseCode { get; set; }
         public string HydrologicSoilGroup { get; set; }

@@ -55,11 +55,11 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new LandUseBlockStagingConfiguration());
             modelBuilder.Configurations.Add(new LoadGeneratingUnitConfiguration());
             modelBuilder.Configurations.Add(new LoadGeneratingUnitRefreshAreaConfiguration());
-            modelBuilder.Configurations.Add(new LSPCBasinConfiguration());
-            modelBuilder.Configurations.Add(new LSPCBasinStagingConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
+            modelBuilder.Configurations.Add(new ModelBasinConfiguration());
+            modelBuilder.Configurations.Add(new ModelBasinStagingConfiguration());
             modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
@@ -78,6 +78,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
+            modelBuilder.Configurations.Add(new ProjectDocumentConfiguration());
             modelBuilder.Configurations.Add(new ProjectStatusConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
@@ -133,6 +134,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vPowerBITreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanOAndMVerificationConfiguration());
+            modelBuilder.Configurations.Add(new vRegionalSubbasinUpstreamCatchmentGeometry4326Configuration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
             modelBuilder.Configurations.Add(new vTreatmentBMPDetailedConfiguration());
             modelBuilder.Configurations.Add(new vViewTreatmentBMPModelingAttributesConfiguration());
@@ -159,11 +161,11 @@ namespace Neptune.Web.Models
         public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
         public virtual DbSet<LoadGeneratingUnitRefreshArea> LoadGeneratingUnitRefreshAreas { get; set; }
         public virtual DbSet<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
-        public virtual DbSet<LSPCBasin> LSPCBasins { get; set; }
-        public virtual DbSet<LSPCBasinStaging> LSPCBasinStagings { get; set; }
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+        public virtual DbSet<ModelBasin> ModelBasins { get; set; }
+        public virtual DbSet<ModelBasinStaging> ModelBasinStagings { get; set; }
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
@@ -181,6 +183,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
+        public virtual DbSet<ProjectDocument> ProjectDocuments { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectStatus> ProjectStatuses { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
@@ -237,6 +240,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
+        public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
         public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }
         public virtual DbSet<vViewTreatmentBMPModelingAttributes> vViewTreatmentBMPModelingAttributes { get; set; }
@@ -379,12 +383,6 @@ namespace Neptune.Web.Models
                 case "LoadGeneratingUnit":
                     return LoadGeneratingUnits.GetLoadGeneratingUnit(primaryKey);
 
-                case "LSPCBasin":
-                    return LSPCBasins.GetLSPCBasin(primaryKey);
-
-                case "LSPCBasinStaging":
-                    return LSPCBasinStagings.GetLSPCBasinStaging(primaryKey);
-
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
 
@@ -403,6 +401,12 @@ namespace Neptune.Web.Models
                     var measurementUnitType = MeasurementUnitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(measurementUnitType, "MeasurementUnitType", primaryKey);
                     return measurementUnitType;
+
+                case "ModelBasin":
+                    return ModelBasins.GetModelBasin(primaryKey);
+
+                case "ModelBasinStaging":
+                    return ModelBasinStagings.GetModelBasinStaging(primaryKey);
 
                 case "MonthsOfOperation":
                     var monthsOfOperation = MonthsOfOperation.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
@@ -529,6 +533,9 @@ namespace Neptune.Web.Models
                     var priorityLandUseType = PriorityLandUseType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(priorityLandUseType, "PriorityLandUseType", primaryKey);
                     return priorityLandUseType;
+
+                case "ProjectDocument":
+                    return ProjectDocuments.GetProjectDocument(primaryKey);
 
                 case "Project":
                     return Projects.GetProject(primaryKey);

@@ -29,6 +29,7 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessmentObservationPhotos = new HashSet<OnlandVisualTrashAssessmentObservationPhoto>();
             this.OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
             this.OrganizationsWhereYouAreTheLogoFileResource = new HashSet<Organization>();
+            this.ProjectDocuments = new HashSet<ProjectDocument>();
             this.TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
             this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
@@ -101,7 +102,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return NeptuneHomePageImages.Any() || NeptunePageImages.Any() || OnlandVisualTrashAssessmentObservationPhotos.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OrganizationsWhereYouAreTheLogoFileResource.Any() || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanPhotos.Any() || WaterQualityManagementPlanVerifies.Any();
+            return NeptuneHomePageImages.Any() || NeptunePageImages.Any() || OnlandVisualTrashAssessmentObservationPhotos.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OrganizationsWhereYouAreTheLogoFileResource.Any() || ProjectDocuments.Any() || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanPhotos.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
@@ -134,6 +135,11 @@ namespace Neptune.Web.Models
             if(OrganizationsWhereYouAreTheLogoFileResource.Any())
             {
                 dependentObjects.Add(typeof(Organization).Name);
+            }
+
+            if(ProjectDocuments.Any())
+            {
+                dependentObjects.Add(typeof(ProjectDocument).Name);
             }
 
             if(TreatmentBMPAssessmentPhotos.Any())
@@ -171,7 +177,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(OnlandVisualTrashAssessmentObservationPhoto).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(Organization).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(OnlandVisualTrashAssessmentObservationPhoto).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(Organization).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -217,6 +223,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in OrganizationsWhereYouAreTheLogoFileResource.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectDocuments.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -269,6 +280,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreTheLogoFileResource { get; set; }
+        public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }

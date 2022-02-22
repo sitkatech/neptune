@@ -17,14 +17,14 @@ namespace Neptune.Web.Models
             HasKey(x => x.LoadGeneratingUnitID);
             Property(x => x.LoadGeneratingUnitID).HasColumnName(@"LoadGeneratingUnitID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.LoadGeneratingUnitGeometry).HasColumnName(@"LoadGeneratingUnitGeometry").HasColumnType("geometry").IsRequired();
-            Property(x => x.LSPCBasinID).HasColumnName(@"LSPCBasinID").HasColumnType("int").IsOptional();
+            Property(x => x.ModelBasinID).HasColumnName(@"ModelBasinID").HasColumnType("int").IsOptional();
             Property(x => x.RegionalSubbasinID).HasColumnName(@"RegionalSubbasinID").HasColumnType("int").IsOptional();
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsOptional();
             Property(x => x.IsEmptyResponseFromHRUService).HasColumnName(@"IsEmptyResponseFromHRUService").HasColumnType("bit").IsOptional();
 
             // Foreign keys
-            HasOptional(a => a.LSPCBasin).WithMany(b => b.LoadGeneratingUnits).HasForeignKey(c => c.LSPCBasinID).WillCascadeOnDelete(false); // FK_LoadGeneratingUnit_LSPCBasin_LSPCBasinID
+            HasOptional(a => a.ModelBasin).WithMany(b => b.LoadGeneratingUnits).HasForeignKey(c => c.ModelBasinID).WillCascadeOnDelete(false); // FK_LoadGeneratingUnit_ModelBasin_ModelBasinID
             HasOptional(a => a.RegionalSubbasin).WithMany(b => b.LoadGeneratingUnits).HasForeignKey(c => c.RegionalSubbasinID).WillCascadeOnDelete(false); // FK_LoadGeneratingUnit_RegionalSubbasin_RegionalSubbasinID
             HasOptional(a => a.Delineation).WithMany(b => b.LoadGeneratingUnits).HasForeignKey(c => c.DelineationID).WillCascadeOnDelete(false); // FK_LoadGeneratingUnit_Delineation_DelineationID
             HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.LoadGeneratingUnits).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_LoadGeneratingUnit_WaterQualityManagementPlan_WaterQualityManagementPlanID

@@ -52,3 +52,6 @@ drop procedure dbo.pLSPCBasinUpdateFromStaging
 drop procedure dbo.pTreatmentBMPUpdateLSPCBasin
 
 drop view dbo.vLSPCBasinLGUInput
+
+drop table dbo.LSPCBasin
+drop table dbo.LSPCBasinStaging

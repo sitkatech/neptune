@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vPowerBILandUseStatistic(int primaryKey, int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, double area, string hRUCharacteristicLandUseCodeDisplayName, int? lSPCBasinID, string watershedName, int? catchIDN, int? downCatchIDN, int? treatmentBMPID, int? delineationID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? loadGeneratingUnitID, string lSPCBasinName, string landUse, string surfaceKey) : this()
+        public vPowerBILandUseStatistic(int primaryKey, int hRUCharacteristicID, string hydrologicSoilGroup, int slopePercentage, double imperviousAcres, double area, string hRUCharacteristicLandUseCodeDisplayName, int? modelBasinID, string watershedName, int? catchIDN, int? downCatchIDN, int? treatmentBMPID, int? delineationID, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? loadGeneratingUnitID, string modelBasinName, string landUse, string surfaceKey) : this()
         {
             this.PrimaryKey = primaryKey;
             this.HRUCharacteristicID = hRUCharacteristicID;
@@ -34,7 +34,7 @@ namespace Neptune.Web.Models
             this.ImperviousAcres = imperviousAcres;
             this.Area = area;
             this.HRUCharacteristicLandUseCodeDisplayName = hRUCharacteristicLandUseCodeDisplayName;
-            this.LSPCBasinID = lSPCBasinID;
+            this.ModelBasinID = modelBasinID;
             this.WatershedName = watershedName;
             this.CatchIDN = catchIDN;
             this.DownCatchIDN = downCatchIDN;
@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.RegionalSubbasinID = regionalSubbasinID;
             this.LoadGeneratingUnitID = loadGeneratingUnitID;
-            this.LSPCBasinName = lSPCBasinName;
+            this.ModelBasinName = modelBasinName;
             this.LandUse = landUse;
             this.SurfaceKey = surfaceKey;
         }
@@ -60,7 +60,7 @@ namespace Neptune.Web.Models
             this.ImperviousAcres = vPowerBILandUseStatistic.ImperviousAcres;
             this.Area = vPowerBILandUseStatistic.Area;
             this.HRUCharacteristicLandUseCodeDisplayName = vPowerBILandUseStatistic.HRUCharacteristicLandUseCodeDisplayName;
-            this.LSPCBasinID = vPowerBILandUseStatistic.LSPCBasinID;
+            this.ModelBasinID = vPowerBILandUseStatistic.ModelBasinID;
             this.WatershedName = vPowerBILandUseStatistic.WatershedName;
             this.CatchIDN = vPowerBILandUseStatistic.CatchIDN;
             this.DownCatchIDN = vPowerBILandUseStatistic.DownCatchIDN;
@@ -69,7 +69,7 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanID = vPowerBILandUseStatistic.WaterQualityManagementPlanID;
             this.RegionalSubbasinID = vPowerBILandUseStatistic.RegionalSubbasinID;
             this.LoadGeneratingUnitID = vPowerBILandUseStatistic.LoadGeneratingUnitID;
-            this.LSPCBasinName = vPowerBILandUseStatistic.LSPCBasinName;
+            this.ModelBasinName = vPowerBILandUseStatistic.ModelBasinName;
             this.LandUse = vPowerBILandUseStatistic.LandUse;
             this.SurfaceKey = vPowerBILandUseStatistic.SurfaceKey;
             CallAfterConstructor(vPowerBILandUseStatistic);
@@ -84,7 +84,7 @@ namespace Neptune.Web.Models
         public double ImperviousAcres { get; set; }
         public double Area { get; set; }
         public string HRUCharacteristicLandUseCodeDisplayName { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         public string WatershedName { get; set; }
         public int? CatchIDN { get; set; }
         public int? DownCatchIDN { get; set; }
@@ -93,7 +93,7 @@ namespace Neptune.Web.Models
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? LoadGeneratingUnitID { get; set; }
-        public string LSPCBasinName { get; set; }
+        public string ModelBasinName { get; set; }
         public string LandUse { get; set; }
         public string SurfaceKey { get; set; }
     }

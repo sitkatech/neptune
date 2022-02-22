@@ -26,7 +26,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[TrashCaptureEffectiveness] [int] NULL,
 	[LocationPoint4326] [geometry] NULL,
 	[WatershedID] [int] NULL,
-	[LSPCBasinID] [int] NULL,
+	[ModelBasinID] [int] NULL,
 	[PrecipitationZoneID] [int] NULL,
 	[UpstreamBMPID] [int] NULL,
 	[RegionalSubbasinID] [int] NULL,
@@ -48,10 +48,10 @@ CREATE TABLE [dbo].[TreatmentBMP](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_LSPCBasin_LSPCBasinID] FOREIGN KEY([LSPCBasinID])
-REFERENCES [dbo].[LSPCBasin] ([LSPCBasinID])
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_ModelBasin_ModelBasinID] FOREIGN KEY([ModelBasinID])
+REFERENCES [dbo].[ModelBasin] ([ModelBasinID])
 GO
-ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_LSPCBasin_LSPCBasinID]
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_ModelBasin_ModelBasinID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID] FOREIGN KEY([OwnerOrganizationID])
 REFERENCES [dbo].[Organization] ([OrganizationID])

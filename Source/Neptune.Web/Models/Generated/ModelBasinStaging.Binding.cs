@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[LSPCBasinStaging]
+//  Source Table: [dbo].[ModelBasinStaging]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[LSPCBasinStaging] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[LSPCBasinStaging]")]
-    public partial class LSPCBasinStaging : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[ModelBasinStaging] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[ModelBasinStaging]")]
+    public partial class ModelBasinStaging : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected LSPCBasinStaging()
+        protected ModelBasinStaging()
         {
 
         }
@@ -30,34 +30,34 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LSPCBasinStaging(int lSPCBasinStagingID, int lSPCBasinKey, string lSPCBasinName, DbGeometry lSPCBasinGeometry) : this()
+        public ModelBasinStaging(int modelBasinStagingID, int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry) : this()
         {
-            this.LSPCBasinStagingID = lSPCBasinStagingID;
-            this.LSPCBasinKey = lSPCBasinKey;
-            this.LSPCBasinName = lSPCBasinName;
-            this.LSPCBasinGeometry = lSPCBasinGeometry;
+            this.ModelBasinStagingID = modelBasinStagingID;
+            this.ModelBasinKey = modelBasinKey;
+            this.ModelBasinName = modelBasinName;
+            this.ModelBasinGeometry = modelBasinGeometry;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LSPCBasinStaging(int lSPCBasinKey, string lSPCBasinName, DbGeometry lSPCBasinGeometry) : this()
+        public ModelBasinStaging(int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.LSPCBasinStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.ModelBasinStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.LSPCBasinKey = lSPCBasinKey;
-            this.LSPCBasinName = lSPCBasinName;
-            this.LSPCBasinGeometry = lSPCBasinGeometry;
+            this.ModelBasinKey = modelBasinKey;
+            this.ModelBasinName = modelBasinName;
+            this.ModelBasinGeometry = modelBasinGeometry;
         }
 
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static LSPCBasinStaging CreateNewBlank()
+        public static ModelBasinStaging CreateNewBlank()
         {
-            return new LSPCBasinStaging(default(int), default(string), default(DbGeometry));
+            return new ModelBasinStaging(default(int), default(string), default(DbGeometry));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasinStaging).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ModelBasinStaging).Name};
 
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.LSPCBasinStagings.Remove(this);
+            dbContext.ModelBasinStagings.Remove(this);
         }
         
         /// <summary>
@@ -103,18 +103,18 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int LSPCBasinStagingID { get; set; }
-        public int LSPCBasinKey { get; set; }
-        public string LSPCBasinName { get; set; }
-        public DbGeometry LSPCBasinGeometry { get; set; }
+        public int ModelBasinStagingID { get; set; }
+        public int ModelBasinKey { get; set; }
+        public string ModelBasinName { get; set; }
+        public DbGeometry ModelBasinGeometry { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return LSPCBasinStagingID; } set { LSPCBasinStagingID = value; } }
+        public int PrimaryKey { get { return ModelBasinStagingID; } set { ModelBasinStagingID = value; } }
 
 
 
         public static class FieldLengths
         {
-            public const int LSPCBasinName = 100;
+            public const int ModelBasinName = 100;
         }
     }
 }
