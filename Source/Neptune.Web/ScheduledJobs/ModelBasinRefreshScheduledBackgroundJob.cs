@@ -12,9 +12,9 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
-    public class LSPCBasinRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
+    public class ModelBasinRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
-        public LSPCBasinRefreshScheduledBackgroundJob(int currentPersonPersonID)
+        public ModelBasinRefreshScheduledBackgroundJob(int currentPersonPersonID)
         {
             PersonID = currentPersonPersonID;
         }
@@ -30,11 +30,11 @@ namespace Neptune.Web.ScheduledJobs
 
         public static void RunRefresh(DatabaseEntities dbContext, Person person)
         {
-            dbContext.LSPCBasinStagings.DeleteLSPCBasinStaging(dbContext.LSPCBasinStagings.ToList());
+            dbContext.ModelBasinStagings.DeleteModelBasinStaging(dbContext.ModelBasinStagings.ToList());
             dbContext.SaveChanges(person);
             
             var featureCollection = RetrieveFeatureCollectionFromArcServer();
-            ThrowIfLSPCBasinKeyNotUnique(featureCollection);
+            ThrowIfModelBasinKeyNotUnique(featureCollection);
             StageFeatureCollection(featureCollection);
             MergeAndUpdateTreatmentBMPProperties(dbContext, person);
         }
@@ -43,32 +43,32 @@ namespace Neptune.Web.ScheduledJobs
         {
             // MergeListHelper is doesn't handle same-table foreign keys well, so we use a stored proc to run the merge
             dbContext.Database.CommandTimeout = 30000;
-            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pLSPCBasinUpdateFromStaging");
-            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pTreatmentBMPUpdateLSPCBasin");
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pModelBasinUpdateFromStaging");
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pTreatmentBMPUpdateModelBasin");
         }
 
-        private static void StageFeatureCollection(FeatureCollection newLSPCBasinFeatureCollection)
+        private static void StageFeatureCollection(FeatureCollection newModelBasinFeatureCollection)
         {
-            var jsonFeatureCollection = JsonConvert.SerializeObject(newLSPCBasinFeatureCollection);
+            var jsonFeatureCollection = JsonConvert.SerializeObject(newModelBasinFeatureCollection);
 
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
             ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
-                NeptuneWebConfiguration.DatabaseConnectionString, "LSPCBasinStaging",
-                "LSPC_BASIN as LSPCBasinKey, Name as LSPCBasinName",
+                NeptuneWebConfiguration.DatabaseConnectionString, "ModelBasinStaging",
+                "LSPC_BASIN as ModelBasinKey, Name as ModelBasinName",
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
-        private static void ThrowIfLSPCBasinKeyNotUnique(FeatureCollection featureCollection)
+        private static void ThrowIfModelBasinKeyNotUnique(FeatureCollection featureCollection)
         {
-            var lspcBasinKeysThatAreNotUnique = featureCollection.Features
+            var modelBasinKeysThatAreNotUnique = featureCollection.Features
                 .GroupBy(x => x.Properties["LSPC_BASIN"]).Where(x => x.Count() > 1).Select(x => int.Parse(x.Key.ToString()))
                 .ToList();
 
-            if (lspcBasinKeysThatAreNotUnique.Any())
+            if (modelBasinKeysThatAreNotUnique.Any())
             {
                 throw new RemoteServiceException(
-                    $"The LSPC Basin service returned an invalid collection. The following LSPC Basin IDs are duplicated:\n{string.Join(", ", lspcBasinKeysThatAreNotUnique)}");
+                    $"The Model Basin service returned an invalid collection. The following Model Basin IDs are duplicated:\n{string.Join(", ", modelBasinKeysThatAreNotUnique)}");
             }
         }
 
@@ -78,7 +78,7 @@ namespace Neptune.Web.ScheduledJobs
             using (var client = new HttpClient())
             {
                 var resultOffset = 0;
-                var baseRequestUri = NeptuneWebConfiguration.LSPCBasinServiceUrl;
+                var baseRequestUri = NeptuneWebConfiguration.ModelBasinServiceUrl;
                 var done = false;
 
                 while (!done)
@@ -118,7 +118,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (TaskCanceledException tce)
                     {
                         throw new RemoteServiceException(
-                            $"The LSPC Basin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            $"The Model Basin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             tce);
                     }
 
@@ -130,7 +130,7 @@ namespace Neptune.Web.ScheduledJobs
                     catch (JsonReaderException jre)
                     {
                         throw new RemoteServiceException(
-                            $"The LSPC Basin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
+                            $"The Model Basin service failed to respond correctly. This happens occasionally for no particular reason, is outside of the Sitka development team's control, and will resolve on its own after a short wait. Do not file a bug report for this error.",
                             jre);
                     }
 

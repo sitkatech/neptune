@@ -227,7 +227,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RemoveUpstreamBMP(treatmentBMP));
 
             IsAnalyzedInModelingModule = treatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
-            IsInSOC = treatmentBMP.LSPCBasinID != null;
+            IsInSOC = treatmentBMP.ModelBasinID != null;
             IsFullyParameterized = treatmentBMP.IsFullyParameterized();
 
         }

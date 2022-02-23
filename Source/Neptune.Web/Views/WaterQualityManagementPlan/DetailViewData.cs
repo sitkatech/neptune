@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinitionType FieldDefinitionForFullyParameterized { get; }
         public Models.FieldDefinitionType FieldDefinitionForDelineationStatus { get; }
         public Models.FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
-        public bool AnyLSPCBasins { get; }
+        public bool AnyModelBasins { get; }
 
         public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
 
@@ -65,7 +65,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
-            HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyLspcBasins,
+            HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyModelBasins,
             List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
@@ -152,7 +152,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForDelineationStatus = FieldDefinitionType.DelineationStatus;
             FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
             
-            AnyLSPCBasins = anyLspcBasins;
+            AnyModelBasins = anyModelBasins;
 
             UsesDetailedModelingApproach = WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                                            WaterQualityManagementPlanModelingApproach.Detailed

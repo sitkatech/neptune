@@ -10,7 +10,7 @@ namespace Neptune.Web.Models
             HydrologicSoilGroup = String.Empty;
             ImperviousAcres = 0;
             LastUpdated = String.Empty;
-            LSPCLandUseDescription = String.Empty;
+            ModelBasinLandUseDescription = String.Empty;
             RegionalSubbasin = String.Empty;
             SlopePercentage = 0;
             TotalAcres = 0;
@@ -20,7 +20,7 @@ namespace Neptune.Web.Models
         }
 
         public string HRUEntityType { get; set; }
-        public string LSPCLandUseDescription { get; set; }
+        public string ModelBasinLandUseDescription { get; set; }
         public string HydrologicSoilGroup { get; set; }
         public int SlopePercentage { get; set; }
         public double ImperviousAcres { get; set; }

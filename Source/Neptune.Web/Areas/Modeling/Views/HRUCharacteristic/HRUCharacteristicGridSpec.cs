@@ -36,7 +36,7 @@ namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic
                     (x.GetWaterQualityManagementPlan() != null ? "Water Quality Management Plan" : "Regional Subbasin"), 150,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("LGU ID", x => x.LoadGeneratingUnitID, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
-            Add("LSPC Land Use Description", x => x.HRUCharacteristicLandUseCode?.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Model Basin Land Use Description", x => x.HRUCharacteristicLandUseCode?.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Baseline LSPC Land Use Description", x => x.BaselineHRUCharacteristicLandUseCode?.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Soil Group", x => x.HydrologicSoilGroup.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Slope Percentage", x => x.SlopePercentage, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);

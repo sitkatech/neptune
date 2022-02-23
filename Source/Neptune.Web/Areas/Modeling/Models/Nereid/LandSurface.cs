@@ -32,7 +32,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
             NodeID = NereidUtilities.LandSurfaceNodeID(vNereidLoadingInput);
             SurfaceKey =
-                $"{vNereidLoadingInput.LSPCBasinKey}-{landUseCode}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
+                $"{vNereidLoadingInput.ModelBasinKey}-{landUseCode}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
             Area = vNereidLoadingInput.Area;
             ImperviousArea = imperviousAcres;
         }
