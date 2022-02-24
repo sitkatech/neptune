@@ -169,7 +169,7 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
         var databaseConnectionString = $"MSSQL:{connectionString}";
         // todo: fix this
         var selectStatement =
-            $"Select LSPCID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
+            $"Select ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
 
         var commandLineArguments = new List<string>
         {
