@@ -23,7 +23,7 @@ from dbo.TreatmentBMP tbmp
 where
 	tbmpt.TreatmentBMPModelingTypeID is not null
 	and (d.DelineationTypeID is null or d.DelineationTypeID = 2)
-	and IsInLSPCBasin = 1
+	and IsInModelBasin = 1
 	and DownstreamBMPID is null
 go
 

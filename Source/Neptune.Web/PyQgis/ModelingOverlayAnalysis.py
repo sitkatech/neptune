@@ -228,13 +228,13 @@ if __name__ == '__main__':
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
         
-    lspcLayer = fetchLayer("vLSPCBasinLGUInput")
+    modelBasinLayer = fetchLayer("vModelBasinLGUInput")
     regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")
     delineationLayer = fetchLayer("vDelineationLGUInput")
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
 
     # perhaps overly-aggressive application of the buffer-zero and 
-    lspcLayer = bufferZero(lspcLayer, "LSPCBasins", context=PROCESSING_CONTEXT)
+    modelBasinLayer = bufferZero(modelBasinLayer, "ModelBasins", context=PROCESSING_CONTEXT)
     regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", context=PROCESSING_CONTEXT)
 
     delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", context=PROCESSING_CONTEXT)
@@ -244,19 +244,19 @@ if __name__ == '__main__':
     wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", context=PROCESSING_CONTEXT)
     wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
 
-    # At present time, we're only concerned with the area covered by LSPC basins. 
-    regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, lspcLayer, "RSBClipped")
-    delineationLayerClipped = clip(delineationLayer, lspcLayer, "DelineationClipped")
-    wqmpLayerClipped = clip(wqmpLayer, lspcLayer, "WQMPClipped")
+    # At present time, we're only concerned with the area covered by Model basins. 
+    regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, modelBasinLayer, "RSBClipped")
+    delineationLayerClipped = clip(delineationLayer, modelBasinLayer, "DelineationClipped")
+    wqmpLayerClipped = clip(wqmpLayer, modelBasinLayer, "WQMPClipped")
 
     wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
 
     rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, memoryOutputName="rsb_wqmp", context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb_delineation)
-    rsb_wqmp = bufferZero(rsb_wqmp, "LSPC-RSB-D", context=PROCESSING_CONTEXT)
+    rsb_wqmp = bufferZero(rsb_wqmp, "ModelBasin-RSB-D", context=PROCESSING_CONTEXT)
 
 
-    # clip the lspc layer to the input boundary so that all further datasets will be clipped as well
+    # clip the model basin layer to the input boundary so that all further datasets will be clipped as well
     if clip_layer is not None:
         masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
         masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
@@ -268,7 +268,7 @@ if __name__ == '__main__':
     masterOverlay.startEditing()
 
     for feat in masterOverlay.getFeatures():
-        ## todo: would be nice to also exclude those where the RegionalSubbasinID is non-exist. could also handle that by making LSPC_RSB as an intersect instead of a union.
+        ## todo: would be nice to also exclude those where the RegionalSubbasinID is non-exist. could also handle that by making ModelBasin_RSB as an intersect instead of a union.
         if feat.geometry().area() < 1 or feat["RSBID"] is None:
             masterOverlay.deleteFeature(feat.id())
     

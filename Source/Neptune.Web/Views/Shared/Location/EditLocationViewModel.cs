@@ -59,7 +59,7 @@ namespace Neptune.Web.Views.Shared.Location
 
             treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary();
 
-            // associate watershed, lspc basin, precipitation zone
+            // associate watershed, model basin, precipitation zone
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint);
 
             treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent();

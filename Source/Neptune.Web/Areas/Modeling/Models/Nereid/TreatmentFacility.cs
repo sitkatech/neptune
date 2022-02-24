@@ -96,7 +96,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition)
         {
             var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP);
-            var lspcBasinKey = treatmentBMP.LSPCBasin?.LSPCBasinKey.ToString();
+            var modelBasinKey = treatmentBMP.ModelBasin?.ModelBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
             double? treatmentRate = null;
             var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute;
@@ -109,7 +109,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 {
                     NodeID = treatmentBMPNodeID,
                     FacilityType = "NoTreatment",
-                    ReferenceDataKey = lspcBasinKey,
+                    ReferenceDataKey = modelBasinKey,
                     DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches ?? .8,
                     EliminateAllDryWeatherFlowOverride = modelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
                 };
@@ -183,7 +183,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
             {
                 NodeID = treatmentBMPNodeID,
                 FacilityType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
-                ReferenceDataKey = lspcBasinKey,
+                ReferenceDataKey = modelBasinKey,
                 DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,

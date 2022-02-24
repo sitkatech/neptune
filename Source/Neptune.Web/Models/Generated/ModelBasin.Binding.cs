@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[LSPCBasin]
+//  Source Table: [dbo].[ModelBasin]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[LSPCBasin] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[LSPCBasin]")]
-    public partial class LSPCBasin : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[ModelBasin] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[ModelBasin]")]
+    public partial class ModelBasin : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected LSPCBasin()
+        protected ModelBasin()
         {
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
             this.RegionalSubbasins = new HashSet<RegionalSubbasin>();
@@ -32,26 +32,26 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LSPCBasin(int lSPCBasinID, int lSPCBasinKey, string lSPCBasinName, DbGeometry lSPCBasinGeometry, DateTime lastUpdate) : this()
+        public ModelBasin(int modelBasinID, int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry, DateTime lastUpdate) : this()
         {
-            this.LSPCBasinID = lSPCBasinID;
-            this.LSPCBasinKey = lSPCBasinKey;
-            this.LSPCBasinName = lSPCBasinName;
-            this.LSPCBasinGeometry = lSPCBasinGeometry;
+            this.ModelBasinID = modelBasinID;
+            this.ModelBasinKey = modelBasinKey;
+            this.ModelBasinName = modelBasinName;
+            this.ModelBasinGeometry = modelBasinGeometry;
             this.LastUpdate = lastUpdate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LSPCBasin(int lSPCBasinKey, string lSPCBasinName, DbGeometry lSPCBasinGeometry, DateTime lastUpdate) : this()
+        public ModelBasin(int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry, DateTime lastUpdate) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.LSPCBasinID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.ModelBasinID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.LSPCBasinKey = lSPCBasinKey;
-            this.LSPCBasinName = lSPCBasinName;
-            this.LSPCBasinGeometry = lSPCBasinGeometry;
+            this.ModelBasinKey = modelBasinKey;
+            this.ModelBasinName = modelBasinName;
+            this.ModelBasinGeometry = modelBasinGeometry;
             this.LastUpdate = lastUpdate;
         }
 
@@ -59,9 +59,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static LSPCBasin CreateNewBlank()
+        public static ModelBasin CreateNewBlank()
         {
-            return new LSPCBasin(default(int), default(string), default(DbGeometry), default(DateTime));
+            return new ModelBasin(default(int), default(string), default(DbGeometry), default(DateTime));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LSPCBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(RegionalSubbasin).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ModelBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(RegionalSubbasin).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.LSPCBasins.Remove(this);
+            dbContext.ModelBasins.Remove(this);
         }
         
         /// <summary>
@@ -142,13 +142,13 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int LSPCBasinID { get; set; }
-        public int LSPCBasinKey { get; set; }
-        public string LSPCBasinName { get; set; }
-        public DbGeometry LSPCBasinGeometry { get; set; }
+        public int ModelBasinID { get; set; }
+        public int ModelBasinKey { get; set; }
+        public string ModelBasinName { get; set; }
+        public DbGeometry ModelBasinGeometry { get; set; }
         public DateTime LastUpdate { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return LSPCBasinID; } set { LSPCBasinID = value; } }
+        public int PrimaryKey { get { return ModelBasinID; } set { ModelBasinID = value; } }
 
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public virtual ICollection<RegionalSubbasin> RegionalSubbasins { get; set; }
@@ -156,7 +156,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int LSPCBasinName = 100;
+            public const int ModelBasinName = 100;
         }
     }
 }

@@ -25,14 +25,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vWaterQualityManagementPlanLGUAudit(int primaryKey, int waterQualityManagementPlanID, string waterQualityManagementPlanName, bool? loadGeneratingUnitsPopulated, bool? boundaryIsDefined, int countOfIntersectingLSPCBasins) : this()
+        public vWaterQualityManagementPlanLGUAudit(int primaryKey, int waterQualityManagementPlanID, string waterQualityManagementPlanName, bool? loadGeneratingUnitsPopulated, bool? boundaryIsDefined, int countOfIntersectingModelBasins) : this()
         {
             this.PrimaryKey = primaryKey;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
             this.LoadGeneratingUnitsPopulated = loadGeneratingUnitsPopulated;
             this.BoundaryIsDefined = boundaryIsDefined;
-            this.CountOfIntersectingLSPCBasins = countOfIntersectingLSPCBasins;
+            this.CountOfIntersectingModelBasins = countOfIntersectingModelBasins;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanName = vWaterQualityManagementPlanLGUAudit.WaterQualityManagementPlanName;
             this.LoadGeneratingUnitsPopulated = vWaterQualityManagementPlanLGUAudit.LoadGeneratingUnitsPopulated;
             this.BoundaryIsDefined = vWaterQualityManagementPlanLGUAudit.BoundaryIsDefined;
-            this.CountOfIntersectingLSPCBasins = vWaterQualityManagementPlanLGUAudit.CountOfIntersectingLSPCBasins;
+            this.CountOfIntersectingModelBasins = vWaterQualityManagementPlanLGUAudit.CountOfIntersectingModelBasins;
             CallAfterConstructor(vWaterQualityManagementPlanLGUAudit);
         }
 
@@ -56,6 +56,6 @@ namespace Neptune.Web.Models
         public string WaterQualityManagementPlanName { get; set; }
         public bool? LoadGeneratingUnitsPopulated { get; set; }
         public bool? BoundaryIsDefined { get; set; }
-        public int CountOfIntersectingLSPCBasins { get; set; }
+        public int CountOfIntersectingModelBasins { get; set; }
     }
 }

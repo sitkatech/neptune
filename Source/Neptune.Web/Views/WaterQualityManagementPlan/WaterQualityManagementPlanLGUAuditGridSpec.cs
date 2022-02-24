@@ -49,7 +49,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Is Boundary Defined?", x => x.BoundaryIsDefined == true ? "Yes" : "No", 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Intersects LSPC Basin(s)?", x => x.CountOfIntersectingLSPCBasins != 0 ? "Yes" : "No", 100,
+            Add("Intersects Model Basin(s)?", x => x.CountOfIntersectingModelBasins != 0 ? "Yes" : "No", 100,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
 

@@ -9,7 +9,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
         [JsonProperty("QueryFeatureID")]
         public int QueryFeatureID { get; set; }
         [JsonProperty("LSPC_LU_EDIT")]
-        public string LSPCLandUseDescription { get; set; }
+        public string ModelBasinLandUseDescription { get; set; }
         [JsonProperty("LU_2002")]
         public string BaselineLandUseDescription { get; set; }
         [JsonProperty("soil_hsg")]

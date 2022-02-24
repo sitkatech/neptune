@@ -23,10 +23,10 @@ namespace Neptune.Web.ScheduledJobs
             regionalSubbasinRefreshScheduledBackgroundJob.RunJob();
         }
 
-        public static void RunLSPCBasinRefreshBackgroundJob(int personID)
+        public static void RunModelBasinRefreshBackgroundJob(int personID)
         {
-            var lspcBasinRefreshScheduledBackgroundJob = new LSPCBasinRefreshScheduledBackgroundJob(personID);
-            lspcBasinRefreshScheduledBackgroundJob.RunJob();
+            var modelBasinRefreshScheduledBackgroundJob = new ModelBasinRefreshScheduledBackgroundJob(personID);
+            modelBasinRefreshScheduledBackgroundJob.RunJob();
         }
 
         public static void RunPrecipitationZoneRefreshBackgroundJob(int personID)

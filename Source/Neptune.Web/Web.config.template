@@ -53,7 +53,7 @@
     <add key="AutoDelineateServiceUrl" value="${auto-delineate-service-url}" />
     <add key="HRUServiceBaseUrl" value="${hru-service-base-url}" />
     <add key="RegionalSubbasinServiceUrl" value="${regional-subbasin-service-url}" />
-    <add key="LSPCBasinServiceUrl" value="${lspc-basin-service-url}" />
+    <add key="ModelBasinServiceUrl" value="${model-basin-service-url}" />
     <add key="PrecipitationZoneServiceUrl" value="${precipitation-zone-service-url}" />
     <add key="NominatimAPIKey" value="${nominatim-key}" />
     <add key="PathToPyqgisTestScript" value="${path-to-pyqgis-test-script}" />

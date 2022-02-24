@@ -314,7 +314,7 @@
                 {
                     <p class="systemText">This WQMP is modeled using the detailed approach, but all of its structural BMPs are either missing required modeling parameters or missing verified delineations, so no results are available.</p>
                 }
-                else if (!ViewDataTyped.AnyLSPCBasins)
+                else if (!ViewDataTyped.AnyModelBasins)
                 {
                     <p class="systemText">Model results are only available for WQMPs within the South Orange County WMA.</p>
                 }
@@ -375,9 +375,9 @@
                     {
                         <p class="systemText">No treatment area is provided for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
                     }
-                    else if (!ViewDataTyped.AnyLSPCBasins)
+                    else if (!ViewDataTyped.AnyModelBasins)
                     {
-                        <p class="systemText">The @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel() boundary does not lie within any LSPC Basin; no Land Use Statistics will be calculated.</p>
+                        <p class="systemText">The @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel() boundary does not lie within any Model Basin; no Land Use Statistics will be calculated.</p>
                     }
                     else
                     {

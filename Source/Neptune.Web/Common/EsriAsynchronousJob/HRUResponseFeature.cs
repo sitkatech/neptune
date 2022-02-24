@@ -15,7 +15,7 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
 
         public HRUCharacteristic ToHRUCharacteristic()
         {
-            var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.HRUCharacteristicLandUseCodeName == Attributes.LSPCLandUseDescription);
+            var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.HRUCharacteristicLandUseCodeName == Attributes.ModelBasinLandUseDescription);
             var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.HRUCharacteristicLandUseCodeName == Attributes.BaselineLandUseDescription);
 
             var hruCharacteristic = new HRUCharacteristic(Attributes.HydrologicSoilGroup, Attributes.SlopePercentage.GetValueOrDefault(),

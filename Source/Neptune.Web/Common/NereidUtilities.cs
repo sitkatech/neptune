@@ -123,7 +123,7 @@ namespace Neptune.Web.Common
 
         public static void MakeRSBNodesAndEdges(DatabaseEntities dbContext, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         {
-            var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInLSPCBasin == true).ToList();
+            var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInModelBasin == true).ToList();
 
             rsbNodes = regionalSubbasinsInCoverage
                 .Select(x => new Node { ID = RegionalSubbasinNodeID(x), RegionalSubbasinID = x.RegionalSubbasinID }).ToList();
@@ -160,7 +160,7 @@ namespace Neptune.Web.Common
                             // don't include delineations for non-modeled BMPs
                             x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
                             x.TreatmentBMP.RegionalSubbasinID != null &&
-                            x.TreatmentBMP.LSPCBasinID != null).ToList();
+                            x.TreatmentBMP.ModelBasinID != null).ToList();
 
             delineationNodes = distributedDelineations
                 .Select(x => new Node()
@@ -335,7 +335,7 @@ namespace Neptune.Web.Common
         public static IQueryable<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext)
         {
             return dbContext.TreatmentBMPs
-                .Where(x => x.RegionalSubbasinID!= null && x.LSPCBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null);
+                .Where(x => x.RegionalSubbasinID!= null && x.ModelBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null);
 
         }
         

@@ -1,10 +1,10 @@
 ﻿namespace Neptune.Web.Models
 {
-    public partial class LSPCBasin : IAuditableEntity
+    public partial class ModelBasin : IAuditableEntity
     {
         public string GetAuditDescriptionString()
         {
-            return LSPCBasinName;
+            return ModelBasinName;
         }
     }
 }

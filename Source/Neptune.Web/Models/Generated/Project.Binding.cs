@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Project()
         {
+            this.ProjectDocuments = new HashSet<ProjectDocument>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -101,7 +102,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPs.Any();
+            return ProjectDocuments.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -111,6 +112,11 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(ProjectDocuments.Any())
+            {
+                dependentObjects.Add(typeof(ProjectDocument).Name);
+            }
+
             if(TreatmentBMPs.Any())
             {
                 dependentObjects.Add(typeof(TreatmentBMP).Name);
@@ -121,7 +127,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -146,6 +152,11 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
+            foreach(var x in ProjectDocuments.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in TreatmentBMPs.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -166,6 +177,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
+        public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }

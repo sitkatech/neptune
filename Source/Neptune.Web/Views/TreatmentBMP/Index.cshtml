@@ -44,7 +44,7 @@
             @if (ViewDataTyped.HasAdminPermissions)
             {        
                 <li><a href="@ViewDataTyped.BulkBMPUploadUrl">Bulk Upload Treatment BMP</a></li>
-                <li>@ModalDialogFormHelper.ModalDialogFormLink("Refresh LSPC Basins", ViewDataTyped.RefreshLSPCBasinsUrl, "Refresh LSPC Basin layer from OC Survey", 400, "Continue", "Cancel", null, null, null)</li>
+                <li>@ModalDialogFormHelper.ModalDialogFormLink("Refresh Model Basins", ViewDataTyped.RefreshModelBasinsUrl, "Refresh Model Basin layer from OC Survey", 400, "Continue", "Cancel", null, null, null)</li>
                 <li>@ModalDialogFormHelper.ModalDialogFormLink("Refresh Precipitation Zones", ViewDataTyped.RefreshPrecipitationZonesUrl, "Refresh Precipitation Zones layer from OC Survey", 400, "Continue", "Cancel", null, null, null)</li>
             }
             <li><a href="javascript:createDownloadConfirmDialog()">Export Inventory to GIS</a></li>

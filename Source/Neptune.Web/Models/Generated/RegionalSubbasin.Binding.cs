@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public RegionalSubbasin(int regionalSubbasinID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326, DateTime? lastUpdate, bool? isWaitingForLGURefresh, bool? isInLSPCBasin, int? lSPCBasinID) : this()
+        public RegionalSubbasin(int regionalSubbasinID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID, DbGeometry catchmentGeometry4326, DateTime? lastUpdate, bool? isWaitingForLGURefresh, bool? isInModelBasin, int? modelBasinID) : this()
         {
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DrainID = drainID;
@@ -42,8 +42,8 @@ namespace Neptune.Web.Models
             this.CatchmentGeometry4326 = catchmentGeometry4326;
             this.LastUpdate = lastUpdate;
             this.IsWaitingForLGURefresh = isWaitingForLGURefresh;
-            this.IsInLSPCBasin = isInLSPCBasin;
-            this.LSPCBasinID = lSPCBasinID;
+            this.IsInModelBasin = isInModelBasin;
+            this.ModelBasinID = modelBasinID;
         }
 
         /// <summary>
@@ -144,15 +144,15 @@ namespace Neptune.Web.Models
         public DbGeometry CatchmentGeometry4326 { get; set; }
         public DateTime? LastUpdate { get; set; }
         public bool? IsWaitingForLGURefresh { get; set; }
-        public bool? IsInLSPCBasin { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public bool? IsInModelBasin { get; set; }
+        public int? ModelBasinID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return RegionalSubbasinID; } set { RegionalSubbasinID = value; } }
 
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         public virtual ICollection<RegionalSubbasin> RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
-        public virtual LSPCBasin LSPCBasin { get; set; }
+        public virtual ModelBasin ModelBasin { get; set; }
 
         public static class FieldLengths
         {

@@ -821,28 +821,28 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public PartialViewResult RefreshLSPCBasinsFromOCSurvey()
+        public PartialViewResult RefreshModelBasinsFromOCSurvey()
         {
-            return ViewRefreshLSPCBasinsFromOCSurvey(new ConfirmDialogFormViewModel());
+            return ViewRefreshModelBasinsFromOCSurvey(new ConfirmDialogFormViewModel());
         }
 
         [HttpPost]
         [NeptuneAdminFeature]
-        public ActionResult RefreshLSPCBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        public ActionResult RefreshModelBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewRefreshLSPCBasinsFromOCSurvey(viewModel);
+                return ViewRefreshModelBasinsFromOCSurvey(viewModel);
             }
 
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLSPCBasinRefreshBackgroundJob(CurrentPerson.PersonID));
-            SetMessageForDisplay("LSPC Basins refresh will run in the background.");
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunModelBasinRefreshBackgroundJob(CurrentPerson.PersonID));
+            SetMessageForDisplay("Model Basins refresh will run in the background.");
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewRefreshLSPCBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        private PartialViewResult ViewRefreshModelBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = "Are you sure you want to refresh the LSPC Basins layer from OC Survey?<br /><br />This can take a little while to run.";
+            var confirmMessage = "Are you sure you want to refresh the Model Basins layer from OC Survey?<br /><br />This can take a little while to run.";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

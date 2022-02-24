@@ -30,11 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LoadGeneratingUnit(int loadGeneratingUnitID, DbGeometry loadGeneratingUnitGeometry, int? lSPCBasinID, int? regionalSubbasinID, int? delineationID, int? waterQualityManagementPlanID, bool? isEmptyResponseFromHRUService) : this()
+        public LoadGeneratingUnit(int loadGeneratingUnitID, DbGeometry loadGeneratingUnitGeometry, int? modelBasinID, int? regionalSubbasinID, int? delineationID, int? waterQualityManagementPlanID, bool? isEmptyResponseFromHRUService) : this()
         {
             this.LoadGeneratingUnitID = loadGeneratingUnitID;
             this.LoadGeneratingUnitGeometry = loadGeneratingUnitGeometry;
-            this.LSPCBasinID = lSPCBasinID;
+            this.ModelBasinID = modelBasinID;
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DelineationID = delineationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -121,7 +121,7 @@ namespace Neptune.Web.Models
         [Key]
         public int LoadGeneratingUnitID { get; set; }
         public DbGeometry LoadGeneratingUnitGeometry { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
@@ -130,7 +130,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return LoadGeneratingUnitID; } set { LoadGeneratingUnitID = value; } }
 
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
-        public virtual LSPCBasin LSPCBasin { get; set; }
+        public virtual ModelBasin ModelBasin { get; set; }
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }
         public virtual Delineation Delineation { get; set; }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }

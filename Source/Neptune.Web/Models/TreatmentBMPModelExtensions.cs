@@ -534,8 +534,8 @@ namespace Neptune.Web.Models
         {
             treatmentBMP.WatershedID = HttpRequestStorage.DatabaseEntities.Watersheds
                 .FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry))?.WatershedID;
-            treatmentBMP.LSPCBasinID = HttpRequestStorage.DatabaseEntities.LSPCBasins
-                .FirstOrDefault(x => locationPoint.Intersects(x.LSPCBasinGeometry))?.LSPCBasinID;
+            treatmentBMP.ModelBasinID = HttpRequestStorage.DatabaseEntities.ModelBasins
+                .FirstOrDefault(x => locationPoint.Intersects(x.ModelBasinGeometry))?.ModelBasinID;
             treatmentBMP.PrecipitationZoneID = HttpRequestStorage.DatabaseEntities.PrecipitationZones
                 .FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry))?.PrecipitationZoneID;
             treatmentBMP.RegionalSubbasinID = HttpRequestStorage.DatabaseEntities.RegionalSubbasins

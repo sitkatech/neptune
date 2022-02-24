@@ -58,7 +58,7 @@ namespace Neptune.Web.Common
 
         public static readonly string AutoDelineateServiceUrl = SitkaConfiguration.GetOptionalAppSetting("AutoDelineateServiceUrl");
         public static readonly string HRUServiceBaseUrl = SitkaConfiguration.GetOptionalAppSetting("HRUServiceBaseUrl");
-        public static readonly string LSPCBasinServiceUrl = SitkaConfiguration.GetOptionalAppSetting("LSPCBasinServiceUrl");
+        public static readonly string ModelBasinServiceUrl = SitkaConfiguration.GetOptionalAppSetting("ModelBasinServiceUrl");
         public static readonly string PrecipitationZoneServiceUrl = SitkaConfiguration.GetOptionalAppSetting("PrecipitationZoneServiceUrl");
         public static readonly string RegionalSubbasinServiceUrl = SitkaConfiguration.GetRequiredAppSetting("RegionalSubbasinServiceUrl");
 

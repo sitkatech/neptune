@@ -37,7 +37,7 @@ namespace Neptune.Web.ScheduledJobs
             // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
             
             // collect the load generating units that require updates,
-            // group them by LSPC basin so requests to the HRU service are spatially bounded,
+            // group them by Model basin so requests to the HRU service are spatially bounded,
             // and batch them for processing 25 at a time so requests are small.
 
             var stopwatch = new Stopwatch();
@@ -56,9 +56,9 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
 
-            var loadGeneratingUnitsToUpdateGroupedByLSPCBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.LSPCBasin);
+            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.ModelBasin);
 
-            foreach (var group in loadGeneratingUnitsToUpdateGroupedByLSPCBasin)
+            foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
             {
                 var batches = group.Batch(25);
 
@@ -151,7 +151,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             return dbContext.LoadGeneratingUnits.Where(x =>
                 x.RegionalSubbasin != null &&
-                x.LSPCBasinID == x.RegionalSubbasin.LSPCBasinID.Value &&
+                x.ModelBasinID == x.RegionalSubbasin.ModelBasinID.Value &&
                 !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
                   x.IsEmptyResponseFromHRUService == true));
         }
