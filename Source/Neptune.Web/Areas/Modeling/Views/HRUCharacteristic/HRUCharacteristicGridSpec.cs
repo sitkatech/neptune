@@ -37,7 +37,7 @@ namespace Neptune.Web.Areas.Modeling.Views.HRUCharacteristic
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("LGU ID", x => x.LoadGeneratingUnitID, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
             Add("Model Basin Land Use Description", x => x.HRUCharacteristicLandUseCode?.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Baseline LSPC Land Use Description", x => x.BaselineHRUCharacteristicLandUseCode?.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Baseline Model Basin Land Use Description", x => x.BaselineHRUCharacteristicLandUseCode?.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Soil Group", x => x.HydrologicSoilGroup.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Slope Percentage", x => x.SlopePercentage, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
             Add("Impervious Acres", x => x.ImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal);
