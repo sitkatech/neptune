@@ -48,6 +48,16 @@ add constraint FK_RegionalSubbasin_ModelBasin_ModelBasinID foreign key (ModelBas
 alter table dbo.TreatmentBMP
 add constraint FK_TreatmentBMP_ModelBasin_ModelBasinID foreign key (ModelBasinID) references dbo.ModelBasin (ModelBasinID)
 
+update dbo.geometry_columns
+set f_table_name = 'ModelBasin',
+	f_geometry_column = 'ModelBasinGeometry'
+where f_table_name = 'LSPCBasin'
+
+update dbo.geometry_columns
+set f_table_name = 'ModelBasinStaging',
+	f_geometry_column = 'ModelBasinGeometry'
+where f_table_name = 'LSPCBasinStaging'
+
 drop procedure dbo.pLSPCBasinUpdateFromStaging
 drop procedure dbo.pTreatmentBMPUpdateLSPCBasin
 
