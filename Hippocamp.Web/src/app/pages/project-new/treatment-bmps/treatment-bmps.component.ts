@@ -477,7 +477,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   public getModelingAttributeFieldsToDisplay(treatmentBMPModelingTypeID: number): Array<string> {
-    return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPModelingTypeID];
+    return TreatmentBmpsComponent.modelingAttributesByModelingType[treatmentBMPModelingTypeID] ?? [];
   }
 
   public getModelingAttributeDisplayUnitsByField(fieldName: string): string {
@@ -502,7 +502,9 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   public updateModelingTypeOnTypeChange(selectedType: TreatmentBMPTypeSimpleDto) {
-    this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
+    if (selectedType) {
+      this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
+    }
   }
 
   public toggleIsEditingLocation() {
@@ -564,15 +566,18 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   public onSubmit() {
     this.isLoadingSubmit = true;
     this.alertService.clearAlerts();
-    window.scroll(0, 0);
 
     this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
       this.isLoadingSubmit = false;
       this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success, true));
+      window.scroll(0, 0);
 
       this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
         this.treatmentBMPs = treatmentBMPs;
-      })
+        if (this.treatmentBMPs.length > 0) {
+          this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+        }
+      });
     }, error => {
       this.isLoadingSubmit = false;
       window.scroll(0,0);
