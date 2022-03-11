@@ -21,6 +21,6 @@ namespace Hippocamp.EFModels.Entities
         public Geometry WaterQualityManagementPlanBoundary { get; set; }
         public bool? LoadGeneratingUnitsPopulated { get; set; }
         public bool? BoundaryIsDefined { get; set; }
-        public int CountOfIntersectingLSPCBasins { get; set; }
+        public int CountOfIntersectingModelBasins { get; set; }
     }
 }

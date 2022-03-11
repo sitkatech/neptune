@@ -67,7 +67,7 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry LocationPoint4326 { get; set; }
         public int? WatershedID { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         public int? PrecipitationZoneID { get; set; }
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
@@ -76,9 +76,9 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(InventoryVerifiedByPersonID))]
         [InverseProperty(nameof(Person.TreatmentBMPs))]
         public virtual Person InventoryVerifiedByPerson { get; set; }
-        [ForeignKey(nameof(LSPCBasinID))]
+        [ForeignKey(nameof(ModelBasinID))]
         [InverseProperty("TreatmentBMPs")]
-        public virtual LSPCBasin LSPCBasin { get; set; }
+        public virtual ModelBasin ModelBasin { get; set; }
         [ForeignKey(nameof(OwnerOrganizationID))]
         [InverseProperty(nameof(Organization.TreatmentBMPs))]
         public virtual Organization OwnerOrganization { get; set; }

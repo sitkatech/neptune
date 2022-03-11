@@ -20,8 +20,8 @@ namespace Hippocamp.EFModels.Entities
                 OCSurveyDownstreamCatchmentID = regionalSubbasin.OCSurveyDownstreamCatchmentID,
                 LastUpdate = regionalSubbasin.LastUpdate,
                 IsWaitingForLGURefresh = regionalSubbasin.IsWaitingForLGURefresh,
-                IsInLSPCBasin = regionalSubbasin.IsInLSPCBasin,
-                LSPCBasin = regionalSubbasin.LSPCBasin?.AsDto()
+                IsInModelBasin = regionalSubbasin.IsInModelBasin,
+                ModelBasin = regionalSubbasin.ModelBasin?.AsDto()
             };
             DoCustomMappings(regionalSubbasin, regionalSubbasinDto);
             return regionalSubbasinDto;
@@ -40,8 +40,8 @@ namespace Hippocamp.EFModels.Entities
                 OCSurveyDownstreamCatchmentID = regionalSubbasin.OCSurveyDownstreamCatchmentID,
                 LastUpdate = regionalSubbasin.LastUpdate,
                 IsWaitingForLGURefresh = regionalSubbasin.IsWaitingForLGURefresh,
-                IsInLSPCBasin = regionalSubbasin.IsInLSPCBasin,
-                LSPCBasinID = regionalSubbasin.LSPCBasinID
+                IsInModelBasin = regionalSubbasin.IsInModelBasin,
+                ModelBasinID = regionalSubbasin.ModelBasinID
             };
             DoCustomSimpleDtoMappings(regionalSubbasin, regionalSubbasinSimpleDto);
             return regionalSubbasinSimpleDto;

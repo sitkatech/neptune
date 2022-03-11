@@ -9,11 +9,11 @@ using NetTopologySuite.Geometries;
 
 namespace Hippocamp.EFModels.Entities
 {
-    [Table("LSPCBasin")]
-    [Index(nameof(LSPCBasinKey), Name = "AK_LSPCBasin_LSPCBasinKey", IsUnique = true)]
-    public partial class LSPCBasin
+    [Table("ModelBasin")]
+    [Index(nameof(ModelBasinKey), Name = "AK_ModelBasin_ModelBasinKey", IsUnique = true)]
+    public partial class ModelBasin
     {
-        public LSPCBasin()
+        public ModelBasin()
         {
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
             RegionalSubbasins = new HashSet<RegionalSubbasin>();
@@ -21,22 +21,22 @@ namespace Hippocamp.EFModels.Entities
         }
 
         [Key]
-        public int LSPCBasinID { get; set; }
-        public int LSPCBasinKey { get; set; }
+        public int ModelBasinID { get; set; }
+        public int ModelBasinKey { get; set; }
         [Required]
         [StringLength(100)]
-        public string LSPCBasinName { get; set; }
+        public string ModelBasinName { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
-        public Geometry LSPCBasinGeometry { get; set; }
+        public Geometry ModelBasinGeometry { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime LastUpdate { get; set; }
 
-        [InverseProperty(nameof(LoadGeneratingUnit.LSPCBasin))]
+        [InverseProperty(nameof(LoadGeneratingUnit.ModelBasin))]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(RegionalSubbasin.LSPCBasin))]
+        [InverseProperty(nameof(RegionalSubbasin.ModelBasin))]
         public virtual ICollection<RegionalSubbasin> RegionalSubbasins { get; set; }
-        [InverseProperty(nameof(TreatmentBMP.LSPCBasin))]
+        [InverseProperty(nameof(TreatmentBMP.ModelBasin))]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

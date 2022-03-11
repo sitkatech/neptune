@@ -10,11 +10,11 @@ using NetTopologySuite.Geometries;
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
-    public partial class vLSPCBasinLGUInput
+    public partial class vModelBasinLGUInput
     {
-        public int LSPCID { get; set; }
+        public int ModelID { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
-        public Geometry LSPCBasinGeometry { get; set; }
+        public Geometry ModelBasinGeometry { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace Hippocamp.EFModels.Entities
         [Required]
         [Column(TypeName = "geometry")]
         public Geometry LoadGeneratingUnitGeometry { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
@@ -31,9 +31,9 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(DelineationID))]
         [InverseProperty("LoadGeneratingUnits")]
         public virtual Delineation Delineation { get; set; }
-        [ForeignKey(nameof(LSPCBasinID))]
+        [ForeignKey(nameof(ModelBasinID))]
         [InverseProperty("LoadGeneratingUnits")]
-        public virtual LSPCBasin LSPCBasin { get; set; }
+        public virtual ModelBasin ModelBasin { get; set; }
         [ForeignKey(nameof(RegionalSubbasinID))]
         [InverseProperty("LoadGeneratingUnits")]
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }

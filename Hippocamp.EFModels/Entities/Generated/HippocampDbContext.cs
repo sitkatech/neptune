@@ -51,8 +51,6 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
         public virtual DbSet<HydromodificationAppliesType> HydromodificationAppliesTypes { get; set; }
         public virtual DbSet<LEGAL_LOTS_ATTRIBUTES_4326> LEGAL_LOTS_ATTRIBUTES_4326s { get; set; }
-        public virtual DbSet<LSPCBasin> LSPCBasins { get; set; }
-        public virtual DbSet<LSPCBasinStaging> LSPCBasinStagings { get; set; }
         public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<LandUseBlockStaging> LandUseBlockStagings { get; set; }
         public virtual DbSet<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
@@ -62,6 +60,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecordType> MaintenanceRecordTypes { get; set; }
         public virtual DbSet<MeasurementUnitType> MeasurementUnitTypes { get; set; }
+        public virtual DbSet<ModelBasin> ModelBasins { get; set; }
+        public virtual DbSet<ModelBasinStaging> ModelBasinStagings { get; set; }
         public virtual DbSet<MonthsOfOperation> MonthsOfOperations { get; set; }
         public virtual DbSet<NeptuneArea> NeptuneAreas { get; set; }
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
@@ -179,8 +179,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vGeoServerTrashGeneratingUnitLoad> vGeoServerTrashGeneratingUnitLoads { get; set; }
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vGeoServerWatershed> vGeoServerWatersheds { get; set; }
-        public virtual DbSet<vLSPCBasinLGUInput> vLSPCBasinLGUInputs { get; set; }
         public virtual DbSet<vLandUseBlockTGUInput> vLandUseBlockTGUInputs { get; set; }
+        public virtual DbSet<vModelBasinLGUInput> vModelBasinLGUInputs { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
@@ -715,16 +715,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.ZONE_AND_Housing).IsUnicode(false);
             });
 
-            modelBuilder.Entity<LSPCBasin>(entity =>
-            {
-                entity.Property(e => e.LSPCBasinName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<LSPCBasinStaging>(entity =>
-            {
-                entity.Property(e => e.LSPCBasinName).IsUnicode(false);
-            });
-
             modelBuilder.Entity<LandUseBlock>(entity =>
             {
                 entity.Property(e => e.LandUseDescription).IsUnicode(false);
@@ -858,6 +848,16 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.MeasurementUnitTypeName).IsUnicode(false);
 
                 entity.Property(e => e.SingularDisplayName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ModelBasin>(entity =>
+            {
+                entity.Property(e => e.ModelBasinName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ModelBasinStaging>(entity =>
+            {
+                entity.Property(e => e.ModelBasinName).IsUnicode(false);
             });
 
             modelBuilder.Entity<MonthsOfOperation>(entity =>
@@ -2421,13 +2421,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.WatershedName).IsUnicode(false);
             });
 
-            modelBuilder.Entity<vLSPCBasinLGUInput>(entity =>
-            {
-                entity.ToView("vLSPCBasinLGUInput");
-
-                entity.Property(e => e.LSPCID).ValueGeneratedOnAdd();
-            });
-
             modelBuilder.Entity<vLandUseBlockTGUInput>(entity =>
             {
                 entity.ToView("vLandUseBlockTGUInput");
@@ -2437,6 +2430,13 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.LandUseDescription).IsUnicode(false);
 
                 entity.Property(e => e.LandUseForTGR).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<vModelBasinLGUInput>(entity =>
+            {
+                entity.ToView("vModelBasinLGUInput");
+
+                entity.Property(e => e.ModelID).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<vMostRecentTreatmentBMPAssessment>(entity =>
@@ -2505,9 +2505,9 @@ namespace Hippocamp.EFModels.Entities
 
                 entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
 
-                entity.Property(e => e.LSPCBasinName).IsUnicode(false);
-
                 entity.Property(e => e.LandUse).IsUnicode(false);
+
+                entity.Property(e => e.ModelBasinName).IsUnicode(false);
 
                 entity.Property(e => e.SurfaceKey).IsUnicode(false);
 

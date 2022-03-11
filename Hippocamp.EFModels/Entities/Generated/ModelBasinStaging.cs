@@ -9,18 +9,18 @@ using NetTopologySuite.Geometries;
 
 namespace Hippocamp.EFModels.Entities
 {
-    [Table("LSPCBasinStaging")]
-    [Index(nameof(LSPCBasinKey), Name = "AK_LSPCBasinStaging_LSPCBasinKey", IsUnique = true)]
-    public partial class LSPCBasinStaging
+    [Table("ModelBasinStaging")]
+    [Index(nameof(ModelBasinKey), Name = "AK_ModelBasinStaging_ModelBasinKey", IsUnique = true)]
+    public partial class ModelBasinStaging
     {
         [Key]
-        public int LSPCBasinStagingID { get; set; }
-        public int LSPCBasinKey { get; set; }
+        public int ModelBasinStagingID { get; set; }
+        public int ModelBasinKey { get; set; }
         [Required]
         [StringLength(100)]
-        public string LSPCBasinName { get; set; }
+        public string ModelBasinName { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
-        public Geometry LSPCBasinGeometry { get; set; }
+        public Geometry ModelBasinGeometry { get; set; }
     }
 }

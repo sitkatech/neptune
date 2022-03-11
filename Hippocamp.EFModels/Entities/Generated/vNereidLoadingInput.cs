@@ -16,7 +16,7 @@ namespace Hippocamp.EFModels.Entities
         public int? WaterQualityManagementPlanID { get; set; }
         public int RegionalSubbasinID { get; set; }
         public int OCSurveyCatchmentID { get; set; }
-        public int LSPCBasinKey { get; set; }
+        public int ModelBasinKey { get; set; }
         [Required]
         [StringLength(100)]
         public string LandUseCode { get; set; }

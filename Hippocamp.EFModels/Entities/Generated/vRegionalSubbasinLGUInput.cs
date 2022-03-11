@@ -16,6 +16,6 @@ namespace Hippocamp.EFModels.Entities
         [Required]
         [Column(TypeName = "geometry")]
         public Geometry CatchmentGeometry { get; set; }
-        public int? LSPCID { get; set; }
+        public int? ModelID { get; set; }
     }
 }

@@ -37,12 +37,12 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }
         public bool? IsWaitingForLGURefresh { get; set; }
-        public bool? IsInLSPCBasin { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public bool? IsInModelBasin { get; set; }
+        public int? ModelBasinID { get; set; }
 
-        [ForeignKey(nameof(LSPCBasinID))]
+        [ForeignKey(nameof(ModelBasinID))]
         [InverseProperty("RegionalSubbasins")]
-        public virtual LSPCBasin LSPCBasin { get; set; }
+        public virtual ModelBasin ModelBasin { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
         public virtual ICollection<RegionalSubbasin> InverseOCSurveyDownstreamCatchment { get; set; }
         [InverseProperty(nameof(LoadGeneratingUnit.RegionalSubbasin))]

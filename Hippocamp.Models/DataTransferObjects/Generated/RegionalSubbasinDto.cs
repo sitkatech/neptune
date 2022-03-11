@@ -16,8 +16,8 @@ namespace Hippocamp.Models.DataTransferObjects
         public int? OCSurveyDownstreamCatchmentID { get; set; }
         public DateTime? LastUpdate { get; set; }
         public bool? IsWaitingForLGURefresh { get; set; }
-        public bool? IsInLSPCBasin { get; set; }
-        public LSPCBasinDto LSPCBasin { get; set; }
+        public bool? IsInModelBasin { get; set; }
+        public ModelBasinDto ModelBasin { get; set; }
     }
 
     public partial class RegionalSubbasinSimpleDto
@@ -29,8 +29,8 @@ namespace Hippocamp.Models.DataTransferObjects
         public int? OCSurveyDownstreamCatchmentID { get; set; }
         public DateTime? LastUpdate { get; set; }
         public bool? IsWaitingForLGURefresh { get; set; }
-        public bool? IsInLSPCBasin { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public bool? IsInModelBasin { get; set; }
+        public int? ModelBasinID { get; set; }
     }
 
 }

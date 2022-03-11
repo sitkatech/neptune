@@ -14,7 +14,7 @@ namespace Hippocamp.EFModels.Entities
             var loadGeneratingUnitDto = new LoadGeneratingUnitDto()
             {
                 LoadGeneratingUnitID = loadGeneratingUnit.LoadGeneratingUnitID,
-                LSPCBasin = loadGeneratingUnit.LSPCBasin?.AsDto(),
+                ModelBasin = loadGeneratingUnit.ModelBasin?.AsDto(),
                 RegionalSubbasin = loadGeneratingUnit.RegionalSubbasin?.AsDto(),
                 Delineation = loadGeneratingUnit.Delineation?.AsDto(),
                 WaterQualityManagementPlan = loadGeneratingUnit.WaterQualityManagementPlan?.AsDto(),
@@ -31,7 +31,7 @@ namespace Hippocamp.EFModels.Entities
             var loadGeneratingUnitSimpleDto = new LoadGeneratingUnitSimpleDto()
             {
                 LoadGeneratingUnitID = loadGeneratingUnit.LoadGeneratingUnitID,
-                LSPCBasinID = loadGeneratingUnit.LSPCBasinID,
+                ModelBasinID = loadGeneratingUnit.ModelBasinID,
                 RegionalSubbasinID = loadGeneratingUnit.RegionalSubbasinID,
                 DelineationID = loadGeneratingUnit.DelineationID,
                 WaterQualityManagementPlanID = loadGeneratingUnit.WaterQualityManagementPlanID,

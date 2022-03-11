@@ -10,7 +10,7 @@ namespace Hippocamp.Models.DataTransferObjects
     public partial class LoadGeneratingUnitDto
     {
         public int LoadGeneratingUnitID { get; set; }
-        public LSPCBasinDto LSPCBasin { get; set; }
+        public ModelBasinDto ModelBasin { get; set; }
         public RegionalSubbasinDto RegionalSubbasin { get; set; }
         public DelineationDto Delineation { get; set; }
         public WaterQualityManagementPlanDto WaterQualityManagementPlan { get; set; }
@@ -20,7 +20,7 @@ namespace Hippocamp.Models.DataTransferObjects
     public partial class LoadGeneratingUnitSimpleDto
     {
         public int LoadGeneratingUnitID { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }

@@ -30,7 +30,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public SizingBasisTypeDto SizingBasisType { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public WatershedDto Watershed { get; set; }
-        public LSPCBasinDto LSPCBasin { get; set; }
+        public ModelBasinDto ModelBasin { get; set; }
         public PrecipitationZoneDto PrecipitationZone { get; set; }
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
@@ -60,7 +60,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public int SizingBasisTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public int? WatershedID { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         public int? PrecipitationZoneID { get; set; }
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }

@@ -21,7 +21,7 @@ namespace Hippocamp.EFModels.Entities
         public double Area { get; set; }
         [StringLength(100)]
         public string HRUCharacteristicLandUseCodeDisplayName { get; set; }
-        public int? LSPCBasinID { get; set; }
+        public int? ModelBasinID { get; set; }
         [StringLength(100)]
         public string WatershedName { get; set; }
         public int? CatchIDN { get; set; }
@@ -32,7 +32,7 @@ namespace Hippocamp.EFModels.Entities
         public int? RegionalSubbasinID { get; set; }
         public int? LoadGeneratingUnitID { get; set; }
         [StringLength(100)]
-        public string LSPCBasinName { get; set; }
+        public string ModelBasinName { get; set; }
         [StringLength(100)]
         public string LandUse { get; set; }
         [Required]
