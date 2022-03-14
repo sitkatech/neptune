@@ -18,4 +18,5 @@ from dbo.Delineation d
 where
 	DelineationTypeID = 1 
 	and rsb.IsInModelBasin = 1 
+	and bmp.ProjectID is null
 GO

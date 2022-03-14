@@ -83,7 +83,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             stopwatch.Start();
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var validateCallStartTime = stopwatch.Elapsed;
@@ -120,7 +120,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
@@ -159,7 +159,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var solutionSequenceRequestObject = new SolutionSequenceRequest(graph);
@@ -418,7 +418,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public ContentResult NetworkTable()
         {
 
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             return Content(JsonConvert.SerializeObject(graph), "application/json");
         }
 
@@ -437,7 +437,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
             // this subgraph is 23 nodes deep
             var single = graph.Nodes.Single(x => x.ID == "RSB_42");

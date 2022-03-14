@@ -22,7 +22,7 @@ namespace Neptune.Web.Common
         public const int BASELINE_CUTOFF_YEAR = 2002;
         private static ILog _logger = LogManager.GetLogger(typeof(NereidUtilities));
 
-        public static Graph BuildNetworkGraph(DatabaseEntities dbContext)
+        public static Graph BuildTotalNetworkGraph(DatabaseEntities dbContext)
         {
             var nodes = new List<Node>();
             var edges = new List<Edge>();
@@ -160,7 +160,8 @@ namespace Neptune.Web.Common
                             // don't include delineations for non-modeled BMPs
                             x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
                             x.TreatmentBMP.RegionalSubbasinID != null &&
-                            x.TreatmentBMP.ModelBasinID != null).ToList();
+                            x.TreatmentBMP.ModelBasinID != null &&
+                            x.TreatmentBMP.ProjectID == null).ToList();
 
             delineationNodes = distributedDelineations
                 .Select(x => new Node()
@@ -335,7 +336,7 @@ namespace Neptune.Web.Common
         public static IQueryable<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext)
         {
             return dbContext.TreatmentBMPs
-                .Where(x => x.RegionalSubbasinID!= null && x.ModelBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null);
+                .Where(x => x.RegionalSubbasinID!= null && x.ModelBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null && x.ProjectID == null);
 
         }
         
@@ -414,7 +415,7 @@ namespace Neptune.Web.Common
             stackTrace = "";
             missingNodeIDs = new List<string>();
 
-            graph = NereidUtilities.BuildNetworkGraph(dbContext);
+            graph = NereidUtilities.BuildTotalNetworkGraph(dbContext);
 
             var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition);
 
@@ -437,7 +438,7 @@ namespace Neptune.Web.Common
             stackTrace = "";
             missingNodeIDs = new List<string>();
 
-            graph = BuildNetworkGraph(dbContext);
+            graph = BuildTotalNetworkGraph(dbContext);
 
             var dirtyTreatmentBMPIDs = dirtyModelNodes.Where(x => x.TreatmentBMPID != null).Select(y => y.TreatmentBMPID).ToList();
             var dirtyDelineationIDs = dirtyModelNodes.Where(x => x.DelineationID != null).Select(y => y.DelineationID).ToList();

@@ -9,5 +9,6 @@ select
 	bmp_up.TreatmentBMPID as UpstreamBMPID
 from dbo.TreatmentBMP bmp_Down
 	join dbo.TreatmentBMP bmp_up
-		on bmp_down.UpstreamBMPID = bmp_up.TreatmentBMPID
+	on bmp_down.UpstreamBMPID = bmp_up.TreatmentBMPID
+	where bmp_Down.ProjectID is null and bmp_up.ProjectID is null
 go
