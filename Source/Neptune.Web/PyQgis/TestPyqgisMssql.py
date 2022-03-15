@@ -4,6 +4,14 @@ from qgis.core import *
 
 from TestModule import *
 
+from pyqgis_utils import (
+    duplicateLayer,
+    fetchLayerFromDatabase,
+    raiseIfLayerInvalid,
+    QgisError,
+    fetchLayerFromGeoJson
+)
+
 if module_import_successful:
         print("Module import successful!")
 else:
@@ -32,16 +40,16 @@ qgs.initQgis()
 
 uri = QgsDataSourceUri()
 
-rsb_connstring = connstring_base + "tables=dbo.RegionalSubbasin"
+def fetchLayer(spatialTableName):
+        return fetchLayerFromDatabase(connstring_base, spatialTableName)
 
-vlayer = QgsVectorLayer(rsb_connstring, "RegionalSubbasin", "ogr")
+vlayer =fetchLayer("RegionalSubbasin")
 
 ## refactor at this point 
 
 if not vlayer.isValid():
         print("Layer failed to load!")
         print("Base connection string: " + connstring_base)
-        print("Connection string with table: " + rsb_connstring)
         print(args)
 else:
         print("Loaded RegionalSubbain layer!")

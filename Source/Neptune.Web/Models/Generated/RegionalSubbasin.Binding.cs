@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected RegionalSubbasin()
         {
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
             this.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<RegionalSubbasin>();
         }
 
@@ -73,7 +74,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return LoadGeneratingUnits.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
+            return LoadGeneratingUnits.Any() || PlannedProjectLoadGeneratingUnits.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
         }
 
         /// <summary>
@@ -88,6 +89,11 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
             }
 
+            if(PlannedProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(PlannedProjectLoadGeneratingUnit).Name);
+            }
+
             if(RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any())
             {
                 dependentObjects.Add(typeof(RegionalSubbasin).Name);
@@ -98,7 +104,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(LoadGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(LoadGeneratingUnit).Name, typeof(PlannedProjectLoadGeneratingUnit).Name};
 
 
         /// <summary>
@@ -128,6 +134,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in PlannedProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -150,6 +161,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return RegionalSubbasinID; } set { RegionalSubbasinID = value; } }
 
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
         public virtual ICollection<RegionalSubbasin> RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
         public virtual ModelBasin ModelBasin { get; set; }

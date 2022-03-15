@@ -27,7 +27,7 @@ namespace Neptune.Web.Common
             var nodes = new List<Node>();
             var edges = new List<Edge>();
 
-            MakeRSBNodesAndEdges(dbContext, out var rsbEdges, out var rsbNodes);
+            MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.Where(x => x.IsInModelBasin == true).ToList(), out var rsbEdges, out var rsbNodes);
             nodes.AddRange(rsbNodes);
             edges.AddRange(rsbEdges);
 
@@ -43,6 +43,44 @@ namespace Neptune.Web.Common
             nodes.AddRange(colocationNodes);
             edges.AddRange(colocationEdges);
 
+            MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
+            nodes.AddRange(wqmpNodes);
+            edges.AddRange(wqmpEdges);
+
+            MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
+            nodes.AddRange(centralizedBMPNodes);
+            edges.AddRange(centralizedBMPEdges);
+
+            var graph = new Graph(true, nodes, edges);
+            return graph;
+        }
+
+        public static Graph BuildPlannedProjectNetworkGraph(DatabaseEntities dbContext, Project plannedProject)
+        {
+            var nodes = new List<Node>();
+            var edges = new List<Edge>();
+
+            var regionalSubbasinIDs = plannedProject.GetRegionalSubbasinIDs(dbContext);
+            MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).ToList(), out var rsbEdges, out var rsbNodes);
+            nodes.AddRange(rsbNodes);
+            edges.AddRange(rsbEdges);
+
+            //Need confirmation about which nodes to include outside of our planned project bmps
+            //MakeDistributedBMPNodesAndEdges(dbContext, out var distributedBMPEdges, out var distributedBMPNodes);
+            //nodes.AddRange(distributedBMPNodes);
+            //edges.AddRange(distributedBMPEdges);
+
+            //Need confirmation about which delineations to include outside of our planned project bmps
+            MakeDistributedDelineationNodesAndEdges(dbContext, out var delineationEdges, out var delineationNodes);
+            nodes.AddRange(delineationNodes);
+            edges.AddRange(delineationEdges);
+
+            //Need confirmation about which nodes to include outside of our planned project bmps
+            MakeUpstreamBMPNodesAndEdges(dbContext, out var colocationEdges, out var colocationNodes);
+            nodes.AddRange(colocationNodes);
+            edges.AddRange(colocationEdges);
+
+            //Need LGU job for planned projects
             MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
             nodes.AddRange(wqmpNodes);
             edges.AddRange(wqmpEdges);
@@ -121,10 +159,8 @@ namespace Neptune.Web.Common
             return "Delineation_" + delineationID;
         }
 
-        public static void MakeRSBNodesAndEdges(DatabaseEntities dbContext, out List<Edge> rsbEdges, out List<Node> rsbNodes)
+        public static void MakeRSBNodesAndEdges(List<RegionalSubbasin> regionalSubbasinsInCoverage, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         {
-            var regionalSubbasinsInCoverage = dbContext.RegionalSubbasins.Where(x => x.IsInModelBasin == true).ToList();
-
             rsbNodes = regionalSubbasinsInCoverage
                 .Select(x => new Node { ID = RegionalSubbasinNodeID(x), RegionalSubbasinID = x.RegionalSubbasinID }).ToList();
 
@@ -416,6 +452,27 @@ namespace Neptune.Web.Common
             missingNodeIDs = new List<string>();
 
             graph = NereidUtilities.BuildTotalNetworkGraph(dbContext);
+
+            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition);
+
+            var baselineConditionSqlParam = new SqlParameter("@isBaselineCondition", isBaselineCondition);
+            dbContext.Database.ExecuteSqlCommand(
+                "EXEC dbo.pDeleteNereidResults @isBaselineCondition", baselineConditionSqlParam);
+
+            dbContext.NereidResults.AddRange(nereidResults);
+            // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
+            dbContext.Database.CommandTimeout = 600;
+            dbContext.SaveChangesWithNoAuditing();
+
+            return nereidResults;
+        }
+
+        public static IEnumerable<NereidResult> PlannedProjectNetworkSolve(out string stackTrace,
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient, bool isBaselineCondition, Project plannedProject)
+        {
+            stackTrace = "";
+            missingNodeIDs = new List<string>();
+            graph = NereidUtilities.BuildPlannedProjectNetworkGraph(dbContext, plannedProject);
 
             var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition);
 

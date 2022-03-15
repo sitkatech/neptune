@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Project()
         {
+            this.PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
             this.ProjectDocuments = new HashSet<ProjectDocument>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -102,7 +103,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return ProjectDocuments.Any() || TreatmentBMPs.Any();
+            return PlannedProjectLoadGeneratingUnits.Any() || ProjectDocuments.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -112,6 +113,11 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(PlannedProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(PlannedProjectLoadGeneratingUnit).Name);
+            }
+
             if(ProjectDocuments.Any())
             {
                 dependentObjects.Add(typeof(ProjectDocument).Name);
@@ -127,7 +133,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -151,6 +157,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteChildren(DatabaseEntities dbContext)
         {
+
+            foreach(var x in PlannedProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
 
             foreach(var x in ProjectDocuments.ToList())
             {
@@ -177,6 +188,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
+        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual Organization Organization { get; set; }

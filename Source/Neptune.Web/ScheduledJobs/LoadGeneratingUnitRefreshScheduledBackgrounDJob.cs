@@ -30,7 +30,7 @@ namespace Neptune.Web.ScheduledJobs
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            //NeptuneEnvironmentType.Local,
+            NeptuneEnvironmentType.Local,
             NeptuneEnvironmentType.Qa,
             NeptuneEnvironmentType.Prod
         };
@@ -158,18 +158,19 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
     }
 
     /// <summary>
-    /// Single-purpose method used by TGU job
+    /// Single-purpose method used by LGU job
     /// </summary>
     /// <param name="outputLayerName"></param>
     /// <param name="outputPath"></param>
     /// <param name="connectionString"></param>
     public void ImportLoadGeneratingUnitsFromShapefile(string outputLayerName,
-        string outputPath, string connectionString)
+        string outputPath, string connectionString, int? plannedProjectID = null)
     {
         var databaseConnectionString = $"MSSQL:{connectionString}";
+        var destinationTable = plannedProjectID != null ? "dbo.PlannedProjectLoadGeneratingUnit" : "dbo.LoadGeneratingUnit";
         // todo: fix this
         var selectStatement =
-            $"Select ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
+            $"Select {(plannedProjectID != null ? plannedProjectID.ToString() + " as ProjectID, " : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
 
         var commandLineArguments = new List<string>
         {
@@ -187,7 +188,7 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
             "-a_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
-            "dbo.LoadGeneratingUnit"
+            destinationTable
         };
 
         ExecuteOgr2OgrCommand(commandLineArguments);
