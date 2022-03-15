@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
+using MoreLinq;
 using Neptune.Web.Common;
+using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
@@ -36,7 +39,8 @@ namespace Neptune.Web.ScheduledJobs
             var plannedProjectRSBIDs = plannedProject.GetRegionalSubbasinIDs(DbContext);
             //Get our LGUs
             LoadGeneratingUnitRefreshImpl(plannedProjectRSBIDs);
-
+            //Get our HRUs
+            HRURefreshImpl();
             NereidUtilities.PlannedProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, plannedProject);
         }
 
@@ -61,7 +65,6 @@ namespace Neptune.Web.ScheduledJobs
 
             try
             {
-
                 DbContext.Database.ExecuteSqlCommand(
                     $"EXEC dbo.pDeletePlannedProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {PlannedProjectID}");
 
@@ -82,6 +85,66 @@ namespace Neptune.Web.ScheduledJobs
             {
                 File.Delete(outputLayerPath);
             }
+        }
+
+        private void HRURefreshImpl()
+        {
+            // collect the load generating units that require updates, which will be all for the Project
+            // group them by Model basin so requests to the HRU service are spatially bounded. It is possible that a number of these won't have a model basin, but if the system is used in a logical manner any of these that don't have model basins will be in an rsb that is in North OC, so technically will still be spatially bounded
+            // and batch them for processing 25 at a time so requests are small.
+            Logger.Info($"Processing '{JobName}'-HRURefresh for {PlannedProjectID}");
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            var loadGeneratingUnitsToUpdate = DbContext.PlannedProjectLoadGeneratingUnits.Where(x => x.ProjectID == PlannedProjectID).ToList();
+            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasin);
+
+            foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
+            {
+                var batches = group.Batch(25);
+
+                foreach (var batch in batches)
+                {
+                    try
+                    {
+                        var batchHRUResponseFeatures =
+                            HRUUtilities.RetrieveHRUResponseFeatures(batch.GetHRURequestFeatures().ToList(), Logger).ToList();
+
+                        if (!batchHRUResponseFeatures.Any())
+                        {
+                            foreach (var loadGeneratingUnit in batch)
+                            {
+                                loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
+                            }
+                            Logger.Warn($"No data for PlannedProjectLGUs with these IDs: {string.Join(", ", batch.Select(x => x.PlannedProjectLoadGeneratingUnitID.ToString()))}");
+                        }
+
+                        DbContext.PlannedProjectHRUCharacteristics.AddRange(batchHRUResponseFeatures.Select(x =>
+                        {
+                            var hruCharacteristic = x.ToPlannedProjectHRUCharacteristic(PlannedProjectID);
+                            return hruCharacteristic;
+                        }));
+                        DbContext.SaveChangesWithNoAuditing();
+                    }
+                    catch (Exception ex)
+                    {
+                        // this batch failed, but we don't want to give up the whole job.
+                        Logger.Warn(ex.Message);
+                    }
+
+                    if (stopwatch.Elapsed.Minutes > 20)
+                    {
+                        break;
+                    }
+                }
+
+                if (stopwatch.Elapsed.Minutes > 20)
+                {
+                    break;
+                }
+            }
+
+            stopwatch.Stop();
         }
     }
 }

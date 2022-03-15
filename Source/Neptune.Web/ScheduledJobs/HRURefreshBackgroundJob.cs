@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using Neptune.Web.Models;
 using Exception = System.Exception;
+using Neptune.Web.Common.EsriAsynchronousJob;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -67,7 +68,7 @@ namespace Neptune.Web.ScheduledJobs
                     try
                     {
                         var batchHRUCharacteristics =
-                            HRUUtilities.RetrieveHRUCharacteristics(batch.ToList(), Logger).ToList();
+                            HRUUtilities.RetrieveHRUResponseFeatures(batch.GetHRURequestFeatures().ToList(), Logger).ToList();
 
                         if (!batchHRUCharacteristics.Any())
                         {
@@ -79,7 +80,11 @@ namespace Neptune.Web.ScheduledJobs
                             Logger.Warn($"No data for LGUs with these IDs: {string.Join(", ", batch.Select(x => x.LoadGeneratingUnitID.ToString()))}");
                         }
 
-                        DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics);
+                        DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics.Select(x =>
+                        {
+                            var hruCharacteristic = x.ToHRUCharacteristic();
+                            return hruCharacteristic;
+                        }));
                         DbContext.SaveChangesWithNoAuditing();
                     }
                     catch (Exception ex)

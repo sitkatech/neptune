@@ -11,13 +11,13 @@ namespace Neptune.Web.Common
 {
     public static class HRUUtilities
     {
-        public static IEnumerable<HRUCharacteristic> RetrieveHRUCharacteristics(
-            List<LoadGeneratingUnit> loadGeneratingUnits, ILog logger)
+        public static IEnumerable<HRUResponseFeature> RetrieveHRUResponseFeatures(
+            List<HRURequestFeature> featuresForHRURequest, ILog logger)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
             var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "output_fc");
 
-            var hruRequest = GetGPRecordSetLayer(loadGeneratingUnits);
+            var hruRequest = GetGPRecordSetLayer(featuresForHRURequest);
 
             var serializeObject = new
             {
@@ -28,7 +28,7 @@ namespace Neptune.Web.Common
                 f = "pjson"
             };
 
-            var newHRUCharacteristics = new List<HRUCharacteristic>();
+            var newHRUCharacteristics = new List<HRUResponseFeature>();
             var rawResponse = string.Empty;
             try
             {
@@ -39,18 +39,13 @@ namespace Neptune.Web.Common
 
                 newHRUCharacteristics.AddRange(
                     esriGPRecordSetLayer
-                        .Features.Where(x=>x.Attributes.ImperviousAcres!= null)
-                        .Select(x =>
-                        {
-                            var hruCharacteristic = x.ToHRUCharacteristic();
-                            return hruCharacteristic;
-                        }));
+                        .Features.Where(x=>x.Attributes.ImperviousAcres!= null));
 
             }
             catch (Exception ex)
             {
                 logger.Warn(ex.Message, ex);
-                logger.Warn($"Skipped LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x=>x.LoadGeneratingUnitID.ToString()))}");
+                logger.Warn($"Skipped entities (PlannedProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", featuresForHRURequest.Select(x=>x.Attributes.QueryFeatureID.ToString()))}");
                 logger.Warn(rawResponse);
             }
 
@@ -58,11 +53,11 @@ namespace Neptune.Web.Common
         }
 
         public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(
-            IEnumerable<LoadGeneratingUnit> loadGeneratingUnits)
+            List<HRURequestFeature> features)
         {
             return new EsriGPRecordSetLayer<HRURequestFeature>
             {
-                Features = loadGeneratingUnits.GetHRURequestFeatures().ToList(),
+                Features = features,
                 DisplayFieldName = "",
                 GeometryType = "esriGeometryPolygon",
                 ExceededTransferLimit = "false",
