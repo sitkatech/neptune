@@ -114,4 +114,4 @@ if __name__ == '__main__':
     else:
         print("Output layer invalid :(")
 
-    qgs.exitQgis()
+    qgs.exit()
