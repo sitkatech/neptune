@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Project()
         {
+            this.PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
             this.PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
             this.ProjectDocuments = new HashSet<ProjectDocument>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
@@ -103,7 +104,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return PlannedProjectLoadGeneratingUnits.Any() || ProjectDocuments.Any() || TreatmentBMPs.Any();
+            return PlannedProjectHRUCharacteristics.Any() || PlannedProjectLoadGeneratingUnits.Any() || ProjectDocuments.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -113,6 +114,11 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(PlannedProjectHRUCharacteristics.Any())
+            {
+                dependentObjects.Add(typeof(PlannedProjectHRUCharacteristic).Name);
+            }
+
             if(PlannedProjectLoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(PlannedProjectLoadGeneratingUnit).Name);
@@ -133,7 +139,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(PlannedProjectHRUCharacteristic).Name, typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -157,6 +163,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteChildren(DatabaseEntities dbContext)
         {
+
+            foreach(var x in PlannedProjectHRUCharacteristics.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
 
             foreach(var x in PlannedProjectLoadGeneratingUnits.ToList())
             {
@@ -188,6 +199,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
+        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
         public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }

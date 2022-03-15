@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected PlannedProjectLoadGeneratingUnit()
         {
-
+            this.PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return PlannedProjectHRUCharacteristics.Any();
         }
 
         /// <summary>
@@ -90,13 +90,17 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(PlannedProjectHRUCharacteristics.Any())
+            {
+                dependentObjects.Add(typeof(PlannedProjectHRUCharacteristic).Name);
+            }
             return dependentObjects.Distinct().ToList();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(PlannedProjectLoadGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(PlannedProjectHRUCharacteristic).Name};
 
 
         /// <summary>
@@ -112,8 +116,19 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in PlannedProjectHRUCharacteristics.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -127,6 +142,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return PlannedProjectLoadGeneratingUnitID; } set { PlannedProjectLoadGeneratingUnitID = value; } }
 
+        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
         public virtual Project Project { get; set; }
         public virtual ModelBasin ModelBasin { get; set; }
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }

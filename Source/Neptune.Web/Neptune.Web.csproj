@@ -269,6 +269,10 @@
     <Compile Include="Models\Generated\Person.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PersonConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\PersonPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\PlannedProjectHRUCharacteristic.Binding.cs" />
+    <Compile Include="Models\Generated\PlannedProjectHRUCharacteristic.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\PlannedProjectHRUCharacteristicConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\PlannedProjectHRUCharacteristicPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\PlannedProjectLoadGeneratingUnit.Binding.cs" />
     <Compile Include="Models\Generated\PlannedProjectLoadGeneratingUnit.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PlannedProjectLoadGeneratingUnitConfiguration.Binding.cs" />

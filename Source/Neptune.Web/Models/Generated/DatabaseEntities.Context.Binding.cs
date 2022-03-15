@@ -75,6 +75,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
+            modelBuilder.Configurations.Add(new PlannedProjectHRUCharacteristicConfiguration());
             modelBuilder.Configurations.Add(new PlannedProjectLoadGeneratingUnitConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
@@ -182,6 +183,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
         public virtual DbSet<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
@@ -514,6 +516,9 @@ namespace Neptune.Web.Models
                     var permitType = PermitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(permitType, "PermitType", primaryKey);
                     return permitType;
+
+                case "PlannedProjectHRUCharacteristic":
+                    return PlannedProjectHRUCharacteristics.GetPlannedProjectHRUCharacteristic(primaryKey);
 
                 case "PlannedProjectLoadGeneratingUnit":
                     return PlannedProjectLoadGeneratingUnits.GetPlannedProjectLoadGeneratingUnit(primaryKey);
