@@ -128,6 +128,9 @@ namespace Hippocamp.EFModels.Entities
                     x.LocationPoint4326 = y.LocationPoint4326;
                     x.LocationPoint = y.LocationPoint;
                     x.WatershedID = y.WatershedID;
+                    x.ModelBasinID = y.ModelBasinID;
+                    x.PrecipitationZoneID = y.PrecipitationZoneID;
+                    x.RegionalSubbasinID = y.RegionalSubbasinID;
                     x.Notes = y.Notes;
                 });
 
@@ -197,7 +200,9 @@ namespace Hippocamp.EFModels.Entities
             var locationPoint = locationPointGeometry4326.ProjectTo2771();
 
             var watershed = dbContext.Watersheds.FirstOrDefault(x => x.WatershedGeometry.Contains(locationPoint));
-
+            var modelBasin =dbContext.ModelBasins.FirstOrDefault(x => x.ModelBasinGeometry.Contains(locationPoint));
+            var precipitationZone = dbContext.PrecipitationZones.FirstOrDefault(x => x.PrecipitationZoneGeometry.Contains(locationPoint));
+            var regionalSubbasin = dbContext.RegionalSubbasins.FirstOrDefault(x => x.CatchmentGeometry.Contains(locationPoint));
 
             var treatmentBMP = new TreatmentBMP()
             {
@@ -209,6 +214,9 @@ namespace Hippocamp.EFModels.Entities
                 LocationPoint4326 = locationPointGeometry4326,
                 LocationPoint = locationPoint,
                 WatershedID = watershed?.WatershedID,
+                ModelBasinID = modelBasin?.ModelBasinID,
+                PrecipitationZoneID = precipitationZone?.PrecipitationZoneID,
+                RegionalSubbasinID = regionalSubbasin?.RegionalSubbasinID,
                 Notes = treatmentBMPUpsertDto.Notes,
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = (int)TrashCaptureStatusTypeEnum.NotProvided,
