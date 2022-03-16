@@ -55,37 +55,32 @@ namespace Neptune.Web.Common
             return graph;
         }
 
-        public static Graph BuildPlannedProjectNetworkGraph(DatabaseEntities dbContext, Project plannedProject)
+        public static Graph BuildPlannedProjectNetworkGraph(DatabaseEntities dbContext, int plannedProjectID, List<int> plannedProjectRSBIDs)
         {
             var nodes = new List<Node>();
             var edges = new List<Edge>();
 
-            var regionalSubbasinIDs = plannedProject.GetRegionalSubbasinIDs(dbContext);
-            MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).ToList(), out var rsbEdges, out var rsbNodes);
+            MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.Where(x => plannedProjectRSBIDs.Contains(x.RegionalSubbasinID)).ToList(), out var rsbEdges, out var rsbNodes);
             nodes.AddRange(rsbNodes);
             edges.AddRange(rsbEdges);
 
-            //Need confirmation about which nodes to include outside of our planned project bmps
-            //MakeDistributedBMPNodesAndEdges(dbContext, out var distributedBMPEdges, out var distributedBMPNodes);
-            //nodes.AddRange(distributedBMPNodes);
-            //edges.AddRange(distributedBMPEdges);
+            MakeDistributedBMPNodesAndEdges(dbContext, out var distributedBMPEdges, out var distributedBMPNodes, plannedProjectID, plannedProjectRSBIDs);
+            nodes.AddRange(distributedBMPNodes);
+            edges.AddRange(distributedBMPEdges);
 
-            //Need confirmation about which delineations to include outside of our planned project bmps
-            MakeDistributedDelineationNodesAndEdges(dbContext, out var delineationEdges, out var delineationNodes);
+            MakeDistributedDelineationNodesAndEdges(dbContext, out var delineationEdges, out var delineationNodes, plannedProjectID, plannedProjectRSBIDs);
             nodes.AddRange(delineationNodes);
             edges.AddRange(delineationEdges);
 
-            //Need confirmation about which nodes to include outside of our planned project bmps
-            MakeUpstreamBMPNodesAndEdges(dbContext, out var colocationEdges, out var colocationNodes);
+            MakeUpstreamBMPNodesAndEdges(dbContext, out var colocationEdges, out var colocationNodes, plannedProjectRSBIDs);
             nodes.AddRange(colocationNodes);
             edges.AddRange(colocationEdges);
 
-            //Need LGU job for planned projects
             MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
             nodes.AddRange(wqmpNodes);
             edges.AddRange(wqmpEdges);
 
-            MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges);
+            MakeCentralizedBMPNodesAndEdges(dbContext, out var centralizedBMPEdges, out var centralizedBMPNodes, edges, plannedProjectID, plannedProjectRSBIDs);
             nodes.AddRange(centralizedBMPNodes);
             edges.AddRange(centralizedBMPEdges);
 
@@ -173,9 +168,13 @@ namespace Neptune.Web.Common
                     }).ToList();
         }
 
-        public static void MakeDistributedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes)
+        public static void MakeDistributedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes, int? plannedProjectID = null, List<int> plannedProjectRegionalSubbasinIDs = null)
         {
             var vNereidTreatmentBMPRegionalSubbasins = dbContext.vNereidTreatmentBMPRegionalSubbasins.ToList();
+            if (plannedProjectRegionalSubbasinIDs != null && plannedProjectRegionalSubbasinIDs.Any())
+            {
+                vNereidTreatmentBMPRegionalSubbasins = vNereidTreatmentBMPRegionalSubbasins.Where(x => plannedProjectRegionalSubbasinIDs.Contains(x.RegionalSubbasinID)).ToList();
+            }
 
             distributedBMPNodes = vNereidTreatmentBMPRegionalSubbasins
                 .Select(x => new Node() { ID = TreatmentBMPNodeID(x.TreatmentBMPID), TreatmentBMPID = x.TreatmentBMPID }).ToList();
@@ -185,9 +184,20 @@ namespace Neptune.Web.Common
                 SourceID = TreatmentBMPNodeID(x.TreatmentBMPID),
                 TargetID = RegionalSubbasinNodeID(x.OCSurveyCatchmentID)
             }).ToList();
+
+            if (plannedProjectID != null)
+            {
+                var vNereidPlannedProjectTreatmentBMPRegionalSubbasins = dbContext.vNereidPlannedProjectTreatmentBMPRegionalSubbasins.Where(x => x.ProjectID == plannedProjectID).ToList();
+                distributedBMPNodes.AddRange(vNereidPlannedProjectTreatmentBMPRegionalSubbasins.Select(x => new Node() { ID = TreatmentBMPNodeID(x.TreatmentBMPID), TreatmentBMPID = x.TreatmentBMPID }).ToList());
+                distributedBMPEdges.AddRange(vNereidPlannedProjectTreatmentBMPRegionalSubbasins.Select(x => new Edge()
+                {
+                    SourceID = TreatmentBMPNodeID(x.TreatmentBMPID),
+                    TargetID = RegionalSubbasinNodeID(x.OCSurveyCatchmentID)
+                }).ToList());
+            }
         }
 
-        public static void MakeDistributedDelineationNodesAndEdges(DatabaseEntities dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes)
+        public static void MakeDistributedDelineationNodesAndEdges(DatabaseEntities dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes, int? plannedProjectID = null, List<int> plannedProjectRegionalSubbasinIDs = null)
         {
             var distributedDelineations = dbContext.Delineations.Include(x=>x.TreatmentBMP)
                 .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID &&
@@ -195,9 +205,20 @@ namespace Neptune.Web.Common
                             x.IsVerified &&
                             // don't include delineations for non-modeled BMPs
                             x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
-                            x.TreatmentBMP.RegionalSubbasinID != null &&
+                            x.TreatmentBMP.RegionalSubbasinID != null).ToList();
+
+            if (plannedProjectID != null && plannedProjectRegionalSubbasinIDs != null)
+            {
+                distributedDelineations = distributedDelineations.Where(x =>
+                             plannedProjectRegionalSubbasinIDs.Contains(x.TreatmentBMP.RegionalSubbasinID.Value) &&
+                            (x.TreatmentBMP.ProjectID == null || x.TreatmentBMP.ProjectID == plannedProjectID)).ToList();
+            }
+            else
+            {
+                distributedDelineations = distributedDelineations.Where(x =>
                             x.TreatmentBMP.ModelBasinID != null &&
                             x.TreatmentBMP.ProjectID == null).ToList();
+            }
 
             delineationNodes = distributedDelineations
                 .Select(x => new Node()
@@ -214,11 +235,16 @@ namespace Neptune.Web.Common
                 }).ToList();
         }
 
-        private static void MakeUpstreamBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> colocationEdges, out List<Node> colocationNodes)
+        private static void MakeUpstreamBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> colocationEdges, out List<Node> colocationNodes, List<int> plannedProjectRegionalSubbasinIDs = null)
         {
             // we only need to add the upstream nodes, because any bmp that's not an upstream node has already been added
 
             var bmpColocations = dbContext.vNereidBMPColocations.ToList();
+
+            if (plannedProjectRegionalSubbasinIDs != null)
+            {
+                bmpColocations = bmpColocations.Where(x => x.DownstreamRSBID != null && x.UpstreamRSBID != null && plannedProjectRegionalSubbasinIDs.Contains(x.DownstreamRSBID.Value) && plannedProjectRegionalSubbasinIDs.Contains(x.UpstreamRSBID.Value)).ToList();
+            }
             colocationNodes = bmpColocations
                 .Select(x => new Node()
                 {
@@ -272,9 +298,9 @@ namespace Neptune.Web.Common
             wqmpEdges.AddRange(tmntEdges);
         }
 
-        public static IQueryable<WaterQualityManagementPlanNode> GetWaterQualityManagementPlanNodes(DatabaseEntities dbContext)
+        public static List<WaterQualityManagementPlanNode> GetWaterQualityManagementPlanNodes(DatabaseEntities dbContext, int? plannedProjectID = null, List<int> plannedProjectRegionalSubbasinIDs = null)
         {
-            return dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin)
+            var wqmpns = dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin)
                 .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null)
                 .Select(x => new WaterQualityManagementPlanNode
                 {
@@ -282,11 +308,29 @@ namespace Neptune.Web.Common
                     RegionalSubbasinID = x.RegionalSubbasinID.Value,
                     OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID,
                     DateOfConstruction = x.WaterQualityManagementPlan.DateOfContruction
-                }).Distinct();
+                }).Distinct().ToList();
+
+            if (plannedProjectID != null && plannedProjectRegionalSubbasinIDs != null)
+            {
+                var ppwqmpns = dbContext.PlannedProjectLoadGeneratingUnits.Include(x => x.RegionalSubbasin)
+                    .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null && x.ProjectID == plannedProjectID)
+                    .Select(x => new WaterQualityManagementPlanNode
+                    {
+                        WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
+                        RegionalSubbasinID = x.RegionalSubbasinID.Value,
+                        OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID,
+                        DateOfConstruction = x.WaterQualityManagementPlan.DateOfContruction
+                    }).Distinct().ToList();
+                wqmpns = wqmpns.Where(x => plannedProjectRegionalSubbasinIDs.Contains(x.RegionalSubbasinID)).ToList();
+                wqmpns.AddRange(ppwqmpns);
+                wqmpns = wqmpns.Distinct().ToList();
+            }
+
+            return wqmpns;
         }
 
         private static void MakeCentralizedBMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> centralizedBMPEdges,
-            out List<Node> centralizedBMPNodes, List<Edge> existingEdges)
+            out List<Node> centralizedBMPNodes, List<Edge> existingEdges, int? plannedProjectID = null, List<int> plannedProjectRegionalSubbasinIDs = null)
         {
             centralizedBMPNodes = new List<Node>();
             centralizedBMPEdges = new List<Edge>();
@@ -295,7 +339,17 @@ namespace Neptune.Web.Common
             // multiple centralized delineations per one regional subbasin. In future, we'll need
             // to find something better to do about that case than ignore the additionals.
 
-            foreach (var rsbCentralizedBMPPairing in dbContext.vNereidRegionalSubbasinCentralizedBMPs.Where(x => x.RowNumber == 1).ToList())
+            var centralizedBMPs = dbContext.vNereidRegionalSubbasinCentralizedBMPs.Where(x => x.RowNumber == 1).ToList();
+
+            if (plannedProjectID != null && plannedProjectRegionalSubbasinIDs != null)
+            {
+                var plannedProjectCentralizedBMPs = dbContext.vNereidPlannedProjectRegionalSubbasinCentralizedBMPs.Where(x => x.RowNumber == 1 && x.ProjectID == plannedProjectID).Select(x => x.tovNereidRegionalSubbasinCentralizedBMP()).ToList();
+                //this might be incorrect, but since we're only grabbing 1 per rsb lets prioritize our planned project ones in this case
+                centralizedBMPs = centralizedBMPs.Where(x => plannedProjectRegionalSubbasinIDs.Contains(x.RegionalSubbasinID) && !plannedProjectCentralizedBMPs.Any(y => y.RegionalSubbasinID == x.RegionalSubbasinID)).ToList();
+                centralizedBMPs.AddRange(plannedProjectCentralizedBMPs);
+            }
+
+            foreach (var rsbCentralizedBMPPairing in centralizedBMPs)
             {
                 var newCentralizedBMPNodeID = TreatmentBMPNodeID(rsbCentralizedBMPPairing.TreatmentBMPID);
                 var existingRSBNodeID = RegionalSubbasinNodeID(rsbCentralizedBMPPairing.OCSurveyCatchmentID);
@@ -369,11 +423,19 @@ namespace Neptune.Web.Common
             }
         }
 
-        public static IQueryable<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext)
+        public static List<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext, int? plannedProjectID = null, List<int> plannedProjectRSBIDs = null)
         {
-            return dbContext.TreatmentBMPs
-                .Where(x => x.RegionalSubbasinID!= null && x.ModelBasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null && x.ProjectID == null);
+            var toReturn = dbContext.TreatmentBMPs.Where(x => x.RegionalSubbasinID!= null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList();
 
+            if (plannedProjectID != null && plannedProjectRSBIDs != null)
+            {
+                toReturn = toReturn.Where(x => plannedProjectRSBIDs.Contains(x.RegionalSubbasinID.Value) && (x.ProjectID == null || x.ProjectID == plannedProjectID)).ToList();
+            }
+            else
+            {
+                toReturn = toReturn.Where(x => x.ModelBasinID != null && x.ProjectID == null).ToList();
+            }
+            return toReturn;
         }
         
         public static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent, HttpClient httpClient)
@@ -468,19 +530,19 @@ namespace Neptune.Web.Common
         }
 
         public static IEnumerable<NereidResult> PlannedProjectNetworkSolve(out string stackTrace,
-            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient, bool isBaselineCondition, Project plannedProject)
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient, bool isBaselineCondition, int plannedProjectID, List<int> plannedProjectRSBIDs)
         {
             stackTrace = "";
             missingNodeIDs = new List<string>();
-            graph = NereidUtilities.BuildPlannedProjectNetworkGraph(dbContext, plannedProject);
+            graph = NereidUtilities.BuildPlannedProjectNetworkGraph(dbContext, plannedProjectID, plannedProjectRSBIDs);
 
-            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition);
+            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition, plannedProjectID, plannedProjectRSBIDs);
 
-            var baselineConditionSqlParam = new SqlParameter("@isBaselineCondition", isBaselineCondition);
+            var projectIDSqlParam = new SqlParameter("@projectID", plannedProjectID);
             dbContext.Database.ExecuteSqlCommand(
-                "EXEC dbo.pDeleteNereidResults @isBaselineCondition", baselineConditionSqlParam);
+                "EXEC dbo.pDeletePlannedProjectNereidResults @projectID", projectIDSqlParam);
 
-            dbContext.NereidResults.AddRange(nereidResults);
+            dbContext.PlannedProjectNereidResults.AddRange(nereidResults.Select(x => x.toPlannedProjectNereidResult(plannedProjectID)).ToList());
             // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
             dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();
@@ -550,15 +612,16 @@ namespace Neptune.Web.Common
         }
 
         private static List<NereidResult> NetworkSolveImpl(List<string> missingNodeIDs, Graph graph, DatabaseEntities dbContext,
-            HttpClient httpClient, bool sendPreviousResults, bool isBaselineCondition)
+            HttpClient httpClient, bool sendPreviousResults, bool isBaselineCondition, int? plannedProjectID = null, List<int> plannedProjectRegionalSubbasinIDs = null)
         {
             var solutionSequenceUrl =
                 $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
 
-            var allLoadingInputs = dbContext.vNereidLoadingInputs.ToList();
-            var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(dbContext).ToList();
+            var allLoadingInputs = plannedProjectID != null ? dbContext.vNereidPlannedProjectLoadingInputs.Where(x => x.ProjectID == plannedProjectID).Select(x => x.tovNereidLoadingInput()).ToList() : dbContext.vNereidLoadingInputs.ToList();
+            var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(dbContext, plannedProjectID, plannedProjectRegionalSubbasinIDs).ToList();
             var allwaterQualityManagementPlanNodes =
-                NereidUtilities.GetWaterQualityManagementPlanNodes(dbContext).ToList();
+                NereidUtilities.GetWaterQualityManagementPlanNodes(dbContext, plannedProjectID, plannedProjectRegionalSubbasinIDs).ToList();
+            //This will get taken care of inside of SolveSubgraph based on the WQMP nodes above, so no need to filter it here
             var allModelingQuickBMPs = dbContext.QuickBMPs.Include(x => x.TreatmentBMPType)
                 .GetFullyParameterized();
 

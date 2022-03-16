@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Data.Entity;
 using System.Net.Http;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
@@ -36,12 +37,12 @@ namespace Neptune.Web.ScheduledJobs
         protected override void RunJobImplementation()
         {
             var plannedProject = DbContext.Projects.First(x => x.ProjectID == PlannedProjectID);
-            var plannedProjectRSBIDs = plannedProject.GetRegionalSubbasinIDs(DbContext);
+            var regionalSubbasinIDs = plannedProject.GetRegionalSubbasinIDs(DbContext);
             //Get our LGUs
-            LoadGeneratingUnitRefreshImpl(plannedProjectRSBIDs);
+            LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
             //Get our HRUs
             HRURefreshImpl();
-            NereidUtilities.PlannedProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, plannedProject);
+            NereidUtilities.PlannedProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, PlannedProjectID, regionalSubbasinIDs);
         }
 
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)
@@ -50,7 +51,6 @@ namespace Neptune.Web.ScheduledJobs
 
             var outputLayerName = Guid.NewGuid().ToString();
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
-
             var additionalCommandLineArguments = new List<string> { outputLayerPath, PlannedProjectID.ToString(), String.Join(", ", regionalSubbasinIDs) };
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile

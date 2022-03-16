@@ -77,6 +77,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new PlannedProjectHRUCharacteristicConfiguration());
             modelBuilder.Configurations.Add(new PlannedProjectLoadGeneratingUnitConfiguration());
+            modelBuilder.Configurations.Add(new PlannedProjectNereidResultConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
@@ -128,6 +129,9 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vNereidBMPColocationConfiguration());
             modelBuilder.Configurations.Add(new vNereidLoadingInputConfiguration());
+            modelBuilder.Configurations.Add(new vNereidPlannedProjectLoadingInputConfiguration());
+            modelBuilder.Configurations.Add(new vNereidPlannedProjectRegionalSubbasinCentralizedBMPConfiguration());
+            modelBuilder.Configurations.Add(new vNereidPlannedProjectTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vNereidRegionalSubbasinCentralizedBMPConfiguration());
             modelBuilder.Configurations.Add(new vNereidTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
@@ -185,6 +189,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
         public virtual DbSet<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
+        public virtual DbSet<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<ProjectDocument> ProjectDocuments { get; set; }
@@ -236,6 +241,9 @@ namespace Neptune.Web.Models
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
+        public virtual DbSet<vNereidPlannedProjectLoadingInput> vNereidPlannedProjectLoadingInputs { get; set; }
+        public virtual DbSet<vNereidPlannedProjectRegionalSubbasinCentralizedBMP> vNereidPlannedProjectRegionalSubbasinCentralizedBMPs { get; set; }
+        public virtual DbSet<vNereidPlannedProjectTreatmentBMPRegionalSubbasin> vNereidPlannedProjectTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
@@ -522,6 +530,9 @@ namespace Neptune.Web.Models
 
                 case "PlannedProjectLoadGeneratingUnit":
                     return PlannedProjectLoadGeneratingUnits.GetPlannedProjectLoadGeneratingUnit(primaryKey);
+
+                case "PlannedProjectNereidResult":
+                    return PlannedProjectNereidResults.GetPlannedProjectNereidResult(primaryKey);
 
                 case "PrecipitationZone":
                     return PrecipitationZones.GetPrecipitationZone(primaryKey);

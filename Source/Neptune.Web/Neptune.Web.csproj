@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -277,6 +277,10 @@
     <Compile Include="Models\Generated\PlannedProjectLoadGeneratingUnit.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PlannedProjectLoadGeneratingUnitConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\PlannedProjectLoadGeneratingUnitPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\PlannedProjectNereidResult.Binding.cs" />
+    <Compile Include="Models\Generated\PlannedProjectNereidResult.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\PlannedProjectNereidResultConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\PlannedProjectNereidResultPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\PrecipitationZone.Binding.cs" />
     <Compile Include="Models\Generated\PrecipitationZone.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PrecipitationZoneConfiguration.Binding.cs" />
@@ -453,6 +457,12 @@
     <Compile Include="Models\Generated\vNereidBMPColocationConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidLoadingInput.Binding.cs" />
     <Compile Include="Models\Generated\vNereidLoadingInputConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidPlannedProjectLoadingInput.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidPlannedProjectLoadingInputConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidPlannedProjectRegionalSubbasinCentralizedBMP.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidPlannedProjectRegionalSubbasinCentralizedBMPConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidPlannedProjectTreatmentBMPRegionalSubbasin.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidPlannedProjectTreatmentBMPRegionalSubbasinConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidRegionalSubbasinCentralizedBMP.Binding.cs" />
     <Compile Include="Models\Generated\vNereidRegionalSubbasinCentralizedBMPConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidTreatmentBMPRegionalSubbasin.Binding.cs" />
@@ -561,9 +571,12 @@
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentSite.cs" />
     <Compile Include="Models\ModeledPerformanceResultSimple.cs" />
     <Compile Include="Models\ModelResultsDisplayHelper.cs" />
+    <Compile Include="Models\NereidResultExtensionMethods.cs" />
     <Compile Include="Models\ProjectModelExtensions.cs" />
     <Compile Include="Models\QuickBMPModelExtensions.cs" />
     <Compile Include="Models\RegionalSubbasinRevisionRequest.cs" />
+    <Compile Include="Models\vNereidPlannedProjectRegionalSubbasinCentralizedBMPExtensionMethods.cs" />
+    <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
     <Compile Include="ScheduledJobs\PlannedProjectNetworkSolveJob.cs" />

@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
         {
             this.PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
             this.PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
+            this.PlannedProjectNereidResults = new HashSet<PlannedProjectNereidResult>();
             this.ProjectDocuments = new HashSet<ProjectDocument>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -104,7 +105,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return PlannedProjectHRUCharacteristics.Any() || PlannedProjectLoadGeneratingUnits.Any() || ProjectDocuments.Any() || TreatmentBMPs.Any();
+            return PlannedProjectHRUCharacteristics.Any() || PlannedProjectLoadGeneratingUnits.Any() || PlannedProjectNereidResults.Any() || ProjectDocuments.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -124,6 +125,11 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(PlannedProjectLoadGeneratingUnit).Name);
             }
 
+            if(PlannedProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(PlannedProjectNereidResult).Name);
+            }
+
             if(ProjectDocuments.Any())
             {
                 dependentObjects.Add(typeof(ProjectDocument).Name);
@@ -139,7 +145,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(PlannedProjectHRUCharacteristic).Name, typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(PlannedProjectHRUCharacteristic).Name, typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(PlannedProjectNereidResult).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -174,6 +180,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in PlannedProjectNereidResults.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in ProjectDocuments.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -201,6 +212,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
         public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
+        public virtual ICollection<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual Organization Organization { get; set; }

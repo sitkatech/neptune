@@ -6,7 +6,11 @@ as
 select 
 	bmp_down.TreatmentBMPID as PrimaryKey,
 	bmp_down.TreatmentBMPID as DownstreamBMPID,
-	bmp_up.TreatmentBMPID as UpstreamBMPID
+	--Include this for planned projects
+	bmp_down.RegionalSubbasinID as DownstreamRSBID,
+	bmp_up.TreatmentBMPID as UpstreamBMPID,
+	--Include this for planned projects
+	bmp_up.RegionalSubbasinID as UpstreamRSBID
 from dbo.TreatmentBMP bmp_Down
 	join dbo.TreatmentBMP bmp_up
 	on bmp_down.UpstreamBMPID = bmp_up.TreatmentBMPID

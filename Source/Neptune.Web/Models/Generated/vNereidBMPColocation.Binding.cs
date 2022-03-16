@@ -25,11 +25,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidBMPColocation(int primaryKey, int downstreamBMPID, int upstreamBMPID) : this()
+        public vNereidBMPColocation(int primaryKey, int downstreamBMPID, int? downstreamRSBID, int upstreamBMPID, int? upstreamRSBID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.DownstreamBMPID = downstreamBMPID;
+            this.DownstreamRSBID = downstreamRSBID;
             this.UpstreamBMPID = upstreamBMPID;
+            this.UpstreamRSBID = upstreamRSBID;
         }
 
         /// <summary>
@@ -39,7 +41,9 @@ namespace Neptune.Web.Models
         {
             this.PrimaryKey = vNereidBMPColocation.PrimaryKey;
             this.DownstreamBMPID = vNereidBMPColocation.DownstreamBMPID;
+            this.DownstreamRSBID = vNereidBMPColocation.DownstreamRSBID;
             this.UpstreamBMPID = vNereidBMPColocation.UpstreamBMPID;
+            this.UpstreamRSBID = vNereidBMPColocation.UpstreamRSBID;
             CallAfterConstructor(vNereidBMPColocation);
         }
 
@@ -47,6 +51,8 @@ namespace Neptune.Web.Models
 
         public int PrimaryKey { get; set; }
         public int DownstreamBMPID { get; set; }
+        public int? DownstreamRSBID { get; set; }
         public int UpstreamBMPID { get; set; }
+        public int? UpstreamRSBID { get; set; }
     }
 }
