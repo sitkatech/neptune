@@ -16,6 +16,7 @@ namespace Hippocamp.EFModels.Entities
         public ModelBasin()
         {
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
             RegionalSubbasins = new HashSet<RegionalSubbasin>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -34,6 +35,8 @@ namespace Hippocamp.EFModels.Entities
 
         [InverseProperty(nameof(LoadGeneratingUnit.ModelBasin))]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        [InverseProperty(nameof(PlannedProjectLoadGeneratingUnit.ModelBasin))]
+        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
         [InverseProperty(nameof(RegionalSubbasin.ModelBasin))]
         public virtual ICollection<RegionalSubbasin> RegionalSubbasins { get; set; }
         [InverseProperty(nameof(TreatmentBMP.ModelBasin))]

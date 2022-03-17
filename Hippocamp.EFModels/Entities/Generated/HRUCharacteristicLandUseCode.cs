@@ -17,6 +17,8 @@ namespace Hippocamp.EFModels.Entities
         {
             HRUCharacteristicBaselineHRUCharacteristicLandUseCodes = new HashSet<HRUCharacteristic>();
             HRUCharacteristicHRUCharacteristicLandUseCodes = new HashSet<HRUCharacteristic>();
+            PlannedProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes = new HashSet<PlannedProjectHRUCharacteristic>();
+            PlannedProjectHRUCharacteristicHRUCharacteristicLandUseCodes = new HashSet<PlannedProjectHRUCharacteristic>();
         }
 
         [Key]
@@ -32,5 +34,9 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<HRUCharacteristic> HRUCharacteristicBaselineHRUCharacteristicLandUseCodes { get; set; }
         [InverseProperty(nameof(HRUCharacteristic.HRUCharacteristicLandUseCode))]
         public virtual ICollection<HRUCharacteristic> HRUCharacteristicHRUCharacteristicLandUseCodes { get; set; }
+        [InverseProperty(nameof(PlannedProjectHRUCharacteristic.BaselineHRUCharacteristicLandUseCode))]
+        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes { get; set; }
+        [InverseProperty(nameof(PlannedProjectHRUCharacteristic.HRUCharacteristicLandUseCode))]
+        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristicHRUCharacteristicLandUseCodes { get; set; }
     }
 }

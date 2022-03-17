@@ -13,6 +13,8 @@ namespace Hippocamp.EFModels.Entities
     {
         public int PrimaryKey { get; set; }
         public int DownstreamBMPID { get; set; }
+        public int? DownstreamRSBID { get; set; }
         public int UpstreamBMPID { get; set; }
+        public int? UpstreamRSBID { get; set; }
     }
 }

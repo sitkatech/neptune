@@ -19,6 +19,7 @@ namespace Hippocamp.EFModels.Entities
             DelineationOverlapDelineations = new HashSet<DelineationOverlap>();
             DelineationOverlapOverlappingDelineations = new HashSet<DelineationOverlap>();
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
         }
 
         [Key]
@@ -53,5 +54,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<DelineationOverlap> DelineationOverlapOverlappingDelineations { get; set; }
         [InverseProperty(nameof(LoadGeneratingUnit.Delineation))]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        [InverseProperty(nameof(PlannedProjectLoadGeneratingUnit.Delineation))]
+        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
     }
 }

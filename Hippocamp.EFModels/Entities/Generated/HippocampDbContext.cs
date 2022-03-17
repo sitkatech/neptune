@@ -89,6 +89,9 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<PermitType> PermitTypes { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
+        public virtual DbSet<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
+        public virtual DbSet<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<PreliminarySourceIdentificationCategory> PreliminarySourceIdentificationCategories { get; set; }
@@ -184,10 +187,14 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
+        public virtual DbSet<vNereidPlannedProjectLoadingInput> vNereidPlannedProjectLoadingInputs { get; set; }
+        public virtual DbSet<vNereidPlannedProjectRegionalSubbasinCentralizedBMP> vNereidPlannedProjectRegionalSubbasinCentralizedBMPs { get; set; }
+        public virtual DbSet<vNereidPlannedProjectTreatmentBMPRegionalSubbasin> vNereidPlannedProjectTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaDated> vOnlandVisualTrashAssessmentAreaDateds { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
+        public virtual DbSet<vPlannedProjectDelineationLGUInput> vPlannedProjectDelineationLGUInputs { get; set; }
         public virtual DbSet<vPowerBICentralizedBMPLoadGeneratingUnit> vPowerBICentralizedBMPLoadGeneratingUnits { get; set; }
         public virtual DbSet<vPowerBILandUseStatistic> vPowerBILandUseStatistics { get; set; }
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
@@ -1218,6 +1225,52 @@ namespace Hippocamp.EFModels.Entities
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.People)
                     .HasForeignKey(d => d.RoleID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<PlannedProjectHRUCharacteristic>(entity =>
+            {
+                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
+
+                entity.HasOne(d => d.BaselineHRUCharacteristicLandUseCode)
+                    .WithMany(p => p.PlannedProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes)
+                    .HasForeignKey(d => d.BaselineHRUCharacteristicLandUseCodeID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PlannedProjectHRUCharacteristic_HRUCharacteristicLandUseCodeID");
+
+                entity.HasOne(d => d.HRUCharacteristicLandUseCode)
+                    .WithMany(p => p.PlannedProjectHRUCharacteristicHRUCharacteristicLandUseCodes)
+                    .HasForeignKey(d => d.HRUCharacteristicLandUseCodeID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.PlannedProjectLoadGeneratingUnit)
+                    .WithMany(p => p.PlannedProjectHRUCharacteristics)
+                    .HasForeignKey(d => d.PlannedProjectLoadGeneratingUnitID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.PlannedProjectHRUCharacteristics)
+                    .HasForeignKey(d => d.ProjectID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<PlannedProjectLoadGeneratingUnit>(entity =>
+            {
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.PlannedProjectLoadGeneratingUnits)
+                    .HasForeignKey(d => d.ProjectID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<PlannedProjectNereidResult>(entity =>
+            {
+                entity.Property(e => e.FullResponse).IsUnicode(false);
+
+                entity.Property(e => e.NodeID).IsUnicode(false);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.PlannedProjectNereidResults)
+                    .HasForeignKey(d => d.ProjectID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
@@ -2468,6 +2521,27 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.LandUseCode).IsUnicode(false);
             });
 
+            modelBuilder.Entity<vNereidPlannedProjectLoadingInput>(entity =>
+            {
+                entity.ToView("vNereidPlannedProjectLoadingInput");
+
+                entity.Property(e => e.BaselineLandUseCode).IsUnicode(false);
+
+                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
+
+                entity.Property(e => e.LandUseCode).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<vNereidPlannedProjectRegionalSubbasinCentralizedBMP>(entity =>
+            {
+                entity.ToView("vNereidPlannedProjectRegionalSubbasinCentralizedBMP");
+            });
+
+            modelBuilder.Entity<vNereidPlannedProjectTreatmentBMPRegionalSubbasin>(entity =>
+            {
+                entity.ToView("vNereidPlannedProjectTreatmentBMPRegionalSubbasin");
+            });
+
             modelBuilder.Entity<vNereidRegionalSubbasinCentralizedBMP>(entity =>
             {
                 entity.ToView("vNereidRegionalSubbasinCentralizedBMP");
@@ -2490,6 +2564,11 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vOnlandVisualTrashAssessmentAreaProgress");
 
                 entity.Property(e => e.OnlandVisualTrashAssessmentScoreDisplayName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<vPlannedProjectDelineationLGUInput>(entity =>
+            {
+                entity.ToView("vPlannedProjectDelineationLGUInput");
             });
 
             modelBuilder.Entity<vPowerBICentralizedBMPLoadGeneratingUnit>(entity =>

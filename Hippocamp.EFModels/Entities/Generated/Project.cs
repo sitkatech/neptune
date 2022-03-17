@@ -14,6 +14,9 @@ namespace Hippocamp.EFModels.Entities
     {
         public Project()
         {
+            PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
+            PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
+            PlannedProjectNereidResults = new HashSet<PlannedProjectNereidResult>();
             ProjectDocuments = new HashSet<ProjectDocument>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -50,6 +53,12 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(StormwaterJurisdictionID))]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        [InverseProperty(nameof(PlannedProjectHRUCharacteristic.Project))]
+        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
+        [InverseProperty(nameof(PlannedProjectLoadGeneratingUnit.Project))]
+        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
+        [InverseProperty(nameof(PlannedProjectNereidResult.Project))]
+        public virtual ICollection<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         [InverseProperty(nameof(ProjectDocument.Project))]
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         [InverseProperty(nameof(TreatmentBMP.Project))]

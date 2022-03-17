@@ -19,6 +19,7 @@ namespace Hippocamp.EFModels.Entities
         {
             InverseOCSurveyDownstreamCatchment = new HashSet<RegionalSubbasin>();
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
         }
 
         [Key]
@@ -47,5 +48,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<RegionalSubbasin> InverseOCSurveyDownstreamCatchment { get; set; }
         [InverseProperty(nameof(LoadGeneratingUnit.RegionalSubbasin))]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        [InverseProperty(nameof(PlannedProjectLoadGeneratingUnit.RegionalSubbasin))]
+        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
     }
 }
