@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Web.Http.Cors;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
@@ -583,6 +585,29 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
             return Content("Enqueued");
+        }
+
+        //todo figure out why post and model-binding aren't working
+        //also figure out why web-service tokens weren't working
+        [HttpGet]
+        [AllowAnonymous]
+        [EnableCors(origins: "*", headers: "*", methods: "*")] 
+        public ActionResult NetworkSolveForProject(int projectID)
+        {
+            var project = HttpRequestStorage.DatabaseEntities.Projects.FirstOrDefault(x => x.ProjectID == projectID);
+            if (project == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content($"Project with ID:{projectID} does not exist.");
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID));
+            return Content($"Network solve for Project with ID:{projectID} has begun.");
+        }
+
+        public class NetworkSolveRequest
+        {
+            public int ProjectID { get; set; }
         }
     }
 

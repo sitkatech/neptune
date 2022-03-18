@@ -249,8 +249,9 @@ if __name__ == '__main__':
     if PLANNED_PROJECT_ID is not None:
         nonProjectDelineationLayer = fetchLayer("vDelineationLGUInput")
         projectDelineationLayer = fetchLayer("vPlannedProjectDelineationLGUInput")
-        projectDelineationLayer.setSubsetString("ProjectID=" + PLANNED_PROJECT_ID)
-        delineationLayer = union(regionalSubbasinLayerClipped, wqmpLayerClipped, memoryOutputName="delineationLayer", context=PROCESSING_CONTEXT)
+        projectDelineationLayer.setSubsetString("ProjectID=" + str(PLANNED_PROJECT_ID))
+        #this introduces possibility for overlaps and double counting
+        delineationLayer = union(nonProjectDelineationLayer, projectDelineationLayer, memoryOutputName="delineationLayer", context=PROCESSING_CONTEXT)
     else:
         delineationLayer = fetchLayer("vDelineationLGUInput")
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")

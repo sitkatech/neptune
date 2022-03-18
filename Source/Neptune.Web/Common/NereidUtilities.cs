@@ -343,7 +343,7 @@ namespace Neptune.Web.Common
 
             if (plannedProjectID != null && plannedProjectRegionalSubbasinIDs != null)
             {
-                var plannedProjectCentralizedBMPs = dbContext.vNereidPlannedProjectRegionalSubbasinCentralizedBMPs.Where(x => x.RowNumber == 1 && x.ProjectID == plannedProjectID).Select(x => x.tovNereidRegionalSubbasinCentralizedBMP()).ToList();
+                var plannedProjectCentralizedBMPs = dbContext.vNereidPlannedProjectRegionalSubbasinCentralizedBMPs.Where(x => x.RowNumber == 1 && x.ProjectID == plannedProjectID).ToList().Select(x => x.tovNereidRegionalSubbasinCentralizedBMP()).ToList();
                 //this might be incorrect, but since we're only grabbing 1 per rsb lets prioritize our planned project ones in this case
                 centralizedBMPs = centralizedBMPs.Where(x => plannedProjectRegionalSubbasinIDs.Contains(x.RegionalSubbasinID) && !plannedProjectCentralizedBMPs.Any(y => y.RegionalSubbasinID == x.RegionalSubbasinID)).ToList();
                 centralizedBMPs.AddRange(plannedProjectCentralizedBMPs);
@@ -617,7 +617,7 @@ namespace Neptune.Web.Common
             var solutionSequenceUrl =
                 $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
 
-            var allLoadingInputs = plannedProjectID != null ? dbContext.vNereidPlannedProjectLoadingInputs.Where(x => x.ProjectID == plannedProjectID).Select(x => x.tovNereidLoadingInput()).ToList() : dbContext.vNereidLoadingInputs.ToList();
+            var allLoadingInputs = plannedProjectID != null ? dbContext.vNereidPlannedProjectLoadingInputs.Where(x => x.ProjectID == plannedProjectID).ToList().Select(x => x.tovNereidLoadingInput()).ToList() : dbContext.vNereidLoadingInputs.ToList();
             var allModelingBMPs = NereidUtilities.ModelingTreatmentBMPs(dbContext, plannedProjectID, plannedProjectRegionalSubbasinIDs).ToList();
             var allwaterQualityManagementPlanNodes =
                 NereidUtilities.GetWaterQualityManagementPlanNodes(dbContext, plannedProjectID, plannedProjectRegionalSubbasinIDs).ToList();

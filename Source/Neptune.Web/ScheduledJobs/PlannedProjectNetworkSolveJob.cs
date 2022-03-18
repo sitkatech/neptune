@@ -51,7 +51,7 @@ namespace Neptune.Web.ScheduledJobs
 
             var outputLayerName = Guid.NewGuid().ToString();
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
-            var additionalCommandLineArguments = new List<string> { outputLayerPath, PlannedProjectID.ToString(), String.Join(", ", regionalSubbasinIDs) };
+            var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", PlannedProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
