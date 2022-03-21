@@ -589,25 +589,28 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
         //todo figure out why post and model-binding aren't working
         //also figure out why web-service tokens weren't working
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         [EnableCors(origins: "*", headers: "*", methods: "*")] 
-        public ActionResult NetworkSolveForProject(int projectID)
+        public ActionResult NetworkSolveForProject(ProjectPrimaryKey projectPrimaryKey, [System.Web.Http.FromBody] string webServiceAccessTokenGuidAsString)
         {
-            var project = HttpRequestStorage.DatabaseEntities.Projects.FirstOrDefault(x => x.ProjectID == projectID);
-            if (project == null)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Content($"Project with ID:{projectID} does not exist.");
-            }
+            //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
+            var webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
 
+            var projectID = projectPrimaryKey.EntityObject.ProjectID;
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID));
             return Content($"Network solve for Project with ID:{projectID} has begun.");
         }
 
         public class NetworkSolveRequest
         {
-            public int ProjectID { get; set; }
+            public WebServiceToken WebServiceToken { get; set; }
+
+            public NetworkSolveRequest() { }
+            public NetworkSolveRequest(string webServiceToken)
+            {
+                WebServiceToken = new WebServiceToken(webServiceToken);
+            }
         }
     }
 
