@@ -442,7 +442,7 @@ namespace Neptune.Web.Common
         {
             NereidResult<TResp> responseObject = null;
             var serializedRequest = JsonConvert.SerializeObject(nereidRequestObject);
-            var requestStringContent = new StringContent(serializedRequest);
+            var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
             _logger.Info($"Executing Nereid request: {nereidRequestUrl}");
             var requestLogFile = Path.Combine(NeptuneWebConfiguration.NereidLogFileFolder.FullName, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
             File.WriteAllText(requestLogFile, serializedRequest);
@@ -481,7 +481,13 @@ namespace Neptune.Web.Common
             }
             while (executing)
             {
-                var stringResponse = httpClient.GetAsync($"{NeptuneWebConfiguration.NereidUrl}{resultRoute}").Result.Content
+                //MP 3/18/22 This is a temporary necessity because Nereid won't return urls with the proper protocol
+                //Austin is looking into it but for now this will let the environments work properly
+                if (resultRoute != null && resultRoute.StartsWith("http:"))
+                {
+                    resultRoute = resultRoute.Replace("http:", "https:");
+                }
+                var stringResponse = httpClient.GetAsync($"{resultRoute}").Result.Content
                     .ReadAsStringAsync().Result;
 
                 var continuePollingResponse =
