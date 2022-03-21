@@ -27,6 +27,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Common
 {
@@ -65,6 +66,19 @@ namespace Neptune.Web.Common
             var duplicates = sitkaRouteEntries.GroupBy(x => x.RouteName).Where(y => y.Count() > 1).SelectMany(z => z).ToList();
 
             Check.Require(!duplicates.Any(), string.Format("Unexpected duplicate routes found, check controller actions:\r\n{0}", String.Join("\r\n", duplicates)));
+
+            //MP 3/21/22  Search PLANNING_MODULE_LOCAL_NECESSITY for any other areas where there were necessary local changes
+            //As of now, the route in question is ONLY used by the planning module and locally we need to be able to call this from inside
+            //our docker container. So update the url to be host.docker.internal which is what docker uses to make the true localhost available.
+            if (NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType == NeptuneEnvironmentType.Local)
+            {
+                sitkaRouteEntries.AddRange(sitkaRouteEntries.Where(x => x.Action == "NetworkSolveForProject").Select(x =>
+                {
+                    var newEntry = x;
+                    newEntry.AreaAsSubdomainName = newEntry.AreaAsSubdomainName.Replace(NeptuneWebConfiguration.CanonicalHostNameModeling, "host.docker.internal");
+                    return newEntry;
+                }).ToList());
+            }
 
             // add the ones with a route order first
             foreach (var routeEntry in sitkaRouteEntries.Where(x => x.RouteOrder.HasValue).OrderBy(x => x.RouteOrder).ThenBy(x => x.Controller).ThenBy(x => x.Action).ThenBy(x => x.RouteName).ToList())

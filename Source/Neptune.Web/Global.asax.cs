@@ -151,8 +151,15 @@ namespace Neptune.Web
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            // Require SSL from this point forward
-            filters.Add(new RequireHttpsAttribute());
+            //MP 3/21/22  Search PLANNING_MODULE_LOCAL_NECESSITY for any other areas where there were necessary local changes
+            //Currently for locally developing against the planning module (hippocamp) there are some hurdles to jump through to get the containerized app to communicate with the local iis app
+            //One thing thats helpful in that is being allowed to communicate without https.
+            //NOTE this will also require you to go to IIS and add an http binding to localhost.ocstormwatertools.org for host.docker.internal (Port 80, host name host.docker.internal)
+            if (NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType != NeptuneEnvironmentType.Local)
+            {
+                // Require SSL from this point forward
+                filters.Add(new RequireHttpsAttribute());
+            }
             filters.Add(new OpenIDNeptuneAuthorizeAttribute());
        }
 
