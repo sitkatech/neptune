@@ -1,6 +1,8 @@
 Drop View If Exists dbo.vPlannedProjectDelineationLGUInput
 GO
 
+--We are going to use this to get ALL delineations, and then in our python script filter down
+--to non-project delineations and our delineations only
 Create view dbo.vPlannedProjectDelineationLGUInput
 as
 Select
@@ -15,5 +17,4 @@ from
 Where d.DelineationTypeID = 2  -- distributed
  --and d.IsVerified = 1 -- allow provisional delineations; they will be excluded from model results later.
  and ttype.TreatmentBMPModelingTypeID is not null  --only include modeling BMPs
- and t.ProjectID is not null --only include project treatment bmps
 GO

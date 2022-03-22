@@ -247,11 +247,8 @@ if __name__ == '__main__':
     if RSB_IDs is not None:
         regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
     if PLANNED_PROJECT_ID is not None:
-        nonProjectDelineationLayer = fetchLayer("vDelineationLGUInput")
-        projectDelineationLayer = fetchLayer("vPlannedProjectDelineationLGUInput")
-        projectDelineationLayer.setSubsetString("ProjectID=" + str(PLANNED_PROJECT_ID))
-        #this introduces possibility for overlaps and double counting
-        delineationLayer = union(nonProjectDelineationLayer, projectDelineationLayer, memoryOutputName="delineationLayer", context=PROCESSING_CONTEXT)
+        delineationLayer = fetchLayer("vPlannedProjectDelineationLGUInput")
+        delineationLayer.setSubsetString("ProjectID is null or ProjectID=" + str(PLANNED_PROJECT_ID))
     else:
         delineationLayer = fetchLayer("vDelineationLGUInput")
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
