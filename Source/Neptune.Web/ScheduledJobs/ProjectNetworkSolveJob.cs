@@ -11,6 +11,8 @@ using MoreLinq;
 using Neptune.Web.Common;
 using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
+using System.Net.Mail;
+using LtInfo.Common.Email;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -20,11 +22,13 @@ namespace Neptune.Web.ScheduledJobs
 
         public HttpClient HttpClient { get; set; }
         public int ProjectID { get; }
+        public int ProjectNetworkSolveHistoryID { get; }
 
-        public ProjectNetworkSolveJob(int projectID) : base()
+        public ProjectNetworkSolveJob(int projectID, int projectNetworkSolveHistoryID) : base()
         {
             HttpClient = new HttpClient();
             ProjectID = projectID;
+            ProjectNetworkSolveHistoryID = projectNetworkSolveHistoryID;
         }
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
@@ -37,12 +41,68 @@ namespace Neptune.Web.ScheduledJobs
         protected override void RunJobImplementation()
         {
             var project = DbContext.Projects.First(x => x.ProjectID == ProjectID);
+            var projectNetworkSolveHistory = DbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).First(x => x.ProjectNetworkSolveHistoryID == ProjectNetworkSolveHistoryID);
             var regionalSubbasinIDs = project.GetRegionalSubbasinIDs(DbContext);
-            //Get our LGUs
-            LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
-            //Get our HRUs
-            HRURefreshImpl();
-            NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs);
+
+            try
+            {
+                //Get our LGUs
+                LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
+                //Get our HRUs
+                HRURefreshImpl();
+                throw new Exception("Oh no an exception!!!!");
+                //NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs);
+                //projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
+                //DbContext.SaveChangesWithNoAuditing();
+                //SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
+            }
+            catch (Exception ex)
+            {
+                projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Failed;
+                projectNetworkSolveHistory.ErrorMessage = ex.Message;
+                DbContext.SaveChangesWithNoAuditing();
+                SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, false, ex.Message);
+                throw;
+            }
+            
+        }
+
+        private void SendProjectNetworkSolveTerminalStatusEmail(Models.Person requestPerson,
+            Models.Project project, bool successful, string errorMessage)
+        {
+            var projectName = project.ProjectName;
+            var subject = successful ? $"Modeled Results calculated for Project:{projectName}" : $"Model Results calculation failed for Project:{projectName}";
+            var requestPersonEmail = requestPerson.Email;
+            var errorContext = $"<br /><br/>See the provided error message for more details:\n {errorMessage}";
+            var planningURL = $"{NeptuneWebConfiguration.CanonicalHostNamePlanning}/projects/edit/{project.ProjectID}/stormwater-treatments/modeled-performance";
+            var message = $@"
+<div style='font-size: 12px; font-family: Arial'>
+<strong>{subject}</strong><br />
+<br />
+Model results calculation for Project:{projectName} has completed{(!successful ? " but encountered errors." : ".")}
+<br /><br />
+You can view the results or trigger another network solve <a href='{planningURL}'>here</a>.
+
+{(!successful ? errorContext : "")}
+";
+            // Create Notification
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(Common.NeptuneWebConfiguration.DoNotReplyEmail),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(requestPersonEmail);
+
+            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People
+                .GetPeopleWhoReceiveSupportEmails())
+            {
+                mailMessage.CC.Add(revisionRequestPeople.Email);
+            }
+
+            SitkaSmtpClient.Send(mailMessage);
         }
 
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)

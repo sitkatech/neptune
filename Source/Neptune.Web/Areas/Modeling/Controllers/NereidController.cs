@@ -597,11 +597,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             try
             {
                 //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
-
                 var webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
-
-                var projectID = projectPrimaryKey.EntityObject.ProjectID;
-                BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID));
+                var projectID = projectPrimaryKey.EntityObject.ProjectID; 
+                var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory(projectID, webServiceAccessToken.Person.PersonID, (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued);
+                HttpRequestStorage.DatabaseEntities.ProjectNetworkSolveHistories.Add(projectNetworkSolveHistoryEntity);
+                HttpRequestStorage.DatabaseEntities.SaveChangesWithNoAuditing();
+                BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
                 return Content($"Network solve for Project with ID:{projectID} has begun.");
             }
             catch (NullReferenceException ex)
