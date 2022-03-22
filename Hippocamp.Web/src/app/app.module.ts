@@ -40,6 +40,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
 import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
 import { DelineationsComponent } from './pages/project-new/delineations/delineations.component';
+import { ModeledPerformanceComponent } from './pages/project-new/modeled-performance/modeled-performance.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -67,6 +68,7 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     TreatmentBmpsComponent,
     ProjectAttachmentsComponent,
     DelineationsComponent,
+    ModeledPerformanceComponent,
   ],
   imports: [
     AppRoutingModule,

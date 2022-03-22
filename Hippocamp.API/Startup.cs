@@ -23,6 +23,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 using Serilog.Sinks.ApplicationInsights.Sinks.ApplicationInsights.TelemetryConverters;
 using ILogger = Serilog.ILogger;
+using System.Net;
 
 namespace Hippocamp.API
 {
@@ -102,6 +103,12 @@ namespace Hippocamp.API
                     });
                     options.TokenValidationParameters.NameClaimType = "name";
                     options.TokenValidationParameters.RoleClaimType = "role";
+                });
+
+            services.AddHttpClient("NeptuneClient")
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
+                {
+                    ServerCertificateCustomValidationCallback = _environment.IsDevelopment() ? HttpClientHandler.DangerousAcceptAnyServerCertificateValidator : null
                 });
 
             services.AddDbContext<HippocampDbContext>(c =>

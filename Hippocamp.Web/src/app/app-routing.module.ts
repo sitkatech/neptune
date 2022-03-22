@@ -20,6 +20,7 @@ import { UnderConstructionComponent } from './shared/components/under-constructi
 import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
 import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
 import { DelineationsComponent } from './pages/project-new/delineations/delineations.component';
+import { ModeledPerformanceComponent } from './pages/project-new/modeled-performance/modeled-performance.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -43,7 +44,7 @@ const routes: Routes = [
       { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
       { path: "treatment-bmps", component:  TreatmentBmpsComponent},
       { path: "delineations", component:  DelineationsComponent},
-      { path: "modeled-performance", component:  UnderConstructionComponent},
+      { path: "modeled-performance", component:  ModeledPerformanceComponent},
     ]},
     { path: "attachments", component:  ProjectAttachmentsComponent},
     { path: "review", component:  UnderConstructionComponent},

@@ -1,0 +1,71 @@
+<h2 class="d-inline-block mt-md-0 mt-4">
+    Modeled Performance
+</h2>
+<div class="row m-1">
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</div>
+<div class="row m-1 mb-3">
+    <div class="col-4 col-md-2">
+        <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()">
+            Calculate
+        </button>
+    </div>
+    <div class="col-8 col-md-10">
+        <p class="text-bold">Press 'Calculate' to run the model results for your project. You will be notified via email
+            when the updated results are returned. Toggle the dropdown below to view results for individual BMPs.</p>
+        <p>Results last calculated at (create queue and put time here)</p>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Location
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-md-5">
+                        <table class="table d-block" style="overflow:scroll" [style.max-height]="mapHeight">
+                            <thead>
+                                <th>
+                                    BMP Name
+                                </th>
+                                <th>
+                                    <field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'">
+                                    </field-definition>
+                                </th>
+                                <th>
+                                    Delineation Area (ac)
+                                </th>
+                                <th>
+                                    <field-definition fieldDefinitionType="FullyParameterized"></field-definition>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let treatmentBMP of treatmentBMPs" class="selectable"
+                                    [class.selected]="selectedTreatmentBMP?.TreatmentBMPID == treatmentBMP.TreatmentBMPID"
+                                    (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
+                                    <td>
+                                        {{treatmentBMP.TreatmentBMPName}}
+                                    </td>
+                                    <td>
+                                        {{treatmentBMP.TreatmentBMPTypeName}}
+                                    </td>
+                                    <td>
+                                        {{getDelineationAcreageForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}
+                                    </td>
+                                    <td>
+                                        {{treatmentBMP.IsFullyParameterized ? "Yes" : "No"}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-6 col-md-7">
+                        <div #mapDiv id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

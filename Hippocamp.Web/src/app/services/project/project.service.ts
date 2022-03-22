@@ -88,4 +88,9 @@ export class ProjectService {
     let route = `/projects/attachments/${attachmentID}`;
     return this.apiService.deleteToApi(route);
   }
+
+  triggerNetworkSolveForProject(projectID: number): Observable<any> {
+    let route = `/projects/${projectID}/modeled-performance`;
+    return this.apiService.postToApi(route, {});
+  }
 }

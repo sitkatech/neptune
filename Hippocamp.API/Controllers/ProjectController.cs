@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Hippocamp.API.Controllers
 {
@@ -16,8 +19,11 @@ namespace Hippocamp.API.Controllers
 
     public class ProjectController : SitkaController<ProjectController>
     {
-        public ProjectController(HippocampDbContext dbContext, ILogger<ProjectController> logger, KeystoneService keystoneService, IOptions<HippocampConfiguration> hippocampConfiguration) : base(dbContext, logger, keystoneService, hippocampConfiguration)
+        private readonly HttpClient _neptuneClient;
+
+        public ProjectController(HippocampDbContext dbContext, ILogger<ProjectController> logger, KeystoneService keystoneService, IOptions<HippocampConfiguration> hippocampConfiguration, IHttpClientFactory httpClientFactory) : base(dbContext, logger, keystoneService, hippocampConfiguration)
         {
+            _neptuneClient = httpClientFactory.CreateClient("NeptuneClient");
         }
 
         [HttpGet("projects/{projectID}")]
@@ -179,6 +185,38 @@ namespace Hippocamp.API.Controllers
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
             Projects.Delete(_dbContext, project);
+            return Ok();
+        }
+
+        [HttpPost("projects/{projectID}/modeled-performance")]
+        [JurisdictionEditFeature]
+        public IActionResult TriggerModeledPerformanceForProject([FromRoute] int projectID)
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
+            {
+                return actionResult;
+            }
+            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            {
+                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+            }
+
+            var requestObject = new
+            {
+                webServiceAccessTokenGuidAsString = personDto.WebServiceAccessToken.ToString()
+            };
+
+            var result = _neptuneClient.PostAsync($"http://host.docker.internal/Nereid/NetworkSolveForProject/{projectID}", new StringContent(JsonConvert.SerializeObject(requestObject), Encoding.UTF8, "application/json")).Result;
+            var body = result.Content.ReadAsStringAsync().Result;
+
+            if (!result.IsSuccessStatusCode)
+            {
+                //more logic here, but just return that we failed
+                return BadRequest("The request failed");
+            }
+
             return Ok();
         }
 

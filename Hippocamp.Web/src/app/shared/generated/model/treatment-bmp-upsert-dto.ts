@@ -50,6 +50,7 @@ export class TreatmentBMPUpsertDto {
     UnderlyingHydrologicSoilGroupID?: number;
     MonthsOfOperationID?: number;
     DryWeatherFlowOverrideID?: number;
+    IsFullyParameterized?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

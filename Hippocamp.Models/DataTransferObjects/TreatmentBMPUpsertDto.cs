@@ -53,6 +53,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public int? UnderlyingHydrologicSoilGroupID { get; set; }
         public int? MonthsOfOperationID { get; set; }
         public int? DryWeatherFlowOverrideID { get; set; }
+        public bool? IsFullyParameterized { get; set; }
 
     }
 }

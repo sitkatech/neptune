@@ -900,6 +900,29 @@
         }
       }
     },
+    "/projects/{projectID}/modeled-performance": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": [
@@ -2462,6 +2485,10 @@
           "DryWeatherFlowOverrideID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "IsFullyParameterized": {
+            "type": "boolean",
             "nullable": true
           }
         },
