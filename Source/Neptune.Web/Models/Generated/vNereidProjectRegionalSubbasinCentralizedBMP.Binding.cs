@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[vNereidPlannedProjectRegionalSubbasinCentralizedBMP]
+//  Source Table: [dbo].[vNereidProjectRegionalSubbasinCentralizedBMP]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
@@ -13,19 +13,19 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public partial class vNereidPlannedProjectRegionalSubbasinCentralizedBMP
+    public partial class vNereidProjectRegionalSubbasinCentralizedBMP
     {
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
-        public vNereidPlannedProjectRegionalSubbasinCentralizedBMP()
+        public vNereidProjectRegionalSubbasinCentralizedBMP()
         {
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidPlannedProjectRegionalSubbasinCentralizedBMP(int primaryKey, int regionalSubbasinID, int oCSurveyCatchmentID, int? projectID, int treatmentBMPID, int? upstreamBMPID, long? rowNumber) : this()
+        public vNereidProjectRegionalSubbasinCentralizedBMP(int primaryKey, int regionalSubbasinID, int oCSurveyCatchmentID, int? projectID, int treatmentBMPID, int? upstreamBMPID, long? rowNumber) : this()
         {
             this.PrimaryKey = primaryKey;
             this.RegionalSubbasinID = regionalSubbasinID;
@@ -39,19 +39,19 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new simple object with the POCO class
         /// </summary>
-        public vNereidPlannedProjectRegionalSubbasinCentralizedBMP(vNereidPlannedProjectRegionalSubbasinCentralizedBMP vNereidPlannedProjectRegionalSubbasinCentralizedBMP) : this()
+        public vNereidProjectRegionalSubbasinCentralizedBMP(vNereidProjectRegionalSubbasinCentralizedBMP vNereidProjectRegionalSubbasinCentralizedBMP) : this()
         {
-            this.PrimaryKey = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.PrimaryKey;
-            this.RegionalSubbasinID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.RegionalSubbasinID;
-            this.OCSurveyCatchmentID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.OCSurveyCatchmentID;
-            this.ProjectID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.ProjectID;
-            this.TreatmentBMPID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.TreatmentBMPID;
-            this.UpstreamBMPID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.UpstreamBMPID;
-            this.RowNumber = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.RowNumber;
-            CallAfterConstructor(vNereidPlannedProjectRegionalSubbasinCentralizedBMP);
+            this.PrimaryKey = vNereidProjectRegionalSubbasinCentralizedBMP.PrimaryKey;
+            this.RegionalSubbasinID = vNereidProjectRegionalSubbasinCentralizedBMP.RegionalSubbasinID;
+            this.OCSurveyCatchmentID = vNereidProjectRegionalSubbasinCentralizedBMP.OCSurveyCatchmentID;
+            this.ProjectID = vNereidProjectRegionalSubbasinCentralizedBMP.ProjectID;
+            this.TreatmentBMPID = vNereidProjectRegionalSubbasinCentralizedBMP.TreatmentBMPID;
+            this.UpstreamBMPID = vNereidProjectRegionalSubbasinCentralizedBMP.UpstreamBMPID;
+            this.RowNumber = vNereidProjectRegionalSubbasinCentralizedBMP.RowNumber;
+            CallAfterConstructor(vNereidProjectRegionalSubbasinCentralizedBMP);
         }
 
-        partial void CallAfterConstructor(vNereidPlannedProjectRegionalSubbasinCentralizedBMP vNereidPlannedProjectRegionalSubbasinCentralizedBMP);
+        partial void CallAfterConstructor(vNereidProjectRegionalSubbasinCentralizedBMP vNereidProjectRegionalSubbasinCentralizedBMP);
 
         public int PrimaryKey { get; set; }
         public int RegionalSubbasinID { get; set; }

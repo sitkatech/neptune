@@ -247,7 +247,7 @@ if __name__ == '__main__':
     if RSB_IDs is not None:
         regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
     if PLANNED_PROJECT_ID is not None:
-        delineationLayer = fetchLayer("vPlannedProjectDelineationLGUInput")
+        delineationLayer = fetchLayer("vProjectDelineationLGUInput")
         delineationLayer.setSubsetString("ProjectID is null or ProjectID=" + str(PLANNED_PROJECT_ID))
     else:
         delineationLayer = fetchLayer("vDelineationLGUInput")

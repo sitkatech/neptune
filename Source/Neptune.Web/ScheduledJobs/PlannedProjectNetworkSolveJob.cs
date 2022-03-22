@@ -14,17 +14,17 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.ScheduledJobs
 {
-    public class PlannedProjectNetworkSolveJob : ScheduledBackgroundJobBase
+    public class ProjectNetworkSolveJob : ScheduledBackgroundJobBase
     {
         public new static string JobName => "Nereid Planned Project Network Solve";
 
         public HttpClient HttpClient { get; set; }
-        public int PlannedProjectID { get; }
+        public int ProjectID { get; }
 
-        public PlannedProjectNetworkSolveJob(int plannedProjectID) : base()
+        public ProjectNetworkSolveJob(int projectID) : base()
         {
             HttpClient = new HttpClient();
-            PlannedProjectID = plannedProjectID;
+            ProjectID = projectID;
         }
 
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
@@ -36,22 +36,22 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            var plannedProject = DbContext.Projects.First(x => x.ProjectID == PlannedProjectID);
-            var regionalSubbasinIDs = plannedProject.GetRegionalSubbasinIDs(DbContext);
+            var project = DbContext.Projects.First(x => x.ProjectID == ProjectID);
+            var regionalSubbasinIDs = project.GetRegionalSubbasinIDs(DbContext);
             //Get our LGUs
             LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
             //Get our HRUs
             HRURefreshImpl();
-            NereidUtilities.PlannedProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, PlannedProjectID, regionalSubbasinIDs);
+            NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs);
         }
 
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)
         {
-            Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {PlannedProjectID}");
+            Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {ProjectID}");
 
             var outputLayerName = Guid.NewGuid().ToString();
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
-            var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", PlannedProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
+            var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
@@ -66,13 +66,13 @@ namespace Neptune.Web.ScheduledJobs
             try
             {
                 DbContext.Database.ExecuteSqlCommand(
-                    $"EXEC dbo.pDeletePlannedProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {PlannedProjectID}");
+                    $"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {ProjectID}");
 
                 var ogr2OgrCommandLineRunner =
                     new Ogr2OgrCommandLineRunnerForLGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
 
                 ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
-                    NeptuneWebConfiguration.DatabaseConnectionString, PlannedProjectID);
+                    NeptuneWebConfiguration.DatabaseConnectionString, ProjectID);
             }
             catch (Ogr2OgrCommandLineException e)
             {
@@ -92,11 +92,11 @@ namespace Neptune.Web.ScheduledJobs
             // collect the load generating units that require updates, which will be all for the Project
             // group them by Model basin so requests to the HRU service are spatially bounded. It is possible that a number of these won't have a model basin, but if the system is used in a logical manner any of these that don't have model basins will be in an rsb that is in North OC, so technically will still be spatially bounded
             // and batch them for processing 25 at a time so requests are small.
-            Logger.Info($"Processing '{JobName}'-HRURefresh for {PlannedProjectID}");
+            Logger.Info($"Processing '{JobName}'-HRURefresh for {ProjectID}");
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdate = DbContext.PlannedProjectLoadGeneratingUnits.Where(x => x.ProjectID == PlannedProjectID).ToList();
+            var loadGeneratingUnitsToUpdate = DbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == ProjectID).ToList();
             var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasin);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
@@ -116,12 +116,12 @@ namespace Neptune.Web.ScheduledJobs
                             {
                                 loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
                             }
-                            Logger.Warn($"No data for PlannedProjectLGUs with these IDs: {string.Join(", ", batch.Select(x => x.PlannedProjectLoadGeneratingUnitID.ToString()))}");
+                            Logger.Warn($"No data for ProjectLGUs with these IDs: {string.Join(", ", batch.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
                         }
 
-                        DbContext.PlannedProjectHRUCharacteristics.AddRange(batchHRUResponseFeatures.Select(x =>
+                        DbContext.ProjectHRUCharacteristics.AddRange(batchHRUResponseFeatures.Select(x =>
                         {
-                            var hruCharacteristic = x.ToPlannedProjectHRUCharacteristic(PlannedProjectID);
+                            var hruCharacteristic = x.ToProjectHRUCharacteristic(ProjectID);
                             return hruCharacteristic;
                         }));
                         DbContext.SaveChangesWithNoAuditing();

@@ -75,13 +75,13 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
-            modelBuilder.Configurations.Add(new PlannedProjectHRUCharacteristicConfiguration());
-            modelBuilder.Configurations.Add(new PlannedProjectLoadGeneratingUnitConfiguration());
-            modelBuilder.Configurations.Add(new PlannedProjectNereidResultConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
             modelBuilder.Configurations.Add(new ProjectDocumentConfiguration());
+            modelBuilder.Configurations.Add(new ProjectHRUCharacteristicConfiguration());
+            modelBuilder.Configurations.Add(new ProjectLoadGeneratingUnitConfiguration());
+            modelBuilder.Configurations.Add(new ProjectNereidResultConfiguration());
             modelBuilder.Configurations.Add(new ProjectStatusConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
@@ -129,9 +129,9 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vNereidBMPColocationConfiguration());
             modelBuilder.Configurations.Add(new vNereidLoadingInputConfiguration());
-            modelBuilder.Configurations.Add(new vNereidPlannedProjectLoadingInputConfiguration());
-            modelBuilder.Configurations.Add(new vNereidPlannedProjectRegionalSubbasinCentralizedBMPConfiguration());
-            modelBuilder.Configurations.Add(new vNereidPlannedProjectTreatmentBMPRegionalSubbasinConfiguration());
+            modelBuilder.Configurations.Add(new vNereidProjectLoadingInputConfiguration());
+            modelBuilder.Configurations.Add(new vNereidProjectRegionalSubbasinCentralizedBMPConfiguration());
+            modelBuilder.Configurations.Add(new vNereidProjectTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vNereidRegionalSubbasinCentralizedBMPConfiguration());
             modelBuilder.Configurations.Add(new vNereidTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
@@ -187,12 +187,12 @@ namespace Neptune.Web.Models
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<Person> People { get; set; }
-        public virtual DbSet<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
-        public virtual DbSet<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
-        public virtual DbSet<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<ProjectDocument> ProjectDocuments { get; set; }
+        public virtual DbSet<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
+        public virtual DbSet<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual DbSet<ProjectNereidResult> ProjectNereidResults { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectStatus> ProjectStatuses { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
@@ -241,9 +241,9 @@ namespace Neptune.Web.Models
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
-        public virtual DbSet<vNereidPlannedProjectLoadingInput> vNereidPlannedProjectLoadingInputs { get; set; }
-        public virtual DbSet<vNereidPlannedProjectRegionalSubbasinCentralizedBMP> vNereidPlannedProjectRegionalSubbasinCentralizedBMPs { get; set; }
-        public virtual DbSet<vNereidPlannedProjectTreatmentBMPRegionalSubbasin> vNereidPlannedProjectTreatmentBMPRegionalSubbasins { get; set; }
+        public virtual DbSet<vNereidProjectLoadingInput> vNereidProjectLoadingInputs { get; set; }
+        public virtual DbSet<vNereidProjectRegionalSubbasinCentralizedBMP> vNereidProjectRegionalSubbasinCentralizedBMPs { get; set; }
+        public virtual DbSet<vNereidProjectTreatmentBMPRegionalSubbasin> vNereidProjectTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
@@ -525,15 +525,6 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(permitType, "PermitType", primaryKey);
                     return permitType;
 
-                case "PlannedProjectHRUCharacteristic":
-                    return PlannedProjectHRUCharacteristics.GetPlannedProjectHRUCharacteristic(primaryKey);
-
-                case "PlannedProjectLoadGeneratingUnit":
-                    return PlannedProjectLoadGeneratingUnits.GetPlannedProjectLoadGeneratingUnit(primaryKey);
-
-                case "PlannedProjectNereidResult":
-                    return PlannedProjectNereidResults.GetPlannedProjectNereidResult(primaryKey);
-
                 case "PrecipitationZone":
                     return PrecipitationZones.GetPrecipitationZone(primaryKey);
 
@@ -557,6 +548,15 @@ namespace Neptune.Web.Models
 
                 case "ProjectDocument":
                     return ProjectDocuments.GetProjectDocument(primaryKey);
+
+                case "ProjectHRUCharacteristic":
+                    return ProjectHRUCharacteristics.GetProjectHRUCharacteristic(primaryKey);
+
+                case "ProjectLoadGeneratingUnit":
+                    return ProjectLoadGeneratingUnits.GetProjectLoadGeneratingUnit(primaryKey);
+
+                case "ProjectNereidResult":
+                    return ProjectNereidResults.GetProjectNereidResult(primaryKey);
 
                 case "Project":
                     return Projects.GetProject(primaryKey);

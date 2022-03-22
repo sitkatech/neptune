@@ -1,26 +1,26 @@
 ﻿namespace Neptune.Web.Models
 {
-    public static class vNereidPlannedProjectLoadingInputExtensionMethods 
+    public static class vNereidProjectLoadingInputExtensionMethods 
     { 
-        public static vNereidLoadingInput tovNereidLoadingInput (this vNereidPlannedProjectLoadingInput vNereidPlannedProjectLoadingInput)
+        public static vNereidLoadingInput tovNereidLoadingInput (this vNereidProjectLoadingInput vNereidProjectLoadingInput)
         {
             return new vNereidLoadingInput()
             {
-                Area = vNereidPlannedProjectLoadingInput.Area,
-                BaselineImperviousAcres = vNereidPlannedProjectLoadingInput.BaselineImperviousAcres,
-                BaselineLandUseCode = vNereidPlannedProjectLoadingInput.BaselineLandUseCode,
-                DelineationID = vNereidPlannedProjectLoadingInput.DelineationID,
-                DelineationIsVerified = vNereidPlannedProjectLoadingInput.DelineationIsVerified,
-                HydrologicSoilGroup = vNereidPlannedProjectLoadingInput.HydrologicSoilGroup,
-                ImperviousAcres = vNereidPlannedProjectLoadingInput.ImperviousAcres,
-                LandUseCode = vNereidPlannedProjectLoadingInput.LandUseCode,
-                ModelBasinKey = vNereidPlannedProjectLoadingInput.ModelBasinKey,
-                OCSurveyCatchmentID = vNereidPlannedProjectLoadingInput.OCSurveyCatchmentID,
-                RegionalSubbasinID = vNereidPlannedProjectLoadingInput.RegionalSubbasinID,
-                SlopePercentage = vNereidPlannedProjectLoadingInput.SlopePercentage,
-                RelationallyAssociatedModelingApproach = vNereidPlannedProjectLoadingInput.RelationallyAssociatedModelingApproach,
-                SpatiallyAssociatedModelingApproach = vNereidPlannedProjectLoadingInput.SpatiallyAssociatedModelingApproach,
-                WaterQualityManagementPlanID = vNereidPlannedProjectLoadingInput.WaterQualityManagementPlanID
+                Area = vNereidProjectLoadingInput.Area,
+                BaselineImperviousAcres = vNereidProjectLoadingInput.BaselineImperviousAcres,
+                BaselineLandUseCode = vNereidProjectLoadingInput.BaselineLandUseCode,
+                DelineationID = vNereidProjectLoadingInput.DelineationID,
+                DelineationIsVerified = vNereidProjectLoadingInput.DelineationIsVerified,
+                HydrologicSoilGroup = vNereidProjectLoadingInput.HydrologicSoilGroup,
+                ImperviousAcres = vNereidProjectLoadingInput.ImperviousAcres,
+                LandUseCode = vNereidProjectLoadingInput.LandUseCode,
+                ModelBasinKey = vNereidProjectLoadingInput.ModelBasinKey,
+                OCSurveyCatchmentID = vNereidProjectLoadingInput.OCSurveyCatchmentID,
+                RegionalSubbasinID = vNereidProjectLoadingInput.RegionalSubbasinID,
+                SlopePercentage = vNereidProjectLoadingInput.SlopePercentage,
+                RelationallyAssociatedModelingApproach = vNereidProjectLoadingInput.RelationallyAssociatedModelingApproach,
+                SpatiallyAssociatedModelingApproach = vNereidProjectLoadingInput.SpatiallyAssociatedModelingApproach,
+                WaterQualityManagementPlanID = vNereidProjectLoadingInput.WaterQualityManagementPlanID
             };
         }
     }

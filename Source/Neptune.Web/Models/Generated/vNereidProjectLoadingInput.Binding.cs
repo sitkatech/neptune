@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[vNereidPlannedProjectLoadingInput]
+//  Source Table: [dbo].[vNereidProjectLoadingInput]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
@@ -13,19 +13,19 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public partial class vNereidPlannedProjectLoadingInput
+    public partial class vNereidProjectLoadingInput
     {
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
-        public vNereidPlannedProjectLoadingInput()
+        public vNereidProjectLoadingInput()
         {
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidPlannedProjectLoadingInput(int primaryKey, int projectID, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int modelBasinKey, string landUseCode, string baselineLandUseCode, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, double baselineImperviousAcres, bool? delineationIsVerified, int? spatiallyAssociatedModelingApproach, int? relationallyAssociatedModelingApproach) : this()
+        public vNereidProjectLoadingInput(int primaryKey, int projectID, int? delineationID, int? waterQualityManagementPlanID, int regionalSubbasinID, int oCSurveyCatchmentID, int modelBasinKey, string landUseCode, string baselineLandUseCode, string hydrologicSoilGroup, int slopePercentage, double area, double imperviousAcres, double baselineImperviousAcres, bool? delineationIsVerified, int? spatiallyAssociatedModelingApproach, int? relationallyAssociatedModelingApproach) : this()
         {
             this.PrimaryKey = primaryKey;
             this.ProjectID = projectID;
@@ -49,29 +49,29 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new simple object with the POCO class
         /// </summary>
-        public vNereidPlannedProjectLoadingInput(vNereidPlannedProjectLoadingInput vNereidPlannedProjectLoadingInput) : this()
+        public vNereidProjectLoadingInput(vNereidProjectLoadingInput vNereidProjectLoadingInput) : this()
         {
-            this.PrimaryKey = vNereidPlannedProjectLoadingInput.PrimaryKey;
-            this.ProjectID = vNereidPlannedProjectLoadingInput.ProjectID;
-            this.DelineationID = vNereidPlannedProjectLoadingInput.DelineationID;
-            this.WaterQualityManagementPlanID = vNereidPlannedProjectLoadingInput.WaterQualityManagementPlanID;
-            this.RegionalSubbasinID = vNereidPlannedProjectLoadingInput.RegionalSubbasinID;
-            this.OCSurveyCatchmentID = vNereidPlannedProjectLoadingInput.OCSurveyCatchmentID;
-            this.ModelBasinKey = vNereidPlannedProjectLoadingInput.ModelBasinKey;
-            this.LandUseCode = vNereidPlannedProjectLoadingInput.LandUseCode;
-            this.BaselineLandUseCode = vNereidPlannedProjectLoadingInput.BaselineLandUseCode;
-            this.HydrologicSoilGroup = vNereidPlannedProjectLoadingInput.HydrologicSoilGroup;
-            this.SlopePercentage = vNereidPlannedProjectLoadingInput.SlopePercentage;
-            this.Area = vNereidPlannedProjectLoadingInput.Area;
-            this.ImperviousAcres = vNereidPlannedProjectLoadingInput.ImperviousAcres;
-            this.BaselineImperviousAcres = vNereidPlannedProjectLoadingInput.BaselineImperviousAcres;
-            this.DelineationIsVerified = vNereidPlannedProjectLoadingInput.DelineationIsVerified;
-            this.SpatiallyAssociatedModelingApproach = vNereidPlannedProjectLoadingInput.SpatiallyAssociatedModelingApproach;
-            this.RelationallyAssociatedModelingApproach = vNereidPlannedProjectLoadingInput.RelationallyAssociatedModelingApproach;
-            CallAfterConstructor(vNereidPlannedProjectLoadingInput);
+            this.PrimaryKey = vNereidProjectLoadingInput.PrimaryKey;
+            this.ProjectID = vNereidProjectLoadingInput.ProjectID;
+            this.DelineationID = vNereidProjectLoadingInput.DelineationID;
+            this.WaterQualityManagementPlanID = vNereidProjectLoadingInput.WaterQualityManagementPlanID;
+            this.RegionalSubbasinID = vNereidProjectLoadingInput.RegionalSubbasinID;
+            this.OCSurveyCatchmentID = vNereidProjectLoadingInput.OCSurveyCatchmentID;
+            this.ModelBasinKey = vNereidProjectLoadingInput.ModelBasinKey;
+            this.LandUseCode = vNereidProjectLoadingInput.LandUseCode;
+            this.BaselineLandUseCode = vNereidProjectLoadingInput.BaselineLandUseCode;
+            this.HydrologicSoilGroup = vNereidProjectLoadingInput.HydrologicSoilGroup;
+            this.SlopePercentage = vNereidProjectLoadingInput.SlopePercentage;
+            this.Area = vNereidProjectLoadingInput.Area;
+            this.ImperviousAcres = vNereidProjectLoadingInput.ImperviousAcres;
+            this.BaselineImperviousAcres = vNereidProjectLoadingInput.BaselineImperviousAcres;
+            this.DelineationIsVerified = vNereidProjectLoadingInput.DelineationIsVerified;
+            this.SpatiallyAssociatedModelingApproach = vNereidProjectLoadingInput.SpatiallyAssociatedModelingApproach;
+            this.RelationallyAssociatedModelingApproach = vNereidProjectLoadingInput.RelationallyAssociatedModelingApproach;
+            CallAfterConstructor(vNereidProjectLoadingInput);
         }
 
-        partial void CallAfterConstructor(vNereidPlannedProjectLoadingInput vNereidPlannedProjectLoadingInput);
+        partial void CallAfterConstructor(vNereidProjectLoadingInput vNereidProjectLoadingInput);
 
         public int PrimaryKey { get; set; }
         public int ProjectID { get; set; }

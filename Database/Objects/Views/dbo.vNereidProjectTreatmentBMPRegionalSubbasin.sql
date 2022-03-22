@@ -1,10 +1,10 @@
-Drop view if exists dbo.vNereidPlannedProjectTreatmentBMPRegionalSubbasin
+Drop view if exists dbo.vNereidProjectTreatmentBMPRegionalSubbasin
 go
 
 -- collects the Distributed Modeling BMPs together with the RSBs they flow to,
--- for any planned projects
--- we don't allow upstream bmps in planned projects so they should not be a concern here
-Create view dbo.vNereidPlannedProjectTreatmentBMPRegionalSubbasin
+-- for any  projects
+-- we don't allow upstream bmps in  projects so they should not be a concern here
+Create view dbo.vNereidProjectTreatmentBMPRegionalSubbasin
 as
 select
 	Row_number() over(order by tbmp.TreatmentBMPID asc) as PrimaryKey, 
@@ -25,4 +25,4 @@ where
 	and tbmp.ProjectID is not null
 go
 
-select * from vNereidPlannedProjectTreatmentBMPRegionalSubbasin
+select * from vNereidProjectTreatmentBMPRegionalSubbasin

@@ -1,19 +1,19 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source View: [dbo].[vNereidPlannedProjectLoadingInput]
+//  Source View: [dbo].[vNereidProjectLoadingInput]
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Neptune.Web.Models
 {
-    public class vNereidPlannedProjectLoadingInputConfiguration : EntityTypeConfiguration<vNereidPlannedProjectLoadingInput>
+    public class vNereidProjectLoadingInputConfiguration : EntityTypeConfiguration<vNereidProjectLoadingInput>
     {
-        public vNereidPlannedProjectLoadingInputConfiguration() : this("dbo"){}
+        public vNereidProjectLoadingInputConfiguration() : this("dbo"){}
 
-        public vNereidPlannedProjectLoadingInputConfiguration(string schema)
+        public vNereidProjectLoadingInputConfiguration(string schema)
         {
-            ToTable("vNereidPlannedProjectLoadingInput", schema);
+            ToTable("vNereidProjectLoadingInput", schema);
             HasKey(x => x.PrimaryKey);
             
             

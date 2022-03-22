@@ -1,10 +1,10 @@
-drop view if exists dbo.vNereidPlannedProjectLoadingInput
+drop view if exists dbo.vNereidProjectLoadingInput
 GO
 
-create view dbo.vNereidPlannedProjectLoadingInput
+create view dbo.vNereidProjectLoadingInput
 as
 select
-	hru.PlannedProjectHRUCharacteristicID as PrimaryKey,
+	hru.ProjectHRUCharacteristicID as PrimaryKey,
 	hru.ProjectID,
 	d.DelineationID,
 	lgu.WaterQualityManagementPlanID,
@@ -22,8 +22,8 @@ select
 	wqmp.WaterQualityManagementPlanModelingApproachID as SpatiallyAssociatedModelingApproach,
 	bwqmp.WaterQualityManagementPlanModelingApproachID as RelationallyAssociatedModelingApproach
 from
-	dbo.PlannedProjectHRUCharacteristic hru join dbo.PlannedProjectLoadGeneratingUnit lgu
-		on hru.PlannedProjectLoadGeneratingUnitID = lgu.PlannedProjectLoadGeneratingUnitID
+	dbo.ProjectHRUCharacteristic hru join dbo.ProjectLoadGeneratingUnit lgu
+		on hru.ProjectLoadGeneratingUnitID = lgu.ProjectLoadGeneratingUnitID
 	join dbo.RegionalSubbasin rsb
 		on lgu.RegionalSubbasinID = rsb.RegionalSubbasinID
 	join dbo.ModelBasin Model

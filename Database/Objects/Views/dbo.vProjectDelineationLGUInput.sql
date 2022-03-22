@@ -1,9 +1,9 @@
-Drop View If Exists dbo.vPlannedProjectDelineationLGUInput
+Drop View If Exists dbo.vProjectDelineationLGUInput
 GO
 
 --We are going to use this to get ALL delineations, and then in our python script filter down
 --to non-project delineations and our delineations only
-Create view dbo.vPlannedProjectDelineationLGUInput
+Create view dbo.vProjectDelineationLGUInput
 as
 Select
 	DelineationID as DelinID,

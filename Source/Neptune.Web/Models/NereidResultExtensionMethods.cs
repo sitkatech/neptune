@@ -2,9 +2,9 @@
 {
     public static class NereidResultExtensionMethods
     {
-        public static PlannedProjectNereidResult toPlannedProjectNereidResult (this NereidResult nereidResult,int plannedProjectID)
+        public static ProjectNereidResult toProjectNereidResult (this NereidResult nereidResult,int projectID)
         {
-            return new PlannedProjectNereidResult(plannedProjectID, nereidResult.IsBaselineCondition)
+            return new ProjectNereidResult(projectID, nereidResult.IsBaselineCondition)
             {
                 FullResponse =  nereidResult.FullResponse,
                 LastUpdate = nereidResult.LastUpdate,

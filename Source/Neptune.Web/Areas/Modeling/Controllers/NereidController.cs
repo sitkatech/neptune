@@ -594,12 +594,23 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [EnableCors(origins: "*", headers: "*", methods: "*")] 
         public ActionResult NetworkSolveForProject(ProjectPrimaryKey projectPrimaryKey, [System.Web.Http.FromBody] string webServiceAccessTokenGuidAsString)
         {
-            //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
-            var webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
+            try
+            {
+                //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
 
-            var projectID = projectPrimaryKey.EntityObject.ProjectID;
-            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID));
-            return Content($"Network solve for Project with ID:{projectID} has begun.");
+                var webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
+
+                var projectID = projectPrimaryKey.EntityObject.ProjectID;
+                BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID));
+                return Content($"Network solve for Project with ID:{projectID} has begun.");
+            }
+            catch (NullReferenceException ex)
+            {
+                var error = ex;
+                Response.StatusCode = 404;
+                return Content($"Could not find user with access token: {webServiceAccessTokenGuidAsString}");
+            }
+            
         }
 
         public class NetworkSolveRequest

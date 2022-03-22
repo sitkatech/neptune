@@ -164,13 +164,13 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
     /// <param name="outputPath"></param>
     /// <param name="connectionString"></param>
     public void ImportLoadGeneratingUnitsFromShapefile(string outputLayerName,
-        string outputPath, string connectionString, int? plannedProjectID = null)
+        string outputPath, string connectionString, int? projectID = null)
     {
         var databaseConnectionString = $"MSSQL:{connectionString}";
-        var destinationTable = plannedProjectID != null ? "dbo.PlannedProjectLoadGeneratingUnit" : "dbo.LoadGeneratingUnit";
+        var destinationTable = projectID != null ? "dbo.ProjectLoadGeneratingUnit" : "dbo.LoadGeneratingUnit";
         // todo: fix this
         var selectStatement =
-            $"Select {(plannedProjectID != null ? plannedProjectID.ToString() + " as ProjectID, " : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
+            $"Select {(projectID != null ? projectID.ToString() + " as ProjectID, " : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
 
         var commandLineArguments = new List<string>
         {

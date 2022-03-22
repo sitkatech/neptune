@@ -45,7 +45,7 @@ namespace Neptune.Web.Common
             catch (Exception ex)
             {
                 logger.Warn(ex.Message, ex);
-                logger.Warn($"Skipped entities (PlannedProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", featuresForHRURequest.Select(x=>x.Attributes.QueryFeatureID.ToString()))}");
+                logger.Warn($"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", featuresForHRURequest.Select(x=>x.Attributes.QueryFeatureID.ToString()))}");
                 logger.Warn(rawResponse);
             }
 

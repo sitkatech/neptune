@@ -1,17 +1,17 @@
 ﻿namespace Neptune.Web.Models
 {
-    public static class vNereidPlannedProjectRegionalSubbasinCentralizedBMPExtensionMethods
+    public static class vNereidProjectRegionalSubbasinCentralizedBMPExtensionMethods
     {
-        public static vNereidRegionalSubbasinCentralizedBMP tovNereidRegionalSubbasinCentralizedBMP(this vNereidPlannedProjectRegionalSubbasinCentralizedBMP vNereidPlannedProjectRegionalSubbasinCentralizedBMP)
+        public static vNereidRegionalSubbasinCentralizedBMP tovNereidRegionalSubbasinCentralizedBMP(this vNereidProjectRegionalSubbasinCentralizedBMP vNereidProjectRegionalSubbasinCentralizedBMP)
         {
             return new vNereidRegionalSubbasinCentralizedBMP()
             {
-                OCSurveyCatchmentID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.OCSurveyCatchmentID,
-                RegionalSubbasinID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.RegionalSubbasinID,
-                RowNumber = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.RowNumber,
-                TreatmentBMPID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.TreatmentBMPID,
+                OCSurveyCatchmentID = vNereidProjectRegionalSubbasinCentralizedBMP.OCSurveyCatchmentID,
+                RegionalSubbasinID = vNereidProjectRegionalSubbasinCentralizedBMP.RegionalSubbasinID,
+                RowNumber = vNereidProjectRegionalSubbasinCentralizedBMP.RowNumber,
+                TreatmentBMPID = vNereidProjectRegionalSubbasinCentralizedBMP.TreatmentBMPID,
                 //3/16/22 at this point these will always be null, but in the future that may change
-                UpstreamBMPID = vNereidPlannedProjectRegionalSubbasinCentralizedBMP.UpstreamBMPID
+                UpstreamBMPID = vNereidProjectRegionalSubbasinCentralizedBMP.UpstreamBMPID
             };
         }
     }

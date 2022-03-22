@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[PlannedProjectLoadGeneratingUnit]
+//  Source Table: [dbo].[ProjectLoadGeneratingUnit]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,25 +15,25 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[PlannedProjectLoadGeneratingUnit] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[PlannedProjectLoadGeneratingUnit]")]
-    public partial class PlannedProjectLoadGeneratingUnit : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[ProjectLoadGeneratingUnit] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[ProjectLoadGeneratingUnit]")]
+    public partial class ProjectLoadGeneratingUnit : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected PlannedProjectLoadGeneratingUnit()
+        protected ProjectLoadGeneratingUnit()
         {
-            this.PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
+            this.ProjectHRUCharacteristics = new HashSet<ProjectHRUCharacteristic>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public PlannedProjectLoadGeneratingUnit(int plannedProjectLoadGeneratingUnitID, DbGeometry plannedProjectLoadGeneratingUnitGeometry, int projectID, int? modelBasinID, int? regionalSubbasinID, int? delineationID, int? waterQualityManagementPlanID, bool? isEmptyResponseFromHRUService) : this()
+        public ProjectLoadGeneratingUnit(int projectLoadGeneratingUnitID, DbGeometry projectLoadGeneratingUnitGeometry, int projectID, int? modelBasinID, int? regionalSubbasinID, int? delineationID, int? waterQualityManagementPlanID, bool? isEmptyResponseFromHRUService) : this()
         {
-            this.PlannedProjectLoadGeneratingUnitID = plannedProjectLoadGeneratingUnitID;
-            this.PlannedProjectLoadGeneratingUnitGeometry = plannedProjectLoadGeneratingUnitGeometry;
+            this.ProjectLoadGeneratingUnitID = projectLoadGeneratingUnitID;
+            this.ProjectLoadGeneratingUnitGeometry = projectLoadGeneratingUnitGeometry;
             this.ProjectID = projectID;
             this.ModelBasinID = modelBasinID;
             this.RegionalSubbasinID = regionalSubbasinID;
@@ -45,34 +45,34 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public PlannedProjectLoadGeneratingUnit(DbGeometry plannedProjectLoadGeneratingUnitGeometry, int projectID) : this()
+        public ProjectLoadGeneratingUnit(DbGeometry projectLoadGeneratingUnitGeometry, int projectID) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.PlannedProjectLoadGeneratingUnitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.ProjectLoadGeneratingUnitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.PlannedProjectLoadGeneratingUnitGeometry = plannedProjectLoadGeneratingUnitGeometry;
+            this.ProjectLoadGeneratingUnitGeometry = projectLoadGeneratingUnitGeometry;
             this.ProjectID = projectID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public PlannedProjectLoadGeneratingUnit(DbGeometry plannedProjectLoadGeneratingUnitGeometry, Project project) : this()
+        public ProjectLoadGeneratingUnit(DbGeometry projectLoadGeneratingUnitGeometry, Project project) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.PlannedProjectLoadGeneratingUnitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            this.PlannedProjectLoadGeneratingUnitGeometry = plannedProjectLoadGeneratingUnitGeometry;
+            this.ProjectLoadGeneratingUnitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.ProjectLoadGeneratingUnitGeometry = projectLoadGeneratingUnitGeometry;
             this.ProjectID = project.ProjectID;
             this.Project = project;
-            project.PlannedProjectLoadGeneratingUnits.Add(this);
+            project.ProjectLoadGeneratingUnits.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static PlannedProjectLoadGeneratingUnit CreateNewBlank(Project project)
+        public static ProjectLoadGeneratingUnit CreateNewBlank(Project project)
         {
-            return new PlannedProjectLoadGeneratingUnit(default(DbGeometry), project);
+            return new ProjectLoadGeneratingUnit(default(DbGeometry), project);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return PlannedProjectHRUCharacteristics.Any();
+            return ProjectHRUCharacteristics.Any();
         }
 
         /// <summary>
@@ -91,9 +91,9 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
-            if(PlannedProjectHRUCharacteristics.Any())
+            if(ProjectHRUCharacteristics.Any())
             {
-                dependentObjects.Add(typeof(PlannedProjectHRUCharacteristic).Name);
+                dependentObjects.Add(typeof(ProjectHRUCharacteristic).Name);
             }
             return dependentObjects.Distinct().ToList();
         }
@@ -101,7 +101,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(PlannedProjectHRUCharacteristic).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectHRUCharacteristic).Name};
 
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.PlannedProjectLoadGeneratingUnits.Remove(this);
+            dbContext.ProjectLoadGeneratingUnits.Remove(this);
         }
         
         /// <summary>
@@ -126,15 +126,15 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
-            foreach(var x in PlannedProjectHRUCharacteristics.ToList())
+            foreach(var x in ProjectHRUCharacteristics.ToList())
             {
                 x.DeleteFull(dbContext);
             }
         }
 
         [Key]
-        public int PlannedProjectLoadGeneratingUnitID { get; set; }
-        public DbGeometry PlannedProjectLoadGeneratingUnitGeometry { get; set; }
+        public int ProjectLoadGeneratingUnitID { get; set; }
+        public DbGeometry ProjectLoadGeneratingUnitGeometry { get; set; }
         public int ProjectID { get; set; }
         public int? ModelBasinID { get; set; }
         public int? RegionalSubbasinID { get; set; }
@@ -142,9 +142,9 @@ namespace Neptune.Web.Models
         public int? WaterQualityManagementPlanID { get; set; }
         public bool? IsEmptyResponseFromHRUService { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return PlannedProjectLoadGeneratingUnitID; } set { PlannedProjectLoadGeneratingUnitID = value; } }
+        public int PrimaryKey { get { return ProjectLoadGeneratingUnitID; } set { ProjectLoadGeneratingUnitID = value; } }
 
-        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
+        public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
         public virtual Project Project { get; set; }
         public virtual ModelBasin ModelBasin { get; set; }
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }

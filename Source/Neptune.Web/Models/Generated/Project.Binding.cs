@@ -24,10 +24,10 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Project()
         {
-            this.PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
-            this.PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
-            this.PlannedProjectNereidResults = new HashSet<PlannedProjectNereidResult>();
             this.ProjectDocuments = new HashSet<ProjectDocument>();
+            this.ProjectHRUCharacteristics = new HashSet<ProjectHRUCharacteristic>();
+            this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            this.ProjectNereidResults = new HashSet<ProjectNereidResult>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -105,7 +105,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return PlannedProjectHRUCharacteristics.Any() || PlannedProjectLoadGeneratingUnits.Any() || PlannedProjectNereidResults.Any() || ProjectDocuments.Any() || TreatmentBMPs.Any();
+            return ProjectDocuments.Any() || ProjectHRUCharacteristics.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -115,24 +115,24 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
-            if(PlannedProjectHRUCharacteristics.Any())
-            {
-                dependentObjects.Add(typeof(PlannedProjectHRUCharacteristic).Name);
-            }
-
-            if(PlannedProjectLoadGeneratingUnits.Any())
-            {
-                dependentObjects.Add(typeof(PlannedProjectLoadGeneratingUnit).Name);
-            }
-
-            if(PlannedProjectNereidResults.Any())
-            {
-                dependentObjects.Add(typeof(PlannedProjectNereidResult).Name);
-            }
-
             if(ProjectDocuments.Any())
             {
                 dependentObjects.Add(typeof(ProjectDocument).Name);
+            }
+
+            if(ProjectHRUCharacteristics.Any())
+            {
+                dependentObjects.Add(typeof(ProjectHRUCharacteristic).Name);
+            }
+
+            if(ProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
+            }
+
+            if(ProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNereidResult).Name);
             }
 
             if(TreatmentBMPs.Any())
@@ -145,7 +145,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(PlannedProjectHRUCharacteristic).Name, typeof(PlannedProjectLoadGeneratingUnit).Name, typeof(PlannedProjectNereidResult).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(ProjectDocument).Name, typeof(ProjectHRUCharacteristic).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -170,22 +170,22 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
-            foreach(var x in PlannedProjectHRUCharacteristics.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in PlannedProjectLoadGeneratingUnits.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in PlannedProjectNereidResults.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
             foreach(var x in ProjectDocuments.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectHRUCharacteristics.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNereidResults.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -210,10 +210,10 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
-        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
-        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
-        public virtual ICollection<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
+        public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }

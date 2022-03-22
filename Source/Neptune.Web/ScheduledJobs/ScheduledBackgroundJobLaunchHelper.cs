@@ -68,8 +68,8 @@ namespace Neptune.Web.ScheduledJobs
 
         public static void RunNetworkSolveForProject(int projectID)
         {
-            var plannedProjectNetworkSolve = new PlannedProjectNetworkSolveJob(projectID);
-            plannedProjectNetworkSolve.RunJob();
+            var projectNetworkSolve = new ProjectNetworkSolveJob(projectID);
+            projectNetworkSolve.RunJob();
         }
 
         public static void RunDeltaSolve()

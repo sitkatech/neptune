@@ -1,7 +1,7 @@
-drop view if exists dbo.vNereidPlannedProjectRegionalSubbasinCentralizedBMP
+drop view if exists dbo.vNereidProjectRegionalSubbasinCentralizedBMP
 GO
 
-create view dbo.vNereidPlannedProjectRegionalSubbasinCentralizedBMP
+create view dbo.vNereidProjectRegionalSubbasinCentralizedBMP
 As
 Select
 	rsb.RegionalSubbasinID as PrimaryKey,

@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[vNereidPlannedProjectTreatmentBMPRegionalSubbasin]
+//  Source Table: [dbo].[vNereidProjectTreatmentBMPRegionalSubbasin]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
@@ -13,19 +13,19 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public partial class vNereidPlannedProjectTreatmentBMPRegionalSubbasin
+    public partial class vNereidProjectTreatmentBMPRegionalSubbasin
     {
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
-        public vNereidPlannedProjectTreatmentBMPRegionalSubbasin()
+        public vNereidProjectTreatmentBMPRegionalSubbasin()
         {
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vNereidPlannedProjectTreatmentBMPRegionalSubbasin(long? primaryKey, int treatmentBMPID, int? projectID, int regionalSubbasinID, int oCSurveyCatchmentID) : this()
+        public vNereidProjectTreatmentBMPRegionalSubbasin(long? primaryKey, int treatmentBMPID, int? projectID, int regionalSubbasinID, int oCSurveyCatchmentID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPID = treatmentBMPID;
@@ -37,17 +37,17 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new simple object with the POCO class
         /// </summary>
-        public vNereidPlannedProjectTreatmentBMPRegionalSubbasin(vNereidPlannedProjectTreatmentBMPRegionalSubbasin vNereidPlannedProjectTreatmentBMPRegionalSubbasin) : this()
+        public vNereidProjectTreatmentBMPRegionalSubbasin(vNereidProjectTreatmentBMPRegionalSubbasin vNereidProjectTreatmentBMPRegionalSubbasin) : this()
         {
-            this.PrimaryKey = vNereidPlannedProjectTreatmentBMPRegionalSubbasin.PrimaryKey;
-            this.TreatmentBMPID = vNereidPlannedProjectTreatmentBMPRegionalSubbasin.TreatmentBMPID;
-            this.ProjectID = vNereidPlannedProjectTreatmentBMPRegionalSubbasin.ProjectID;
-            this.RegionalSubbasinID = vNereidPlannedProjectTreatmentBMPRegionalSubbasin.RegionalSubbasinID;
-            this.OCSurveyCatchmentID = vNereidPlannedProjectTreatmentBMPRegionalSubbasin.OCSurveyCatchmentID;
-            CallAfterConstructor(vNereidPlannedProjectTreatmentBMPRegionalSubbasin);
+            this.PrimaryKey = vNereidProjectTreatmentBMPRegionalSubbasin.PrimaryKey;
+            this.TreatmentBMPID = vNereidProjectTreatmentBMPRegionalSubbasin.TreatmentBMPID;
+            this.ProjectID = vNereidProjectTreatmentBMPRegionalSubbasin.ProjectID;
+            this.RegionalSubbasinID = vNereidProjectTreatmentBMPRegionalSubbasin.RegionalSubbasinID;
+            this.OCSurveyCatchmentID = vNereidProjectTreatmentBMPRegionalSubbasin.OCSurveyCatchmentID;
+            CallAfterConstructor(vNereidProjectTreatmentBMPRegionalSubbasin);
         }
 
-        partial void CallAfterConstructor(vNereidPlannedProjectTreatmentBMPRegionalSubbasin vNereidPlannedProjectTreatmentBMPRegionalSubbasin);
+        partial void CallAfterConstructor(vNereidProjectTreatmentBMPRegionalSubbasin vNereidProjectTreatmentBMPRegionalSubbasin);
 
         public long? PrimaryKey { get; set; }
         public int TreatmentBMPID { get; set; }

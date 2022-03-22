@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[PlannedProjectNereidResult]
+//  Source Table: [dbo].[ProjectNereidResult]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,14 +15,14 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[PlannedProjectNereidResult] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[PlannedProjectNereidResult]")]
-    public partial class PlannedProjectNereidResult : IHavePrimaryKey, ICanDeleteFull
+    // Table [dbo].[ProjectNereidResult] is NOT multi-tenant, so is attributed as ICanDeleteFull
+    [Table("[dbo].[ProjectNereidResult]")]
+    public partial class ProjectNereidResult : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected PlannedProjectNereidResult()
+        protected ProjectNereidResult()
         {
 
         }
@@ -30,9 +30,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public PlannedProjectNereidResult(int plannedProjectNereidResultID, int projectID, bool isBaselineCondition, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, string nodeID, string fullResponse, DateTime? lastUpdate) : this()
+        public ProjectNereidResult(int projectNereidResultID, int projectID, bool isBaselineCondition, int? treatmentBMPID, int? waterQualityManagementPlanID, int? regionalSubbasinID, string nodeID, string fullResponse, DateTime? lastUpdate) : this()
         {
-            this.PlannedProjectNereidResultID = plannedProjectNereidResultID;
+            this.ProjectNereidResultID = projectNereidResultID;
             this.ProjectID = projectID;
             this.IsBaselineCondition = isBaselineCondition;
             this.TreatmentBMPID = treatmentBMPID;
@@ -46,10 +46,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public PlannedProjectNereidResult(int projectID, bool isBaselineCondition) : this()
+        public ProjectNereidResult(int projectID, bool isBaselineCondition) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.PlannedProjectNereidResultID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.ProjectNereidResultID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ProjectID = projectID;
             this.IsBaselineCondition = isBaselineCondition;
@@ -58,22 +58,22 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public PlannedProjectNereidResult(Project project, bool isBaselineCondition) : this()
+        public ProjectNereidResult(Project project, bool isBaselineCondition) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.PlannedProjectNereidResultID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.ProjectNereidResultID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.ProjectID = project.ProjectID;
             this.Project = project;
-            project.PlannedProjectNereidResults.Add(this);
+            project.ProjectNereidResults.Add(this);
             this.IsBaselineCondition = isBaselineCondition;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static PlannedProjectNereidResult CreateNewBlank(Project project)
+        public static ProjectNereidResult CreateNewBlank(Project project)
         {
-            return new PlannedProjectNereidResult(project, default(bool));
+            return new ProjectNereidResult(project, default(bool));
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(PlannedProjectNereidResult).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ProjectNereidResult).Name};
 
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public void Delete(DatabaseEntities dbContext)
         {
-            dbContext.PlannedProjectNereidResults.Remove(this);
+            dbContext.ProjectNereidResults.Remove(this);
         }
         
         /// <summary>
@@ -119,7 +119,7 @@ namespace Neptune.Web.Models
         }
 
         [Key]
-        public int PlannedProjectNereidResultID { get; set; }
+        public int ProjectNereidResultID { get; set; }
         public int ProjectID { get; set; }
         public bool IsBaselineCondition { get; set; }
         public int? TreatmentBMPID { get; set; }
@@ -129,7 +129,7 @@ namespace Neptune.Web.Models
         public string FullResponse { get; set; }
         public DateTime? LastUpdate { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return PlannedProjectNereidResultID; } set { PlannedProjectNereidResultID = value; } }
+        public int PrimaryKey { get { return ProjectNereidResultID; } set { ProjectNereidResultID = value; } }
 
         public virtual Project Project { get; set; }
 
