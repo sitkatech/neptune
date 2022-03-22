@@ -28,6 +28,7 @@ import { OrderableAccordionComponent, OrderablePanel, OrderablePanelContent, Ord
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IconComponent } from './components/icon/icon.component';
 import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
+import { NeptuneModelingResultSigFigPipe } from './pipes/neptune-modeling-result-sig-fig.pipe';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { UnderConstructionComponent } from './components/under-construction/unde
         IconComponent,
         ProgressIconComponent,
         ProjectWizardSidebarComponent,
-        UnderConstructionComponent
+        UnderConstructionComponent,
+        NeptuneModelingResultSigFigPipe
     ],
     imports: [
         CommonModule,
@@ -88,7 +90,8 @@ import { UnderConstructionComponent } from './components/under-construction/unde
         OrderablePanelContent,
         IconComponent,
         ProgressIconComponent,
-        ProjectWizardSidebarComponent
+        ProjectWizardSidebarComponent,
+        NeptuneModelingResultSigFigPipe
     ],
     entryComponents:[]
 })

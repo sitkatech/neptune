@@ -2,7 +2,7 @@ import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewC
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationUpsertDto, PersonDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
@@ -29,9 +29,15 @@ export class ModeledPerformanceComponent implements OnInit {
 
   private watchUserChangeSubscription: any;
   private currentUser: PersonDto;
+  public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;
+  public activeID = ModeledPerformanceDisplayTypeEnum.Total;
+  public modelingSelectListOptions: {TreatmentBMPID: number, TreatmentBMPName: string}[] = [];
+  public treatmentBMPIDForSelectedModelResults = 0;
+  public selectedModelResults: TreatmentBMPModeledResultSimpleDto;
   
   @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'modeledPerformanceMap';
+  public modeledResults: Array<TreatmentBMPModeledResultSimpleDto>;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: DelineationUpsertDto[];
   public zoomMapToDefaultExtent: boolean = true;
@@ -86,11 +92,17 @@ export class ModeledPerformanceComponent implements OnInit {
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
           delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-        }).subscribe(({ treatmentBMPs, delineations, boundingBox }) => {
+          treatmentBMPModeledResults: this.projectService.getModeledResultsForProject(this.projectID)
+        }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPModeledResults }) => {
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
           this.boundingBox = boundingBox;
-  
+          this.modeledResults = treatmentBMPModeledResults;
+          debugger;
+          if (this.modeledResults != null && this.modeledResults.length > 0) {
+            this.populateModeledResultsOptions();
+            this.updateSelectedModelResults();
+          }
           this.initializeMap();
         });
       }
@@ -315,4 +327,39 @@ export class ModeledPerformanceComponent implements OnInit {
     })
   }
 
+  populateModeledResultsOptions() {
+    var tempOptions = [];
+    tempOptions.push({TreatmentBMPID: 0, TreatmentBMPName :"Total"});
+    this.modeledResults.forEach(x => {
+      var treatmentBMP = this.treatmentBMPs.filter(y => y.TreatmentBMPID == x.TreatmentBMPID)[0];
+      tempOptions.push({TreatmentBMPID: treatmentBMP.TreatmentBMPID, TreatmentBMPName : treatmentBMP.TreatmentBMPName});
+    });
+
+    this.modelingSelectListOptions = [...this.modelingSelectListOptions, ...tempOptions];
+  }
+
+  updateSelectedModelResults() {
+    if (this.treatmentBMPIDForSelectedModelResults != 0) {
+      this.selectedModelResults = this.modeledResults.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedModelResults)[0];
+      return;
+    }
+
+    this.selectedModelResults = new TreatmentBMPModeledResultSimpleDto();
+    for (let key of Object.getOwnPropertyNames(this.modeledResults[0])) {
+      this.selectedModelResults[key] = this.modeledResults.reduce((sum, current) => sum + (current[key] ?? 0), 0);
+    }
+  }
+
+  //Helps to prevent keyvalue pipe from trying to do sorting
+  returnZero(): number {
+    return 0;
+  }
+
+}
+
+export enum ModeledPerformanceDisplayTypeEnum
+{
+  Total = "Total",
+  Dry = "Dry",
+  Wet = "Wet"
 }

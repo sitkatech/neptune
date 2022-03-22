@@ -16,7 +16,7 @@ namespace Hippocamp.EFModels.Entities
         public WaterQualityManagementPlan()
         {
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
-            PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
+            ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
             QuickBMPs = new HashSet<QuickBMP>();
             SourceControlBMPs = new HashSet<SourceControlBMP>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
@@ -100,8 +100,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get; set; }
         [InverseProperty(nameof(LoadGeneratingUnit.WaterQualityManagementPlan))]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(PlannedProjectLoadGeneratingUnit.WaterQualityManagementPlan))]
-        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
+        [InverseProperty(nameof(ProjectLoadGeneratingUnit.WaterQualityManagementPlan))]
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
         [InverseProperty(nameof(QuickBMP.WaterQualityManagementPlan))]
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         [InverseProperty(nameof(SourceControlBMP.WaterQualityManagementPlan))]

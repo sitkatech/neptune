@@ -89,9 +89,6 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<PermitType> PermitTypes { get; set; }
         public virtual DbSet<Person> People { get; set; }
-        public virtual DbSet<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
-        public virtual DbSet<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
-        public virtual DbSet<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<PreliminarySourceIdentificationCategory> PreliminarySourceIdentificationCategories { get; set; }
@@ -99,6 +96,11 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<PriorityLandUseType> PriorityLandUseTypes { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectDocument> ProjectDocuments { get; set; }
+        public virtual DbSet<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
+        public virtual DbSet<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual DbSet<ProjectNereidResult> ProjectNereidResults { get; set; }
+        public virtual DbSet<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
+        public virtual DbSet<ProjectNetworkSolveHistoryStatusType> ProjectNetworkSolveHistoryStatusTypes { get; set; }
         public virtual DbSet<ProjectStatus> ProjectStatuses { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<RegionalSubbasin> RegionalSubbasins { get; set; }
@@ -187,19 +189,19 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
-        public virtual DbSet<vNereidPlannedProjectLoadingInput> vNereidPlannedProjectLoadingInputs { get; set; }
-        public virtual DbSet<vNereidPlannedProjectRegionalSubbasinCentralizedBMP> vNereidPlannedProjectRegionalSubbasinCentralizedBMPs { get; set; }
-        public virtual DbSet<vNereidPlannedProjectTreatmentBMPRegionalSubbasin> vNereidPlannedProjectTreatmentBMPRegionalSubbasins { get; set; }
+        public virtual DbSet<vNereidProjectLoadingInput> vNereidProjectLoadingInputs { get; set; }
+        public virtual DbSet<vNereidProjectRegionalSubbasinCentralizedBMP> vNereidProjectRegionalSubbasinCentralizedBMPs { get; set; }
+        public virtual DbSet<vNereidProjectTreatmentBMPRegionalSubbasin> vNereidProjectTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaDated> vOnlandVisualTrashAssessmentAreaDateds { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
-        public virtual DbSet<vPlannedProjectDelineationLGUInput> vPlannedProjectDelineationLGUInputs { get; set; }
         public virtual DbSet<vPowerBICentralizedBMPLoadGeneratingUnit> vPowerBICentralizedBMPLoadGeneratingUnits { get; set; }
         public virtual DbSet<vPowerBILandUseStatistic> vPowerBILandUseStatistics { get; set; }
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
+        public virtual DbSet<vProjectDelineationLGUInput> vProjectDelineationLGUInputs { get; set; }
         public virtual DbSet<vRegionalSubbasinLGUInput> vRegionalSubbasinLGUInputs { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vStormwaterJurisdictionOrganizationMapping> vStormwaterJurisdictionOrganizationMappings { get; set; }
@@ -1228,52 +1230,6 @@ namespace Hippocamp.EFModels.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<PlannedProjectHRUCharacteristic>(entity =>
-            {
-                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
-
-                entity.HasOne(d => d.BaselineHRUCharacteristicLandUseCode)
-                    .WithMany(p => p.PlannedProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes)
-                    .HasForeignKey(d => d.BaselineHRUCharacteristicLandUseCodeID)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PlannedProjectHRUCharacteristic_HRUCharacteristicLandUseCodeID");
-
-                entity.HasOne(d => d.HRUCharacteristicLandUseCode)
-                    .WithMany(p => p.PlannedProjectHRUCharacteristicHRUCharacteristicLandUseCodes)
-                    .HasForeignKey(d => d.HRUCharacteristicLandUseCodeID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.PlannedProjectLoadGeneratingUnit)
-                    .WithMany(p => p.PlannedProjectHRUCharacteristics)
-                    .HasForeignKey(d => d.PlannedProjectLoadGeneratingUnitID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.PlannedProjectHRUCharacteristics)
-                    .HasForeignKey(d => d.ProjectID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
-            modelBuilder.Entity<PlannedProjectLoadGeneratingUnit>(entity =>
-            {
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.PlannedProjectLoadGeneratingUnits)
-                    .HasForeignKey(d => d.ProjectID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
-            modelBuilder.Entity<PlannedProjectNereidResult>(entity =>
-            {
-                entity.Property(e => e.FullResponse).IsUnicode(false);
-
-                entity.Property(e => e.NodeID).IsUnicode(false);
-
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.PlannedProjectNereidResults)
-                    .HasForeignKey(d => d.ProjectID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
             modelBuilder.Entity<PreliminarySourceIdentificationCategory>(entity =>
             {
                 entity.Property(e => e.PreliminarySourceIdentificationCategoryID).ValueGeneratedNever();
@@ -1359,6 +1315,82 @@ namespace Hippocamp.EFModels.Entities
                     .WithMany(p => p.ProjectDocuments)
                     .HasForeignKey(d => d.ProjectID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProjectHRUCharacteristic>(entity =>
+            {
+                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
+
+                entity.HasOne(d => d.BaselineHRUCharacteristicLandUseCode)
+                    .WithMany(p => p.ProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes)
+                    .HasForeignKey(d => d.BaselineHRUCharacteristicLandUseCodeID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectHRUCharacteristic_HRUCharacteristicLandUseCodeID");
+
+                entity.HasOne(d => d.HRUCharacteristicLandUseCode)
+                    .WithMany(p => p.ProjectHRUCharacteristicHRUCharacteristicLandUseCodes)
+                    .HasForeignKey(d => d.HRUCharacteristicLandUseCodeID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectHRUCharacteristics)
+                    .HasForeignKey(d => d.ProjectID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.ProjectLoadGeneratingUnit)
+                    .WithMany(p => p.ProjectHRUCharacteristics)
+                    .HasForeignKey(d => d.ProjectLoadGeneratingUnitID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProjectLoadGeneratingUnit>(entity =>
+            {
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectLoadGeneratingUnits)
+                    .HasForeignKey(d => d.ProjectID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProjectNereidResult>(entity =>
+            {
+                entity.Property(e => e.FullResponse).IsUnicode(false);
+
+                entity.Property(e => e.NodeID).IsUnicode(false);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectNereidResults)
+                    .HasForeignKey(d => d.ProjectID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ProjectNetworkSolveHistory>(entity =>
+            {
+                entity.Property(e => e.ErrorMessage).IsUnicode(false);
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectNetworkSolveHistories)
+                    .HasForeignKey(d => d.ProjectID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.ProjectNetworkSolveHistoryStatusType)
+                    .WithMany(p => p.ProjectNetworkSolveHistories)
+                    .HasForeignKey(d => d.ProjectNetworkSolveHistoryStatusTypeID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.RequestedByPerson)
+                    .WithMany(p => p.ProjectNetworkSolveHistories)
+                    .HasForeignKey(d => d.RequestedByPersonID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectNetworkSolveHistory_Person_RequestedByPersonID_PersonID");
+            });
+
+            modelBuilder.Entity<ProjectNetworkSolveHistoryStatusType>(entity =>
+            {
+                entity.Property(e => e.ProjectNetworkSolveHistoryStatusTypeID).ValueGeneratedNever();
+
+                entity.Property(e => e.ProjectNetworkSolveHistoryStatusTypeDisplayName).IsUnicode(false);
+
+                entity.Property(e => e.ProjectNetworkSolveHistoryStatusTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<ProjectStatus>(entity =>
@@ -2521,9 +2553,9 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.LandUseCode).IsUnicode(false);
             });
 
-            modelBuilder.Entity<vNereidPlannedProjectLoadingInput>(entity =>
+            modelBuilder.Entity<vNereidProjectLoadingInput>(entity =>
             {
-                entity.ToView("vNereidPlannedProjectLoadingInput");
+                entity.ToView("vNereidProjectLoadingInput");
 
                 entity.Property(e => e.BaselineLandUseCode).IsUnicode(false);
 
@@ -2532,14 +2564,14 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.LandUseCode).IsUnicode(false);
             });
 
-            modelBuilder.Entity<vNereidPlannedProjectRegionalSubbasinCentralizedBMP>(entity =>
+            modelBuilder.Entity<vNereidProjectRegionalSubbasinCentralizedBMP>(entity =>
             {
-                entity.ToView("vNereidPlannedProjectRegionalSubbasinCentralizedBMP");
+                entity.ToView("vNereidProjectRegionalSubbasinCentralizedBMP");
             });
 
-            modelBuilder.Entity<vNereidPlannedProjectTreatmentBMPRegionalSubbasin>(entity =>
+            modelBuilder.Entity<vNereidProjectTreatmentBMPRegionalSubbasin>(entity =>
             {
-                entity.ToView("vNereidPlannedProjectTreatmentBMPRegionalSubbasin");
+                entity.ToView("vNereidProjectTreatmentBMPRegionalSubbasin");
             });
 
             modelBuilder.Entity<vNereidRegionalSubbasinCentralizedBMP>(entity =>
@@ -2564,11 +2596,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vOnlandVisualTrashAssessmentAreaProgress");
 
                 entity.Property(e => e.OnlandVisualTrashAssessmentScoreDisplayName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<vPlannedProjectDelineationLGUInput>(entity =>
-            {
-                entity.ToView("vPlannedProjectDelineationLGUInput");
             });
 
             modelBuilder.Entity<vPowerBICentralizedBMPLoadGeneratingUnit>(entity =>
@@ -2654,6 +2681,11 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.VisitStatus).IsUnicode(false);
 
                 entity.Property(e => e.WQMPName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<vProjectDelineationLGUInput>(entity =>
+            {
+                entity.ToView("vProjectDelineationLGUInput");
             });
 
             modelBuilder.Entity<vRegionalSubbasinLGUInput>(entity =>

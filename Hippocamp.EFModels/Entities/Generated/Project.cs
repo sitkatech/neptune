@@ -14,10 +14,11 @@ namespace Hippocamp.EFModels.Entities
     {
         public Project()
         {
-            PlannedProjectHRUCharacteristics = new HashSet<PlannedProjectHRUCharacteristic>();
-            PlannedProjectLoadGeneratingUnits = new HashSet<PlannedProjectLoadGeneratingUnit>();
-            PlannedProjectNereidResults = new HashSet<PlannedProjectNereidResult>();
             ProjectDocuments = new HashSet<ProjectDocument>();
+            ProjectHRUCharacteristics = new HashSet<ProjectHRUCharacteristic>();
+            ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            ProjectNereidResults = new HashSet<ProjectNereidResult>();
+            ProjectNetworkSolveHistories = new HashSet<ProjectNetworkSolveHistory>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -53,14 +54,16 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey(nameof(StormwaterJurisdictionID))]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [InverseProperty(nameof(PlannedProjectHRUCharacteristic.Project))]
-        public virtual ICollection<PlannedProjectHRUCharacteristic> PlannedProjectHRUCharacteristics { get; set; }
-        [InverseProperty(nameof(PlannedProjectLoadGeneratingUnit.Project))]
-        public virtual ICollection<PlannedProjectLoadGeneratingUnit> PlannedProjectLoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(PlannedProjectNereidResult.Project))]
-        public virtual ICollection<PlannedProjectNereidResult> PlannedProjectNereidResults { get; set; }
         [InverseProperty(nameof(ProjectDocument.Project))]
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
+        [InverseProperty(nameof(ProjectHRUCharacteristic.Project))]
+        public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
+        [InverseProperty(nameof(ProjectLoadGeneratingUnit.Project))]
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        [InverseProperty(nameof(ProjectNereidResult.Project))]
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
+        [InverseProperty(nameof(ProjectNetworkSolveHistory.Project))]
+        public virtual ICollection<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
         [InverseProperty(nameof(TreatmentBMP.Project))]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }

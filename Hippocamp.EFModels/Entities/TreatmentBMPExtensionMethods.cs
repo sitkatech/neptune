@@ -91,6 +91,11 @@ namespace Hippocamp.EFModels.Entities
                 return false;
             }
 
+            if (treatmentBMP.Delineation == null)
+            {
+                return false;
+            }
+
             var bmpModelingTypeID = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID;
 
             if (bmpModelingAttributes != null)

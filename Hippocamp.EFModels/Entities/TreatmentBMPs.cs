@@ -29,6 +29,7 @@ namespace Hippocamp.EFModels.Entities
         public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
         {
             var treatmentBMPs = GetTreatmentBMPsImpl(dbContext)
+                .Include(x => x.Delineation)
                 .Where(x => x.ProjectID == projectID).ToList();
 
             var treatmentBMPIDs = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();

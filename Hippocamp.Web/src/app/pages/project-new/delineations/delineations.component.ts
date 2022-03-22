@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet.fullscreen';
-import 'leaflet-draw';
 import * as esri from 'esri-leaflet'
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';

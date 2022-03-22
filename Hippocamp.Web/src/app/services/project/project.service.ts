@@ -9,6 +9,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
+import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
 
 
 @Injectable({
@@ -87,6 +88,11 @@ export class ProjectService {
   deleteAttachmentByID(attachmentID: number) {
     let route = `/projects/attachments/${attachmentID}`;
     return this.apiService.deleteToApi(route);
+  }
+
+  getModeledResultsForProject(projectID: number): Observable<Array<TreatmentBMPModeledResultSimpleDto>> {
+    let route = `/projects/${projectID}/modeled-performance`;
+    return this.apiService.getFromApi(route);
   }
 
   triggerNetworkSolveForProject(projectID: number): Observable<any> {

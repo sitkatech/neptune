@@ -1,15 +1,15 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[PlannedProjectNereidResult]
+//  Source Table: [dbo].[ProjectNereidResult]
 using System;
 
 
 namespace Hippocamp.Models.DataTransferObjects
 {
-    public partial class PlannedProjectNereidResultDto
+    public partial class ProjectNereidResultDto
     {
-        public int PlannedProjectNereidResultID { get; set; }
+        public int ProjectNereidResultID { get; set; }
         public ProjectDto Project { get; set; }
         public bool IsBaselineCondition { get; set; }
         public int? TreatmentBMPID { get; set; }
@@ -20,9 +20,9 @@ namespace Hippocamp.Models.DataTransferObjects
         public DateTime? LastUpdate { get; set; }
     }
 
-    public partial class PlannedProjectNereidResultSimpleDto
+    public partial class ProjectNereidResultSimpleDto
     {
-        public int PlannedProjectNereidResultID { get; set; }
+        public int ProjectNereidResultID { get; set; }
         public int ProjectID { get; set; }
         public bool IsBaselineCondition { get; set; }
         public int? TreatmentBMPID { get; set; }
