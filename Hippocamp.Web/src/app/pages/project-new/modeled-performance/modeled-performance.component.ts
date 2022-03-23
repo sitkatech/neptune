@@ -422,6 +422,10 @@ export class ModeledPerformanceComponent implements OnInit {
     return this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type;
   }
 
+  getNotFullyParameterizedBMPNames() : string[] {
+    return this.treatmentBMPs.filter(x => !x.IsFullyParameterized).map(x => x.TreatmentBMPName);
+  }
+
 }
 
 export enum ModeledPerformanceDisplayTypeEnum

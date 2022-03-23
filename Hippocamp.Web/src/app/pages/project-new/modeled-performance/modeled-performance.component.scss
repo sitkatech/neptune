@@ -9,3 +9,12 @@ tr.selectable:hover {
 tr.selectable.selected {
     background-color: #FFFF85;
 }
+
+#modeledPerfomanceDisplayTabs {
+    //This allows it to be in line with the land use table
+    padding-top:1.90rem;
+}
+
+#landUseTable tr th {
+    border-top:none;
+}

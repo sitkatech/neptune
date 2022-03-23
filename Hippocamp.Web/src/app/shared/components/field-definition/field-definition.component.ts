@@ -21,6 +21,7 @@ export class FieldDefinitionComponent implements OnInit {
 
   @Input() fieldDefinitionType: string;
   @Input() labelOverride: string;
+  @Input() labelAppend: string;
   @ViewChild('p') public popover: NgbPopover;
   @ViewChild('popContent') public content: any;
   public fieldDefinition: FieldDefinitionDto;
@@ -60,7 +61,7 @@ export class FieldDefinitionComponent implements OnInit {
   }
 
   public getLabelText() {
-    return this.labelOverride !== null && this.labelOverride !== undefined ? this.labelOverride : this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName;
+    return (this.labelOverride !== null && this.labelOverride !== undefined ? this.labelOverride : this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName) + (this.labelAppend != null && this.labelAppend != undefined ? this.labelAppend : "");
   }
 
   public showEditButton(): boolean {
