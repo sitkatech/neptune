@@ -426,6 +426,20 @@ export class ModeledPerformanceComponent implements OnInit {
     return this.treatmentBMPs.filter(x => !x.IsFullyParameterized).map(x => x.TreatmentBMPName);
   }
 
+  getBMPNamesForDelineationsWithDiscrepancies() : string[] {
+    if (this.delineations == null || this.delineations.length == 0) {
+      return null;
+    }
+
+    var treatmentBMPIDsForDelineationsWithDiscrepancies = this.delineations.filter(x => x.HasDiscrepancies).map(x => x.TreatmentBMPID);
+    
+    if (treatmentBMPIDsForDelineationsWithDiscrepancies == null || treatmentBMPIDsForDelineationsWithDiscrepancies.length == 0) {
+      return null;
+    }
+
+    return this.treatmentBMPs.filter(x => treatmentBMPIDsForDelineationsWithDiscrepancies.includes(x.TreatmentBMPID)).map(x => x.TreatmentBMPName);
+  }
+
 }
 
 export enum ModeledPerformanceDisplayTypeEnum

@@ -14,6 +14,7 @@ namespace Hippocamp.EFModels.Entities
                 DelineationTypeID = delineation.DelineationTypeID,
                 DelineationArea = delineation.GetDelineationArea(),
                 Geometry = delineation.Geometry4326GeoJson,
+                HasDiscrepancies = delineation.HasDiscrepancies,
                 TreatmentBMPID = delineation.TreatmentBMPID
             };
 

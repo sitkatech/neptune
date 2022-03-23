@@ -16,6 +16,7 @@ export class DelineationUpsertDto {
     DelineationArea?: number;
     Geometry?: string;
     TreatmentBMPID?: number;
+    HasDiscrepancies?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

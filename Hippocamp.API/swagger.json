@@ -1648,6 +1648,9 @@
           "TreatmentBMPID": {
             "type": "integer",
             "format": "int32"
+          },
+          "HasDiscrepancies": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

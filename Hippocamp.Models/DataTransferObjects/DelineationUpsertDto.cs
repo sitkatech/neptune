@@ -7,6 +7,7 @@
         public double? DelineationArea { get; set; }
         public string Geometry { get; set; }
         public int TreatmentBMPID { get; set; }
+        public bool HasDiscrepancies { get; set; }
        
     }
 }

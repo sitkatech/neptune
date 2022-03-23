@@ -91,6 +91,13 @@
                         <li *ngFor="let name of getNotFullyParameterizedBMPNames()">{{name}}</li>
                     </ul>
                 </ngb-alert>
+                <ngb-alert *ngIf="getBMPNamesForDelineationsWithDiscrepancies().length > 0" [type]="'warning'"
+                    [dismissible]="false">
+                    Some of the proposed BMPs (see list below) have delineations that overlap an existing BMP delineation or another delineation within this project, so these results may be incomplete or inaccurate.
+                    <ul>
+                        <li *ngFor="let name of getBMPNamesForDelineationsWithDiscrepancies()">{{name}}</li>
+                    </ul>
+                </ngb-alert>
                 <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'"
                     [dismissible]="false">
                     Results for this project are currently being calculated. The below results will remain until the
@@ -429,7 +436,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <table id="landUseTable" class="table table-responsive" style="text-align:center">
+                        <table id="landUseTable" class="table table-responsive table-striped" style="text-align:center">
                             <thead>
                                 <tr>
                                     <th style="text-align: left">
