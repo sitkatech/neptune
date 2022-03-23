@@ -594,22 +594,45 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [EnableCors(origins: "*", headers: "*", methods: "*")] 
         public ActionResult NetworkSolveForProject(ProjectPrimaryKey projectPrimaryKey, [System.Web.Http.FromBody] string webServiceAccessTokenGuidAsString)
         {
+            WebServiceToken webServiceAccessToken;
             try
             {
                 //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
-                var webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
-                var projectID = projectPrimaryKey.EntityObject.ProjectID; 
-                var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory(projectID, webServiceAccessToken.Person.PersonID, (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued);
+                webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
+            }
+            catch (Exception ex)
+            {
+                var error = ex;
+                Response.StatusCode = 400;
+                return Content($"Could not find user with access token: {webServiceAccessTokenGuidAsString}");
+            }
+
+            int projectID;
+
+            try
+            {
+                projectID = projectPrimaryKey.EntityObject.ProjectID;
+            }
+            catch (Exception ex)
+            {
+                var error = ex;
+                Response.StatusCode = 400;
+                return Content($"Could not find requested project. ProjectID sent was:{Request.Url.ToString().Split('/').Last()}");
+            }
+
+            try
+            {
+                var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory(projectID, webServiceAccessToken.Person.PersonID, (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued, DateTime.UtcNow);
                 HttpRequestStorage.DatabaseEntities.ProjectNetworkSolveHistories.Add(projectNetworkSolveHistoryEntity);
                 HttpRequestStorage.DatabaseEntities.SaveChangesWithNoAuditing();
                 BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
                 return Content($"Network solve for Project with ID:{projectID} has begun.");
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
                 var error = ex;
-                Response.StatusCode = 404;
-                return Content($"Could not find user with access token: {webServiceAccessTokenGuidAsString}");
+                Response.StatusCode = 500;
+                return Content($"Unable to start the Network Solve for ProjectID:{projectID}. Error message:{ex.Message}");
             }
             
         }

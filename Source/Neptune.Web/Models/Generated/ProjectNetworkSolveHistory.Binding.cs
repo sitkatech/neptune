@@ -30,19 +30,20 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ProjectNetworkSolveHistory(int projectNetworkSolveHistoryID, int projectID, int requestedByPersonID, int projectNetworkSolveHistoryStatusTypeID, string errorMessage) : this()
+        public ProjectNetworkSolveHistory(int projectNetworkSolveHistoryID, int projectID, int requestedByPersonID, int projectNetworkSolveHistoryStatusTypeID, DateTime lastUpdated, string errorMessage) : this()
         {
             this.ProjectNetworkSolveHistoryID = projectNetworkSolveHistoryID;
             this.ProjectID = projectID;
             this.RequestedByPersonID = requestedByPersonID;
             this.ProjectNetworkSolveHistoryStatusTypeID = projectNetworkSolveHistoryStatusTypeID;
+            this.LastUpdated = lastUpdated;
             this.ErrorMessage = errorMessage;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ProjectNetworkSolveHistory(int projectID, int requestedByPersonID, int projectNetworkSolveHistoryStatusTypeID) : this()
+        public ProjectNetworkSolveHistory(int projectID, int requestedByPersonID, int projectNetworkSolveHistoryStatusTypeID, DateTime lastUpdated) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ProjectNetworkSolveHistoryID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -50,12 +51,13 @@ namespace Neptune.Web.Models
             this.ProjectID = projectID;
             this.RequestedByPersonID = requestedByPersonID;
             this.ProjectNetworkSolveHistoryStatusTypeID = projectNetworkSolveHistoryStatusTypeID;
+            this.LastUpdated = lastUpdated;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public ProjectNetworkSolveHistory(Project project, Person requestedByPerson, ProjectNetworkSolveHistoryStatusType projectNetworkSolveHistoryStatusType) : this()
+        public ProjectNetworkSolveHistory(Project project, Person requestedByPerson, ProjectNetworkSolveHistoryStatusType projectNetworkSolveHistoryStatusType, DateTime lastUpdated) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ProjectNetworkSolveHistoryID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -66,6 +68,7 @@ namespace Neptune.Web.Models
             this.RequestedByPerson = requestedByPerson;
             requestedByPerson.ProjectNetworkSolveHistoriesWhereYouAreTheRequestedByPerson.Add(this);
             this.ProjectNetworkSolveHistoryStatusTypeID = projectNetworkSolveHistoryStatusType.ProjectNetworkSolveHistoryStatusTypeID;
+            this.LastUpdated = lastUpdated;
         }
 
         /// <summary>
@@ -73,7 +76,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static ProjectNetworkSolveHistory CreateNewBlank(Project project, Person requestedByPerson, ProjectNetworkSolveHistoryStatusType projectNetworkSolveHistoryStatusType)
         {
-            return new ProjectNetworkSolveHistory(project, requestedByPerson, projectNetworkSolveHistoryStatusType);
+            return new ProjectNetworkSolveHistory(project, requestedByPerson, projectNetworkSolveHistoryStatusType, default(DateTime));
         }
 
         /// <summary>
@@ -123,6 +126,7 @@ namespace Neptune.Web.Models
         public int ProjectID { get; set; }
         public int RequestedByPersonID { get; set; }
         public int ProjectNetworkSolveHistoryStatusTypeID { get; set; }
+        public DateTime LastUpdated { get; set; }
         public string ErrorMessage { get; set; }
         [NotMapped]
         public HtmlString ErrorMessageHtmlString

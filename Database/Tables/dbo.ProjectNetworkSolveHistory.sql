@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[ProjectNetworkSolveHistory](
 	[ProjectID] [int] NOT NULL,
 	[RequestedByPersonID] [int] NOT NULL,
 	[ProjectNetworkSolveHistoryStatusTypeID] [int] NOT NULL,
+	[LastUpdated] [datetime] NOT NULL,
 	[ErrorMessage] [dbo].[html] NULL,
  CONSTRAINT [PK_ProjectNetworkSolveHistory_ProjectNetworkSolveHistoryID] PRIMARY KEY CLUSTERED 
 (

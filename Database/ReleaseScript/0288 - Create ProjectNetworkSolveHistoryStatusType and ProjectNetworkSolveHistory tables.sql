@@ -14,5 +14,6 @@ create table dbo.ProjectNetworkSolveHistory (
 	ProjectID int not null constraint FK_ProjectNetworkSolveHistory_Project_ProjectID foreign key references dbo.Project (ProjectID),
 	RequestedByPersonID int not null constraint FK_ProjectNetworkSolveHistory_Person_RequestedByPersonID_PersonID foreign key references dbo.Person(PersonID),
 	ProjectNetworkSolveHistoryStatusTypeID int not null constraint FK_ProjectNetworkSolveHistory_ProjectNetworkSolveHistoryStatusType_ProjectNetworkSolveHistoryStatusTypeID foreign key references dbo.ProjectNetworkSolveHistoryStatusType (ProjectNetworkSolveHistoryStatusTypeID),
+	LastUpdated datetime not null,
 	ErrorMessage dbo.html null
 )

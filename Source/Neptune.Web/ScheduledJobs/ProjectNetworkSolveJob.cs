@@ -50,15 +50,16 @@ namespace Neptune.Web.ScheduledJobs
                 LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
                 //Get our HRUs
                 HRURefreshImpl();
-                throw new Exception("Oh no an exception!!!!");
-                //NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs);
-                //projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
-                //DbContext.SaveChangesWithNoAuditing();
-                //SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
+                NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs);
+                projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
+                projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
+                DbContext.SaveChangesWithNoAuditing();
+                SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
             }
             catch (Exception ex)
             {
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Failed;
+                projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
                 projectNetworkSolveHistory.ErrorMessage = ex.Message;
                 DbContext.SaveChangesWithNoAuditing();
                 SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, false, ex.Message);
@@ -96,10 +97,13 @@ You can view the results or trigger another network solve <a href='{planningURL}
 
             mailMessage.To.Add(requestPersonEmail);
 
-            foreach (var revisionRequestPeople in HttpRequestStorage.DatabaseEntities.People
-                .GetPeopleWhoReceiveSupportEmails())
+            if (!successful)
             {
-                mailMessage.CC.Add(revisionRequestPeople.Email);
+                foreach (var supportPeople in HttpRequestStorage.DatabaseEntities.People
+                .GetPeopleWhoReceiveSupportEmails())
+                {
+                    mailMessage.CC.Add(supportPeople.Email);
+                }
             }
 
             SitkaSmtpClient.Send(mailMessage);

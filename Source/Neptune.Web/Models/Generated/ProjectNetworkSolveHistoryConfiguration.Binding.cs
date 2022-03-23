@@ -19,6 +19,7 @@ namespace Neptune.Web.Models
             Property(x => x.ProjectID).HasColumnName(@"ProjectID").HasColumnType("int").IsRequired();
             Property(x => x.RequestedByPersonID).HasColumnName(@"RequestedByPersonID").HasColumnType("int").IsRequired();
             Property(x => x.ProjectNetworkSolveHistoryStatusTypeID).HasColumnName(@"ProjectNetworkSolveHistoryStatusTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.LastUpdated).HasColumnName(@"LastUpdated").HasColumnType("datetime").IsRequired();
             Property(x => x.ErrorMessage).HasColumnName(@"ErrorMessage").HasColumnType("varchar").IsOptional();
 
             // Foreign keys
