@@ -43,14 +43,14 @@ namespace Neptune.Web.ScheduledJobs
             var project = DbContext.Projects.First(x => x.ProjectID == ProjectID);
             var projectNetworkSolveHistory = DbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).First(x => x.ProjectNetworkSolveHistoryID == ProjectNetworkSolveHistoryID);
             var regionalSubbasinIDs = project.GetRegionalSubbasinIDs(DbContext);
-
+            var projectDistributedDelineationIDs = project.TreatmentBMPs.SelectMany(x => x.Delineations.Where(y => y.DelineationTypeID == (int)DelineationTypeEnum.Distributed)).Select(x => x.DelineationID).ToList();
             try
             {
                 //Get our LGUs
                 LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
                 //Get our HRUs
                 HRURefreshImpl();
-                NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs);
+                NereidUtilities.ProjectNetworkSolve(out _, out _, out _, DbContext, HttpClient, false, ProjectID, regionalSubbasinIDs, projectDistributedDelineationIDs);
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
                 projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
                 DbContext.SaveChangesWithNoAuditing();

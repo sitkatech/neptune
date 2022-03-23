@@ -1,6 +1,7 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Neptune.Web.Areas.Modeling.Models.Nereid
 {
@@ -20,7 +21,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         }
 
-        public LandSurface(vNereidLoadingInput vNereidLoadingInput, bool isBaselineCondition)
+        public LandSurface(vNereidLoadingInput vNereidLoadingInput, bool isBaselineCondition, List<int> projectDelineationIDs = null)
         {
             var landUseCode = isBaselineCondition
                 ? vNereidLoadingInput.BaselineLandUseCode
@@ -30,7 +31,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 ? vNereidLoadingInput.BaselineImperviousAcres
                 : vNereidLoadingInput.ImperviousAcres;
 
-            NodeID = NereidUtilities.LandSurfaceNodeID(vNereidLoadingInput);
+            NodeID = NereidUtilities.LandSurfaceNodeID(vNereidLoadingInput, projectDelineationIDs);
             SurfaceKey =
                 $"{vNereidLoadingInput.ModelBasinKey}-{landUseCode}-{vNereidLoadingInput.HydrologicSoilGroup}-{vNereidLoadingInput.SlopePercentage}";
             Area = vNereidLoadingInput.Area;

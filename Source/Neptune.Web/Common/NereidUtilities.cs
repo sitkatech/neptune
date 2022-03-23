@@ -124,7 +124,7 @@ namespace Neptune.Web.Common
             return "Delineation_" + delineation.DelineationID;
         }
 
-        public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit)
+        public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit, List<int> projectDelineationIDs = null)
         {
             // provisional delineations are tracked in the LGU layer, but do not contribute runoff
             // to their respective BMPs in the model therefore those LGUs should fall back to their
@@ -132,7 +132,7 @@ namespace Neptune.Web.Common
             // If the associated BMP belongs to a Simple WQMP, it should not be accounted for in the modeling 
 
             if (loadGeneratingUnit.DelineationID != null &&
-                loadGeneratingUnit.DelineationIsVerified == true &&
+                (loadGeneratingUnit.DelineationIsVerified == true || (projectDelineationIDs != null && projectDelineationIDs.Contains(loadGeneratingUnit.DelineationID.Value))) &&
                 loadGeneratingUnit.RelationallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
             {
                 return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
@@ -536,13 +536,13 @@ namespace Neptune.Web.Common
         }
 
         public static IEnumerable<NereidResult> ProjectNetworkSolve(out string stackTrace,
-            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient, bool isBaselineCondition, int projectID, List<int> projectRSBIDs)
+            out List<string> missingNodeIDs, out Graph graph, DatabaseEntities dbContext, HttpClient httpClient, bool isBaselineCondition, int projectID, List<int> projectRSBIDs, List<int> projectDistributedDelineationIDs)
         {
             stackTrace = "";
             missingNodeIDs = new List<string>();
             graph = NereidUtilities.BuildProjectNetworkGraph(dbContext, projectID, projectRSBIDs);
 
-            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition, projectID, projectRSBIDs);
+            var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition, projectID, projectRSBIDs, projectDistributedDelineationIDs);
 
             var projectIDSqlParam = new SqlParameter("@projectID", projectID);
             dbContext.Database.ExecuteSqlCommand(
@@ -618,7 +618,7 @@ namespace Neptune.Web.Common
         }
 
         private static List<NereidResult> NetworkSolveImpl(List<string> missingNodeIDs, Graph graph, DatabaseEntities dbContext,
-            HttpClient httpClient, bool sendPreviousResults, bool isBaselineCondition, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
+            HttpClient httpClient, bool sendPreviousResults, bool isBaselineCondition, int? projectID = null, List<int> projectRegionalSubbasinIDs = null, List<int> projectDistributedDelineationIDs = null)
         {
             var solutionSequenceUrl =
                 $"{NeptuneWebConfiguration.NereidUrl}/api/v1/network/solution_sequence?min_branch_size=12";
@@ -662,7 +662,7 @@ namespace Neptune.Web.Common
                     var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                     SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allwaterQualityManagementPlanNodes,
-                        allModelingQuickBMPs, out var notFoundNodes, httpClient, isBaselineCondition);
+                        allModelingQuickBMPs, out var notFoundNodes, httpClient, isBaselineCondition, projectDistributedDelineationIDs);
                     missingNodeIDs.AddRange(notFoundNodes);
                 }
             }
@@ -697,7 +697,7 @@ namespace Neptune.Web.Common
         public static NereidResult<SolutionResponseObject> SolveSubgraph(Graph subgraph,
             List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
             List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
-            List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes, HttpClient httpClient, bool isBaselineCondition)
+            List<QuickBMP> allModelingQuickBMPs, out List<string> notFoundNodes, HttpClient httpClient, bool isBaselineCondition, List<int> projectDelineationIDs = null)
         {
             notFoundNodes = new List<string>();
 
@@ -718,7 +718,7 @@ namespace Neptune.Web.Common
                 delineationToIncludeIDs.Contains(x.DelineationID.GetValueOrDefault()) ||
                 regionalSubbasinToIncludeIDs.Contains(x.RegionalSubbasinID) ||
                 waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID.GetValueOrDefault())
-            ).ToList().Select(x => new LandSurface(x, isBaselineCondition)).ToList();
+            ).ToList().Select(x => new LandSurface(x, isBaselineCondition, projectDelineationIDs)).ToList();
 
             var treatmentFacilities = allModelingBMPs
                 .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
