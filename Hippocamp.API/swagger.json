@@ -949,6 +949,55 @@
         }
       }
     },
+    "/projects/{projectID}/treatment-bmp-hru-characteristics": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPHRUCharacteristicsSummarySimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPHRUCharacteristicsSummarySimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPHRUCharacteristicsSummarySimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectID}/modeled-performance": {
       "get": {
         "tags": [
@@ -2371,6 +2420,28 @@
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPHRUCharacteristicsSummarySimpleDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LandUse": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "ImperviousCover": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

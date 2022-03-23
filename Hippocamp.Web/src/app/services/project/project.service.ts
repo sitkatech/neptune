@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
-import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/models';
+import { ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -103,6 +103,11 @@ export class ProjectService {
 
   getNetworkSolveHistoriesForProject(projectID: number): Observable<ProjectNetworkSolveHistorySimpleDto[]> {
     let route = `/projects/${projectID}/project-network-solve-histories`;
+    return this.apiService.getFromApi(route);
+  }
+
+  getTreatmentBMPHRUCharacteristicSummariesForProject(projectID: number): Observable<TreatmentBMPHRUCharacteristicsSummarySimpleDto[]> {
+    let route = `/projects/${projectID}/treatment-bmp-hru-characteristics`;
     return this.apiService.getFromApi(route);
   }
 }

@@ -87,5 +87,40 @@ namespace Hippocamp.EFModels.Entities
             dbContext.Projects.Remove(project);
             dbContext.SaveChanges();
         }
+
+        public static List<TreatmentBMPHRUCharacteristicsSummarySimpleDto> GetTreatmentBMPHRUCharacteristicSimplesForProject(HippocampDbContext dbContext, int projectID)
+        {
+            var projectTreatmentBMPs = dbContext.Projects
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.Delineation)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Where(x => x.ProjectID == projectID).SelectMany(x => x.TreatmentBMPs).ToList();
+
+            if (projectTreatmentBMPs == null || projectTreatmentBMPs.Count == 0)
+            {
+                return new List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>();
+            }
+
+            var blah = projectTreatmentBMPs.SelectMany(x =>
+                x.GetHRUCharacteristics(dbContext)
+                .ToList()).ToList();
+
+            return projectTreatmentBMPs.SelectMany(x =>
+                x.GetHRUCharacteristics(dbContext)
+                .ToList()
+                .GroupBy(y => y.HRUCharacteristicLandUseCode)
+                .Select(y => new TreatmentBMPHRUCharacteristicsSummarySimpleDto()
+                {
+                    TreatmentBMPID = x.TreatmentBMPID,
+                    Area = y.Sum(z => z.Area),
+                    ImperviousCover = y.Sum(z => z.ImperviousAcres),
+                    LandUse = y.Key.HRUCharacteristicLandUseCodeDisplayName
+                })
+                .ToList()
+            )
+            .ToList();
+
+        }
     }
 }

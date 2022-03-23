@@ -2,7 +2,7 @@ import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewC
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
@@ -34,13 +34,20 @@ export class ModeledPerformanceComponent implements OnInit {
   public activeID = ModeledPerformanceDisplayTypeEnum.Total;
   public modelingSelectListOptions: {TreatmentBMPID: number, TreatmentBMPName: string}[] = [];
   public treatmentBMPIDForSelectedModelResults = 0;
+  public modeledResults: Array<TreatmentBMPModeledResultSimpleDto>;
   public selectedModelResults: TreatmentBMPModeledResultSimpleDto;
+  public treatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
+  public selectedTreatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
+  public selectedTreatmentBMPHRUCharacteristicSummaryTotal: TreatmentBMPHRUCharacteristicsSummarySimpleDto = {
+    LandUse: "Total",
+    Area: 0,
+    ImperviousCover: 0
+  };
   public projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
   public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
   
   @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'modeledPerformanceMap';
-  public modeledResults: Array<TreatmentBMPModeledResultSimpleDto>;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: DelineationUpsertDto[];
   public zoomMapToDefaultExtent: boolean = true;
@@ -105,8 +112,13 @@ export class ModeledPerformanceComponent implements OnInit {
               this.projectNetworkSolveHistories != undefined && 
               this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0) 
               {
-                this.projectService.getModeledResultsForProject(this.projectID).subscribe(result => {
-                  this.modeledResults = result;
+                forkJoin({
+                  modeledResults : this.projectService.getModeledResultsForProject(this.projectID),
+                  treatmentBMPHRUCharacteristicSummaries : this.projectService.getTreatmentBMPHRUCharacteristicSummariesForProject(this.projectID)
+                })
+                .subscribe(({modeledResults, treatmentBMPHRUCharacteristicSummaries}) => {
+                  this.modeledResults = modeledResults;
+                  this.treatmentBMPHRUCharacteristicSummaries = treatmentBMPHRUCharacteristicSummaries;
                   this.populateModeledResultsOptions();
                   this.updateSelectedModelResults();
                 });
@@ -353,13 +365,37 @@ export class ModeledPerformanceComponent implements OnInit {
   updateSelectedModelResults() {
     if (this.treatmentBMPIDForSelectedModelResults != 0) {
       this.selectedModelResults = this.modeledResults.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedModelResults)[0];
+      this.selectedTreatmentBMPHRUCharacteristicSummaries = this.treatmentBMPHRUCharacteristicSummaries.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedModelResults).sort((a, b) => { if (a.LandUse > b.LandUse) {return 1;} if (b.LandUse > a.LandUse) {return -1;} return 0});
+      this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
       return;
     }
 
     this.selectedModelResults = new TreatmentBMPModeledResultSimpleDto();
+    //We get the property names of the first one so we have a fully populated object because Typescript doesn't always populate the keys which is VERY annoying
     for (let key of Object.getOwnPropertyNames(this.modeledResults[0])) {
       this.selectedModelResults[key] = this.modeledResults.reduce((sum, current) => sum + (current[key] ?? 0), 0);
     }
+    
+    this.selectedTreatmentBMPHRUCharacteristicSummaries = [...this.treatmentBMPHRUCharacteristicSummaries.reduce((r, o) => {
+      const key = o.LandUse;
+      
+      const item = r.get(key) || Object.assign({}, o, {
+        Area: 0,
+        ImperviousCover: 0
+      });
+      
+      item.Area += o.Area;
+      item.ImperviousCover += o.ImperviousCover;
+    
+      return r.set(key, item);
+    }, new Map).values()].sort((a, b) => { if (a.LandUse > b.LandUse) {return 1;} if (b.LandUse > a.LandUse) {return -1;} return 0});
+    this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
+    
+  }
+
+  updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal() {
+    this.selectedTreatmentBMPHRUCharacteristicSummaryTotal.Area = this.selectedTreatmentBMPHRUCharacteristicSummaries.reduce((sum, current) => sum + current.Area, 0);
+    this.selectedTreatmentBMPHRUCharacteristicSummaryTotal.ImperviousCover = this.selectedTreatmentBMPHRUCharacteristicSummaries.reduce((sum, current) => sum + current.ImperviousCover, 0);
   }
 
   //Helps to prevent keyvalue pipe from trying to do sorting

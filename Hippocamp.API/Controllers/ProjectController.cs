@@ -211,6 +211,26 @@ namespace Hippocamp.API.Controllers
             return Ok(projectNetworkSolveHistoryDtos);
         }
 
+        [HttpGet("projects/{projectID}/treatment-bmp-hru-characteristics")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> GetTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
+            {
+                return actionResult;
+            }
+            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            {
+                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+            }
+
+            var hruCharacteristics = Projects.GetTreatmentBMPHRUCharacteristicSimplesForProject(_dbContext, projectID);
+
+            return Ok(hruCharacteristics);
+        }
+
         [HttpGet("projects/{projectID}/modeled-performance")]
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPModeledResultSimpleDto>> GetModeledPerformanceForProject([FromRoute] int projectID)

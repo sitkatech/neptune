@@ -29,3 +29,4 @@ model/treatment-bmp-modeled-result-simple-dto.ts
 model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
 model/treatment-bmp-type-simple-dto.ts
 model/treatment-bmp-upsert-dto.ts
+model/treatment-bmphru-characteristics-summary-simple-dto.ts
