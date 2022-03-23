@@ -7,8 +7,10 @@ using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
 using Hippocamp.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -20,10 +22,12 @@ namespace Hippocamp.API.Controllers
     public class ProjectController : SitkaController<ProjectController>
     {
         private readonly HttpClient _neptuneClient;
+        private readonly IWebHostEnvironment _environment;
 
-        public ProjectController(HippocampDbContext dbContext, ILogger<ProjectController> logger, KeystoneService keystoneService, IOptions<HippocampConfiguration> hippocampConfiguration, IHttpClientFactory httpClientFactory) : base(dbContext, logger, keystoneService, hippocampConfiguration)
+        public ProjectController(HippocampDbContext dbContext, ILogger<ProjectController> logger, KeystoneService keystoneService, IOptions<HippocampConfiguration> hippocampConfiguration, IHttpClientFactory httpClientFactory, IWebHostEnvironment environment ) : base(dbContext, logger, keystoneService, hippocampConfiguration)
         {
             _neptuneClient = httpClientFactory.CreateClient("NeptuneClient");
+            _environment = environment;
         }
 
         [HttpGet("projects/{projectID}")]
@@ -228,13 +232,19 @@ namespace Hippocamp.API.Controllers
                 webServiceAccessTokenGuidAsString = personDto.WebServiceAccessToken.ToString()
             };
 
-            var result = _neptuneClient.PostAsync($"http://host.docker.internal/Nereid/NetworkSolveForProject/{projectID}", new StringContent(JsonConvert.SerializeObject(requestObject), Encoding.UTF8, "application/json")).Result;
+            var requestBaseURL = _hippocampConfiguration.OcStormwaterToolsBaseUrl;
+            //Necessary for circumnavigating the container accessing localhost issue
+            if (_environment.IsDevelopment())
+            {
+                requestBaseURL = "http://host.docker.internal";
+            }
+
+            var result = _neptuneClient.PostAsync($"{requestBaseURL}/Nereid/NetworkSolveForProject/{projectID}", new StringContent(JsonConvert.SerializeObject(requestObject), Encoding.UTF8, "application/json")).Result;
             var body = result.Content.ReadAsStringAsync().Result;
 
             if (!result.IsSuccessStatusCode)
             {
-                //more logic here, but just return that we failed
-                return BadRequest("The request failed");
+                return StatusCode((int)result.StatusCode, body);
             }
 
             return Ok();
