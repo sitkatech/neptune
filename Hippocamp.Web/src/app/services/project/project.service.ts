@@ -10,6 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
+import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -98,5 +99,10 @@ export class ProjectService {
   triggerNetworkSolveForProject(projectID: number): Observable<any> {
     let route = `/projects/${projectID}/modeled-performance`;
     return this.apiService.postToApi(route, {});
+  }
+
+  getNetworkSolveHistoriesForProject(projectID: number): Observable<ProjectNetworkSolveHistorySimpleDto[]> {
+    let route = `/projects/${projectID}/project-network-solve-histories`;
+    return this.apiService.getFromApi(route);
   }
 }

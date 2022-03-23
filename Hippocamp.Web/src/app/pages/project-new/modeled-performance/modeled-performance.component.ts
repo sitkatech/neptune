@@ -2,7 +2,7 @@ import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewC
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
@@ -17,6 +17,7 @@ import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bm
 import { DelineationService } from 'src/app/services/delineation.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { environment } from 'src/environments/environment';
+import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
 
 declare var $: any
 
@@ -34,6 +35,8 @@ export class ModeledPerformanceComponent implements OnInit {
   public modelingSelectListOptions: {TreatmentBMPID: number, TreatmentBMPName: string}[] = [];
   public treatmentBMPIDForSelectedModelResults = 0;
   public selectedModelResults: TreatmentBMPModeledResultSimpleDto;
+  public projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
+  public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
   
   @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'modeledPerformanceMap';
@@ -92,17 +95,23 @@ export class ModeledPerformanceComponent implements OnInit {
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
           delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-          treatmentBMPModeledResults: this.projectService.getModeledResultsForProject(this.projectID)
-        }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPModeledResults }) => {
+          projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesForProject(this.projectID)
+        }).subscribe(({ treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
           this.boundingBox = boundingBox;
-          this.modeledResults = treatmentBMPModeledResults;
-          debugger;
-          if (this.modeledResults != null && this.modeledResults.length > 0) {
-            this.populateModeledResultsOptions();
-            this.updateSelectedModelResults();
-          }
+          this.projectNetworkSolveHistories = projectNetworkSolveHistories;
+          if (this.projectNetworkSolveHistories != null && 
+              this.projectNetworkSolveHistories != undefined && 
+              this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0) 
+              {
+                this.projectService.getModeledResultsForProject(this.projectID).subscribe(result => {
+                  this.modeledResults = result;
+                  this.populateModeledResultsOptions();
+                  this.updateSelectedModelResults();
+                });
+              }
+
           this.initializeMap();
         });
       }
@@ -320,6 +329,9 @@ export class ModeledPerformanceComponent implements OnInit {
     this.projectService.triggerNetworkSolveForProject(this.projectID).subscribe(results => {
       this.alertService.pushAlert(new Alert('Model run was successfully started and will run in the background.', AlertContext.Success, true));
       window.scroll(0, 0);
+      this.projectService.getNetworkSolveHistoriesForProject(this.projectID).subscribe(result => {
+        this.projectNetworkSolveHistories = result;
+      })
     },
     error => {
       window.scroll(0,0);
@@ -329,7 +341,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
   populateModeledResultsOptions() {
     var tempOptions = [];
-    tempOptions.push({TreatmentBMPID: 0, TreatmentBMPName :"Total"});
+    tempOptions.push({TreatmentBMPID: 0, TreatmentBMPName :"All Treatment BMPs"});
     this.modeledResults.forEach(x => {
       var treatmentBMP = this.treatmentBMPs.filter(y => y.TreatmentBMPID == x.TreatmentBMPID)[0];
       tempOptions.push({TreatmentBMPID: treatmentBMP.TreatmentBMPID, TreatmentBMPName : treatmentBMP.TreatmentBMPName});
@@ -353,6 +365,25 @@ export class ModeledPerformanceComponent implements OnInit {
   //Helps to prevent keyvalue pipe from trying to do sorting
   returnZero(): number {
     return 0;
+  }
+
+  getModelResultsLastCalculatedText() : string {
+    if (this.projectNetworkSolveHistories == null || this.projectNetworkSolveHistories == undefined || this.projectNetworkSolveHistories.length == 0) {
+      return "";
+    }
+
+    //These will be ordered by date by the api
+    var successfulResults = this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded);
+    
+    if (successfulResults == null || successfulResults.length == 0) {
+      return "";
+    }
+
+    return `Results last calculated at ${new Date(successfulResults[0].LastUpdated).toLocaleString()}`
+  }
+
+  isMostRecentHistoryOfType(type: ProjectNetworkSolveHistoryStatusTypeEnum) : boolean {
+    return this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type;
   }
 
 }

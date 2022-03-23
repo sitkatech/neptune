@@ -9,20 +9,3 @@ tr.selectable:hover {
 tr.selectable.selected {
     background-color: #FFFF85;
 }
-
-.ng-select.auto-grow {
-    display: flex;
-  
-    ::ng-deep .ng-select-container {
-      min-width: 100px;
-      width: auto;
-    }
-  
-    ::ng-deep .ng-dropdown-panel {
-      width: auto;
-    }
-
-    ::ng-deep .ng-clear-wrapper {
-        padding-left: 10px;
-    }
-  }

@@ -249,3 +249,8 @@ figure.media {
   h4, h5 {
     color: $hippocamp-orange;
   }
+
+  .nav-tabs li.nav-item a.nav-link.active {
+    background-color: $button-hover-background;
+    color: $button-hover-text-color;
+  }

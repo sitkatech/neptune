@@ -900,6 +900,55 @@
         }
       }
     },
+    "/projects/{projectID}/project-network-solve-histories": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectNetworkSolveHistorySimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectNetworkSolveHistorySimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectNetworkSolveHistorySimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectID}/modeled-performance": {
       "get": {
         "tags": [
@@ -2156,6 +2205,36 @@
           "DocumentDescription": {
             "maxLength": 500,
             "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectNetworkSolveHistorySimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectNetworkSolveHistoryID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "RequestedByPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectNetworkSolveHistoryStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ErrorMessage": {
             "type": "string",
             "nullable": true
           }

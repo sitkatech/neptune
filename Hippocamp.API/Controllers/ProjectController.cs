@@ -192,6 +192,25 @@ namespace Hippocamp.API.Controllers
             return Ok();
         }
 
+        [HttpGet("projects/{projectID}/project-network-solve-histories")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject(int projectID)
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
+            {
+                return actionResult;
+            }
+            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            {
+                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+            }
+
+            var projectNetworkSolveHistoryDtos = ProjectNetworkSolveHistories.GetByProjectIDAsDto(_dbContext, projectID);
+            return Ok(projectNetworkSolveHistoryDtos);
+        }
+
         [HttpGet("projects/{projectID}/modeled-performance")]
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPModeledResultSimpleDto>> GetModeledPerformanceForProject([FromRoute] int projectID)

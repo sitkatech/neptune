@@ -13,6 +13,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public ProjectDto Project { get; set; }
         public PersonDto RequestedByPerson { get; set; }
         public ProjectNetworkSolveHistoryStatusTypeDto ProjectNetworkSolveHistoryStatusType { get; set; }
+        public DateTime LastUpdated { get; set; }
         public string ErrorMessage { get; set; }
     }
 
@@ -22,6 +23,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public int ProjectID { get; set; }
         public int RequestedByPersonID { get; set; }
         public int ProjectNetworkSolveHistoryStatusTypeID { get; set; }
+        public DateTime LastUpdated { get; set; }
         public string ErrorMessage { get; set; }
     }
 

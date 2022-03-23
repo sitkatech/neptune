@@ -5,15 +5,18 @@
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <div class="row m-1 mb-3">
+    <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'" [dismissible]="false">
+        Results for this project are currently being calculated. Triggering a new calculation will be disabled until the current calculation completes.
+    </ngb-alert>
     <div class="col-4 col-md-2">
-        <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()">
+        <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()" [disabled]="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)">
             Calculate
         </button>
     </div>
     <div class="col-8 col-md-10">
-        <p class="text-bold">Press 'Calculate' to run the model results for your project. You will be notified via email
+        <p class="font-weight-bold">Press 'Calculate' to run the model results for your project. You will be notified via email
             when the updated results are returned. Toggle the dropdown below to view results for individual BMPs.</p>
-        <p>Results last calculated at (create queue and put time here)</p>
+        <p class="font-italic">{{getModelResultsLastCalculatedText()}}</p>
     </div>
 </div>
 <div class="row mb-3">
@@ -69,23 +72,29 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="selectedModelResults != null">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
                 Model Results
             </div>
             <div class="card-body">
-                
-                <ng-select class="auto-grow mb-3" [(ngModel)]="treatmentBMPIDForSelectedModelResults"
-                                [items]="modelingSelectListOptions" [clearable]="false" (change)="updateSelectedModelResults()" bindLabel="TreatmentBMPName" bindValue="TreatmentBMPID">
-                            </ng-select>
+                <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'" [dismissible]="false">
+                    Results for this project are currently being calculated. The below results will remain until the current calculation completes and then will be discarded in favor of the newer results.
+                </ngb-alert>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <ng-select class="mb-3" [(ngModel)]="treatmentBMPIDForSelectedModelResults"
+                        [items]="modelingSelectListOptions" [clearable]="false" (change)="updateSelectedModelResults()" bindLabel="TreatmentBMPName" bindValue="TreatmentBMPID">
+                        </ng-select>
+                    </div>
+                </div>
                 <ul ngbNav #nav="ngbNav" [(activeId)]="activeID" class="nav-tabs">
                     <li [ngbNavItem]="type.key" *ngFor="let type of ModeledPerformanceDisplayTypeEnum | keyvalue : returnZero">
                         <a ngbNavLink>{{type.key}}</a>
                     </li>
                 </ul>
-                <div *ngIf="selectedModelResults != null">
+                <div>
                     <table class="table table-responsive table-striped table-condensed modelResults" *ngIf="activeID === ModeledPerformanceDisplayTypeEnum.Wet">
                         <thead>
                             <tr style="text-align: center;">
@@ -312,6 +321,7 @@
                         </tbody>
                     </table>
                 </div>
+                <p class="font-italic">{{getModelResultsLastCalculatedText()}}</p>
             </div>
         </div>
     </div>

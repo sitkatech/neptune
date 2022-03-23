@@ -16,6 +16,8 @@ namespace Hippocamp.EFModels.Entities
         public int ProjectID { get; set; }
         public int RequestedByPersonID { get; set; }
         public int ProjectNetworkSolveHistoryStatusTypeID { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime LastUpdated { get; set; }
         public string ErrorMessage { get; set; }
 
         [ForeignKey(nameof(ProjectID))]

@@ -18,6 +18,7 @@ export * from '././problem-details';
 export * from '././project-create-dto';
 export * from '././project-document-simple-dto';
 export * from '././project-document-update-dto';
+export * from '././project-network-solve-history-simple-dto';
 export * from '././project-simple-dto';
 export * from '././project-status-simple-dto';
 export * from '././role-dto';

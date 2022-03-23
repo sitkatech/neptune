@@ -17,6 +17,7 @@ namespace Hippocamp.EFModels.Entities
                 Project = projectNetworkSolveHistory.Project.AsDto(),
                 RequestedByPerson = projectNetworkSolveHistory.RequestedByPerson.AsDto(),
                 ProjectNetworkSolveHistoryStatusType = projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusType.AsDto(),
+                LastUpdated = projectNetworkSolveHistory.LastUpdated,
                 ErrorMessage = projectNetworkSolveHistory.ErrorMessage
             };
             DoCustomMappings(projectNetworkSolveHistory, projectNetworkSolveHistoryDto);
@@ -33,6 +34,7 @@ namespace Hippocamp.EFModels.Entities
                 ProjectID = projectNetworkSolveHistory.ProjectID,
                 RequestedByPersonID = projectNetworkSolveHistory.RequestedByPersonID,
                 ProjectNetworkSolveHistoryStatusTypeID = projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID,
+                LastUpdated = projectNetworkSolveHistory.LastUpdated,
                 ErrorMessage = projectNetworkSolveHistory.ErrorMessage
             };
             DoCustomSimpleDtoMappings(projectNetworkSolveHistory, projectNetworkSolveHistorySimpleDto);
