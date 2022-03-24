@@ -424,7 +424,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   isMostRecentHistoryOfType(type: ProjectNetworkSolveHistoryStatusTypeEnum) : boolean {
-    return this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type;
+    return this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories.length > 0 && this.projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type;
   }
 
   getNotFullyParameterizedBMPNames() : string[] {
@@ -433,13 +433,13 @@ export class ModeledPerformanceComponent implements OnInit {
 
   getBMPNamesForDelineationsWithDiscrepancies() : string[] {
     if (this.delineations == null || this.delineations.length == 0) {
-      return null;
+      return [];
     }
 
     var treatmentBMPIDsForDelineationsWithDiscrepancies = this.delineations.filter(x => x.HasDiscrepancies).map(x => x.TreatmentBMPID);
     
     if (treatmentBMPIDsForDelineationsWithDiscrepancies == null || treatmentBMPIDsForDelineationsWithDiscrepancies.length == 0) {
-      return null;
+      return [];
     }
 
     return this.treatmentBMPs.filter(x => treatmentBMPIDsForDelineationsWithDiscrepancies.includes(x.TreatmentBMPID)).map(x => x.TreatmentBMPName);

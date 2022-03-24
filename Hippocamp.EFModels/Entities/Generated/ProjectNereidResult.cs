@@ -18,6 +18,7 @@ namespace Hippocamp.EFModels.Entities
         public int? TreatmentBMPID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
+        public int? DelineationID { get; set; }
         public string NodeID { get; set; }
         public string FullResponse { get; set; }
         [Column(TypeName = "datetime")]

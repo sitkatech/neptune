@@ -19,6 +19,7 @@ namespace Hippocamp.EFModels.Entities
                 TreatmentBMPID = projectNereidResult.TreatmentBMPID,
                 WaterQualityManagementPlanID = projectNereidResult.WaterQualityManagementPlanID,
                 RegionalSubbasinID = projectNereidResult.RegionalSubbasinID,
+                DelineationID = projectNereidResult.DelineationID,
                 NodeID = projectNereidResult.NodeID,
                 FullResponse = projectNereidResult.FullResponse,
                 LastUpdate = projectNereidResult.LastUpdate
@@ -39,6 +40,7 @@ namespace Hippocamp.EFModels.Entities
                 TreatmentBMPID = projectNereidResult.TreatmentBMPID,
                 WaterQualityManagementPlanID = projectNereidResult.WaterQualityManagementPlanID,
                 RegionalSubbasinID = projectNereidResult.RegionalSubbasinID,
+                DelineationID = projectNereidResult.DelineationID,
                 NodeID = projectNereidResult.NodeID,
                 FullResponse = projectNereidResult.FullResponse,
                 LastUpdate = projectNereidResult.LastUpdate
