@@ -21,6 +21,7 @@ namespace Neptune.Web.Models
         public static readonly NeptuneAreaTrash Trash = NeptuneAreaTrash.Instance;
         public static readonly NeptuneAreaOCStormwaterTools OCStormwaterTools = NeptuneAreaOCStormwaterTools.Instance;
         public static readonly NeptuneAreaModeling Modeling = NeptuneAreaModeling.Instance;
+        public static readonly NeptuneAreaPlanning Planning = NeptuneAreaPlanning.Instance;
 
         public static readonly List<NeptuneArea> All;
         public static readonly ReadOnlyDictionary<int, NeptuneArea> AllLookupDictionary;
@@ -30,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptuneArea()
         {
-            All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling };
+            All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling, Planning };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptuneArea>(All.ToDictionary(x => x.NeptuneAreaID));
         }
 
@@ -108,6 +109,8 @@ namespace Neptune.Web.Models
                     return Modeling;
                 case NeptuneAreaEnum.OCStormwaterTools:
                     return OCStormwaterTools;
+                case NeptuneAreaEnum.Planning:
+                    return Planning;
                 case NeptuneAreaEnum.Trash:
                     return Trash;
                 default:
@@ -120,7 +123,8 @@ namespace Neptune.Web.Models
     {
         Trash = 1,
         OCStormwaterTools = 2,
-        Modeling = 3
+        Modeling = 3,
+        Planning = 4
     }
 
     public partial class NeptuneAreaTrash : NeptuneArea
@@ -139,5 +143,11 @@ namespace Neptune.Web.Models
     {
         private NeptuneAreaModeling(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
         public static readonly NeptuneAreaModeling Instance = new NeptuneAreaModeling(3, @"Modeling", @"Modeling Module", 20, true);
+    }
+
+    public partial class NeptuneAreaPlanning : NeptuneArea
+    {
+        private NeptuneAreaPlanning(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
+        public static readonly NeptuneAreaPlanning Instance = new NeptuneAreaPlanning(4, @"Planning", @"Planning Module", 40, true);
     }
 }

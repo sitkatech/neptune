@@ -108,4 +108,31 @@ namespace Neptune.Web.Models
             return x => x.Role;
         }
     }
+
+    public partial class NeptuneAreaPlanning
+    {
+        public override string GetHomeUrl()
+        {
+            return NeptuneWebConfiguration.CanonicalHostNamePlanning;
+        }
+
+        public override bool IsAreaVisibleToPerson(Person person)
+        {
+            return true;
+        }
+
+        public override string GetIconUrl()
+        {
+            return "/Content/img/icons/planningIcon.png";
+        }
+        public override IRole GetRole(int roleID)
+        {
+            return Role.AllLookupDictionary[roleID];
+        }
+
+        protected override Func<Person, IRole> GetPersonRoleToUseFunc()
+        {
+            return x => x.Role;
+        }
+    }
 }

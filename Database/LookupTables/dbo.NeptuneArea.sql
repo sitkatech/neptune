@@ -4,4 +4,5 @@ insert into dbo.NeptuneArea (NeptuneAreaID, NeptuneAreaName, NeptuneAreaDisplayN
 values 
 (1, 'Trash', 'Trash Module', 30, 1),
 (2, 'OCStormwaterTools', 'Inventory Module', 10, 1),
-(3, 'Modeling', 'Modeling Module', 20, 1)
+(3, 'Modeling', 'Modeling Module', 20, 1),
+(4, 'Planning', 'Planning Module', 40, 1)
