@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Web.Http.Cors;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
@@ -83,7 +85,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
 
             stopwatch.Start();
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var validateCallStartTime = stopwatch.Elapsed;
@@ -120,7 +122,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
@@ -159,7 +161,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var solutionSequenceRequestObject = new SolutionSequenceRequest(graph);
@@ -418,7 +420,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         public ContentResult NetworkTable()
         {
 
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
             return Content(JsonConvert.SerializeObject(graph), "application/json");
         }
 
@@ -437,7 +439,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var graph = NereidUtilities.BuildNetworkGraph(HttpRequestStorage.DatabaseEntities);
+            var graph = NereidUtilities.BuildTotalNetworkGraph(HttpRequestStorage.DatabaseEntities);
 
             // this subgraph is 23 nodes deep
             var single = graph.Nodes.Single(x => x.ID == "RSB_42");
@@ -583,6 +585,65 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         {
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
             return Content("Enqueued");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [EnableCors(origins: "*", headers: "*", methods: "*")] 
+        public ActionResult NetworkSolveForProject(ProjectPrimaryKey projectPrimaryKey, [System.Web.Http.FromBody] string webServiceAccessTokenGuidAsString)
+        {
+            WebServiceToken webServiceAccessToken;
+            try
+            {
+                //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
+                webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
+            }
+            catch (Exception ex)
+            {
+                var error = ex;
+                Response.StatusCode = 400;
+                return Content($"Could not find user with access token: {webServiceAccessTokenGuidAsString}");
+            }
+
+            int projectID;
+
+            try
+            {
+                projectID = projectPrimaryKey.EntityObject.ProjectID;
+            }
+            catch (Exception ex)
+            {
+                var error = ex;
+                Response.StatusCode = 400;
+                return Content($"Could not find requested project. ProjectID sent was:{Request.Url.ToString().Split('/').Last()}");
+            }
+
+            try
+            {
+                var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory(projectID, webServiceAccessToken.Person.PersonID, (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued, DateTime.UtcNow);
+                HttpRequestStorage.DatabaseEntities.ProjectNetworkSolveHistories.Add(projectNetworkSolveHistoryEntity);
+                HttpRequestStorage.DatabaseEntities.SaveChangesWithNoAuditing();
+                BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
+                return Content($"Network solve for Project with ID:{projectID} has begun.");
+            }
+            catch (Exception ex)
+            {
+                var error = ex;
+                Response.StatusCode = 500;
+                return Content($"Unable to start the Network Solve for ProjectID:{projectID}. Error message:{ex.Message}");
+            }
+            
+        }
+
+        public class NetworkSolveRequest
+        {
+            public WebServiceToken WebServiceToken { get; set; }
+
+            public NetworkSolveRequest() { }
+            public NetworkSolveRequest(string webServiceToken)
+            {
+                WebServiceToken = new WebServiceToken(webServiceToken);
+            }
         }
     }
 

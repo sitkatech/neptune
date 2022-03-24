@@ -25,7 +25,7 @@ else:
         for field in vlayer.fields():
                 print(field.name(), field.typeName())
 
-# Finally, exitQgis() is called to remove the
+# Finally, exit() is called to remove the
 # provider and layer registries from memory
 
-qgs.exitQgis()
+qgs.exit()

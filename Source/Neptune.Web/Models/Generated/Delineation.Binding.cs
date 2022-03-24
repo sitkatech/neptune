@@ -27,6 +27,7 @@ namespace Neptune.Web.Models
             this.DelineationOverlaps = new HashSet<DelineationOverlap>();
             this.DelineationOverlapsWhereYouAreTheOverlappingDelineation = new HashSet<DelineationOverlap>();
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any() || LoadGeneratingUnits.Any();
+            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any() || LoadGeneratingUnits.Any() || ProjectLoadGeneratingUnits.Any();
         }
 
         /// <summary>
@@ -116,13 +117,18 @@ namespace Neptune.Web.Models
             {
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
             }
+
+            if(ProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
+            }
             return dependentObjects.Distinct().ToList();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name, typeof(LoadGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name, typeof(LoadGeneratingUnit).Name, typeof(ProjectLoadGeneratingUnit).Name};
 
 
         /// <summary>
@@ -161,6 +167,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
+
+            foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -180,6 +191,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<DelineationOverlap> DelineationOverlaps { get; set; }
         public virtual ICollection<DelineationOverlap> DelineationOverlapsWhereYouAreTheOverlappingDelineation { get; set; }
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
         public virtual Person VerifiedByPerson { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

@@ -39,19 +39,24 @@ JOIN_PREFIX = "Joined_"
 CONNSTRING_BASE = "CONNSTRING ERROR"
 OUTPUT_PATH = "OUTPUT PATH ERROR"
 CLIP_PATH = None
+RSB_IDs = None
+PLANNED_PROJECT_ID = None
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
     parser.add_argument('connstring', metavar='s', type=str, help='The connection string. Do not specify tables; the script will specify which table(s) it wants to look at.')
     parser.add_argument('output_path', metavar='d', type=str, help='The path to write the final output to.')
+    parser.add_argument('--planned_project_id', type=int, help='If running the overlay for a particular Project, this will add delineations for any Treatment BMPs who belong to this project')
+    parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
     parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
-
     args = parser.parse_args()
 
     # this is easier to write than anything sane
     global CONNSTRING_BASE
     global OUTPUT_PATH
     global CLIP_PATH
+    global PLANNED_PROJECT_ID
+    global RSB_IDs
     CONNSTRING_BASE = "MSSQL:" + args.connstring
     OUTPUT_PATH = args.output_path
     print(OUTPUT_PATH)
@@ -64,6 +69,14 @@ def parseArguments():
     if args.clip:
         CLIP_PATH = args.clip
         print(CLIP_PATH)
+
+    if args.planned_project_id:
+        PLANNED_PROJECT_ID = args.planned_project_id
+        print(PLANNED_PROJECT_ID)
+
+    if args.rsb_ids:
+        RSB_IDs = args.rsb_ids
+        print(RSB_IDs)
 
 def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
     params = {
@@ -225,12 +238,19 @@ if __name__ == '__main__':
         return fetchLayerFromDatabase(CONNSTRING_BASE, spatialTableName)
 
     clip_layer = None
+    delineationLayer = None
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
         
     modelBasinLayer = fetchLayer("vModelBasinLGUInput")
     regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")
-    delineationLayer = fetchLayer("vDelineationLGUInput")
+    if RSB_IDs is not None:
+        regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
+    if PLANNED_PROJECT_ID is not None:
+        delineationLayer = fetchLayer("vProjectDelineationLGUInput")
+        delineationLayer.setSubsetString("ProjectID is null or ProjectID=" + str(PLANNED_PROJECT_ID))
+    else:
+        delineationLayer = fetchLayer("vDelineationLGUInput")
     wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
 
     # perhaps overly-aggressive application of the buffer-zero and 
@@ -244,10 +264,16 @@ if __name__ == '__main__':
     wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", context=PROCESSING_CONTEXT)
     wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
 
-    # At present time, we're only concerned with the area covered by Model basins. 
-    regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, modelBasinLayer, "RSBClipped")
-    delineationLayerClipped = clip(delineationLayer, modelBasinLayer, "DelineationClipped")
-    wqmpLayerClipped = clip(wqmpLayer, modelBasinLayer, "WQMPClipped")
+    if RSB_IDs is not None:
+        #If we've got set RSBs we want only what's within those RSBs'
+        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, regionalSubbasinLayer, "RSBClipped")
+        delineationLayerClipped = clip(delineationLayer, regionalSubbasinLayer, "DelineationClipped")
+        wqmpLayerClipped = clip(wqmpLayer, regionalSubbasinLayer, "WQMPClipped")
+    else:
+        # At present time, we're only concerned with the area covered by Model basins. 
+        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, modelBasinLayer, "RSBClipped")
+        delineationLayerClipped = clip(delineationLayer, modelBasinLayer, "DelineationClipped")
+        wqmpLayerClipped = clip(wqmpLayer, modelBasinLayer, "WQMPClipped")
 
     wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
 

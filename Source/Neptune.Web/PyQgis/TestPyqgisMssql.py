@@ -4,6 +4,14 @@ from qgis.core import *
 
 from TestModule import *
 
+from pyqgis_utils import (
+    duplicateLayer,
+    fetchLayerFromDatabase,
+    raiseIfLayerInvalid,
+    QgisError,
+    fetchLayerFromGeoJson
+)
+
 if module_import_successful:
         print("Module import successful!")
 else:
@@ -32,25 +40,25 @@ qgs.initQgis()
 
 uri = QgsDataSourceUri()
 
-backbone_connstring = connstring_base + "tables=dbo.BackboneSegment"
+def fetchLayer(spatialTableName):
+        return fetchLayerFromDatabase(connstring_base, spatialTableName)
 
-vlayer = QgsVectorLayer(backbone_connstring, "BackboneSegment", "ogr")
+vlayer =fetchLayer("RegionalSubbasin")
 
 ## refactor at this point 
 
 if not vlayer.isValid():
         print("Layer failed to load!")
         print("Base connection string: " + connstring_base)
-        print("Connection string with table: " + backbone_connstring)
         print(args)
 else:
-        print("Loaded BackboneSegment layer!")
+        print("Loaded RegionalSubbain layer!")
 
 request = QgsFeatureRequest()
 
-print("Looking for BackboneSegment with ID = 1...")
+print("Looking for RegionalSubbain with ID = 1...")
 
-request.setFilterExpression("BackboneSegmentID = 1")
+request.setFilterExpression("RegionalSubbasinID = 1")
 
 features = vlayer.getFeatures(request)
 
@@ -58,4 +66,4 @@ for feature in features:
         print("Found. WKT:")
         print(feature.geometry().asWkt())        
 
-qgs.exitQgis()
+qgs.exit()

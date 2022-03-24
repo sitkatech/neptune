@@ -114,5 +114,30 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 }
             }
         }
+
+        public static IEnumerable<HRURequestFeature> GetHRURequestFeatures(this IEnumerable<ProjectLoadGeneratingUnit> loadGeneratingUnits)
+        {
+            foreach (var loadGeneratingUnit in loadGeneratingUnits)
+            {
+                var baseAttributes = new HRURequestFeatureAttributes
+                {
+                    ObjectID = loadGeneratingUnit.PrimaryKey,
+                    Area = loadGeneratingUnit.ProjectLoadGeneratingUnitGeometry.Area.GetValueOrDefault(),
+                    Length = loadGeneratingUnit.ProjectLoadGeneratingUnitGeometry.Length.GetValueOrDefault(),
+                    QueryFeatureID = loadGeneratingUnit.ProjectLoadGeneratingUnitID
+                };
+                var catchmentGeometry =
+                    CoordinateSystemHelper.Project2771To2230(loadGeneratingUnit.ProjectLoadGeneratingUnitGeometry);
+
+                for (var i = 1; i <= catchmentGeometry.ElementCount; i++)
+                {
+                    if (catchmentGeometry.ElementAt(i).SpatialTypeName.ToUpper() == "POLYGON")
+                    {
+                        yield return new HRURequestFeature(catchmentGeometry.ElementAt(i), baseAttributes,
+                            loadGeneratingUnit.ProjectLoadGeneratingUnitID);
+                    }
+                }
+            }
+        }
     }
 }

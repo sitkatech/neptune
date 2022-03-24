@@ -290,6 +290,24 @@
     <Compile Include="Models\Generated\ProjectDocument.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\ProjectDocumentConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\ProjectDocumentPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectHRUCharacteristic.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectHRUCharacteristic.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ProjectHRUCharacteristicConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectHRUCharacteristicPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectLoadGeneratingUnit.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectLoadGeneratingUnit.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ProjectLoadGeneratingUnitConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectLoadGeneratingUnitPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNereidResult.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNereidResult.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ProjectNereidResultConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNereidResultPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNetworkSolveHistory.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNetworkSolveHistory.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ProjectNetworkSolveHistoryConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNetworkSolveHistoryPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNetworkSolveHistoryStatusType.Binding.cs" />
+    <Compile Include="Models\Generated\ProjectNetworkSolveHistoryStatusTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\ProjectPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\ProjectStatus.Binding.cs" />
     <Compile Include="Models\Generated\ProjectStatus.DatabaseContextExtensions.cs" />
@@ -445,6 +463,12 @@
     <Compile Include="Models\Generated\vNereidBMPColocationConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidLoadingInput.Binding.cs" />
     <Compile Include="Models\Generated\vNereidLoadingInputConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidProjectLoadingInput.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidProjectLoadingInputConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidProjectRegionalSubbasinCentralizedBMP.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidProjectRegionalSubbasinCentralizedBMPConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidProjectTreatmentBMPRegionalSubbasin.Binding.cs" />
+    <Compile Include="Models\Generated\vNereidProjectTreatmentBMPRegionalSubbasinConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidRegionalSubbasinCentralizedBMP.Binding.cs" />
     <Compile Include="Models\Generated\vNereidRegionalSubbasinCentralizedBMPConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vNereidTreatmentBMPRegionalSubbasin.Binding.cs" />
@@ -553,10 +577,15 @@
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentSite.cs" />
     <Compile Include="Models\ModeledPerformanceResultSimple.cs" />
     <Compile Include="Models\ModelResultsDisplayHelper.cs" />
+    <Compile Include="Models\NereidResultExtensionMethods.cs" />
+    <Compile Include="Models\ProjectModelExtensions.cs" />
     <Compile Include="Models\QuickBMPModelExtensions.cs" />
     <Compile Include="Models\RegionalSubbasinRevisionRequest.cs" />
+    <Compile Include="Models\vNereidPlannedProjectRegionalSubbasinCentralizedBMPExtensionMethods.cs" />
+    <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
+    <Compile Include="ScheduledJobs\ProjectNetworkSolveJob.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaEditFeature.cs" />
     <Compile Include="Security\StormwaterJurisdictionViewFeature.cs" />
@@ -2307,8 +2336,8 @@
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -2359,6 +2388,9 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -2368,6 +2400,12 @@
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>

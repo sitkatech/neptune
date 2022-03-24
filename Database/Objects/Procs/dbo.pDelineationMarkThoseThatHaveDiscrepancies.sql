@@ -57,10 +57,10 @@ where d.DelineationTypeID = 1 and d.DelineationGeometry.STSymDifference(a.Region
 
 truncate table dbo.DelineationOverlap;
 
-with distributedBMPs (DelineationID, DelineationGeometry)
+with distributedBMPs (DelineationID, DelineationGeometry, ProjectID)
 as
 (
-		select d.DelineationID, d.DelineationGeometry
+		select d.DelineationID, d.DelineationGeometry, tb.ProjectID
 		from dbo.Delineation d
 		join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
 		join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
@@ -73,10 +73,19 @@ select row_number() over(order by a.DelineationID) as DelineationOverlapID,  Del
 from
 (
 	-- again, intentionally having this in an inner query; it is much faster to have it stintersects both sets and remove self intersections after
-	select d1.DelineationID, d2.DelineationID as OverlappingDelineationID, d1.DelineationGeometry.STIntersection(d2.DelineationGeometry) as OverlappingGeometry
+	select d1.DelineationID, d1.ProjectID, d2.DelineationID as OverlappingDelineationID, d2.ProjectID as OverlappingProjectID, d1.DelineationGeometry.STIntersection(d2.DelineationGeometry) as OverlappingGeometry
 	from distributedBMPs d1, distributedBMPs d2
 	where d1.DelineationGeometry.STIntersection(d2.DelineationGeometry).STArea() > (@toleranceInSquareMeters / 2) -- tolerance here is even less, .05 acre
 ) a
-where a.DelineationID != a.OverlappingDelineationID and OverlappingGeometry.STArea() > 0
+where a.DelineationID != a.OverlappingDelineationID and 
+	  OverlappingGeometry.STArea() > 0 and
+	  (
+		--Cover existing distributed delineations overlapping one another
+		(ProjectID is null and OverlappingProjectID is null) or
+		--Cover project delineations overlapping existing distributed delineations
+		(ProjectID is not null and OverlappingProjectID is null) or
+		--Cover project delineations overlapping other delineations within their project BUT NOT OTHER PROJECTS!!
+		(ProjectID = OverlappingProjectID)
+	  )
 
 GO

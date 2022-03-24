@@ -158,18 +158,19 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
     }
 
     /// <summary>
-    /// Single-purpose method used by TGU job
+    /// Single-purpose method used by LGU job
     /// </summary>
     /// <param name="outputLayerName"></param>
     /// <param name="outputPath"></param>
     /// <param name="connectionString"></param>
     public void ImportLoadGeneratingUnitsFromShapefile(string outputLayerName,
-        string outputPath, string connectionString)
+        string outputPath, string connectionString, int? projectID = null)
     {
         var databaseConnectionString = $"MSSQL:{connectionString}";
+        var destinationTable = projectID != null ? "dbo.ProjectLoadGeneratingUnit" : "dbo.LoadGeneratingUnit";
         // todo: fix this
         var selectStatement =
-            $"Select ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
+            $"Select {(projectID != null ? projectID.ToString() + " as ProjectID, " : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
 
         var commandLineArguments = new List<string>
         {
@@ -187,7 +188,7 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
             "-a_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
-            "dbo.LoadGeneratingUnit"
+            destinationTable
         };
 
         ExecuteOgr2OgrCommand(commandLineArguments);

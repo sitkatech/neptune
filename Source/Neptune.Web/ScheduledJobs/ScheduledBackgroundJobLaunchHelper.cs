@@ -66,6 +66,12 @@ namespace Neptune.Web.ScheduledJobs
             totalNetworkSolveJob.RunJob();
         }
 
+        public static void RunNetworkSolveForProject(int projectID, int projectNetworkSolveHistoryID)
+        {
+            var projectNetworkSolve = new ProjectNetworkSolveJob(projectID, projectNetworkSolveHistoryID);
+            projectNetworkSolve.RunJob();
+        }
+
         public static void RunDeltaSolve()
         {
             var deltaSolveJob = new DeltaSolveJob();

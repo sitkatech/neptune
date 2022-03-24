@@ -79,6 +79,10 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
             modelBuilder.Configurations.Add(new ProjectDocumentConfiguration());
+            modelBuilder.Configurations.Add(new ProjectHRUCharacteristicConfiguration());
+            modelBuilder.Configurations.Add(new ProjectLoadGeneratingUnitConfiguration());
+            modelBuilder.Configurations.Add(new ProjectNereidResultConfiguration());
+            modelBuilder.Configurations.Add(new ProjectNetworkSolveHistoryConfiguration());
             modelBuilder.Configurations.Add(new ProjectStatusConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new RegionalSubbasinConfiguration());
@@ -126,6 +130,9 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vNereidBMPColocationConfiguration());
             modelBuilder.Configurations.Add(new vNereidLoadingInputConfiguration());
+            modelBuilder.Configurations.Add(new vNereidProjectLoadingInputConfiguration());
+            modelBuilder.Configurations.Add(new vNereidProjectRegionalSubbasinCentralizedBMPConfiguration());
+            modelBuilder.Configurations.Add(new vNereidProjectTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vNereidRegionalSubbasinCentralizedBMPConfiguration());
             modelBuilder.Configurations.Add(new vNereidTreatmentBMPRegionalSubbasinConfiguration());
             modelBuilder.Configurations.Add(new vOnlandVisualTrashAssessmentAreaProgressConfiguration());
@@ -184,6 +191,10 @@ namespace Neptune.Web.Models
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
         public virtual DbSet<ProjectDocument> ProjectDocuments { get; set; }
+        public virtual DbSet<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
+        public virtual DbSet<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual DbSet<ProjectNereidResult> ProjectNereidResults { get; set; }
+        public virtual DbSet<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectStatus> ProjectStatuses { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
@@ -232,6 +243,9 @@ namespace Neptune.Web.Models
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
+        public virtual DbSet<vNereidProjectLoadingInput> vNereidProjectLoadingInputs { get; set; }
+        public virtual DbSet<vNereidProjectRegionalSubbasinCentralizedBMP> vNereidProjectRegionalSubbasinCentralizedBMPs { get; set; }
+        public virtual DbSet<vNereidProjectTreatmentBMPRegionalSubbasin> vNereidProjectTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
@@ -536,6 +550,23 @@ namespace Neptune.Web.Models
 
                 case "ProjectDocument":
                     return ProjectDocuments.GetProjectDocument(primaryKey);
+
+                case "ProjectHRUCharacteristic":
+                    return ProjectHRUCharacteristics.GetProjectHRUCharacteristic(primaryKey);
+
+                case "ProjectLoadGeneratingUnit":
+                    return ProjectLoadGeneratingUnits.GetProjectLoadGeneratingUnit(primaryKey);
+
+                case "ProjectNereidResult":
+                    return ProjectNereidResults.GetProjectNereidResult(primaryKey);
+
+                case "ProjectNetworkSolveHistory":
+                    return ProjectNetworkSolveHistories.GetProjectNetworkSolveHistory(primaryKey);
+
+                case "ProjectNetworkSolveHistoryStatusType":
+                    var projectNetworkSolveHistoryStatusType = ProjectNetworkSolveHistoryStatusType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(projectNetworkSolveHistoryStatusType, "ProjectNetworkSolveHistoryStatusType", primaryKey);
+                    return projectNetworkSolveHistoryStatusType;
 
                 case "Project":
                     return Projects.GetProject(primaryKey);

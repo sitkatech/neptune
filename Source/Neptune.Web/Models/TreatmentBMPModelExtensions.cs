@@ -388,6 +388,12 @@ namespace Neptune.Web.Models
                 return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes(treatmentBmpiDsTraversed);
             }
 
+            //Project BMPs don't need verified delineations
+            if (treatmentBMP.ProjectID != null)
+            {
+                return true;
+            }
+
             return treatmentBMP.Delineation?.IsVerified ?? false;
         }
 

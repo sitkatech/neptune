@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlan()
         {
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
             this.QuickBMPs = new HashSet<QuickBMP>();
             this.SourceControlBMPs = new HashSet<SourceControlBMP>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
@@ -109,7 +110,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return LoadGeneratingUnits.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
+            return LoadGeneratingUnits.Any() || ProjectLoadGeneratingUnits.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
@@ -122,6 +123,11 @@ namespace Neptune.Web.Models
             if(LoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
+            }
+
+            if(ProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
             }
 
             if(QuickBMPs.Any())
@@ -159,7 +165,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(LoadGeneratingUnit).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(LoadGeneratingUnit).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -185,6 +191,11 @@ namespace Neptune.Web.Models
         {
 
             foreach(var x in LoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectLoadGeneratingUnits.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -251,6 +262,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }

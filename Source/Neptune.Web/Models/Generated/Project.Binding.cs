@@ -25,6 +25,10 @@ namespace Neptune.Web.Models
         protected Project()
         {
             this.ProjectDocuments = new HashSet<ProjectDocument>();
+            this.ProjectHRUCharacteristics = new HashSet<ProjectHRUCharacteristic>();
+            this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            this.ProjectNereidResults = new HashSet<ProjectNereidResult>();
+            this.ProjectNetworkSolveHistories = new HashSet<ProjectNetworkSolveHistory>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
 
@@ -102,7 +106,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return ProjectDocuments.Any() || TreatmentBMPs.Any();
+            return ProjectDocuments.Any() || ProjectHRUCharacteristics.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any() || ProjectNetworkSolveHistories.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -117,6 +121,26 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(ProjectDocument).Name);
             }
 
+            if(ProjectHRUCharacteristics.Any())
+            {
+                dependentObjects.Add(typeof(ProjectHRUCharacteristic).Name);
+            }
+
+            if(ProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
+            }
+
+            if(ProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNereidResult).Name);
+            }
+
+            if(ProjectNetworkSolveHistories.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNetworkSolveHistory).Name);
+            }
+
             if(TreatmentBMPs.Any())
             {
                 dependentObjects.Add(typeof(TreatmentBMP).Name);
@@ -127,7 +151,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(ProjectDocument).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Project).Name, typeof(ProjectDocument).Name, typeof(ProjectHRUCharacteristic).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name, typeof(ProjectNetworkSolveHistory).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -157,6 +181,26 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in ProjectHRUCharacteristics.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNereidResults.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNetworkSolveHistories.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in TreatmentBMPs.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -178,6 +222,10 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
+        public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
+        public virtual ICollection<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual Organization Organization { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }

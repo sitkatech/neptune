@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected ModelBasin()
         {
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
             this.RegionalSubbasins = new HashSet<RegionalSubbasin>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
         }
@@ -70,7 +71,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return LoadGeneratingUnits.Any() || RegionalSubbasins.Any() || TreatmentBMPs.Any();
+            return LoadGeneratingUnits.Any() || ProjectLoadGeneratingUnits.Any() || RegionalSubbasins.Any() || TreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -83,6 +84,11 @@ namespace Neptune.Web.Models
             if(LoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
+            }
+
+            if(ProjectLoadGeneratingUnits.Any())
+            {
+                dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
             }
 
             if(RegionalSubbasins.Any())
@@ -100,7 +106,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ModelBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(RegionalSubbasin).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ModelBasin).Name, typeof(LoadGeneratingUnit).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(RegionalSubbasin).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -130,6 +136,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in RegionalSubbasins.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -151,6 +162,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return ModelBasinID; } set { ModelBasinID = value; } }
 
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
         public virtual ICollection<RegionalSubbasin> RegionalSubbasins { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
 

@@ -14,4 +14,5 @@ from
 Where d.DelineationTypeID = 2  -- distributed
  --and d.IsVerified = 1 -- allow provisional delineations; they will be excluded from model results later.
  and ttype.TreatmentBMPModelingTypeID is not null  --only include modeling BMPs
+ and t.ProjectID is null --don't include project treatment bmps
 GO

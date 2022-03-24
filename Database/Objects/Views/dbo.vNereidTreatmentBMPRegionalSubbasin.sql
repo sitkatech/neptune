@@ -25,6 +25,7 @@ where
 	and (d.DelineationTypeID is null or d.DelineationTypeID = 2)
 	and IsInModelBasin = 1
 	and DownstreamBMPID is null
+	and tbmp.ProjectID is null
 go
 
 select * from vNereidTreatmentBMPRegionalSubbasin
