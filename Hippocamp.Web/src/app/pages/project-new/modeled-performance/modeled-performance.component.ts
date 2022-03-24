@@ -240,6 +240,7 @@ export class ModeledPerformanceComponent implements OnInit {
       });
 
     $(leafletControlLayersSelector).append(closem);
+    $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
 
     this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
       this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);

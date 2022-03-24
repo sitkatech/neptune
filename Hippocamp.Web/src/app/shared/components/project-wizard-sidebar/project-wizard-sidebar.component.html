@@ -72,7 +72,7 @@
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
                         [ngClass]="{'disabled': !projectModel.ProjectName}">
-                        <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+                        <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
                         Modeled Performance
                         </a>
                     </div>
