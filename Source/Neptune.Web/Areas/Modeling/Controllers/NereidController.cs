@@ -587,8 +587,6 @@ namespace Neptune.Web.Areas.Modeling.Controllers
             return Content("Enqueued");
         }
 
-        //todo figure out why post and model-binding aren't working
-        //also figure out why web-service tokens weren't working
         [HttpPost]
         [AllowAnonymous]
         [EnableCors(origins: "*", headers: "*", methods: "*")] 
