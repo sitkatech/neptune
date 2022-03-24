@@ -188,7 +188,7 @@ namespace Hippocamp.API.Controllers
             {
                 return Forbid("You are not authorized to edit projects within this jurisdiction.");
             }
-            Projects.Delete(_dbContext, project);
+            Projects.Delete(_dbContext, projectID);
             return Ok();
         }
 

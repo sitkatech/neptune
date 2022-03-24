@@ -95,6 +95,10 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
     }
 
     public requestSupportUrl(): string {
-        return `${environment.ocStormwaterToolsBaseUrl}/Help/Support`;
+        return `${this.ocstBaseUrl()}/Help/Support`;
+    }
+
+    public ocstBaseUrl(): string {
+        return environment.ocStormwaterToolsBaseUrl
     }
 }
