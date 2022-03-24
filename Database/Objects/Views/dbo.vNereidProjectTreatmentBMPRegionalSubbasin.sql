@@ -22,6 +22,7 @@ left join dbo.Delineation d
 where
 	tbmpt.TreatmentBMPModelingTypeID is not null
 	and (d.DelineationTypeID is null or d.DelineationTypeID = 2)
+	and IsInModelBasin = 1
 	and tbmp.ProjectID is not null
 go
 

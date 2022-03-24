@@ -18,5 +18,6 @@ from dbo.Delineation d
 		on bmp.RegionalSubbasinID = rsb.RegionalSubbasinID
 where
 	DelineationTypeID = 1 
+	and rsb.IsInModelBasin = 1 
 	and bmp.ProjectID is not null
 GO

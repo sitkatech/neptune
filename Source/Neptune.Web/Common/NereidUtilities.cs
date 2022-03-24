@@ -205,7 +205,8 @@ namespace Neptune.Web.Common
                             x.IsVerified &&
                             // don't include delineations for non-modeled BMPs
                             x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
-                            x.TreatmentBMP.RegionalSubbasinID != null).ToList();
+                            x.TreatmentBMP.RegionalSubbasinID != null &&
+                            x.TreatmentBMP.ModelBasinID != null).ToList();
 
             if (projectID != null && projectRegionalSubbasinIDs != null)
             {
@@ -216,7 +217,6 @@ namespace Neptune.Web.Common
             else
             {
                 distributedDelineations = distributedDelineations.Where(x =>
-                            x.TreatmentBMP.ModelBasinID != null &&
                             x.TreatmentBMP.ProjectID == null).ToList();
             }
 
@@ -425,7 +425,7 @@ namespace Neptune.Web.Common
 
         public static List<TreatmentBMP> ModelingTreatmentBMPs(DatabaseEntities dbContext, int? projectID = null, List<int> projectRSBIDs = null)
         {
-            var toReturn = dbContext.TreatmentBMPs.Where(x => x.RegionalSubbasinID!= null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null).ToList();
+            var toReturn = dbContext.TreatmentBMPs.Where(x => x.RegionalSubbasinID!= null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null && x.ModelBasinID != null).ToList();
 
             if (projectID != null && projectRSBIDs != null)
             {
@@ -433,7 +433,7 @@ namespace Neptune.Web.Common
             }
             else
             {
-                toReturn = toReturn.Where(x => x.ModelBasinID != null && x.ProjectID == null).ToList();
+                toReturn = toReturn.Where(x => x.ProjectID == null).ToList();
             }
             return toReturn;
         }
