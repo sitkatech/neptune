@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[ProjectNereidResult](
 	[TreatmentBMPID] [int] NULL,
 	[WaterQualityManagementPlanID] [int] NULL,
 	[RegionalSubbasinID] [int] NULL,
+	[DelineationID] [int] NULL,
 	[NodeID] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[FullResponse] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[LastUpdate] [datetime] NULL,

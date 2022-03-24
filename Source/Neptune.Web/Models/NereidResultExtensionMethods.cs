@@ -11,7 +11,8 @@
                 NodeID = nereidResult.NodeID,
                 RegionalSubbasinID = nereidResult.RegionalSubbasinID,
                 TreatmentBMPID = nereidResult.TreatmentBMPID,
-                WaterQualityManagementPlanID = nereidResult.WaterQualityManagementPlanID
+                WaterQualityManagementPlanID = nereidResult.WaterQualityManagementPlanID,
+                DelineationID = nereidResult.DelineationID
             };
         }
     }

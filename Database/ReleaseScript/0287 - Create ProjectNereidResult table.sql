@@ -6,6 +6,7 @@ create table dbo.ProjectNereidResult (
 	TreatmentBMPID int null,
 	WaterQualityManagementPlanID int null,
 	RegionalSubbasinID int null,
+	DelineationID int null,
 	NodeID varchar(max) null,
 	FullResponse varchar(max) null,
 	LastUpdate datetime null
