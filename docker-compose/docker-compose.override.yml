@@ -16,3 +16,4 @@ services:
       - PlatformLongName=${PlatformLongName}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
+      - OcStormwaterToolsModelingBaseUrl=${OcStormwaterToolsModelingBaseUrl}

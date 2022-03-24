@@ -271,7 +271,7 @@ namespace Hippocamp.API.Controllers
                 webServiceAccessTokenGuidAsString = personDto.WebServiceAccessToken.ToString()
             };
 
-            var requestBaseURL = _hippocampConfiguration.OcStormwaterToolsBaseUrl;
+            var requestBaseURL = _hippocampConfiguration.OcStormwaterToolsModelingBaseUrl;
             //Necessary for circumnavigating the container accessing localhost issue
             if (_environment.IsDevelopment())
             {
