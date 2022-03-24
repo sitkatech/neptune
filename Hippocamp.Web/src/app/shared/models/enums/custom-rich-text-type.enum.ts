@@ -8,5 +8,6 @@ export enum CustomRichTextType{
     ProjectBasics = 58,
     ProjectAttachments = 59,
     TreatmentBMPs = 60,
-    Delineations = 61
+    Delineations = 61,
+    ModeledPerformance = 62
 }

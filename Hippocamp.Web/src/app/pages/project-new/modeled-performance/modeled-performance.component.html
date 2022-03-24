@@ -1,6 +1,7 @@
-<h2 class="d-inline-block mt-md-0 mt-4">
-    Modeled Performance
-</h2>
+<div class="mt-md-0 mt-4">
+    <h2 class="d-inline-block">Modeled Performance</h2>
+    <a href="{{getAboutModelingPerformanceURL()}}" class="float-right">About Modeling Performance</a>
+</div>
 <div class="row m-1">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
@@ -31,7 +32,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6 col-md-5">
+                    <div class="col-12 col-md-6">
                         <table class="table d-block" style="overflow:auto" [style.max-height]="mapHeight">
                             <thead>
                                 <th>
@@ -68,7 +69,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-6 col-md-7">
+                    <div class="col-12 col-md-6">
                         <div #mapDiv id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
                     </div>
                 </div>

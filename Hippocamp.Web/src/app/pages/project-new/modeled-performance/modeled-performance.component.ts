@@ -76,7 +76,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   public projectID: number;
-  public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
+  public customRichTextTypeID = CustomRichTextType.ModeledPerformance;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -173,6 +173,10 @@ export class ModeledPerformanceComponent implements OnInit {
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
+  }
+
+  public getAboutModelingPerformanceURL(): string {
+    return `${environment.ocStormwaterToolsBaseUrl}/Home/AboutModelingBMPPerformance`;
   }
 
   public initializeMap(): void {
