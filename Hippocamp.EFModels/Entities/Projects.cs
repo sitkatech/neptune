@@ -102,10 +102,6 @@ namespace Hippocamp.EFModels.Entities
                 return new List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>();
             }
 
-            var blah = projectTreatmentBMPs.SelectMany(x =>
-                x.GetHRUCharacteristics(dbContext)
-                .ToList()).ToList();
-
             return projectTreatmentBMPs.SelectMany(x =>
                 x.GetHRUCharacteristics(dbContext)
                 .ToList()

@@ -84,7 +84,6 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges {
   }
 
   doAllTreatmentBMPsHaveCalculatedModelResults() : boolean {
-    debugger;
     if (this.treatmentBMPs == null || this.treatmentBMPs == undefined || this.treatmentBMPs.length == 0 ||
         this.modeledResults == null || this.modeledResults == undefined || this.modeledResults.length == 0 ||
         this.treatmentBMPs.length != this.modeledResults.length) {
