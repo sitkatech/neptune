@@ -20,7 +20,7 @@ namespace Hippocamp.EFModels.Entities
                 return new List<ProjectHRUCharacteristic>();
             }
 
-            if (Delineation.DelineationTypeID == (int)DelineationType.DelineationTypeEnum.Centralized && TreatmentBMPType.TreatmentBMPModelingType != null)
+            if (Delineation.DelineationTypeID == (int)DelineationType.DelineationTypeEnum.Centralized && TreatmentBMPType.TreatmentBMPModelingTypeID != null)
             {
                 var catchmentRegionalSubbasins = GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
 
