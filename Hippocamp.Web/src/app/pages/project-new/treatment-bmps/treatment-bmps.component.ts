@@ -136,12 +136,12 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
     [TreatmentBMPModelingType.FlowDurationControlBasin]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
-        'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
+        'EffectiveFootprint', 'DrawdownTimeForWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
     [TreatmentBMPModelingType.FlowDurationControlTank]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
-        'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
+        'EffectiveFootprint', 'DrawdownTimeForWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
     [TreatmentBMPModelingType.HydrodynamicSeparator]:
       ['TreatmentRate', 'TimeOfConcentrationID'],

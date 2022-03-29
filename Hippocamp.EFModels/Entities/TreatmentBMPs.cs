@@ -93,7 +93,7 @@ namespace Hippocamp.EFModels.Entities
         {
             var existingProjectTreatmentBMPs = existingTreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
             var existingProjectTreatmentBMPModelingAttributes = dbContext.TreatmentBMPModelingAttributes.Where(x => existingProjectTreatmentBMPs.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID)).ToList();
-            
+
             var allTreatmentBMPsInDatabase = dbContext.TreatmentBMPs;
             var allTreatmentBMPModelingAttributesInDatabase = dbContext.TreatmentBMPModelingAttributes;
 
@@ -102,7 +102,6 @@ namespace Hippocamp.EFModels.Entities
                 .Select(x => TreatmentBMPFromUpsertDtoAndProject(dbContext, x, project));
 
             var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326)))).Select(x => x.TreatmentBMPID).ToList();
-
             existingProjectTreatmentBMPs.MergeNew(updatedTreatmentBMPs, allTreatmentBMPsInDatabase,
                 (x, y) => x.TreatmentBMPName == y.TreatmentBMPName);
 
@@ -174,6 +173,16 @@ namespace Hippocamp.EFModels.Entities
             existingProjectTreatmentBMPModelingAttributes.MergeDelete(updatedTreatmentBMPModelingAttributes, 
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID, 
                 allTreatmentBMPModelingAttributesInDatabase);
+
+            var treatmentBMPIDsWhoAreBeingDeleted = existingProjectTreatmentBMPs.Where(x => !updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID)).Select(x => x.TreatmentBMPID).ToList();
+            var delineationsToBeDeleted = dbContext.Delineations.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID)).ToList();
+            var delineationsToBeDeletedIDs = delineationsToBeDeleted.Select(x => x.DelineationID).ToList();
+
+            // delete all the Delineation related entities
+            dbContext.ProjectHRUCharacteristics.RemoveRange(dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit).Where(x => x.ProjectLoadGeneratingUnit.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.ProjectLoadGeneratingUnit.DelineationID.Value)).ToList());
+            dbContext.ProjectLoadGeneratingUnits.RemoveRange(dbContext.ProjectLoadGeneratingUnits.Where(x => x.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.DelineationID.Value)).ToList());
+            dbContext.DelineationOverlaps.RemoveRange(dbContext.DelineationOverlaps.Where(x => delineationsToBeDeletedIDs.Contains(x.DelineationID) || delineationsToBeDeletedIDs.Contains(x.DelineationOverlapID)).ToList());
+            dbContext.Delineations.RemoveRange(delineationsToBeDeleted);
 
             // delete TreatmentBMP records
             existingProjectTreatmentBMPs.MergeDelete(updatedTreatmentBMPs,
