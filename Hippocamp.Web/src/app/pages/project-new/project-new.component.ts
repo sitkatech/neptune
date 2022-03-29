@@ -18,7 +18,7 @@ import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-
 })
 export class ProjectNewComponent implements OnInit {
 
-  private watchUserChangeSubscription: any;
+  
   public currentUser: PersonDto;
   
   public projectID: number;
@@ -36,7 +36,7 @@ export class ProjectNewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
       
       this.projectModel = new ProjectCreateDto();
@@ -53,8 +53,8 @@ export class ProjectNewComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.watchUserChangeSubscription.unsubscribe();
-    this.authenticationService.dispose();
+    
+    
     this.cdr.detach();
   }
 

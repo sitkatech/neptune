@@ -15,7 +15,7 @@ import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/mo
 export class FieldDefinitionListComponent implements OnInit {
 
   @ViewChild("fieldDefinitionsGrid") fieldDefinitionsGrid: AgGridAngular;
-  private watchUserChangeSubscription: any;
+  
   private currentUser: PersonDto;
 
   public fieldDefinitions: Array<FieldDefinitionDto>
@@ -30,7 +30,7 @@ export class FieldDefinitionListComponent implements OnInit {
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.watchUserChangeSubscription = this.authenticationService.currentUserSetObservable.subscribe(currentUser => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
       this.fieldDefinitionsGrid.api.showLoadingOverlay();
       this.fieldDefinitionService.listAllFieldDefinitions().subscribe(fieldDefinitions => {
@@ -75,8 +75,8 @@ export class FieldDefinitionListComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.watchUserChangeSubscription.unsubscribe();
-    this.authenticationService.dispose();
+    
+    
     this.cdr.detach();
   }
 }

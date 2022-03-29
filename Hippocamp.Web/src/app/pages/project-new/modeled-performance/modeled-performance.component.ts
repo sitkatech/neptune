@@ -28,7 +28,7 @@ declare var $: any
 })
 export class ModeledPerformanceComponent implements OnInit {
 
-  private watchUserChangeSubscription: any;
+  
   private currentUser: PersonDto;
   public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;
   public activeID = ModeledPerformanceDisplayTypeEnum.Total;
@@ -92,7 +92,7 @@ export class ModeledPerformanceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
 
       const projectID = this.route.snapshot.paramMap.get("projectID");

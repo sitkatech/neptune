@@ -50,7 +50,7 @@ export class FieldDefinitionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.authenticationService.dispose();
+    
     this.cdr.detach();
   }
 

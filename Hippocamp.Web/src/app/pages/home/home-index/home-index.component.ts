@@ -43,7 +43,7 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
                     });
             }
 
-            this.watchUserChangeSubscription = this.authenticationService.currentUserSetObservable.subscribe(currentUser => {
+            this.authenticationService.getCurrentUser().subscribe(currentUser => {
                 this.currentUser = currentUser;
             });
 

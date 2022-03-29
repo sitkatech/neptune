@@ -87,7 +87,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
 
-  private watchUserChangeSubscription: any;
+  
   private currentUser: PersonDto;
   
   public projectID: number;
@@ -235,7 +235,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
 
       const projectID = this.route.snapshot.paramMap.get("projectID");
@@ -298,8 +298,8 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.watchUserChangeSubscription.unsubscribe();
-    this.authenticationService.dispose();
+    
+    
     this.cdr.detach();
   }
 

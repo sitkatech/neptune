@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { UserService } from './user/user.service';
 import { Observable, Subject, race } from 'rxjs';
-import { filter, first } from 'rxjs/operators';
+import { filter, first, map } from 'rxjs/operators';
 import { CookieStorageService } from '../shared/services/cookies/cookie-storage.service';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { RoleEnum } from '../shared/models/enums/role.enum';
@@ -30,39 +30,50 @@ export class AuthenticationService {
     private cookieStorageService: CookieStorageService,
     private userService: UserService,
     private alertService: AlertService) {
-      this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe((e: NavigationEnd) => {
-        if (this.isAuthenticated()) {
-          this.getGlobalIDFromClaimsAndAttemptToSetUserObservableAndCreateUserIfNecessary();
-        } else {
-          this.currentUser = null;
-          this._currentUserSetSubject.next(null);
-        }
-      });
-
-    // check for a currentUser at NavigationStart so that authorization-based guards can work with promises.
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationStart))
-      .subscribe((e: NavigationStart) => {
+      this.oauthService.events.subscribe(_ => {
         this.checkAuthentication();
-      })
-  }
-
-  public checkAuthentication() {
-    if (this.isAuthenticated() && !this.currentUser) {
-      console.log("Authenticated but no user found...");
-      this.getGlobalIDFromClaimsAndAttemptToSetUserObservableAndCreateUserIfNecessary();
+      });
+  
+      this.oauthService.events
+        .pipe(filter(e => ['token_received'].includes(e.type)))
+        .subscribe(e => this.oauthService.loadUserProfile());
+  
+      this.oauthService.events
+        .pipe(filter(e => ['session_terminated', 'session_error'].includes(e.type)))
+        .subscribe(e => this.router.navigateByUrl("/"));
+  
+      this.oauthService.setupAutomaticSilentRefresh();
     }
-  }
-
-  public getGlobalIDFromClaimsAndAttemptToSetUserObservableAndCreateUserIfNecessary() {
-    var claims = this.oauthService.getIdentityClaims();
-    var globalID = claims["sub"];
-
-    this.getUserObservable = this.userService.getUserFromGlobalID(globalID).subscribe(result => {
-      this.getUserCallback(result);
-    }, error => {
+  
+    public initialLoginSequence() {
+      this.oauthService.loadDiscoveryDocument()
+        .then(() => this.oauthService.tryLogin())
+        .then(() => Promise.resolve()).catch(() => {});
+    }
+  
+    public checkAuthentication() {
+      if (this.isAuthenticated() && !this.currentUser) {
+        console.log("Authenticated but no user found...");
+        var claims = this.oauthService.getIdentityClaims();
+        this.getUser(claims);
+      }
+    }
+  
+    private getUser(claims: any) {
+      var globalID = claims["sub"];
+  
+      this.userService.getUserFromGlobalID(globalID).subscribe(
+        result => { this.updateUser(result) },
+        error => { this.onGetUserError(error, claims) }
+      );
+    }
+  
+    private updateUser(user: PersonDto) {
+      this.currentUser = user;
+      this._currentUserSetSubject.next(this.currentUser);
+    }
+  
+    private onGetUserError(error: any, claims: any) {
       if (error.status !== 404) {
         this.alertService.pushAlert(new Alert("There was an error logging into the application.", AlertContext.Danger));
         this.router.navigate(['/']);
@@ -72,77 +83,94 @@ export class AuthenticationService {
           FirstName: claims["given_name"],
           LastName: claims["family_name"],
           Email: claims["email"],
-          RoleID: RoleEnum.Unassigned,
           LoginName: claims["login_name"],
           UserGuid: claims["sub"],
-          OrganizationName: claims["organization_name"]
         });
-
+  
         this.userService.createNewUser(newUser).subscribe(user => {
-          this.getUserCallback(user);
+          this.updateUser(user);
         })
-
       }
-    });
-  }
-
-  private getUserCallback(user: PersonDto) {
-    this.currentUser = user;
-    this._currentUserSetSubject.next(this.currentUser);
-  }
-
-  public refreshUserInfo(user: PersonDto) {
-    this.getUserCallback(user);
-  }
-
-  dispose() {
-    this.getUserObservable.unsubscribe();
-  }
-
-  public getCurrentUser(): Observable<PersonDto> {
-    return race(
-      new Observable(subscriber => {
-        if (this.currentUser) {
-          subscriber.next(this.currentUser);
-          subscriber.complete();
-        }
-      }),
-      this.currentUserSetObservable.pipe(first())
-    );
-  }
-
-  public isAuthenticated(): boolean {
-    return this.oauthService.hasValidAccessToken();
-  }
-
-  public handleUnauthorized(): void {
-    this.forcedLogout();
-  }
-
-  public login() {
-    this.oauthService.initCodeFlow();
+    }
+  
+    public refreshUserInfo(user: PersonDto) {
+      this.updateUser(user);
+    }
+  
+    public isAuthenticated(): boolean {
+      return this.oauthService.hasValidAccessToken();
+    }
+  
+    public handleUnauthorized(): void {
+      this.forcedLogout();
+    }
+  
+    public forcedLogout() {
+      sessionStorage["authRedirectUrl"] = window.location.href;
+      this.logout();
   }
   
-  public createAccount() {
-    localStorage.setItem("loginOnReturn", "true");
-    window.location.href = `${environment.keystoneAuthConfiguration.issuer}/Account/Register?${this.getClientIDAndRedirectUrlForKeystone()}`;
-  }
+    public login() {
+      this.oauthService.initCodeFlow();
+    }
+  
+    public createAccount() {
+      localStorage.setItem("loginOnReturn", "true");
+      window.location.href = `${environment.keystoneAuthConfiguration.issuer}/Account/Register?${this.getClientIDAndRedirectUrlForKeystone()}`;
+    }
+  
+    public getClientIDAndRedirectUrlForKeystone() {
+      return `ClientID=${environment.keystoneAuthConfiguration.clientId}&RedirectUrl=${encodeURIComponent(environment.createAccountRedirectUrl)}`;
+    }
+  
+    public logout() {
+      this.oauthService.logOut();
+      setTimeout(() => {
+        this.cookieStorageService.removeAll();
+      });
+    }
+  
+    public getAuthRedirectUrl() {
+      return sessionStorage["authRedirectUrl"];
+    }
+  
+    public setAuthRedirectUrl(url: string) {
+      sessionStorage["authRedirectUrl"] = url;
+    }
+  
+    public clearAuthRedirectUrl() {
+      this.setAuthRedirectUrl("");
+    }
 
-  public getClientIDAndRedirectUrlForKeystone() {
-    return `ClientID=${environment.keystoneAuthConfiguration.clientId}&RedirectUrl=${encodeURIComponent(environment.createAccountRedirectUrl)}`;
-  }
-
-  public forcedLogout() {
-    sessionStorage["authRedirectUrl"] = window.location.href;
-    this.logout();
-  }
-
-  public logout() {
-    this.oauthService.logOut();
-    setTimeout(() => {
-      this.cookieStorageService.removeAll();
-    });
-  }
+    public getCurrentUser(): Observable<PersonDto> {
+      return race(
+        new Observable(subscriber => {
+          if (this.currentUser) {
+            subscriber.next(this.currentUser);
+            subscriber.complete();
+          }
+        }),
+        this.currentUserSetObservable.pipe(first())
+      );
+    }
+  
+    public getCurrentUserID(): Observable<number> {
+      return race(
+        new Observable(subscriber => {
+          if (this.currentUser) {
+            subscriber.next(this.currentUser.PersonID);
+            subscriber.complete();
+          }
+        }),
+        this.currentUserSetObservable.pipe(first(), map(
+          (user) => user.PersonID
+        ))
+      );
+    }
+  
+    public getAccessToken(): string {
+      return this.oauthService.getAccessToken();
+    }
 
   public isUserAnAdministrator(user: PersonDto): boolean {
     const role = user && user.Role

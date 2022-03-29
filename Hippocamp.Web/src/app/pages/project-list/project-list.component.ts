@@ -23,7 +23,7 @@ export class ProjectListComponent implements OnInit {
   @ViewChild('projectsGrid') projectsGrid: AgGridAngular;
   @ViewChild('deleteProjectModal') deleteProjectModal
 
-  private watchUserChangeSubscription: any;
+  
   private currentUser: PersonDto;
 
   private gridApi: GridApi;
@@ -47,7 +47,7 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.watchUserChangeSubscription = this.authenticationService.getCurrentUser().subscribe(currentUser => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
 
       this.createProjectGridColDefs();
@@ -58,8 +58,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.watchUserChangeSubscription.unsubscribe();
-    this.authenticationService.dispose();
+    
+    
     this.cdr.detach();
   }
 

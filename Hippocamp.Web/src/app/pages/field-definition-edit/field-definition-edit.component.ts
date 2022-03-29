@@ -14,7 +14,7 @@ import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/mo
   styleUrls: ['./field-definition-edit.component.scss']
 })
 export class FieldDefinitionEditComponent implements OnInit {
-  private watchUserChangeSubscription: any;
+  
   private currentUser: PersonDto;
 
   public fieldDefinition: FieldDefinitionDto;
@@ -35,7 +35,7 @@ export class FieldDefinitionEditComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.watchUserChangeSubscription = this.authenticationService.currentUserSetObservable.subscribe(currentUser => {
+      this.authenticationService.getCurrentUser().subscribe(currentUser => {
           this.currentUser = currentUser;
           const id = parseInt(this.route.snapshot.paramMap.get("definitionID"));
           if (id) {
@@ -47,8 +47,7 @@ export class FieldDefinitionEditComponent implements OnInit {
   }
 
   ngOnDestroy() {
-      this.watchUserChangeSubscription.unsubscribe();
-      this.authenticationService.dispose();
+           
       this.cdr.detach();
   }
 
