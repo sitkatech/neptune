@@ -33,8 +33,11 @@ namespace Hippocamp.EFModels.Entities
             // merge new Delineations
             var newDelineations = delineationUpsertDtos
                 .Select(x => DelineationFromUpsertDto(x)).ToList();
+            
+            existingProjectDelineations.MergeNew(newDelineations, allDelineationsInDatabase,
+                (x, y) => x.DelineationID == y.DelineationID);
 
-            existingProjectDelineations.Merge(newDelineations, allDelineationsInDatabase,
+            existingProjectDelineations.MergeUpdate(newDelineations,
                 (x, y) => x.DelineationID == y.DelineationID,
                 (x, y) =>
                 {
@@ -43,6 +46,17 @@ namespace Hippocamp.EFModels.Entities
                     x.DelineationGeometry4326 = y.DelineationGeometry4326;
                     x.DateLastModified = y.DateLastModified;
                 });
+
+            var delineationsToBeDeletedIDs = existingProjectDelineations.Where(x => newDelineations.Any(y => y.DelineationID == x.DelineationID)).Select(x => x.DelineationID).ToList();
+            // delete all the Delineation related entities
+            dbContext.ProjectHRUCharacteristics.RemoveRange(dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit).Where(x => x.ProjectLoadGeneratingUnit.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.ProjectLoadGeneratingUnit.DelineationID.Value)).ToList());
+            dbContext.ProjectLoadGeneratingUnits.RemoveRange(dbContext.ProjectLoadGeneratingUnits.Where(x => x.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.DelineationID.Value)).ToList());
+            dbContext.DelineationOverlaps.RemoveRange(dbContext.DelineationOverlaps.Where(x => delineationsToBeDeletedIDs.Contains(x.DelineationID) || delineationsToBeDeletedIDs.Contains(x.DelineationOverlapID)).ToList());
+
+            existingProjectDelineations.MergeDelete(newDelineations,
+                (x, y) => x.DelineationID == y.DelineationID,
+                allDelineationsInDatabase);
+
 
             dbContext.SaveChanges();
         }
