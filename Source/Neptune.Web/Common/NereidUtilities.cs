@@ -201,8 +201,6 @@ namespace Neptune.Web.Common
         {
             var distributedDelineations = dbContext.Delineations.Include(x=>x.TreatmentBMP)
                 .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID &&
-                            // don't include the provisionals
-                            x.IsVerified &&
                             // don't include delineations for non-modeled BMPs
                             x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
                             x.TreatmentBMP.RegionalSubbasinID != null &&
@@ -212,11 +210,13 @@ namespace Neptune.Web.Common
             {
                 distributedDelineations = distributedDelineations.Where(x =>
                              projectRegionalSubbasinIDs.Contains(x.TreatmentBMP.RegionalSubbasinID.Value) &&
-                            (x.TreatmentBMP.ProjectID == null || x.TreatmentBMP.ProjectID == projectID)).ToList();
+                            ((x.TreatmentBMP.ProjectID == null && x.IsVerified) || x.TreatmentBMP.ProjectID == projectID)).ToList();
             }
             else
             {
                 distributedDelineations = distributedDelineations.Where(x =>
+                            // don't include the provisionals
+                            x.IsVerified &&
                             x.TreatmentBMP.ProjectID == null).ToList();
             }
 
