@@ -57,6 +57,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   public mapID: string = 'poolDetailMap';
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+  private originalTreatmentBMPs: string;
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '400px';
@@ -234,6 +235,10 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  canExit(){
+    return this.originalTreatmentBMPs == JSON.stringify(this.treatmentBMPs);
+  };
+
   public ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
@@ -250,6 +255,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
           modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
         }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
           this.treatmentBMPs = treatmentBMPs;
+          this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
           this.delineations = delineations
           this.boundingBox = boundingBox;
           this.treatmentBMPTypes = treatmentBMPTypes;

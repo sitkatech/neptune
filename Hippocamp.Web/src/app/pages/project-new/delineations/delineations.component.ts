@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet-draw';
@@ -34,6 +34,7 @@ export class DelineationsComponent implements OnInit {
   public drawMapClicked: boolean = false;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: DelineationUpsertDto[];
+  private originalDelineations: string;
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '400px';
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
@@ -53,6 +54,7 @@ export class DelineationsComponent implements OnInit {
   public featureLayer: any;
   public delineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
   public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
+  private preStartEditingEditableDelineationFeatureGroup: string;
   public layerControl: L.Control.Layers;
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
@@ -118,9 +120,19 @@ export class DelineationsComponent implements OnInit {
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private cdr: ChangeDetectorRef
   ) {
   }
+
+  canExit(){
+    let currentDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
+    if (this.isPerformingDrawAction) {
+      return this.originalDelineations == currentDelineations && this.preStartEditingEditableDelineationFeatureGroup == JSON.stringify(this.editableDelineationFeatureGroup.getLayers().map(x => x.getLatLngs));
+    }
+
+    return this.originalDelineations == currentDelineations;
+  };
 
   public ngOnInit(): void {
     const projectID = this.route.snapshot.paramMap.get("projectID");
@@ -134,6 +146,7 @@ export class DelineationsComponent implements OnInit {
       }).subscribe(({ treatmentBMPs, delineations, boundingBox }) => {
         this.treatmentBMPs = treatmentBMPs;
         this.delineations = delineations;
+        this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
         this.boundingBox = boundingBox;
 
         this.initializeMap();
@@ -184,6 +197,10 @@ export class DelineationsComponent implements OnInit {
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
+  }
+
+  ngOnDestroy() {
+    this.cdr.detach();
   }
 
   public initializeMap(): void {
@@ -318,7 +335,7 @@ export class DelineationsComponent implements OnInit {
         draw: Object.assign({}, this.defaultDrawControlSpec),
         edit: Object.assign({}, this.defaultEditControlSpec)
       };
-      if (this.selectedDelineation?.Geometry == null || this.drawMapClicked) {
+      if (this.selectedDelineation?.Geometry == null) {
         drawOptions.edit = false;
       }
       else {
@@ -386,13 +403,15 @@ export class DelineationsComponent implements OnInit {
       .on(L.Draw.Event.DRAWSTART, () => {
         if (this.selectedDelineation != null && this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
           this.editableDelineationFeatureGroup.clearLayers();
-        }
+        };
       })
       .on(L.Draw.Event.TOOLBAROPENED, () => {
         this.isPerformingDrawAction = true;
+        this.preStartEditingEditableDelineationFeatureGroup = JSON.stringify(this.editableDelineationFeatureGroup.getLayers().map(x => x.getLatLngs()));
       })
       .on(L.Draw.Event.TOOLBARCLOSED, () => {
         this.isPerformingDrawAction = false;
+        this.preStartEditingEditableDelineationFeatureGroup = "";
       });
     this.addOrRemoveDrawControl(true);
     this.afterSetControl.emit(this.layerControl);
@@ -508,28 +527,36 @@ export class DelineationsComponent implements OnInit {
 
   public onSubmit() {
     this.isLoadingSubmit = true;
-    window.scroll(0, 0);
-    //We need a fully qualified geojson string and above we are just getting the geometry
-    //Possible can remove the update above if we are always going to do it here
-    this.delineationFeatureGroup.eachLayer((layer) => {
-      var delineationUpsertDto = this.delineations.filter(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)[0];
-      delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
-    });
-
+    this.alertService.clearAlerts();
+    this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
     this.delineationService.mergeDelineations(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
+      window.scroll(0, 0); 
       this.isLoadingSubmit = false;
-      this.alertService.clearAlerts();
       this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
       this.delineationService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
         this.delineations = delineations;
         this.resetDelineationFeatureGroups();
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
       });
+    }, error => {
+      this.isLoadingSubmit = false;
+      window.scroll(0,0);
+      this.cdr.detectChanges();
+    });
+  }
+
+  public getFullyQualifiedJSONGeometryForDelineations(delineations: DelineationUpsertDto[]) {
+    //We need a fully qualified geojson string and above we are just getting the geometry
+    //Possible can remove the update above if we are always going to do it here
+    this.delineationFeatureGroup.eachLayer((layer) => {
+      var delineationUpsertDto = delineations.filter(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)[0];
+      delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
     });
   }
 
   private resetDelineationFeatureGroups() {
     this.editableDelineationFeatureGroup.clearLayers();
+    this.preStartEditingEditableDelineationFeatureGroup = "";
     this.delineationFeatureGroup.clearLayers();
     this.addFeatureCollectionToFeatureGroup(this.mapDelineationsToGeoJson(this.delineations), this.delineationFeatureGroup);
   }
