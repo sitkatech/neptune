@@ -577,9 +577,9 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
       this.isLoadingSubmit = false;
       this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success, true));
       window.scroll(0, 0);
-
       this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
         this.treatmentBMPs = treatmentBMPs;
+        this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
         if (this.treatmentBMPs.length > 0) {
           this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
         }

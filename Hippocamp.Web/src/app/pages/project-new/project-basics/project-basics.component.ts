@@ -104,7 +104,8 @@ export class ProjectBasicsComponent implements OnInit {
   }
 
   private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string, projectID: number) {
-    this.isLoadingSubmit = false;    
+    this.isLoadingSubmit = false;  
+    this.originalProjectModel = JSON.stringify(this.projectModel);
     this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(() => {
       this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
     });

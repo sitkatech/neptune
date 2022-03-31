@@ -535,6 +535,7 @@ export class DelineationsComponent implements OnInit {
       this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
       this.delineationService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
         this.delineations = delineations;
+        this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
         this.resetDelineationFeatureGroups();
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
       });

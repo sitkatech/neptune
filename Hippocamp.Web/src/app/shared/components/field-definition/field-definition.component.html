@@ -49,7 +49,7 @@
         </div>
     </ng-container>
     <ng-container *ngIf="!showEditButton()">
-        <span class="text-danger">
+        <span> 
             {{getLabelText()}}
             <i class="fas fa-question-circle small" style="cursor: help;" [ngbPopover]="popContent"  popoverClass="popover-override"
                 [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName" triggers="mouseenter:mouseleave" container="body">
