@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UnsavedChangesGuardGuard } from './unsaved-changes-guard.guard';
+import { UnsavedChangesGuard } from './unsaved-changes.guard';
 
 describe('UnsavedChangesGuardGuard', () => {
-  let guard: UnsavedChangesGuardGuard;
+  let guard: UnsavedChangesGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(UnsavedChangesGuardGuard);
+    guard = TestBed.inject(UnsavedChangesGuard);
   });
 
   it('should be created', () => {

@@ -10,7 +10,7 @@ export interface IDeactivateComponent {
 @Injectable({
   providedIn: 'root'
 })
-export class UnsavedChangesGuardGuard implements CanDeactivate<IDeactivateComponent> {
+export class UnsavedChangesGuard implements CanDeactivate<IDeactivateComponent> {
 
   constructor(private confirmService: ConfirmService) {}
 

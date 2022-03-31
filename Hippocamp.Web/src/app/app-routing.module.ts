@@ -21,6 +21,7 @@ import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treat
 import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
 import { DelineationsComponent } from './pages/project-new/delineations/delineations.component';
 import { ModeledPerformanceComponent } from './pages/project-new/modeled-performance/modeled-performance.component';
+import { UnsavedChangesGuard } from './shared/guards/unsaved-changes.guard';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -34,16 +35,16 @@ const routes: Routes = [
   { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
-    { path: "project-basics", component:  ProjectBasicsComponent}
+    { path: "project-basics", component:  ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard]}
   ]},
   { path: `projects/edit/${routeParams.projectID}`, component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
-    { path: "project-basics", component:  ProjectBasicsComponent},
+    { path: "project-basics", component:  ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard]},
     { path: "stormwater-treatments", children: [
       { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
-      { path: "treatment-bmps", component:  TreatmentBmpsComponent},
-      { path: "delineations", component:  DelineationsComponent},
+      { path: "treatment-bmps", component:  TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard]},
+      { path: "delineations", component:  DelineationsComponent, canDeactivate: [UnsavedChangesGuard]},
       { path: "modeled-performance", component:  ModeledPerformanceComponent},
     ]},
     { path: "attachments", component:  ProjectAttachmentsComponent},

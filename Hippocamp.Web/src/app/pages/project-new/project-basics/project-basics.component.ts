@@ -33,6 +33,7 @@ export class ProjectBasicsComponent implements OnInit {
   public invalidFields: Array<string> = [];
   public isLoadingSubmit = false;
   public customRichTextTypeID : number = CustomRichTextType.ProjectBasics;
+  public originalProjectModel: string;
 
 
   constructor(
@@ -47,6 +48,10 @@ export class ProjectBasicsComponent implements OnInit {
     private userService: UserService
   ) { }
 
+  canExit(){
+    return this.originalProjectModel == JSON.stringify(this.projectModel);
+  };
+
   ngOnInit(): void {
     const projectID = this.route.snapshot.paramMap.get("projectID");
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
@@ -56,9 +61,11 @@ export class ProjectBasicsComponent implements OnInit {
         this.projectID = parseInt(projectID);
         this.projectService.getByID(this.projectID).subscribe(project => {
           this.mapProjectSimpleDtoToProjectModel(project);
+          this.originalProjectModel = JSON.stringify(this.projectModel);
         });
       } else {
         this.projectModel.PrimaryContactPersonID = this.currentUser.PersonID;
+        this.originalProjectModel = "";
       }
 
       forkJoin({
