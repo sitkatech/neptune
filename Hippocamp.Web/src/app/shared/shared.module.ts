@@ -29,6 +29,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IconComponent } from './components/icon/icon.component';
 import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
 import { NeptuneModelingResultSigFigPipe } from './pipes/neptune-modeling-result-sig-fig.pipe';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 
 @NgModule({
     declarations: [
@@ -58,7 +59,8 @@ import { NeptuneModelingResultSigFigPipe } from './pipes/neptune-modeling-result
         ProgressIconComponent,
         ProjectWizardSidebarComponent,
         UnderConstructionComponent,
-        NeptuneModelingResultSigFigPipe
+        NeptuneModelingResultSigFigPipe,
+        ConfirmModalComponent
     ],
     imports: [
         CommonModule,
