@@ -337,7 +337,7 @@ export class DelineationsComponent implements OnInit {
         draw: Object.assign({}, this.defaultDrawControlSpec),
         edit: Object.assign({}, this.defaultEditControlSpec)
       };
-      if (this.selectedDelineation?.Geometry == null) {
+      if (this.selectedDelineation?.Geometry == null || this.drawMapClicked) {
         drawOptions.edit = false;
       }
       else {
