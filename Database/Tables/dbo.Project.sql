@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[Project](
 	[DateCreated] [datetime] NOT NULL,
 	[ProjectDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[AdditionalContactInformation] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[DoesNotIncludeTreatmentBMPs] [bit] NOT NULL,
  CONSTRAINT [PK_Project_ProjectID] PRIMARY KEY CLUSTERED 
 (
 	[ProjectID] ASC

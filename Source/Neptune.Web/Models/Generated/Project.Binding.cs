@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation) : this()
+        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs) : this()
         {
             this.ProjectID = projectID;
             this.ProjectName = projectName;
@@ -47,12 +47,13 @@ namespace Neptune.Web.Models
             this.DateCreated = dateCreated;
             this.ProjectDescription = projectDescription;
             this.AdditionalContactInformation = additionalContactInformation;
+            this.DoesNotIncludeTreatmentBMPs = doesNotIncludeTreatmentBMPs;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Project(string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated) : this()
+        public Project(string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, bool doesNotIncludeTreatmentBMPs) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ProjectID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -64,12 +65,13 @@ namespace Neptune.Web.Models
             this.PrimaryContactPersonID = primaryContactPersonID;
             this.CreatePersonID = createPersonID;
             this.DateCreated = dateCreated;
+            this.DoesNotIncludeTreatmentBMPs = doesNotIncludeTreatmentBMPs;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public Project(string projectName, Organization organization, StormwaterJurisdiction stormwaterJurisdiction, ProjectStatus projectStatus, Person primaryContactPerson, Person createPerson, DateTime dateCreated) : this()
+        public Project(string projectName, Organization organization, StormwaterJurisdiction stormwaterJurisdiction, ProjectStatus projectStatus, Person primaryContactPerson, Person createPerson, DateTime dateCreated, bool doesNotIncludeTreatmentBMPs) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ProjectID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -90,6 +92,7 @@ namespace Neptune.Web.Models
             this.CreatePerson = createPerson;
             createPerson.ProjectsWhereYouAreTheCreatePerson.Add(this);
             this.DateCreated = dateCreated;
+            this.DoesNotIncludeTreatmentBMPs = doesNotIncludeTreatmentBMPs;
         }
 
         /// <summary>
@@ -97,7 +100,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static Project CreateNewBlank(Organization organization, StormwaterJurisdiction stormwaterJurisdiction, ProjectStatus projectStatus, Person primaryContactPerson, Person createPerson)
         {
-            return new Project(default(string), organization, stormwaterJurisdiction, projectStatus, primaryContactPerson, createPerson, default(DateTime));
+            return new Project(default(string), organization, stormwaterJurisdiction, projectStatus, primaryContactPerson, createPerson, default(DateTime), default(bool));
         }
 
         /// <summary>
@@ -218,6 +221,7 @@ namespace Neptune.Web.Models
         public DateTime DateCreated { get; set; }
         public string ProjectDescription { get; set; }
         public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
