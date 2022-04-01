@@ -2,7 +2,7 @@
 
 namespace Hippocamp.Models.DataTransferObjects
 {
-    public class ProjectCreateDto
+    public class ProjectUpsertDto
     {
         [Display(Name = "Project Name")]
         [Required]
@@ -20,5 +20,6 @@ namespace Hippocamp.Models.DataTransferObjects
         public string ProjectDescription { get; set; }
         [StringLength(500, ErrorMessage = "Additional Contact Information field cannot exceed 500 characters.")]
         public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
     }
 }

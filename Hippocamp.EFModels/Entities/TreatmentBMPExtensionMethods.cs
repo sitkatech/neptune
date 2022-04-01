@@ -65,6 +65,7 @@ namespace Hippocamp.EFModels.Entities
                 WinterHarvestedWaterDemand = treatmentBMPModelingAttribute?.WinterHarvestedWaterDemand,
                 MonthsOfOperationID = treatmentBMPModelingAttribute?.MonthsOfOperationID,
                 DryWeatherFlowOverrideID = treatmentBMPModelingAttribute?.DryWeatherFlowOverrideID,
+                AreAllModelingAttributesComplete = treatmentBMP.AreAllModelingAttributesComplete(treatmentBMPModelingAttribute),
                 IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMPModelingAttribute)
             };
 
@@ -84,18 +85,8 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDto;
         }
 
-        private static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute? bmpModelingAttributes)
+        private static bool AreAllModelingAttributesComplete(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute? bmpModelingAttributes)
         {
-            if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID == null)
-            {
-                return false;
-            }
-
-            if (treatmentBMP.Delineation == null)
-            {
-                return false;
-            }
-
             var bmpModelingTypeID = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID;
 
             if (bmpModelingAttributes != null)
@@ -219,6 +210,21 @@ namespace Hippocamp.EFModels.Entities
             }
 
             return true;
+        }
+
+        private static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute? bmpModelingAttributes)
+        {
+            if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID == null)
+            {
+                return false;
+            }
+
+            if (treatmentBMP.Delineation == null)
+            {
+                return false;
+            }
+
+            return treatmentBMP.AreAllModelingAttributesComplete(bmpModelingAttributes);
         }
     }
 }

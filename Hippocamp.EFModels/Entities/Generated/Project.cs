@@ -38,6 +38,7 @@ namespace Hippocamp.EFModels.Entities
         public string ProjectDescription { get; set; }
         [StringLength(500)]
         public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
 
         [ForeignKey(nameof(CreatePersonID))]
         [InverseProperty(nameof(Person.ProjectCreatePeople))]

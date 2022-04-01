@@ -48,7 +48,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpPost("projects/new")]
         [JurisdictionEditFeature]
-        public ActionResult<ProjectSimpleDto> New([FromBody] ProjectCreateDto projectCreateDto)
+        public ActionResult<ProjectSimpleDto> New([FromBody] ProjectUpsertDto projectCreateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpPost("projects/{projectID}/update")]
         [JurisdictionEditFeature]
-        public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectCreateDto projectCreateDto)
+        public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
         {
             if (!ModelState.IsValid)
             {

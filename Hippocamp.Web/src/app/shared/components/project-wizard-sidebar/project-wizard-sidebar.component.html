@@ -26,7 +26,7 @@
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             class="icon-padding">
-            <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+            <hippocamp-progress-icon [isComplete]="isProjectBasicsComplete()"></hippocamp-progress-icon>
             Project Basics
         </a>
     </div>
@@ -35,7 +35,7 @@
             <ng-template ngbPanelHeader let-opened="opened">
                 <div class="card-body">
                     <button ngbPanelToggle class="btn icon-padding">
-                        <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+                        <hippocamp-progress-icon [isComplete]="isStormwaterTreatmentsComplete()"></hippocamp-progress-icon>
                         <span>Stormwater Treatments</span>
                         <hippocamp-toggle-status [opened]="opened" [closeOthers]="true" ></hippocamp-toggle-status>
                     </button>
@@ -50,7 +50,7 @@
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
                         [ngClass]="{'disabled': !projectModel.ProjectName}">
-                        <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
+                        <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveModelingParameters()"></hippocamp-progress-icon>
                         Treatment BMPs
                         </a>
                     </div>
@@ -61,7 +61,7 @@
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
                         [ngClass]="{'disabled': !projectModel.ProjectName}">
-                        <hippocamp-progress-icon [isComplete]="false"></hippocamp-progress-icon>
+                        <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></hippocamp-progress-icon>
                         Delineations
                         </a>
                     </div>

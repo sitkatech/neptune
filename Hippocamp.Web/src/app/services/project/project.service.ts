@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/shared/services';
 import { Observable } from 'rxjs';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
-import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
+import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { ProjectDocumentUpsertDto } from 'src/app/shared/models/project-document-upsert-dto';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpResponse } from '@angular/common/http';
@@ -30,12 +30,12 @@ export class ProjectService {
     return this.apiService.getFromApi(route);
   }
 
-  newProject(projectModel: ProjectCreateDto): Observable<ProjectSimpleDto> {
+  newProject(projectModel: ProjectUpsertDto): Observable<ProjectSimpleDto> {
     let route = `/projects/new`;
     return this.apiService.postToApi(route, projectModel);
   }
 
-  updateProject(projectID: number, projectModel: ProjectCreateDto) {
+  updateProject(projectID: number, projectModel: ProjectUpsertDto) {
     let route = `/projects/${projectID}/update`;
     return this.apiService.postToApi(route, projectModel);
   }

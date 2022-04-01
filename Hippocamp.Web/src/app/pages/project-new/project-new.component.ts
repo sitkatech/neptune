@@ -6,10 +6,12 @@ import { ProjectService } from 'src/app/services/project/project.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
-import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
+import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'hippocamp-project-new',
@@ -20,9 +22,11 @@ export class ProjectNewComponent implements OnInit {
 
   
   public currentUser: PersonDto;
+
+  private workflowUpdateSubscription: Subscription;
   
   public projectID: number;
-  public projectModel: ProjectCreateDto;
+  public projectModel: ProjectUpsertDto;
   public organizations: Array<OrganizationSimpleDto>;
   public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
   public isLoadingSubmit = false;
@@ -32,14 +36,15 @@ export class ProjectNewComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private authenticationService: AuthenticationService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private projectWorkflowService: ProjectWorkflowService
   ) { }
 
   ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
       
-      this.projectModel = new ProjectCreateDto();
+      this.projectModel = new ProjectUpsertDto();
       const projectID = this.route.snapshot.paramMap.get("projectID");
       if (projectID) {
         this.projectID = parseInt(projectID);
@@ -48,13 +53,17 @@ export class ProjectNewComponent implements OnInit {
         });
       }
 
+      this.workflowUpdateSubscription = this.projectWorkflowService.workflowUpdate.subscribe(() => {
+        this.projectService.getByID(this.projectID).subscribe(project => {
+          this.mapProjectSimpleDtoToProjectModel(project);
+        });
+      })
+
       this.cdr.detectChanges();
     });
   }
 
   ngOnDestroy() {
-    
-    
     this.cdr.detach();
   }
 
@@ -65,6 +74,7 @@ export class ProjectNewComponent implements OnInit {
     this.projectModel.PrimaryContactPersonID = project.PrimaryContactPersonID;
     this.projectModel.ProjectDescription = project.ProjectDescription;
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
+    this.projectModel.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
   }
 
 }

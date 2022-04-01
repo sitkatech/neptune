@@ -528,22 +528,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             }
           }
@@ -592,22 +592,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectCreateDto"
+                "$ref": "#/components/schemas/ProjectUpsertDto"
               }
             }
           }
@@ -2164,47 +2164,6 @@
         },
         "additionalProperties": { }
       },
-      "ProjectCreateDto": {
-        "required": [
-          "OrganizationID",
-          "PrimaryContactPersonID",
-          "ProjectName",
-          "StormwaterJurisdictionID"
-        ],
-        "type": "object",
-        "properties": {
-          "ProjectName": {
-            "maxLength": 200,
-            "minLength": 0,
-            "type": "string"
-          },
-          "OrganizationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "StormwaterJurisdictionID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PrimaryContactPersonID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectDescription": {
-            "maxLength": 500,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "AdditionalContactInformation": {
-            "maxLength": 500,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ProjectDocumentSimpleDto": {
         "type": "object",
         "properties": {
@@ -2336,6 +2295,9 @@
             "type": "string",
             "nullable": true
           },
+          "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
+          },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
@@ -2372,6 +2334,50 @@
           "ProjectStatusSortOrder": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectUpsertDto": {
+        "required": [
+          "OrganizationID",
+          "PrimaryContactPersonID",
+          "ProjectName",
+          "StormwaterJurisdictionID"
+        ],
+        "type": "object",
+        "properties": {
+          "ProjectName": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalContactInformation": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3059,6 +3065,10 @@
           "DryWeatherFlowOverrideID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "AreAllModelingAttributesComplete": {
+            "type": "boolean",
             "nullable": true
           },
           "IsFullyParameterized": {

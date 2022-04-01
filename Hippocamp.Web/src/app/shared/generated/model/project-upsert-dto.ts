@@ -10,13 +10,14 @@
  * Do not edit the class manually.
  */
 
-export class ProjectCreateDto { 
+export class ProjectUpsertDto { 
     ProjectName: string;
     OrganizationID: number;
     StormwaterJurisdictionID: number;
     PrimaryContactPersonID: number;
     ProjectDescription?: string;
     AdditionalContactInformation?: string;
+    DoesNotIncludeTreatmentBMPs?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

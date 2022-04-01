@@ -19,6 +19,7 @@ import { DelineationTypeEnum } from 'src/app/shared/models/enums/delineation-typ
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
+import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 
 declare var $: any
 
@@ -121,7 +122,8 @@ export class DelineationsComponent implements OnInit {
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
     private alertService: AlertService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private projectWorkflowService: ProjectWorkflowService
   ) {
   }
 
@@ -533,6 +535,7 @@ export class DelineationsComponent implements OnInit {
       window.scroll(0, 0); 
       this.isLoadingSubmit = false;
       this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
+      this.projectWorkflowService.emitWorkflowUpdate();
       this.delineationService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
         this.delineations = delineations;
         this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));

@@ -160,7 +160,7 @@
 <ng-template #noTreatmentBMPs>
     <div class="row m-2 mt-4 mb-0">
         <div class="ml-auto">
-            <input type="checkbox" name="no-treatment-bmps">
+            <input type="checkbox" name="no-treatment-bmps" [(ngModel)]="project.DoesNotIncludeTreatmentBMPs">
             <label for="no-treatment-bmps" class="ml-2">My project does not include any Stormwater Treatment BMPs</label>
         </div>
     </div>

@@ -22,7 +22,8 @@ namespace Hippocamp.EFModels.Entities
                 CreatePerson = project.CreatePerson.AsDto(),
                 DateCreated = project.DateCreated,
                 ProjectDescription = project.ProjectDescription,
-                AdditionalContactInformation = project.AdditionalContactInformation
+                AdditionalContactInformation = project.AdditionalContactInformation,
+                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
             };
             DoCustomMappings(project, projectDto);
             return projectDto;
@@ -43,7 +44,8 @@ namespace Hippocamp.EFModels.Entities
                 CreatePersonID = project.CreatePersonID,
                 DateCreated = project.DateCreated,
                 ProjectDescription = project.ProjectDescription,
-                AdditionalContactInformation = project.AdditionalContactInformation
+                AdditionalContactInformation = project.AdditionalContactInformation,
+                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
             };
             DoCustomSimpleDtoMappings(project, projectSimpleDto);
             return projectSimpleDto;

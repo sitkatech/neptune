@@ -43,6 +43,10 @@ import { TimeOfConcentrationEnum } from 'src/app/shared/models/enums/time-of-con
 import { UnderlyingHydrologicSoilGroupEnum } from 'src/app/shared/models/enums/underlying-hydrologic-soil-group.enum';
 import { DelineationService } from 'src/app/services/delineation.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
+import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 
 declare var $: any
 
@@ -57,7 +61,9 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   public mapID: string = 'poolDetailMap';
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+  public project: ProjectUpsertDto = new ProjectUpsertDto();
   private originalTreatmentBMPs: string;
+  private originalDoesNotIncludeTreatmentBMPs: boolean;
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '400px';
@@ -224,6 +230,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private authenticationService: AuthenticationService,
+    private projectService: ProjectService,
     private treatmentBMPService: TreatmentBMPService,
     private delineationService: DelineationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
@@ -232,11 +239,12 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private alertService: AlertService,
+    private projectWorkflowService: ProjectWorkflowService
   ) {
   }
 
   canExit(){
-    return this.originalTreatmentBMPs == JSON.stringify(this.treatmentBMPs);
+    return this.originalDoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && this.originalTreatmentBMPs == JSON.stringify(this.treatmentBMPs);
   };
 
   public ngOnInit(): void {
@@ -248,12 +256,15 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
         this.projectID = parseInt(projectID);
 
         forkJoin({
+          project: this.projectService.getByID(this.projectID),
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
           delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
           treatmentBMPTypes: this.treatmentBMPService.getTypes(),
           modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
-        }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+        }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+          this.mapProjectSimpleDtoToProject(project);
+          this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
           this.treatmentBMPs = treatmentBMPs;
           this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
           this.delineations = delineations
@@ -307,6 +318,16 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
     
     
     this.cdr.detach();
+  }
+
+  private mapProjectSimpleDtoToProject(project: ProjectSimpleDto) {
+    this.project.ProjectName = project.ProjectName;
+    this.project.OrganizationID = project.OrganizationID;
+    this.project.StormwaterJurisdictionID = project.StormwaterJurisdictionID;
+    this.project.PrimaryContactPersonID = project.PrimaryContactPersonID;
+    this.project.ProjectDescription = project.ProjectDescription;
+    this.project.AdditionalContactInformation = project.AdditionalContactInformation;
+    this.project.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
   }
 
   public updateMapLayers(): void {
@@ -572,17 +593,26 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   public onSubmit() {
     this.isLoadingSubmit = true;
     this.alertService.clearAlerts();
+    this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.treatmentBMPs == null || this.treatmentBMPs.length == 0);
 
-    this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
-      this.isLoadingSubmit = false;
-      this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success, true));
-      window.scroll(0, 0);
-      this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
-        this.treatmentBMPs = treatmentBMPs;
-        this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
-        if (this.treatmentBMPs.length > 0) {
-          this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
-        }
+    this.projectService.updateProject(this.projectID, this.project).subscribe(() => {
+      this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
+        this.isLoadingSubmit = false;
+        this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success, true));
+        this.projectWorkflowService.emitWorkflowUpdate();
+        window.scroll(0, 0);
+        this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
+          this.treatmentBMPs = treatmentBMPs;
+          this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
+          this.originalDoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs;
+          if (this.treatmentBMPs.length > 0) {
+            this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+          }
+        })
+      }, error => {
+        this.isLoadingSubmit = false;
+        window.scroll(0,0);
+        this.cdr.detectChanges();
       });
     }, error => {
       this.isLoadingSubmit = false;

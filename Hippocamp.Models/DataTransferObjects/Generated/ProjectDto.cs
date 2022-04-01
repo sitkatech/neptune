@@ -19,6 +19,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public DateTime DateCreated { get; set; }
         public string ProjectDescription { get; set; }
         public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
     }
 
     public partial class ProjectSimpleDto
@@ -33,6 +34,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public DateTime DateCreated { get; set; }
         public string ProjectDescription { get; set; }
         public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
     }
 
 }

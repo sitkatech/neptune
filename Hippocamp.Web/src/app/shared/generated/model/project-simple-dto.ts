@@ -25,6 +25,7 @@ export class ProjectSimpleDto {
     DateCreated?: string;
     ProjectDescription?: string;
     AdditionalContactInformation?: string;
+    DoesNotIncludeTreatmentBMPs?: boolean;
     Organization?: OrganizationSimpleDto;
     StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
     ProjectStatus?: ProjectStatusSimpleDto;

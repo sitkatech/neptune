@@ -50,19 +50,20 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        public static ProjectSimpleDto CreateNew(HippocampDbContext dbContext, ProjectCreateDto projectCreateDto, PersonDto personDto)
+        public static ProjectSimpleDto CreateNew(HippocampDbContext dbContext, ProjectUpsertDto projectUpsertDto, PersonDto personDto)
         {
             var project = new Project()
             {
-                ProjectName = projectCreateDto.ProjectName,
-                OrganizationID = projectCreateDto.OrganizationID.Value,
-                StormwaterJurisdictionID = projectCreateDto.StormwaterJurisdictionID.Value,
+                ProjectName = projectUpsertDto.ProjectName,
+                OrganizationID = projectUpsertDto.OrganizationID.Value,
+                StormwaterJurisdictionID = projectUpsertDto.StormwaterJurisdictionID.Value,
                 ProjectStatusID = (int) ProjectStatusEnum.Draft,
-                PrimaryContactPersonID = projectCreateDto.PrimaryContactPersonID.Value,
+                PrimaryContactPersonID = projectUpsertDto.PrimaryContactPersonID.Value,
                 CreatePersonID = personDto.PersonID,
                 DateCreated = DateTime.UtcNow,
-                ProjectDescription = projectCreateDto.ProjectDescription,
-                AdditionalContactInformation = projectCreateDto.AdditionalContactInformation
+                ProjectDescription = projectUpsertDto.ProjectDescription,
+                AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation,
+                DoesNotIncludeTreatmentBMPs = false
             };
             dbContext.Add(project);
             dbContext.SaveChanges();
@@ -70,14 +71,21 @@ namespace Hippocamp.EFModels.Entities
             return GetByIDAsSimpleDto(dbContext, project.ProjectID);
         }
 
-        public static void Update(HippocampDbContext dbContext, Project project, ProjectCreateDto projectEditDto)
+        public static void Update(HippocampDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto)
         {
-            project.ProjectName = projectEditDto.ProjectName;
-            project.OrganizationID = projectEditDto.OrganizationID.Value;
-            project.StormwaterJurisdictionID = projectEditDto.StormwaterJurisdictionID.Value;
-            project.PrimaryContactPersonID = projectEditDto.PrimaryContactPersonID.Value;
-            project.ProjectDescription = projectEditDto.ProjectDescription;
-            project.AdditionalContactInformation = projectEditDto.AdditionalContactInformation;
+            project.ProjectName = projectUpsertDto.ProjectName;
+            project.OrganizationID = projectUpsertDto.OrganizationID.Value;
+            project.StormwaterJurisdictionID = projectUpsertDto.StormwaterJurisdictionID.Value;
+            project.PrimaryContactPersonID = projectUpsertDto.PrimaryContactPersonID.Value;
+            project.ProjectDescription = projectUpsertDto.ProjectDescription;
+            project.AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation;
+            project.DoesNotIncludeTreatmentBMPs = projectUpsertDto.DoesNotIncludeTreatmentBMPs;
+
+            //If we opt to not include treatmentBMPs, ensure we get rid of our pre-existing treatment bmps
+            if (project.DoesNotIncludeTreatmentBMPs)
+            {
+                TreatmentBMPs.MergeProjectTreatmentBMPs(dbContext, new List<TreatmentBMPUpsertDto>(), dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList(), project);
+            }
 
             dbContext.SaveChanges();
         }

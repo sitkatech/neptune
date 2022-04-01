@@ -9,7 +9,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
-import { ProjectCreateDto } from 'src/app/shared/generated/model/project-create-dto';
+import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
@@ -26,7 +26,7 @@ export class ProjectBasicsComponent implements OnInit {
   public currentUser: PersonDto;
   
   public projectID: number;
-  public projectModel: ProjectCreateDto;
+  public projectModel: ProjectUpsertDto;
   public organizations: Array<OrganizationSimpleDto>;
   public users: Array<PersonSimpleDto>;
   public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
@@ -56,7 +56,7 @@ export class ProjectBasicsComponent implements OnInit {
     const projectID = this.route.snapshot.paramMap.get("projectID");
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-      this.projectModel = new ProjectCreateDto();
+      this.projectModel = new ProjectUpsertDto();
       if (projectID) {
         this.projectID = parseInt(projectID);
         this.projectService.getByID(this.projectID).subscribe(project => {
