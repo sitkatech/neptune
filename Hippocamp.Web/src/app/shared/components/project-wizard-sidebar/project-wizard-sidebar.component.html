@@ -84,7 +84,7 @@
     <div class="card-body">
         <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding"
             [ngClass]="{'disabled': !projectModel.ProjectName}">
-            <hippocamp-progress-icon></hippocamp-progress-icon>
+            <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
             Attachments
         </a>
     </div>
