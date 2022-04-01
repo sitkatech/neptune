@@ -34,7 +34,7 @@
         <ngb-panel id="stormwaterTreatmentsPanel" cardClass="sidebar-card">
             <ng-template ngbPanelHeader let-opened="opened">
                 <div class="card-body">
-                    <button ngbPanelToggle class="btn icon-padding">
+                    <button ngbPanelToggle class="btn icon-padding" [class.opened]="opened">
                         <hippocamp-progress-icon [isComplete]="isStormwaterTreatmentsComplete()"></hippocamp-progress-icon>
                         <span>Stormwater Treatments</span>
                         <hippocamp-toggle-status [opened]="opened" [closeOthers]="true" ></hippocamp-toggle-status>

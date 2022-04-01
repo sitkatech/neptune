@@ -244,7 +244,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
   }
 
   canExit(){
-    return this.originalDoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && this.originalTreatmentBMPs == JSON.stringify(this.treatmentBMPs);
+    return this.originalDoesNotIncludeTreatmentBMPs == this.project.DoesNotIncludeTreatmentBMPs && this.originalTreatmentBMPs == JSON.stringify(this.treatmentBMPs);
   };
 
   public ngOnInit(): void {
@@ -473,14 +473,7 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
 
   private selectTreatmentBMPImpl(feature: any) {
     const treatmentBMPID = feature.properties.TreatmentBMPID;
-    if (this.selectedListItem) {
-      this.selectedListItem = null;
-      this.selectedListItemDetails = {};
-      if (this.selectedObjectMarker) {
-        this.map.removeLayer(this.selectedObjectMarker);
-      }
-      this.selectedObjectMarker = null;
-    }
+    this.clearSelectedItem();
 
     this.selectedListItem = treatmentBMPID;
     let selectedNumber = null;
@@ -556,8 +549,20 @@ export class TreatmentBmpsComponent implements OnInit, OnDestroy {
     this.modalReference.close();
 
     this.selectedTreatmentBMP = null;
+    this.clearSelectedItem();
     if (this.treatmentBMPs.length > 0) {
       this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+    }
+  }
+
+  private clearSelectedItem() {
+    if (this.selectedListItem) {
+      this.selectedListItem = null;
+      this.selectedListItemDetails = {};
+      if (this.selectedObjectMarker) {
+        this.map.removeLayer(this.selectedObjectMarker);
+      }
+      this.selectedObjectMarker = null;
     }
   }
 

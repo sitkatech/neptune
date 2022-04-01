@@ -52,21 +52,20 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
   ngOnInit() {
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-      this.checkForProjectIDInRouteAndGetEntitiesIfPresent()
+      this.checkForProjectIDInRouteAndGetEntitiesIfPresent();
       this._routeListener = this.router.events
         .pipe(filter(e => e instanceof NavigationEnd))
         .subscribe((e: NavigationEnd) => {
           this.checkForProjectIDInRouteAndGetEntitiesIfPresent();
         });
-    });
-
-    this.workflowUpdateSubscription = this.projectWorkflowService.workflowUpdate.subscribe(() => {
-      this.checkForProjectIDInRouteAndGetEntitiesIfPresent();
+      this.workflowUpdateSubscription = this.projectWorkflowService.workflowUpdate.subscribe(() => {
+        this.checkForProjectIDInRouteAndGetEntitiesIfPresent();
+      });
     });
 
     let path = this.router.url;
     if (path.includes('stormwater-treatments')) {
-      this.activeAccordionIds = ["stormwater-treatments"];
+      this.activeAccordionIds = ["stormwaterTreatmentsPanel"];
     }
   }
 

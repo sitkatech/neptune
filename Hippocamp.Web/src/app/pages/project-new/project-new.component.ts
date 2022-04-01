@@ -45,18 +45,10 @@ export class ProjectNewComponent implements OnInit {
       this.currentUser = currentUser;
       
       this.projectModel = new ProjectUpsertDto();
-      const projectID = this.route.snapshot.paramMap.get("projectID");
-      if (projectID) {
-        this.projectID = parseInt(projectID);
-        this.projectService.getByID(this.projectID).subscribe(project => {
-          this.mapProjectSimpleDtoToProjectModel(project);
-        });
-      }
+      this.parseURLForProjectIDAndGetEntitiesIfPresent();
 
       this.workflowUpdateSubscription = this.projectWorkflowService.workflowUpdate.subscribe(() => {
-        this.projectService.getByID(this.projectID).subscribe(project => {
-          this.mapProjectSimpleDtoToProjectModel(project);
-        });
+        this.parseURLForProjectIDAndGetEntitiesIfPresent();
       })
 
       this.cdr.detectChanges();
@@ -65,6 +57,16 @@ export class ProjectNewComponent implements OnInit {
 
   ngOnDestroy() {
     this.cdr.detach();
+  }
+
+  private parseURLForProjectIDAndGetEntitiesIfPresent() {
+    const projectID = this.route.snapshot.paramMap.get("projectID");
+      if (projectID) {
+        this.projectID = parseInt(projectID);
+        this.projectService.getByID(this.projectID).subscribe(project => {
+          this.mapProjectSimpleDtoToProjectModel(project);
+        });
+      }
   }
 
   private mapProjectSimpleDtoToProjectModel(project: ProjectSimpleDto) {
