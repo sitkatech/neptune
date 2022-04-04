@@ -30,16 +30,21 @@ export class AuthenticationService {
     private cookieStorageService: CookieStorageService,
     private userService: UserService,
     private alertService: AlertService) {
-      this.oauthService.events.subscribe(_ => {
-        this.checkAuthentication();
-      });
-  
+      this.oauthService.events
+        .pipe(filter(e => ['discovery_document_loaded'].includes(e.type)))
+        .subscribe(e => { 
+          this.checkAuthentication();
+        });
+
       this.oauthService.events
         .pipe(filter(e => ['token_received'].includes(e.type)))
-        .subscribe(e => this.oauthService.loadUserProfile());
+        .subscribe(e => { 
+          this.checkAuthentication();
+          this.oauthService.loadUserProfile();
+        });
   
       this.oauthService.events
-        .pipe(filter(e => ['session_terminated', 'session_error'].includes(e.type)))
+        .pipe(filter(e => ['session_terminated', 'session_error', 'token_error', 'token_refresh_error', 'silent_refresh_error', 'token_validation_error'].includes(e.type)))
         .subscribe(e => this.router.navigateByUrl("/"));
   
       this.oauthService.setupAutomaticSilentRefresh();
