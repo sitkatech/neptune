@@ -9,7 +9,39 @@ namespace Hippocamp.EFModels.Entities
 {
     public static class People
     {
-        public static PersonDto CreateNewPerson(HippocampDbContext dbContext, PersonCreateDto personToCreate)
+        public static PersonDto CreateUnassignedPerson(HippocampDbContext dbContext, PersonCreateDto userCreateDto)
+        {
+            var userUpsertDto = new PersonUpsertDto()
+            {
+                FirstName = userCreateDto.FirstName,
+                LastName = userCreateDto.LastName,
+                OrganizationName = userCreateDto.OrganizationName,
+                Email = userCreateDto.Email,
+                RoleID = (int)RoleEnum.Unassigned,  // don't allow non-admin user to set their role to something other than Unassigned
+            };
+            return CreateNewPerson(dbContext, userUpsertDto, userCreateDto.LoginName, userCreateDto.UserGuid);
+        }
+
+        public static List<ErrorMessage> ValidateCreateUnassignedPerson(HippocampDbContext dbContext, PersonCreateDto userCreateDto)
+        {
+            var result = new List<ErrorMessage>();
+
+            var userByGuidDto = GetByPersonGuid(dbContext, userCreateDto.UserGuid);  // A duplicate Guid not only leads to 500s, it allows someone to hijack another user's account
+            if (userByGuidDto != null)
+            {
+                result.Add(new ErrorMessage() { Type = "Person Creation", Message = "Invalid user information." });  // purposely vague; we don't want a naughty person realizing they figured out someone else's Guid
+            }
+
+            var userByEmailDto = GetByEmailAsDto(dbContext, userCreateDto.Email);  // A duplicate email leads to 500s, so need to prevent duplicates
+            if (userByEmailDto != null)
+            {
+                result.Add(new ErrorMessage() { Type = "Person Creation", Message = "There is already a user account with this email address." });
+            }
+
+            return result;
+        }
+
+        public static PersonDto CreateNewPerson(HippocampDbContext dbContext, PersonUpsertDto personToCreate,  string loginName, Guid userGuid)
         {
             if (!personToCreate.RoleID.HasValue)
             {
@@ -25,8 +57,8 @@ namespace Hippocamp.EFModels.Entities
 
             var person = new Person
             {
-                PersonGuid = personToCreate.UserGuid,
-                LoginName = personToCreate.LoginName,
+                PersonGuid = userGuid,
+                LoginName = loginName,
                 Email = personToCreate.Email,
                 FirstName = personToCreate.FirstName,
                 LastName = personToCreate.LastName,
@@ -69,6 +101,18 @@ namespace Hippocamp.EFModels.Entities
         {
             var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
             return person?.AsDto();
+        }
+
+        public static PersonDto GetByEmailAsDto(HippocampDbContext dbContext, string email)
+        {
+            var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.Email == email);
+            return person?.AsDto();
+        }
+
+        public static Person GetByPersonGuid(HippocampDbContext dbContext, Guid personGuid)
+        {
+            return GetPersonImpl(dbContext)
+                .SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
         public static PersonDto GetByPersonGuidAsDto(HippocampDbContext dbContext, Guid personGuid)

@@ -23,7 +23,20 @@ namespace Hippocamp.API.Controllers
         [LoggedInUnclassifiedFeature]
         public ActionResult<PersonDto> CreateUser([FromBody] PersonCreateDto personCreateDto)
         {
-            var user = People.CreateNewPerson(_dbContext, personCreateDto);
+            // Validate request body; all fields required in Dto except Org Name and Phone
+            if (personCreateDto == null)
+            {
+                return BadRequest();
+            }
+
+            var validationMessages = People.ValidateCreateUnassignedPerson(_dbContext, personCreateDto);
+            validationMessages.ForEach(vm => { ModelState.AddModelError(vm.Type, vm.Message); });
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = People.CreateUnassignedPerson(_dbContext, personCreateDto);
 
             var smtpClient = HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
             var mailMessage = GenerateUserCreatedEmail(user, smtpClient);

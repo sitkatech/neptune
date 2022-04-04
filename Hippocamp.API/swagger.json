@@ -1957,32 +1957,30 @@
         "additionalProperties": false
       },
       "PersonCreateDto": {
+        "required": [
+          "Email",
+          "FirstName",
+          "LastName",
+          "LoginName",
+          "UserGuid"
+        ],
         "type": "object",
         "properties": {
           "FirstName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "LastName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "OrganizationName": {
             "type": "string",
             "nullable": true
           },
           "Email": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": "string"
           },
           "LoginName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "UserGuid": {
             "type": "string",

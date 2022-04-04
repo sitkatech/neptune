@@ -1,20 +1,13 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Hippocamp.Models.DataTransferObjects.Person
 {
-    public class PersonCreateDto
+    public class PersonUpsertDto
     {
-        [Required]
         public string FirstName { get; set; }
-        [Required]
         public string LastName { get; set; }
         public string OrganizationName { get; set; }
-        [Required]
         public string Email { get; set; }
-        [Required]
-        public string LoginName { get; set; }
-        [Required]
-        public Guid UserGuid { get; set; }
+        public int? RoleID { get; set; }
     }
 }
