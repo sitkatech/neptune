@@ -35,7 +35,16 @@ namespace Hippocamp.EFModels.Entities
                 .Select(x => DelineationFromUpsertDto(x)).ToList();
             
             existingProjectDelineations.MergeNew(newDelineations, allDelineationsInDatabase,
-                (x, y) => x.DelineationID == y.DelineationID);
+                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID);
+
+            dbContext.SaveChanges();
+
+            // update upsert dtos with new DelineationIDs
+            foreach (var delineationUpsertDto in delineationUpsertDtos)
+            {
+                delineationUpsertDto.DelineationID = existingProjectDelineations
+                    .Single(x => x.TreatmentBMPID == delineationUpsertDto.TreatmentBMPID).DelineationID;
+            }
 
             existingProjectDelineations.MergeUpdate(newDelineations,
                 (x, y) => x.DelineationID == y.DelineationID,
