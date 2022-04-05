@@ -641,7 +641,7 @@
     <Compile Include="Controllers\RegionalSubbasinRevisionRequestController.cs" />
     <Compile Include="Areas\Modeling\Controllers\NereidController.cs" />
     <Compile Include="Models\LandUseBlockStaging.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\LSPCBasin.cs" />
+    <Compile Include="Models\ModelBasin.cs" />
     <Compile Include="Models\PrecipitationZone.cs" />
     <Compile Include="Models\TreatmentBMPModelingAttribute.cs" />
     <Compile Include="Models\Watershed.cs" />

@@ -55,14 +55,14 @@ namespace Neptune.Web.ScheduledJobs
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
             ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
                 NeptuneWebConfiguration.DatabaseConnectionString, "ModelBasinStaging",
-                "LSPC_BASIN as ModelBasinKey, Name as ModelBasinName",
+                "MODEL_BASIN as ModelBasinKey, Name as ModelBasinName",
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
         private static void ThrowIfModelBasinKeyNotUnique(FeatureCollection featureCollection)
         {
             var modelBasinKeysThatAreNotUnique = featureCollection.Features
-                .GroupBy(x => x.Properties["LSPC_BASIN"]).Where(x => x.Count() > 1).Select(x => int.Parse(x.Key.ToString()))
+                .GroupBy(x => x.Properties["MODEL_BASIN"]).Where(x => x.Count() > 1).Select(x => int.Parse(x.Key.ToString()))
                 .ToList();
 
             if (modelBasinKeysThatAreNotUnique.Any())
@@ -85,7 +85,9 @@ namespace Neptune.Web.ScheduledJobs
                 {
                     var queryStringObject = new
                     {
-                        where = "1=1",
+                        //This satisfies requirements for switching to the new service and maintaining our refresh of SOC only
+                        //Future work will need to return this to 1=1 and potentially update the model basin table appropriately, but that's for future us to worry about
+                        where = "STATE='CA' and REGION='SOC'",
                         geometryType = "esriGeometryEnvelope",
                         spatialRel = "esriSpatialRelIntersects",
                         outFields = "*",
