@@ -33,6 +33,7 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
 import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './components/projects/treatment-bmp-map-editor-and-modeling-attributes/treatment-bmp-map-editor-and-modeling-attributes.component';
 import { ModelResultsComponent } from './components/projects/model-results/model-results.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AttachmentsDisplayComponent } from './components/projects/attachments-display/attachments-display.component';
 
 @NgModule({
     declarations: [
@@ -65,7 +66,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         NeptuneModelingResultSigFigPipe,
         ConfirmModalComponent,
         TreatmentBmpMapEditorAndModelingAttributesComponent,
-        ModelResultsComponent
+        ModelResultsComponent,
+        AttachmentsDisplayComponent
     ],
     imports: [
         CommonModule,
@@ -101,7 +103,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         ProjectWizardSidebarComponent,
         NeptuneModelingResultSigFigPipe,
         TreatmentBmpMapEditorAndModelingAttributesComponent,
-        ModelResultsComponent
+        ModelResultsComponent,
+        AttachmentsDisplayComponent
     ],
     entryComponents:[]
 })

@@ -105,45 +105,9 @@
     </div>
 </div>
 
-<div class="row mt-2 mb-4" *ngIf="attachments && attachments.length > 0">
-    <div class="col-lg-6 mb-4" *ngFor="let attachment of attachments">
-        <div class="card h-100 mr-4 mt-2 mb-2">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-10 card-header-name">
-                        {{attachment.DisplayName}}
-                    </div>
-                    <div class="col-2">
-                        <span class="float-right ml-3" (click)="launchDeleteModal(deleteAttachmentModal, attachment.ProjectDocumentID)">
-                            <hippocamp-icon icon="delete" class="delete-attachment" ngbTooltip="Delete Attachment" container="body">
-                            </hippocamp-icon>
-                        </span>
-                        <span class="float-right ml-3" (click)="launchEditModal(editAttachmentModal, attachment)">
-                            <hippocamp-icon icon="edit" class="edit-attachment" ngbTooltip="Edit Attachment" container="body">
-                            </hippocamp-icon>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-sm-4 label text-right"><strong>File: </strong></div>
-                    <div class="col-12 col-sm-8 text-left"><a href={{getFileLinkValue(attachment)}}>{{attachment.FileResource.OriginalBaseFilename}}</a>
-                        <em *ngIf="!attachment.FileResource" class="text-muted">Not Available</em>
-                    </div>
-                    <div class="col-12 col-sm-4 label text-right"><strong>Uploaded On: </strong></div>
-                    <div class="col-12 col-sm-8 text-left">{{attachment.UploadDate | date:'shortDate'}}</div>
-                    <div class="col-12 col-sm-4 label text-right"><strong>File Type: </strong></div>
-                    <div class="col-12 col-sm-8 text-left">{{attachment.FileResource.OriginalFileExtension}}</div>
-                    <div class="col-12 col-sm-4 label text-right"><strong>Description: </strong></div>
-                    <div class="col-12 col-sm-8 text-left">{{attachment.DocumentDescription}}</div>
-
-                </div>
-      
-            </div>
-        </div>
-    </div>
-</div>
+<ng-container *ngIf="attachments && attachments.length > 0">
+    <hippocamp-attachments-display [attachments]="attachments" [readOnly]="false" (onDeleteTriggered)="launchDeleteModal(deleteAttachmentModal, $event)" (onEditTriggered)="launchEditModal(editAttachmentModal, $event)"></hippocamp-attachments-display>
+</ng-container>
 
 <ng-template #deleteAttachmentModal let-modal>
     <div class="modal-header">

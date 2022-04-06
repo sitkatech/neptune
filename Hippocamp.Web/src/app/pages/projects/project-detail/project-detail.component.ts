@@ -6,6 +6,7 @@ import { DelineationService } from 'src/app/services/delineation.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
+import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/models';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
@@ -24,6 +25,7 @@ export class ProjectDetailComponent implements OnInit {
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: Array<DelineationUpsertDto>;
   public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
+  public attachments: Array<ProjectDocumentSimpleDto>;
 
 
   constructor(
@@ -43,12 +45,14 @@ export class ProjectDetailComponent implements OnInit {
           project: this.projectService.getByID(this.projectID),
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
           delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
-          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesForProject(this.projectID)
-        }).subscribe(({project, treatmentBMPs, delineations, projectNetworkSolveHistories}) => {
+          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesForProject(this.projectID),
+          attachments: this.projectService.getAttachmentsByProjectID(this.projectID)
+        }).subscribe(({project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments}) => {
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
           this.projectNetworkSolveHistories = projectNetworkSolveHistories;
           this.project = project;
+          this.attachments = attachments;
         });
       }
     });

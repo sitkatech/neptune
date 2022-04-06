@@ -41,7 +41,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   private modalReference: NgbModalRef;
   private isLoadingDelete = false;
   private isLoadingUpdate = false;
-  private mainAppApiUrl = environment.mainAppApiUrl;
 
   private acceptedFileTypes: Array<string> = ["PDF", "ZIP", "DOC", "DOCX", "XLS", "XLSX", "JPG", "PNG"];
   public attachmentIDToRemove: number;
@@ -107,10 +106,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
   public openFileUpload() {
     this.fileUpload.nativeElement.click();
-  }
-
-  public getFileLinkValue(attachment: ProjectDocumentSimpleDto): string {
-    return `${this.mainAppApiUrl}/FileResource/${attachment.FileResource.FileResourceGUID}`;
   }
 
   public isFieldInvalid(fieldName: string) {
