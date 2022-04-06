@@ -12,15 +12,15 @@ import { FieldDefinitionEditComponent } from './pages/field-definition-edit/fiel
 import { TrainingComponent } from './pages/training/training.component';
 import { ProjectListComponent } from './pages/project-list/project-list.component';
 import { AboutComponent } from './pages/about/about.component';
-import { ProjectNewComponent } from './pages/project-new/project-new.component';
+import { ProjectWorkflowOutletComponent } from './pages/project-workflow/project-workflow-outlet.component';
 import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard';
-import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
-import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
+import { ProjectInstructionsComponent } from './pages/project-workflow/project-instructions/project-instructions.component';
+import { ProjectBasicsComponent } from './pages/project-workflow/project-basics/project-basics.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
-import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
-import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
-import { DelineationsComponent } from './pages/project-new/delineations/delineations.component';
-import { ModeledPerformanceComponent } from './pages/project-new/modeled-performance/modeled-performance.component';
+import { TreatmentBmpsComponent } from './pages/project-workflow/treatment-bmps/treatment-bmps.component';
+import { ProjectAttachmentsComponent } from './pages/project-workflow/project-attachments/project-attachments.component';
+import { DelineationsComponent } from './pages/project-workflow/delineations/delineations.component';
+import { ModeledPerformanceComponent } from './pages/project-workflow/modeled-performance/modeled-performance.component';
 import { UnsavedChangesGuard } from './shared/guards/unsaved-changes.guard';
 
 export const routeParams = {
@@ -32,12 +32,12 @@ const routes: Routes = [
   { path: `labels-and-definitions/${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "projects", component: ProjectListComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
-  { path: "projects/new", component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
+  { path: "projects/new", component: ProjectWorkflowOutletComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
     { path: "project-basics", component:  ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard]}
   ]},
-  { path: `projects/edit/${routeParams.projectID}`, component: ProjectNewComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
+  { path: `projects/edit/${routeParams.projectID}`, component: ProjectWorkflowOutletComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
     { path: "", redirectTo: 'instructions', pathMatch: 'full' },
     { path: "instructions", component:  ProjectInstructionsComponent},
     { path: "project-basics", component:  ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard]},

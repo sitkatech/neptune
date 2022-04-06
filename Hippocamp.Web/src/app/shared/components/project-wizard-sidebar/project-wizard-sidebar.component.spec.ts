@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectWizardSidebarComponent } from './project-wizard-sidebar.component';
 
-describe('ProjectNewSidebarComponent', () => {
+describe('ProjectWizardSidebarComponent', () => {
   let component: ProjectWizardSidebarComponent;
   let fixture: ComponentFixture<ProjectWizardSidebarComponent>;
 

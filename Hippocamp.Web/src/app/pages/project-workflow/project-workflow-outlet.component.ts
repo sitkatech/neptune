@@ -14,11 +14,11 @@ import { ProjectWorkflowService } from 'src/app/services/project-workflow.servic
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
-  selector: 'hippocamp-project-new',
-  templateUrl: './project-new.component.html',
-  styleUrls: ['./project-new.component.scss']
+  selector: 'hippocamp-project-workflow-outlet',
+  templateUrl: './project-workflow-outlet.component.html',
+  styleUrls: ['./project-workflow-outlet.component.scss']
 })
-export class ProjectNewComponent implements OnInit {
+export class ProjectWorkflowOutletComponent implements OnInit {
 
   
   public currentUser: PersonDto;

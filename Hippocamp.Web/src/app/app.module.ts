@@ -32,15 +32,15 @@ import { CookieStorageService } from './shared/services/cookies/cookie-storage.s
 import { TrainingComponent } from './pages/training/training.component';
 import { ProjectListComponent } from './pages/project-list/project-list.component';
 import { AboutComponent } from './pages/about/about.component';
-import { ProjectNewComponent } from './pages/project-new/project-new.component';
+import { ProjectWorkflowOutletComponent } from './pages/project-workflow/project-workflow-outlet.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ProjectBasicsComponent } from './pages/project-new/project-basics/project-basics.component';
-import { ProjectInstructionsComponent } from './pages/project-new/project-instructions/project-instructions.component';
+import { ProjectBasicsComponent } from './pages/project-workflow/project-basics/project-basics.component';
+import { ProjectInstructionsComponent } from './pages/project-workflow/project-instructions/project-instructions.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { TreatmentBmpsComponent } from './pages/project-new/treatment-bmps/treatment-bmps.component';
-import { ProjectAttachmentsComponent } from './pages/project-new/project-attachments/project-attachments.component';
-import { DelineationsComponent } from './pages/project-new/delineations/delineations.component';
-import { ModeledPerformanceComponent } from './pages/project-new/modeled-performance/modeled-performance.component';
+import { TreatmentBmpsComponent } from './pages/project-workflow/treatment-bmps/treatment-bmps.component';
+import { ProjectAttachmentsComponent } from './pages/project-workflow/project-attachments/project-attachments.component';
+import { DelineationsComponent } from './pages/project-workflow/delineations/delineations.component';
+import { ModeledPerformanceComponent } from './pages/project-workflow/modeled-performance/modeled-performance.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -62,7 +62,7 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     TrainingComponent,
 	  ProjectListComponent,
 	  AboutComponent,
-    ProjectNewComponent,
+    ProjectWorkflowOutletComponent,
     ProjectBasicsComponent,
     ProjectInstructionsComponent,
     TreatmentBmpsComponent,
