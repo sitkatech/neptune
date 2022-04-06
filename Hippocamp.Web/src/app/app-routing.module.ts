@@ -10,18 +10,19 @@ import { CreateUserCallbackComponent } from './pages/create-user-callback/create
 import { FieldDefinitionListComponent } from './pages/field-definition-list/field-definition-list.component';
 import { FieldDefinitionEditComponent } from './pages/field-definition-edit/field-definition-edit.component';
 import { TrainingComponent } from './pages/training/training.component';
-import { ProjectListComponent } from './pages/project-list/project-list.component';
+import { ProjectListComponent } from './pages/projects/project-list/project-list.component';
 import { AboutComponent } from './pages/about/about.component';
-import { ProjectWorkflowOutletComponent } from './pages/project-workflow/project-workflow-outlet.component';
+import { ProjectWorkflowOutletComponent } from './pages/projects/project-workflow/project-workflow-outlet.component';
 import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard';
-import { ProjectInstructionsComponent } from './pages/project-workflow/project-instructions/project-instructions.component';
-import { ProjectBasicsComponent } from './pages/project-workflow/project-basics/project-basics.component';
+import { ProjectInstructionsComponent } from './pages/projects/project-workflow/project-instructions/project-instructions.component';
+import { ProjectBasicsComponent } from './pages/projects/project-workflow/project-basics/project-basics.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
-import { TreatmentBmpsComponent } from './pages/project-workflow/treatment-bmps/treatment-bmps.component';
-import { ProjectAttachmentsComponent } from './pages/project-workflow/project-attachments/project-attachments.component';
-import { DelineationsComponent } from './pages/project-workflow/delineations/delineations.component';
-import { ModeledPerformanceComponent } from './pages/project-workflow/modeled-performance/modeled-performance.component';
+import { TreatmentBmpsComponent } from './pages/projects/project-workflow/treatment-bmps/treatment-bmps.component';
+import { ProjectAttachmentsComponent } from './pages/projects/project-workflow/project-attachments/project-attachments.component';
+import { DelineationsComponent } from './pages/projects/project-workflow/delineations/delineations.component';
+import { ModeledPerformanceComponent } from './pages/projects/project-workflow/modeled-performance/modeled-performance.component';
 import { UnsavedChangesGuard } from './shared/guards/unsaved-changes.guard';
+import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
