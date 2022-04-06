@@ -31,6 +31,8 @@ import { UnderConstructionComponent } from './components/under-construction/unde
 import { NeptuneModelingResultSigFigPipe } from './pipes/neptune-modeling-result-sig-fig.pipe';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './components/projects/treatment-bmp-map-editor-and-modeling-attributes/treatment-bmp-map-editor-and-modeling-attributes.component';
+import { ModelResultsComponent } from './components/projects/model-results/model-results.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     declarations: [
@@ -62,7 +64,8 @@ import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './component
         UnderConstructionComponent,
         NeptuneModelingResultSigFigPipe,
         ConfirmModalComponent,
-        TreatmentBmpMapEditorAndModelingAttributesComponent
+        TreatmentBmpMapEditorAndModelingAttributesComponent,
+        ModelResultsComponent
     ],
     imports: [
         CommonModule,
@@ -72,7 +75,8 @@ import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './component
         RouterModule,
         CKEditorModule,
         NgbModule,
-        DragDropModule
+        DragDropModule,
+        NgSelectModule
     ],
     exports: [
         AlertDisplayComponent,
@@ -96,7 +100,8 @@ import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './component
         ProgressIconComponent,
         ProjectWizardSidebarComponent,
         NeptuneModelingResultSigFigPipe,
-        TreatmentBmpMapEditorAndModelingAttributesComponent
+        TreatmentBmpMapEditorAndModelingAttributesComponent,
+        ModelResultsComponent
     ],
     entryComponents:[]
 })

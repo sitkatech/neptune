@@ -50,7 +50,23 @@
                     Treatment BMPs
                 </div>
                 <div class="card-body">
-                    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes [readOnly]="true" [projectID]="projectID"></hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+                    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes
+                        [readOnly]="true" [projectID]="projectID">
+                    </hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="showModelResultsPanel()">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Model Results
+                </div>
+                <div class="card-body">
+                    <hippocamp-model-results [projectID]="project.ProjectID" [treatmentBMPs]="treatmentBMPs"
+                        [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
+                    </hippocamp-model-results>
                 </div>
             </div>
         </div>
