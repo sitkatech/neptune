@@ -8,11 +8,11 @@ import { ProjectWorkflowService } from 'src/app/services/project-workflow.servic
 import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { UserService } from 'src/app/services/user/user.service';
-import { DelineationUpsertDto } from '../../generated/model/delineation-upsert-dto';
-import { TreatmentBMPModeledResultSimpleDto } from '../../generated/model/models';
-import { PersonDto } from '../../generated/model/person-dto';
-import { ProjectUpsertDto } from '../../generated/model/project-upsert-dto';
-import { TreatmentBMPUpsertDto } from '../../generated/model/treatment-bmp-upsert-dto';
+import { DelineationUpsertDto } from '../../../generated/model/delineation-upsert-dto';
+import { TreatmentBMPModeledResultSimpleDto } from '../../../generated/model/models';
+import { PersonDto } from '../../../generated/model/person-dto';
+import { ProjectUpsertDto } from '../../../generated/model/project-upsert-dto';
+import { TreatmentBMPUpsertDto } from '../../../generated/model/treatment-bmp-upsert-dto';
 
 @Component({
   selector: 'hippocamp-project-wizard-sidebar',

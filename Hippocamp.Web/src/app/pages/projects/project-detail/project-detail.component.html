@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="project">
     <div class="row mt-3 mb-3">
         <div class="col-12">
             <div class="card">
@@ -39,6 +39,18 @@
                             <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
                         </dd>
                     </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Treatment BMPs
+                </div>
+                <div class="card-body">
+                    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes [readOnly]="true" [projectID]="projectID"></hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
                 </div>
             </div>
         </div>

@@ -21,7 +21,7 @@ import { CustomPinnedRowRendererComponent } from './components/ag-grid/custom-pi
 import { CustomDropdownFilterComponent } from './components/custom-dropdown-filter/custom-dropdown-filter.component';
 import { CsvDownloadButtonComponent } from './components/csv-download-button/csv-download-button.component';
 import { ClearGridFiltersButtonComponent } from './components/clear-grid-filters-button/clear-grid-filters-button.component';
-import { ProjectWizardSidebarComponent } from './components/project-wizard-sidebar/project-wizard-sidebar.component';
+import { ProjectWizardSidebarComponent } from './components/projects/project-wizard-sidebar/project-wizard-sidebar.component';
 import { ProgressIconComponent } from './components/progress-icon/progress-icon.component';
 import { ToggleStatusComponent } from './components/toggle-status/toggle-status.component';
 import { OrderableAccordionComponent, OrderablePanel, OrderablePanelContent, OrderablePanelControls, OrderablePanelTitle, OrderablePanelToggle } from './components/orderable-accordion/orderable-accordion.component';
@@ -30,6 +30,7 @@ import { IconComponent } from './components/icon/icon.component';
 import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
 import { NeptuneModelingResultSigFigPipe } from './pipes/neptune-modeling-result-sig-fig.pipe';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
+import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './components/projects/treatment-bmp-map-editor-and-modeling-attributes/treatment-bmp-map-editor-and-modeling-attributes.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
         ProjectWizardSidebarComponent,
         UnderConstructionComponent,
         NeptuneModelingResultSigFigPipe,
-        ConfirmModalComponent
+        ConfirmModalComponent,
+        TreatmentBmpMapEditorAndModelingAttributesComponent
     ],
     imports: [
         CommonModule,
@@ -93,7 +95,8 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
         IconComponent,
         ProgressIconComponent,
         ProjectWizardSidebarComponent,
-        NeptuneModelingResultSigFigPipe
+        NeptuneModelingResultSigFigPipe,
+        TreatmentBmpMapEditorAndModelingAttributesComponent
     ],
     entryComponents:[]
 })
