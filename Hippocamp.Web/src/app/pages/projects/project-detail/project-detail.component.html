@@ -38,12 +38,17 @@
                             {{project?.AdditionalContactInformation}}
                             <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
                         </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Does Project Include Stormwater Treatment BMPs?</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
+                        </dd>
                     </dl>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3 mb-3" *ngIf="!project?.DoesNotIncludeTreatmentBMPs">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -51,7 +56,7 @@
                 </div>
                 <div class="card-body">
                     <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes
-                        [readOnly]="true" [projectID]="projectID">
+                        [readOnly]="true" [includeDelineations]="true" [projectID]="projectID">
                     </hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
                 </div>
             </div>

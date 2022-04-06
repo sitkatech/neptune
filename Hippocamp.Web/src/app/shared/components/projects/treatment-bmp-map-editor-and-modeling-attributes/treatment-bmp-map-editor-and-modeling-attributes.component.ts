@@ -41,7 +41,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   @ViewChild('deleteTreatmentBMPModal') deleteTreatmentBMPModal
 
-  @Input('readOnly') readOnly: boolean = false;
+  @Input('readOnly') readOnly: boolean = true;
+  @Input('includeDelineations') includeDelineations: boolean = false;
   @Input('projectID') projectID: number;
 
   public mapID: string = 'treatmentBMPMap';
@@ -77,9 +78,19 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public selectedObjectMarker: L.Layer;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
+  public delineationsLayer: L.GeoJson<any>;
   private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
   private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
-
+  private delineationDefaultStyle = {
+    color: 'blue',
+    fillOpacity: 0.2,
+    opacity: 1
+  }
+  private delineationSelectedStyle = {
+    color: 'yellow',
+    fillOpacity: 0.2,
+    opacity: 1
+  }
   public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
   public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
   public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
@@ -338,22 +349,56 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       this.treatmentBMPsLayer = null;
     }
 
+    if (this.delineationsLayer) {
+      this.map.removeLayer(this.delineationsLayer);
+      this.delineationsLayer = null;
+    }
+
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
-      pointToLayer: function (feature, latlng) {
+      pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: this.markerIcon })
-      }.bind(this),
+      },
       filter: (feature) => {
         return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
       }
     });
     this.treatmentBMPsLayer.addTo(this.map);
 
-    if (!this.isEditingLocation)
-      this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
-        this.selectTreatmentBMPImpl(event.propagatedFrom.feature);
-        this.updateTreatmentBMPsLayer();
+    if (this.includeDelineations) {
+      const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
+      this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
+        style: (feature) => {
+          if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != feature.properties.TreatmentBMPID) {
+            return this.delineationDefaultStyle;
+          }
+          return this.delineationSelectedStyle;
+        }
       });
+      this.delineationsLayer.addTo(this.map);
+      if (this.selectedTreatmentBMP != null) {
+        this.delineationsLayer.eachLayer(layer => {
+          if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
+            return;
+          }
+          layer.bringToFront();
+        })
+      }
+
+      this.delineationsLayer.on("click", (event: L.LeafletEvent) => {
+        if (this.isEditingLocation) {
+          return;
+        }
+        this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
+      });
+    }
+
+    this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
+      if (this.isEditingLocation) {
+        return;
+      }
+      this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
+    });
   }
 
   public buildMarker(iconUrl: string, iconRetinaUrl: string): any {
@@ -394,6 +439,28 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
         TreatmentBMPTypeName: x.TreatmentBMPTypeName,
         Latitude: x.Latitude,
         Longitude: x.Longitude
+      }
+    };
+  }
+
+  private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
+    return {
+      type: "FeatureCollection",
+      features: delineations.map(x => {
+        let delineationGeoJson =
+          this.mapDelineationToFeature(x);
+        return delineationGeoJson;
+      })
+    }
+  }
+
+  private mapDelineationToFeature(x: DelineationUpsertDto) {
+    return {
+      "type": "Feature",
+      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
+      "properties": {
+        DelineationID: x.DelineationID,
+        TreatmentBMPID: x.TreatmentBMPID
       }
     };
   }
@@ -439,13 +506,11 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   public selectTreatmentBMP(treatmentBMPID: number) {
     this.isEditingLocation = false;
-    const feature = this.mapTreatmentBMPToFeature(this.treatmentBMPs.find(x => x.TreatmentBMPID === treatmentBMPID));
-    this.selectTreatmentBMPImpl(feature);
+    this.selectTreatmentBMPImpl(treatmentBMPID);
     this.updateTreatmentBMPsLayer();
   }
 
-  private selectTreatmentBMPImpl(feature: any) {
-    const treatmentBMPID = feature.properties.TreatmentBMPID;
+  private selectTreatmentBMPImpl(treatmentBMPID: number) {
     this.clearSelectedItem();
 
     this.selectedListItem = treatmentBMPID;
@@ -486,6 +551,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   }
 
   public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
+    debugger;
     const dropdownItem = this.modelingAttributeDropdownItems.find(x => x.FieldName == fieldName && x.ItemID == itemID);
     return dropdownItem ? dropdownItem.ItemName : '';
   }

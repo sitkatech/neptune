@@ -5,6 +5,6 @@
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <ng-container *ngIf="projectID; else noProjectID">
-    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes [isReadOnly]="false" [projectID]="projectID"></hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes [readOnly]="false" [includeDelineations]="false" [projectID]="projectID"></hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
 </ng-container>
 <ng-template #noProjectID>No ProjectID identified</ng-template>

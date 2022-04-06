@@ -124,11 +124,14 @@
                                 <field-definition [fieldDefinitionType]="fieldName"></field-definition>
                             </div>
                             <div class="col-sm-6" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
-                                <select class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
+                                <select class="form-control" *ngIf="!readOnly; else readOnlyDropdownDisplay" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
                                     <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(fieldName)" [value]="dropdownItem.ItemID">
                                         {{dropdownItem.ItemName}}
                                     </option>
                                 </select>
+                                <ng-template #readOnlyDropdownDisplay>
+                                    {{getDropdownItemNameByFieldNameAndItemID(fieldName, selectedTreatmentBMP[fieldName])}}
+                                </ng-template>
                             </div>
                             <ng-template #numericModelingAttributeField>
                                 <div class="col-sm-4">
