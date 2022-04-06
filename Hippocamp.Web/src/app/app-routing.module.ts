@@ -32,25 +32,37 @@ export const routeParams = {
 const routes: Routes = [
   { path: `labels-and-definitions/${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
   { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
-  { path: "projects", component: ProjectListComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
-  { path: "projects/new", component: ProjectWorkflowOutletComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
-    { path: "", redirectTo: 'instructions', pathMatch: 'full' },
-    { path: "instructions", component:  ProjectInstructionsComponent},
-    { path: "project-basics", component:  ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard]}
-  ]},
-  { path: `projects/edit/${routeParams.projectID}`, component: ProjectWorkflowOutletComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard], children: [
-    { path: "", redirectTo: 'instructions', pathMatch: 'full' },
-    { path: "instructions", component:  ProjectInstructionsComponent},
-    { path: "project-basics", component:  ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard]},
-    { path: "stormwater-treatments", children: [
-      { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
-      { path: "treatment-bmps", component:  TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard]},
-      { path: "delineations", component:  DelineationsComponent, canDeactivate: [UnsavedChangesGuard]},
-      { path: "modeled-performance", component:  ModeledPerformanceComponent},
-    ]},
-    { path: "attachments", component:  ProjectAttachmentsComponent},
-    { path: "review", component:  UnderConstructionComponent},
-  ]},
+  {
+    path: "projects", canActivate: [UnauthenticatedAccessGuard],
+    children: [
+      { path: "", component: ProjectListComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
+      { path: `${routeParams.projectID}`, component: ProjectDetailComponent},
+      {
+        path: "new", component: ProjectWorkflowOutletComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard], children: [
+          { path: "", redirectTo: 'instructions', pathMatch: 'full' },
+          { path: "instructions", component: ProjectInstructionsComponent },
+          { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] }
+        ]
+      },
+      {
+        path: `edit/${routeParams.projectID}`, component: ProjectWorkflowOutletComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard], children: [
+          { path: "", redirectTo: 'instructions', pathMatch: 'full' },
+          { path: "instructions", component: ProjectInstructionsComponent },
+          { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
+          {
+            path: "stormwater-treatments", children: [
+              { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
+              { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
+              { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
+              { path: "modeled-performance", component: ModeledPerformanceComponent },
+            ]
+          },
+          { path: "attachments", component: ProjectAttachmentsComponent },
+          { path: "review", component: UnderConstructionComponent },
+        ]
+      }
+    ]
+  },
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "create-user-callback", component: CreateUserCallbackComponent },
@@ -58,15 +70,15 @@ const routes: Routes = [
   { path: 'subscription-insufficient', component: SubscriptionInsufficientComponent },
   { path: 'unauthenticated', component: UnauthenticatedComponent },
   { path: "signin-oidc", component: LoginCallbackComponent },
-  { path: "", component: HomeIndexComponent},
+  { path: "", component: HomeIndexComponent },
   { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { 
+  imports: [RouterModule.forRoot(routes, {
     relativeLinkResolution: 'legacy',
     paramsInheritanceStrategy: 'always'
-   })],
+  })],
   exports: [RouterModule]
 })
 
