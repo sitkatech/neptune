@@ -15,7 +15,7 @@ namespace Neptune.Web.Common
             List<HRURequestFeature> featuresForHRURequest, ILog logger)
         {
             var postUrl = NeptuneWebConfiguration.HRUServiceBaseUrl;
-            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "output_fc");
+            var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(postUrl, "output_table");
 
             var hruRequest = GetGPRecordSetLayer(featuresForHRURequest);
 
