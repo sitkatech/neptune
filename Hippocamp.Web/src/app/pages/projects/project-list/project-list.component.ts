@@ -86,7 +86,7 @@ export class ProjectListComponent implements OnInit {
           return { LinkValue: params.data.ProjectID, LinkDisplay: "View", CssClasses: "btn btn-hippocamp btn-sm" };
         }, cellRendererFramework: LinkRendererComponent,
         cellRendererParams: { inRouterLink: "/projects/", },
-        width: 80, sortable: false, filter: false
+        width: 57, sortable: false, filter: false
       },
       {
         headerName: 'Project ID', valueGetter: (params: any) => {

@@ -21,7 +21,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<ProjectSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
         {
-            return GetProjectsImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
+            return GetProjectsImpl(dbContext).OrderByDescending(x => x.ProjectID).Select(x => x.AsSimpleDto()).ToList();
         }
 
         public static Project GetByID(HippocampDbContext dbContext, int projectID)
@@ -46,6 +46,7 @@ namespace Hippocamp.EFModels.Entities
 
             return GetProjectsImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
+                .OrderByDescending(x => x.ProjectID)
                 .Select(x => x.AsSimpleDto())
                 .ToList();
         }

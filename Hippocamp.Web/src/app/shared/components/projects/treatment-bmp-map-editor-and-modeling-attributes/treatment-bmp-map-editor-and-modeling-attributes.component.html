@@ -1,9 +1,9 @@
-<div class="row m-1 mb-3">
-    <button class="btn btn-hippocamp ml-auto" *ngIf="!readOnly" (click)="addTreatmentBMP()">
+<div class="row m-1 mb-3" *ngIf="!readOnly">
+    <button class="btn btn-hippocamp ml-auto" (click)="addTreatmentBMP()">
         Add New Treatment BMP
     </button>
 </div>
-<div class="row">
+<div class="row" *ngIf="!readOnly || (readOnly && treatmentBMPs != null && treatmentBMPs.length > 0); else noTreatmentBMPs">
     <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
         <ul class="list-group">
             <li class="list-group-item font-weight-bold" *ngFor="let treatmentBMP of treatmentBMPs"
@@ -20,7 +20,7 @@
         <div id={{mapID}} class="location-card" [style.height]="mapHeight" [style.cursor]="isEditingLocation ? 'crosshair' : ''"></div>
     </div>
 </div>
-<div class="card mt-4" *ngIf="selectedTreatmentBMP; else noTreatmentBMPs">
+<div class="card mt-4" *ngIf="selectedTreatmentBMP; else noTreatmentBMPsCheckboxOption">
     <div class="card-body bg-white">
         <div class="row">
             <div class="col-sm-4 order-sm-last" *ngIf="!readOnly">
@@ -160,13 +160,16 @@
         </div>
     </div>
 </div>
-<ng-template #noTreatmentBMPs>
-    <div class="row m-2 mt-4 mb-0">
+<ng-template #noTreatmentBMPsCheckboxOption>
+    <div class="row m-2 mt-4 mb-0" *ngIf="!readOnly">
         <div class="ml-auto">
             <input type="checkbox" name="no-treatment-bmps" [(ngModel)]="project.DoesNotIncludeTreatmentBMPs">
             <label for="no-treatment-bmps" class="ml-2">My project does not include any Stormwater Treatment BMPs</label>
         </div>
     </div>
+</ng-template>
+<ng-template #noTreatmentBMPs>
+    <p class="text-italic">No BMPs have been added to this project yet</p>
 </ng-template>
 <div class="row m-1 mt-3" *ngIf="!readOnly">
     <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit()">
