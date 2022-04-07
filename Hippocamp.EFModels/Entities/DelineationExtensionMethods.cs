@@ -21,6 +21,13 @@ namespace Hippocamp.EFModels.Entities
             return delineationUpsertDto;
         }
 
+        static partial void DoCustomSimpleDtoMappings(Delineation delineation, DelineationSimpleDto delineationSimpleDto)
+        {
+            delineationSimpleDto.Geometry = delineation.Geometry4326GeoJson;
+            delineationSimpleDto.DelineationArea = delineation.GetDelineationArea();
+            delineationSimpleDto.DelineationTypeName = delineation.DelineationType.DelineationTypeName;
+        }
+
         public static double? GetDelineationArea(this Delineation delineation)
         {
             return delineation?.DelineationGeometry.Area != null

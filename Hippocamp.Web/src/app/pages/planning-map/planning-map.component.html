@@ -1,1 +1,88 @@
-<p>planning-map works!</p>
+<div class="container">
+    <app-alert-display></app-alert-display>
+    <div class="row mb-2">
+        <div class="col">
+            <h2 class="d-inline-block">Planning Map</h2>
+            <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row no-gutters">
+                <div class="col-12 col-md-6 col-lg-4 order-last order-md-first">
+                    <div class="card" [style.height]="mapHeight" style="overflow:auto">
+                        <div class="card-header">
+                            Selected Treatment BMP
+                        </div>
+                        <div class="card-body" *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected">
+                            <dl class="row">
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    <a
+                                        routerLink="/projects/{{selectedTreatmentBMP.TreatmentBMPID}}">{{selectedTreatmentBMP.TreatmentBMPName}}</a>
+                                </dd>
+
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Type</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    {{selectedTreatmentBMP.TreatmentBMPTypeName}}
+                                </dd>
+
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Status</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    {{selectedProject.ProjectStatus.ProjectStatusDisplayName}}
+                                </dd>
+
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Area</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    {{selectedDelineation.DelineationArea}} ac
+                                </dd>
+
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Type</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    {{selectedDelineation.DelineationTypeName}}
+                                </dd>
+
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Project Name</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    {{selectedProject.ProjectName}}
+                                </dd>
+
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Jurisdiction</dt>
+                                <dd class="col-sm-7 col-xs-12">
+                                    {{selectedProject.StormwaterJurisdiction.Organization.OrganizationName}}
+                                </dd>
+                            </dl>
+                            <hr>
+                            <!-- <p>Associated Points of Diversion</p>
+                            <div *ngFor="let pod of selectedTreatmentBMP.associatedPointOfDiversions" class="row mb-1">
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <button class="btn btn-primary"
+                                        [disabled]="selectedEntity.selectedPointOfDiversionID == pod.PointOfDiversionID"
+                                        (click)="selectFeatureImpl(pod.PointOfDiversionID)">Select</button>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-8">
+                                    <ng-container *ngIf="pod.Nickname != null">
+                                        {{pod.Nickname}}
+                                        <br />
+                                    </ng-container>
+                                    {{pod.Latitude}},{{pod.Longitude}}
+                                </div>
+                            </div> -->
+                        </div>
+                        <ng-template #noTreatmentBMPSelected>
+                            <div class="card-body">
+                                Select a Treatment BMP on the map to see information about the
+                                Treatment BMP, its Project and related Treatment BMPs, and Delineation if present
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-8 mb-1 mb-md-0">
+                    <div id={{mapID}} class="location-card" [style.min-height]="mapHeight" [style.height]="'100%'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

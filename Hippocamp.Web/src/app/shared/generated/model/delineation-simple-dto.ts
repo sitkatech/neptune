@@ -11,6 +11,9 @@
  */
 
 export class DelineationSimpleDto { 
+    Geometry?: string;
+    DelineationArea?: number;
+    DelineationTypeName?: string;
     DelineationID?: number;
     DelineationTypeID?: number;
     IsVerified?: boolean;

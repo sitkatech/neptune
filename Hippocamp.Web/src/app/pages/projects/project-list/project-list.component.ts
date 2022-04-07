@@ -121,7 +121,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   private updateGridData() {
-    this.projectService.getProjectsByPersonID(this.currentUser.PersonID).subscribe(projects => {
+    this.projectService.getProjectsByPersonID().subscribe(projects => {
       this.projectsGrid.api.setRowData(projects);
     });
   }

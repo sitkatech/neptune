@@ -24,6 +24,7 @@ import { UnderlyingHydrologicSoilGroupEnum } from 'src/app/shared/models/enums/u
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
+import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 
 declare var $: any
 
@@ -75,8 +76,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
   public delineationsLayer: L.GeoJson<any>;
-  private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
-  private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
   private delineationDefaultStyle = {
     color: 'blue',
     fillOpacity: 0.2,
@@ -353,7 +352,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: this.markerIcon })
+        return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
       },
       filter: (feature) => {
         return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
@@ -394,20 +393,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
         return;
       }
       this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
-    });
-  }
-
-  public buildMarker(iconUrl: string, iconRetinaUrl: string): any {
-    const shadowUrl = 'assets/marker-shadow.png';
-    return L.icon({
-      iconRetinaUrl,
-      iconUrl,
-      shadowUrl,
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      tooltipAnchor: [16, -28],
-      shadowSize: [41, 41]
     });
   }
 
@@ -490,7 +475,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       }
       this.selectedObjectMarker = new L.marker(
         event.latlng,
-        { icon: this.markerIconSelected, zIndexOffset: 1000 });
+        { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
 
       this.selectedObjectMarker.addTo(this.map);
 
@@ -522,7 +507,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
       this.selectedObjectMarker = new L.marker(
         { lat: this.selectedTreatmentBMP.Latitude, lng: this.selectedTreatmentBMP.Longitude },
-        { icon: this.markerIconSelected, zIndexOffset: 1000 });
+        { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
 
       this.selectedObjectMarker.addTo(this.map);
       this.selectedListItemDetails.title = `${selectedNumber}`;

@@ -1220,7 +1220,7 @@
         }
       }
     },
-    "/jurisdictions": {
+    "/jurisdictions/boundingBox": {
       "get": {
         "tags": [
           "StormwaterJurisdiction"
@@ -1682,6 +1682,19 @@
       "DelineationSimpleDto": {
         "type": "object",
         "properties": {
+          "Geometry": {
+            "type": "string",
+            "nullable": true
+          },
+          "DelineationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DelineationTypeName": {
+            "type": "string",
+            "nullable": true
+          },
           "DelineationID": {
             "type": "integer",
             "format": "int32"
@@ -2548,10 +2561,7 @@
           },
           "ProjectID": {
             "type": "integer",
-            "format": "int32"
-          },
-          "ProjectName": {
-            "type": "string",
+            "format": "int32",
             "nullable": true
           }
         },

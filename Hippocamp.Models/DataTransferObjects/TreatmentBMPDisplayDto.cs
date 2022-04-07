@@ -7,7 +7,6 @@
         public string TreatmentBMPTypeName { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
-        public int ProjectID { get; set; }
-        public string ProjectName { get; set; }
+        public int? ProjectID { get; set; }
     }
 }

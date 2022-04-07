@@ -1,16 +1,16 @@
 import { Component, Inject } from '@angular/core';
-import { OAuthService, OAuthSuccessEvent } from 'angular-oauth2-oidc';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
-import { Subject, Observable } from 'rxjs';
 import { environment } from '../environments/environment';
-import { CookieStorageService } from './shared/services/cookies/cookie-storage.service';
 import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, NavigationEnd } from '@angular/router';
 import { BusyService } from './shared/services';
 import { AuthenticationService } from './services/authentication.service';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { MarkerHelper } from './shared/helpers/marker-helper';
 
 declare var require: any
+MarkerHelper.fixMarkerPath();
 
 @Component({
     selector: 'app-root',

@@ -10,5 +10,6 @@ export enum CustomRichTextType{
     TreatmentBMPs = 60,
     Delineations = 61,
     ModeledPerformance = 62,
-    Review = 63
+    Review = 63,
+    PlanningMap = 64
 }

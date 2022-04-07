@@ -76,12 +76,12 @@ namespace Hippocamp.EFModels.Entities
         {
             var treatmentBMPDisplayDto = new TreatmentBMPDisplayDto()
             {
+                TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                 TreatmentBMPName = treatmentBMP.TreatmentBMPName,
                 TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName,
                 Longitude = treatmentBMP.Longitude,
                 Latitude = treatmentBMP.Latitude,
-                ProjectID = treatmentBMP.Project.ProjectID,
-                ProjectName = treatmentBMP.Project.ProjectName
+                ProjectID = treatmentBMP.ProjectID
             };
 
             return treatmentBMPDisplayDto;

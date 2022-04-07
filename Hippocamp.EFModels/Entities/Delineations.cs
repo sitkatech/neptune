@@ -13,6 +13,7 @@ namespace Hippocamp.EFModels.Entities
         {
             return dbContext.Delineations
                 .Include(x => x.TreatmentBMP)
+                .Include(x => x.DelineationType)
                 .AsNoTracking();
         }
 

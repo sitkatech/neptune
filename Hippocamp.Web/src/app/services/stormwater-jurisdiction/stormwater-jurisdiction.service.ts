@@ -23,4 +23,9 @@ export class StormwaterJurisdictionService {
     let route = `/jurisdictions/${projectID}/getBoundingBoxByProjectID`;
     return this.apiService.getFromApi(route);
   }
+
+  getBoundingBoxByLoggedInPerson(): Observable<BoundingBoxDto> {
+    let route = `/jurisdictions/boundingBox`;
+    return this.apiService.getFromApi(route);
+  }
 }

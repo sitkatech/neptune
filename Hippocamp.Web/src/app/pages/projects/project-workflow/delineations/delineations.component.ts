@@ -20,6 +20,7 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 import { ProjectService } from 'src/app/services/project/project.service';
+import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 
 declare var $: any
 
@@ -65,8 +66,6 @@ export class DelineationsComponent implements OnInit {
   public selectedDelineation: DelineationUpsertDto;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
-  private markerIcon = this.buildMarker('/assets/main/map-icons/marker-icon-violet.png', '/assets/main/map-icons/marker-icon-2x-violet.png');
-  private markerIconSelected = this.buildMarker('/assets/main/map-icons/marker-icon-selected.png', '/assets/main/map-icons/marker-icon-2x-selected.png');
   private delineationDefaultStyle = {
     color: 'blue',
     fillOpacity: 0.2,
@@ -234,7 +233,7 @@ export class DelineationsComponent implements OnInit {
     const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: this.markerIcon })
+        return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
       }
     });
     this.treatmentBMPsLayer.addTo(this.map);
@@ -244,20 +243,6 @@ export class DelineationsComponent implements OnInit {
     if (this.treatmentBMPs.length > 0) {
       this.selectFeatureImpl(this.treatmentBMPs[0].TreatmentBMPID);
     }
-  }
-
-  public buildMarker(iconUrl: string, iconRetinaUrl: string): any {
-    const shadowUrl = 'assets/marker-shadow.png';
-    return L.icon({
-      iconRetinaUrl,
-      iconUrl,
-      shadowUrl,
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      tooltipAnchor: [16, -28],
-      shadowSize: [41, 41]
-    });
   }
 
   private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPUpsertDto[]) {
@@ -471,10 +456,10 @@ export class DelineationsComponent implements OnInit {
 
     this.treatmentBMPsLayer?.eachLayer(layer => {
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-        layer.setIcon(this.markerIcon).setZIndexOffset(1000);
+        layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
         return;
       }
-      layer.setIcon(this.markerIconSelected);
+      layer.setIcon(MarkerHelper.selectedMarker);
       layer.setZIndexOffset(10000);
       this.map.panTo(layer.getLatLng());
     })

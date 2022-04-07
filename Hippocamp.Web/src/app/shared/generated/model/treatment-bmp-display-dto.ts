@@ -17,7 +17,6 @@ export class TreatmentBMPDisplayDto {
     Longitude?: number;
     Latitude?: number;
     ProjectID?: number;
-    ProjectName?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

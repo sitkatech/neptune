@@ -22,7 +22,7 @@
             <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
                 <a href="javascript:void(0);" (click)="login()" routerLinkActive="active" class="nav-link">Sign In</a>
             </li>
-            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()"> 
+            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()">
                 <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     Welcome {{getUserName()}}
@@ -31,12 +31,12 @@
                     <a href="javascript:void(0);" (click)="logout()" class="dropdown-item">Sign Out</a>
                 </div>
             </li>
-            <li class="nav-item" routerLinkActive="active"> 
+            <li class="nav-item" routerLinkActive="active">
                 <a routerLink="/about" class="nav-link">
                     About
                 </a>
             </li>
-            <li class="nav-item dropdown" routerLinkActive="active"> 
+            <li class="nav-item dropdown" routerLinkActive="active">
                 <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     Help
@@ -59,13 +59,21 @@
 <nav class="navbar navbar-expand-xl navbar-hippocamp">
     <div class="collapse navbar-collapse" id="navbar2">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAuthenticated() && !isUnassigned()">
-                <a href="/projects" class="nav-link" role="button">
-                    Projects
-                </a>
-            </li>
+            <ng-container *ngIf="isAuthenticated() && !isUnassigned()">
+                <li class="nav-item" routerLinkActive="active">
+                    <a href="/projects" class="nav-link" role="button">
+                        Projects
+                    </a>
+                </li>
+                <li class="nav-item" routerLinkActive="active">
+                    <a href="/planning-map" class="nav-link" role="button">
+                        Planning Map
+                    </a>
+                </li>
+            </ng-container>
             <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
-                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
                     Manage
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
