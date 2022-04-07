@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DelineationUpsertDto } from '../shared/generated/model/delineation-upsert-dto';
+import { DelineationSimpleDto } from '../shared/generated/model/delineation-simple-dto';
 import { ApiService } from '../shared/services';
 
 @Injectable({
@@ -12,5 +12,8 @@ export class DelineationService {
     private apiService: ApiService
   ) { }
 
-  
+  getDelineations() : Observable<Array<DelineationSimpleDto>> {
+    let route = `delineations`;
+    return this.apiService.getFromApi(route);
+  }
 }

@@ -24,6 +24,7 @@ import { ModeledPerformanceComponent } from './pages/projects/project-workflow/m
 import { UnsavedChangesGuard } from './shared/guards/unsaved-changes.guard';
 import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
 import { ReviewComponent } from './pages/projects/project-workflow/review/review.component';
+import { PlanningMapComponent } from './pages/planning-map/planning-map.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -64,6 +65,7 @@ const routes: Routes = [
       { path: `${routeParams.projectID}`, component: ProjectDetailComponent},
     ]
   },
+  { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
   { path: "create-user-callback", component: CreateUserCallbackComponent },

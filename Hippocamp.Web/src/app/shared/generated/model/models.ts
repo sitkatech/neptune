@@ -24,6 +24,7 @@ export * from '././project-status-simple-dto';
 export * from '././project-upsert-dto';
 export * from '././role-dto';
 export * from '././stormwater-jurisdiction-simple-dto';
+export * from '././treatment-bmp-display-dto';
 export * from '././treatment-bmphru-characteristics-summary-simple-dto';
 export * from '././treatment-bmp-modeled-result-simple-dto';
 export * from '././treatment-bmp-modeling-attribute-dropdown-item-dto';

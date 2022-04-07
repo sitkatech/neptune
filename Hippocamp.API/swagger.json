@@ -1220,6 +1220,55 @@
         }
       }
     },
+    "/jurisdictions": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoundingBoxDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoundingBoxDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoundingBoxDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatmentBMPs/{projectID}/getByProjectID": {
       "get": {
         "tags": [
@@ -1271,17 +1320,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                 }
               }
             }
@@ -2470,6 +2519,40 @@
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDisplayDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

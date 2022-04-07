@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/shared/services';
 import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-type-simple-dto';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
 import { GeometryGeoJSONAndAreaDto } from 'src/app/shared/generated/model/geometry-geo-json-and-area-dto';
+import { TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -39,5 +40,10 @@ export class TreatmentBMPService {
   mergeTreatmentBMPs(treamentBMPs: Array<TreatmentBMPUpsertDto>, projectID: number) {
     let route = `treatmentBMPs/${projectID}`;
     return this.apiService.putToApi(route, treamentBMPs);
+  }
+
+  getTreatmentBMPs() : Observable<Array<TreatmentBMPDisplayDto>> {
+    let route = `treatmentBMPs`;
+    return this.apiService.getFromApi(route);
   }
 }

@@ -32,5 +32,17 @@ namespace Hippocamp.EFModels.Entities
 
             return new BoundingBoxDto(stormwaterJurisdictionGeometry);
         }
+
+        public static BoundingBoxDto GetBoundingBoxDtoByPersonID(HippocampDbContext dbContext, int personID)
+        {
+            var person = People.GetByID(dbContext, personID);
+            var jurisdictions = dbContext.StormwaterJurisdictionGeometries;
+            if (person.RoleID != (int)RoleEnum.Admin || person.RoleID != (int)RoleEnum.SitkaAdmin)
+            {
+                var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
+                jurisdictions.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID));
+            }
+            return new BoundingBoxDto(jurisdictions.Select(x => x.Geometry4326).ToList());
+        }
     }
 }

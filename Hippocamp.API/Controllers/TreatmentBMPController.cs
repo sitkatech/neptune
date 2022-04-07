@@ -29,7 +29,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("treatmentBMPs")]
         [JurisdictionEditFeature]
-        public ActionResult<TreatmentBMPUpsertDto> ListByPersonID()
+        public ActionResult<TreatmentBMPDisplayDto> ListByPersonID()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, personDto.PersonID);
