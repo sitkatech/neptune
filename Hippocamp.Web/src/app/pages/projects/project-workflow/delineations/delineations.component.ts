@@ -6,7 +6,6 @@ import 'leaflet.fullscreen';
 import * as esri from 'esri-leaflet'
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
@@ -20,6 +19,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
+import { ProjectService } from 'src/app/services/project/project.service';
 
 declare var $: any
 
@@ -116,14 +116,14 @@ export class DelineationsComponent implements OnInit {
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
-    private delineationService: DelineationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
     private alertService: AlertService,
     private cdr: ChangeDetectorRef,
-    private projectWorkflowService: ProjectWorkflowService
+    private projectWorkflowService: ProjectWorkflowService,
+    private projectService: ProjectService
   ) {
   }
 
@@ -143,7 +143,7 @@ export class DelineationsComponent implements OnInit {
 
       forkJoin({
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-        delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
+        delineations: this.projectService.getDelineationsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
       }).subscribe(({ treatmentBMPs, delineations, boundingBox }) => {
         this.treatmentBMPs = treatmentBMPs;
@@ -531,12 +531,12 @@ export class DelineationsComponent implements OnInit {
     this.isLoadingSubmit = true;
     this.alertService.clearAlerts();
     this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
-    this.delineationService.mergeDelineations(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
+    this.projectService.mergeDelineationsByProjectID(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
       window.scroll(0, 0); 
       this.isLoadingSubmit = false;
       this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
       this.projectWorkflowService.emitWorkflowUpdate();
-      this.delineationService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
+      this.projectService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
         this.delineations = delineations;
         this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
         this.resetDelineationFeatureGroups();

@@ -79,7 +79,9 @@ namespace Hippocamp.EFModels.Entities
                 TreatmentBMPName = treatmentBMP.TreatmentBMPName,
                 TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName,
                 Longitude = treatmentBMP.Longitude,
-                Latitude = treatmentBMP.Latitude
+                Latitude = treatmentBMP.Latitude,
+                ProjectID = treatmentBMP.Project.ProjectID,
+                ProjectName = treatmentBMP.Project.ProjectName
             };
 
             return treatmentBMPDisplayDto;

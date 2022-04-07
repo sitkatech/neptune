@@ -43,11 +43,12 @@ namespace Hippocamp.API.Controllers
             return Ok(projectSimpleDto);
         }
 
-        [HttpGet("projects/{personID}/listByPersonID")]
+        [HttpGet("projects")]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectSimpleDto>> ListByPersonID([FromRoute] int personID)
+        public ActionResult<List<ProjectSimpleDto>> ListByPersonID()
         {
-            var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDto(_dbContext, personID);
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDto(_dbContext, personDto.PersonID);
             return Ok(projectSimpleDtos);
         }
 
@@ -290,6 +291,30 @@ namespace Hippocamp.API.Controllers
             {
                 return StatusCode((int)result.StatusCode, body);
             }
+
+            return Ok();
+        }
+
+        [HttpGet("projects/{projectID}/delineations")]
+        [JurisdictionEditFeature]
+        public ActionResult<DelineationUpsertDto> GetDelineationsByProjectID([FromRoute] int projectID)
+        {
+            var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
+            return Ok(DelineationUpsertDtos);
+        }
+
+        [HttpPut("projects/{projectID}/delineations")]
+        [JurisdictionEditFeature]
+        public ActionResult MergeDelineationsForProject(List<DelineationUpsertDto> delineationUpsertDtos, [FromRoute] int projectID)
+        {
+            // project validation here
+            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            if (project == null)
+            {
+                return BadRequest();
+            }
+
+            Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
 
             return Ok();
         }

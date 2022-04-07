@@ -107,21 +107,10 @@
         }
       }
     },
-    "/delineations/{projectID}/getByProjectID": {
+    "/delineations": {
       "get": {
         "tags": [
           "Delineation"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -129,79 +118,20 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                  "$ref": "#/components/schemas/DelineationSimpleDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                  "$ref": "#/components/schemas/DelineationSimpleDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                  "$ref": "#/components/schemas/DelineationSimpleDto"
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/delineations/{projectID}": {
-      "put": {
-        "tags": [
-          "Delineation"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
-                }
-              }
-            },
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
           }
         }
       }
@@ -470,21 +400,10 @@
         }
       }
     },
-    "/projects/{personID}/listByPersonID": {
+    "/projects": {
       "get": {
         "tags": [
           "Project"
-        ],
-        "parameters": [
-          {
-            "name": "personID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -1068,6 +987,103 @@
         }
       }
     },
+    "/projects/{projectID}/delineations": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": [
@@ -1248,17 +1264,6 @@
       "get": {
         "tags": [
           "TreatmentBMP"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -1621,6 +1626,44 @@
           "Top": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DelineationSimpleDto": {
+        "type": "object",
+        "properties": {
+          "DelineationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DelineationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsVerified": {
+            "type": "boolean"
+          },
+          "DateLastVerified": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "VerifiedByPersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateLastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "HasDiscrepancies": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

@@ -17,28 +17,15 @@ namespace Hippocamp.API.Controllers
         {
         }
 
-        [HttpGet("delineations/{projectID}/getByProjectID")]
+        [HttpGet("delineations")]
         [JurisdictionEditFeature]
-        public ActionResult<DelineationUpsertDto> GetByProjectID([FromRoute] int projectID)
+        public ActionResult<DelineationSimpleDto> ListByPersonID()
         {
-            var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
-            return Ok(DelineationUpsertDtos);
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var delineationsUpsertDtos = Delineations.ListByPersonIDAsSimpleDto(_dbContext, personDto.PersonID);
+            return Ok(delineationsUpsertDtos);
         }
 
-        [HttpPut("delineations/{projectID}")]
-        [JurisdictionEditFeature]
-        public ActionResult MergeDelineations(List<DelineationUpsertDto> delineationUpsertDtos, [FromRoute] int projectID)
-        {
-            // project validation here
-            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
-            if (project == null)
-            {
-                return BadRequest();
-            }
 
-            Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
-
-            return Ok();
-        }
     }
 }

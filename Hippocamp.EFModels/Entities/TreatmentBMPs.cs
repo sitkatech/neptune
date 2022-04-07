@@ -18,6 +18,7 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.Watershed)
                 .Include(x => x.OwnerOrganization)
+                .Include(x => x.Project)
                 .AsNoTracking();
         }
 
@@ -51,6 +52,24 @@ namespace Hippocamp.EFModels.Entities
         public static List<TreatmentBMPDisplayDto> ListAsDisplayDto(HippocampDbContext dbContext)
         {
             var treatmentBMPDisplayDtos = GetTreatmentBMPsImpl(dbContext)
+                .Select(x => x.AsDisplayDto())
+                .ToList();
+
+            return treatmentBMPDisplayDtos;
+        }
+
+        public static List<TreatmentBMPDisplayDto> ListByPersonIDAsDisplayDto(HippocampDbContext dbContext, int personID)
+        {
+            var person = People.GetByID(dbContext, personID);
+            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
+            {
+                return ListAsDisplayDto(dbContext);
+            }
+
+            var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
+
+            var treatmentBMPDisplayDtos = GetTreatmentBMPsImpl(dbContext)
+                .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .Select(x => x.AsDisplayDto())
                 .ToList();
 

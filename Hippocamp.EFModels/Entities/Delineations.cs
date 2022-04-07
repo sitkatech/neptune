@@ -24,6 +24,33 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
+        public static List<DelineationSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
+        {
+            var treatmentBMPDisplayDtos = GetDelineationsImpl(dbContext)
+                .Select(x => x.AsSimpleDto())
+                .ToList();
+
+            return treatmentBMPDisplayDtos;
+        }
+
+        public static List<DelineationSimpleDto> ListByPersonIDAsSimpleDto(HippocampDbContext dbContext, int personID)
+        {
+            var person = People.GetByID(dbContext, personID);
+            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
+            {
+                return ListAsSimpleDto(dbContext);
+            }
+
+            var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
+
+            var treatmentBMPDisplayDtos = GetDelineationsImpl(dbContext)
+                .Where(x => jurisdictionIDs.Contains(x.TreatmentBMP.StormwaterJurisdictionID))
+                .Select(x => x.AsSimpleDto())
+                .ToList();
+
+            return treatmentBMPDisplayDtos;
+        }
+
         public static void MergeDelineations(HippocampDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)
         {
             var existingProjectDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == project.ProjectID).ToList();

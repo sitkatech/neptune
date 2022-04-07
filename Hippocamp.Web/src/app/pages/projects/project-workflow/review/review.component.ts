@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
@@ -31,7 +30,6 @@ export class ReviewComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private projectService: ProjectService,
     private treatmentBMPService: TreatmentBMPService,
-    private delineationService: DelineationService,
     private route: ActivatedRoute
   ) { }
 
@@ -43,8 +41,8 @@ export class ReviewComponent implements OnInit {
         forkJoin({
           project: this.projectService.getByID(this.projectID),
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-          delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
-          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesForProject(this.projectID),
+          delineations: this.projectService.getDelineationsByProjectID(this.projectID),
+          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID),
           attachments: this.projectService.getAttachmentsByProjectID(this.projectID)
         }).subscribe(({project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments}) => {
           this.treatmentBMPs = treatmentBMPs;

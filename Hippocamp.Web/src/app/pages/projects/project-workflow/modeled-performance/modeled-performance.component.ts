@@ -14,7 +14,6 @@ import * as esri from 'esri-leaflet';
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { environment } from 'src/environments/environment';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
@@ -70,7 +69,6 @@ export class ModeledPerformanceComponent implements OnInit {
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private treatmentBMPService: TreatmentBMPService,
-    private delineationService: DelineationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private route: ActivatedRoute,
     private alertService: AlertService,
@@ -85,9 +83,9 @@ export class ModeledPerformanceComponent implements OnInit {
         this.projectID = parseInt(projectID);
         forkJoin({
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-          delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
+          delineations: this.projectService.getDelineationsByProjectID(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-          projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesForProject(this.projectID)
+          projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID)
         }).subscribe(({ treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
@@ -312,10 +310,10 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   triggerModelRunForProject(): void {
-    this.projectService.triggerNetworkSolveForProject(this.projectID).subscribe(results => {
+    this.projectService.triggerNetworkSolveByProjectID(this.projectID).subscribe(results => {
       this.alertService.pushAlert(new Alert('Model run was successfully started and will run in the background.', AlertContext.Success, true));
       window.scroll(0, 0);
-      this.projectService.getNetworkSolveHistoriesForProject(this.projectID).subscribe(result => {
+      this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID).subscribe(result => {
         this.projectNetworkSolveHistories = result;
       })
     },

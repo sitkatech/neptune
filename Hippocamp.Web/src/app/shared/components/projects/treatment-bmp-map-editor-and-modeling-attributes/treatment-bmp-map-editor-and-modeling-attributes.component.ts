@@ -1,19 +1,15 @@
 import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as L from 'leaflet';
 import 'leaflet.fullscreen';
 import * as esri from 'esri-leaflet';
 import { forkJoin } from 'rxjs';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
@@ -21,7 +17,6 @@ import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatm
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { FieldDefinitionTypeEnum } from 'src/app/shared/models/enums/field-definition-type.enum';
 import { TimeOfConcentrationEnum } from 'src/app/shared/models/enums/time-of-concentration.enum';
 import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-bmp-modeling-type.enum';
@@ -222,14 +217,11 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private authenticationService: AuthenticationService,
     private projectService: ProjectService,
     private treatmentBMPService: TreatmentBMPService,
-    private delineationService: DelineationService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
-    private route: ActivatedRoute,
     private modalService: NgbModal,
     private alertService: AlertService,
     private projectWorkflowService: ProjectWorkflowService
@@ -246,7 +238,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       forkJoin({
         project: this.projectService.getByID(this.projectID),
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-        delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
+        delineations: this.projectService.getDelineationsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
         treatmentBMPTypes: this.treatmentBMPService.getTypes(),
         modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()

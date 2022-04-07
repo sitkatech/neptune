@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
@@ -11,7 +10,6 @@ import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/mo
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
-import { TreatmentBmpsComponent } from '../project-workflow/treatment-bmps/treatment-bmps.component';
 
 @Component({
   selector: 'hippocamp-project-detail',
@@ -32,7 +30,6 @@ export class ProjectDetailComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private projectService: ProjectService,
     private treatmentBMPService: TreatmentBMPService,
-    private delineationService: DelineationService,
     private route: ActivatedRoute
   ) { }
 
@@ -44,8 +41,8 @@ export class ProjectDetailComponent implements OnInit {
         forkJoin({
           project: this.projectService.getByID(this.projectID),
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-          delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
-          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesForProject(this.projectID),
+          delineations: this.projectService.getDelineationsByProjectID(this.projectID),
+          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID),
           attachments: this.projectService.getAttachmentsByProjectID(this.projectID)
         }).subscribe(({project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments}) => {
           this.treatmentBMPs = treatmentBMPs;

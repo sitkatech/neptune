@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
-import { ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
+import { DelineationUpsertDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -91,23 +91,33 @@ export class ProjectService {
     return this.apiService.deleteToApi(route);
   }
 
-  getModeledResultsForProject(projectID: number): Observable<Array<TreatmentBMPModeledResultSimpleDto>> {
+  getModeledResultsByProjectID(projectID: number): Observable<Array<TreatmentBMPModeledResultSimpleDto>> {
     let route = `/projects/${projectID}/modeled-performance`;
     return this.apiService.getFromApi(route);
   }
 
-  triggerNetworkSolveForProject(projectID: number): Observable<any> {
+  triggerNetworkSolveByProjectID(projectID: number): Observable<any> {
     let route = `/projects/${projectID}/modeled-performance`;
     return this.apiService.postToApi(route, {});
   }
 
-  getNetworkSolveHistoriesForProject(projectID: number): Observable<ProjectNetworkSolveHistorySimpleDto[]> {
+  getNetworkSolveHistoriesByProjectID(projectID: number): Observable<ProjectNetworkSolveHistorySimpleDto[]> {
     let route = `/projects/${projectID}/project-network-solve-histories`;
     return this.apiService.getFromApi(route);
   }
 
-  getTreatmentBMPHRUCharacteristicSummariesForProject(projectID: number): Observable<TreatmentBMPHRUCharacteristicsSummarySimpleDto[]> {
+  getTreatmentBMPHRUCharacteristicSummariesByProjectID(projectID: number): Observable<TreatmentBMPHRUCharacteristicsSummarySimpleDto[]> {
     let route = `/projects/${projectID}/treatment-bmp-hru-characteristics`;
     return this.apiService.getFromApi(route);
+  }
+
+  getDelineationsByProjectID(projectID: number): Observable<Array<DelineationUpsertDto>> {
+    let route = `/delineations/${projectID}/getByProjectID`;
+    return this.apiService.getFromApi(route);
+  }
+
+  mergeDelineationsByProjectID(delineations: Array<DelineationUpsertDto>, projectID: number) {
+    let route = `delineations/${projectID}`;
+    return this.apiService.putToApi(route, delineations);
   }
 }

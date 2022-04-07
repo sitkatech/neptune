@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
@@ -40,7 +39,6 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
     private userService: UserService,
     private authenticationService: AuthenticationService,
     private treatmentBMPService: TreatmentBMPService,
-    private delineationService: DelineationService,
     private projectService: ProjectService,
     private projectWorkflowService: ProjectWorkflowService
   ) { }
@@ -84,8 +82,8 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
   getProjectRelatedEntities() {
     forkJoin({
       treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-      delineations: this.delineationService.getDelineationsByProjectID(this.projectID),
-      modeledResults: this.projectService.getModeledResultsForProject(this.projectID)
+      delineations: this.projectService.getDelineationsByProjectID(this.projectID),
+      modeledResults: this.projectService.getModeledResultsByProjectID(this.projectID)
     }).subscribe(({ treatmentBMPs, delineations, modeledResults }) => {
       this.treatmentBMPs = treatmentBMPs;
       this.delineations = delineations;
