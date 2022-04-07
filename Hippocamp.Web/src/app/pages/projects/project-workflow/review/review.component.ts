@@ -9,6 +9,7 @@ import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
+import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
 
 @Component({
@@ -24,7 +25,7 @@ export class ReviewComponent implements OnInit {
   public delineations: Array<DelineationUpsertDto>;
   public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
   public attachments: Array<ProjectDocumentSimpleDto>;
-
+  public customRichTextTypeID = CustomRichTextType.Review;
 
   constructor(
     private authenticationService: AuthenticationService,

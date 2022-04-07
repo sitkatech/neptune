@@ -98,13 +98,13 @@ export class ModeledPerformanceComponent implements OnInit {
 
     this.tileLayers = Object.assign({}, {
       "Aerial": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Aerial',
+        attribution: 'Aerial', maxZoom: 22, maxNativeZoom:18
       }),
       "Street": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Aerial',
+        attribution: 'Street', maxZoom: 22, maxNativeZoom:18
       }),
       "Terrain": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Terrain',
+        attribution: 'Terrain', maxZoom: 22, maxNativeZoom:18
       }),
     }, this.tileLayers);
 
@@ -150,7 +150,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
     const mapOptions: L.MapOptions = {
       minZoom: 9,
-      maxZoom: 18,
+      maxZoom: 22,
       layers: [
         this.tileLayers["Terrain"],
       ],
