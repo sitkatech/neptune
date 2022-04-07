@@ -23,6 +23,7 @@ import { DelineationsComponent } from './pages/projects/project-workflow/delinea
 import { ModeledPerformanceComponent } from './pages/projects/project-workflow/modeled-performance/modeled-performance.component';
 import { UnsavedChangesGuard } from './shared/guards/unsaved-changes.guard';
 import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
+import { ReviewComponent } from './pages/projects/project-workflow/review/review.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -36,7 +37,6 @@ const routes: Routes = [
     path: "projects", canActivate: [UnauthenticatedAccessGuard],
     children: [
       { path: "", component: ProjectListComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
-      { path: `${routeParams.projectID}`, component: ProjectDetailComponent},
       {
         path: "new", component: ProjectWorkflowOutletComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard], children: [
           { path: "", redirectTo: 'instructions', pathMatch: 'full' },
@@ -54,13 +54,14 @@ const routes: Routes = [
               { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
               { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
               { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
-              { path: "modeled-performance", component: ModeledPerformanceComponent },
+              { path: "modeled-performance", component: ModeledPerformanceComponent }
             ]
           },
           { path: "attachments", component: ProjectAttachmentsComponent },
-          { path: "review", component: UnderConstructionComponent },
+          { path: "review", component: ReviewComponent },
         ]
-      }
+      },
+      { path: `${routeParams.projectID}`, component: ProjectDetailComponent},
     ]
   },
   { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },

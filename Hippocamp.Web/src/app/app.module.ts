@@ -42,6 +42,7 @@ import { ProjectAttachmentsComponent } from './pages/projects/project-workflow/p
 import { DelineationsComponent } from './pages/projects/project-workflow/delineations/delineations.component';
 import { ModeledPerformanceComponent } from './pages/projects/project-workflow/modeled-performance/modeled-performance.component';
 import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
+import { ReviewComponent } from './pages/projects/project-workflow/review/review.component';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -70,7 +71,8 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
     ProjectAttachmentsComponent,
     DelineationsComponent,
     ModeledPerformanceComponent,
-    ProjectDetailComponent
+    ProjectDetailComponent,
+    ReviewComponent
   ],
   imports: [
     AppRoutingModule,

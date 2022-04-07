@@ -1,0 +1,91 @@
+<ng-container *ngIf="project">
+    <div class="row mt-3 mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Project Basics
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.ProjectName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Description</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.ProjectDescription}}
+                            <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Project Owner</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.Organization.OrganizationName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Jurisdiction</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.StormwaterJurisdiction.Organization.OrganizationName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Primary Contact</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.PrimaryContactPerson.FullName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Additional Contact Information</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.AdditionalContactInformation}}
+                            <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-5 col-xs-12">Does Project Include Stormwater Treatment BMPs?</dt>
+                        <dd class="col-sm-7 col-xs-12">
+                            {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="!project?.DoesNotIncludeTreatmentBMPs">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Treatment BMPs
+                </div>
+                <div class="card-body">
+                    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes
+                        [readOnly]="true" [includeDelineations]="true" [projectID]="projectID">
+                    </hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="showModelResultsPanel()">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Model Results
+                </div>
+                <div class="card-body">
+                    <hippocamp-model-results [projectID]="project.ProjectID" [treatmentBMPs]="treatmentBMPs"
+                        [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
+                    </hippocamp-model-results>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="attachments && attachments.length > 0">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Attachments
+                </div>
+                <div class="card-body">
+                    <hippocamp-attachments-display [attachments]="attachments"></hippocamp-attachments-display>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

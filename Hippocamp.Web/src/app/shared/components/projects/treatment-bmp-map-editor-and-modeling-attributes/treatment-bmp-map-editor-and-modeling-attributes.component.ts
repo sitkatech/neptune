@@ -551,7 +551,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   }
 
   public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
-    debugger;
     const dropdownItem = this.modelingAttributeDropdownItems.find(x => x.FieldName == fieldName && x.ItemID == itemID);
     return dropdownItem ? dropdownItem.ItemName : '';
   }

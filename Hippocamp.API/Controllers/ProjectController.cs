@@ -34,7 +34,12 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<ProjectSimpleDto> GetByID([FromRoute] int projectID)
         {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectSimpleDto = Projects.GetByIDAsSimpleDto(_dbContext, projectID);
+            if (!UserCanEditJurisdiction(personDto, projectSimpleDto.StormwaterJurisdictionID))
+            {
+                return Forbid();
+            }
             return Ok(projectSimpleDto);
         }
 
@@ -57,7 +62,7 @@ namespace Hippocamp.API.Controllers
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID.Value))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
 
             var projectNameAlreadyExists = _dbContext.Projects.Any(x => x.ProjectName == projectCreateDto.ProjectName);
@@ -86,7 +91,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID.Value))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
             Projects.Update(_dbContext, project, projectCreateDto);
             return Ok();
@@ -148,7 +153,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
 
             var updatedProjectDocument = ProjectDocuments.Update(_dbContext, projectDocument, projectDocumentUpdateDto);
@@ -168,7 +173,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
             ProjectDocuments.Delete(_dbContext, projectDocument);
             return Ok();
@@ -186,7 +191,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
             Projects.Delete(_dbContext, projectID);
             return Ok();
@@ -204,7 +209,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
 
             var projectNetworkSolveHistoryDtos = ProjectNetworkSolveHistories.GetByProjectIDAsDto(_dbContext, projectID);
@@ -223,7 +228,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
 
             var hruCharacteristics = Projects.GetTreatmentBMPHRUCharacteristicSimplesForProject(_dbContext, projectID);
@@ -243,7 +248,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
 
             var modeledResults = ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectID(_dbContext, projectID);
@@ -263,7 +268,7 @@ namespace Hippocamp.API.Controllers
             }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
-                return Forbid("You are not authorized to edit projects within this jurisdiction.");
+                return Forbid();
             }
 
             var requestObject = new
@@ -291,12 +296,18 @@ namespace Hippocamp.API.Controllers
 
         private bool UserCanEditJurisdiction(PersonDto personDto, int stormwaterJurisdictionID)
         {
+            if (personDto.Role.RoleID == (int) RoleEnum.Admin)
+            {
+                return true;
+            }
+
             if (personDto.Role.RoleID == (int) RoleEnum.JurisdictionEditor || personDto.Role.RoleID == (int) RoleEnum.JurisdictionManager)
             {
                 var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonDto(_dbContext, personDto);
                 return stormwaterJurisdictionIDs.Contains(stormwaterJurisdictionID);
             }
-            return true;
+
+            return false;
         }
 
     }

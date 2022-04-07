@@ -127,8 +127,11 @@ export class ApiService {
                 this.alertService.pushAlert(new Alert("Access token expired..."));
                 this.oauthService.initCodeFlow();
             } else if (error && (error.status === 403)) {
-                this.alertService.pushNotFoundUnauthorizedAlert();
-                this.router.navigate(["/"]);
+                this.router.navigate(["/"], {queryParams: {forcedRedirect : true}}).then(() => {
+                    //just to remove the query params
+                    this.router.navigate(["/"]);
+                    this.alertService.pushNotFoundUnauthorizedAlert();
+                });
             } else if (error.error && typeof error.error === 'string') {
                 this.alertService.pushAlert(new Alert(error.error, AlertContext.Danger));
             } else if (error.error && error.status === 404) {

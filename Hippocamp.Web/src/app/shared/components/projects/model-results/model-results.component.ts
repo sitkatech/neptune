@@ -62,7 +62,6 @@ export class ModelResultsComponent implements OnInit {
       var treatmentBMP = this.treatmentBMPs.filter(y => y.TreatmentBMPID == x.TreatmentBMPID)[0];
       tempOptions.push({ TreatmentBMPID: treatmentBMP.TreatmentBMPID, TreatmentBMPName: treatmentBMP.TreatmentBMPName });
     });
-    debugger;
     this.modelingSelectListOptions = [...this.modelingSelectListOptions, ...tempOptions];
   }
 
