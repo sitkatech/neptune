@@ -296,7 +296,7 @@ namespace Hippocamp.API.Controllers
 
         private bool UserCanEditJurisdiction(PersonDto personDto, int stormwaterJurisdictionID)
         {
-            if (personDto.Role.RoleID == (int) RoleEnum.Admin)
+            if (personDto.Role.RoleID == (int) RoleEnum.Admin || personDto.Role.RoleID == (int) RoleEnum.SitkaAdmin )
             {
                 return true;
             }

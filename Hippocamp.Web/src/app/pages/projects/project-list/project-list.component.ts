@@ -12,6 +12,7 @@ import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { FontAwesomeIconLinkRendererComponent } from 'src/app/shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ProjectListComponent implements OnInit {
   @ViewChild('projectsGrid') projectsGrid: AgGridAngular;
   @ViewChild('deleteProjectModal') deleteProjectModal
 
-  
+
   private currentUser: PersonDto;
 
   private gridApi: GridApi;
@@ -58,8 +59,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    
-    
+
+
     this.cdr.detach();
   }
 
@@ -69,26 +70,51 @@ export class ProjectListComponent implements OnInit {
 
   private createProjectGridColDefs() {
     this.projectColumnDefs = [
-      { 
-        valueGetter: params => params.data.ProjectID, 
+      {
+        valueGetter: params => params.data.ProjectID,
         cellRendererFramework: FontAwesomeIconLinkRendererComponent,
-        cellRendererParams: { inRouterLink: '/projects/edit/', fontawesomeIconName: 'edit', CssClasses: 'text-primary'},
+        cellRendererParams: { inRouterLink: '/projects/edit/', fontawesomeIconName: 'edit', CssClasses: 'text-primary' },
         width: 40, sortable: false, filter: false
       },
       {
         cellRendererFramework: FontAwesomeIconLinkRendererComponent,
-        cellRendererParams: { isSpan: true, fontawesomeIconName: 'trash', CssClasses: 'text-danger'},
+        cellRendererParams: { isSpan: true, fontawesomeIconName: 'trash', CssClasses: 'text-danger' },
         width: 40, sortable: false, filter: false
       },
-      { headerName: 'Project ID', field: 'ProjectID' },
-      { headerName: 'Project Name', field: 'ProjectName' },
+      {
+        valueGetter: (params: any) => {
+          return { LinkValue: params.data.ProjectID, LinkDisplay: "View", CssClasses: "btn btn-hippocamp btn-sm" };
+        }, cellRendererFramework: LinkRendererComponent,
+        cellRendererParams: { inRouterLink: "/projects/", },
+        width: 80, sortable: false, filter: false
+      },
+      {
+        headerName: 'Project ID', valueGetter: (params: any) => {
+          return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectID };
+        }, cellRendererFramework: LinkRendererComponent,
+        cellRendererParams: { inRouterLink: "/projects/" },
+        filterValueGetter: (params: any) => {
+          return params.data.ProjectID;
+        },
+        comparator: this.utilityFunctionsService.linkRendererComparator
+      },
+      {
+        headerName: 'Project Name', valueGetter: (params: any) => {
+          return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
+        }, cellRendererFramework: LinkRendererComponent,
+        cellRendererParams: { inRouterLink: "/projects/" },
+        filterValueGetter: (params: any) => {
+          return params.data.ProjectID;
+        },
+        comparator: this.utilityFunctionsService.linkRendererComparator
+      },
       { headerName: 'Organization', field: 'Organization.OrganizationName' },
       { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
       { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
       this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
       { headerName: 'Project Description', field: 'ProjectDescription' }
     ];
-    
+
     this.defaultColDef = {
       filter: true, sortable: true, resizable: true
     };
@@ -117,16 +143,17 @@ export class ProjectListComponent implements OnInit {
 
   private launchModal(modalContent: any, modalTitle: string): void {
     this.modalReference = this.modalService.open(
-      modalContent, 
-      { ariaLabelledBy: modalTitle, beforeDismiss: () => this.checkIfDeleting(), backdrop: 'static', keyboard: false 
-    });
+      modalContent,
+      {
+        ariaLabelledBy: modalTitle, beforeDismiss: () => this.checkIfDeleting(), backdrop: 'static', keyboard: false
+      });
   }
 
   private checkIfDeleting(): boolean {
     return this.isLoadingDelete;
   }
 
-  public deleteProject() { 
+  public deleteProject() {
     this.isLoadingDelete = true;
 
     this.projectService.deleteProject(this.projectIDToDelete).subscribe(() => {
@@ -136,7 +163,7 @@ export class ProjectListComponent implements OnInit {
       this.updateGridData();
     }, error => {
       this.isLoadingDelete = false;
-      window.scroll(0,0);
+      window.scroll(0, 0);
       this.cdr.detectChanges();
     });
   }

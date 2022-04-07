@@ -32,6 +32,7 @@ import { environment } from 'src/environments/environment';
 
 declare var $: any
 
+//This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
   selector: 'hippocamp-treatment-bmp-map-editor-and-modeling-attributes',
   templateUrl: './treatment-bmp-map-editor-and-modeling-attributes.component.html',
