@@ -5,46 +5,55 @@
                 <div class="card-header">
                     Project Basics
                 </div>
-                <div class="card-body">
-                    <dl class="row">
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.ProjectName}}
-                        </dd>
+                <dl class="row">
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.ProjectName}}
+                    </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Description</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.ProjectDescription}}
-                            <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
-                        </dd>
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Description</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.ProjectDescription}}
+                        <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
+                    </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Project Owner</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.Organization.OrganizationName}}
-                        </dd>
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Status</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.ProjectStatus.ProjectStatusDisplayName}}
+                    </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Jurisdiction</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.StormwaterJurisdiction.Organization.OrganizationName}}
-                        </dd>
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Date Created</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.DateCreated | date: 'MM/dd/yyyy'}}
+                    </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Primary Contact</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.PrimaryContactPerson.FullName}}
-                        </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Additional Contact Information</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.AdditionalContactInformation}}
-                            <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
-                        </dd>
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Project Owner</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.Organization.OrganizationName}}
+                    </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Does Project Include Stormwater Treatment BMPs?</dt>
-                        <dd class="col-sm-7 col-xs-12">
-                            {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
-                        </dd>
-                    </dl>
-                </div>
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Jurisdiction</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.StormwaterJurisdiction.Organization.OrganizationName}}
+                    </dd>
+
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Primary Contact</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.PrimaryContactPerson.FullName}}
+                    </dd>
+
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Additional Contact Information</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.AdditionalContactInformation}}
+                        <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
+                    </dd>
+
+                    <dt class="text-sm-right col-sm-5 col-xs-12">Does Project Include Stormwater Treatment BMPs?</dt>
+                    <dd class="col-sm-7 col-xs-12">
+                        {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
+                    </dd>
+                </dl>
             </div>
         </div>
     </div>
