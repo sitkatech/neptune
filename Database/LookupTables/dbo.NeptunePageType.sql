@@ -61,4 +61,5 @@ values
 (59, 'HippocampProjectAttachments', 'Hippocamp Project Attachments'),
 (60, 'HippocampTreatmentBMPs', 'Hippocamp Treatment BMPs'),
 (61, 'HippocampDelineations', 'Hippocamp Delineations'),
-(62, 'HippocampModeledPerformance', 'Hippocamp Modeled Performance')
+(62, 'HippocampModeledPerformance', 'Hippocamp Modeled Performance'),
+(63, 'HippocampReview', 'Hippocamp Review')
