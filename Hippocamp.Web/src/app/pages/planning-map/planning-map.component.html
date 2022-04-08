@@ -54,21 +54,16 @@
                                 </dd>
                             </dl>
                             <hr>
-                            <!-- <p>Associated Points of Diversion</p>
-                            <div *ngFor="let pod of selectedTreatmentBMP.associatedPointOfDiversions" class="row mb-1">
+                            <p>Associated BMPs</p>
+                            <div *ngFor="let bmp of relatedTreatmentBMPs" class="row mb-1">
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <button class="btn btn-primary"
-                                        [disabled]="selectedEntity.selectedPointOfDiversionID == pod.PointOfDiversionID"
-                                        (click)="selectFeatureImpl(pod.PointOfDiversionID)">Select</button>
+                                        (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-8">
-                                    <ng-container *ngIf="pod.Nickname != null">
-                                        {{pod.Nickname}}
-                                        <br />
-                                    </ng-container>
-                                    {{pod.Latitude}},{{pod.Longitude}}
+                                    {{bmp.TreatmentBMPName}}
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                         <ng-template #noTreatmentBMPSelected>
                             <div class="card-body">

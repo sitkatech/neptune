@@ -3,6 +3,7 @@ import { forkJoin } from 'rxjs';
 import * as L from 'leaflet';
 import 'leaflet-gesture-handling';
 import 'leaflet.fullscreen';
+import 'leaflet.marker.highlight';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DelineationService } from 'src/app/services/delineation.service';
@@ -31,6 +32,7 @@ export class PlanningMapComponent implements OnInit {
   private treatmentBMPs : Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationSimpleDto>;
   public selectedTreatmentBMP : TreatmentBMPDisplayDto;
+  public relatedTreatmentBMPs : Array<TreatmentBMPDisplayDto>;
   public selectedDelineation : DelineationSimpleDto;
   public selectedProject : ProjectSimpleDto;
 
@@ -179,9 +181,14 @@ export class PlanningMapComponent implements OnInit {
     }
 
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == this.selectedTreatmentBMP.ProjectID && x.TreatmentBMPID != treatmentBMPID);
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
+      layer.disablePermanentHighlight();
       if (this.selectedTreatmentBMP == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(MarkerHelper.treatmentBMPMarker);
+        if (this.relatedTreatmentBMPs.some(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)) {
+          layer.enablePermanentHighlight();
+        }
         return;
       }
       layer.setIcon(MarkerHelper.selectedMarker);
