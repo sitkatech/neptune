@@ -112,12 +112,12 @@ export class ProjectService {
   }
 
   getDelineationsByProjectID(projectID: number): Observable<Array<DelineationUpsertDto>> {
-    let route = `/delineations/${projectID}/getByProjectID`;
+    let route = `/projects/${projectID}/delineations`;
     return this.apiService.getFromApi(route);
   }
 
   mergeDelineationsByProjectID(delineations: Array<DelineationUpsertDto>, projectID: number) {
-    let route = `delineations/${projectID}`;
+    let route = `projects/${projectID}/delineations`;
     return this.apiService.putToApi(route, delineations);
   }
 }

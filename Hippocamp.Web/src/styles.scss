@@ -258,12 +258,12 @@ img:hover+.light.temporary .flare {
 }
 
 .permanent .glow {
-    background: -webkit-radial-gradient(rgba(66, 186, 255, 1), rgba(255, 223, 67, 0) 70%)!important;
+    background: -webkit-radial-gradient(rgba(255, 211, 38, 1), rgba(255, 223, 67, 0) 70%)!important;
     animation: highlight1 2s 1 cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
 .permanent .flare {
-    background: rgba(66, 186, 255, 1) !important;
+    background: rgba(255, 211, 38, 1) !important;
     animation: highlight 2s 1 cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 

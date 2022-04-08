@@ -1,26 +1,26 @@
-<div class="container">
+<div class="container-fluid">
     <app-alert-display></app-alert-display>
-    <div class="row mb-2">
-        <div class="col">
+    <div class="row mb-2 justify-content-center">
+        <div class="col-12 col-lg-11">
             <h2 class="d-inline-block">Planning Map</h2>
             <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-11">
             <div class="row no-gutters">
                 <div class="col-12 col-md-6 col-lg-4 order-last order-md-first">
                     <div class="card" [style.height]="mapHeight" style="overflow:auto">
-                        <div class="card-header">
+                        <div class="card-header hippocamp">
                             Selected Treatment BMP
                         </div>
-                        <div class="card-body" *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected">
+                        <div class="card-body d-flex flex-column overflow-auto" *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected">
+                            <strong>BMP</strong>
                             <dl class="row">
                                 <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
                                 <dd class="col-sm-7 col-xs-12">
-                                    <a
-                                        routerLink="/projects/{{selectedTreatmentBMP.TreatmentBMPID}}">{{selectedTreatmentBMP.TreatmentBMPName}}</a>
+                                    {{selectedTreatmentBMP.TreatmentBMPName}}
                                 </dd>
 
                                 <dt class="text-sm-right col-sm-5 col-xs-12">Type</dt>
@@ -32,18 +32,24 @@
                                 <dd class="col-sm-7 col-xs-12">
                                     {{selectedProject.ProjectStatus.ProjectStatusDisplayName}}
                                 </dd>
+                            </dl>
+                            <ng-container *ngIf="selectedDelineation != null">
+                                <strong>Delineation</strong>
+                                <dl class="row">
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Area</dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedDelineation.DelineationArea}} ac
+                                    </dd>
 
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Area</dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedDelineation.DelineationArea}} ac
-                                </dd>
-
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Type</dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedDelineation.DelineationTypeName}}
-                                </dd>
-
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Project Name</dt>
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Type</dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedDelineation.DelineationTypeName}}
+                                    </dd>
+                                </dl>
+                            </ng-container>
+                            <strong>Project</strong>
+                            <dl class="row">
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
                                 <dd class="col-sm-7 col-xs-12">
                                     {{selectedProject.ProjectName}}
                                 </dd>
@@ -52,18 +58,21 @@
                                 <dd class="col-sm-7 col-xs-12">
                                     {{selectedProject.StormwaterJurisdiction.Organization.OrganizationName}}
                                 </dd>
+                                <dt class="text-sm-right col-sm-5 col-xs-12">Associated BMPS</dt>
+                                <dd class="col-sm-7 col-xs-12"></dd>
+                                <dt class="text-sm-right col-sm-5 col-xs-12"></dt>
+                                <dd class="col-sm-7 col-xs-12"></dd>
+                                <ng-container *ngFor="let bmp of relatedTreatmentBMPs">
+                                    <div class="col-12 col-sm-5 text-sm-right">
+                                        <button class="btn btn-primary btn-sm"
+                                            (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
+                                    </div>
+                                    <div class="col-12 col-sm-7">
+                                        {{bmp.TreatmentBMPName}}
+                                    </div>
+                                </ng-container>
                             </dl>
-                            <hr>
-                            <p>Associated BMPs</p>
-                            <div *ngFor="let bmp of relatedTreatmentBMPs" class="row mb-1">
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <button class="btn btn-primary"
-                                        (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-8">
-                                    {{bmp.TreatmentBMPName}}
-                                </div>
-                            </div>
+                            <a routerLink="/projects/{{selectedProject.ProjectID}}" class="d-inline-block mt-auto btn btn-hippocamp">View Project Details</a>
                         </div>
                         <ng-template #noTreatmentBMPSelected>
                             <div class="card-body">

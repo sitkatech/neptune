@@ -1,0 +1,9 @@
+::ng-deep .leaflet-top.leaflet-left {
+    width: 100%;
+    height: 100%;
+}
+
+::ng-deep .is-loading {
+    left:50%;
+    top: 30%;
+}

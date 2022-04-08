@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import 'leaflet-gesture-handling';
 import 'leaflet.fullscreen';
 import 'leaflet.marker.highlight';
+import 'leaflet-loading';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DelineationService } from 'src/app/services/delineation.service';
@@ -17,6 +18,8 @@ import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+
+declare var $: any;
 
 @Component({
   selector: 'hippocamp-planning-map',
@@ -45,6 +48,13 @@ export class PlanningMapComponent implements OnInit {
   public selectedDelineationLayer: L.GeoJSON<any>;
   private boundingBox: BoundingBoxDto;
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
+  public layerControl: L.Control.Layers;
+
+  private delineationSelectedStyle = {
+    color: 'yellow',
+    fillOpacity: 0.2,
+    opacity: 1
+  }
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -60,19 +70,22 @@ export class PlanningMapComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(result => {
       this.currentUser = result;
-      forkJoin({
-        projects : this.projectService.getProjectsByPersonID(),
-        treatmentBMPs : this.treatmentBMPService.getTreatmentBMPs(),
-        delineations: this.delineationService.getDelineations(),
-        boundingBox : this.stormwaterJurisdictionService.getBoundingBoxByLoggedInPerson()
-      }).subscribe(({projects, treatmentBMPs, delineations, boundingBox}) => {
-        this.projects = projects;
-        this.treatmentBMPs = treatmentBMPs;
-        this.delineations = delineations;
-        this.boundingBox = boundingBox;
-
+      this.stormwaterJurisdictionService.getBoundingBoxByLoggedInPerson().subscribe(result => {
+        this.boundingBox = result;
+        forkJoin({
+          projects : this.projectService.getProjectsByPersonID(),
+          treatmentBMPs : this.treatmentBMPService.getTreatmentBMPs(),
+          delineations: this.delineationService.getDelineations()
+        }).subscribe(({projects, treatmentBMPs, delineations}) => {
+          this.projects = projects;
+          this.treatmentBMPs = treatmentBMPs;
+          this.addPlannedProjectTreatmentBMPLayerToMap();
+          this.delineations = delineations;
+        });
         this.initMap();
-      });
+        this.map.fireEvent('dataloading');
+      })
+      
     });
 
     this.tileLayers = Object.assign({}, {
@@ -103,17 +116,25 @@ export class PlanningMapComponent implements OnInit {
       styles: "jurisdiction_orange"
     } as L.WMSOptions);
 
+    let verifiedDelineationsWMSOptions = ({
+      layers: "OCStormwater:Delineations",
+      transparent: true,
+      format: "image/png",
+      tiled: true,
+      cql_filter: "DelineationStatus = 'Verified'"
+    } as L.WMSOptions);
+
     this.overlayLayers = Object.assign({
       "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
+      "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
-      "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" })
+      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
   }
 
   initMap() {
-    debugger;
     const mapOptions: L.MapOptions = {
       // center: [46.8797, -110],
       // zoom: 6,
@@ -121,12 +142,53 @@ export class PlanningMapComponent implements OnInit {
       maxZoom: 22,
       layers: [
         this.tileLayers["Terrain"],
+        this.overlayLayers["<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions"]
       ],
-      fullscreenControl: true
+      fullscreenControl: true,
+      gestureHandling: true
     } as L.MapOptions;
     this.map = L.map(this.mapID, mapOptions);
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
     
+    this.setControl();
+    this.registerClickEvents();
+  }
+
+  public setControl(): void {
+    var loadingControl = L.Control.loading({
+      separate: true
+    });
+    this.map.addControl(loadingControl);
+
+    this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })
+      .addTo(this.map);
+  }
+
+  public registerClickEvents(): void {
+    var leafletControlLayersSelector = ".leaflet-control-layers";
+    var closeButtonClass = "leaflet-control-layers-close";
+
+    var closem = L.DomUtil.create("a", closeButtonClass);
+    closem.innerHTML = "Close";
+    L.DomEvent.on(closem,
+      "click",
+      function () {
+        $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
+      });
+
+    $(leafletControlLayersSelector).append(closem);
+  }
+
+  public addPlannedProjectTreatmentBMPLayerToMap(): void {
+    //If you were called and there is no map, try again in a little bit
+    if (!this.map) {
+      setTimeout(() => {this.addPlannedProjectTreatmentBMPLayerToMap()}, 500);
+    }
+
+    if (this.plannedProjectTreatmentBMPsLayer) {
+      this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
+    }
+
     const treatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
     this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
@@ -140,6 +202,7 @@ export class PlanningMapComponent implements OnInit {
     });
 
     this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
+    this.map.fireEvent('dataload');
   }
 
   private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -192,11 +255,18 @@ export class PlanningMapComponent implements OnInit {
         return;
       }
       layer.setIcon(MarkerHelper.selectedMarker);
+      if (!this.map.getBounds().contains(layer.getLatLng())) {
+        this.map.flyTo(layer.getLatLng());
+      }
     })
     this.selectedProject = this.projects.filter(x => x.ProjectID == this.selectedTreatmentBMP.ProjectID)[0];
     this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     if (this.selectedDelineation != null) {
-      this.selectedDelineationLayer = new L.GeoJSON(this.mapDelineationToFeature(this.selectedDelineation));
+      this.selectedDelineationLayer = new L.GeoJSON(this.mapDelineationToFeature(this.selectedDelineation), {
+        style: (feature) => {
+          return this.delineationSelectedStyle;
+        }
+      });
       this.selectedDelineationLayer.addTo(this.map);
     }
   }

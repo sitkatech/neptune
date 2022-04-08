@@ -100,6 +100,10 @@ a:hover {
   color: $card-header;
 }
 
+.card-header.hippocamp {
+  background-color: $primary;
+}
+
 .card-body
 {
   background-color: $card-body;
