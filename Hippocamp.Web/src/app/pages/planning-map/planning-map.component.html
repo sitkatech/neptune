@@ -63,13 +63,13 @@
                                 <dt class="text-sm-right col-sm-5 col-xs-12"></dt>
                                 <dd class="col-sm-7 col-xs-12"></dd>
                                 <ng-container *ngFor="let bmp of relatedTreatmentBMPs">
-                                    <div class="col-12 col-sm-5 text-sm-right">
+                                    <dt class="col-12 col-sm-5 text-sm-right">
                                         <button class="btn btn-primary btn-sm"
                                             (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
-                                    </div>
-                                    <div class="col-12 col-sm-7">
+                                    </dt>
+                                    <dd class="col-12 col-sm-7 ">
                                         {{bmp.TreatmentBMPName}}
-                                    </div>
+                                    </dd>
                                 </ng-container>
                             </dl>
                             <a routerLink="/projects/{{selectedProject.ProjectID}}" class="d-inline-block mt-auto btn btn-hippocamp">View Project Details</a>
