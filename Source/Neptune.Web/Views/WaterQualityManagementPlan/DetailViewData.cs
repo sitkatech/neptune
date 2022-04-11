@@ -50,7 +50,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.FieldDefinitionType FieldDefinitionForFullyParameterized { get; }
         public Models.FieldDefinitionType FieldDefinitionForDelineationStatus { get; }
         public Models.FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
-        public bool AnyModelBasins { get; }
 
         public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
 
@@ -151,8 +150,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             FieldDefinitionForFullyParameterized = FieldDefinitionType.FullyParameterized;
             FieldDefinitionForDelineationStatus = FieldDefinitionType.DelineationStatus;
             FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
-            
-            AnyModelBasins = anyModelBasins;
 
             UsesDetailedModelingApproach = WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                                            WaterQualityManagementPlanModelingApproach.Detailed
