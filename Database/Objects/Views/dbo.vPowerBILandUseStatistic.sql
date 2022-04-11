@@ -20,7 +20,7 @@ select
 	lgu.WaterQualityManagementPlanID,
 	lgu.RegionalSubbasinID,
 	lgu.LoadGeneratingUnitID,
-	Model.ModelBasinName,
+	Model.ModelBasinKey,
 	luc.HRUCharacteristicLandUseCodeName as LandUse,
 	concat(Model.ModelBasinKey, '-', luc.HRUCharacteristicLandUseCodeName, '-', hru.HydrologicSoilGroup, '-', hru.SlopePercentage) as SurfaceKey
 from

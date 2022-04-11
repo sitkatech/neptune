@@ -5,9 +5,10 @@ GO
 CREATE TABLE [dbo].[ModelBasin](
 	[ModelBasinID] [int] IDENTITY(1,1) NOT NULL,
 	[ModelBasinKey] [int] NOT NULL,
-	[ModelBasinName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[ModelBasinGeometry] [geometry] NOT NULL,
 	[LastUpdate] [datetime] NOT NULL,
+	[ModelBasinState] [varchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[ModelBasinRegion] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_ModelBasin_ModelBasinID] PRIMARY KEY CLUSTERED 
 (
 	[ModelBasinID] ASC

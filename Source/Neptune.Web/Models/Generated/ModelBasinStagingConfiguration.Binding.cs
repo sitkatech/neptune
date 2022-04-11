@@ -17,8 +17,9 @@ namespace Neptune.Web.Models
             HasKey(x => x.ModelBasinStagingID);
             Property(x => x.ModelBasinStagingID).HasColumnName(@"ModelBasinStagingID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.ModelBasinKey).HasColumnName(@"ModelBasinKey").HasColumnType("int").IsRequired();
-            Property(x => x.ModelBasinName).HasColumnName(@"ModelBasinName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.ModelBasinGeometry).HasColumnName(@"ModelBasinGeometry").HasColumnType("geometry").IsRequired();
+            Property(x => x.ModelBasinState).HasColumnName(@"ModelBasinState").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(5);
+            Property(x => x.ModelBasinRegion).HasColumnName(@"ModelBasinRegion").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(10);
 
         }
     }

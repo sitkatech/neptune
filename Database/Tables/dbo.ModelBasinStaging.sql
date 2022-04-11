@@ -5,8 +5,9 @@ GO
 CREATE TABLE [dbo].[ModelBasinStaging](
 	[ModelBasinStagingID] [int] IDENTITY(1,1) NOT NULL,
 	[ModelBasinKey] [int] NOT NULL,
-	[ModelBasinName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[ModelBasinGeometry] [geometry] NOT NULL,
+	[ModelBasinState] [varchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[ModelBasinRegion] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_ModelBasinStaging_ModelBasinStagingID] PRIMARY KEY CLUSTERED 
 (
 	[ModelBasinStagingID] ASC
