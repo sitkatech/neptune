@@ -581,11 +581,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     Modeled BMP Performance
                 </div>
                 <div class="panel-body">
-                    @if (!ViewDataTyped.IsInSOC)
-                    {
-                        <p class="systemText">Model results are only available for BMPs within the South Orange County WMA.</p>
-                    }
-                    else if (!ViewDataTyped.IsFullyParameterized)
+                    @if (!ViewDataTyped.IsFullyParameterized)
                     {
                         if (ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null && ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
                         {

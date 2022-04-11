@@ -139,9 +139,6 @@ namespace Neptune.Web.Controllers
             x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
                 waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
 
-            var anyModelBasins = waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && HttpRequestStorage.DatabaseEntities.ModelBasins.Any(x =>
-                                    x.ModelBasinGeometry.Intersects(waterQualityManagementPlan.WaterQualityManagementPlanBoundary));
-
             var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
@@ -151,7 +148,7 @@ namespace Neptune.Web.Controllers
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 new HRUCharacteristicsViewData(waterQualityManagementPlan,
                     ((IHaveHRUCharacteristics) waterQualityManagementPlan).GetHRUCharacteristics().ToList()),
-                anyModelBasins, dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(waterQualityManagementPlan, CurrentPerson));
+                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(waterQualityManagementPlan, CurrentPerson));
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

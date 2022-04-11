@@ -65,7 +65,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
-            HRUCharacteristicsViewData hruCharacteristicsViewData, bool anyModelBasins,
+            HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
