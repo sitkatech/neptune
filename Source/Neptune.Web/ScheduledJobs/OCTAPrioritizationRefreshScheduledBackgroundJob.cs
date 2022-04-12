@@ -36,10 +36,10 @@ namespace Neptune.Web.ScheduledJobs
             var featureCollection = RetrieveFeatureCollectionFromArcServer();
             ThrowIfOCTAPrioritizationKeyNotUnique(featureCollection);
             StageFeatureCollection(featureCollection);
-            MergeAndUpdateTreatmentBMPProperties(dbContext);
+            Merge(dbContext);
         }
 
-        private static void MergeAndUpdateTreatmentBMPProperties(DatabaseEntities dbContext)
+        private static void Merge(DatabaseEntities dbContext)
         {
             dbContext.Database.CommandTimeout = 30000;
             dbContext.Database.ExecuteSqlCommand("EXEC dbo.pOCTAPrioritizationUpdateFromStaging");
