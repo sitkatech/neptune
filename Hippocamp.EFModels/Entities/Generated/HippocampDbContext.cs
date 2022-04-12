@@ -71,6 +71,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<NereidResult> NereidResults { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<NotificationType> NotificationTypes { get; set; }
+        public virtual DbSet<OCTAPrioritization> OCTAPrioritizations { get; set; }
+        public virtual DbSet<OCTAPrioritizationStaging> OCTAPrioritizationStagings { get; set; }
         public virtual DbSet<OVTASection> OVTASections { get; set; }
         public virtual DbSet<ObservationTargetType> ObservationTargetTypes { get; set; }
         public virtual DbSet<ObservationThresholdType> ObservationThresholdTypes { get; set; }
@@ -175,6 +177,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vGeoServerJurisdiction> vGeoServerJurisdictions { get; set; }
         public virtual DbSet<vGeoServerLandUseBlock> vGeoServerLandUseBlocks { get; set; }
         public virtual DbSet<vGeoServerMaskLayer> vGeoServerMaskLayers { get; set; }
+        public virtual DbSet<vGeoServerOCTAPrioritization> vGeoServerOCTAPrioritizations { get; set; }
         public virtual DbSet<vGeoServerObservationPointExport> vGeoServerObservationPointExports { get; set; }
         public virtual DbSet<vGeoServerOnlandVisualTrashAssessmentArea> vGeoServerOnlandVisualTrashAssessmentAreas { get; set; }
         public virtual DbSet<vGeoServerParcel> vGeoServerParcels { get; set; }
@@ -958,6 +961,24 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.NotificationTypeDisplayName).IsUnicode(false);
 
                 entity.Property(e => e.NotificationTypeName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OCTAPrioritization>(entity =>
+            {
+                entity.Property(e => e.CatchIDN).IsUnicode(false);
+
+                entity.Property(e => e.SEA_PCTL).IsUnicode(false);
+
+                entity.Property(e => e.Watershed).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OCTAPrioritizationStaging>(entity =>
+            {
+                entity.Property(e => e.CatchIDN).IsUnicode(false);
+
+                entity.Property(e => e.SEA_PCTL).IsUnicode(false);
+
+                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<OVTASection>(entity =>
@@ -2393,6 +2414,13 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vGeoServerMaskLayer>(entity =>
             {
                 entity.ToView("vGeoServerMaskLayer");
+            });
+
+            modelBuilder.Entity<vGeoServerOCTAPrioritization>(entity =>
+            {
+                entity.ToView("vGeoServerOCTAPrioritization");
+
+                entity.Property(e => e.OCTAPrioritizationID).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<vGeoServerObservationPointExport>(entity =>

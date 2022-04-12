@@ -9,73 +9,134 @@
 
     <div class="row justify-content-center">
         <div class="col-12 col-lg-11">
+            <div class="row">
+                <div class="col-12">
+                    <ng-select [(ngModel)]="selectedPrioritizationMetric" [items]="prioritizationMetrics"
+                        bindLabel="key" [clearable]="false" (change)="applyPrioritizationMetricOverlay()">
+                    </ng-select>
+                </div>
+            </div>
             <div class="row no-gutters">
                 <div class="col-12 col-md-6 col-lg-4 order-last order-md-first">
                     <div class="card" [style.height]="mapHeight" style="overflow:auto">
                         <div class="card-header hippocamp">
                             Selected Treatment BMP
                         </div>
-                        <div class="card-body d-flex flex-column overflow-auto" *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected">
-                            <strong>BMP</strong>
-                            <dl class="row">
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedTreatmentBMP.TreatmentBMPName}}
-                                </dd>
-
-                                <dt class="text-sm-right col-sm-5 col-xs-12"><field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'"></field-definition></dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedTreatmentBMP.TreatmentBMPTypeName}}
-                                </dd>
-
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Status</dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedProject.ProjectStatus.ProjectStatusDisplayName}}
-                                </dd>
-                            </dl>
-                            <ng-container *ngIf="selectedDelineation != null">
-                                <strong>Delineation</strong>
+                        <div class="card-body d-flex flex-column overflow-auto">
+                            <ng-container *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected">
+                                <strong>BMP</strong>
                                 <dl class="row">
-                                    <dt class="text-sm-right col-sm-5 col-xs-12"><field-definition fieldDefinitionType="Area"></field-definition></dt>
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
                                     <dd class="col-sm-7 col-xs-12">
-                                        {{selectedDelineation.DelineationArea}} ac
+                                        {{selectedTreatmentBMP.TreatmentBMPName}}
                                     </dd>
 
-                                    <dt class="text-sm-right col-sm-5 col-xs-12"><field-definition fieldDefinitionType="DelineationType" [labelOverride]="'Type'"></field-definition></dt>
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">
+                                        <field-definition fieldDefinitionType="TreatmentBMPType"
+                                            [labelOverride]="'Type'">
+                                        </field-definition>
+                                    </dt>
                                     <dd class="col-sm-7 col-xs-12">
-                                        {{selectedDelineation.DelineationTypeName}}
+                                        {{selectedTreatmentBMP.TreatmentBMPTypeName}}
+                                    </dd>
+
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Status</dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedProject.ProjectStatus.ProjectStatusDisplayName}}
                                     </dd>
                                 </dl>
-                            </ng-container>
-                            <strong>Project</strong>
-                            <dl class="row">
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedProject.ProjectName}}
-                                </dd>
+                                <ng-container *ngIf="selectedDelineation != null">
+                                    <strong>Delineation</strong>
+                                    <dl class="row">
+                                        <dt class="text-sm-right col-sm-5 col-xs-12">
+                                            <field-definition fieldDefinitionType="Area"></field-definition>
+                                        </dt>
+                                        <dd class="col-sm-7 col-xs-12">
+                                            {{selectedDelineation.DelineationArea}} ac
+                                        </dd>
 
-                                <dt class="text-sm-right col-sm-5 col-xs-12"><field-definition fieldDefinitionType="Jurisdiction"></field-definition></dt>
-                                <dd class="col-sm-7 col-xs-12">
-                                    {{selectedProject.StormwaterJurisdiction.Organization.OrganizationName}}
-                                </dd>
-                                <dt class="text-sm-right col-sm-5 col-xs-12">Associated BMPS</dt>
-                                <dd class="col-sm-7 col-xs-12"></dd>
-                                <dt class="text-sm-right col-sm-5 col-xs-12"></dt>
-                                <dd class="col-sm-7 col-xs-12"></dd>
-                                <ng-container *ngFor="let bmp of relatedTreatmentBMPs">
-                                    <dt class="col-12 col-sm-5 text-sm-right">
-                                        <button class="btn btn-primary btn-sm"
-                                            (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
-                                    </dt>
-                                    <dd class="col-12 col-sm-7 ">
-                                        {{bmp.TreatmentBMPName}}
-                                    </dd>
+                                        <dt class="text-sm-right col-sm-5 col-xs-12">
+                                            <field-definition fieldDefinitionType="DelineationType"
+                                                [labelOverride]="'Type'"></field-definition>
+                                        </dt>
+                                        <dd class="col-sm-7 col-xs-12">
+                                            {{selectedDelineation.DelineationTypeName}}
+                                        </dd>
+                                    </dl>
                                 </ng-container>
-                            </dl>
-                            <a routerLink="/projects/{{selectedProject.ProjectID}}" class="d-inline-block btn btn-hippocamp">View Project Details</a>
+                                <strong>Project</strong>
+                                <dl class="row">
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedProject.ProjectName}}
+                                    </dd>
+
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">
+                                        <field-definition fieldDefinitionType="Jurisdiction"></field-definition>
+                                    </dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedProject.StormwaterJurisdiction.Organization.OrganizationName}}
+                                    </dd>
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Associated BMPS</dt>
+                                    <dd class="col-sm-7 col-xs-12"></dd>
+                                    <dt class="text-sm-right col-sm-5 col-xs-12"></dt>
+                                    <dd class="col-sm-7 col-xs-12"></dd>
+                                    <ng-container *ngFor="let bmp of relatedTreatmentBMPs">
+                                        <dt class="col-12 col-sm-5 text-sm-right">
+                                            <button class="btn btn-primary btn-sm"
+                                                (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
+                                        </dt>
+                                        <dd class="col-12 col-sm-7 ">
+                                            {{bmp.TreatmentBMPName}}
+                                        </dd>
+                                    </ng-container>
+                                </dl>
+                                <a routerLink="/projects/{{selectedProject.ProjectID}}"
+                                    class="d-inline-block btn btn-hippocamp">View Project Details</a>
+                            </ng-container>
+
+                            <ng-container *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
+                                <hr class="w-100">
+                                <p class="b3 text-left">{{selectedPrioritizationMetric.toString()}} Legend</p>
+                                <div class="row justify-content-center">
+                                    <div class="col-12 col-md-6 col-lg-5">
+                                        <ng-container
+                                            *ngFor="let legendColor of selectedPrioritizationMetric.legendColors | slice: 0 : 4; index as i">
+                                            <div class="row">
+                                                <div class="col-2 mt-auto mb-auto">
+                                                    <div class="metric-color-swatch" [style.background]="legendColor">
+                                                    </div>
+                                                </div>
+                                                <div class="col-10">
+                                                    <p class="b3 mt-auto mb-auto text-left">
+                                                        {{selectedPrioritizationMetric.legendValues[i]}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-5">
+                                        <ng-container
+                                            *ngFor="let legendColor of selectedPrioritizationMetric.legendColors | slice: 4; index as i">
+                                            <div class="row">
+                                                <div class="col-2 mt-auto mb-auto">
+                                                    <div class="metric-color-swatch" [style.background]="legendColor">
+                                                    </div>
+                                                </div>
+                                                <div class="col-10">
+                                                    <p class="b3 mt-auto mb-auto text-left">
+                                                        {{selectedPrioritizationMetric.legendValues[i+4]}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+
+                            </ng-container>
                         </div>
                         <ng-template #noTreatmentBMPSelected>
-                            <div class="card-body">
+                            <div>
                                 Select a Treatment BMP on the map to see information about the
                                 Treatment BMP, its Project and related Treatment BMPs, and Delineation if present
                             </div>

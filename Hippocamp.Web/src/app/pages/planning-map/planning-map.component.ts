@@ -18,6 +18,7 @@ import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 
 declare var $: any;
 
@@ -28,16 +29,16 @@ declare var $: any;
 })
 export class PlanningMapComponent implements OnInit {
 
-  private currentUser : PersonDto;
+  private currentUser: PersonDto;
   public richTextTypeID = CustomRichTextType.PlanningMap;
 
-  private projects : Array<ProjectSimpleDto>;
-  private treatmentBMPs : Array<TreatmentBMPDisplayDto>;
+  private projects: Array<ProjectSimpleDto>;
+  private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationSimpleDto>;
-  public selectedTreatmentBMP : TreatmentBMPDisplayDto;
-  public relatedTreatmentBMPs : Array<TreatmentBMPDisplayDto>;
-  public selectedDelineation : DelineationSimpleDto;
-  public selectedProject : ProjectSimpleDto;
+  public selectedTreatmentBMP: TreatmentBMPDisplayDto;
+  public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+  public selectedDelineation: DelineationSimpleDto;
+  public selectedProject: ProjectSimpleDto;
 
   public mapID: string = 'planningMap';
   public mapHeight = (window.innerHeight - (window.innerHeight * 0.2)) + "px";
@@ -50,11 +51,19 @@ export class PlanningMapComponent implements OnInit {
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
   public layerControl: L.Control.Layers;
 
+  //this is needed to allow binding to the static class
+  public PrioritizationMetric = PrioritizationMetric;
+  public prioritizationMetrics = Object.values(PrioritizationMetric);
+  public selectedPrioritizationMetric = PrioritizationMetric.NoMetric;
+  public prioritizationMetricOverlayLayer: L.Layers;
+
   private delineationSelectedStyle = {
     color: 'yellow',
     fillOpacity: 0.2,
     opacity: 1
   }
+
+  private viewInitialized: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -73,10 +82,10 @@ export class PlanningMapComponent implements OnInit {
       this.stormwaterJurisdictionService.getBoundingBoxByLoggedInPerson().subscribe(result => {
         this.boundingBox = result;
         forkJoin({
-          projects : this.projectService.getProjectsByPersonID(),
-          treatmentBMPs : this.treatmentBMPService.getTreatmentBMPs(),
+          projects: this.projectService.getProjectsByPersonID(),
+          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPs(),
           delineations: this.delineationService.getDelineations()
-        }).subscribe(({projects, treatmentBMPs, delineations}) => {
+        }).subscribe(({ projects, treatmentBMPs, delineations }) => {
           this.projects = projects;
           this.treatmentBMPs = treatmentBMPs;
           this.addPlannedProjectTreatmentBMPLayerToMap();
@@ -85,18 +94,18 @@ export class PlanningMapComponent implements OnInit {
         this.initMap();
         this.map.fireEvent('dataloading');
       })
-      
+
     });
 
     this.tileLayers = Object.assign({}, {
       "Aerial": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Aerial', maxZoom:22, maxNativeZoom:18
+        attribution: 'Aerial', maxZoom: 22, maxNativeZoom: 18
       }),
       "Street": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Street', maxZoom:22, maxNativeZoom:18
+        attribution: 'Street', maxZoom: 22, maxNativeZoom: 18
       }),
       "Terrain": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Terrain', maxZoom:22, maxNativeZoom:18
+        attribution: 'Terrain', maxZoom: 22, maxNativeZoom: 18
       }),
     }, this.tileLayers);
 
@@ -105,7 +114,8 @@ export class PlanningMapComponent implements OnInit {
       layers: "OCStormwater:RegionalSubbasins",
       transparent: true,
       format: "image/png",
-      tiled: true
+      tiled: true,
+      pane: "hippocampOverlayPane"
     } as L.WMSOptions);
 
     let jurisdictionsWMSOptions = ({
@@ -113,7 +123,8 @@ export class PlanningMapComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-      styles: "jurisdiction_orange"
+      styles: "jurisdiction_orange",
+      pane: "hippocampOverlayPane"
     } as L.WMSOptions);
 
     let verifiedDelineationsWMSOptions = ({
@@ -121,7 +132,8 @@ export class PlanningMapComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-      cql_filter: "DelineationStatus = 'Verified'"
+      cql_filter: "DelineationStatus = 'Verified'",
+      pane: "hippocampOverlayPane"
     } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
@@ -148,10 +160,19 @@ export class PlanningMapComponent implements OnInit {
       gestureHandling: true
     } as L.MapOptions;
     this.map = L.map(this.mapID, mapOptions);
-    this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
-    
+    this.initializePanes();
     this.setControl();
     this.registerClickEvents();
+    this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
+  }
+
+  public initializePanes(): void {
+    let hippocampOverlayPane = this.map.createPane("hippocampOverlayPane");
+    hippocampOverlayPane.style.zIndex = 10000;
+    let hippocampChoroplethPane = this.map.createPane("hippocampChoroplethPane");
+    hippocampChoroplethPane.style.zIndex = 9999;
+    this.map.getPane("markerPane").style.zIndex = 10001;
+    this.map.getPane("popupPane").style.zIndex = 10002;
   }
 
   public setControl(): void {
@@ -182,7 +203,7 @@ export class PlanningMapComponent implements OnInit {
   public addPlannedProjectTreatmentBMPLayerToMap(): void {
     //If you were called and there is no map, try again in a little bit
     if (!this.map) {
-      setTimeout(() => {this.addPlannedProjectTreatmentBMPLayerToMap()}, 500);
+      setTimeout(() => { this.addPlannedProjectTreatmentBMPLayerToMap() }, 500);
     }
 
     if (this.plannedProjectTreatmentBMPsLayer) {
@@ -236,7 +257,7 @@ export class PlanningMapComponent implements OnInit {
     };
   }
 
-  public selectFeatureImpl(treatmentBMPID : number) {
+  public selectFeatureImpl(treatmentBMPID: number) {
     if (this.selectedDelineation) {
       this.map.removeLayer(this.selectedDelineationLayer);
       this.selectedDelineationLayer = null;
@@ -269,6 +290,34 @@ export class PlanningMapComponent implements OnInit {
       });
       this.selectedDelineationLayer.addTo(this.map);
     }
+  }
+
+  public applyPrioritizationMetricOverlay(): void {
+    if (!this.map) {
+      return null;
+    }
+
+    if (this.prioritizationMetricOverlayLayer) {
+      this.map.removeLayer(this.prioritizationMetricOverlayLayer);
+      this.prioritizationMetricOverlayLayer = null;
+    }
+
+    if (this.selectedPrioritizationMetric == PrioritizationMetric.NoMetric) {
+      return null;
+    }
+
+    let prioritizationMetricsWMSOptions = ({
+      layers: "Neptune:OCTAPrioritization",
+      transparent: true,
+      format: "image/png",
+      tiled: true,
+      styles: this.selectedPrioritizationMetric.geoserverStyle,
+      pane: "hippocampChoroplethPane"
+    } as L.WMSOptions);
+
+    this.prioritizationMetricOverlayLayer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", prioritizationMetricsWMSOptions);
+    this.prioritizationMetricOverlayLayer.addTo(this.map);
+    this.prioritizationMetricOverlayLayer.bringToFront();
   }
 
 }
