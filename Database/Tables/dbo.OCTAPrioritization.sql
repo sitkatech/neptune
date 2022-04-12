@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[OCTAPrioritization](
 	[OCTAPrioritizationID] [int] IDENTITY(1,1) NOT NULL,
 	[OCTAPrioritizationKey] [int] NOT NULL,
 	[OCTAPrioritizationGeometry] [geometry] NOT NULL,
+	[OCTAPrioritizationGeometry4326] [geometry] NULL,
 	[LastUpdate] [datetime] NOT NULL,
 	[Watershed] [varchar](80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[CatchIDN] [varchar](80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

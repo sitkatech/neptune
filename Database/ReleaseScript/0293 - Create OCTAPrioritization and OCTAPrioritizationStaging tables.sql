@@ -2,6 +2,7 @@ create table dbo.OCTAPrioritization (
 	OCTAPrioritizationID int not null identity(1,1) constraint PK_OCTAPrioritization_OCTAPrioritizationID primary key,
 	OCTAPrioritizationKey int not null constraint AK_OCTAPrioritization_OCTAPrioritizationKey unique,
 	OCTAPrioritizationGeometry geometry not null,
+	OCTAPrioritizationGeometry4326 geometry null,
 	LastUpdate datetime not null,
 	Watershed varchar(80) not null,
 	CatchIDN varchar(80) not null,

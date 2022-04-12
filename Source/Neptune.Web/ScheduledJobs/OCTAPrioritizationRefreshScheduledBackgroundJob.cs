@@ -36,13 +36,19 @@ namespace Neptune.Web.ScheduledJobs
             var featureCollection = RetrieveFeatureCollectionFromArcServer();
             ThrowIfOCTAPrioritizationKeyNotUnique(featureCollection);
             StageFeatureCollection(featureCollection);
-            Merge(dbContext);
+            MergeAndReproject(dbContext, person);
         }
 
-        private static void Merge(DatabaseEntities dbContext)
+        private static void MergeAndReproject(DatabaseEntities dbContext, Person person)
         {
             dbContext.Database.CommandTimeout = 30000;
             dbContext.Database.ExecuteSqlCommand("EXEC dbo.pOCTAPrioritizationUpdateFromStaging");
+            foreach (var octaPrioritization in dbContext.OCTAPrioritizations)
+            {
+                octaPrioritization.OCTAPrioritizationGeometry4326 =
+                                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(octaPrioritization.OCTAPrioritizationGeometry);
+            }
+            dbContext.SaveChanges(person);
         }
 
         private static void StageFeatureCollection(FeatureCollection newOCTAPrioritizationFeatureCollection)

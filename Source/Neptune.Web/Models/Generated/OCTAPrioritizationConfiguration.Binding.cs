@@ -18,6 +18,7 @@ namespace Neptune.Web.Models
             Property(x => x.OCTAPrioritizationID).HasColumnName(@"OCTAPrioritizationID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.OCTAPrioritizationKey).HasColumnName(@"OCTAPrioritizationKey").HasColumnType("int").IsRequired();
             Property(x => x.OCTAPrioritizationGeometry).HasColumnName(@"OCTAPrioritizationGeometry").HasColumnType("geometry").IsRequired();
+            Property(x => x.OCTAPrioritizationGeometry4326).HasColumnName(@"OCTAPrioritizationGeometry4326").HasColumnType("geometry").IsOptional();
             Property(x => x.LastUpdate).HasColumnName(@"LastUpdate").HasColumnType("datetime").IsRequired();
             Property(x => x.Watershed).HasColumnName(@"Watershed").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(80);
             Property(x => x.CatchIDN).HasColumnName(@"CatchIDN").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(80);

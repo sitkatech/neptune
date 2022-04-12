@@ -30,11 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OCTAPrioritization(int oCTAPrioritizationID, int oCTAPrioritizationKey, DbGeometry oCTAPrioritizationGeometry, DateTime lastUpdate, string watershed, string catchIDN, double tPI, double wQNLU, double wQNMON, double iMPAIR, double mON, double sEA, string sEA_PCTL, double pC_VOL_PCT, double pC_NUT_PCT, double pC_BAC_PCT, double pC_MET_PCT, double pC_TSS_PCT) : this()
+        public OCTAPrioritization(int oCTAPrioritizationID, int oCTAPrioritizationKey, DbGeometry oCTAPrioritizationGeometry, DbGeometry oCTAPrioritizationGeometry4326, DateTime lastUpdate, string watershed, string catchIDN, double tPI, double wQNLU, double wQNMON, double iMPAIR, double mON, double sEA, string sEA_PCTL, double pC_VOL_PCT, double pC_NUT_PCT, double pC_BAC_PCT, double pC_MET_PCT, double pC_TSS_PCT) : this()
         {
             this.OCTAPrioritizationID = oCTAPrioritizationID;
             this.OCTAPrioritizationKey = oCTAPrioritizationKey;
             this.OCTAPrioritizationGeometry = oCTAPrioritizationGeometry;
+            this.OCTAPrioritizationGeometry4326 = oCTAPrioritizationGeometry4326;
             this.LastUpdate = lastUpdate;
             this.Watershed = watershed;
             this.CatchIDN = catchIDN;
@@ -134,6 +135,7 @@ namespace Neptune.Web.Models
         public int OCTAPrioritizationID { get; set; }
         public int OCTAPrioritizationKey { get; set; }
         public DbGeometry OCTAPrioritizationGeometry { get; set; }
+        public DbGeometry OCTAPrioritizationGeometry4326 { get; set; }
         public DateTime LastUpdate { get; set; }
         public string Watershed { get; set; }
         public string CatchIDN { get; set; }
