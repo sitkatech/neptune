@@ -35,6 +35,12 @@ namespace Neptune.Web.ScheduledJobs
             precipitationZoneRefreshScheduledBackgroundJob.RunJob();
         }
 
+        public static void RunOCTAPrioritizationRefreshBackgroundJob(int personID)
+        {
+            var octaPrioritizationRefreshScheduledBackgroundJob = new OCTAPrioritizationRefreshScheduledBackgroundJob(personID);
+            octaPrioritizationRefreshScheduledBackgroundJob.RunJob();
+        }
+
         public static void RunDelineationDiscrepancyCheckerJob()
         {
             var delineationDiscrepancyCheckerBackgroundJob = new DelineationDiscrepancyCheckerBackgroundJob();

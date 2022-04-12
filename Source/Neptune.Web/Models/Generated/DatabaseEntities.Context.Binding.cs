@@ -65,6 +65,8 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
             modelBuilder.Configurations.Add(new NereidResultConfiguration());
             modelBuilder.Configurations.Add(new NotificationConfiguration());
+            modelBuilder.Configurations.Add(new OCTAPrioritizationConfiguration());
+            modelBuilder.Configurations.Add(new OCTAPrioritizationStagingConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentAreaConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationConfiguration());
@@ -178,6 +180,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
         public virtual DbSet<NereidResult> NereidResults { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<OCTAPrioritization> OCTAPrioritizations { get; set; }
+        public virtual DbSet<OCTAPrioritizationStaging> OCTAPrioritizationStagings { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
@@ -476,6 +480,12 @@ namespace Neptune.Web.Models
                     var observationTypeSpecification = ObservationTypeSpecification.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(observationTypeSpecification, "ObservationTypeSpecification", primaryKey);
                     return observationTypeSpecification;
+
+                case "OCTAPrioritization":
+                    return OCTAPrioritizations.GetOCTAPrioritization(primaryKey);
+
+                case "OCTAPrioritizationStaging":
+                    return OCTAPrioritizationStagings.GetOCTAPrioritizationStaging(primaryKey);
 
                 case "OnlandVisualTrashAssessmentArea":
                     return OnlandVisualTrashAssessmentAreas.GetOnlandVisualTrashAssessmentArea(primaryKey);

@@ -19,6 +19,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasAdminPermissions { get; }
         public string RefreshModelBasinsUrl { get; }
         public string RefreshPrecipitationZonesUrl { get; }
+        public string RefreshOCTAPrioritizationLayerUrl { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount, string bulkBMPUploadUrl)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
@@ -39,6 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             DownloadBMPInventoryUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.BMPInventoryExport());
             RefreshModelBasinsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RefreshModelBasinsFromOCSurvey());
             RefreshPrecipitationZonesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RefreshPrecipitationZonesFromOCSurvey());
+            RefreshOCTAPrioritizationLayerUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.RefreshOCTAPrioritizationLayerFromOCSurvey());
         }
     }
 }
