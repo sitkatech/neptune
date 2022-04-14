@@ -21,12 +21,12 @@
             </div>
             <div class="row no-gutters">
                 <div class="col-12 col-md-6 col-lg-4 order-last order-md-first">
-                    <div class="card" [style.height]="mapHeight" style="overflow:auto">
+                    <div class="card overflow-auto" [style.height]="mapHeight">
                         <div class="card-header hippocamp">
                             Selected Treatment BMP
                         </div>
-                        <div class="card-body d-flex flex-column overflow-auto">
-                            <ng-container *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected">
+                        <div class="card-body d-flex flex-column">
+                            <div *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected" class="container overflow-auto">
                                 <strong>BMP</strong>
                                 <dl class="row">
                                     <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
@@ -94,40 +94,41 @@
                                         </dd>
                                     </ng-container>
                                 </dl>
+                            </div>
+                            <ng-container *ngIf="selectedTreatmentBMP">
                                 <a routerLink="/projects/{{selectedProject.ProjectID}}"
                                     class="d-inline-block btn btn-hippocamp">View Project Details</a>
                             </ng-container>
-
                             <ng-container *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
                                 <hr class="w-100">
-                                <p class="b3 text-left">{{selectedPrioritizationMetric.toString()}} Legend</p>
+                                <p class="text-center">{{selectedPrioritizationMetric.toString()}} Legend</p>
                                 <div class="row justify-content-center">
-                                    <div class="col-12 col-md-6 col-lg-5">
+                                    <div class="col-6">
                                         <ng-container
                                             *ngFor="let legendColor of selectedPrioritizationMetric.legendColors | slice: 0 : 4; index as i">
                                             <div class="row">
-                                                <div class="col-2 mt-auto mb-auto">
-                                                    <div class="metric-color-swatch" [style.background]="legendColor">
+                                                <div class="col-6 mt-auto mb-auto text-right">
+                                                    <div class="metric-color-swatch ml-auto" [style.background]="legendColor">
                                                     </div>
                                                 </div>
-                                                <div class="col-10">
-                                                    <p class="b3 mt-auto mb-auto text-left">
+                                                <div class="col-6">
+                                                    <p class="mt-auto mb-auto text-left">
                                                         {{selectedPrioritizationMetric.legendValues[i]}}
                                                     </p>
                                                 </div>
                                             </div>
                                         </ng-container>
                                     </div>
-                                    <div class="col-12 col-md-6 col-lg-5">
+                                    <div class="col-6">
                                         <ng-container
                                             *ngFor="let legendColor of selectedPrioritizationMetric.legendColors | slice: 4; index as i">
                                             <div class="row">
-                                                <div class="col-2 mt-auto mb-auto">
-                                                    <div class="metric-color-swatch" [style.background]="legendColor">
+                                                <div class="col-6 mt-auto mb-auto">
+                                                    <div class="metric-color-swatch ml-auto" [style.background]="legendColor">
                                                     </div>
                                                 </div>
-                                                <div class="col-10">
-                                                    <p class="b3 mt-auto mb-auto text-left">
+                                                <div class="col-6">
+                                                    <p class="mt-auto mb-auto text-left">
                                                         {{selectedPrioritizationMetric.legendValues[i+4]}}
                                                     </p>
                                                 </div>
