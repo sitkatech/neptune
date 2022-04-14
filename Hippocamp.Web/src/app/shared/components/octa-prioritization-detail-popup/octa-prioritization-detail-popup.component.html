@@ -1,3 +1,4 @@
+<p class="text-center"><strong><u>Basics</u></strong></p>
 <dl class="row mb-0">
     <dt class="col-6 text-right">Catch IDN</dt>
     <dd class="col-6">
@@ -7,39 +8,45 @@
     <dd class="col-6">
         {{feature.properties.Watershed}}
     </dd>
-    <dt class="col-6 text-right">Transportation Nexus Score</dt>
+</dl>
+<p class="text-center"><strong><u>Prioritization Scores</u></strong></p>
+<dl class="row mb-0">
+    <dt class="col-6 text-right">Transportation Nexus</dt>
     <dd class="col-6">
         {{feature.properties.TransportationNexusScore | number:'0.0-2'}}
     </dd>
-    <dt class="col-6 text-right">Land Use Based Water Quality Need Score</dt>
+    <dt class="col-6 text-right">Land Use Based Water Quality Need</dt>
     <dd class="col-6">
         {{feature.properties.LandUseBasedWaterQualityNeedScore | number:'0.0-2'}}
     </dd>
-    <dt class="col-6 text-right">Receiving Water Score</dt>
+    <dt class="col-6 text-right">Receiving Water</dt>
     <dd class="col-6">
         {{feature.properties.ReceivingWaterScore | number:'0.0-2'}}
     </dd>
-    <dt class="col-6 text-right">Strategically Effective Area Score</dt>
+    <dt class="col-6 text-right">Strategically Effective Area</dt>
     <dd class="col-6">
         {{feature.properties.StrategicallyEffectiveAreaScore | number:'0.0-2'}}
     </dd>
-    <dt class="col-6 text-right">PC_BAC_PCT</dt>
+</dl>
+<p class="text-center"><strong><u>Pollutant Contribution Percentages</u></strong></p>
+<dl class="row mb-0">
+    <dt class="col-6 text-right">Bacteria</dt>
     <dd class="col-6">
         {{feature.properties.PC_BAC_PCT }}%
     </dd>
-    <dt class="col-6 text-right">PC_MET_PCT</dt>
+    <dt class="col-6 text-right">Metals</dt>
     <dd class="col-6">
         {{feature.properties.PC_MET_PCT }}%
     </dd>
-    <dt class="col-6 text-right">PC_NUT_PCT</dt>
+    <dt class="col-6 text-right">Nutrients</dt>
     <dd class="col-6">
         {{feature.properties.PC_NUT_PCT }}%
     </dd>
-    <dt class="col-6 text-right">PC_TSS_PCT</dt>
+    <dt class="col-6 text-right">Sediment (TSS)</dt>
     <dd class="col-6">
         {{feature.properties.PC_TSS_PCT }}%
     </dd>
-    <dt class="col-6 text-right">PC_VOL_PCT</dt>
+    <dt class="col-6 text-right">Volume</dt>
     <dd class="col-6">
         {{feature.properties.PC_VOL_PCT }}%
     </dd>
