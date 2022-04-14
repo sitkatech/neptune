@@ -875,6 +875,34 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult RefreshOCTAPrioritizationLayerFromOCSurvey()
+        {
+            return ViewRefreshOCTAPrioritizationLayerFromOCSurvey(new ConfirmDialogFormViewModel());
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshOCTAPrioritizationLayerFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshOCTAPrioritizationLayerFromOCSurvey(viewModel);
+            }
+
+            BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunOCTAPrioritizationRefreshBackgroundJob(CurrentPerson.PersonID));
+            SetMessageForDisplay("OCTA Prioritization refresh will run in the background.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshOCTAPrioritizationLayerFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = "Are you sure you want to refresh the OCTA Prioritization layer from OC Survey?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
 
         [AnonymousUnclassifiedFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)

@@ -56,6 +56,7 @@
     <add key="RegionalSubbasinServiceUrl" value="${regional-subbasin-service-url}" />
     <add key="ModelBasinServiceUrl" value="${model-basin-service-url}" />
     <add key="PrecipitationZoneServiceUrl" value="${precipitation-zone-service-url}" />
+    <add key="OCTAPrioritizationServiceUrl" value="${octa-prioritization-service-url}" />
     <add key="NominatimAPIKey" value="${nominatim-key}" />
     <add key="PathToPyqgisTestScript" value="${path-to-pyqgis-test-script}" />
     <add key="PyqgisWorkingDirectory" value="${pyqgis-working-directory}" />

@@ -221,6 +221,14 @@
     <Compile Include="Models\Generated\ObservationTypeCollectionMethodPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\ObservationTypeSpecification.Binding.cs" />
     <Compile Include="Models\Generated\ObservationTypeSpecificationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritization.Binding.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritization.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritizationConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritizationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritizationStaging.Binding.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritizationStaging.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritizationStagingConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\OCTAPrioritizationStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessment.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessment.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentArea.Binding.cs" />
@@ -585,6 +593,7 @@
     <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
+    <Compile Include="ScheduledJobs\OCTAPrioritizationRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\ProjectNetworkSolveJob.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaEditFeature.cs" />
