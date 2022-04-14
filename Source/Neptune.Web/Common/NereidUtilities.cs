@@ -755,7 +755,7 @@ namespace Neptune.Web.Common
 
             //ValidateForTesting(subgraph, landSurfaces, treatmentFacilities, treatmentSites);
 
-            var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=soc";
+            var solveUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/watershed/solve?state=ca&region=oc";
 
             // get the list of leaf nodes for this subgraph
             var targetNodeIDs = subgraph.Edges.Select(x => x.TargetID);
