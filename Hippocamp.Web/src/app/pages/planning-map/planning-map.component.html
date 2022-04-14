@@ -9,11 +9,14 @@
 
     <div class="row justify-content-center">
         <div class="col-12 col-lg-11">
-            <div class="row">
-                <div class="col-12">
-                    <ng-select [(ngModel)]="selectedPrioritizationMetric" [items]="prioritizationMetrics"
-                        bindLabel="key" [clearable]="false" (change)="applyPrioritizationMetricOverlay()">
-                    </ng-select>
+            <div class="row no-gutters justify-content-end">
+                <div class="col-12 col-sm-6 col-lg-8 control-label text-sm-right align-self-center">
+                    OCTA Prioritization Metric Map Overlay:
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4">
+                        <ng-select [(ngModel)]="selectedPrioritizationMetric" [items]="prioritizationMetrics"
+                            bindLabel="key" [clearable]="false" (change)="applyPrioritizationMetricOverlay()">
+                        </ng-select>
                 </div>
             </div>
             <div class="row no-gutters">
