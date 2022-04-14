@@ -34,6 +34,7 @@ import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './component
 import { ModelResultsComponent } from './components/projects/model-results/model-results.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttachmentsDisplayComponent } from './components/projects/attachments-display/attachments-display.component';
+import { OctaPrioritizationDetailPopupComponent } from './components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
 
 @NgModule({
     declarations: [
@@ -67,7 +68,8 @@ import { AttachmentsDisplayComponent } from './components/projects/attachments-d
         ConfirmModalComponent,
         TreatmentBmpMapEditorAndModelingAttributesComponent,
         ModelResultsComponent,
-        AttachmentsDisplayComponent
+        AttachmentsDisplayComponent,
+        OctaPrioritizationDetailPopupComponent
     ],
     imports: [
         CommonModule,
@@ -104,7 +106,8 @@ import { AttachmentsDisplayComponent } from './components/projects/attachments-d
         NeptuneModelingResultSigFigPipe,
         TreatmentBmpMapEditorAndModelingAttributesComponent,
         ModelResultsComponent,
-        AttachmentsDisplayComponent
+        AttachmentsDisplayComponent,
+        OctaPrioritizationDetailPopupComponent
     ],
     entryComponents:[]
 })

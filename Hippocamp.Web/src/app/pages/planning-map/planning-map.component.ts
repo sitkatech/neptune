@@ -19,6 +19,8 @@ import { ProjectService } from 'src/app/services/project/project.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
+import { WfsService } from 'src/app/shared/services/wfs.service';
+import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
 
 declare var $: any;
 
@@ -73,7 +75,8 @@ export class PlanningMapComponent implements OnInit {
     private compileService: CustomCompileService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private cdr: ChangeDetectorRef,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private wfsService: WfsService
   ) { }
 
   ngOnInit(): void {
@@ -198,6 +201,25 @@ export class PlanningMapComponent implements OnInit {
       });
 
     $(leafletControlLayersSelector).append(closem);
+
+    const wfsService = this.wfsService;
+    const self = this;
+    this.map.on("click", (event: L.LeafletMouseEvent): void => {
+      wfsService.getOCTAPrioritizationMetricsByCoordinate(event.latlng.lng, event.latlng.lat)
+        .subscribe((octaPrioritizationFeatureCollection: L.FeatureCollection) => {
+          octaPrioritizationFeatureCollection.features
+            .forEach((feature: L.Feature) => {
+              new L.Popup({
+                minWidth: 500,
+                autoPanPadding: new L.Point(100,100)
+              })
+                .setLatLng(event.latlng)
+                .setContent(this.compileService.compile(OctaPrioritizationDetailPopupComponent, (c) => { c.instance.feature = feature; })
+                )
+                .openOn(self.map);
+            });
+        });
+    });
   }
 
   public addPlannedProjectTreatmentBMPLayerToMap(): void {
