@@ -25,13 +25,16 @@ namespace Hippocamp.EFModels.Entities
         public int ModelBasinID { get; set; }
         public int ModelBasinKey { get; set; }
         [Required]
-        [StringLength(100)]
-        public string ModelBasinName { get; set; }
-        [Required]
         [Column(TypeName = "geometry")]
         public Geometry ModelBasinGeometry { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime LastUpdate { get; set; }
+        [Required]
+        [StringLength(5)]
+        public string ModelBasinState { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string ModelBasinRegion { get; set; }
 
         [InverseProperty(nameof(LoadGeneratingUnit.ModelBasin))]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }

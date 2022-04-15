@@ -15,7 +15,8 @@ namespace Hippocamp.EFModels.Entities
             {
                 ModelBasinStagingID = modelBasinStaging.ModelBasinStagingID,
                 ModelBasinKey = modelBasinStaging.ModelBasinKey,
-                ModelBasinName = modelBasinStaging.ModelBasinName
+                ModelBasinState = modelBasinStaging.ModelBasinState,
+                ModelBasinRegion = modelBasinStaging.ModelBasinRegion
             };
             DoCustomMappings(modelBasinStaging, modelBasinStagingDto);
             return modelBasinStagingDto;
@@ -29,7 +30,8 @@ namespace Hippocamp.EFModels.Entities
             {
                 ModelBasinStagingID = modelBasinStaging.ModelBasinStagingID,
                 ModelBasinKey = modelBasinStaging.ModelBasinKey,
-                ModelBasinName = modelBasinStaging.ModelBasinName
+                ModelBasinState = modelBasinStaging.ModelBasinState,
+                ModelBasinRegion = modelBasinStaging.ModelBasinRegion
             };
             DoCustomSimpleDtoMappings(modelBasinStaging, modelBasinStagingSimpleDto);
             return modelBasinStagingSimpleDto;

@@ -864,12 +864,16 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<ModelBasin>(entity =>
             {
-                entity.Property(e => e.ModelBasinName).IsUnicode(false);
+                entity.Property(e => e.ModelBasinRegion).IsUnicode(false);
+
+                entity.Property(e => e.ModelBasinState).IsUnicode(false);
             });
 
             modelBuilder.Entity<ModelBasinStaging>(entity =>
             {
-                entity.Property(e => e.ModelBasinName).IsUnicode(false);
+                entity.Property(e => e.ModelBasinRegion).IsUnicode(false);
+
+                entity.Property(e => e.ModelBasinState).IsUnicode(false);
             });
 
             modelBuilder.Entity<MonthsOfOperation>(entity =>
@@ -2420,7 +2424,11 @@ namespace Hippocamp.EFModels.Entities
             {
                 entity.ToView("vGeoServerOCTAPrioritization");
 
+                entity.Property(e => e.CatchIDN).IsUnicode(false);
+
                 entity.Property(e => e.OCTAPrioritizationID).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerObservationPointExport>(entity =>
@@ -2640,8 +2648,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
 
                 entity.Property(e => e.LandUse).IsUnicode(false);
-
-                entity.Property(e => e.ModelBasinName).IsUnicode(false);
 
                 entity.Property(e => e.SurfaceKey).IsUnicode(false);
 

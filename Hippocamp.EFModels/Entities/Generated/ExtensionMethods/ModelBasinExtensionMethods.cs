@@ -15,8 +15,9 @@ namespace Hippocamp.EFModels.Entities
             {
                 ModelBasinID = modelBasin.ModelBasinID,
                 ModelBasinKey = modelBasin.ModelBasinKey,
-                ModelBasinName = modelBasin.ModelBasinName,
-                LastUpdate = modelBasin.LastUpdate
+                LastUpdate = modelBasin.LastUpdate,
+                ModelBasinState = modelBasin.ModelBasinState,
+                ModelBasinRegion = modelBasin.ModelBasinRegion
             };
             DoCustomMappings(modelBasin, modelBasinDto);
             return modelBasinDto;
@@ -30,8 +31,9 @@ namespace Hippocamp.EFModels.Entities
             {
                 ModelBasinID = modelBasin.ModelBasinID,
                 ModelBasinKey = modelBasin.ModelBasinKey,
-                ModelBasinName = modelBasin.ModelBasinName,
-                LastUpdate = modelBasin.LastUpdate
+                LastUpdate = modelBasin.LastUpdate,
+                ModelBasinState = modelBasin.ModelBasinState,
+                ModelBasinRegion = modelBasin.ModelBasinRegion
             };
             DoCustomSimpleDtoMappings(modelBasin, modelBasinSimpleDto);
             return modelBasinSimpleDto;

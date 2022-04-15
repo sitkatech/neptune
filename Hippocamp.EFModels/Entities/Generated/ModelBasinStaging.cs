@@ -17,10 +17,13 @@ namespace Hippocamp.EFModels.Entities
         public int ModelBasinStagingID { get; set; }
         public int ModelBasinKey { get; set; }
         [Required]
-        [StringLength(100)]
-        public string ModelBasinName { get; set; }
-        [Required]
         [Column(TypeName = "geometry")]
         public Geometry ModelBasinGeometry { get; set; }
+        [Required]
+        [StringLength(5)]
+        public string ModelBasinState { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string ModelBasinRegion { get; set; }
     }
 }

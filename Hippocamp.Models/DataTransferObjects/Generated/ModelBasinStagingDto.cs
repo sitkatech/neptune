@@ -11,14 +11,16 @@ namespace Hippocamp.Models.DataTransferObjects
     {
         public int ModelBasinStagingID { get; set; }
         public int ModelBasinKey { get; set; }
-        public string ModelBasinName { get; set; }
+        public string ModelBasinState { get; set; }
+        public string ModelBasinRegion { get; set; }
     }
 
     public partial class ModelBasinStagingSimpleDto
     {
         public int ModelBasinStagingID { get; set; }
         public int ModelBasinKey { get; set; }
-        public string ModelBasinName { get; set; }
+        public string ModelBasinState { get; set; }
+        public string ModelBasinRegion { get; set; }
     }
 
 }

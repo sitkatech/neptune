@@ -31,8 +31,7 @@ namespace Hippocamp.EFModels.Entities
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? LoadGeneratingUnitID { get; set; }
-        [StringLength(100)]
-        public string ModelBasinName { get; set; }
+        public int? ModelBasinKey { get; set; }
         [StringLength(100)]
         public string LandUse { get; set; }
         [Required]

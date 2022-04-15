@@ -16,9 +16,20 @@ namespace Hippocamp.EFModels.Entities
         public int OCTAPrioritizationKey { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry OCTAPrioritizationGeometry { get; set; }
+        [Required]
+        [StringLength(80)]
+        public string CatchIDN { get; set; }
+        [Required]
+        [StringLength(80)]
+        public string Watershed { get; set; }
         public double TransportationNexusScore { get; set; }
         public double LandUseBasedWaterQualityNeedScore { get; set; }
         public double ReceivingWaterScore { get; set; }
         public double StrategicallyEffectiveAreaScore { get; set; }
+        public double PC_BAC_PCT { get; set; }
+        public double PC_MET_PCT { get; set; }
+        public double PC_NUT_PCT { get; set; }
+        public double PC_TSS_PCT { get; set; }
+        public double PC_VOL_PCT { get; set; }
     }
 }
