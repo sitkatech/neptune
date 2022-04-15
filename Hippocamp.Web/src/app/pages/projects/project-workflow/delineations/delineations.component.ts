@@ -53,6 +53,7 @@ export class DelineationsComponent implements OnInit {
 
   public component: any;
   public map: L.Map;
+  public mapInitComplete: boolean = false;
   public featureLayer: any;
   public delineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
   public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
@@ -205,7 +206,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   public initializeMap(): void {
-
+    this.mapInitComplete = false;
     const mapOptions: L.MapOptions = {
       minZoom: 9,
       maxZoom: 22,
@@ -243,6 +244,8 @@ export class DelineationsComponent implements OnInit {
     if (this.treatmentBMPs.length > 0) {
       this.selectFeatureImpl(this.treatmentBMPs[0].TreatmentBMPID);
     }
+
+    this.mapInitComplete = true;
   }
 
   private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPUpsertDto[]) {
@@ -428,6 +431,8 @@ export class DelineationsComponent implements OnInit {
       return;
     }
 
+    let hasFlownToSelectedObject = false;
+
     this.drawControl.remove();
     if (this.selectedListItem) {
       this.selectedListItem = null;
@@ -449,6 +454,13 @@ export class DelineationsComponent implements OnInit {
         l.setStyle(this.delineationSelectedStyle).bringToFront();
       });
       layer.setStyle(this.delineationTransparentStyle);
+      if (!this.mapInitComplete) {
+        this.map.fitBounds(layer.getBounds(), {padding: new L.Point(50,50)})
+      }
+      else {
+        this.map.flyToBounds(layer.getBounds(),{padding: new L.Point(50,50)});
+      }
+      hasFlownToSelectedObject = true;
     })
 
     this.selectedListItem = treatmentBMPID;
@@ -461,7 +473,14 @@ export class DelineationsComponent implements OnInit {
       }
       layer.setIcon(MarkerHelper.selectedMarker);
       layer.setZIndexOffset(10000);
-      this.map.panTo(layer.getLatLng());
+      if (!hasFlownToSelectedObject) {
+        if (!this.mapInitComplete) {
+          this.map.setView(layer.getLatLng(), 18);
+        }
+        else {
+          this.map.flyTo(layer.getLatLng(), 18);
+        }
+      }
     })
     this.addOrRemoveDrawControl(true);
 

@@ -40,6 +40,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   @Input('readOnly') readOnly: boolean = true;
   @Input('includeDelineations') includeDelineations: boolean = false;
+  @Input('zoomToProjectExtentOnLoad') zoomToProjectExtentOnLoad: boolean = false;
+  @Input('zoomOnSelection') zoomOnSelection: boolean = false;
   @Input('projectID') projectID: number;
 
   public mapID: string = 'treatmentBMPMap';
@@ -260,13 +262,13 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
     this.tileLayers = Object.assign({}, {
       "Aerial": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Aerial', maxZoom: 22, maxNativeZoom:18
+        attribution: 'Aerial', maxZoom: 22, maxNativeZoom: 18
       }),
       "Street": L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Street', maxZoom: 22, maxNativeZoom:18
+        attribution: 'Street', maxZoom: 22, maxNativeZoom: 18
       }),
       "Terrain": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Terrain', maxZoom: 22, maxNativeZoom:18
+        attribution: 'Terrain', maxZoom: 22, maxNativeZoom: 18
       }),
     }, this.tileLayers);
 
@@ -336,6 +338,11 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     if (this.treatmentBMPs.length > 0) {
       this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
     }
+
+    if (this.zoomToProjectExtentOnLoad) {
+      let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
+      this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
+    }
   }
 
   public updateTreatmentBMPsLayer() {
@@ -348,17 +355,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       this.map.removeLayer(this.delineationsLayer);
       this.delineationsLayer = null;
     }
-
-    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
-    this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
-      pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
-      },
-      filter: (feature) => {
-        return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
-      }
-    });
-    this.treatmentBMPsLayer.addTo(this.map);
+    let hasFlownToSelectedObject = false;
 
     if (this.includeDelineations) {
       const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
@@ -368,17 +365,21 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
             return this.delineationDefaultStyle;
           }
           return this.delineationSelectedStyle;
+        },
+        onEachFeature: (feature, layer) => {
+          if (this.selectedTreatmentBMP != null) {
+            if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
+              return;
+            }
+            layer.bringToFront();
+            if (this.zoomOnSelection) {
+              this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
+              hasFlownToSelectedObject = true;
+            }
+          }
         }
       });
       this.delineationsLayer.addTo(this.map);
-      if (this.selectedTreatmentBMP != null) {
-        this.delineationsLayer.eachLayer(layer => {
-          if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
-            return;
-          }
-          layer.bringToFront();
-        })
-      }
 
       this.delineationsLayer.on("click", (event: L.LeafletEvent) => {
         if (this.isEditingLocation) {
@@ -387,6 +388,25 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
         this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
       });
     }
+
+    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
+      this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        pointToLayer: (feature, latlng) => {
+          return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
+        },
+        filter: (feature) => {
+          return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
+        },
+        onEachFeature: (feature, layer) => {
+          if (this.selectedTreatmentBMP != null && this.zoomOnSelection && !hasFlownToSelectedObject) {
+            if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
+              return;
+            }
+            this.map.flyTo(layer.getLatLng(), 18);
+          }
+        }
+      });
+      this.treatmentBMPsLayer.addTo(this.map);
 
     this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
       if (this.isEditingLocation) {

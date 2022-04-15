@@ -159,8 +159,6 @@ export class ModeledPerformanceComponent implements OnInit {
     this.map = L.map(this.mapID, mapOptions);
     L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
-    this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
-
     const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
     this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
       onEachFeature: (feature, layer) => {
@@ -186,6 +184,8 @@ export class ModeledPerformanceComponent implements OnInit {
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
     this.registerClickEvents();
+    let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
+    this.map.fitBounds(tempFeatureGroup.getBounds(), {padding: new L.Point(50,50)});
   }
 
   public setControl(): void {
@@ -265,6 +265,16 @@ export class ModeledPerformanceComponent implements OnInit {
 
   private selectFeatureImpl(treatmentBMPID: number) {
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    let hasFlownToSelectedObject = false;
+    this.delineationsLayer?.eachLayer(layer => {
+      if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
+        layer.setStyle(this.delineationDefaultStyle);
+        return;
+      }
+      layer.setStyle(this.delineationSelectedStyle);
+      this.map.flyToBounds(layer.getBounds(), {padding: new L.Point(50,50)})
+      hasFlownToSelectedObject = true;
+    })
     this.treatmentBMPsLayer.eachLayer(layer => {
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
@@ -272,17 +282,10 @@ export class ModeledPerformanceComponent implements OnInit {
       }
       layer.setIcon(MarkerHelper.selectedMarker);
       layer.setZIndexOffset(10000);
-      this.map.panTo(layer.getLatLng());
-    })
-    this.delineationsLayer?.eachLayer(layer => {
-      if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-        layer.setStyle(this.delineationDefaultStyle);
-        return;
+      if (!hasFlownToSelectedObject) {
+        this.map.flyTo(layer.getLatLng(), 18);
       }
-      layer.setStyle(this.delineationSelectedStyle);
     })
-
-    //this.selectedListItem = treatmentBMPID;
   }
 
   getDelineationAcreageForTreatmentBMP(treatmentBMPID: number) : string {
