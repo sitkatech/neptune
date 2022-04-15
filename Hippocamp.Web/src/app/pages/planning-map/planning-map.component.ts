@@ -64,8 +64,8 @@ export class PlanningMapComponent implements OnInit {
   public selectedPrioritizationMetric = PrioritizationMetric.NoMetric;
   public prioritizationMetricOverlayLayer: L.Layers;
 
-  private delineationSelectedStyle = {
-    color: 'yellow',
+  private delineationDefaultStyle = {
+    color: '#51F6F8',
     fillOpacity: 0.2,
     opacity: 1
   }
@@ -330,30 +330,29 @@ export class PlanningMapComponent implements OnInit {
     this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.selectedTreatmentBMP = selectedTreatmentBMP;
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
+      
+      if (!layer.feature.properties.DefaultZIndexOffset) {
+        layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
+      }
       //Doing this here as well feels redundant, but if we dont
       //whenever we set the icon it puts the highlight in a weird state.
       //So just disable and enable as needed
       layer.disablePermanentHighlight();
       if (this.selectedTreatmentBMP == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(MarkerHelper.treatmentBMPMarker);
+        layer.setZIndexOffset(layer.feature.properties.DefaultZIndexOffset); 
         if (this.relatedTreatmentBMPs.some(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)) {
           layer.enablePermanentHighlight();
         }
         return;
       }
-      layer.setIcon(MarkerHelper.selectedMarker);
+      layer.setZIndexOffset(10000);
+      layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath('/assets/main/map-icons/marker-icon-red.png'));
       // if (!this.map.getBounds().contains(layer.getLatLng())) {
       //   this.map.flyTo(layer.getLatLng());
       // }
     })
     this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-    if (this.selectedDelineation != null) {
-      this.selectedProjectDelineationsLayer.eachLayer(layer => {
-        if (layer.feature.properties.DelineationID == this.selectedDelineation.DelineationID) {
-          layer.setStyle(this.delineationSelectedStyle);
-        }
-      });
-    }
   }
 
   public selectProjectImpl(projectID: number) {
@@ -372,7 +371,11 @@ export class PlanningMapComponent implements OnInit {
 
     let relatedDelineations = this.delineations.filter(x => relatedTreatmentBMPIDs.includes(x.TreatmentBMPID));
     if (relatedDelineations != null && relatedDelineations.length > 0) {
-      this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations));
+      this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations), {
+        style: (feature) => {
+          return this.delineationDefaultStyle;
+        }
+      });
       this.selectedProjectDelineationsLayer.addTo(this.map);
       this.selectedProjectDelineationsLayer.addTo(featureGroupForZoom);
     }
@@ -432,6 +435,13 @@ export class PlanningMapComponent implements OnInit {
     if (!selectedNode || (this.selectedProject != null && this.selectedProject.ProjectID == selectedNode.data.ProjectID)) {
       return;
     }
+    let treatmentBMPID = this.treatmentBMPs.filter(x => x.ProjectID == selectedNode.data.ProjectID).map(x => x.TreatmentBMPID)[0];
+    
+    if (treatmentBMPID != null) {
+      this.selectTreatmentBMPImpl(treatmentBMPID);
+      return;
+    }
+
     this.selectProjectImpl(selectedNode.data.ProjectID);
   }
 

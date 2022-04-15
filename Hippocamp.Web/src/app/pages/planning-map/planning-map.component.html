@@ -64,9 +64,9 @@
                     <!-- Hard code background color for now as best option to have scrollable overflow with a responsive growth div -->
                     <div class="card d-flex flex-grow-1" style="overflow-y:auto; background-color: #f9f9f9;">
                         <div class="card-header sticky-top">
-                            Selected Treatment BMP
+                            Selected Project
                         </div>
-                        <div *ngIf="selectedProject != null; else noTreatmentBMPSelected" class="card-body">
+                        <div *ngIf="selectedProject != null; else noProjectSelected" class="card-body">
                                 <div class="d-flex">
                                     <strong>Project</strong>
                                     <a routerLink="/projects/{{selectedProject.ProjectID}}"
@@ -136,10 +136,12 @@
                                     </ng-container>
                                 </dl>
                         </div>
-                        <ng-template #noTreatmentBMPSelected>
+                        <ng-template #noProjectSelected>
                             <div class="card-body">
                                 Select a Treatment BMP on the map to see information about the
-                                Treatment BMP, its Project and related Treatment BMPs, and Delineation if present
+                                Treatment BMP, its Project and related Treatment BMPs, and Delineation if present. 
+                                Alternatively, select a row in the grid below to bring up the selected project and choose
+                                a BMP from the populated panel.
                             </div>
                         </ng-template>
                     </div>
