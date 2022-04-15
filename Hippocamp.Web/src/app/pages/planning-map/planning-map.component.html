@@ -61,13 +61,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card overflow-auto d-flex flex-grow-1">
-                        <div class="card-header">
+                    <div class="card d-flex flex-grow-1" style="overflow-y:auto">
+                        <div class="card-header sticky-top">
                             Selected Treatment BMP
                         </div>
-                        <div class="card-body d-flex flex-column">
+                        <div class="card-body pt-2">
                             <div *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected"
-                                class="container p-0 overflow-y-auto">
+                                class="container p-0">
                                 <div class="d-flex">
                                     <strong>Project</strong>
                                     <a routerLink="/projects/{{selectedProject.ProjectID}}"
@@ -127,7 +127,7 @@
                                     <ng-container *ngFor="let bmp of relatedTreatmentBMPs">
                                         <dt class="col-12 col-sm-5 text-sm-right">
                                             <button class="btn btn-primary btn-sm"
-                                                (click)="selectFeatureImpl(bmp.TreatmentBMPID)">Select</button>
+                                                (click)="selectTreatmentBMPImpl(bmp.TreatmentBMPID)">Select</button>
                                         </dt>
                                         <dd class="col-12 col-sm-7 ">
                                             {{bmp.TreatmentBMPName}}

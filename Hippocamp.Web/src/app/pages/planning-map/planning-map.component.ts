@@ -51,7 +51,7 @@ export class PlanningMapComponent implements OnInit {
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
   public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
-  public selectedDelineationLayer: L.GeoJSON<any>;
+  public selectedProjectDelineationsLayer: L.GeoJSON<any>;
   private boundingBox: BoundingBoxDto;
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
   public layerControl: L.Control.Layers;
@@ -132,7 +132,7 @@ export class PlanningMapComponent implements OnInit {
         this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
         { headerName: 'Project Description', field: 'ProjectDescription' }
       ];
-  
+
       this.defaultColDef = {
         filter: true, sortable: true, resizable: true
       };
@@ -278,7 +278,7 @@ export class PlanningMapComponent implements OnInit {
       },
       onEachFeature: (feature, layer) => {
         layer.on('click', (e) => {
-          this.selectFeatureImpl(feature.properties.TreatmentBMPID);
+          this.selectTreatmentBMPImpl(feature.properties.TreatmentBMPID);
         })
       },
     });
@@ -311,23 +311,35 @@ export class PlanningMapComponent implements OnInit {
     };
   }
 
+  private mapDelineationsToGeoJson(delineations: DelineationSimpleDto[]) {
+    return {
+      type: "FeatureCollection",
+      features: delineations.map(x => this.mapDelineationToFeature(x))
+    }
+  }
+
   private mapDelineationToFeature(x: DelineationSimpleDto) {
     return {
       "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null
+      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
+      "properties": {
+        TreatmentBMPID: x.TreatmentBMPID,
+        DelineationID: x.DelineationID
+      }
     };
   }
 
-  public selectFeatureImpl(treatmentBMPID: number) {
+  public selectTreatmentBMPImpl(treatmentBMPID: number) {
     if (this.selectedDelineation) {
-      this.map.removeLayer(this.selectedDelineationLayer);
-      this.selectedDelineationLayer = null;
       this.selectedDelineation = null;
     }
 
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-    this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == this.selectedTreatmentBMP.ProjectID && x.TreatmentBMPID != treatmentBMPID);
+    this.selectProjectImpl(this.selectedTreatmentBMP.ProjectID);
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
+      //Doing this here as well feels redundant, but if we dont
+      //whenever we set the icon it puts the highlight in a weird state.
+      //So just disable and enable as needed
       layer.disablePermanentHighlight();
       if (this.selectedTreatmentBMP == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(MarkerHelper.treatmentBMPMarker);
@@ -337,20 +349,48 @@ export class PlanningMapComponent implements OnInit {
         return;
       }
       layer.setIcon(MarkerHelper.selectedMarker);
-      if (!this.map.getBounds().contains(layer.getLatLng())) {
-        this.map.flyTo(layer.getLatLng());
-      }
+      // if (!this.map.getBounds().contains(layer.getLatLng())) {
+      //   this.map.flyTo(layer.getLatLng());
+      // }
     })
-    this.selectedProject = this.projects.filter(x => x.ProjectID == this.selectedTreatmentBMP.ProjectID)[0];
     this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     if (this.selectedDelineation != null) {
-      this.selectedDelineationLayer = new L.GeoJSON(this.mapDelineationToFeature(this.selectedDelineation), {
-        style: (feature) => {
-          return this.delineationSelectedStyle;
+      this.selectedProjectDelineationsLayer.eachLayer(layer => {
+        if (layer.feature.properties.DelineationID == this.selectedDelineation.DelineationID) {
+          layer.setStyle(this.delineationSelectedStyle);
         }
       });
-      this.selectedDelineationLayer.addTo(this.map);
     }
+  }
+
+  public selectProjectImpl(projectID: number) {
+    if (this.selectedProjectDelineationsLayer) {
+      this.map.removeLayer(this.selectedProjectDelineationsLayer);
+      this.selectedProjectDelineationsLayer = null;
+    }
+
+    this.selectedProject = this.projects.filter(x => x.ProjectID == this.selectedTreatmentBMP.ProjectID)[0];
+    this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == projectID);
+    let relatedTreatmentBMPIDs = this.relatedTreatmentBMPs.map(x => x.TreatmentBMPID);
+    let featureGroupForZoom = new L.featureGroup();
+
+    let relatedDelineations = this.delineations.filter(x => relatedTreatmentBMPIDs.includes(x.TreatmentBMPID));
+    if (relatedDelineations != null && relatedDelineations.length > 0) {
+      this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations));
+      this.selectedProjectDelineationsLayer.addTo(this.map);
+      this.selectedProjectDelineationsLayer.addTo(featureGroupForZoom);
+    }
+
+    this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
+      layer.disablePermanentHighlight();
+      layer.setIcon(MarkerHelper.treatmentBMPMarker);
+      if (relatedTreatmentBMPIDs.includes(layer.feature.properties.TreatmentBMPID)) {
+          layer.addTo(featureGroupForZoom);
+          layer.enablePermanentHighlight();
+        }
+      });
+    this.map.fitBounds(featureGroupForZoom.getBounds(), {padding: new L.Point(50,50)});
+    
   }
 
   public applyPrioritizationMetricOverlay(): void {
