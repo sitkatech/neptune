@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import * as L from 'leaflet';
 import 'leaflet-gesture-handling';
@@ -24,6 +24,7 @@ import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/component
 import { ColDef } from 'ag-grid-community';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
+import { AgGridAngular } from 'ag-grid-angular';
 
 declare var $: any;
 
@@ -33,6 +34,7 @@ declare var $: any;
   styleUrls: ['./planning-map.component.scss']
 })
 export class PlanningMapComponent implements OnInit {
+  @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
 
   private currentUser: PersonDto;
   public richTextTypeID = CustomRichTextType.PlanningMap;
@@ -72,6 +74,7 @@ export class PlanningMapComponent implements OnInit {
 
   public columnDefs: ColDef[];
   public defaultColDef: ColDef;
+  public paginationPageSize: number = 100;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -156,8 +159,7 @@ export class PlanningMapComponent implements OnInit {
       layers: "OCStormwater:RegionalSubbasins",
       transparent: true,
       format: "image/png",
-      tiled: true,
-      pane: "hippocampOverlayPane"
+      tiled: true
     } as L.WMSOptions);
 
     let jurisdictionsWMSOptions = ({
@@ -165,8 +167,7 @@ export class PlanningMapComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-      styles: "jurisdiction_orange",
-      pane: "hippocampOverlayPane"
+      styles: "jurisdiction_orange"
     } as L.WMSOptions);
 
     let verifiedDelineationsWMSOptions = ({
@@ -174,8 +175,7 @@ export class PlanningMapComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-      cql_filter: "DelineationStatus = 'Verified'",
-      pane: "hippocampOverlayPane"
+      cql_filter: "DelineationStatus = 'Verified'"
     } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
@@ -209,12 +209,8 @@ export class PlanningMapComponent implements OnInit {
   }
 
   public initializePanes(): void {
-    let hippocampOverlayPane = this.map.createPane("hippocampOverlayPane");
-    hippocampOverlayPane.style.zIndex = 10000;
     let hippocampChoroplethPane = this.map.createPane("hippocampChoroplethPane");
-    hippocampChoroplethPane.style.zIndex = 9999;
-    this.map.getPane("markerPane").style.zIndex = 10001;
-    this.map.getPane("popupPane").style.zIndex = 10002;
+    hippocampChoroplethPane.style.zIndex = 300;
   }
 
   public setControl(): void {
@@ -330,12 +326,9 @@ export class PlanningMapComponent implements OnInit {
   }
 
   public selectTreatmentBMPImpl(treatmentBMPID: number) {
-    if (this.selectedDelineation) {
-      this.selectedDelineation = null;
-    }
-
-    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-    this.selectProjectImpl(this.selectedTreatmentBMP.ProjectID);
+    let selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
+    this.selectedTreatmentBMP = selectedTreatmentBMP;
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
       //Doing this here as well feels redundant, but if we dont
       //whenever we set the icon it puts the highlight in a weird state.
@@ -369,7 +362,10 @@ export class PlanningMapComponent implements OnInit {
       this.selectedProjectDelineationsLayer = null;
     }
 
-    this.selectedProject = this.projects.filter(x => x.ProjectID == this.selectedTreatmentBMP.ProjectID)[0];
+    this.selectedDelineation = null;
+    this.selectedTreatmentBMP = null;
+
+    this.selectedProject = this.projects.filter(x => x.ProjectID == projectID)[0];
     this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == projectID);
     let relatedTreatmentBMPIDs = this.relatedTreatmentBMPs.map(x => x.TreatmentBMPID);
     let featureGroupForZoom = new L.featureGroup();
@@ -390,6 +386,16 @@ export class PlanningMapComponent implements OnInit {
         }
       });
     this.map.fitBounds(featureGroupForZoom.getBounds(), {padding: new L.Point(50,50)});
+
+    this.projectsGrid.api.forEachNode(node => {
+      if (node.data.ProjectID === projectID) {
+        node.setSelected(true);
+        var rowIndex = node.rowIndex;
+        //I am honestly kind of flabbergasted that ag-grid doesn't tell me what page the node is on
+        this.projectsGrid.api.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
+        this.projectsGrid.api.ensureIndexVisible(node.rowIndex)
+      }
+    });
     
   }
 
@@ -418,7 +424,20 @@ export class PlanningMapComponent implements OnInit {
 
     this.prioritizationMetricOverlayLayer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", prioritizationMetricsWMSOptions);
     this.prioritizationMetricOverlayLayer.addTo(this.map);
-    this.prioritizationMetricOverlayLayer.bringToFront();
+  }
+
+  public onSelectionChanged(event: Event) {
+    const selectedNode = this.projectsGrid.api.getSelectedNodes()[0];
+    // If we have no selected node or our node has already been selected so we can stop infinite looping
+    if (!selectedNode || (this.selectedProject != null && this.selectedProject.ProjectID == selectedNode.data.ProjectID)) {
+      return;
+    }
+    this.selectProjectImpl(selectedNode.data.ProjectID);
+  }
+
+  public getRelatedBMPsToShow() {
+    let selectedTreatmentBMPID = this.selectedTreatmentBMP?.TreatmentBMPID;
+    return this.relatedTreatmentBMPs.filter(x => x.TreatmentBMPID != selectedTreatmentBMPID);
   }
 
 }
