@@ -184,7 +184,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 NodeID = treatmentBMPNodeID,
                 FacilityType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
                 ReferenceDataKey = modelBasinKey,
-                DesignStormwaterDepth = treatmentBMP.PrecipitationZone.DesignStormwaterDepthInInches,
+                DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches,
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
                 //convert Days to Hours for this field.

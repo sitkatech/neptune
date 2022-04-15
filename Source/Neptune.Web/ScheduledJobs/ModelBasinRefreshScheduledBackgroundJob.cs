@@ -55,7 +55,7 @@ namespace Neptune.Web.ScheduledJobs
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 600000);
             ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(jsonFeatureCollection,
                 NeptuneWebConfiguration.DatabaseConnectionString, "ModelBasinStaging",
-                "MODEL_BASIN as ModelBasinKey, Name as ModelBasinName",
+                "MODEL_BASIN as ModelBasinKey, STATE as ModelBasinState, REGION as ModelBasinRegion",
                 CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
@@ -85,9 +85,7 @@ namespace Neptune.Web.ScheduledJobs
                 {
                     var queryStringObject = new
                     {
-                        //This satisfies requirements for switching to the new service and maintaining our refresh of SOC only
-                        //Future work will need to return this to 1=1 and potentially update the model basin table appropriately, but that's for future us to worry about
-                        where = "STATE='CA' and REGION='SOC'",
+                        where = "1=1",
                         geometryType = "esriGeometryEnvelope",
                         spatialRel = "esriSpatialRelIntersects",
                         outFields = "*",

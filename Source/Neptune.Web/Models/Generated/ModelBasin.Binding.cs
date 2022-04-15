@@ -33,27 +33,29 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ModelBasin(int modelBasinID, int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry, DateTime lastUpdate) : this()
+        public ModelBasin(int modelBasinID, int modelBasinKey, DbGeometry modelBasinGeometry, DateTime lastUpdate, string modelBasinState, string modelBasinRegion) : this()
         {
             this.ModelBasinID = modelBasinID;
             this.ModelBasinKey = modelBasinKey;
-            this.ModelBasinName = modelBasinName;
             this.ModelBasinGeometry = modelBasinGeometry;
             this.LastUpdate = lastUpdate;
+            this.ModelBasinState = modelBasinState;
+            this.ModelBasinRegion = modelBasinRegion;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ModelBasin(int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry, DateTime lastUpdate) : this()
+        public ModelBasin(int modelBasinKey, DbGeometry modelBasinGeometry, DateTime lastUpdate, string modelBasinState, string modelBasinRegion) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ModelBasinID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ModelBasinKey = modelBasinKey;
-            this.ModelBasinName = modelBasinName;
             this.ModelBasinGeometry = modelBasinGeometry;
             this.LastUpdate = lastUpdate;
+            this.ModelBasinState = modelBasinState;
+            this.ModelBasinRegion = modelBasinRegion;
         }
 
 
@@ -62,7 +64,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static ModelBasin CreateNewBlank()
         {
-            return new ModelBasin(default(int), default(string), default(DbGeometry), default(DateTime));
+            return new ModelBasin(default(int), default(DbGeometry), default(DateTime), default(string), default(string));
         }
 
         /// <summary>
@@ -155,9 +157,10 @@ namespace Neptune.Web.Models
         [Key]
         public int ModelBasinID { get; set; }
         public int ModelBasinKey { get; set; }
-        public string ModelBasinName { get; set; }
         public DbGeometry ModelBasinGeometry { get; set; }
         public DateTime LastUpdate { get; set; }
+        public string ModelBasinState { get; set; }
+        public string ModelBasinRegion { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ModelBasinID; } set { ModelBasinID = value; } }
 
@@ -168,7 +171,8 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int ModelBasinName = 100;
+            public const int ModelBasinState = 5;
+            public const int ModelBasinRegion = 10;
         }
     }
 }

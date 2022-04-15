@@ -4,7 +4,7 @@
     {
         public string GetAuditDescriptionString()
         {
-            return ModelBasinName;
+            return ModelBasinKey.ToString();
         }
     }
 }

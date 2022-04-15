@@ -194,7 +194,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult Loading()
         {
-            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
+            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=oc";
             var regionalSubbasinsForTest = new List<int> { 2377,12394 };
             var stopwatch = new Stopwatch();
 
@@ -226,7 +226,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult BaselineLoading()
         {
-            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=soc";
+            var landSurfaceLoadingUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/land_surface/loading?details=true&state=ca&region=oc";
             var regionalSubbasinsForTest = new List<int> { 2377,12394 };
             var stopwatch = new Stopwatch();
 
@@ -261,7 +261,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult TreatmentFacility()
         {
-            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=oc";
 
             var treatmentFacilities = NereidUtilities.ModelingTreatmentBMPs(HttpRequestStorage.DatabaseEntities)
                 .ToList().Where(x => x.IsFullyParameterized())
@@ -294,7 +294,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult ValidateTreatmentFacility(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=oc";
 
             var treatmentFacility = treatmentBMPPrimaryKey.EntityObject.ToTreatmentFacility(true);
 
@@ -326,7 +326,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         [SitkaAdminFeature]
         public JsonResult NoTreatmentFacility()
         {
-            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=soc";
+            var treatmentFacilityUrl = $"{NeptuneWebConfiguration.NereidUrl}/api/v1/treatment_facility/validate?state=ca&region=oc";
 
             var treatmentFacilities = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
                 .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility(true)).ToList();
@@ -460,12 +460,12 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         }
 
         /// <summary>
-        /// Runs Nereid on the entire SOC network graph using the solution sequence pattern.
+        /// Runs Nereid on the entire OC network graph using the solution sequence pattern.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [SitkaAdminFeature]
-        public ActionResult SolveSOC()
+        public ActionResult SolveOC()
         {
             var failed = false;
             var exceptionMessage = "";

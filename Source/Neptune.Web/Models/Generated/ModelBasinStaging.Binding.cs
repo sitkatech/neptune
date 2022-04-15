@@ -30,25 +30,27 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ModelBasinStaging(int modelBasinStagingID, int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry) : this()
+        public ModelBasinStaging(int modelBasinStagingID, int modelBasinKey, DbGeometry modelBasinGeometry, string modelBasinState, string modelBasinRegion) : this()
         {
             this.ModelBasinStagingID = modelBasinStagingID;
             this.ModelBasinKey = modelBasinKey;
-            this.ModelBasinName = modelBasinName;
             this.ModelBasinGeometry = modelBasinGeometry;
+            this.ModelBasinState = modelBasinState;
+            this.ModelBasinRegion = modelBasinRegion;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ModelBasinStaging(int modelBasinKey, string modelBasinName, DbGeometry modelBasinGeometry) : this()
+        public ModelBasinStaging(int modelBasinKey, DbGeometry modelBasinGeometry, string modelBasinState, string modelBasinRegion) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ModelBasinStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ModelBasinKey = modelBasinKey;
-            this.ModelBasinName = modelBasinName;
             this.ModelBasinGeometry = modelBasinGeometry;
+            this.ModelBasinState = modelBasinState;
+            this.ModelBasinRegion = modelBasinRegion;
         }
 
 
@@ -57,7 +59,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static ModelBasinStaging CreateNewBlank()
         {
-            return new ModelBasinStaging(default(int), default(string), default(DbGeometry));
+            return new ModelBasinStaging(default(int), default(DbGeometry), default(string), default(string));
         }
 
         /// <summary>
@@ -105,8 +107,9 @@ namespace Neptune.Web.Models
         [Key]
         public int ModelBasinStagingID { get; set; }
         public int ModelBasinKey { get; set; }
-        public string ModelBasinName { get; set; }
         public DbGeometry ModelBasinGeometry { get; set; }
+        public string ModelBasinState { get; set; }
+        public string ModelBasinRegion { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ModelBasinStagingID; } set { ModelBasinStagingID = value; } }
 
@@ -114,7 +117,8 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int ModelBasinName = 100;
+            public const int ModelBasinState = 5;
+            public const int ModelBasinRegion = 10;
         }
     }
 }
