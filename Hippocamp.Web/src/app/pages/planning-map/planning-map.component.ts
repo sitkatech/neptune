@@ -21,6 +21,9 @@ import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
 import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
+import { ColDef } from 'ag-grid-community';
+import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
+import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 
 declare var $: any;
 
@@ -34,7 +37,7 @@ export class PlanningMapComponent implements OnInit {
   private currentUser: PersonDto;
   public richTextTypeID = CustomRichTextType.PlanningMap;
 
-  private projects: Array<ProjectSimpleDto>;
+  public projects: Array<ProjectSimpleDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationSimpleDto>;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
@@ -67,6 +70,9 @@ export class PlanningMapComponent implements OnInit {
 
   private viewInitialized: boolean = false;
 
+  public columnDefs: ColDef[];
+  public defaultColDef: ColDef;
+
   constructor(
     private authenticationService: AuthenticationService,
     private treatmentBMPService: TreatmentBMPService,
@@ -76,7 +82,8 @@ export class PlanningMapComponent implements OnInit {
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private cdr: ChangeDetectorRef,
     private projectService: ProjectService,
-    private wfsService: WfsService
+    private wfsService: WfsService,
+    private utilityFunctionsService: UtilityFunctionsService
   ) { }
 
   ngOnInit(): void {
@@ -96,7 +103,39 @@ export class PlanningMapComponent implements OnInit {
         });
         this.initMap();
         this.map.fireEvent('dataloading');
-      })
+      });
+
+      this.columnDefs = [
+        {
+          headerName: 'Project ID', valueGetter: (params: any) => {
+            return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectID };
+          }, cellRendererFramework: LinkRendererComponent,
+          cellRendererParams: { inRouterLink: "/projects/" },
+          filterValueGetter: (params: any) => {
+            return params.data.ProjectID;
+          },
+          comparator: this.utilityFunctionsService.linkRendererComparator
+        },
+        {
+          headerName: 'Project Name', valueGetter: (params: any) => {
+            return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
+          }, cellRendererFramework: LinkRendererComponent,
+          cellRendererParams: { inRouterLink: "/projects/" },
+          filterValueGetter: (params: any) => {
+            return params.data.ProjectID;
+          },
+          comparator: this.utilityFunctionsService.linkRendererComparator
+        },
+        { headerName: 'Organization', field: 'Organization.OrganizationName' },
+        { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
+        { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
+        this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
+        { headerName: 'Project Description', field: 'ProjectDescription' }
+      ];
+  
+      this.defaultColDef = {
+        filter: true, sortable: true, resizable: true
+      };
 
     });
 
@@ -211,7 +250,7 @@ export class PlanningMapComponent implements OnInit {
             .forEach((feature: L.Feature) => {
               new L.Popup({
                 minWidth: 500,
-                autoPanPadding: new L.Point(100,100)
+                autoPanPadding: new L.Point(100, 100)
               })
                 .setLatLng(event.latlng)
                 .setContent(this.compileService.compile(OctaPrioritizationDetailPopupComponent, (c) => { c.instance.feature = feature; })
