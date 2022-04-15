@@ -14,13 +14,11 @@
                     [style.height]="mapHeight">
                     <div class="card">
                         <button class="m-0 border-0 p-0 text-left" type="button" data-toggle="collapse"
-                                data-target="#mapOverlayCardBody" aria-expanded="true"
-                                aria-controls="mapOverlayCardBody">
-                                <div class="card-header dropdown-toggle">
-                            Map Overlay
-                                </div>
-                            </button>
-                        
+                            data-target="#mapOverlayCardBody" aria-expanded="true" aria-controls="mapOverlayCardBody">
+                            <div class="card-header dropdown-toggle">
+                                Map Overlay
+                            </div>
+                        </button>
                         <div id="mapOverlayCardBody" class="collapse show">
                             <div class="card-body d-flex flex-column">
                                 <div class="row">
@@ -69,8 +67,26 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <div *ngIf="selectedTreatmentBMP != null; else noTreatmentBMPSelected"
-                                class="container overflow-auto">
-                                <strong>BMP</strong>
+                                class="container p-0 overflow-y-auto">
+                                <div class="d-flex">
+                                    <strong>Project</strong>
+                                    <a routerLink="/projects/{{selectedProject.ProjectID}}"
+                                        class="d-inline-block btn btn-hippocamp ml-auto">View Project Details</a>
+                                </div>
+                                <dl class="row">
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedProject.ProjectName}}
+                                    </dd>
+
+                                    <dt class="text-sm-right col-sm-5 col-xs-12">
+                                        <field-definition fieldDefinitionType="Jurisdiction"></field-definition>
+                                    </dt>
+                                    <dd class="col-sm-7 col-xs-12">
+                                        {{selectedProject.StormwaterJurisdiction.Organization.OrganizationName}}
+                                    </dd>
+                                </dl>
+                                <strong>Selected BMP</strong>
                                 <dl class="row">
                                     <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
                                     <dd class="col-sm-7 col-xs-12">
@@ -90,43 +106,24 @@
                                     <dd class="col-sm-7 col-xs-12">
                                         {{selectedProject.ProjectStatus.ProjectStatusDisplayName}}
                                     </dd>
-                                </dl>
-                                <ng-container *ngIf="selectedDelineation != null">
-                                    <strong>Delineation</strong>
-                                    <dl class="row">
+                                    <ng-container *ngIf="selectedDelineation != null">
                                         <dt class="text-sm-right col-sm-5 col-xs-12">
-                                            <field-definition fieldDefinitionType="Area"></field-definition>
+                                            <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
                                         </dt>
                                         <dd class="col-sm-7 col-xs-12">
                                             {{selectedDelineation.DelineationArea}} ac
                                         </dd>
 
                                         <dt class="text-sm-right col-sm-5 col-xs-12">
-                                            <field-definition fieldDefinitionType="DelineationType"
-                                                [labelOverride]="'Type'"></field-definition>
+                                            <field-definition fieldDefinitionType="DelineationType"></field-definition>
                                         </dt>
                                         <dd class="col-sm-7 col-xs-12">
                                             {{selectedDelineation.DelineationTypeName}}
                                         </dd>
-                                    </dl>
-                                </ng-container>
-                                <strong>Project</strong>
+                                    </ng-container>
+                                </dl>
+                                <strong>Other BMPs</strong>
                                 <dl class="row">
-                                    <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
-                                    <dd class="col-sm-7 col-xs-12">
-                                        {{selectedProject.ProjectName}}
-                                    </dd>
-
-                                    <dt class="text-sm-right col-sm-5 col-xs-12">
-                                        <field-definition fieldDefinitionType="Jurisdiction"></field-definition>
-                                    </dt>
-                                    <dd class="col-sm-7 col-xs-12">
-                                        {{selectedProject.StormwaterJurisdiction.Organization.OrganizationName}}
-                                    </dd>
-                                    <dt class="text-sm-right col-sm-5 col-xs-12">Associated BMPS</dt>
-                                    <dd class="col-sm-7 col-xs-12"></dd>
-                                    <dt class="text-sm-right col-sm-5 col-xs-12"></dt>
-                                    <dd class="col-sm-7 col-xs-12"></dd>
                                     <ng-container *ngFor="let bmp of relatedTreatmentBMPs">
                                         <dt class="col-12 col-sm-5 text-sm-right">
                                             <button class="btn btn-primary btn-sm"
@@ -138,10 +135,6 @@
                                     </ng-container>
                                 </dl>
                             </div>
-                            <ng-container *ngIf="selectedTreatmentBMP">
-                                <a routerLink="/projects/{{selectedProject.ProjectID}}"
-                                    class="d-inline-block btn btn-hippocamp">View Project Details</a>
-                            </ng-container>
                         </div>
                         <ng-template #noTreatmentBMPSelected>
                             <div>
