@@ -35,6 +35,7 @@ import { ModelResultsComponent } from './components/projects/model-results/model
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttachmentsDisplayComponent } from './components/projects/attachments-display/attachments-display.component';
 import { OctaPrioritizationDetailPopupComponent } from './components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
+import { GrantScoresComponent } from './components/projects/grant-scores/grant-scores.component';
 
 @NgModule({
     declarations: [
@@ -69,7 +70,8 @@ import { OctaPrioritizationDetailPopupComponent } from './components/octa-priori
         TreatmentBmpMapEditorAndModelingAttributesComponent,
         ModelResultsComponent,
         AttachmentsDisplayComponent,
-        OctaPrioritizationDetailPopupComponent
+        OctaPrioritizationDetailPopupComponent,
+        GrantScoresComponent
     ],
     imports: [
         CommonModule,
@@ -107,7 +109,8 @@ import { OctaPrioritizationDetailPopupComponent } from './components/octa-priori
         TreatmentBmpMapEditorAndModelingAttributesComponent,
         ModelResultsComponent,
         AttachmentsDisplayComponent,
-        OctaPrioritizationDetailPopupComponent
+        OctaPrioritizationDetailPopupComponent,
+        GrantScoresComponent
     ],
     entryComponents:[]
 })
