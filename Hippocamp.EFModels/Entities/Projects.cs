@@ -66,7 +66,7 @@ namespace Hippocamp.EFModels.Entities
                 AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation,
                 DoesNotIncludeTreatmentBMPs = false,
                 CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores,
-                ShareOCTAM2Tier2Scores = projectUpsertDto.ShareOCTAM2Tier2Scores
+                ShareOCTAM2Tier2Scores = false
             };
             dbContext.Add(project);
             dbContext.SaveChanges();
