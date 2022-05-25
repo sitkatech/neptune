@@ -118,5 +118,10 @@ export enum FieldDefinitionTypeEnum {
     DelineationStatus = 114,
     DryWeatherFlowOverride = 115,
     DryWeatherFlowOverrideID = 115,
-    ModeledPerformance = 116
+    ModeledPerformance = 116,
+    OCTAM2Tier2GrantProgram = 117,
+	SEAScore = 118,
+	TPIScore = 119,
+	WQLRI = 120,
+	PollutantContributionToSEA = 121
 }
