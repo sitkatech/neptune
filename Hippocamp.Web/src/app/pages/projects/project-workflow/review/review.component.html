@@ -1,67 +1,83 @@
 <div class="mt-md-0 mt-4">
-    <h2 class="d-inline-block">Review</h2>
+    <h2 class="d-inline-block">Review and Share</h2>
 </div>
 <div class="row m-1">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <ng-container *ngIf="project">
     <div class="row mt-3 mb-3">
-        <div class="col-12">
+        <div class="col-lg-7">
             <div class="card">
                 <div class="card-header">
                     Project Basics
                 </div>
                 <div class="card-body">
                     <dl class="row">
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Name</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Name</dt>
+                        <dd class=" col-sm-6">
                             {{project?.ProjectName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Description</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Description</dt>
+                        <dd class=" col-sm-6">
                             {{project?.ProjectDescription}}
                             <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Status</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Status</dt>
+                        <dd class=" col-sm-6">
                             {{project?.ProjectStatus.ProjectStatusDisplayName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Date Created</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Date Created</dt>
+                        <dd class=" col-sm-6">
                             {{project?.DateCreated | date: 'MM/dd/yyyy'}}
                         </dd>
 
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Project Owner</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Project Owner</dt>
+                        <dd class=" col-sm-6">
                             {{project?.Organization.OrganizationName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Jurisdiction</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Jurisdiction</dt>
+                        <dd class=" col-sm-6">
                             {{project?.StormwaterJurisdiction.Organization.OrganizationName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Primary Contact</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Primary Contact</dt>
+                        <dd class=" col-sm-6">
                             {{project?.PrimaryContactPerson.FullName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Additional Contact Information</dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dt class="text-sm-right col-sm-6">Additional Contact Information</dt>
+                        <dd class=" col-sm-6">
                             {{project?.AdditionalContactInformation}}
                             <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
                         </dd>
 
-                        <dt class="text-sm-right col-sm-5 col-xs-12">Does Project Include Stormwater Treatment BMPs?
+                        <dt class="text-sm-right col-sm-6">Does Project Include Stormwater Treatment BMPs?
                         </dt>
-                        <dd class="col-sm-7 col-xs-12">
+                        <dd class=" col-sm-6">
                             {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
                         </dd>
                     </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 mt-lg-0 mt-3">
+            <div class="card">
+                <div class="card-header">
+                    Share Project
+                </div>
+                <div class="card-body">
+                    <p class="mt-2">Make visible to:</p>
+                    <div class="row mt-2 ml-4">
+                        <div class="col">
+                            <input type="checkbox" name="OCTAM2Tier2" id="OCTAM2Tier2" [(ngModel)]="shareOCTAM2Tier2Scores">
+                            <label for="OCTAM2Tier2" class="control-label ml-2">OCTA M2 Tier 2 Grant Program</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,6 +120,27 @@
                     <hippocamp-attachments-display [attachments]="attachments"></hippocamp-attachments-display>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="project.CalculateOCTAM2Tier2Scores">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Grant Scores
+                </div>
+                <div class="card-body">
+                    <hippocamp-grant-scores [projectID]="projectID"></hippocamp-grant-scores>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col text-right">
+            <button (click)="onSubmit()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                Save
+            </button>
+            <a class="btn btn-secondary ml-1" routerLink="/projects">Cancel</a>
         </div>
     </div>
 </ng-container>

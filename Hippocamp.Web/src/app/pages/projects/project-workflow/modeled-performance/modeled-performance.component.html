@@ -1,5 +1,5 @@
 <div class="mt-md-0 mt-4">
-    <h2 class="d-inline-block">Modeled Performance</h2>
+    <h2 class="d-inline-block">Modeled Performance and Scoring</h2>
     <a href="{{getAboutModelingPerformanceURL()}}" class="float-right">About Modeling Performance</a>
 </div>
 <div class="row m-1">
@@ -87,6 +87,18 @@
                 <hippocamp-model-results [projectID]="projectID" [treatmentBMPs]="treatmentBMPs"
                     [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
                 </hippocamp-model-results>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3 mb-3" *ngIf="project?.CalculateOCTAM2Tier2Scores">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Grant Scores
+            </div>
+            <div class="card-body">
+                <hippocamp-grant-scores [projectID]="projectID"></hippocamp-grant-scores>
             </div>
         </div>
     </div>

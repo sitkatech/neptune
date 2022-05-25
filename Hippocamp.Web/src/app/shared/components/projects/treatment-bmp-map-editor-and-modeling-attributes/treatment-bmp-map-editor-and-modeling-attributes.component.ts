@@ -308,7 +308,9 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     this.project.PrimaryContactPersonID = project.PrimaryContactPersonID;
     this.project.ProjectDescription = project.ProjectDescription;
     this.project.AdditionalContactInformation = project.AdditionalContactInformation;
-    this.project.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
+    this.project.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
+    this.project.CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores;
+    this.project.ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores;
   }
 
   public updateMapLayers(): void {

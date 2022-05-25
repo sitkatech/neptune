@@ -97,6 +97,9 @@ export class ProjectBasicsComponent implements OnInit {
     this.projectModel.PrimaryContactPersonID = project.PrimaryContactPersonID;
     this.projectModel.ProjectDescription = project.ProjectDescription;
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
+    this.projectModel.CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores;
+    this.projectModel.ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores;
+    this.projectModel.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
   }
 
   public isFieldInvalid(fieldName: string) {
@@ -109,6 +112,7 @@ export class ProjectBasicsComponent implements OnInit {
     this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(() => {
       this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
     });
+    window.scroll(0,0);
   }
 
   private onSubmitFailure(error) {

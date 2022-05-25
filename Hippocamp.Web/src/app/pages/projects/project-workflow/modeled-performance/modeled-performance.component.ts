@@ -2,7 +2,7 @@ import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewC
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, ProjectSimpleDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
@@ -59,6 +59,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   public projectID: number;
+  public project: ProjectSimpleDto;
   public customRichTextTypeID = CustomRichTextType.ModeledPerformance;
 
   constructor(
@@ -81,11 +82,13 @@ export class ModeledPerformanceComponent implements OnInit {
       if (projectID) {
         this.projectID = parseInt(projectID);
         forkJoin({
+          project: this.projectService.getByID(this.projectID),
           treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
           delineations: this.projectService.getDelineationsByProjectID(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
           projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID)
-        }).subscribe(({ treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
+        }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
+          this.project = project;
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
           this.boundingBox = boundingBox;

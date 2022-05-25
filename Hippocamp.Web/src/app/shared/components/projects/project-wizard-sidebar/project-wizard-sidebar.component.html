@@ -67,13 +67,13 @@
                     </div>
 
                     <div class="card-body">
-                        <a [routerLink]="['stormwater-treatments', 'modeled-performance']"
+                        <a [routerLink]="['stormwater-treatments', 'modeled-performance-and-scoring']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
                         [ngClass]="{'disabled': !projectModel.ProjectName}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
-                        Modeled Performance
+                        Modeled Performance and Scoring
                         </a>
                     </div>
                 </div>
@@ -90,10 +90,10 @@
     </div>
 
     <div class="card-body">
-        <a [routerLink]="['review']" routerLinkActive="active" class="icon-padding"
+        <a [routerLink]="['review-and-share']" routerLinkActive="active" class="icon-padding"
             [ngClass]="{'disabled': !projectModel.ProjectName}">
             <hippocamp-progress-icon></hippocamp-progress-icon>
-            Review
+            Review and Share
         </a>
     </div>
 

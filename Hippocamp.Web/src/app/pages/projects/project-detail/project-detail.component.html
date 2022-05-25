@@ -106,4 +106,16 @@
             </div>
         </div>
     </div>
+    <div class="row mt-3 mb-3" *ngIf="project.CalculateOCTAM2Tier2Scores">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Grant Scores
+                </div>
+                <div class="card-body">
+                    <hippocamp-grant-scores [projectID]="projectID"></hippocamp-grant-scores>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
