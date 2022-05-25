@@ -117,5 +117,10 @@ VALUES
 (113, 'HydromodificationApplies', 'Hydromodification Controls Apply'),
 (114, 'DelineationStatus', N'Delineation Status'),
 (115, 'DryWeatherFlowOverride', 'Dry Weather Flow Override?'),
-(116, 'ModeledPerformance', N'Modeled Performance')
+(116, 'ModeledPerformance', N'Modeled Performance'),
+(117, 'OCTA M2 Tier 2 Grant Program', 'OCTA M2 Tier 2 Grant Program'),
+(118, 'SEA Score', 'SEA Score'),
+(119, 'TPI Score', 'TPI Score'),
+(120, 'WQLRI', 'WQLRI'),
+(121, 'Pollutant Contribution to SEA', 'Pollutant Contribution to SEA')
 

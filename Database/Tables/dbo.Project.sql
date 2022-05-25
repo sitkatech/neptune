@@ -14,6 +14,8 @@ CREATE TABLE [dbo].[Project](
 	[ProjectDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[AdditionalContactInformation] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[DoesNotIncludeTreatmentBMPs] [bit] NOT NULL,
+	[CalculateOCTAM2Tier2Scores] [bit] NOT NULL,
+	[ShareOCTAM2Tier2Scores] [bit] NOT NULL,
  CONSTRAINT [PK_Project_ProjectID] PRIMARY KEY CLUSTERED 
 (
 	[ProjectID] ASC
