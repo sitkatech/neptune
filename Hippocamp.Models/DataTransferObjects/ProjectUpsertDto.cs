@@ -21,5 +21,8 @@ namespace Hippocamp.Models.DataTransferObjects
         [StringLength(500, ErrorMessage = "Additional Contact Information field cannot exceed 500 characters.")]
         public string AdditionalContactInformation { get; set; }
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
+        public bool CalculateOCTAM2Tier2Scores { get; set; }
+
+        public bool ShareOCTAM2Tier2Scores { get; set; }
     }
 }

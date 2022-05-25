@@ -2401,6 +2401,12 @@
           "DoesNotIncludeTreatmentBMPs": {
             "type": "boolean"
           },
+          "CalculateOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "ShareOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
@@ -2480,6 +2486,12 @@
             "nullable": true
           },
           "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
+          },
+          "CalculateOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
           }
         },

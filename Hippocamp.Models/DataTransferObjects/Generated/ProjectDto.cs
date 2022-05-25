@@ -20,6 +20,8 @@ namespace Hippocamp.Models.DataTransferObjects
         public string ProjectDescription { get; set; }
         public string AdditionalContactInformation { get; set; }
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
+        public bool CalculateOCTAM2Tier2Scores { get; set; }
+        public bool ShareOCTAM2Tier2Scores { get; set; }
     }
 
     public partial class ProjectSimpleDto
@@ -35,6 +37,8 @@ namespace Hippocamp.Models.DataTransferObjects
         public string ProjectDescription { get; set; }
         public string AdditionalContactInformation { get; set; }
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
+        public bool CalculateOCTAM2Tier2Scores { get; set; }
+        public bool ShareOCTAM2Tier2Scores { get; set; }
     }
 
 }

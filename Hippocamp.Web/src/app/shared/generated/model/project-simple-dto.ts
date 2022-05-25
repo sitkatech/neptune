@@ -26,6 +26,8 @@ export class ProjectSimpleDto {
     ProjectDescription?: string;
     AdditionalContactInformation?: string;
     DoesNotIncludeTreatmentBMPs?: boolean;
+    CalculateOCTAM2Tier2Scores?: boolean;
+    ShareOCTAM2Tier2Scores?: boolean;
     Organization?: OrganizationSimpleDto;
     StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
     ProjectStatus?: ProjectStatusSimpleDto;

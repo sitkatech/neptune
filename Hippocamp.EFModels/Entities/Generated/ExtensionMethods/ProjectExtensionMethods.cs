@@ -23,7 +23,9 @@ namespace Hippocamp.EFModels.Entities
                 DateCreated = project.DateCreated,
                 ProjectDescription = project.ProjectDescription,
                 AdditionalContactInformation = project.AdditionalContactInformation,
-                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
+                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
+                CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
+                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores
             };
             DoCustomMappings(project, projectDto);
             return projectDto;
@@ -45,7 +47,9 @@ namespace Hippocamp.EFModels.Entities
                 DateCreated = project.DateCreated,
                 ProjectDescription = project.ProjectDescription,
                 AdditionalContactInformation = project.AdditionalContactInformation,
-                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
+                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
+                CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
+                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores
             };
             DoCustomSimpleDtoMappings(project, projectSimpleDto);
             return projectSimpleDto;

@@ -64,7 +64,9 @@ namespace Hippocamp.EFModels.Entities
                 DateCreated = DateTime.UtcNow,
                 ProjectDescription = projectUpsertDto.ProjectDescription,
                 AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation,
-                DoesNotIncludeTreatmentBMPs = false
+                DoesNotIncludeTreatmentBMPs = false,
+                CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores,
+                ShareOCTAM2Tier2Scores = projectUpsertDto.ShareOCTAM2Tier2Scores
             };
             dbContext.Add(project);
             dbContext.SaveChanges();
@@ -81,6 +83,8 @@ namespace Hippocamp.EFModels.Entities
             project.ProjectDescription = projectUpsertDto.ProjectDescription;
             project.AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation;
             project.DoesNotIncludeTreatmentBMPs = projectUpsertDto.DoesNotIncludeTreatmentBMPs;
+            project.CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores;
+            project.ShareOCTAM2Tier2Scores = projectUpsertDto.ShareOCTAM2Tier2Scores;
 
             //If we opt to not include treatmentBMPs, ensure we get rid of our pre-existing treatment bmps
             if (project.DoesNotIncludeTreatmentBMPs)

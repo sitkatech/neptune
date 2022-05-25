@@ -39,6 +39,8 @@ namespace Hippocamp.EFModels.Entities
         [StringLength(500)]
         public string AdditionalContactInformation { get; set; }
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
+        public bool CalculateOCTAM2Tier2Scores { get; set; }
+        public bool ShareOCTAM2Tier2Scores { get; set; }
 
         [ForeignKey(nameof(CreatePersonID))]
         [InverseProperty(nameof(Person.ProjectCreatePeople))]

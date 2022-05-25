@@ -18,6 +18,8 @@ export class ProjectUpsertDto {
     ProjectDescription?: string;
     AdditionalContactInformation?: string;
     DoesNotIncludeTreatmentBMPs?: boolean;
+    CalculateOCTAM2Tier2Scores?: boolean;
+    ShareOCTAM2Tier2Scores?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
