@@ -26,6 +26,8 @@ namespace Neptune.Web.Models
             Property(x => x.ProjectDescription).HasColumnName(@"ProjectDescription").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.AdditionalContactInformation).HasColumnName(@"AdditionalContactInformation").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.DoesNotIncludeTreatmentBMPs).HasColumnName(@"DoesNotIncludeTreatmentBMPs").HasColumnType("bit").IsRequired();
+            Property(x => x.CalculateOCTAM2Tier2Scores).HasColumnName(@"CalculateOCTAM2Tier2Scores").HasColumnType("bit").IsRequired();
+            Property(x => x.ShareOCTAM2Tier2Scores).HasColumnName(@"ShareOCTAM2Tier2Scores").HasColumnType("bit").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.Projects).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Project_Organization_OrganizationID
