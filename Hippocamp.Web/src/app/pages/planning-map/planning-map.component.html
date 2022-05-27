@@ -29,9 +29,13 @@
                                             (change)="applyPrioritizationMetricOverlay()">
                                         </ng-select>
                                     </div>
-                                    <div class="col-12"
-                                        *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
-                                        <p class="text-center">{{selectedPrioritizationMetric.toString()}} Legend</p>
+                                    <div class="col-12" *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
+                                        <p class="text-center" *ngIf="getSelectedPrioritizationMetricFieldDefinitionType() as fieldDefinitionType; else noFieldDefinition">
+                                            <field-definition [fieldDefinitionType]="fieldDefinitionType"></field-definition> Legend
+                                        </p>
+                                        <ng-template #noFieldDefinition>
+                                            <p class="text-center">{{selectedPrioritizationMetric.toString()}} Legend</p>
+                                        </ng-template>
                                         <div class="row justify-content-center no-gutters">
                                             <div class="col-6">
                                                 <div

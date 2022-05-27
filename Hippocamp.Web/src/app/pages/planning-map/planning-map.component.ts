@@ -450,4 +450,14 @@ export class PlanningMapComponent implements OnInit {
     return this.relatedTreatmentBMPs.filter(x => x.TreatmentBMPID != selectedTreatmentBMPID);
   }
 
+  public getSelectedPrioritizationMetricFieldDefinitionType(): string {
+    switch (this.selectedPrioritizationMetric.toString()) {
+      case 'Strategically Effective Area Score':
+        return 'SEAScore';
+      case 'Transportation Nexus Score':
+        return 'TPIScore';
+      default:
+        return null;
+    }
+  }
 }

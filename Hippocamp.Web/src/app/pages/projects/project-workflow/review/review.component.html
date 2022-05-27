@@ -13,52 +13,52 @@
                 </div>
                 <div class="card-body">
                     <dl class="row">
-                        <dt class="text-sm-right col-sm-6">Name</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4">Name</dt>
+                        <dd class="col-sm-7">
                             {{project?.ProjectName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Description</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Description</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.ProjectDescription}}
                             <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Status</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Status</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.ProjectStatus.ProjectStatusDisplayName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Date Created</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Date Created</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.DateCreated | date: 'MM/dd/yyyy'}}
                         </dd>
 
 
-                        <dt class="text-sm-right col-sm-6">Project Owner</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Project Owner</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.Organization.OrganizationName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Jurisdiction</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Jurisdiction</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.StormwaterJurisdiction.Organization.OrganizationName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Primary Contact</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Primary Contact</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.PrimaryContactPerson.FullName}}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Additional Contact Information</dt>
-                        <dd class=" col-sm-6">
+                        <dt class="text-sm-right col-sm-4 mt-2">Additional Contact Information</dt>
+                        <dd class="col-sm-7 mt-2">
                             {{project?.AdditionalContactInformation}}
                             <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
                         </dd>
 
-                        <dt class="text-sm-right col-sm-6">Does Project Include Stormwater Treatment BMPs?
+                        <dt class="text-sm-right col-sm-4 mt-2">Includes Stormwater Treatment BMPs
                         </dt>
-                        <dd class=" col-sm-6">
+                        <dd class="col-sm-7 mt-2">
                             {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
                         </dd>
                     </dl>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="card-body">
                     <p class="mt-2">Make visible to:</p>
-                    <div class="row mt-2 ml-4">
+                    <div class="row ml-4">
                         <div class="col">
                             <input type="checkbox" name="OCTAM2Tier2" id="OCTAM2Tier2" [(ngModel)]="shareOCTAM2Tier2Scores">
                             <label for="OCTAM2Tier2" class="control-label ml-2">

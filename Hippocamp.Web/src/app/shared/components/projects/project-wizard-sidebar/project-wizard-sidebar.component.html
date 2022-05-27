@@ -92,7 +92,7 @@
     <div class="card-body">
         <a [routerLink]="['review-and-share']" routerLinkActive="active" class="icon-padding"
             [ngClass]="{'disabled': !projectModel.ProjectName}">
-            <hippocamp-progress-icon></hippocamp-progress-icon>
+            <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
             Review and Share
         </a>
     </div>
