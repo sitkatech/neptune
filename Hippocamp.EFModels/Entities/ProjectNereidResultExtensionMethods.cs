@@ -12,6 +12,7 @@ namespace Hippocamp.EFModels.Entities
             {
                 TreatmentBMPID = result.TreatmentBMPID.Value,
                 ProjectID = result.ProjectID,
+                ProjectName = result.Project.ProjectName,
                 WetWeatherInflow = parsedResults.ExtractDoubleValue("runoff_volume_cuft_inflow"),
                 WetWeatherTreated = parsedResults.ExtractDoubleValue("runoff_volume_cuft_treated"),
                 WetWeatherRetained = parsedResults.ExtractDoubleValue("runoff_volume_cuft_retained"),
