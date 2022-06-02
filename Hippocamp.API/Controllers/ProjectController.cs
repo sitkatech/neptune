@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
 using Hippocamp.API.Services;
 using Hippocamp.API.Services.Authorization;
 using Hippocamp.EFModels.Entities;
@@ -335,5 +339,75 @@ namespace Hippocamp.API.Controllers
             return false;
         }
 
+        [HttpGet("projects/OCTAM2Tier2GrantProgram")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<ProjectHRUCharacteristicsSummaryDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
+        {
+            var projectDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
+                .Select(x => x.AsProjectHRUCharacteristicsSummaryDto());
+
+            return Ok(projectDtos);
+        }
+
+        [HttpGet("projects/OCTAM2Tier2GrantProgram/modeledResults")]
+        [JurisdictionEditFeature]
+        public async Task<IActionResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
+        {
+            var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
+            var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
+            var fileName = "OCTA-M2-Tier2-projects-with-model-results.csv";
+
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            await csv.WriteRecordsAsync(records);
+            await writer.FlushAsync();
+
+            var contentDisposition = new System.Net.Mime.ContentDisposition
+            {
+                FileName = fileName,
+                Inline = false
+            };
+            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
+            return File(stream, "text/csv", fileName);
+        }
+
+        [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
+        {
+            var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(_dbContext, projectIDs);
+
+            return Ok(treatmentBMPDisplayDtos);
+        }
+
+        [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs/modeledResults")]
+        [JurisdictionEditFeature]
+        public async Task<IActionResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
+        {
+            var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
+            var records = ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(_dbContext, projectIDs);
+            var fileName = "OCTA-M2-Tier2-BMPs-model-results.csv";
+
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            await csv.WriteRecordsAsync(records);
+            await writer.FlushAsync();
+
+            var contentDisposition = new System.Net.Mime.ContentDisposition
+            {
+                FileName = fileName,
+                Inline = false
+            };
+            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
+            return File(stream, "text/csv", fileName);
+
+        }
     }
 }
