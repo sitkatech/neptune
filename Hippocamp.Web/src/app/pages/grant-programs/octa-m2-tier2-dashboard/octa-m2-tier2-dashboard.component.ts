@@ -25,6 +25,7 @@ import { ColDef } from 'ag-grid-community';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { AgGridAngular } from 'ag-grid-angular';
+import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 
 declare var $: any;
 
@@ -96,10 +97,10 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
       this.stormwaterJurisdictionService.getBoundingBoxByLoggedInPerson().subscribe(result => {
         this.boundingBox = result;
         forkJoin({
-          projects: this.projectService.getProjectsByPersonID(),
-          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPs(),
-          delineations: this.delineationService.getDelineations()
-        }).subscribe(({ projects, treatmentBMPs, delineations }) => {
+          projects: this.projectService.getProjectsSharedWithOCTAM2Tier2GrantProgram(),
+          treatmentBMPs: this.projectService.getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(),
+          delineations: this.delineationService.getDelineations(),
+        }).subscribe(({ projects, treatmentBMPs, delineations}) => {
           this.projects = projects;
           this.treatmentBMPs = treatmentBMPs;
           this.addPlannedProjectTreatmentBMPLayerToMap();
@@ -122,9 +123,11 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         },
         { headerName: 'Organization', field: 'Organization.OrganizationName' },
         { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
-        { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
-        this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
-        { headerName: 'Project Description', field: 'ProjectDescription' }
+        { headerName: 'Area Treated (ac)', field: 'Area'},
+        { headerName: 'Impervious Area Treated (ac)', field: 'ImperviousAcres'},
+        { headerName: 'SEA Score'},
+        { headerName: 'TPI Score'},
+        { headerName: 'WQLRI'}
       ];
 
       this.defaultColDef = {
@@ -441,4 +444,16 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     return this.relatedTreatmentBMPs.filter(x => x.TreatmentBMPID != selectedTreatmentBMPID);
   }
 
+  public exportProjectGridToCsv() {   
+    let columnIDs = this.projectsGrid.columnApi.getAllGridColumns().map(x => x.getColId());
+    this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, 'OCTA-M2-Tier2-projects' + '.csv', columnIDs);
+  } 
+
+  public getProjectModelResultsDownloadLink() {
+    return environment.mainAppApiUrl + '/projects/OCTAM2Tier2GrantProgram/modeledResults';
+  }
+
+  public getTreatmentBMPModelResultsDownloadLink() {
+    return environment.mainAppApiUrl + '/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/modeledResults';
+  }
 }
