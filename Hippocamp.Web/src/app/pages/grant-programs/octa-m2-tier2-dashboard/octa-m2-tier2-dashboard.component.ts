@@ -38,7 +38,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
 
   private currentUser: PersonDto;
-  public richTextTypeID = CustomRichTextType.PlanningMap;
+  public richTextTypeID = CustomRichTextType.OCTAM2Tier2GrantProgramDashboard;
 
   public projects: Array<ProjectSimpleDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
@@ -80,7 +80,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private treatmentBMPService: TreatmentBMPService,
     private delineationService: DelineationService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,

@@ -56,7 +56,7 @@ const routes: Routes = [
               { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
               { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
               { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
-              { path: "modeled-performance-and-scoring", component: ModeledPerformanceComponent }
+              { path: "modeled-performance-and-metrics", component: ModeledPerformanceComponent }
             ]
           },
           { path: "attachments", component: ProjectAttachmentsComponent },

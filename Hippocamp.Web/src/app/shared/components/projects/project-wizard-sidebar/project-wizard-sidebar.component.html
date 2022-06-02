@@ -67,13 +67,13 @@
                     </div>
 
                     <div class="card-body">
-                        <a [routerLink]="['stormwater-treatments', 'modeled-performance-and-scoring']"
+                        <a [routerLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
                         [ngClass]="{'disabled': !projectModel.ProjectName}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
-                        Modeled Performance and Scoring
+                        Modeled Performance and Metrics
                         </a>
                     </div>
                 </div>
