@@ -1,10 +1,11 @@
-﻿namespace Hippocamp.Models.DataTransferObjects
+﻿using System.Collections.Generic;
+
+namespace Hippocamp.Models.DataTransferObjects
 {
-    public class TreatmentBMPModeledResultSimpleDto
+    public class ProjectModeledResultSummaryDto : ProjectSimpleDto
     {
-        public int TreatmentBMPID { get; set; }
-        public int ProjectID { get; set; }
-        public string ProjectName { get; set; }
+        public double TotalArea { get; set; }
+        public double TotalImperviousAcres { get; set; }
         public double WetWeatherInflow { get; set; }
         public double WetWeatherTreated { get; set; }
         public double WetWeatherRetained { get; set; }
@@ -59,42 +60,42 @@
         public double WinterDryWeatherTCuInflow { get; set; }
         public double WinterDryWeatherTPbInflow { get; set; }
         public double WinterDryWeatherTZnInflow { get; set; }
-        public double DryWeatherInflow { get; set;}
-        public double DryWeatherTreated { get; set;}
-        public double DryWeatherRetained { get; set;}
-        public double DryWeatherUntreated { get; set;}
-        public double DryWeatherTSSRemoved { get; set;}
-        public double DryWeatherTNRemoved { get; set;}
-        public double DryWeatherTPRemoved { get; set;}
-        public double DryWeatherFCRemoved { get; set;}
-        public double DryWeatherTCuRemoved { get; set;}
-        public double DryWeatherTPbRemoved { get; set;}
-        public double DryWeatherTZnRemoved { get; set;}
-        public double DryWeatherTSSInflow { get; set;}
-        public double DryWeatherTNInflow { get; set;}
-        public double DryWeatherTPInflow { get; set;}
-        public double DryWeatherFCInflow { get; set;}
-        public double DryWeatherTCuInflow { get; set;}
-        public double DryWeatherTPbInflow { get; set;}
-        public double DryWeatherTZnInflow { get; set;}
+        public double DryWeatherInflow { get; set; }
+        public double DryWeatherTreated { get; set; }
+        public double DryWeatherRetained { get; set; }
+        public double DryWeatherUntreated { get; set; }
+        public double DryWeatherTSSRemoved { get; set; }
+        public double DryWeatherTNRemoved { get; set; }
+        public double DryWeatherTPRemoved { get; set; }
+        public double DryWeatherFCRemoved { get; set; }
+        public double DryWeatherTCuRemoved { get; set; }
+        public double DryWeatherTPbRemoved { get; set; }
+        public double DryWeatherTZnRemoved { get; set; }
+        public double DryWeatherTSSInflow { get; set; }
+        public double DryWeatherTNInflow { get; set; }
+        public double DryWeatherTPInflow { get; set; }
+        public double DryWeatherFCInflow { get; set; }
+        public double DryWeatherTCuInflow { get; set; }
+        public double DryWeatherTPbInflow { get; set; }
+        public double DryWeatherTZnInflow { get; set; }
 
-        public double TotalInflow { get; set;}
-        public double TotalTreated { get; set;}
-        public double TotalRetained { get; set;}
-        public double TotalUntreated { get; set;}
-        public double TotalTSSRemoved { get; set;}
-        public double TotalTNRemoved { get; set;}
-        public double TotalTPRemoved { get; set;}
-        public double TotalFCRemoved { get; set;}
-        public double TotalTCuRemoved { get; set;}
-        public double TotalTPbRemoved { get; set;}
-        public double TotalTZnRemoved { get; set;}
-        public double TotalTSSInflow { get; set;}
-        public double TotalTNInflow { get; set;}
-        public double TotalTPInflow { get; set;}
-        public double TotalFCInflow { get; set;}
-        public double TotalTCuInflow { get; set;}
-        public double TotalTPbInflow { get; set;}
-        public double TotalTZnInflow { get; set;}
+        public double TotalInflow { get; set; }
+        public double TotalTreated { get; set; }
+        public double TotalRetained { get; set; }
+        public double TotalUntreated { get; set; }
+        public double TotalTSSRemoved { get; set; }
+        public double TotalTNRemoved { get; set; }
+        public double TotalTPRemoved { get; set; }
+        public double TotalFCRemoved { get; set; }
+        public double TotalTCuRemoved { get; set; }
+        public double TotalTPbRemoved { get; set; }
+        public double TotalTZnRemoved { get; set; }
+        public double TotalTSSInflow { get; set; }
+        public double TotalTNInflow { get; set; }
+        public double TotalTPInflow { get; set; }
+        public double TotalFCInflow { get; set; }
+        public double TotalTCuInflow { get; set; }
+        public double TotalTPbInflow { get; set; }
+        public double TotalTZnInflow { get; set; }
     }
 }
