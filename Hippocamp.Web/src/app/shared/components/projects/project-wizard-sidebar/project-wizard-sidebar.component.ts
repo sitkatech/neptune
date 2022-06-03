@@ -79,6 +79,10 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
+  doesProjectHaveTreatmentBMPs(): boolean {
+    return this.treatmentBMPs?.length > 0;
+  }
+
   getProjectRelatedEntities() {
     forkJoin({
       treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),

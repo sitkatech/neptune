@@ -38,9 +38,15 @@
         </div>
     </div>
 </div>
-<div class="row m-1 mt-3">
-    <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit()">
-        <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-        Save
-    </button>
+<div class="row mt-3">
+    <div class="col-auto ml-auto">
+        <button class="btn btn-outline-primary ml-auto mr-2" [disabled]="isLoadingSubmit" (click)="onSubmit()">
+            <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+            Save
+        </button>
+        <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit(true)">
+            <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+            Save and Continue
+        </button>
+    </div>
 </div>

@@ -97,11 +97,15 @@
             <i class="fas fa-bolt"></i> Required field
         </div>
         <div class="col-sm-8 text-right">
-            <button type="submit" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+            <button type="submit" class="btn btn-outline-primary mr-2" [disabled]="isLoadingSubmit">
                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                 Save
             </button>
-            <a class="btn btn-secondary ml-1" routerLink="/projects">Cancel</a>
+            <button (click)="onSubmit($event, true)" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                Save and Continue
+            </button>
+            <!-- <a class="btn btn-secondary ml-1" routerLink="/projects">Cancel</a> -->
         </div>
     </div>
 </form>

@@ -55,7 +55,7 @@
                         </a>
                     </div>
                     
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="doesProjectHaveTreatmentBMPs()">
                         <a [routerLink]="['stormwater-treatments', 'delineations']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
@@ -66,7 +66,7 @@
                         </a>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="doesProjectHaveTreatmentBMPs()">
                         <a [routerLink]="['stormwater-treatments', 'modeled-performance-and-scoring']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"

@@ -109,6 +109,14 @@
     <hippocamp-attachments-display [attachments]="attachments" [readOnly]="false" (onDeleteTriggered)="launchDeleteModal(deleteAttachmentModal, $event)" (onEditTriggered)="launchEditModal(editAttachmentModal, $event)"></hippocamp-attachments-display>
 </ng-container>
 
+<div class="row m-1 mt-3">
+    <div class="col-auto ml-auto">
+        <button class="btn btn-hippocamp ml-auto" (click)="continueToNextStep()">
+            Continue
+        </button>
+    </div>
+</div>
+
 <ng-template #deleteAttachmentModal let-modal>
     <div class="modal-header">
         <h5 class="modal-title text-white" id="deleteAttachmentModalTitle">Delete Attachment</h5>

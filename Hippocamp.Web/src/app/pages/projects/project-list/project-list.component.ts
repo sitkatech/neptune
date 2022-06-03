@@ -123,6 +123,7 @@ export class ProjectListComponent implements OnInit {
   private updateGridData() {
     this.projectService.getProjectsByPersonID().subscribe(projects => {
       this.projectsGrid.api.setRowData(projects);
+      this.projectsGrid.api.sizeColumnsToFit();
     });
   }
 

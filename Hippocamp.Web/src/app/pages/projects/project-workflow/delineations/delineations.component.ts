@@ -1,5 +1,5 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet.fullscreen';
@@ -120,6 +120,7 @@ export class DelineationsComponent implements OnInit {
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private route: ActivatedRoute,
+    private router: Router,
     private alertService: AlertService,
     private cdr: ChangeDetectorRef,
     private projectWorkflowService: ProjectWorkflowService,
@@ -146,6 +147,10 @@ export class DelineationsComponent implements OnInit {
         delineations: this.projectService.getDelineationsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
       }).subscribe(({ treatmentBMPs, delineations, boundingBox }) => {
+        if (treatmentBMPs.length == 0) {
+          this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+        }
+
         this.treatmentBMPs = treatmentBMPs;
         this.delineations = delineations;
         this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
@@ -531,20 +536,28 @@ export class DelineationsComponent implements OnInit {
     }
   }
 
-  public onSubmit() {
+  public onSubmit(continueToNextStep?: boolean) {
     this.isLoadingSubmit = true;
     this.alertService.clearAlerts();
     this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
     this.projectService.mergeDelineationsByProjectID(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
       window.scroll(0, 0); 
       this.isLoadingSubmit = false;
-      this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
       this.projectWorkflowService.emitWorkflowUpdate();
       this.projectService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
         this.delineations = delineations;
         this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
         this.resetDelineationFeatureGroups();
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+
+        if (continueToNextStep) {
+          this.router.navigateByUrl(`/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-scoring`).then(x => {
+            this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
+          });
+          return;
+        }
+  
+        this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
       });
     }, error => {
       this.isLoadingSubmit = false;

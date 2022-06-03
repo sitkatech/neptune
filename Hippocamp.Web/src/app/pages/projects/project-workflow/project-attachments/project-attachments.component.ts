@@ -229,4 +229,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  continueToNextStep() {
+    this.router.navigateByUrl(`/projects/edit/${this.projectID}/review-and-share`)
+  }
 }

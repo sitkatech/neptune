@@ -106,10 +106,14 @@ export class ProjectBasicsComponent implements OnInit {
     return this.invalidFields.indexOf(fieldName) > -1;
   }
 
-  private onSubmitSuccess(createProjectForm: HTMLFormElement, successMessage: string, projectID: number) {
+  private onSubmitSuccess(successMessage: string, projectID: number, continueToNextStep?: boolean) {
     this.isLoadingSubmit = false;  
     this.originalProjectModel = JSON.stringify(this.projectModel);
-    this.router.navigateByUrl(`/projects/edit/${projectID}/project-basics`).then(() => {
+
+    const rerouteURL = continueToNextStep ? 
+      `/projects/edit/${projectID}/stormwater-treatments/treatment-bmps` : `/projects/edit/${projectID}/project-basics`;
+
+    this.router.navigateByUrl(rerouteURL).then(() => {
       this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
     });
     window.scroll(0,0);
@@ -126,20 +130,20 @@ export class ProjectBasicsComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  public onSubmit(createProjectForm: HTMLFormElement): void {
+  public onSubmit(createProjectForm: HTMLFormElement, continueToNextStep?: boolean): void {
     this.isLoadingSubmit = true;
     this.invalidFields = [];
     this.alertService.clearAlerts();
 
     if (this.projectID) {
       this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
-        this.onSubmitSuccess(createProjectForm, "Your project was successfully updated.", this.projectID)
+        this.onSubmitSuccess("Your project was successfully updated.", this.projectID, continueToNextStep)
       }, error => {
         this.onSubmitFailure(error);
       });
     } else {
       this.projectService.newProject(this.projectModel).subscribe(project => {
-        this.onSubmitSuccess(createProjectForm, "Your project was successfully created.", project.ProjectID)
+        this.onSubmitSuccess("Your project was successfully created.", project.ProjectID, continueToNextStep)
       }, error => {
         this.onSubmitFailure(error);
       });

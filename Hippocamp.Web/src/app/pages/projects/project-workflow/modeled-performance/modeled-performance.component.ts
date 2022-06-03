@@ -1,5 +1,5 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPModeledResultSimpleDto, TreatmentBMPUpsertDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, ProjectSimpleDto } from 'src/app/shared/generated/model/models';
@@ -71,6 +71,7 @@ export class ModeledPerformanceComponent implements OnInit {
     private treatmentBMPService: TreatmentBMPService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private route: ActivatedRoute,
+    private router: Router,
     private alertService: AlertService,
   ) { }
 
@@ -88,6 +89,10 @@ export class ModeledPerformanceComponent implements OnInit {
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
           projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID)
         }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
+          if (treatmentBMPs.length == 0) {
+            this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+          }
+
           this.project = project;
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
@@ -337,5 +342,9 @@ export class ModeledPerformanceComponent implements OnInit {
 
   isMostRecentHistoryOfType(type: ProjectNetworkSolveHistoryStatusTypeEnum): boolean {
     return this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories.length > 0 && this.projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type;
+  }
+
+  continueToNextStep() {
+    this.router.navigateByUrl(`/projects/edit/${this.projectID}/attachments`)
   }
 }

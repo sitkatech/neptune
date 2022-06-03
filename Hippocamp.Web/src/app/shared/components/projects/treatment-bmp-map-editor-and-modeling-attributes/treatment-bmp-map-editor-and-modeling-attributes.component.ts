@@ -25,6 +25,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
+import { Router } from '@angular/router';
 
 declare var $: any
 
@@ -225,7 +226,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     private compileService: CustomCompileService,
     private modalService: NgbModal,
     private alertService: AlertService,
-    private projectWorkflowService: ProjectWorkflowService
+    private projectWorkflowService: ProjectWorkflowService,
+    private router: Router
   ) {
   }
 
@@ -636,7 +638,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     return `${delineation.DelineationArea} ac`;
   }
 
-  public onSubmit() {
+  public onSubmit(continueToNextStep?: boolean) {
     this.isLoadingSubmit = true;
     this.alertService.clearAlerts();
     this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.treatmentBMPs == null || this.treatmentBMPs.length == 0);
@@ -644,9 +646,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     this.projectService.updateProject(this.projectID, this.project).subscribe(() => {
       this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
         this.isLoadingSubmit = false;
-        this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success, true));
         this.projectWorkflowService.emitWorkflowUpdate();
-        window.scroll(0, 0);
         this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
           this.treatmentBMPs = treatmentBMPs;
           this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
@@ -654,12 +654,24 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
           if (this.treatmentBMPs.length > 0) {
             this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
           }
+
+          if (continueToNextStep) {
+            const rerouteURL = this.treatmentBMPs.length > 0 ? 
+              `projects/edit/${this.projectID}/stormwater-treatments/delineations` : `projects/edit/${this.projectID}/attachments`;
+            this.router.navigateByUrl(rerouteURL).then(x => {
+              this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success));
+            });
+            return;
+          }
+          this.alertService.pushAlert(new Alert('Your Treatment BMP changes have been saved.', AlertContext.Success));
+          window.scroll(0, 0);
+        }, error => {
+          this.isLoadingSubmit = false;
+          window.scroll(0, 0);
+          this.cdr.detectChanges();
+        });
         })
-      }, error => {
-        this.isLoadingSubmit = false;
-        window.scroll(0, 0);
-        this.cdr.detectChanges();
-      });
+      
     }, error => {
       this.isLoadingSubmit = false;
       window.scroll(0, 0);
