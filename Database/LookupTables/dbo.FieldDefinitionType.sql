@@ -119,8 +119,8 @@ VALUES
 (115, 'DryWeatherFlowOverride', 'Dry Weather Flow Override?'),
 (116, 'ModeledPerformance', N'Modeled Performance'),
 (117, 'OCTA M2 Tier 2 Grant Program', 'OCTA M2 Tier 2 Grant Program'),
-(118, 'SEA Score', 'SEA Score'),
-(119, 'TPI Score', 'TPI Score'),
-(120, 'WQLRI', 'WQLRI'),
-(121, 'Pollutant Contribution to SEA', 'Pollutant Contribution to SEA')
+(118, 'SEA Score', 'Strategically Effective Area Score'),
+(119, 'TPI Score', 'Transportation Nexus Score'),
+(120, 'WQLRI', 'Water Quality Load Reduction Index'),
+(121, 'Pollutant Contribution to SEA', 'Pollutant Contribution to Strategically Effective Area')
 
