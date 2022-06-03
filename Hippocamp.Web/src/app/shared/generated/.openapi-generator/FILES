@@ -20,6 +20,7 @@ model/person-simple-dto.ts
 model/problem-details.ts
 model/project-document-simple-dto.ts
 model/project-document-update-dto.ts
+model/project-hru-characteristics-summary-dto.ts
 model/project-network-solve-history-simple-dto.ts
 model/project-simple-dto.ts
 model/project-status-simple-dto.ts

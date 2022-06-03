@@ -2,7 +2,7 @@
     <app-alert-display></app-alert-display>
     <div class="row mb-2 justify-content-center">
         <div class="col-12 col-lg-11">
-            <h2 class="d-inline-block">Planning Map</h2>
+            <h2 class="d-inline-block">OCTA M2 Tier 2 Grant Program</h2>
             <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
         </div>
     </div>
@@ -29,13 +29,9 @@
                                             (change)="applyPrioritizationMetricOverlay()">
                                         </ng-select>
                                     </div>
-                                    <div class="col-12" *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
-                                        <p class="text-center" *ngIf="getSelectedPrioritizationMetricFieldDefinitionType() as fieldDefinitionType; else noFieldDefinition">
-                                            <field-definition [fieldDefinitionType]="fieldDefinitionType"></field-definition> Legend
-                                        </p>
-                                        <ng-template #noFieldDefinition>
-                                            <p class="text-center">{{selectedPrioritizationMetric.toString()}} Legend</p>
-                                        </ng-template>
+                                    <div class="col-12"
+                                        *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
+                                        <p class="text-center">{{selectedPrioritizationMetric.toString()}} Legend</p>
                                         <div class="row justify-content-center no-gutters">
                                             <div class="col-6">
                                                 <div
@@ -160,10 +156,20 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-2">
+            <div class="row mt-3 mb-2">
                 <div class="col-auto ml-auto">
                     <hippocamp-clear-grid-filters-button [grid]="projectsGrid" class="mr-2">
                     </hippocamp-clear-grid-filters-button>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary btn-md dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-download mr-2"></i>Download
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" (click)="exportProjectGridToCsv()">Project List</a>
+                            <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                            <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
+                          </div>
+                    </div>
                 </div>
             </div>
             <ag-grid-angular #projectsGrid class="ag-theme-balham" style="width: 100%; height: 700px;"

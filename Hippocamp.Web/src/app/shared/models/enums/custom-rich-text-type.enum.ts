@@ -11,5 +11,7 @@ export enum CustomRichTextType{
     Delineations = 61,
     ModeledPerformance = 62,
     Review = 63,
-    PlanningMap = 64
+    PlanningMap = 64,
+    OCTAM2Tier2GrantProgramMetrics = 65,
+    OCTAM2Tier2GrantProgramDashboard = 66
 }

@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
-import { DelineationUpsertDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
+import { DelineationUpsertDto, ProjectHRUCharacteristicsSummaryDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -119,5 +119,25 @@ export class ProjectService {
   mergeDelineationsByProjectID(delineations: Array<DelineationUpsertDto>, projectID: number) {
     let route = `projects/${projectID}/delineations`;
     return this.apiService.putToApi(route, delineations);
+  }
+
+  getProjectsSharedWithOCTAM2Tier2GrantProgram(): Observable<any> {
+    let route = 'projects/OCTAM2Tier2GrantProgram';
+    return this.apiService.getFromApi(route);
+  }
+
+  getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(): Observable<any> {
+    let route = 'projects/OCTAM2Tier2GrantProgram/treatmentBMPs';
+    return this.apiService.getFromApi(route);
+  }
+
+  downloadOCTAM2Tier2GrantProgramProjectModelResults(): Observable<Blob> {
+    let route = `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/download`;
+    return this.httpClient.get(route, { responseType: "blob"});
+  }
+
+  downloadOCTAM2Tier2GrantProgramBMPModelResults(): Observable<Blob> {
+    let route = `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download`;
+    return this.httpClient.get(route, { responseType: "blob"});
   }
 }

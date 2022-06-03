@@ -80,6 +80,15 @@
                             </label>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-auto ml-auto">
+
+                            <button (click)="onSubmit()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                                Save and Share
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,21 +137,12 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    Grant Scores
+                    Grant Metrics
                 </div>
                 <div class="card-body">
                     <hippocamp-grant-scores [projectID]="projectID"></hippocamp-grant-scores>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col text-right">
-            <button (click)="onSubmit()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
-                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-                Save
-            </button>
-            <a class="btn btn-secondary ml-1" routerLink="/projects">Cancel</a>
         </div>
     </div>
 </ng-container>

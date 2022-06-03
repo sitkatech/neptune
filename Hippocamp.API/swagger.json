@@ -1084,6 +1084,122 @@
         }
       }
     },
+    "/projects/OCTAM2Tier2GrantProgram": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectHRUCharacteristicsSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectHRUCharacteristicsSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectHRUCharacteristicsSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram/download": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
         "tags": [
@@ -2325,6 +2441,84 @@
         },
         "additionalProperties": false
       },
+      "ProjectHRUCharacteristicsSummaryDto": {
+        "type": "object",
+        "properties": {
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "ImperviousAcres": {
+            "type": "number",
+            "format": "double"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatePersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ProjectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalContactInformation": {
+            "type": "string",
+            "nullable": true
+          },
+          "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
+          },
+          "CalculateOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "ShareOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "Organization": {
+            "$ref": "#/components/schemas/OrganizationSimpleDto"
+          },
+          "StormwaterJurisdiction": {
+            "$ref": "#/components/schemas/StormwaterJurisdictionSimpleDto"
+          },
+          "ProjectStatus": {
+            "$ref": "#/components/schemas/ProjectStatusSimpleDto"
+          },
+          "PrimaryContactPerson": {
+            "$ref": "#/components/schemas/PersonSimpleDto"
+          },
+          "CreatePerson": {
+            "$ref": "#/components/schemas/PersonSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "ProjectNetworkSolveHistorySimpleDto": {
         "type": "object",
         "properties": {
@@ -2611,6 +2805,10 @@
           "ProjectID": {
             "type": "integer",
             "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
           },
           "WetWeatherInflow": {
             "type": "number",
