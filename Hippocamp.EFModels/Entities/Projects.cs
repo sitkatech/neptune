@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -163,8 +164,23 @@ namespace Hippocamp.EFModels.Entities
 
             foreach (var treatmentBMPGroup in treatmentBMPModeledResultByProject)
             {
+                var project = dbContext.Projects.Include(x => x.Organization)
+                    .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+                    .SingleOrDefault(x => x.ProjectID == treatmentBMPGroup.Key);
+
+                var projectHRUCharacteristics = dbContext.ProjectHRUCharacteristics
+                    .Where(x => x.ProjectID == treatmentBMPGroup.Key);
+                var area = projectHRUCharacteristics.Sum(x => x.Area);
+                var imperviousAcres = projectHRUCharacteristics.Sum(x => x.ImperviousAcres);
+
                 projectModeledResultSummaryDtos.Add(new ProjectModeledResultSummaryDto() 
                     {
+                        ProjectName = project?.ProjectName,
+                        Jurisdiction = project?.StormwaterJurisdiction.Organization.OrganizationName,
+                        Organization = project?.Organization.OrganizationName,
+                        AcresTreated = area,
+                        ImperviousAcresTreated = imperviousAcres,
+
                         WetWeatherInflow = treatmentBMPGroup.Sum(x => x.WetWeatherInflow),
                         WetWeatherTreated = treatmentBMPGroup.Sum(x => x.WetWeatherTreated),
                         WetWeatherRetained = treatmentBMPGroup.Sum(x => x.WetWeatherRetained),
@@ -261,6 +277,32 @@ namespace Hippocamp.EFModels.Entities
                         TotalTZnInflow = treatmentBMPGroup.Sum(x => x.TotalTZnInflow)
                     }
                 );
+            }
+
+            foreach (var projectID in projectIDs)
+            {
+                if (treatmentBMPModeledResultByProject.Any(x => x.Key == projectID))
+                {
+                    continue;
+                }
+
+                var project = dbContext.Projects.Include(x => x.Organization)
+                    .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+                    .SingleOrDefault(x => x.ProjectID == projectID);
+
+                var projectHRUCharacteristics = dbContext.ProjectHRUCharacteristics
+                    .Where(x => x.ProjectID == projectID);
+                var area = projectHRUCharacteristics.Sum(x => x.Area);
+                var imperviousAcres = projectHRUCharacteristics.Sum(x => x.ImperviousAcres);
+
+                projectModeledResultSummaryDtos.Add(new ProjectModeledResultSummaryDto()
+                {
+                    ProjectName = project?.ProjectName,
+                    Jurisdiction = project?.StormwaterJurisdiction.Organization.OrganizationName,
+                    Organization = project?.Organization.OrganizationName,
+                    AcresTreated = area,
+                    ImperviousAcresTreated = imperviousAcres
+                });
             }
 
             return projectModeledResultSummaryDtos;

@@ -2,10 +2,17 @@
 
 namespace Hippocamp.Models.DataTransferObjects
 {
-    public class ProjectModeledResultSummaryDto : ProjectSimpleDto
+    public class ProjectModeledResultSummaryDto
     {
-        public double TotalArea { get; set; }
-        public double TotalImperviousAcres { get; set; }
+        public string ProjectName { get; set; }
+        public string Organization { get; set; }
+        public string Jurisdiction { get; set; }
+        public double AcresTreated { get; set; }
+        public double ImperviousAcresTreated { get; set; }
+
+        public double SEAScore { get; set; }
+        public double TPIScore { get; set; }
+        public double WQLRI { get; set; }
         public double WetWeatherInflow { get; set; }
         public double WetWeatherTreated { get; set; }
         public double WetWeatherRetained { get; set; }

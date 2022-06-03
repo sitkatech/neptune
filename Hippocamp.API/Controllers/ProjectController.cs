@@ -352,7 +352,7 @@ namespace Hippocamp.API.Controllers
         [HttpGet("projects/OCTAM2Tier2GrantProgram/download")]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        public async Task<FileStreamResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<FileContentResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
@@ -365,7 +365,7 @@ namespace Hippocamp.API.Controllers
             await csv.FlushAsync();
             stream.Seek(0, SeekOrigin.Begin);
 
-            return File(stream, "text/csv");
+            return File(stream.ToArray(), "text/csv");
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs")]
@@ -382,7 +382,7 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        public async Task<IActionResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<FileContentResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records =
@@ -396,7 +396,7 @@ namespace Hippocamp.API.Controllers
             await csv.FlushAsync();
             stream.Seek(0, SeekOrigin.Begin);
 
-            return File(stream, "text/csv");
+            return File(stream.ToArray(), "text/csv");
         }
     }
 }

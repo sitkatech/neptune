@@ -11,7 +11,7 @@ namespace Hippocamp.EFModels.Entities
         {
             var treatmentBMPIDs = dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).Select(x => x.TreatmentBMPID).ToList();
 
-            return dbContext.ProjectNereidResults
+            return dbContext.ProjectNereidResults.Include(x => x.Project)
                 .Where(x => x.ProjectID == projectID && x.TreatmentBMPID != null)
                 .ToList()
                 .Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID.Value))
