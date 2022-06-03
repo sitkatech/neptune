@@ -166,8 +166,8 @@
                           </button>
                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" (click)="exportProjectGridToCsv()">Project List</a>
-                            <a class="dropdown-item" [href]=getProjectModelResultsDownloadLink() download>Project List with Model Results</a>
-                            <a class="dropdown-item" [href]=getProjectModelResultsDownloadLink() download>Treatment BMP List with Model Results</a>
+                            <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                            <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
                           </div>
                     </div>
                 </div>

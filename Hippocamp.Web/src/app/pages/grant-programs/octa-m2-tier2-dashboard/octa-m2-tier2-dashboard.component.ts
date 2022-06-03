@@ -8,7 +8,6 @@ import 'leaflet-loading';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DelineationService } from 'src/app/services/delineation.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto, DelineationSimpleDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
@@ -25,7 +24,9 @@ import { ColDef } from 'ag-grid-community';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { AgGridAngular } from 'ag-grid-angular';
-import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { Alert } from 'src/app/shared/models/alert';
+import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 
 declare var $: any;
 
@@ -87,7 +88,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private projectService: ProjectService,
     private wfsService: WfsService,
-    private utilityFunctionsService: UtilityFunctionsService
+    private utilityFunctionsService: UtilityFunctionsService,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -449,10 +451,42 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   } 
 
   public getProjectModelResultsDownloadLink() {
-    return environment.mainAppApiUrl + '/projects/OCTAM2Tier2GrantProgram/modeledResults';
+    return `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/download`;
+  }
+  
+  public getTreatmentBMPModelResultsDownloadLink() {
+    return `${environment.mainAppApiUrl}/FileResource/962E0B1B-78D3-4FC8-B716-24E42E353F2F`;
   }
 
-  public getTreatmentBMPModelResultsDownloadLink() {
-    return environment.mainAppApiUrl + '/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/modeledResults';
+  public downloadProjectModelResults() {
+    this.projectService.downloadOCTAM2Tier2GrantProgramProjectModelResults().subscribe(csv => {
+      //Create a fake object for us to click and download
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(csv);
+      a.download = `OCTA-M2-Tier2-project-modeled-results.csv`;
+      document.body.appendChild(a);
+      a.click();
+      //Revoke the generated url so the blob doesn't hang in memory https://javascript.info/blob
+      URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    }, (() => {
+      this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
+    }))
+  }
+
+  public downloadTreatmentBMPModelResults() {
+    this.projectService.downloadOCTAM2Tier2GrantProgramBMPModelResults().subscribe(csv => {
+      //Create a fake object for us to click and download
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(csv);
+      a.download = `OCTA-M2-Tier2-BMP-modeled-results.csv`;
+      document.body.appendChild(a);
+      a.click();
+      //Revoke the generated url so the blob doesn't hang in memory https://javascript.info/blob
+      URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    }, (() => {
+      this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
+    }))
   }
 }

@@ -126,13 +126,18 @@ export class ProjectService {
     return this.apiService.getFromApi(route);
   }
 
-  downloadProjectsSharedWithOCTAM2Tier2GrantProgramDetailedSummary() {
-    let route = 'projects/OCTAM2Tier2GrantProgram/detailedSummary';
-    return this.apiService.getFromApi(route);
-  }
-
   getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(): Observable<any> {
     let route = 'projects/OCTAM2Tier2GrantProgram/treatmentBMPs';
     return this.apiService.getFromApi(route);
+  }
+
+  downloadOCTAM2Tier2GrantProgramProjectModelResults(): Observable<Blob> {
+    let route = `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/download`;
+    return this.httpClient.get(route, { responseType: "blob"});
+  }
+
+  downloadOCTAM2Tier2GrantProgramBMPModelResults(): Observable<Blob> {
+    let route = `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download`;
+    return this.httpClient.get(route, { responseType: "blob"});
   }
 }

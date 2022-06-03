@@ -349,29 +349,23 @@ namespace Hippocamp.API.Controllers
             return Ok(projectDtos);
         }
 
-        [HttpGet("projects/OCTAM2Tier2GrantProgram/modeledResults")]
-        [JurisdictionEditFeature]
-        public async Task<IActionResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
+        [HttpGet("projects/OCTAM2Tier2GrantProgram/download")]
+        [Produces(@"text/csv")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+        public async Task<FileStreamResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
-            var fileName = "OCTA-M2-Tier2-projects-with-model-results.csv";
 
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
+            await using var stream = new MemoryStream();
+            await using var writer = new StreamWriter(stream);
+
             var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-
             await csv.WriteRecordsAsync(records);
-            await writer.FlushAsync();
+            await csv.FlushAsync();
+            stream.Seek(0, SeekOrigin.Begin);
 
-            var contentDisposition = new System.Net.Mime.ContentDisposition
-            {
-                FileName = fileName,
-                Inline = false
-            };
-            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
-            return File(stream, "text/csv", fileName);
+            return File(stream, "text/csv");
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs")]
@@ -384,30 +378,25 @@ namespace Hippocamp.API.Controllers
             return Ok(treatmentBMPDisplayDtos);
         }
 
-        [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs/modeledResults")]
+        [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download")]
         [JurisdictionEditFeature]
+        [Produces(@"text/csv")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<IActionResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
-            var records = ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(_dbContext, projectIDs);
-            var fileName = "OCTA-M2-Tier2-BMPs-model-results.csv";
+            var records =
+                ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(_dbContext, projectIDs);
 
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            await using var stream = new MemoryStream();
+            await using var writer = new StreamWriter(stream);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
             await csv.WriteRecordsAsync(records);
-            await writer.FlushAsync();
+            await csv.FlushAsync();
+            stream.Seek(0, SeekOrigin.Begin);
 
-            var contentDisposition = new System.Net.Mime.ContentDisposition
-            {
-                FileName = fileName,
-                Inline = false
-            };
-            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
-            return File(stream, "text/csv", fileName);
-
+            return File(stream, "text/csv");
         }
     }
 }

@@ -1122,14 +1122,22 @@
         }
       }
     },
-    "/projects/OCTAM2Tier2GrantProgram/modeledResults": {
+    "/projects/OCTAM2Tier2GrantProgram/download": {
       "get": {
         "tags": [
           "Project"
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
@@ -1172,14 +1180,22 @@
         }
       }
     },
-    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/modeledResults": {
+    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download": {
       "get": {
         "tags": [
           "Project"
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
