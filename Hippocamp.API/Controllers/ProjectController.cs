@@ -361,6 +361,8 @@ namespace Hippocamp.API.Controllers
             await using var writer = new StreamWriter(stream);
 
             var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<ProjectModeledResultsSummaryMap>();
+
             await csv.WriteRecordsAsync(records);
             await csv.FlushAsync();
             stream.Seek(0, SeekOrigin.Begin);
@@ -384,13 +386,15 @@ namespace Hippocamp.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
+
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records =
-                ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(_dbContext, projectIDs);
+                ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosWithBMPFieldsByProjectIDs(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
             await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<TreatmentBMPModeledResultMap>();
 
             await csv.WriteRecordsAsync(records);
             await csv.FlushAsync();

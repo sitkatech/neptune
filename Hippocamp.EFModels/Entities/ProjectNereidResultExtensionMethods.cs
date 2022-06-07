@@ -13,6 +13,7 @@ namespace Hippocamp.EFModels.Entities
                 TreatmentBMPID = result.TreatmentBMPID.Value,
                 ProjectID = result.ProjectID,
                 ProjectName = result.Project.ProjectName,
+
                 WetWeatherInflow = parsedResults.ExtractDoubleValue("runoff_volume_cuft_inflow"),
                 WetWeatherTreated = parsedResults.ExtractDoubleValue("runoff_volume_cuft_treated"),
                 WetWeatherRetained = parsedResults.ExtractDoubleValue("runoff_volume_cuft_retained"),
@@ -157,7 +158,15 @@ namespace Hippocamp.EFModels.Entities
             toReturn.TotalTZnInflow = toReturn.DryWeatherTZnInflow + toReturn.WetWeatherTZnInflow;
 
             return toReturn;
-    }
+        }
+
+        public static TreatmentBMPModeledResultSimpleDto AsTreatmentBMPModeledResultSimpleDtoWithTreatmentBMPFields(this ProjectNereidResult result, TreatmentBMP treatmentBMP)
+        {
+            var toReturn = result.AsTreatmentBMPModeledResultSimpleDto();
+            toReturn.TreatmentBMPName = treatmentBMP.TreatmentBMPName;
+
+            return toReturn;
+        }
 
         public static double ExtractDoubleValue(this JObject jobject, string key)
         {

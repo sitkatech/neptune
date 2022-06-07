@@ -13,6 +13,7 @@
 export class TreatmentBMPModeledResultSimpleDto { 
     TreatmentBMPID?: number;
     ProjectID?: number;
+    ProjectName?: string;
     WetWeatherInflow?: number;
     WetWeatherTreated?: number;
     WetWeatherRetained?: number;

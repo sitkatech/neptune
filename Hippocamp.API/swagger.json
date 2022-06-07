@@ -2802,6 +2802,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
           "ProjectID": {
             "type": "integer",
             "format": "int32"
