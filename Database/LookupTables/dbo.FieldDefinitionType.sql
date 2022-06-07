@@ -122,5 +122,16 @@ VALUES
 (118, 'SEA Score', 'Strategically Effective Area Score'),
 (119, 'TPI Score', 'Transportation Nexus Score'),
 (120, 'WQLRI', 'Water Quality Load Reduction Index'),
-(121, 'Pollutant Contribution to SEA', 'Pollutant Contribution to Strategically Effective Area')
+(121, 'Pollutant Contribution to SEA', 'Pollutant Contribution to Strategically Effective Area'),
+(122, 'SiteRunoff', 'Site Runoff'),
+(123, 'TreatedAndDischarged', 'Treated and Discharged'),
+(124, 'RetainedOrRecycled', 'Retained or Recycled'),
+(125, 'Untreated(BypassOrOverflow)', 'Untreated (Bypass or Overflow)'),
+(126, 'TotalSuspendedSolids', 'Total Suspended Solids'),
+(127, 'TotalNitrogen', 'Total Nitrogen'),
+(128, 'TotalPhosphorous', 'Total Phosphorous'),
+(129, 'FecalColiform', 'Fecal Coliform'),
+(130, 'TotalCopper', 'Total Copper'),
+(131, 'TotalLead', 'Total Lead'),
+(132, 'TotalZinc', 'Total Zinc')
 
