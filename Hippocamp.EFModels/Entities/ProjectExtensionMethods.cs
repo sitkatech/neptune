@@ -1,4 +1,5 @@
-﻿using Hippocamp.Models.DataTransferObjects;
+﻿using System.Linq;
+using Hippocamp.Models.DataTransferObjects;
 
 namespace Hippocamp.EFModels.Entities
 {
@@ -11,6 +12,35 @@ namespace Hippocamp.EFModels.Entities
             projectSimpleDto.ProjectStatus = project.ProjectStatus.AsSimpleDto();
             projectSimpleDto.PrimaryContactPerson = project.PrimaryContactPerson.AsSimpleDto();
             projectSimpleDto.CreatePerson = project.CreatePerson.AsSimpleDto();
+        }
+
+        public static ProjectHRUCharacteristicsSummaryDto AsProjectHRUCharacteristicsSummaryDto(this Project project)
+        {
+            var projectDto = new ProjectHRUCharacteristicsSummaryDto()
+            {
+                ProjectID = project.ProjectID,
+                ProjectName = project.ProjectName,
+                OrganizationID = project.OrganizationID,
+                StormwaterJurisdictionID = project.StormwaterJurisdictionID,
+                ProjectStatusID = project.ProjectStatusID,
+                PrimaryContactPersonID = project.PrimaryContactPersonID,
+                CreatePersonID = project.CreatePersonID,
+                DateCreated = project.DateCreated,
+                ProjectDescription = project.ProjectDescription,
+                AdditionalContactInformation = project.AdditionalContactInformation,
+                DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
+                CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
+                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
+                Organization = project.Organization.AsSimpleDto(),
+                StormwaterJurisdiction = project.StormwaterJurisdiction.AsSimpleDto(),
+                ProjectStatus = project.ProjectStatus.AsSimpleDto(),
+                PrimaryContactPerson = project.PrimaryContactPerson.AsSimpleDto(),
+                CreatePerson = project.CreatePerson.AsSimpleDto(),
+                Area = project.ProjectHRUCharacteristics.Sum(x => x.Area),
+                ImperviousAcres = project.ProjectHRUCharacteristics.Sum(x => x.ImperviousAcres)
+            };
+
+            return projectDto;
         }
     }
 }

@@ -1,7 +1,22 @@
 <ng-container *ngIf="treatmentBMPs">
-    <div class="mt-md-0 mt-4">
-        <h2 class="d-inline-block">Modeled Performance and Scoring</h2>
-        <a href="{{getAboutModelingPerformanceURL()}}" class="float-right">About Modeling Performance</a>
+<div class="mt-md-0 mt-4">
+    <h2 class="d-inline-block">Modeled Performance and Grant Metrics</h2>
+    <a href="{{getAboutModelingPerformanceURL()}}" class="float-right">About Modeling Performance</a>
+</div>
+<div class="row m-1">
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</div>
+<div class="row m-1 mb-3">
+    <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'"
+        [dismissible]="false">
+        Results for this project are currently being calculated. Triggering a new calculation will be disabled until the
+        current calculation completes.
+    </ngb-alert>
+    <div class="col-4 col-md-2">
+        <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()"
+            [disabled]="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)">
+            Calculate
+        </button>
     </div>
     <div class="row m-1">
         <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
@@ -92,15 +107,15 @@
             </div>
         </div>
     </div>
-    <div class="row mt-3 mb-3" *ngIf="project?.CalculateOCTAM2Tier2Scores">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    Grant Scores
-                </div>
-                <div class="card-body">
-                    <hippocamp-grant-scores [projectID]="projectID"></hippocamp-grant-scores>
-                </div>
+</div>
+<div class="row mt-3 mb-3" *ngIf="project?.CalculateOCTAM2Tier2Scores">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Grant Metrics
+            </div>
+            <div class="card-body">
+                <hippocamp-grant-scores [projectID]="projectID"></hippocamp-grant-scores>
             </div>
         </div>
     </div>
@@ -111,4 +126,5 @@
             </button>
         </div>
     </div>
+</div>
 </ng-container>

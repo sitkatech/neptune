@@ -25,6 +25,7 @@ import { UnsavedChangesGuard } from './shared/guards/unsaved-changes.guard';
 import { ProjectDetailComponent } from './pages/projects/project-detail/project-detail.component';
 import { ReviewComponent } from './pages/projects/project-workflow/review/review.component';
 import { PlanningMapComponent } from './pages/planning-map/planning-map.component';
+import { OCTAM2Tier2DashboardComponent } from './pages/grant-programs/octa-m2-tier2-dashboard/octa-m2-tier2-dashboard.component';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -55,7 +56,7 @@ const routes: Routes = [
               { path: "", redirectTo: 'treatment-bmps', pathMatch: 'full' },
               { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
               { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
-              { path: "modeled-performance-and-scoring", component: ModeledPerformanceComponent }
+              { path: "modeled-performance-and-metrics", component: ModeledPerformanceComponent }
             ]
           },
           { path: "attachments", component: ProjectAttachmentsComponent },
@@ -63,6 +64,12 @@ const routes: Routes = [
         ]
       },
       { path: `${routeParams.projectID}`, component: ProjectDetailComponent},
+    ]
+  },
+  {
+    path: "grant-programs", canActivate: [UnauthenticatedAccessGuard],
+    children: [
+      { path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
     ]
   },
   { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },

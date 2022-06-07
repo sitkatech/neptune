@@ -551,7 +551,7 @@ export class DelineationsComponent implements OnInit {
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
 
         if (continueToNextStep) {
-          this.router.navigateByUrl(`/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-scoring`).then(x => {
+          this.router.navigateByUrl(`/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-metrics`).then(x => {
             this.alertService.pushAlert(new Alert('Your Delineation changes have been saved.', AlertContext.Success, true));
           });
           return;

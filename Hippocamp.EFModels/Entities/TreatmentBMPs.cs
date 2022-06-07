@@ -64,6 +64,16 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
+        public static List<TreatmentBMPDisplayDto> ListByProjectIDsAsDisplayDto(HippocampDbContext dbContext, List<int> projectIDs)
+        {
+            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayDtoImpl(dbContext)
+                .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
+                .Select(x => x.AsDisplayDto())
+                .ToList();
+
+            return treatmentBMPDisplayDtos;
+        }
+
         public static List<TreatmentBMPDisplayDto> ListByPersonIDAsDisplayDto(HippocampDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);

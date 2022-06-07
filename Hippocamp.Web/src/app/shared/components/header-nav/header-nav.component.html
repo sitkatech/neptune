@@ -88,6 +88,17 @@
                     </a>
                 </div>
             </li>
+            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
+                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Grant Programs
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a href="grant-programs/octa-m2-tier-2" class="dropdown-item">
+                        OCTA M2 Tier 2 Grant Program
+                    </a>
+                </div>
+            </li>
         </ul>
 
     </div>
