@@ -123,5 +123,16 @@ export enum FieldDefinitionTypeEnum {
 	SEAScore = 118,
 	TPIScore = 119,
 	WQLRI = 120,
-	PollutantContributionToSEA = 121
+	PollutantContributionToSEA = 121,
+    SiteRunoff = 122,
+    TreatedAndDischarged = 123,
+    RetainedOrRecycled = 124,
+    UntreatedBypassOrOverflow = 125,
+    TotalSuspendedSolids = 126,
+    TotalNitrogen = 127,
+    TotalPhosphorous = 128,
+    FecalColiform = 129,
+    TotalCopper = 130, 
+    TotalLead = 131,
+    TotalZinc = 132
 }

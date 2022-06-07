@@ -45,27 +45,35 @@
                 </thead>
                 <tbody>
                     <tr *ngIf="treatmentBMPIDForSelectedModelResults != 0">
-                        <td class="left">To BMP</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherInflow |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td>--</td>
                     </tr>
                     <tr>
-                        <td class="left">Treated and Discharged</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.WetWeatherTreated /
                                 selectedModelResults.WetWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Retained or Recycled</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherRetained |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.WetWeatherRetained /
                                 selectedModelResults.WetWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Untreated (Bypass or Overflow)</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherUntreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.WetWeatherUntreated /
@@ -81,7 +89,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="left">Total Suspended Solids</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTSSRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -89,7 +99,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Nitrogen</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTNRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -97,7 +109,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Phosphorous</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTPRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -105,7 +119,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Fecal Coliform</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="FecalColiform"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherFCRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
@@ -113,7 +129,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Copper</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalCopper"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTCuRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -121,7 +139,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Lead</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalLead"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTPbRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -129,7 +149,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Zinc</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalZinc"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.WetWeatherTZnRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -149,27 +171,35 @@
                 </thead>
                 <tbody>
                     <tr *ngIf="treatmentBMPIDForSelectedModelResults != 0">
-                        <td class="left">To BMP</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherInflow |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td>--</td>
                     </tr>
                     <tr>
-                        <td class="left">Treated and Discharged</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.DryWeatherTreated /
                                 selectedModelResults.DryWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Retained or Recycled</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherRetained |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.DryWeatherRetained /
                                 selectedModelResults.DryWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Untreated (Bypass or Overflow)</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherUntreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.DryWeatherUntreated /
@@ -185,7 +215,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="left">Total Suspended Solids</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTSSRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -193,7 +225,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Nitrogen</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTNRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -201,7 +235,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Phosphorous</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTPRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -209,7 +245,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Fecal Coliform</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="FecalColiform"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherFCRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
@@ -217,7 +255,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Copper</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalCopper"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTCuRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -225,7 +265,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Lead</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalLead"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTPbRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -233,7 +275,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Zinc</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalZinc"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.DryWeatherTZnRemoved |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -253,27 +297,35 @@
                 </thead>
                 <tbody>
                     <tr *ngIf="treatmentBMPIDForSelectedModelResults != 0">
-                        <td class="left">To BMP</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalInflow | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
                         <td>--</td>
                     </tr>
                     <tr>
-                        <td class="left">Treated and Discharged</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTreated | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
                         <td><span>{{100 * selectedModelResults.TotalTreated /
                                 selectedModelResults.TotalInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Retained or Recycled</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalRetained | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
                         <td><span>{{100 * selectedModelResults.TotalRetained /
                                 selectedModelResults.TotalInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Untreated (Bypass or Overflow)</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalUntreated | neptuneModelingResultSigFig:3
                                 | number}}</span></td>
                         <td><span>{{100 * selectedModelResults.TotalUntreated /
@@ -289,7 +341,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="left">Total Suspended Solids</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTSSRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -297,7 +351,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Nitrogen</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTNRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -305,7 +361,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Phosphorous</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTPRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
@@ -313,7 +371,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Fecal Coliform</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="FecalColiform"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalFCRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
@@ -321,7 +381,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Copper</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalCopper"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTCuRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -329,7 +391,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Lead</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalLead"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTPbRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> g</td>
                         <td><span>{{100 *
@@ -337,7 +401,9 @@
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
-                        <td class="left">Total Zinc</td>
+                        <td class="left">
+                            <field-definition fieldDefinitionType="TotalZinc"></field-definition>
+                        </td>
                         <td><span>{{selectedModelResults.TotalTZnRemoved | neptuneModelingResultSigFig:2
                                 | number}}</span> g</td>
                         <td><span>{{100 *

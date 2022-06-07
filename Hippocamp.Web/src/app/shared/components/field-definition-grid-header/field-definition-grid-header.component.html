@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center; width:100%" (click)="onSortRequested($event)">
-    <div #header class="customHeaderLabel"><field-definition  [fieldDefinitionType]="params.fieldDefinitionType" [labelOverride]="params.labelOverride"></field-definition></div>
+    <div #header class="customHeaderLabel"><field-definition [fieldDefinitionType]="params.fieldDefinitionType" [labelOverride]="params.labelOverride" [white]="true"></field-definition></div>
     <div [hidden]="!params.enableSorting" style="margin-left:5px; margin-right:5px">
         <i *ngIf="this.sorted === 'desc'" class="fa fa-long-arrow-down"></i>
         <i *ngIf="this.sorted === 'asc'" class="fa fa-long-arrow-up"></i>

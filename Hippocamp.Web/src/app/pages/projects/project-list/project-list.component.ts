@@ -13,6 +13,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { FontAwesomeIconLinkRendererComponent } from 'src/app/shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
+import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 
 
 @Component({
@@ -108,8 +109,16 @@ export class ProjectListComponent implements OnInit {
         },
         comparator: this.utilityFunctionsService.linkRendererComparator
       },
-      { headerName: 'Organization', field: 'Organization.OrganizationName' },
-      { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
+      { 
+        headerComponentFramework: FieldDefinitionGridHeaderComponent,
+        headerComponentParams: { fieldDefinitionType: 'Organization' },
+        field: 'Organization.OrganizationName' 
+      },
+      { 
+        headerComponentFramework: FieldDefinitionGridHeaderComponent,
+        headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
+        field: 'StormwaterJurisdiction.Organization.OrganizationName' 
+      },
       { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
       this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
       { headerName: 'Project Description', field: 'ProjectDescription' }

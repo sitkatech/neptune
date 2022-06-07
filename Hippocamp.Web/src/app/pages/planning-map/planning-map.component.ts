@@ -25,6 +25,7 @@ import { ColDef } from 'ag-grid-community';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { AgGridAngular } from 'ag-grid-angular';
+import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 
 declare var $: any;
 
@@ -129,8 +130,16 @@ export class PlanningMapComponent implements OnInit {
           },
           comparator: this.utilityFunctionsService.linkRendererComparator
         },
-        { headerName: 'Organization', field: 'Organization.OrganizationName' },
-        { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'Organization' },
+          field: 'Organization.OrganizationName' 
+        },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
+          field: 'StormwaterJurisdiction.Organization.OrganizationName' 
+        },
         { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
         this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
         { headerName: 'Project Description', field: 'ProjectDescription' }

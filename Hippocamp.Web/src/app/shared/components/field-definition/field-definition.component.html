@@ -43,7 +43,7 @@
                 {{getLabelText()}}
                 <i class="fas fa-question-circle small" style="cursor: help;" #p="ngbPopover" [ngbPopover]="popContent"
                     [popoverTitle]="popTitle" triggers="manual" [autoClose]="false"
-                    popoverClass="popover-override" container="body">
+                    popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
                 </i>
             </span>
         </div>
@@ -52,7 +52,8 @@
         <span> 
             {{getLabelText()}}
             <i class="fas fa-question-circle small" style="cursor: help;" [ngbPopover]="popContent"  popoverClass="popover-override"
-                [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName" triggers="mouseenter:mouseleave" container="body">
+                [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName" triggers="mouseenter:mouseleave" 
+                container="body" [ngClass]="{'text-white': white}">
             </i>
         </span>
     </ng-container>

@@ -22,6 +22,7 @@ export class FieldDefinitionComponent implements OnInit {
   @Input() fieldDefinitionType: string;
   @Input() labelOverride: string;
   @Input() labelAppend: string;
+  @Input() white?: boolean;
   @ViewChild('p') public popover: NgbPopover;
   @ViewChild('popContent') public content: any;
   public fieldDefinition: FieldDefinitionDto;

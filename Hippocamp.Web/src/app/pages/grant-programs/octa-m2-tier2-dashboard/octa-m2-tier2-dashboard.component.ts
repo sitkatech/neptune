@@ -27,6 +27,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
+import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 
 declare var $: any;
 
@@ -122,13 +123,30 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           },
           comparator: this.utilityFunctionsService.linkRendererComparator
         },
-        { headerName: 'Organization', field: 'Organization.OrganizationName' },
-        { headerName: 'Jurisdiction', field: 'StormwaterJurisdiction.Organization.OrganizationName' },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'Organization' },
+          field: 'Organization.OrganizationName' 
+        },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
+          field: 'StormwaterJurisdiction.Organization.OrganizationName' 
+        },
         { headerName: 'Area Treated (ac)', field: 'Area'},
         { headerName: 'Impervious Area Treated (ac)', field: 'ImperviousAcres'},
-        { headerName: 'SEA Score'},
-        { headerName: 'TPI Score'},
-        { headerName: 'WQLRI'}
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'SEAScore', labelOverride: 'SEA Score' },
+        },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'TPIScore', labelOverride: 'TPI Score' },
+        },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'WQLRI', labelOverride: 'WQLRI' },
+        }
       ];
 
       this.defaultColDef = {
@@ -488,5 +506,16 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }, (() => {
       this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
     }))
+  }
+
+  public getSelectedPrioritizationMetricFieldDefinitionType(): string {
+    switch (this.selectedPrioritizationMetric.toString()) {
+      case 'Strategically Effective Area Score':
+        return 'SEAScore';
+      case 'Transportation Nexus Score':
+        return 'TPIScore';
+      default:
+        return null;
+    }
   }
 }
