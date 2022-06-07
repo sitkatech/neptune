@@ -133,6 +133,22 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTypeDelineationStatus DelineationStatus = FieldDefinitionTypeDelineationStatus.Instance;
         public static readonly FieldDefinitionTypeDryWeatherFlowOverride DryWeatherFlowOverride = FieldDefinitionTypeDryWeatherFlowOverride.Instance;
         public static readonly FieldDefinitionTypeModeledPerformance ModeledPerformance = FieldDefinitionTypeModeledPerformance.Instance;
+        public static readonly FieldDefinitionTypeOCTAM2Tier2GrantProgram OCTAM2Tier2GrantProgram = FieldDefinitionTypeOCTAM2Tier2GrantProgram.Instance;
+        public static readonly FieldDefinitionTypeSEAScore SEAScore = FieldDefinitionTypeSEAScore.Instance;
+        public static readonly FieldDefinitionTypeTPIScore TPIScore = FieldDefinitionTypeTPIScore.Instance;
+        public static readonly FieldDefinitionTypeWQLRI WQLRI = FieldDefinitionTypeWQLRI.Instance;
+        public static readonly FieldDefinitionTypePollutantContributiontoSEA PollutantContributiontoSEA = FieldDefinitionTypePollutantContributiontoSEA.Instance;
+        public static readonly FieldDefinitionTypeSiteRunoff SiteRunoff = FieldDefinitionTypeSiteRunoff.Instance;
+        public static readonly FieldDefinitionTypeTreatedAndDischarged TreatedAndDischarged = FieldDefinitionTypeTreatedAndDischarged.Instance;
+        public static readonly FieldDefinitionTypeRetainedOrRecycled RetainedOrRecycled = FieldDefinitionTypeRetainedOrRecycled.Instance;
+        public static readonly FieldDefinitionTypeUntreatedBypassOrOverflow UntreatedBypassOrOverflow = FieldDefinitionTypeUntreatedBypassOrOverflow.Instance;
+        public static readonly FieldDefinitionTypeTotalSuspendedSolids TotalSuspendedSolids = FieldDefinitionTypeTotalSuspendedSolids.Instance;
+        public static readonly FieldDefinitionTypeTotalNitrogen TotalNitrogen = FieldDefinitionTypeTotalNitrogen.Instance;
+        public static readonly FieldDefinitionTypeTotalPhosphorous TotalPhosphorous = FieldDefinitionTypeTotalPhosphorous.Instance;
+        public static readonly FieldDefinitionTypeFecalColiform FecalColiform = FieldDefinitionTypeFecalColiform.Instance;
+        public static readonly FieldDefinitionTypeTotalCopper TotalCopper = FieldDefinitionTypeTotalCopper.Instance;
+        public static readonly FieldDefinitionTypeTotalLead TotalLead = FieldDefinitionTypeTotalLead.Instance;
+        public static readonly FieldDefinitionTypeTotalZinc TotalZinc = FieldDefinitionTypeTotalZinc.Instance;
 
         public static readonly List<FieldDefinitionType> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinitionType> AllLookupDictionary;
@@ -142,7 +158,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinitionType()
         {
-            All = new List<FieldDefinitionType> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOperational, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized, HydromodificationApplies, DelineationStatus, DryWeatherFlowOverride, ModeledPerformance };
+            All = new List<FieldDefinitionType> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOperational, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized, HydromodificationApplies, DelineationStatus, DryWeatherFlowOverride, ModeledPerformance, OCTAM2Tier2GrantProgram, SEAScore, TPIScore, WQLRI, PollutantContributiontoSEA, SiteRunoff, TreatedAndDischarged, RetainedOrRecycled, UntreatedBypassOrOverflow, TotalSuspendedSolids, TotalNitrogen, TotalPhosphorous, FecalColiform, TotalCopper, TotalLead, TotalZinc };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinitionType>(All.ToDictionary(x => x.FieldDefinitionTypeID));
         }
 
@@ -278,6 +294,8 @@ namespace Neptune.Web.Models
                     return EffectiveRetentionDepth;
                 case FieldDefinitionTypeEnum.ExternalLinks:
                     return ExternalLinks;
+                case FieldDefinitionTypeEnum.FecalColiform:
+                    return FecalColiform;
                 case FieldDefinitionTypeEnum.FieldVisit:
                     return FieldVisit;
                 case FieldDefinitionTypeEnum.FieldVisitStatus:
@@ -342,6 +360,8 @@ namespace Neptune.Web.Models
                     return ObservationTargetType;
                 case FieldDefinitionTypeEnum.ObservationThresholdType:
                     return ObservationThresholdType;
+                case FieldDefinitionTypeEnum.OCTAM2Tier2GrantProgram:
+                    return OCTAM2Tier2GrantProgram;
                 case FieldDefinitionTypeEnum.OnlandVisualTrashAssessment:
                     return OnlandVisualTrashAssessment;
                 case FieldDefinitionTypeEnum.OnlandVisualTrashAssessmentNotes:
@@ -368,6 +388,8 @@ namespace Neptune.Web.Models
                     return PhotoCredit;
                 case FieldDefinitionTypeEnum.PhotoTiming:
                     return PhotoTiming;
+                case FieldDefinitionTypeEnum.PollutantContributiontoSEA:
+                    return PollutantContributiontoSEA;
                 case FieldDefinitionTypeEnum.PrimaryContact:
                     return PrimaryContact;
                 case FieldDefinitionTypeEnum.ProgressScore:
@@ -384,10 +406,16 @@ namespace Neptune.Web.Models
                     return RequiredLifespanOfInstallation;
                 case FieldDefinitionTypeEnum.RequiredPostStormFieldVisitsPerYear:
                     return RequiredPostStormFieldVisitsPerYear;
+                case FieldDefinitionTypeEnum.RetainedOrRecycled:
+                    return RetainedOrRecycled;
                 case FieldDefinitionTypeEnum.RoleName:
                     return RoleName;
                 case FieldDefinitionTypeEnum.RoutingConfiguration:
                     return RoutingConfiguration;
+                case FieldDefinitionTypeEnum.SEAScore:
+                    return SEAScore;
+                case FieldDefinitionTypeEnum.SiteRunoff:
+                    return SiteRunoff;
                 case FieldDefinitionTypeEnum.SizingBasis:
                     return SizingBasis;
                 case FieldDefinitionTypeEnum.StorageVolumeBelowLowestOutletElevation:
@@ -400,12 +428,28 @@ namespace Neptune.Web.Models
                     return TimeOfConcentration;
                 case FieldDefinitionTypeEnum.TotalAchieved:
                     return TotalAchieved;
+                case FieldDefinitionTypeEnum.TotalCopper:
+                    return TotalCopper;
                 case FieldDefinitionTypeEnum.TotalEffectiveBMPVolume:
                     return TotalEffectiveBMPVolume;
                 case FieldDefinitionTypeEnum.TotalEffectiveDrywellBMPVolume:
                     return TotalEffectiveDrywellBMPVolume;
+                case FieldDefinitionTypeEnum.TotalLead:
+                    return TotalLead;
+                case FieldDefinitionTypeEnum.TotalNitrogen:
+                    return TotalNitrogen;
+                case FieldDefinitionTypeEnum.TotalPhosphorous:
+                    return TotalPhosphorous;
+                case FieldDefinitionTypeEnum.TotalSuspendedSolids:
+                    return TotalSuspendedSolids;
+                case FieldDefinitionTypeEnum.TotalZinc:
+                    return TotalZinc;
+                case FieldDefinitionTypeEnum.TPIScore:
+                    return TPIScore;
                 case FieldDefinitionTypeEnum.TrashCaptureStatus:
                     return TrashCaptureStatus;
+                case FieldDefinitionTypeEnum.TreatedAndDischarged:
+                    return TreatedAndDischarged;
                 case FieldDefinitionTypeEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case FieldDefinitionTypeEnum.TreatmentBMPAssessmentObservationType:
@@ -420,6 +464,8 @@ namespace Neptune.Web.Models
                     return UnderlyingHydrologicSoilGroupHSG;
                 case FieldDefinitionTypeEnum.UnderlyingInfiltrationRate:
                     return UnderlyingInfiltrationRate;
+                case FieldDefinitionTypeEnum.UntreatedBypassOrOverflow:
+                    return UntreatedBypassOrOverflow;
                 case FieldDefinitionTypeEnum.UpstreamBMP:
                     return UpstreamBMP;
                 case FieldDefinitionTypeEnum.Username:
@@ -442,6 +488,8 @@ namespace Neptune.Web.Models
                     return WettedFootprint;
                 case FieldDefinitionTypeEnum.WinterHarvestedWaterDemand:
                     return WinterHarvestedWaterDemand;
+                case FieldDefinitionTypeEnum.WQLRI:
+                    return WQLRI;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -564,7 +612,23 @@ namespace Neptune.Web.Models
         HydromodificationApplies = 113,
         DelineationStatus = 114,
         DryWeatherFlowOverride = 115,
-        ModeledPerformance = 116
+        ModeledPerformance = 116,
+        OCTAM2Tier2GrantProgram = 117,
+        SEAScore = 118,
+        TPIScore = 119,
+        WQLRI = 120,
+        PollutantContributiontoSEA = 121,
+        SiteRunoff = 122,
+        TreatedAndDischarged = 123,
+        RetainedOrRecycled = 124,
+        UntreatedBypassOrOverflow = 125,
+        TotalSuspendedSolids = 126,
+        TotalNitrogen = 127,
+        TotalPhosphorous = 128,
+        FecalColiform = 129,
+        TotalCopper = 130,
+        TotalLead = 131,
+        TotalZinc = 132
     }
 
     public partial class FieldDefinitionTypeIsPrimaryContactOrganization : FieldDefinitionType
@@ -1255,5 +1319,101 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionTypeModeledPerformance(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
         public static readonly FieldDefinitionTypeModeledPerformance Instance = new FieldDefinitionTypeModeledPerformance(116, @"ModeledPerformance", @"Modeled Performance");
+    }
+
+    public partial class FieldDefinitionTypeOCTAM2Tier2GrantProgram : FieldDefinitionType
+    {
+        private FieldDefinitionTypeOCTAM2Tier2GrantProgram(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeOCTAM2Tier2GrantProgram Instance = new FieldDefinitionTypeOCTAM2Tier2GrantProgram(117, @"OCTA M2 Tier 2 Grant Program", @"OCTA M2 Tier 2 Grant Program");
+    }
+
+    public partial class FieldDefinitionTypeSEAScore : FieldDefinitionType
+    {
+        private FieldDefinitionTypeSEAScore(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeSEAScore Instance = new FieldDefinitionTypeSEAScore(118, @"SEA Score", @"Strategically Effective Area Score");
+    }
+
+    public partial class FieldDefinitionTypeTPIScore : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTPIScore(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTPIScore Instance = new FieldDefinitionTypeTPIScore(119, @"TPI Score", @"Transportation Nexus Score");
+    }
+
+    public partial class FieldDefinitionTypeWQLRI : FieldDefinitionType
+    {
+        private FieldDefinitionTypeWQLRI(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeWQLRI Instance = new FieldDefinitionTypeWQLRI(120, @"WQLRI", @"Water Quality Load Reduction Index");
+    }
+
+    public partial class FieldDefinitionTypePollutantContributiontoSEA : FieldDefinitionType
+    {
+        private FieldDefinitionTypePollutantContributiontoSEA(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypePollutantContributiontoSEA Instance = new FieldDefinitionTypePollutantContributiontoSEA(121, @"Pollutant Contribution to SEA", @"Pollutant Contribution to Strategically Effective Area");
+    }
+
+    public partial class FieldDefinitionTypeSiteRunoff : FieldDefinitionType
+    {
+        private FieldDefinitionTypeSiteRunoff(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeSiteRunoff Instance = new FieldDefinitionTypeSiteRunoff(122, @"SiteRunoff", @"Site Runoff");
+    }
+
+    public partial class FieldDefinitionTypeTreatedAndDischarged : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTreatedAndDischarged(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTreatedAndDischarged Instance = new FieldDefinitionTypeTreatedAndDischarged(123, @"TreatedAndDischarged", @"Treated and Discharged");
+    }
+
+    public partial class FieldDefinitionTypeRetainedOrRecycled : FieldDefinitionType
+    {
+        private FieldDefinitionTypeRetainedOrRecycled(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeRetainedOrRecycled Instance = new FieldDefinitionTypeRetainedOrRecycled(124, @"RetainedOrRecycled", @"Retained or Recycled");
+    }
+
+    public partial class FieldDefinitionTypeUntreatedBypassOrOverflow : FieldDefinitionType
+    {
+        private FieldDefinitionTypeUntreatedBypassOrOverflow(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeUntreatedBypassOrOverflow Instance = new FieldDefinitionTypeUntreatedBypassOrOverflow(125, @"Untreated(BypassOrOverflow)", @"Untreated (Bypass or Overflow)");
+    }
+
+    public partial class FieldDefinitionTypeTotalSuspendedSolids : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTotalSuspendedSolids(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTotalSuspendedSolids Instance = new FieldDefinitionTypeTotalSuspendedSolids(126, @"TotalSuspendedSolids", @"Total Suspended Solids");
+    }
+
+    public partial class FieldDefinitionTypeTotalNitrogen : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTotalNitrogen(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTotalNitrogen Instance = new FieldDefinitionTypeTotalNitrogen(127, @"TotalNitrogen", @"Total Nitrogen");
+    }
+
+    public partial class FieldDefinitionTypeTotalPhosphorous : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTotalPhosphorous(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTotalPhosphorous Instance = new FieldDefinitionTypeTotalPhosphorous(128, @"TotalPhosphorous", @"Total Phosphorous");
+    }
+
+    public partial class FieldDefinitionTypeFecalColiform : FieldDefinitionType
+    {
+        private FieldDefinitionTypeFecalColiform(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeFecalColiform Instance = new FieldDefinitionTypeFecalColiform(129, @"FecalColiform", @"Fecal Coliform");
+    }
+
+    public partial class FieldDefinitionTypeTotalCopper : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTotalCopper(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTotalCopper Instance = new FieldDefinitionTypeTotalCopper(130, @"TotalCopper", @"Total Copper");
+    }
+
+    public partial class FieldDefinitionTypeTotalLead : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTotalLead(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTotalLead Instance = new FieldDefinitionTypeTotalLead(131, @"TotalLead", @"Total Lead");
+    }
+
+    public partial class FieldDefinitionTypeTotalZinc : FieldDefinitionType
+    {
+        private FieldDefinitionTypeTotalZinc(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTotalZinc Instance = new FieldDefinitionTypeTotalZinc(132, @"TotalZinc", @"Total Zinc");
     }
 }
