@@ -5,14 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("RegionalSubbasin")]
-    [Index(nameof(OCSurveyCatchmentID), Name = "AK_RegionalSubbasin_OCSurveyCatchmentID", IsUnique = true)]
-    [Index(nameof(OCSurveyDownstreamCatchmentID), Name = "IX_RegionalSubbasin_OCSurveyDownstreamCatchmentID")]
-    [Index(nameof(CatchmentGeometry), Name = "SPATIAL_RegionalSubbasin_CatchmentGeometry")]
+    [Index("OCSurveyCatchmentID", Name = "AK_RegionalSubbasin_OCSurveyCatchmentID", IsUnique = true)]
+    [Index("OCSurveyDownstreamCatchmentID", Name = "IX_RegionalSubbasin_OCSurveyDownstreamCatchmentID")]
+    [Index("CatchmentGeometry", Name = "SPATIAL_RegionalSubbasin_CatchmentGeometry")]
     public partial class RegionalSubbasin
     {
         public RegionalSubbasin()
@@ -25,8 +23,10 @@ namespace Hippocamp.EFModels.Entities
         [Key]
         public int RegionalSubbasinID { get; set; }
         [StringLength(10)]
+        [Unicode(false)]
         public string DrainID { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string Watershed { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
@@ -41,14 +41,14 @@ namespace Hippocamp.EFModels.Entities
         public bool? IsInModelBasin { get; set; }
         public int? ModelBasinID { get; set; }
 
-        [ForeignKey(nameof(ModelBasinID))]
+        [ForeignKey("ModelBasinID")]
         [InverseProperty("RegionalSubbasins")]
         public virtual ModelBasin ModelBasin { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
         public virtual ICollection<RegionalSubbasin> InverseOCSurveyDownstreamCatchment { get; set; }
-        [InverseProperty(nameof(LoadGeneratingUnit.RegionalSubbasin))]
+        [InverseProperty("RegionalSubbasin")]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(ProjectLoadGeneratingUnit.RegionalSubbasin))]
+        [InverseProperty("RegionalSubbasin")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
     }
 }

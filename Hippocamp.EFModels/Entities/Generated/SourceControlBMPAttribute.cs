@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("SourceControlBMPAttribute")]
@@ -21,12 +19,13 @@ namespace Hippocamp.EFModels.Entities
         public int SourceControlBMPAttributeCategoryID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string SourceControlBMPAttributeName { get; set; }
 
-        [ForeignKey(nameof(SourceControlBMPAttributeCategoryID))]
+        [ForeignKey("SourceControlBMPAttributeCategoryID")]
         [InverseProperty("SourceControlBMPAttributes")]
         public virtual SourceControlBMPAttributeCategory SourceControlBMPAttributeCategory { get; set; }
-        [InverseProperty(nameof(SourceControlBMP.SourceControlBMPAttribute))]
+        [InverseProperty("SourceControlBMPAttribute")]
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
     }
 }

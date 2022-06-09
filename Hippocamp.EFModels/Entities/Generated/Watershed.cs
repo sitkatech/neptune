@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("Watershed")]
@@ -22,11 +20,12 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry WatershedGeometry { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string WatershedName { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry WatershedGeometry4326 { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMP.Watershed))]
+        [InverseProperty("Watershed")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

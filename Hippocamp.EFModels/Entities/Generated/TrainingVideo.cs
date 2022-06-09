@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TrainingVideo")]
@@ -15,11 +13,14 @@ namespace Hippocamp.EFModels.Entities
         public int TrainingVideoID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string VideoName { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string VideoDescription { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string VideoURL { get; set; }
     }
 }

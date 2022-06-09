@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("SizingBasisType")]
-    [Index(nameof(SizingBasisTypeDisplayName), Name = "AK_SizingBasisType_SizingBasisTypeDisplayName", IsUnique = true)]
-    [Index(nameof(SizingBasisTypeName), Name = "AK_SizingBasisType_SizingBasisTypeName", IsUnique = true)]
+    [Index("SizingBasisTypeDisplayName", Name = "AK_SizingBasisType_SizingBasisTypeDisplayName", IsUnique = true)]
+    [Index("SizingBasisTypeName", Name = "AK_SizingBasisType_SizingBasisTypeName", IsUnique = true)]
     public partial class SizingBasisType
     {
         public SizingBasisType()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int SizingBasisTypeID { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string SizingBasisTypeName { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string SizingBasisTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMP.SizingBasisType))]
+        [InverseProperty("SizingBasisType")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

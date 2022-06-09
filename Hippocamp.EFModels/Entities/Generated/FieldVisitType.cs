@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FieldVisitType")]
-    [Index(nameof(FieldVisitTypeName), Name = "AK_FieldVisitType_FieldVisitTypeName", IsUnique = true)]
+    [Index("FieldVisitTypeName", Name = "AK_FieldVisitType_FieldVisitTypeName", IsUnique = true)]
     public partial class FieldVisitType
     {
         public FieldVisitType()
@@ -21,12 +19,14 @@ namespace Hippocamp.EFModels.Entities
         public int FieldVisitTypeID { get; set; }
         [Required]
         [StringLength(40)]
+        [Unicode(false)]
         public string FieldVisitTypeName { get; set; }
         [Required]
         [StringLength(40)]
+        [Unicode(false)]
         public string FieldVisitTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(FieldVisit.FieldVisitType))]
+        [InverseProperty("FieldVisitType")]
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
     }
 }

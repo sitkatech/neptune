@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("MaintenanceRecord")]
-    [Index(nameof(FieldVisitID), Name = "AK_MaintenanceRecord_FieldVisitID", IsUnique = true)]
-    [Index(nameof(MaintenanceRecordID), nameof(TreatmentBMPID), Name = "AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID", IsUnique = true)]
-    [Index(nameof(MaintenanceRecordID), nameof(TreatmentBMPTypeID), Name = "AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID", IsUnique = true)]
+    [Index("FieldVisitID", Name = "AK_MaintenanceRecord_FieldVisitID", IsUnique = true)]
+    [Index("MaintenanceRecordID", "TreatmentBMPID", Name = "AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID", IsUnique = true)]
+    [Index("MaintenanceRecordID", "TreatmentBMPTypeID", Name = "AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID", IsUnique = true)]
     public partial class MaintenanceRecord
     {
         public MaintenanceRecord()
@@ -26,25 +24,26 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPTypeID { get; set; }
         public int FieldVisitID { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string MaintenanceRecordDescription { get; set; }
         public int? MaintenanceRecordTypeID { get; set; }
 
-        [ForeignKey(nameof(FieldVisitID))]
+        [ForeignKey("FieldVisitID")]
         [InverseProperty("MaintenanceRecordFieldVisit")]
         public virtual FieldVisit FieldVisit { get; set; }
         public virtual FieldVisit FieldVisitNavigation { get; set; }
-        [ForeignKey(nameof(MaintenanceRecordTypeID))]
+        [ForeignKey("MaintenanceRecordTypeID")]
         [InverseProperty("MaintenanceRecords")]
         public virtual MaintenanceRecordType MaintenanceRecordType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("MaintenanceRecordTreatmentBMPs")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMP TreatmentBMPNavigation { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("MaintenanceRecords")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationMaintenanceRecordNavigations { get; set; }
-        [InverseProperty(nameof(MaintenanceRecordObservation.MaintenanceRecord))]
+        [InverseProperty("MaintenanceRecord")]
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationMaintenanceRecords { get; set; }
     }
 }

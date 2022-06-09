@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FundingEventFundingSource")]
-    [Index(nameof(FundingSourceID), nameof(FundingEventID), Name = "AK_FundingEventFundingSource_FundingSourceID_FundingEventID", IsUnique = true)]
+    [Index("FundingSourceID", "FundingEventID", Name = "AK_FundingEventFundingSource_FundingSourceID_FundingEventID", IsUnique = true)]
     public partial class FundingEventFundingSource
     {
         [Key]
@@ -19,10 +17,10 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "money")]
         public decimal? Amount { get; set; }
 
-        [ForeignKey(nameof(FundingEventID))]
+        [ForeignKey("FundingEventID")]
         [InverseProperty("FundingEventFundingSources")]
         public virtual FundingEvent FundingEvent { get; set; }
-        [ForeignKey(nameof(FundingSourceID))]
+        [ForeignKey("FundingSourceID")]
         [InverseProperty("FundingEventFundingSources")]
         public virtual FundingSource FundingSource { get; set; }
     }

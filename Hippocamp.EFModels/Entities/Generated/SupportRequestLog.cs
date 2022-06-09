@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("SupportRequestLog")]
@@ -17,24 +15,29 @@ namespace Hippocamp.EFModels.Entities
         public DateTime RequestDate { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string RequestPersonName { get; set; }
         [Required]
         [StringLength(256)]
+        [Unicode(false)]
         public string RequestPersonEmail { get; set; }
         public int? RequestPersonID { get; set; }
         public int SupportRequestTypeID { get; set; }
         [Required]
         [StringLength(2000)]
+        [Unicode(false)]
         public string RequestDescription { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string RequestPersonOrganization { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string RequestPersonPhone { get; set; }
 
-        [ForeignKey(nameof(RequestPersonID))]
-        [InverseProperty(nameof(Person.SupportRequestLogs))]
+        [ForeignKey("RequestPersonID")]
+        [InverseProperty("SupportRequestLogs")]
         public virtual Person RequestPerson { get; set; }
-        [ForeignKey(nameof(SupportRequestTypeID))]
+        [ForeignKey("SupportRequestTypeID")]
         [InverseProperty("SupportRequestLogs")]
         public virtual SupportRequestType SupportRequestType { get; set; }
     }

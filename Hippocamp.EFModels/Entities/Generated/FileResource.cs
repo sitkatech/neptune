@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FileResource")]
-    [Index(nameof(FileResourceGUID), Name = "AK_FileResource_FileResourceGUID", IsUnique = true)]
+    [Index("FileResourceGUID", Name = "AK_FileResource_FileResourceGUID", IsUnique = true)]
     public partial class FileResource
     {
         public FileResource()
@@ -33,9 +31,11 @@ namespace Hippocamp.EFModels.Entities
         public int FileResourceMimeTypeID { get; set; }
         [Required]
         [StringLength(255)]
+        [Unicode(false)]
         public string OriginalBaseFilename { get; set; }
         [Required]
         [StringLength(255)]
+        [Unicode(false)]
         public string OriginalFileExtension { get; set; }
         public Guid FileResourceGUID { get; set; }
         [Required]
@@ -44,35 +44,35 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime CreateDate { get; set; }
 
-        [ForeignKey(nameof(CreatePersonID))]
-        [InverseProperty(nameof(Person.FileResources))]
+        [ForeignKey("CreatePersonID")]
+        [InverseProperty("FileResources")]
         public virtual Person CreatePerson { get; set; }
-        [ForeignKey(nameof(FileResourceMimeTypeID))]
+        [ForeignKey("FileResourceMimeTypeID")]
         [InverseProperty("FileResources")]
         public virtual FileResourceMimeType FileResourceMimeType { get; set; }
-        [InverseProperty(nameof(NeptuneHomePageImage.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
-        [InverseProperty(nameof(NeptunePageImage.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<NeptunePageImage> NeptunePageImages { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentObservationPhotoStaging.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentObservationPhoto.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
-        [InverseProperty(nameof(Organization.LogoFileResource))]
+        [InverseProperty("LogoFileResource")]
         public virtual ICollection<Organization> Organizations { get; set; }
-        [InverseProperty(nameof(ProjectDocument.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
-        [InverseProperty(nameof(TreatmentBMPAssessmentPhoto.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
-        [InverseProperty(nameof(TreatmentBMPDocument.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
-        [InverseProperty(nameof(TreatmentBMPImage.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanDocument.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanPhoto.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerify.FileResource))]
+        [InverseProperty("FileResource")]
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
     }
 }

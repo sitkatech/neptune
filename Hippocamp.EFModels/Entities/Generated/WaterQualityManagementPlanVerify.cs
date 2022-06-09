@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanVerify")]
@@ -28,8 +26,10 @@ namespace Hippocamp.EFModels.Entities
         public int? WaterQualityManagementPlanVerifyStatusID { get; set; }
         public int LastEditedByPersonID { get; set; }
         [StringLength(1000)]
+        [Unicode(false)]
         public string SourceControlCondition { get; set; }
         [StringLength(1000)]
+        [Unicode(false)]
         public string EnforcementOrFollowupActions { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime LastEditedDate { get; set; }
@@ -37,31 +37,31 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime VerificationDate { get; set; }
 
-        [ForeignKey(nameof(FileResourceID))]
+        [ForeignKey("FileResourceID")]
         [InverseProperty("WaterQualityManagementPlanVerifies")]
         public virtual FileResource FileResource { get; set; }
-        [ForeignKey(nameof(LastEditedByPersonID))]
-        [InverseProperty(nameof(Person.WaterQualityManagementPlanVerifies))]
+        [ForeignKey("LastEditedByPersonID")]
+        [InverseProperty("WaterQualityManagementPlanVerifies")]
         public virtual Person LastEditedByPerson { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("WaterQualityManagementPlanVerifies")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanVerifyStatusID))]
+        [ForeignKey("WaterQualityManagementPlanVerifyStatusID")]
         [InverseProperty("WaterQualityManagementPlanVerifies")]
         public virtual WaterQualityManagementPlanVerifyStatus WaterQualityManagementPlanVerifyStatus { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanVerifyTypeID))]
+        [ForeignKey("WaterQualityManagementPlanVerifyTypeID")]
         [InverseProperty("WaterQualityManagementPlanVerifies")]
         public virtual WaterQualityManagementPlanVerifyType WaterQualityManagementPlanVerifyType { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanVisitStatusID))]
+        [ForeignKey("WaterQualityManagementPlanVisitStatusID")]
         [InverseProperty("WaterQualityManagementPlanVerifies")]
         public virtual WaterQualityManagementPlanVisitStatus WaterQualityManagementPlanVisitStatus { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifyPhoto.WaterQualityManagementPlanVerify))]
+        [InverseProperty("WaterQualityManagementPlanVerify")]
         public virtual ICollection<WaterQualityManagementPlanVerifyPhoto> WaterQualityManagementPlanVerifyPhotos { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerify))]
+        [InverseProperty("WaterQualityManagementPlanVerify")]
         public virtual ICollection<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifySourceControlBMP.WaterQualityManagementPlanVerify))]
+        [InverseProperty("WaterQualityManagementPlanVerify")]
         public virtual ICollection<WaterQualityManagementPlanVerifySourceControlBMP> WaterQualityManagementPlanVerifySourceControlBMPs { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerify))]
+        [InverseProperty("WaterQualityManagementPlanVerify")]
         public virtual ICollection<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
     }
 }

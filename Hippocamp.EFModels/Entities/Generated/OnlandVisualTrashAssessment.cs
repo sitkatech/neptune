@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("OnlandVisualTrashAssessment")]
-    [Index(nameof(DraftGeometry), Name = "SPATIAL_OnlandVisualTrashAssessment_DraftGeometry")]
+    [Index("DraftGeometry", Name = "SPATIAL_OnlandVisualTrashAssessment_DraftGeometry")]
     public partial class OnlandVisualTrashAssessment
     {
         public OnlandVisualTrashAssessment()
@@ -27,6 +25,7 @@ namespace Hippocamp.EFModels.Entities
         public DateTime CreatedDate { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string Notes { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public bool? AssessingNewArea { get; set; }
@@ -38,33 +37,35 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime? CompletedDate { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string DraftAreaName { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string DraftAreaDescription { get; set; }
         public bool IsTransectBackingAssessment { get; set; }
         public bool IsProgressAssessment { get; set; }
 
-        [ForeignKey(nameof(CreatedByPersonID))]
-        [InverseProperty(nameof(Person.OnlandVisualTrashAssessments))]
+        [ForeignKey("CreatedByPersonID")]
+        [InverseProperty("OnlandVisualTrashAssessments")]
         public virtual Person CreatedByPerson { get; set; }
-        [ForeignKey(nameof(OnlandVisualTrashAssessmentAreaID))]
+        [ForeignKey("OnlandVisualTrashAssessmentAreaID")]
         [InverseProperty("OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentArea")]
         public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
         public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentAreaNavigation { get; set; }
-        [ForeignKey(nameof(OnlandVisualTrashAssessmentScoreID))]
+        [ForeignKey("OnlandVisualTrashAssessmentScoreID")]
         [InverseProperty("OnlandVisualTrashAssessments")]
         public virtual OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentScore { get; set; }
-        [ForeignKey(nameof(OnlandVisualTrashAssessmentStatusID))]
+        [ForeignKey("OnlandVisualTrashAssessmentStatusID")]
         [InverseProperty("OnlandVisualTrashAssessments")]
         public virtual OnlandVisualTrashAssessmentStatus OnlandVisualTrashAssessmentStatus { get; set; }
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("OnlandVisualTrashAssessments")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessment))]
+        [InverseProperty("OnlandVisualTrashAssessment")]
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessment))]
+        [InverseProperty("OnlandVisualTrashAssessment")]
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.OnlandVisualTrashAssessment))]
+        [InverseProperty("OnlandVisualTrashAssessment")]
         public virtual ICollection<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes { get; set; }
     }
 }

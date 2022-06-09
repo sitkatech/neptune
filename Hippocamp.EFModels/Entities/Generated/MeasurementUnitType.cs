@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("MeasurementUnitType")]
-    [Index(nameof(MeasurementUnitTypeDisplayName), Name = "AK_MeasurementUnitType_MeasurementUnitTypeDisplayName", IsUnique = true)]
-    [Index(nameof(MeasurementUnitTypeName), Name = "AK_MeasurementUnitType_MeasurementUnitTypeName", IsUnique = true)]
+    [Index("MeasurementUnitTypeDisplayName", Name = "AK_MeasurementUnitType_MeasurementUnitTypeDisplayName", IsUnique = true)]
+    [Index("MeasurementUnitTypeName", Name = "AK_MeasurementUnitType_MeasurementUnitTypeName", IsUnique = true)]
     public partial class MeasurementUnitType
     {
         public MeasurementUnitType()
@@ -22,18 +20,22 @@ namespace Hippocamp.EFModels.Entities
         public int MeasurementUnitTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string MeasurementUnitTypeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string MeasurementUnitTypeDisplayName { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string LegendDisplayName { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string SingularDisplayName { get; set; }
         public int NumberOfSignificantDigits { get; set; }
         public bool IncludeSpaceBeforeLegendLabel { get; set; }
 
-        [InverseProperty(nameof(CustomAttributeType.MeasurementUnitType))]
+        [InverseProperty("MeasurementUnitType")]
         public virtual ICollection<CustomAttributeType> CustomAttributeTypes { get; set; }
     }
 }

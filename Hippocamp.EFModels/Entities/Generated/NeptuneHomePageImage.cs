@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("NeptuneHomePageImage")]
@@ -16,10 +14,11 @@ namespace Hippocamp.EFModels.Entities
         public int FileResourceID { get; set; }
         [Required]
         [StringLength(300)]
+        [Unicode(false)]
         public string Caption { get; set; }
         public int SortOrder { get; set; }
 
-        [ForeignKey(nameof(FileResourceID))]
+        [ForeignKey("FileResourceID")]
         [InverseProperty("NeptuneHomePageImages")]
         public virtual FileResource FileResource { get; set; }
     }

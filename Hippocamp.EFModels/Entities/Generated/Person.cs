@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("Person")]
@@ -39,14 +37,18 @@ namespace Hippocamp.EFModels.Entities
         public Guid PersonGuid { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string FirstName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string LastName { get; set; }
         [Required]
         [StringLength(255)]
+        [Unicode(false)]
         public string Email { get; set; }
         [StringLength(30)]
+        [Unicode(false)]
         public string Phone { get; set; }
         public int RoleID { get; set; }
         [Column(TypeName = "datetime")]
@@ -60,53 +62,54 @@ namespace Hippocamp.EFModels.Entities
         public bool ReceiveSupportEmails { get; set; }
         [Required]
         [StringLength(128)]
+        [Unicode(false)]
         public string LoginName { get; set; }
         public bool ReceiveRSBRevisionRequestEmails { get; set; }
         public Guid WebServiceAccessToken { get; set; }
 
-        [ForeignKey(nameof(OrganizationID))]
+        [ForeignKey("OrganizationID")]
         [InverseProperty("People")]
         public virtual Organization Organization { get; set; }
-        [ForeignKey(nameof(RoleID))]
+        [ForeignKey("RoleID")]
         [InverseProperty("People")]
         public virtual Role Role { get; set; }
-        [InverseProperty(nameof(AuditLog.Person))]
+        [InverseProperty("Person")]
         public virtual ICollection<AuditLog> AuditLogs { get; set; }
-        [InverseProperty(nameof(DelineationStaging.UploadedByPerson))]
+        [InverseProperty("UploadedByPerson")]
         public virtual ICollection<DelineationStaging> DelineationStagings { get; set; }
-        [InverseProperty(nameof(Delineation.VerifiedByPerson))]
+        [InverseProperty("VerifiedByPerson")]
         public virtual ICollection<Delineation> Delineations { get; set; }
-        [InverseProperty(nameof(FieldVisit.PerformedByPerson))]
+        [InverseProperty("PerformedByPerson")]
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
-        [InverseProperty(nameof(FileResource.CreatePerson))]
+        [InverseProperty("CreatePerson")]
         public virtual ICollection<FileResource> FileResources { get; set; }
-        [InverseProperty(nameof(LandUseBlockStaging.UploadedByPerson))]
+        [InverseProperty("UploadedByPerson")]
         public virtual ICollection<LandUseBlockStaging> LandUseBlockStagings { get; set; }
-        [InverseProperty(nameof(Notification.Person))]
+        [InverseProperty("Person")]
         public virtual ICollection<Notification> Notifications { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessment.CreatedByPerson))]
+        [InverseProperty("CreatedByPerson")]
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         [InverseProperty("PrimaryContactPerson")]
         public virtual ICollection<Organization> Organizations { get; set; }
-        [InverseProperty(nameof(Project.CreatePerson))]
+        [InverseProperty("CreatePerson")]
         public virtual ICollection<Project> ProjectCreatePeople { get; set; }
-        [InverseProperty(nameof(ProjectNetworkSolveHistory.RequestedByPerson))]
+        [InverseProperty("RequestedByPerson")]
         public virtual ICollection<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
-        [InverseProperty(nameof(Project.PrimaryContactPerson))]
+        [InverseProperty("PrimaryContactPerson")]
         public virtual ICollection<Project> ProjectPrimaryContactPeople { get; set; }
-        [InverseProperty(nameof(RegionalSubbasinRevisionRequest.ClosedByPerson))]
+        [InverseProperty("ClosedByPerson")]
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequestClosedByPeople { get; set; }
-        [InverseProperty(nameof(RegionalSubbasinRevisionRequest.RequestPerson))]
+        [InverseProperty("RequestPerson")]
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequestRequestPeople { get; set; }
-        [InverseProperty(nameof(StormwaterJurisdictionPerson.Person))]
+        [InverseProperty("Person")]
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
-        [InverseProperty(nameof(SupportRequestLog.RequestPerson))]
+        [InverseProperty("RequestPerson")]
         public virtual ICollection<SupportRequestLog> SupportRequestLogs { get; set; }
-        [InverseProperty(nameof(TrashGeneratingUnitAdjustment.AdjustedByPerson))]
+        [InverseProperty("AdjustedByPerson")]
         public virtual ICollection<TrashGeneratingUnitAdjustment> TrashGeneratingUnitAdjustments { get; set; }
-        [InverseProperty(nameof(TreatmentBMP.InventoryVerifiedByPerson))]
+        [InverseProperty("InventoryVerifiedByPerson")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerify.LastEditedByPerson))]
+        [InverseProperty("LastEditedByPerson")]
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
     }
 }

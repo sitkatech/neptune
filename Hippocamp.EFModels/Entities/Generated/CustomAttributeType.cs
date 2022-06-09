@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("CustomAttributeType")]
-    [Index(nameof(CustomAttributeTypeName), Name = "AK_CustomAttributeType_CustomAttributeTypeName", IsUnique = true)]
+    [Index("CustomAttributeTypeName", Name = "AK_CustomAttributeType_CustomAttributeTypeName", IsUnique = true)]
     public partial class CustomAttributeType
     {
         public CustomAttributeType()
@@ -23,29 +21,32 @@ namespace Hippocamp.EFModels.Entities
         public int CustomAttributeTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string CustomAttributeTypeName { get; set; }
         public int CustomAttributeDataTypeID { get; set; }
         public int? MeasurementUnitTypeID { get; set; }
         public bool IsRequired { get; set; }
         [StringLength(200)]
+        [Unicode(false)]
         public string CustomAttributeTypeDescription { get; set; }
         public int CustomAttributeTypePurposeID { get; set; }
+        [Unicode(false)]
         public string CustomAttributeTypeOptionsSchema { get; set; }
 
-        [ForeignKey(nameof(CustomAttributeDataTypeID))]
+        [ForeignKey("CustomAttributeDataTypeID")]
         [InverseProperty("CustomAttributeTypes")]
         public virtual CustomAttributeDataType CustomAttributeDataType { get; set; }
-        [ForeignKey(nameof(CustomAttributeTypePurposeID))]
+        [ForeignKey("CustomAttributeTypePurposeID")]
         [InverseProperty("CustomAttributeTypes")]
         public virtual CustomAttributeTypePurpose CustomAttributeTypePurpose { get; set; }
-        [ForeignKey(nameof(MeasurementUnitTypeID))]
+        [ForeignKey("MeasurementUnitTypeID")]
         [InverseProperty("CustomAttributeTypes")]
         public virtual MeasurementUnitType MeasurementUnitType { get; set; }
-        [InverseProperty(nameof(CustomAttribute.CustomAttributeType))]
+        [InverseProperty("CustomAttributeType")]
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
-        [InverseProperty(nameof(MaintenanceRecordObservation.CustomAttributeType))]
+        [InverseProperty("CustomAttributeType")]
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
-        [InverseProperty(nameof(TreatmentBMPTypeCustomAttributeType.CustomAttributeType))]
+        [InverseProperty("CustomAttributeType")]
         public virtual ICollection<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
     }
 }

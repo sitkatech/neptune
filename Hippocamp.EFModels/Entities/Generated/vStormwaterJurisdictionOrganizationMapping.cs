@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -15,6 +13,7 @@ namespace Hippocamp.EFModels.Entities
         public int OrganizationID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string OrganizationName { get; set; }
     }
 }

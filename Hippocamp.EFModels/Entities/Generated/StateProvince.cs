@@ -5,13 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("StateProvince")]
-    [Index(nameof(StateProvinceFeature), Name = "SPATIAL_StateProvince_StateProvinceFeature")]
-    [Index(nameof(StateProvinceFeatureForAnalysis), Name = "SPATIAL_StateProvince_StateProvinceFeatureForAnalysis")]
+    [Index("StateProvinceFeature", Name = "SPATIAL_StateProvince_StateProvinceFeature")]
+    [Index("StateProvinceFeatureForAnalysis", Name = "SPATIAL_StateProvince_StateProvinceFeatureForAnalysis")]
     public partial class StateProvince
     {
         public StateProvince()
@@ -24,9 +22,11 @@ namespace Hippocamp.EFModels.Entities
         public int StateProvinceID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string StateProvinceName { get; set; }
         [Required]
         [StringLength(2)]
+        [Unicode(false)]
         public string StateProvinceAbbreviation { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry StateProvinceFeature { get; set; }
@@ -34,9 +34,9 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry StateProvinceFeatureForAnalysis { get; set; }
 
-        [InverseProperty(nameof(County.StateProvince))]
+        [InverseProperty("StateProvince")]
         public virtual ICollection<County> Counties { get; set; }
-        [InverseProperty(nameof(StormwaterJurisdiction.StateProvince))]
+        [InverseProperty("StateProvince")]
         public virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
     }
 }

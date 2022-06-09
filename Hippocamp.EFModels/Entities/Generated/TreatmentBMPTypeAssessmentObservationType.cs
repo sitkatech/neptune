@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPTypeAssessmentObservationType")]
-    [Index(nameof(TreatmentBMPTypeAssessmentObservationTypeID), nameof(TreatmentBMPTypeID), nameof(TreatmentBMPAssessmentObservationTypeID), Name = "AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTypeID_TreatmentBMPAssessme", IsUnique = true)]
-    [Index(nameof(TreatmentBMPTypeID), nameof(TreatmentBMPAssessmentObservationTypeID), Name = "AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeID_TreatmentBMPAssessmentObservationTypeID", IsUnique = true)]
+    [Index("TreatmentBMPTypeAssessmentObservationTypeID", "TreatmentBMPTypeID", "TreatmentBMPAssessmentObservationTypeID", Name = "AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTypeID_TreatmentBMPAssessme", IsUnique = true)]
+    [Index("TreatmentBMPTypeID", "TreatmentBMPAssessmentObservationTypeID", Name = "AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeID_TreatmentBMPAssessmentObservationTypeID", IsUnique = true)]
     public partial class TreatmentBMPTypeAssessmentObservationType
     {
         public TreatmentBMPTypeAssessmentObservationType()
@@ -32,17 +30,17 @@ namespace Hippocamp.EFModels.Entities
         public bool OverrideAssessmentScoreIfFailing { get; set; }
         public int? SortOrder { get; set; }
 
-        [ForeignKey(nameof(TreatmentBMPAssessmentObservationTypeID))]
+        [ForeignKey("TreatmentBMPAssessmentObservationTypeID")]
         [InverseProperty("TreatmentBMPTypeAssessmentObservationTypes")]
         public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("TreatmentBMPTypeAssessmentObservationTypes")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMP1s { get; set; }
-        [InverseProperty(nameof(TreatmentBMPBenchmarkAndThreshold.TreatmentBMPTypeAssessmentObservationType))]
+        [InverseProperty("TreatmentBMPTypeAssessmentObservationType")]
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMPTypeAssessmentObservationTypes { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservationTreatmentBMPNavigations { get; set; }
-        [InverseProperty(nameof(TreatmentBMPObservation.TreatmentBMPTypeAssessmentObservationType))]
+        [InverseProperty("TreatmentBMPTypeAssessmentObservationType")]
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservationTreatmentBMPTypeAssessmentObservationTypes { get; set; }
     }
 }

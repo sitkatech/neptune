@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("DelineationOverlap")]
@@ -20,10 +18,10 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry OverlappingGeometry { get; set; }
 
-        [ForeignKey(nameof(DelineationID))]
+        [ForeignKey("DelineationID")]
         [InverseProperty("DelineationOverlapDelineations")]
         public virtual Delineation Delineation { get; set; }
-        [ForeignKey(nameof(OverlappingDelineationID))]
+        [ForeignKey("OverlappingDelineationID")]
         [InverseProperty("DelineationOverlapOverlappingDelineations")]
         public virtual Delineation OverlappingDelineation { get; set; }
     }

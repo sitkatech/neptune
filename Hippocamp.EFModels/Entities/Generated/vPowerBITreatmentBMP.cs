@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -14,19 +12,24 @@ namespace Hippocamp.EFModels.Entities
         public int PrimaryKey { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TreatmentBMPTypeName { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string Jurisdiction { get; set; }
         public double? LocationLon { get; set; }
         public double? LocationLat { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string Watershed { get; set; }
         public int? UpstreamBMPID { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string DelineationType { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         public int? TreatmentBMPModelingAttributeID { get; set; }

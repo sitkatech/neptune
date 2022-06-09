@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPModelingAttribute")]
-    [Index(nameof(TreatmentBMPID), Name = "AK_TreatmentBMPModelingAttribute_TreatmentBMPID", IsUnique = true)]
+    [Index("TreatmentBMPID", Name = "AK_TreatmentBMPModelingAttribute_TreatmentBMPID", IsUnique = true)]
     public partial class TreatmentBMPModelingAttribute
     {
         [Key]
@@ -46,25 +44,25 @@ namespace Hippocamp.EFModels.Entities
         public int? MonthsOfOperationID { get; set; }
         public int? DryWeatherFlowOverrideID { get; set; }
 
-        [ForeignKey(nameof(DryWeatherFlowOverrideID))]
+        [ForeignKey("DryWeatherFlowOverrideID")]
         [InverseProperty("TreatmentBMPModelingAttributes")]
         public virtual DryWeatherFlowOverride DryWeatherFlowOverride { get; set; }
-        [ForeignKey(nameof(MonthsOfOperationID))]
+        [ForeignKey("MonthsOfOperationID")]
         [InverseProperty("TreatmentBMPModelingAttributes")]
         public virtual MonthsOfOperation MonthsOfOperation { get; set; }
-        [ForeignKey(nameof(RoutingConfigurationID))]
+        [ForeignKey("RoutingConfigurationID")]
         [InverseProperty("TreatmentBMPModelingAttributes")]
         public virtual RoutingConfiguration RoutingConfiguration { get; set; }
-        [ForeignKey(nameof(TimeOfConcentrationID))]
+        [ForeignKey("TimeOfConcentrationID")]
         [InverseProperty("TreatmentBMPModelingAttributes")]
         public virtual TimeOfConcentration TimeOfConcentration { get; set; }
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("TreatmentBMPModelingAttributeTreatmentBMP")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
-        [ForeignKey(nameof(UnderlyingHydrologicSoilGroupID))]
+        [ForeignKey("UnderlyingHydrologicSoilGroupID")]
         [InverseProperty("TreatmentBMPModelingAttributes")]
         public virtual UnderlyingHydrologicSoilGroup UnderlyingHydrologicSoilGroup { get; set; }
-        [ForeignKey(nameof(UpstreamTreatmentBMPID))]
+        [ForeignKey("UpstreamTreatmentBMPID")]
         [InverseProperty("TreatmentBMPModelingAttributeUpstreamTreatmentBMPs")]
         public virtual TreatmentBMP UpstreamTreatmentBMP { get; set; }
     }

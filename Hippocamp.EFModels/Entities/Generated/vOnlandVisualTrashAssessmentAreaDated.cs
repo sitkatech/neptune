@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -19,6 +17,7 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime? MostRecentAssessmentDate { get; set; }
         [StringLength(1)]
+        [Unicode(false)]
         public string MostRecentAssessmentScore { get; set; }
     }
 }

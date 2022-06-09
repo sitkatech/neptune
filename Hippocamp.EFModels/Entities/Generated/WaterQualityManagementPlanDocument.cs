@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanDocument")]
-    [Index(nameof(DisplayName), nameof(WaterQualityManagementPlanID), Name = "AK_WaterQualityManagementPlanDocument_DisplayName_WaterQualityManagementPlanID", IsUnique = true)]
+    [Index("DisplayName", "WaterQualityManagementPlanID", Name = "AK_WaterQualityManagementPlanDocument_DisplayName_WaterQualityManagementPlanID", IsUnique = true)]
     public partial class WaterQualityManagementPlanDocument
     {
         [Key]
@@ -18,20 +16,22 @@ namespace Hippocamp.EFModels.Entities
         public int FileResourceID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string DisplayName { get; set; }
         [StringLength(1000)]
+        [Unicode(false)]
         public string Description { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime UploadDate { get; set; }
         public int WaterQualityManagementPlanDocumentTypeID { get; set; }
 
-        [ForeignKey(nameof(FileResourceID))]
+        [ForeignKey("FileResourceID")]
         [InverseProperty("WaterQualityManagementPlanDocuments")]
         public virtual FileResource FileResource { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("WaterQualityManagementPlanDocuments")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanDocumentTypeID))]
+        [ForeignKey("WaterQualityManagementPlanDocumentTypeID")]
         [InverseProperty("WaterQualityManagementPlanDocuments")]
         public virtual WaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType { get; set; }
     }

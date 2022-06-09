@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPTypeCustomAttributeType")]
-    [Index(nameof(TreatmentBMPTypeID), nameof(CustomAttributeTypeID), Name = "AK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID", IsUnique = true)]
+    [Index("TreatmentBMPTypeID", "CustomAttributeTypeID", Name = "AK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID", IsUnique = true)]
     public partial class TreatmentBMPTypeCustomAttributeType
     {
         public TreatmentBMPTypeCustomAttributeType()
@@ -26,17 +24,17 @@ namespace Hippocamp.EFModels.Entities
         public int CustomAttributeTypeID { get; set; }
         public int? SortOrder { get; set; }
 
-        [ForeignKey(nameof(CustomAttributeTypeID))]
+        [ForeignKey("CustomAttributeTypeID")]
         [InverseProperty("TreatmentBMPTypeCustomAttributeTypes")]
         public virtual CustomAttributeType CustomAttributeType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("TreatmentBMPTypeCustomAttributeTypes")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPTypeCustomAttributeTypeNavigations { get; set; }
-        [InverseProperty(nameof(CustomAttribute.TreatmentBMPTypeCustomAttributeType))]
+        [InverseProperty("TreatmentBMPTypeCustomAttributeType")]
         public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPTypeCustomAttributeTypes { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypeNavigations { get; set; }
-        [InverseProperty(nameof(MaintenanceRecordObservation.TreatmentBMPTypeCustomAttributeType))]
+        [InverseProperty("TreatmentBMPTypeCustomAttributeType")]
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypes { get; set; }
     }
 }

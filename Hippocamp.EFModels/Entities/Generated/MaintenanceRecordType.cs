@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("MaintenanceRecordType")]
-    [Index(nameof(MaintenanceRecordTypeDisplayName), Name = "AK_MaintenanceRecordType_MaintenanceRecordTypeDisplayName", IsUnique = true)]
-    [Index(nameof(MaintenanceRecordTypeName), Name = "AK_MaintenanceRecordType_MaintenanceRecordTypeName", IsUnique = true)]
+    [Index("MaintenanceRecordTypeDisplayName", Name = "AK_MaintenanceRecordType_MaintenanceRecordTypeDisplayName", IsUnique = true)]
+    [Index("MaintenanceRecordTypeName", Name = "AK_MaintenanceRecordType_MaintenanceRecordTypeName", IsUnique = true)]
     public partial class MaintenanceRecordType
     {
         public MaintenanceRecordType()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int MaintenanceRecordTypeID { get; set; }
         [Required]
         [StringLength(30)]
+        [Unicode(false)]
         public string MaintenanceRecordTypeName { get; set; }
         [Required]
         [StringLength(30)]
+        [Unicode(false)]
         public string MaintenanceRecordTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(MaintenanceRecord.MaintenanceRecordType))]
+        [InverseProperty("MaintenanceRecordType")]
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
     }
 }

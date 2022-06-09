@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanDevelopmentType")]
-    [Index(nameof(WaterQualityManagementPlanDevelopmentTypeDisplayName), Name = "AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeDisplayName", IsUnique = true)]
-    [Index(nameof(WaterQualityManagementPlanDevelopmentTypeName), Name = "AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeName", IsUnique = true)]
+    [Index("WaterQualityManagementPlanDevelopmentTypeDisplayName", Name = "AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeDisplayName", IsUnique = true)]
+    [Index("WaterQualityManagementPlanDevelopmentTypeName", Name = "AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeName", IsUnique = true)]
     public partial class WaterQualityManagementPlanDevelopmentType
     {
         public WaterQualityManagementPlanDevelopmentType()
@@ -22,13 +20,15 @@ namespace Hippocamp.EFModels.Entities
         public int WaterQualityManagementPlanDevelopmentTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanDevelopmentTypeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanDevelopmentTypeDisplayName { get; set; }
         public int SortOrder { get; set; }
 
-        [InverseProperty(nameof(WaterQualityManagementPlan.WaterQualityManagementPlanDevelopmentType))]
+        [InverseProperty("WaterQualityManagementPlanDevelopmentType")]
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
     }
 }

@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -18,9 +16,11 @@ namespace Hippocamp.EFModels.Entities
         public Geometry OCTAPrioritizationGeometry { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string CatchIDN { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string Watershed { get; set; }
         public double TransportationNexusScore { get; set; }
         public double LandUseBasedWaterQualityNeedScore { get; set; }

@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -14,17 +12,21 @@ namespace Hippocamp.EFModels.Entities
         public int PrimaryKey { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         public int? UpstreamBMPID { get; set; }
         [StringLength(200)]
+        [Unicode(false)]
         public string UpstreamBMPName { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TreatmentBMPTypeName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string OrganizationName { get; set; }
         public int? UpstreamTreatmentBMPID { get; set; }
         public double? AverageDivertedFlowrate { get; set; }
@@ -55,13 +57,17 @@ namespace Hippocamp.EFModels.Entities
         public double? WettedFootprint { get; set; }
         public double? WinterHarvestedWaterDemand { get; set; }
         [StringLength(6)]
+        [Unicode(false)]
         public string OperationMonths { get; set; }
         public double? DesignStormwaterDepthInInches { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string WatershedName { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string DelineationType { get; set; }
         [StringLength(11)]
+        [Unicode(false)]
         public string DelineationStatus { get; set; }
         public int? DryWeatherFlowOverrideID { get; set; }
     }

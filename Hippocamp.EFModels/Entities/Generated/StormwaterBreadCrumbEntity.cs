@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("StormwaterBreadCrumbEntity")]
@@ -15,15 +13,19 @@ namespace Hippocamp.EFModels.Entities
         public int StormwaterBreadCrumbEntityID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string StormwaterBreadCrumbEntityName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string StormwaterBreadCrumbEntityDisplayName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string GlyphIconClass { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string ColorClass { get; set; }
     }
 }

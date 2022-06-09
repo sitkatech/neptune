@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -15,14 +13,17 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TreatmentBMPTypeName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string OrganizationName { get; set; }
         public int FieldVisitID { get; set; }
         [Column(TypeName = "datetime")]
@@ -30,14 +31,17 @@ namespace Hippocamp.EFModels.Entities
         public int FieldVisitTypeID { get; set; }
         [Required]
         [StringLength(40)]
+        [Unicode(false)]
         public string FieldVisitTypeDisplayName { get; set; }
         public int PerformedByPersonID { get; set; }
         [Required]
         [StringLength(201)]
+        [Unicode(false)]
         public string PerformedByPersonName { get; set; }
         public int FieldVisitStatusID { get; set; }
         [Required]
         [StringLength(20)]
+        [Unicode(false)]
         public string FieldVisitStatusDisplayName { get; set; }
         public bool IsFieldVisitVerified { get; set; }
         public bool InventoryUpdated { get; set; }

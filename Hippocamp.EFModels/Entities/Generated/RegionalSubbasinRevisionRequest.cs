@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("RegionalSubbasinRevisionRequest")]
@@ -25,19 +23,21 @@ namespace Hippocamp.EFModels.Entities
         public int? ClosedByPersonID { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? ClosedDate { get; set; }
+        [Unicode(false)]
         public string Notes { get; set; }
+        [Unicode(false)]
         public string CloseNotes { get; set; }
 
-        [ForeignKey(nameof(ClosedByPersonID))]
-        [InverseProperty(nameof(Person.RegionalSubbasinRevisionRequestClosedByPeople))]
+        [ForeignKey("ClosedByPersonID")]
+        [InverseProperty("RegionalSubbasinRevisionRequestClosedByPeople")]
         public virtual Person ClosedByPerson { get; set; }
-        [ForeignKey(nameof(RegionalSubbasinRevisionRequestStatusID))]
+        [ForeignKey("RegionalSubbasinRevisionRequestStatusID")]
         [InverseProperty("RegionalSubbasinRevisionRequests")]
         public virtual RegionalSubbasinRevisionRequestStatus RegionalSubbasinRevisionRequestStatus { get; set; }
-        [ForeignKey(nameof(RequestPersonID))]
-        [InverseProperty(nameof(Person.RegionalSubbasinRevisionRequestRequestPeople))]
+        [ForeignKey("RequestPersonID")]
+        [InverseProperty("RegionalSubbasinRevisionRequestRequestPeople")]
         public virtual Person RequestPerson { get; set; }
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("RegionalSubbasinRevisionRequests")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
     }

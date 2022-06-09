@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("LandUseBlockStaging")]
@@ -15,8 +13,10 @@ namespace Hippocamp.EFModels.Entities
         [Key]
         public int LandUseBlockStagingID { get; set; }
         [StringLength(255)]
+        [Unicode(false)]
         public string PriorityLandUseType { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string LandUseDescription { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
@@ -24,18 +24,21 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "decimal(4, 1)")]
         public decimal? TrashGenerationRate { get; set; }
         [StringLength(80)]
+        [Unicode(false)]
         public string LandUseForTGR { get; set; }
         [Column(TypeName = "numeric(18, 0)")]
         public decimal? MedianHouseholdIncome { get; set; }
         [Required]
         [StringLength(255)]
+        [Unicode(false)]
         public string StormwaterJurisdiction { get; set; }
         [StringLength(255)]
+        [Unicode(false)]
         public string PermitType { get; set; }
         public int UploadedByPersonID { get; set; }
 
-        [ForeignKey(nameof(UploadedByPersonID))]
-        [InverseProperty(nameof(Person.LandUseBlockStagings))]
+        [ForeignKey("UploadedByPersonID")]
+        [InverseProperty("LandUseBlockStagings")]
         public virtual Person UploadedByPerson { get; set; }
     }
 }

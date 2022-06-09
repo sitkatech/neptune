@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("MonthsOfOperation")]
-    [Index(nameof(MonthsOfOperationDisplayName), Name = "AK_MonthsOfOperation_MonthsOfOperationDisplayName", IsUnique = true)]
-    [Index(nameof(MonthsOfOperationName), Name = "AK_MonthsOfOperation_MonthsOfOperationName", IsUnique = true)]
+    [Index("MonthsOfOperationDisplayName", Name = "AK_MonthsOfOperation_MonthsOfOperationDisplayName", IsUnique = true)]
+    [Index("MonthsOfOperationName", Name = "AK_MonthsOfOperation_MonthsOfOperationName", IsUnique = true)]
     public partial class MonthsOfOperation
     {
         public MonthsOfOperation()
@@ -22,15 +20,18 @@ namespace Hippocamp.EFModels.Entities
         public int MonthsOfOperationID { get; set; }
         [Required]
         [StringLength(6)]
+        [Unicode(false)]
         public string MonthsOfOperationName { get; set; }
         [Required]
         [StringLength(6)]
+        [Unicode(false)]
         public string MonthsOfOperationDisplayName { get; set; }
         [Required]
         [StringLength(6)]
+        [Unicode(false)]
         public string MonthsOfOperationNereidAlias { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMPModelingAttribute.MonthsOfOperation))]
+        [InverseProperty("MonthsOfOperation")]
         public virtual ICollection<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributes { get; set; }
     }
 }

@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("ModelBasin")]
-    [Index(nameof(ModelBasinKey), Name = "AK_ModelBasin_ModelBasinKey", IsUnique = true)]
+    [Index("ModelBasinKey", Name = "AK_ModelBasin_ModelBasinKey", IsUnique = true)]
     public partial class ModelBasin
     {
         public ModelBasin()
@@ -31,18 +29,20 @@ namespace Hippocamp.EFModels.Entities
         public DateTime LastUpdate { get; set; }
         [Required]
         [StringLength(5)]
+        [Unicode(false)]
         public string ModelBasinState { get; set; }
         [Required]
         [StringLength(10)]
+        [Unicode(false)]
         public string ModelBasinRegion { get; set; }
 
-        [InverseProperty(nameof(LoadGeneratingUnit.ModelBasin))]
+        [InverseProperty("ModelBasin")]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(ProjectLoadGeneratingUnit.ModelBasin))]
+        [InverseProperty("ModelBasin")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(RegionalSubbasin.ModelBasin))]
+        [InverseProperty("ModelBasin")]
         public virtual ICollection<RegionalSubbasin> RegionalSubbasins { get; set; }
-        [InverseProperty(nameof(TreatmentBMP.ModelBasin))]
+        [InverseProperty("ModelBasin")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("OnlandVisualTrashAssessmentObservationPhoto")]
@@ -16,10 +14,10 @@ namespace Hippocamp.EFModels.Entities
         public int FileResourceID { get; set; }
         public int OnlandVisualTrashAssessmentObservationID { get; set; }
 
-        [ForeignKey(nameof(FileResourceID))]
+        [ForeignKey("FileResourceID")]
         [InverseProperty("OnlandVisualTrashAssessmentObservationPhotos")]
         public virtual FileResource FileResource { get; set; }
-        [ForeignKey(nameof(OnlandVisualTrashAssessmentObservationID))]
+        [ForeignKey("OnlandVisualTrashAssessmentObservationID")]
         [InverseProperty("OnlandVisualTrashAssessmentObservationPhotos")]
         public virtual OnlandVisualTrashAssessmentObservation OnlandVisualTrashAssessmentObservation { get; set; }
     }

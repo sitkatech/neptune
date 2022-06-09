@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPDocument")]
-    [Index(nameof(FileResourceID), nameof(TreatmentBMPID), Name = "AK_TreatmentBMPDocument_FileResourceID_TreatmentBMPID", IsUnique = true)]
+    [Index("FileResourceID", "TreatmentBMPID", Name = "AK_TreatmentBMPDocument_FileResourceID_TreatmentBMPID", IsUnique = true)]
     public partial class TreatmentBMPDocument
     {
         [Key]
@@ -18,16 +16,18 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string DisplayName { get; set; }
         [Column(TypeName = "date")]
         public DateTime UploadDate { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string DocumentDescription { get; set; }
 
-        [ForeignKey(nameof(FileResourceID))]
+        [ForeignKey("FileResourceID")]
         [InverseProperty("TreatmentBMPDocuments")]
         public virtual FileResource FileResource { get; set; }
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("TreatmentBMPDocuments")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
     }

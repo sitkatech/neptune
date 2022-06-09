@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanVerifySourceControlBMP")]
@@ -16,12 +14,13 @@ namespace Hippocamp.EFModels.Entities
         public int WaterQualityManagementPlanVerifyID { get; set; }
         public int SourceControlBMPID { get; set; }
         [StringLength(1000)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanSourceControlCondition { get; set; }
 
-        [ForeignKey(nameof(SourceControlBMPID))]
+        [ForeignKey("SourceControlBMPID")]
         [InverseProperty("WaterQualityManagementPlanVerifySourceControlBMPs")]
         public virtual SourceControlBMP SourceControlBMP { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanVerifyID))]
+        [ForeignKey("WaterQualityManagementPlanVerifyID")]
         [InverseProperty("WaterQualityManagementPlanVerifySourceControlBMPs")]
         public virtual WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
     }

@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("Role")]
-    [Index(nameof(RoleDisplayName), Name = "AK_Role_RoleDisplayName", IsUnique = true)]
-    [Index(nameof(RoleName), Name = "AK_Role_RoleName", IsUnique = true)]
+    [Index("RoleDisplayName", Name = "AK_Role_RoleDisplayName", IsUnique = true)]
+    [Index("RoleName", Name = "AK_Role_RoleName", IsUnique = true)]
     public partial class Role
     {
         public Role()
@@ -22,14 +20,17 @@ namespace Hippocamp.EFModels.Entities
         public int RoleID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string RoleName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string RoleDisplayName { get; set; }
         [StringLength(255)]
+        [Unicode(false)]
         public string RoleDescription { get; set; }
 
-        [InverseProperty(nameof(Person.Role))]
+        [InverseProperty("Role")]
         public virtual ICollection<Person> People { get; set; }
     }
 }

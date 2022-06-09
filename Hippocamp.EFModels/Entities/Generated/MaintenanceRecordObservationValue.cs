@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("MaintenanceRecordObservationValue")]
@@ -16,9 +14,10 @@ namespace Hippocamp.EFModels.Entities
         public int MaintenanceRecordObservationID { get; set; }
         [Required]
         [StringLength(1000)]
+        [Unicode(false)]
         public string ObservationValue { get; set; }
 
-        [ForeignKey(nameof(MaintenanceRecordObservationID))]
+        [ForeignKey("MaintenanceRecordObservationID")]
         [InverseProperty("MaintenanceRecordObservationValues")]
         public virtual MaintenanceRecordObservation MaintenanceRecordObservation { get; set; }
     }

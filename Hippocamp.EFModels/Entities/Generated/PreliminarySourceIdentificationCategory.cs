@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("PreliminarySourceIdentificationCategory")]
-    [Index(nameof(PreliminarySourceIdentificationCategoryDisplayName), Name = "AK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryDisplayName", IsUnique = true)]
-    [Index(nameof(PreliminarySourceIdentificationCategoryName), Name = "AK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryName", IsUnique = true)]
+    [Index("PreliminarySourceIdentificationCategoryDisplayName", Name = "AK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryDisplayName", IsUnique = true)]
+    [Index("PreliminarySourceIdentificationCategoryName", Name = "AK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryName", IsUnique = true)]
     public partial class PreliminarySourceIdentificationCategory
     {
         public PreliminarySourceIdentificationCategory()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int PreliminarySourceIdentificationCategoryID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string PreliminarySourceIdentificationCategoryName { get; set; }
         [Required]
         [StringLength(500)]
+        [Unicode(false)]
         public string PreliminarySourceIdentificationCategoryDisplayName { get; set; }
 
-        [InverseProperty(nameof(PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory))]
+        [InverseProperty("PreliminarySourceIdentificationCategory")]
         public virtual ICollection<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypes { get; set; }
     }
 }

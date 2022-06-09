@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("MaintenanceRecordObservation")]
@@ -23,21 +21,21 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
 
-        [ForeignKey(nameof(CustomAttributeTypeID))]
+        [ForeignKey("CustomAttributeTypeID")]
         [InverseProperty("MaintenanceRecordObservations")]
         public virtual CustomAttributeType CustomAttributeType { get; set; }
-        [ForeignKey(nameof(MaintenanceRecordID))]
+        [ForeignKey("MaintenanceRecordID")]
         [InverseProperty("MaintenanceRecordObservationMaintenanceRecords")]
         public virtual MaintenanceRecord MaintenanceRecord { get; set; }
         public virtual MaintenanceRecord MaintenanceRecordNavigation { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("MaintenanceRecordObservations")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeCustomAttributeTypeID))]
+        [ForeignKey("TreatmentBMPTypeCustomAttributeTypeID")]
         [InverseProperty("MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypes")]
         public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; }
         public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeTypeNavigation { get; set; }
-        [InverseProperty(nameof(MaintenanceRecordObservationValue.MaintenanceRecordObservation))]
+        [InverseProperty("MaintenanceRecordObservation")]
         public virtual ICollection<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
-#nullable disable
 
 namespace Hippocamp.EFModels.Entities
 {
@@ -205,6 +204,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
         public virtual DbSet<vProjectDelineationLGUInput> vProjectDelineationLGUInputs { get; set; }
+        public virtual DbSet<vProjectGrantScore> vProjectGrantScores { get; set; }
+        public virtual DbSet<vProjectModelingResult> vProjectModelingResults { get; set; }
         public virtual DbSet<vRegionalSubbasinLGUInput> vRegionalSubbasinLGUInputs { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vStormwaterJurisdictionOrganizationMapping> vStormwaterJurisdictionOrganizationMappings { get; set; }
@@ -226,20 +227,8 @@ namespace Hippocamp.EFModels.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<AuditLog>(entity =>
             {
-                entity.Property(e => e.AuditDescription).IsUnicode(false);
-
-                entity.Property(e => e.ColumnName).IsUnicode(false);
-
-                entity.Property(e => e.NewValue).IsUnicode(false);
-
-                entity.Property(e => e.OriginalValue).IsUnicode(false);
-
-                entity.Property(e => e.TableName).IsUnicode(false);
-
                 entity.HasOne(d => d.AuditLogEventType)
                     .WithMany(p => p.AuditLogs)
                     .HasForeignKey(d => d.AuditLogEventTypeID)
@@ -254,17 +243,11 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<AuditLogEventType>(entity =>
             {
                 entity.Property(e => e.AuditLogEventTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.AuditLogEventTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.AuditLogEventTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<County>(entity =>
             {
                 entity.Property(e => e.CountyID).ValueGeneratedNever();
-
-                entity.Property(e => e.CountyName).IsUnicode(false);
 
                 entity.HasOne(d => d.StateProvince)
                     .WithMany(p => p.Counties)
@@ -310,20 +293,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<CustomAttributeDataType>(entity =>
             {
                 entity.Property(e => e.CustomAttributeDataTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.CustomAttributeDataTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.CustomAttributeDataTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<CustomAttributeType>(entity =>
             {
-                entity.Property(e => e.CustomAttributeTypeDescription).IsUnicode(false);
-
-                entity.Property(e => e.CustomAttributeTypeName).IsUnicode(false);
-
-                entity.Property(e => e.CustomAttributeTypeOptionsSchema).IsUnicode(false);
-
                 entity.HasOne(d => d.CustomAttributeDataType)
                     .WithMany(p => p.CustomAttributeTypes)
                     .HasForeignKey(d => d.CustomAttributeDataTypeID)
@@ -338,16 +311,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<CustomAttributeTypePurpose>(entity =>
             {
                 entity.Property(e => e.CustomAttributeTypePurposeID).ValueGeneratedNever();
-
-                entity.Property(e => e.CustomAttributeTypePurposeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.CustomAttributeTypePurposeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<CustomAttributeValue>(entity =>
             {
-                entity.Property(e => e.AttributeValue).IsUnicode(false);
-
                 entity.HasOne(d => d.CustomAttribute)
                     .WithMany(p => p.CustomAttributeValues)
                     .HasForeignKey(d => d.CustomAttributeID)
@@ -398,8 +365,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<DelineationStaging>(entity =>
             {
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
                 entity.HasOne(d => d.StormwaterJurisdiction)
                     .WithMany(p => p.DelineationStagings)
                     .HasForeignKey(d => d.StormwaterJurisdictionID)
@@ -415,38 +380,15 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<DelineationType>(entity =>
             {
                 entity.Property(e => e.DelineationTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.DelineationTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.DelineationTypeName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Deployment>(entity =>
-            {
-                entity.Property(e => e.DeployedBy).IsUnicode(false);
-
-                entity.Property(e => e.DeployedFrom).IsUnicode(false);
-
-                entity.Property(e => e.Script).IsUnicode(false);
-
-                entity.Property(e => e.Source).IsUnicode(false);
-
-                entity.Property(e => e.Version).IsUnicode(false);
             });
 
             modelBuilder.Entity<DryWeatherFlowOverride>(entity =>
             {
                 entity.Property(e => e.DryWeatherFlowOverrideID).ValueGeneratedNever();
-
-                entity.Property(e => e.DryWeatherFlowOverrideDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.DryWeatherFlowOverrideName).IsUnicode(false);
             });
 
             modelBuilder.Entity<FieldDefinition>(entity =>
             {
-                entity.Property(e => e.FieldDefinitionValue).IsUnicode(false);
-
                 entity.HasOne(d => d.FieldDefinitionType)
                     .WithMany(p => p.FieldDefinitions)
                     .HasForeignKey(d => d.FieldDefinitionTypeID)
@@ -456,10 +398,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<FieldDefinitionType>(entity =>
             {
                 entity.Property(e => e.FieldDefinitionTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.FieldDefinitionTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FieldDefinitionTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<FieldVisit>(entity =>
@@ -493,38 +431,20 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<FieldVisitSection>(entity =>
             {
                 entity.Property(e => e.FieldVisitSectionID).ValueGeneratedNever();
-
-                entity.Property(e => e.FieldVisitSectionDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FieldVisitSectionName).IsUnicode(false);
-
-                entity.Property(e => e.SectionHeader).IsUnicode(false);
             });
 
             modelBuilder.Entity<FieldVisitStatus>(entity =>
             {
                 entity.Property(e => e.FieldVisitStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.FieldVisitStatusDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FieldVisitStatusName).IsUnicode(false);
             });
 
             modelBuilder.Entity<FieldVisitType>(entity =>
             {
                 entity.Property(e => e.FieldVisitTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.FieldVisitTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FieldVisitTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<FileResource>(entity =>
             {
-                entity.Property(e => e.OriginalBaseFilename).IsUnicode(false);
-
-                entity.Property(e => e.OriginalFileExtension).IsUnicode(false);
-
                 entity.HasOne(d => d.CreatePerson)
                     .WithMany(p => p.FileResources)
                     .HasForeignKey(d => d.CreatePersonID)
@@ -540,22 +460,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<FileResourceMimeType>(entity =>
             {
                 entity.Property(e => e.FileResourceMimeTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.FileResourceMimeTypeContentTypeName).IsUnicode(false);
-
-                entity.Property(e => e.FileResourceMimeTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FileResourceMimeTypeIconNormalFilename).IsUnicode(false);
-
-                entity.Property(e => e.FileResourceMimeTypeIconSmallFilename).IsUnicode(false);
-
-                entity.Property(e => e.FileResourceMimeTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<FundingEvent>(entity =>
             {
-                entity.Property(e => e.Description).IsUnicode(false);
-
                 entity.HasOne(d => d.FundingEventType)
                     .WithMany(p => p.FundingEvents)
                     .HasForeignKey(d => d.FundingEventTypeID)
@@ -583,18 +491,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<FundingEventType>(entity =>
             {
                 entity.Property(e => e.FundingEventTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.FundingEventTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FundingEventTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<FundingSource>(entity =>
             {
-                entity.Property(e => e.FundingSourceDescription).IsUnicode(false);
-
-                entity.Property(e => e.FundingSourceName).IsUnicode(false);
-
                 entity.HasOne(d => d.Organization)
                     .WithMany(p => p.FundingSources)
                     .HasForeignKey(d => d.OrganizationID)
@@ -604,18 +504,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<GoogleChartType>(entity =>
             {
                 entity.Property(e => e.GoogleChartTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.GoogleChartTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.GoogleChartTypeName).IsUnicode(false);
-
-                entity.Property(e => e.SeriesDataDisplayType).IsUnicode(false);
             });
 
             modelBuilder.Entity<HRUCharacteristic>(entity =>
             {
-                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
-
                 entity.HasOne(d => d.BaselineHRUCharacteristicLandUseCode)
                     .WithMany(p => p.HRUCharacteristicBaselineHRUCharacteristicLandUseCodes)
                     .HasForeignKey(d => d.BaselineHRUCharacteristicLandUseCodeID)
@@ -636,103 +528,15 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<HRUCharacteristicLandUseCode>(entity =>
             {
                 entity.Property(e => e.HRUCharacteristicLandUseCodeID).ValueGeneratedNever();
-
-                entity.Property(e => e.HRUCharacteristicLandUseCodeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.HRUCharacteristicLandUseCodeName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<HydrologicSubarea>(entity =>
-            {
-                entity.Property(e => e.HydrologicSubareaName).IsUnicode(false);
             });
 
             modelBuilder.Entity<HydromodificationAppliesType>(entity =>
             {
                 entity.Property(e => e.HydromodificationAppliesTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.HydromodificationAppliesTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.HydromodificationAppliesTypeName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<LEGAL_LOTS_ATTRIBUTES_4326>(entity =>
-            {
-                entity.Property(e => e.ASSESSMENT_NO).IsUnicode(false);
-
-                entity.Property(e => e.CATEGORY).IsUnicode(false);
-
-                entity.Property(e => e.COLOR).IsUnicode(false);
-
-                entity.Property(e => e.DESCRIPTIO).IsUnicode(false);
-
-                entity.Property(e => e.DOC_BUYER_NAME).IsUnicode(false);
-
-                entity.Property(e => e.DOC_DEED_TYPE).IsUnicode(false);
-
-                entity.Property(e => e.DOC_REF_DATE).IsUnicode(false);
-
-                entity.Property(e => e.DOC_REF_NO).IsUnicode(false);
-
-                entity.Property(e => e.DOC_SELLER_NAME).IsUnicode(false);
-
-                entity.Property(e => e.Dist_Regs).IsUnicode(false);
-
-                entity.Property(e => e.LEGAL_DESCR).IsUnicode(false);
-
-                entity.Property(e => e.LOT_SIZE).IsUnicode(false);
-
-                entity.Property(e => e.Link).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_ADDRESS).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_ADDR_NO).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_CITY_STATE).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_PREFIX).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_STREET).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_SUFFIX).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_UNIT_NO).IsUnicode(false);
-
-                entity.Property(e => e.MAIL_ZIP5).IsUnicode(false);
-
-                entity.Property(e => e.OWNER_NAMES).IsUnicode(false);
-
-                entity.Property(e => e.RECORDER_NO).IsUnicode(false);
-
-                entity.Property(e => e.SALE_TYPE).IsUnicode(false);
-
-                entity.Property(e => e.SITE_ADDRESS).IsUnicode(false);
-
-                entity.Property(e => e.SITE_ADDR_NO).IsUnicode(false);
-
-                entity.Property(e => e.SITE_CITY_STATE).IsUnicode(false);
-
-                entity.Property(e => e.SITE_STREET_NAME).IsUnicode(false);
-
-                entity.Property(e => e.SITE_STREET_PREFIX).IsUnicode(false);
-
-                entity.Property(e => e.SITE_STREET_SUFFIX).IsUnicode(false);
-
-                entity.Property(e => e.SITE_ZIP5).IsUnicode(false);
-
-                entity.Property(e => e.USE_DQ_LANDUSE).IsUnicode(false);
-
-                entity.Property(e => e.ZONECLASS).IsUnicode(false);
-
-                entity.Property(e => e.ZONE_AND_Housing).IsUnicode(false);
             });
 
             modelBuilder.Entity<LandUseBlock>(entity =>
             {
-                entity.Property(e => e.LandUseDescription).IsUnicode(false);
-
-                entity.Property(e => e.LandUseForTGR).IsUnicode(false);
-
                 entity.HasOne(d => d.PermitType)
                     .WithMany(p => p.LandUseBlocks)
                     .HasForeignKey(d => d.PermitTypeID)
@@ -746,16 +550,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<LandUseBlockStaging>(entity =>
             {
-                entity.Property(e => e.LandUseDescription).IsUnicode(false);
-
-                entity.Property(e => e.LandUseForTGR).IsUnicode(false);
-
-                entity.Property(e => e.PermitType).IsUnicode(false);
-
-                entity.Property(e => e.PriorityLandUseType).IsUnicode(false);
-
-                entity.Property(e => e.StormwaterJurisdiction).IsUnicode(false);
-
                 entity.HasOne(d => d.UploadedByPerson)
                     .WithMany(p => p.LandUseBlockStagings)
                     .HasForeignKey(d => d.UploadedByPersonID)
@@ -765,8 +559,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<MaintenanceRecord>(entity =>
             {
-                entity.Property(e => e.MaintenanceRecordDescription).IsUnicode(false);
-
                 entity.HasOne(d => d.FieldVisit)
                     .WithOne(p => p.MaintenanceRecordFieldVisit)
                     .HasForeignKey<MaintenanceRecord>(d => d.FieldVisitID)
@@ -832,8 +624,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<MaintenanceRecordObservationValue>(entity =>
             {
-                entity.Property(e => e.ObservationValue).IsUnicode(false);
-
                 entity.HasOne(d => d.MaintenanceRecordObservation)
                     .WithMany(p => p.MaintenanceRecordObservationValues)
                     .HasForeignKey(d => d.MaintenanceRecordObservationID)
@@ -843,63 +633,25 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<MaintenanceRecordType>(entity =>
             {
                 entity.Property(e => e.MaintenanceRecordTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.MaintenanceRecordTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceRecordTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<MeasurementUnitType>(entity =>
             {
                 entity.Property(e => e.MeasurementUnitTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.LegendDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.MeasurementUnitTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.MeasurementUnitTypeName).IsUnicode(false);
-
-                entity.Property(e => e.SingularDisplayName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<ModelBasin>(entity =>
-            {
-                entity.Property(e => e.ModelBasinRegion).IsUnicode(false);
-
-                entity.Property(e => e.ModelBasinState).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<ModelBasinStaging>(entity =>
-            {
-                entity.Property(e => e.ModelBasinRegion).IsUnicode(false);
-
-                entity.Property(e => e.ModelBasinState).IsUnicode(false);
             });
 
             modelBuilder.Entity<MonthsOfOperation>(entity =>
             {
                 entity.Property(e => e.MonthsOfOperationID).ValueGeneratedNever();
-
-                entity.Property(e => e.MonthsOfOperationDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.MonthsOfOperationName).IsUnicode(false);
-
-                entity.Property(e => e.MonthsOfOperationNereidAlias).IsUnicode(false);
             });
 
             modelBuilder.Entity<NeptuneArea>(entity =>
             {
                 entity.Property(e => e.NeptuneAreaID).ValueGeneratedNever();
-
-                entity.Property(e => e.NeptuneAreaDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.NeptuneAreaName).IsUnicode(false);
             });
 
             modelBuilder.Entity<NeptuneHomePageImage>(entity =>
             {
-                entity.Property(e => e.Caption).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.NeptuneHomePageImages)
                     .HasForeignKey(d => d.FileResourceID)
@@ -908,8 +660,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<NeptunePage>(entity =>
             {
-                entity.Property(e => e.NeptunePageContent).IsUnicode(false);
-
                 entity.HasOne(d => d.NeptunePageType)
                     .WithMany(p => p.NeptunePages)
                     .HasForeignKey(d => d.NeptunePageTypeID)
@@ -932,17 +682,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<NeptunePageType>(entity =>
             {
                 entity.Property(e => e.NeptunePageTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.NeptunePageTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.NeptunePageTypeName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<NereidResult>(entity =>
-            {
-                entity.Property(e => e.FullResponse).IsUnicode(false);
-
-                entity.Property(e => e.NodeID).IsUnicode(false);
             });
 
             modelBuilder.Entity<Notification>(entity =>
@@ -961,77 +700,31 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<NotificationType>(entity =>
             {
                 entity.Property(e => e.NotificationTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.NotificationTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.NotificationTypeName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<OCTAPrioritization>(entity =>
-            {
-                entity.Property(e => e.CatchIDN).IsUnicode(false);
-
-                entity.Property(e => e.SEA_PCTL).IsUnicode(false);
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<OCTAPrioritizationStaging>(entity =>
-            {
-                entity.Property(e => e.CatchIDN).IsUnicode(false);
-
-                entity.Property(e => e.SEA_PCTL).IsUnicode(false);
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<OVTASection>(entity =>
             {
                 entity.Property(e => e.OVTASectionID).ValueGeneratedNever();
-
-                entity.Property(e => e.OVTASectionDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.OVTASectionName).IsUnicode(false);
-
-                entity.Property(e => e.SectionHeader).IsUnicode(false);
             });
 
             modelBuilder.Entity<ObservationTargetType>(entity =>
             {
                 entity.Property(e => e.ObservationTargetTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.ObservationTargetTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ObservationTargetTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<ObservationThresholdType>(entity =>
             {
                 entity.Property(e => e.ObservationThresholdTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.ObservationThresholdTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ObservationThresholdTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<ObservationTypeCollectionMethod>(entity =>
             {
                 entity.Property(e => e.ObservationTypeCollectionMethodID).ValueGeneratedNever();
-
-                entity.Property(e => e.ObservationTypeCollectionMethodDescription).IsUnicode(false);
-
-                entity.Property(e => e.ObservationTypeCollectionMethodDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ObservationTypeCollectionMethodName).IsUnicode(false);
             });
 
             modelBuilder.Entity<ObservationTypeSpecification>(entity =>
             {
                 entity.Property(e => e.ObservationTypeSpecificationID).ValueGeneratedNever();
-
-                entity.Property(e => e.ObservationTypeSpecificationDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ObservationTypeSpecificationName).IsUnicode(false);
 
                 entity.HasOne(d => d.ObservationTargetType)
                     .WithMany(p => p.ObservationTypeSpecifications)
@@ -1054,12 +747,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.HasIndex(e => e.OnlandVisualTrashAssessmentAreaID, "CK_OnlandVisualTrashAssessment_AtMostOneTransectBackingAssessmentPerArea")
                     .IsUnique()
                     .HasFilter("([IsTransectBackingAssessment]=(1))");
-
-                entity.Property(e => e.DraftAreaDescription).IsUnicode(false);
-
-                entity.Property(e => e.DraftAreaName).IsUnicode(false);
-
-                entity.Property(e => e.Notes).IsUnicode(false);
 
                 entity.HasOne(d => d.CreatedByPerson)
                     .WithMany(p => p.OnlandVisualTrashAssessments)
@@ -1085,10 +772,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<OnlandVisualTrashAssessmentArea>(entity =>
             {
-                entity.Property(e => e.AssessmentAreaDescription).IsUnicode(false);
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentAreaName).IsUnicode(false);
-
                 entity.HasOne(d => d.OnlandVisualTrashAssessmentBaselineScore)
                     .WithMany(p => p.OnlandVisualTrashAssessmentAreaOnlandVisualTrashAssessmentBaselineScores)
                     .HasForeignKey(d => d.OnlandVisualTrashAssessmentBaselineScoreID)
@@ -1107,8 +790,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<OnlandVisualTrashAssessmentObservation>(entity =>
             {
-                entity.Property(e => e.Note).IsUnicode(false);
-
                 entity.HasOne(d => d.OnlandVisualTrashAssessment)
                     .WithMany(p => p.OnlandVisualTrashAssessmentObservations)
                     .HasForeignKey(d => d.OnlandVisualTrashAssessmentID)
@@ -1143,8 +824,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType>(entity =>
             {
-                entity.Property(e => e.ExplanationIfTypeIsOther).IsUnicode(false);
-
                 entity.HasOne(d => d.OnlandVisualTrashAssessment)
                     .WithMany(p => p.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
                     .HasForeignKey(d => d.OnlandVisualTrashAssessmentID)
@@ -1160,29 +839,15 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<OnlandVisualTrashAssessmentScore>(entity =>
             {
                 entity.Property(e => e.OnlandVisualTrashAssessmentScoreID).ValueGeneratedNever();
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentScoreDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentScoreName).IsUnicode(false);
             });
 
             modelBuilder.Entity<OnlandVisualTrashAssessmentStatus>(entity =>
             {
                 entity.Property(e => e.OnlandVisualTrashAssessmentStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentStatusDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentStatusName).IsUnicode(false);
             });
 
             modelBuilder.Entity<Organization>(entity =>
             {
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationShortName).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationUrl).IsUnicode(false);
-
                 entity.HasOne(d => d.LogoFileResource)
                     .WithMany(p => p.Organizations)
                     .HasForeignKey(d => d.LogoFileResourceID)
@@ -1199,51 +864,13 @@ namespace Hippocamp.EFModels.Entities
                     .HasConstraintName("FK_Organization_Person_PrimaryContactPersonID_PersonID");
             });
 
-            modelBuilder.Entity<OrganizationType>(entity =>
-            {
-                entity.Property(e => e.LegendColor).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationTypeAbbreviation).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationTypeName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Parcel>(entity =>
-            {
-                entity.Property(e => e.LandUse).IsUnicode(false);
-
-                entity.Property(e => e.OwnerName).IsUnicode(false);
-
-                entity.Property(e => e.ParcelAddress).IsUnicode(false);
-
-                entity.Property(e => e.ParcelNumber).IsUnicode(false);
-
-                entity.Property(e => e.ParcelStreetNumber).IsUnicode(false);
-
-                entity.Property(e => e.ParcelZipCode).IsUnicode(false);
-            });
-
             modelBuilder.Entity<PermitType>(entity =>
             {
                 entity.Property(e => e.PermitTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.PermitTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.PermitTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<Person>(entity =>
             {
-                entity.Property(e => e.Email).IsUnicode(false);
-
-                entity.Property(e => e.FirstName).IsUnicode(false);
-
-                entity.Property(e => e.LastName).IsUnicode(false);
-
-                entity.Property(e => e.LoginName).IsUnicode(false);
-
-                entity.Property(e => e.Phone).IsUnicode(false);
-
                 entity.HasOne(d => d.Organization)
                     .WithMany(p => p.People)
                     .HasForeignKey(d => d.OrganizationID)
@@ -1258,19 +885,11 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<PreliminarySourceIdentificationCategory>(entity =>
             {
                 entity.Property(e => e.PreliminarySourceIdentificationCategoryID).ValueGeneratedNever();
-
-                entity.Property(e => e.PreliminarySourceIdentificationCategoryDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.PreliminarySourceIdentificationCategoryName).IsUnicode(false);
             });
 
             modelBuilder.Entity<PreliminarySourceIdentificationType>(entity =>
             {
                 entity.Property(e => e.PreliminarySourceIdentificationTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.PreliminarySourceIdentificationTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.PreliminarySourceIdentificationTypeName).IsUnicode(false);
 
                 entity.HasOne(d => d.PreliminarySourceIdentificationCategory)
                     .WithMany(p => p.PreliminarySourceIdentificationTypes)
@@ -1281,22 +900,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<PriorityLandUseType>(entity =>
             {
                 entity.Property(e => e.PriorityLandUseTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.MapColorHexCode).IsUnicode(false);
-
-                entity.Property(e => e.PriorityLandUseTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.PriorityLandUseTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<Project>(entity =>
             {
-                entity.Property(e => e.AdditionalContactInformation).IsUnicode(false);
-
-                entity.Property(e => e.ProjectDescription).IsUnicode(false);
-
-                entity.Property(e => e.ProjectName).IsUnicode(false);
-
                 entity.HasOne(d => d.CreatePerson)
                     .WithMany(p => p.ProjectCreatePeople)
                     .HasForeignKey(d => d.CreatePersonID)
@@ -1327,10 +934,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<ProjectDocument>(entity =>
             {
-                entity.Property(e => e.DisplayName).IsUnicode(false);
-
-                entity.Property(e => e.DocumentDescription).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.ProjectDocuments)
                     .HasForeignKey(d => d.FileResourceID)
@@ -1344,8 +947,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<ProjectHRUCharacteristic>(entity =>
             {
-                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
-
                 entity.HasOne(d => d.BaselineHRUCharacteristicLandUseCode)
                     .WithMany(p => p.ProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes)
                     .HasForeignKey(d => d.BaselineHRUCharacteristicLandUseCodeID)
@@ -1378,10 +979,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<ProjectNereidResult>(entity =>
             {
-                entity.Property(e => e.FullResponse).IsUnicode(false);
-
-                entity.Property(e => e.NodeID).IsUnicode(false);
-
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.ProjectNereidResults)
                     .HasForeignKey(d => d.ProjectID)
@@ -1390,8 +987,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<ProjectNetworkSolveHistory>(entity =>
             {
-                entity.Property(e => e.ErrorMessage).IsUnicode(false);
-
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.ProjectNetworkSolveHistories)
                     .HasForeignKey(d => d.ProjectID)
@@ -1412,27 +1007,15 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<ProjectNetworkSolveHistoryStatusType>(entity =>
             {
                 entity.Property(e => e.ProjectNetworkSolveHistoryStatusTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.ProjectNetworkSolveHistoryStatusTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ProjectNetworkSolveHistoryStatusTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<ProjectStatus>(entity =>
             {
                 entity.Property(e => e.ProjectStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.ProjectStatusDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ProjectStatusName).IsUnicode(false);
             });
 
             modelBuilder.Entity<QuickBMP>(entity =>
             {
-                entity.Property(e => e.QuickBMPName).IsUnicode(false);
-
-                entity.Property(e => e.QuickBMPNote).IsUnicode(false);
-
                 entity.HasOne(d => d.TreatmentBMPType)
                     .WithMany(p => p.QuickBMPs)
                     .HasForeignKey(d => d.TreatmentBMPTypeID)
@@ -1446,10 +1029,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<RegionalSubbasin>(entity =>
             {
-                entity.Property(e => e.DrainID).IsUnicode(false);
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
-
                 entity.HasOne(d => d.OCSurveyDownstreamCatchment)
                     .WithMany(p => p.InverseOCSurveyDownstreamCatchment)
                     .HasPrincipalKey(p => p.OCSurveyCatchmentID)
@@ -1459,10 +1038,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<RegionalSubbasinRevisionRequest>(entity =>
             {
-                entity.Property(e => e.CloseNotes).IsUnicode(false);
-
-                entity.Property(e => e.Notes).IsUnicode(false);
-
                 entity.HasOne(d => d.ClosedByPerson)
                     .WithMany(p => p.RegionalSubbasinRevisionRequestClosedByPeople)
                     .HasForeignKey(d => d.ClosedByPersonID)
@@ -1489,52 +1064,25 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<RegionalSubbasinRevisionRequestStatus>(entity =>
             {
                 entity.Property(e => e.RegionalSubbasinRevisionRequestStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.RegionalSubbasinRevisionRequestStatusDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.RegionalSubbasinRevisionRequestStatusName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<RegionalSubbasinStaging>(entity =>
-            {
-                entity.Property(e => e.DrainID).IsUnicode(false);
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.Property(e => e.RoleID).ValueGeneratedNever();
-
-                entity.Property(e => e.RoleDescription).IsUnicode(false);
-
-                entity.Property(e => e.RoleDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.RoleName).IsUnicode(false);
             });
 
             modelBuilder.Entity<RoutingConfiguration>(entity =>
             {
                 entity.Property(e => e.RoutingConfigurationID).ValueGeneratedNever();
-
-                entity.Property(e => e.RoutingConfigurationDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.RoutingConfigurationName).IsUnicode(false);
             });
 
             modelBuilder.Entity<SizingBasisType>(entity =>
             {
                 entity.Property(e => e.SizingBasisTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.SizingBasisTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.SizingBasisTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<SourceControlBMP>(entity =>
             {
-                entity.Property(e => e.SourceControlBMPNote).IsUnicode(false);
-
                 entity.HasOne(d => d.SourceControlBMPAttribute)
                     .WithMany(p => p.SourceControlBMPs)
                     .HasForeignKey(d => d.SourceControlBMPAttributeID)
@@ -1550,8 +1098,6 @@ namespace Hippocamp.EFModels.Entities
             {
                 entity.Property(e => e.SourceControlBMPAttributeID).ValueGeneratedNever();
 
-                entity.Property(e => e.SourceControlBMPAttributeName).IsUnicode(false);
-
                 entity.HasOne(d => d.SourceControlBMPAttributeCategory)
                     .WithMany(p => p.SourceControlBMPAttributes)
                     .HasForeignKey(d => d.SourceControlBMPAttributeCategoryID)
@@ -1561,34 +1107,18 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<SourceControlBMPAttributeCategory>(entity =>
             {
                 entity.Property(e => e.SourceControlBMPAttributeCategoryID).ValueGeneratedNever();
-
-                entity.Property(e => e.SourceControlBMPAttributeCategoryName).IsUnicode(false);
-
-                entity.Property(e => e.SourceControlBMPAttributeCategoryShortName).IsUnicode(false);
             });
 
             modelBuilder.Entity<StateProvince>(entity =>
             {
                 entity.Property(e => e.StateProvinceID).ValueGeneratedNever();
 
-                entity.Property(e => e.StateProvinceAbbreviation)
-                    .IsUnicode(false)
-                    .IsFixedLength(true);
-
-                entity.Property(e => e.StateProvinceName).IsUnicode(false);
+                entity.Property(e => e.StateProvinceAbbreviation).IsFixedLength();
             });
 
             modelBuilder.Entity<StormwaterBreadCrumbEntity>(entity =>
             {
                 entity.Property(e => e.StormwaterBreadCrumbEntityID).ValueGeneratedNever();
-
-                entity.Property(e => e.ColorClass).IsUnicode(false);
-
-                entity.Property(e => e.GlyphIconClass).IsUnicode(false);
-
-                entity.Property(e => e.StormwaterBreadCrumbEntityDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.StormwaterBreadCrumbEntityName).IsUnicode(false);
             });
 
             modelBuilder.Entity<StormwaterJurisdiction>(entity =>
@@ -1638,33 +1168,15 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<StormwaterJurisdictionPublicBMPVisibilityType>(entity =>
             {
                 entity.Property(e => e.StormwaterJurisdictionPublicBMPVisibilityTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.StormwaterJurisdictionPublicBMPVisibilityTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<StormwaterJurisdictionPublicWQMPVisibilityType>(entity =>
             {
                 entity.Property(e => e.StormwaterJurisdictionPublicWQMPVisibilityTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.StormwaterJurisdictionPublicWQMPVisibilityTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<SupportRequestLog>(entity =>
             {
-                entity.Property(e => e.RequestDescription).IsUnicode(false);
-
-                entity.Property(e => e.RequestPersonEmail).IsUnicode(false);
-
-                entity.Property(e => e.RequestPersonName).IsUnicode(false);
-
-                entity.Property(e => e.RequestPersonOrganization).IsUnicode(false);
-
-                entity.Property(e => e.RequestPersonPhone).IsUnicode(false);
-
                 entity.HasOne(d => d.RequestPerson)
                     .WithMany(p => p.SupportRequestLogs)
                     .HasForeignKey(d => d.RequestPersonID)
@@ -1679,39 +1191,16 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<SupportRequestType>(entity =>
             {
                 entity.Property(e => e.SupportRequestTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.SupportRequestTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.SupportRequestTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<TimeOfConcentration>(entity =>
             {
                 entity.Property(e => e.TimeOfConcentrationID).ValueGeneratedNever();
-
-                entity.Property(e => e.TimeOfConcentrationDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TimeOfConcentrationName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<TrainingVideo>(entity =>
-            {
-                entity.Property(e => e.VideoDescription).IsUnicode(false);
-
-                entity.Property(e => e.VideoName).IsUnicode(false);
-
-                entity.Property(e => e.VideoURL).IsUnicode(false);
             });
 
             modelBuilder.Entity<TrashCaptureStatusType>(entity =>
             {
                 entity.Property(e => e.TrashCaptureStatusTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.TrashCaptureStatusTypeColorCode).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatusTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatusTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<TrashGeneratingUnit>(entity =>
@@ -1745,12 +1234,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMP>(entity =>
             {
-                entity.Property(e => e.Notes).IsUnicode(false);
-
-                entity.Property(e => e.SystemOfRecordID).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
                 entity.HasOne(d => d.InventoryVerifiedByPerson)
                     .WithMany(p => p.TreatmentBMPs)
                     .HasForeignKey(d => d.InventoryVerifiedByPersonID)
@@ -1790,8 +1273,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMPAssessment>(entity =>
             {
-                entity.Property(e => e.Notes).IsUnicode(false);
-
                 entity.HasOne(d => d.FieldVisit)
                     .WithMany(p => p.TreatmentBMPAssessmentFieldVisits)
                     .HasForeignKey(d => d.FieldVisitID)
@@ -1827,8 +1308,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMPAssessmentObservationType>(entity =>
             {
-                entity.Property(e => e.TreatmentBMPAssessmentObservationTypeName).IsUnicode(false);
-
                 entity.HasOne(d => d.ObservationTypeSpecification)
                     .WithMany(p => p.TreatmentBMPAssessmentObservationTypes)
                     .HasForeignKey(d => d.ObservationTypeSpecificationID)
@@ -1837,8 +1316,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMPAssessmentPhoto>(entity =>
             {
-                entity.Property(e => e.Caption).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.TreatmentBMPAssessmentPhotos)
                     .HasForeignKey(d => d.FileResourceID)
@@ -1853,10 +1330,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<TreatmentBMPAssessmentType>(entity =>
             {
                 entity.Property(e => e.TreatmentBMPAssessmentTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.TreatmentBMPAssessmentTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPAssessmentTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<TreatmentBMPBenchmarkAndThreshold>(entity =>
@@ -1897,10 +1370,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMPDocument>(entity =>
             {
-                entity.Property(e => e.DisplayName).IsUnicode(false);
-
-                entity.Property(e => e.DocumentDescription).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.TreatmentBMPDocuments)
                     .HasForeignKey(d => d.FileResourceID)
@@ -1914,8 +1383,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMPImage>(entity =>
             {
-                entity.Property(e => e.Caption).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.TreatmentBMPImages)
                     .HasForeignKey(d => d.FileResourceID)
@@ -1930,10 +1397,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<TreatmentBMPLifespanType>(entity =>
             {
                 entity.Property(e => e.TreatmentBMPLifespanTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.TreatmentBMPLifespanTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPLifespanTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<TreatmentBMPModelingAttribute>(entity =>
@@ -1957,10 +1420,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<TreatmentBMPModelingType>(entity =>
             {
                 entity.Property(e => e.TreatmentBMPModelingTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.TreatmentBMPModelingTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPModelingTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<TreatmentBMPObservation>(entity =>
@@ -1999,13 +1458,6 @@ namespace Hippocamp.EFModels.Entities
                     .HasConstraintName("FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTyp");
             });
 
-            modelBuilder.Entity<TreatmentBMPType>(entity =>
-            {
-                entity.Property(e => e.TreatmentBMPTypeDescription).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPTypeName).IsUnicode(false);
-            });
-
             modelBuilder.Entity<TreatmentBMPTypeAssessmentObservationType>(entity =>
             {
                 entity.HasOne(d => d.TreatmentBMPAssessmentObservationType)
@@ -2035,34 +1487,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<UnderlyingHydrologicSoilGroup>(entity =>
             {
                 entity.Property(e => e.UnderlyingHydrologicSoilGroupID).ValueGeneratedNever();
-
-                entity.Property(e => e.UnderlyingHydrologicSoilGroupDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.UnderlyingHydrologicSoilGroupName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlan>(entity =>
             {
-                entity.Property(e => e.MaintenanceContactAddress1).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactAddress2).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactCity).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactName).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactOrganization).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactPhone).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactState).IsUnicode(false);
-
-                entity.Property(e => e.MaintenanceContactZip).IsUnicode(false);
-
-                entity.Property(e => e.RecordNumber).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanName).IsUnicode(false);
-
                 entity.HasOne(d => d.StormwaterJurisdiction)
                     .WithMany(p => p.WaterQualityManagementPlans)
                     .HasForeignKey(d => d.StormwaterJurisdictionID)
@@ -2082,18 +1510,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<WaterQualityManagementPlanDevelopmentType>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanDevelopmentTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanDevelopmentTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanDevelopmentTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanDocument>(entity =>
             {
-                entity.Property(e => e.Description).IsUnicode(false);
-
-                entity.Property(e => e.DisplayName).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.WaterQualityManagementPlanDocuments)
                     .HasForeignKey(d => d.FileResourceID)
@@ -2113,30 +1533,16 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<WaterQualityManagementPlanDocumentType>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanDocumentTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanDocumentTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanDocumentTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanLandUse>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanLandUseID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanLandUseDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanLandUseName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanModelingApproach>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanModelingApproachID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanModelingApproachDescription).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanModelingApproachDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanModelingApproachName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanParcel>(entity =>
@@ -2155,16 +1561,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<WaterQualityManagementPlanPermitTerm>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanPermitTermID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanPermitTermDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanPermitTermName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanPhoto>(entity =>
             {
-                entity.Property(e => e.Caption).IsUnicode(false);
-
                 entity.HasOne(d => d.FileResource)
                     .WithMany(p => p.WaterQualityManagementPlanPhotos)
                     .HasForeignKey(d => d.FileResourceID)
@@ -2174,27 +1574,15 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<WaterQualityManagementPlanPriority>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanPriorityID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanPriorityDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanPriorityName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanStatus>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanStatusDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanStatusName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanVerify>(entity =>
             {
-                entity.Property(e => e.EnforcementOrFollowupActions).IsUnicode(false);
-
-                entity.Property(e => e.SourceControlCondition).IsUnicode(false);
-
                 entity.HasOne(d => d.LastEditedByPerson)
                     .WithMany(p => p.WaterQualityManagementPlanVerifies)
                     .HasForeignKey(d => d.LastEditedByPersonID)
@@ -2232,8 +1620,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<WaterQualityManagementPlanVerifyQuickBMP>(entity =>
             {
-                entity.Property(e => e.WaterQualityManagementPlanVerifyQuickBMPNote).IsUnicode(false);
-
                 entity.HasOne(d => d.QuickBMP)
                     .WithMany(p => p.WaterQualityManagementPlanVerifyQuickBMPs)
                     .HasForeignKey(d => d.QuickBMPID)
@@ -2247,8 +1633,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<WaterQualityManagementPlanVerifySourceControlBMP>(entity =>
             {
-                entity.Property(e => e.WaterQualityManagementPlanSourceControlCondition).IsUnicode(false);
-
                 entity.HasOne(d => d.SourceControlBMP)
                     .WithMany(p => p.WaterQualityManagementPlanVerifySourceControlBMPs)
                     .HasForeignKey(d => d.SourceControlBMPID)
@@ -2263,14 +1647,10 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<WaterQualityManagementPlanVerifyStatus>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanVerifyStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanVerifyStatusName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanVerifyTreatmentBMP>(entity =>
             {
-                entity.Property(e => e.WaterQualityManagementPlanVerifyTreatmentBMPNote).IsUnicode(false);
-
                 entity.HasOne(d => d.TreatmentBMP)
                     .WithMany(p => p.WaterQualityManagementPlanVerifyTreatmentBMPs)
                     .HasForeignKey(d => d.TreatmentBMPID)
@@ -2285,49 +1665,17 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<WaterQualityManagementPlanVerifyType>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanVerifyTypeID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanVerifyTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<WaterQualityManagementPlanVisitStatus>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanVisitStatusID).ValueGeneratedNever();
-
-                entity.Property(e => e.WaterQualityManagementPlanVisitStatusName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Watershed>(entity =>
-            {
-                entity.Property(e => e.WatershedName).IsUnicode(false);
             });
 
             modelBuilder.Entity<geometry_column>(entity =>
             {
                 entity.HasKey(e => new { e.f_table_catalog, e.f_table_schema, e.f_table_name, e.f_geometry_column })
                     .HasName("PK_geometry_columns_f_table_catalog_f_table_schema_f_table_name_f_geometry_column");
-
-                entity.Property(e => e.f_table_catalog).IsUnicode(false);
-
-                entity.Property(e => e.f_table_schema).IsUnicode(false);
-
-                entity.Property(e => e.f_table_name).IsUnicode(false);
-
-                entity.Property(e => e.f_geometry_column).IsUnicode(false);
-
-                entity.Property(e => e.geometry_type).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<gt_pk_metadatum>(entity =>
-            {
-                entity.Property(e => e.pk_column).IsUnicode(false);
-
-                entity.Property(e => e.pk_policy).IsUnicode(false);
-
-                entity.Property(e => e.pk_sequence).IsUnicode(false);
-
-                entity.Property(e => e.table_name).IsUnicode(false);
-
-                entity.Property(e => e.table_schema).IsUnicode(false);
             });
 
             modelBuilder.Entity<spatial_ref_sy>(entity =>
@@ -2336,12 +1684,6 @@ namespace Hippocamp.EFModels.Entities
                     .HasName("PK_spatial_ref_sys_srid");
 
                 entity.Property(e => e.srid).ValueGeneratedNever();
-
-                entity.Property(e => e.auth_name).IsUnicode(false);
-
-                entity.Property(e => e.proj4text).IsUnicode(false);
-
-                entity.Property(e => e.srtext).IsUnicode(false);
             });
 
             modelBuilder.Entity<vDelineationLGUInput>(entity =>
@@ -2352,53 +1694,21 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vDelineationTGUInput>(entity =>
             {
                 entity.ToView("vDelineationTGUInput");
-
-                entity.Property(e => e.TrashCaptureStatusTypeDisplayName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vFieldVisitDetailed>(entity =>
             {
                 entity.ToView("vFieldVisitDetailed");
-
-                entity.Property(e => e.FieldVisitStatusDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.FieldVisitTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.PerformedByPersonName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerAssessmentAreaExport>(entity =>
             {
                 entity.ToView("vGeoServerAssessmentAreaExport");
-
-                entity.Property(e => e.CompletedDate).IsUnicode(false);
-
-                entity.Property(e => e.Description).IsUnicode(false);
-
-                entity.Property(e => e.JurisName).IsUnicode(false);
-
-                entity.Property(e => e.OVTAAreaName).IsUnicode(false);
-
-                entity.Property(e => e.Score).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerDelineation>(entity =>
             {
                 entity.ToView("vGeoServerDelineation");
-
-                entity.Property(e => e.DelineationStatus).IsUnicode(false);
-
-                entity.Property(e => e.DelineationType).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerJurisdiction>(entity =>
@@ -2411,8 +1721,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vGeoServerLandUseBlock");
 
                 entity.Property(e => e.LandUseBlockID).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.LandUseDescription).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerMaskLayer>(entity =>
@@ -2424,113 +1732,49 @@ namespace Hippocamp.EFModels.Entities
             {
                 entity.ToView("vGeoServerOCTAPrioritization");
 
-                entity.Property(e => e.CatchIDN).IsUnicode(false);
-
                 entity.Property(e => e.OCTAPrioritizationID).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerObservationPointExport>(entity =>
             {
                 entity.ToView("vGeoServerObservationPointExport");
-
-                entity.Property(e => e.CompletedDate).IsUnicode(false);
-
-                entity.Property(e => e.JurisName).IsUnicode(false);
-
-                entity.Property(e => e.Note).IsUnicode(false);
-
-                entity.Property(e => e.OVTAAreaName).IsUnicode(false);
-
-                entity.Property(e => e.PhotoUrl).IsUnicode(false);
-
-                entity.Property(e => e.Score).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerOnlandVisualTrashAssessmentArea>(entity =>
             {
                 entity.ToView("vGeoServerOnlandVisualTrashAssessmentArea");
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentAreaName).IsUnicode(false);
-
-                entity.Property(e => e.Score).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerParcel>(entity =>
             {
                 entity.ToView("vGeoServerParcel");
-
-                entity.Property(e => e.LandUse).IsUnicode(false);
-
-                entity.Property(e => e.OwnerName).IsUnicode(false);
-
-                entity.Property(e => e.ParcelAddress).IsUnicode(false);
-
-                entity.Property(e => e.ParcelNumber).IsUnicode(false);
-
-                entity.Property(e => e.ParcelStreetNumber).IsUnicode(false);
-
-                entity.Property(e => e.ParcelZipCode).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerRegionalSubbasin>(entity =>
             {
                 entity.ToView("vGeoServerRegionalSubbasin");
 
-                entity.Property(e => e.DrainID).IsUnicode(false);
-
                 entity.Property(e => e.RegionalSubbasinID).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerTransectLineExport>(entity =>
             {
                 entity.ToView("vGeoServerTransectLineExport");
-
-                entity.Property(e => e.OVTAAreaName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerTrashGeneratingUnit>(entity =>
             {
                 entity.ToView("vGeoServerTrashGeneratingUnit");
-
-                entity.Property(e => e.AssessmentScore).IsUnicode(false);
-
-                entity.Property(e => e.LandUseType).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatus).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerTrashGeneratingUnitLoad>(entity =>
             {
                 entity.ToView("vGeoServerTrashGeneratingUnitLoad");
-
-                entity.Property(e => e.LandUseType).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.PriorityLandUseTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerWaterQualityManagementPlan>(entity =>
             {
                 entity.ToView("vGeoServerWaterQualityManagementPlan");
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatusTypeDisplayName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vGeoServerWatershed>(entity =>
@@ -2538,8 +1782,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vGeoServerWatershed");
 
                 entity.Property(e => e.WatershedID).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.WatershedName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vLandUseBlockTGUInput>(entity =>
@@ -2547,10 +1789,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vLandUseBlockTGUInput");
 
                 entity.Property(e => e.LandUseBlockID).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.LandUseDescription).IsUnicode(false);
-
-                entity.Property(e => e.LandUseForTGR).IsUnicode(false);
             });
 
             modelBuilder.Entity<vModelBasinLGUInput>(entity =>
@@ -2563,14 +1801,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vMostRecentTreatmentBMPAssessment>(entity =>
             {
                 entity.ToView("vMostRecentTreatmentBMPAssessment");
-
-                entity.Property(e => e.FieldVisitType).IsUnicode(false);
-
-                entity.Property(e => e.OwnerOrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.StormwaterJurisdictionName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vNereidBMPColocation>(entity =>
@@ -2581,23 +1811,11 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vNereidLoadingInput>(entity =>
             {
                 entity.ToView("vNereidLoadingInput");
-
-                entity.Property(e => e.BaselineLandUseCode).IsUnicode(false);
-
-                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
-
-                entity.Property(e => e.LandUseCode).IsUnicode(false);
             });
 
             modelBuilder.Entity<vNereidProjectLoadingInput>(entity =>
             {
                 entity.ToView("vNereidProjectLoadingInput");
-
-                entity.Property(e => e.BaselineLandUseCode).IsUnicode(false);
-
-                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
-
-                entity.Property(e => e.LandUseCode).IsUnicode(false);
             });
 
             modelBuilder.Entity<vNereidProjectRegionalSubbasinCentralizedBMP>(entity =>
@@ -2623,15 +1841,11 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vOnlandVisualTrashAssessmentAreaDated>(entity =>
             {
                 entity.ToView("vOnlandVisualTrashAssessmentAreaDated");
-
-                entity.Property(e => e.MostRecentAssessmentScore).IsUnicode(false);
             });
 
             modelBuilder.Entity<vOnlandVisualTrashAssessmentAreaProgress>(entity =>
             {
                 entity.ToView("vOnlandVisualTrashAssessmentAreaProgress");
-
-                entity.Property(e => e.OnlandVisualTrashAssessmentScoreDisplayName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vPowerBICentralizedBMPLoadGeneratingUnit>(entity =>
@@ -2642,84 +1856,36 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vPowerBILandUseStatistic>(entity =>
             {
                 entity.ToView("vPowerBILandUseStatistic");
-
-                entity.Property(e => e.HRUCharacteristicLandUseCodeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.HydrologicSoilGroup).IsUnicode(false);
-
-                entity.Property(e => e.LandUse).IsUnicode(false);
-
-                entity.Property(e => e.SurfaceKey).IsUnicode(false);
-
-                entity.Property(e => e.WatershedName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vPowerBITreatmentBMP>(entity =>
             {
                 entity.ToView("vPowerBITreatmentBMP");
-
-                entity.Property(e => e.DelineationType).IsUnicode(false);
-
-                entity.Property(e => e.Jurisdiction).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPTypeName).IsUnicode(false);
-
-                entity.Property(e => e.Watershed).IsUnicode(false);
             });
 
             modelBuilder.Entity<vPowerBIWaterQualityManagementPlan>(entity =>
             {
                 entity.ToView("vPowerBIWaterQualityManagementPlan");
-
-                entity.Property(e => e.HydrologicSubareaName).IsUnicode(false);
-
-                entity.Property(e => e.HydromodificationAppliesDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.ModelingApproach).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatusTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanDevelopmentTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanLandUseDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanPermitTermDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanStatusDisplayName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vPowerBIWaterQualityManagementPlanOAndMVerification>(entity =>
             {
                 entity.ToView("vPowerBIWaterQualityManagementPlanOAndMVerification");
-
-                entity.Property(e => e.DraftOrFinalized).IsUnicode(false);
-
-                entity.Property(e => e.EnforcementOrFollowupActions).IsUnicode(false);
-
-                entity.Property(e => e.Jurisdiction).IsUnicode(false);
-
-                entity.Property(e => e.LastEditedBy).IsUnicode(false);
-
-                entity.Property(e => e.SourceControlCondition).IsUnicode(false);
-
-                entity.Property(e => e.TypeOfVerification).IsUnicode(false);
-
-                entity.Property(e => e.VerificationStatus).IsUnicode(false);
-
-                entity.Property(e => e.VisitStatus).IsUnicode(false);
-
-                entity.Property(e => e.WQMPName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vProjectDelineationLGUInput>(entity =>
             {
                 entity.ToView("vProjectDelineationLGUInput");
+            });
+
+            modelBuilder.Entity<vProjectGrantScore>(entity =>
+            {
+                entity.ToView("vProjectGrantScores");
+            });
+
+            modelBuilder.Entity<vProjectModelingResult>(entity =>
+            {
+                entity.ToView("vProjectModelingResults");
             });
 
             modelBuilder.Entity<vRegionalSubbasinLGUInput>(entity =>
@@ -2737,74 +1903,26 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vStormwaterJurisdictionOrganizationMapping>(entity =>
             {
                 entity.ToView("vStormwaterJurisdictionOrganizationMapping");
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vTrashGeneratingUnitLoadStatistic>(entity =>
             {
                 entity.ToView("vTrashGeneratingUnitLoadStatistic");
-
-                entity.Property(e => e.LandUseType).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.PriorityLandUseTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.WaterQualityManagementPlanName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vTreatmentBMPDetailed>(entity =>
             {
                 entity.ToView("vTreatmentBMPDetailed");
-
-                entity.Property(e => e.DelineationTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.Notes).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.OwnerOrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.SizingBasisTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatusTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPLifespanTypeDisplayName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPTypeName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vViewTreatmentBMPModelingAttribute>(entity =>
             {
                 entity.ToView("vViewTreatmentBMPModelingAttributes");
-
-                entity.Property(e => e.DelineationStatus).IsUnicode(false);
-
-                entity.Property(e => e.DelineationType).IsUnicode(false);
-
-                entity.Property(e => e.OperationMonths).IsUnicode(false);
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPName).IsUnicode(false);
-
-                entity.Property(e => e.TreatmentBMPTypeName).IsUnicode(false);
-
-                entity.Property(e => e.UpstreamBMPName).IsUnicode(false);
-
-                entity.Property(e => e.WatershedName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vWaterQualityManagementPlanLGUAudit>(entity =>
             {
                 entity.ToView("vWaterQualityManagementPlanLGUAudit");
-
-                entity.Property(e => e.WaterQualityManagementPlanName).IsUnicode(false);
             });
 
             modelBuilder.Entity<vWaterQualityManagementPlanLGUInput>(entity =>
@@ -2817,10 +1935,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vWaterQualityManagementPlanTGUInput>(entity =>
             {
                 entity.ToView("vWaterQualityManagementPlanTGUInput");
-
-                entity.Property(e => e.OrganizationName).IsUnicode(false);
-
-                entity.Property(e => e.TrashCaptureStatusTypeDisplayName).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

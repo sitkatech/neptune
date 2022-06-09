@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanPhoto")]
@@ -20,14 +18,15 @@ namespace Hippocamp.EFModels.Entities
         public int WaterQualityManagementPlanPhotoID { get; set; }
         public int FileResourceID { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string Caption { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime UploadDate { get; set; }
 
-        [ForeignKey(nameof(FileResourceID))]
+        [ForeignKey("FileResourceID")]
         [InverseProperty("WaterQualityManagementPlanPhotos")]
         public virtual FileResource FileResource { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifyPhoto.WaterQualityManagementPlanPhoto))]
+        [InverseProperty("WaterQualityManagementPlanPhoto")]
         public virtual ICollection<WaterQualityManagementPlanVerifyPhoto> WaterQualityManagementPlanVerifyPhotos { get; set; }
     }
 }

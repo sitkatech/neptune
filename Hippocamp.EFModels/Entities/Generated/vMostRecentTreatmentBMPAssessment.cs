@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -15,13 +13,16 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string StormwaterJurisdictionName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string OwnerOrganizationName { get; set; }
         public int OwnerOrganizationID { get; set; }
         public int? RequiredFieldVisitsPerYear { get; set; }
@@ -32,6 +33,7 @@ namespace Hippocamp.EFModels.Entities
         public double? AssessmentScore { get; set; }
         [Required]
         [StringLength(40)]
+        [Unicode(false)]
         public string FieldVisitType { get; set; }
     }
 }

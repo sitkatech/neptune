@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("DryWeatherFlowOverride")]
-    [Index(nameof(DryWeatherFlowOverrideDisplayName), Name = "AK_DryWeatherFlowOverride_DryWeatherFlowOverrideDisplayName", IsUnique = true)]
-    [Index(nameof(DryWeatherFlowOverrideName), Name = "AK_DryWeatherFlowOverride_DryWeatherFlowOverrideName", IsUnique = true)]
+    [Index("DryWeatherFlowOverrideDisplayName", Name = "AK_DryWeatherFlowOverride_DryWeatherFlowOverrideDisplayName", IsUnique = true)]
+    [Index("DryWeatherFlowOverrideName", Name = "AK_DryWeatherFlowOverride_DryWeatherFlowOverrideName", IsUnique = true)]
     public partial class DryWeatherFlowOverride
     {
         public DryWeatherFlowOverride()
@@ -23,14 +21,16 @@ namespace Hippocamp.EFModels.Entities
         public int DryWeatherFlowOverrideID { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string DryWeatherFlowOverrideName { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string DryWeatherFlowOverrideDisplayName { get; set; }
 
-        [InverseProperty(nameof(QuickBMP.DryWeatherFlowOverride))]
+        [InverseProperty("DryWeatherFlowOverride")]
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
-        [InverseProperty(nameof(TreatmentBMPModelingAttribute.DryWeatherFlowOverride))]
+        [InverseProperty("DryWeatherFlowOverride")]
         public virtual ICollection<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributes { get; set; }
     }
 }

@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPType")]
-    [Index(nameof(TreatmentBMPTypeName), Name = "AK_TreatmentBMPType_TreatmentBMPTypeName", IsUnique = true)]
+    [Index("TreatmentBMPTypeName", Name = "AK_TreatmentBMPType_TreatmentBMPTypeName", IsUnique = true)]
     public partial class TreatmentBMPType
     {
         public TreatmentBMPType()
@@ -30,35 +28,37 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TreatmentBMPTypeName { get; set; }
         [Required]
         [StringLength(1000)]
+        [Unicode(false)]
         public string TreatmentBMPTypeDescription { get; set; }
         public bool IsAnalyzedInModelingModule { get; set; }
         public int? TreatmentBMPModelingTypeID { get; set; }
 
-        [ForeignKey(nameof(TreatmentBMPModelingTypeID))]
+        [ForeignKey("TreatmentBMPModelingTypeID")]
         [InverseProperty("TreatmentBMPTypes")]
         public virtual TreatmentBMPModelingType TreatmentBMPModelingType { get; set; }
-        [InverseProperty(nameof(CustomAttribute.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
-        [InverseProperty(nameof(MaintenanceRecordObservation.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
-        [InverseProperty(nameof(MaintenanceRecord.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
-        [InverseProperty(nameof(QuickBMP.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
-        [InverseProperty(nameof(TreatmentBMPAssessment.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
-        [InverseProperty(nameof(TreatmentBMPBenchmarkAndThreshold.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
-        [InverseProperty(nameof(TreatmentBMPObservation.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
-        [InverseProperty(nameof(TreatmentBMPTypeAssessmentObservationType.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
-        [InverseProperty(nameof(TreatmentBMPTypeCustomAttributeType.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
-        [InverseProperty(nameof(TreatmentBMP.TreatmentBMPType))]
+        [InverseProperty("TreatmentBMPType")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -14,6 +12,7 @@ namespace Hippocamp.EFModels.Entities
     {
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string OVTAAreaName { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry TransectLine { get; set; }

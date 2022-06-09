@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("HRUCharacteristicLandUseCode")]
-    [Index(nameof(HRUCharacteristicLandUseCodeDisplayName), Name = "AK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeDisplayName", IsUnique = true)]
-    [Index(nameof(HRUCharacteristicLandUseCodeName), Name = "AK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeName", IsUnique = true)]
+    [Index("HRUCharacteristicLandUseCodeDisplayName", Name = "AK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeDisplayName", IsUnique = true)]
+    [Index("HRUCharacteristicLandUseCodeName", Name = "AK_HRUCharacteristicLandUseCode_HRUCharacteristicLandUseCodeName", IsUnique = true)]
     public partial class HRUCharacteristicLandUseCode
     {
         public HRUCharacteristicLandUseCode()
@@ -25,18 +23,20 @@ namespace Hippocamp.EFModels.Entities
         public int HRUCharacteristicLandUseCodeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string HRUCharacteristicLandUseCodeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string HRUCharacteristicLandUseCodeDisplayName { get; set; }
 
-        [InverseProperty(nameof(HRUCharacteristic.BaselineHRUCharacteristicLandUseCode))]
+        [InverseProperty("BaselineHRUCharacteristicLandUseCode")]
         public virtual ICollection<HRUCharacteristic> HRUCharacteristicBaselineHRUCharacteristicLandUseCodes { get; set; }
-        [InverseProperty(nameof(HRUCharacteristic.HRUCharacteristicLandUseCode))]
+        [InverseProperty("HRUCharacteristicLandUseCode")]
         public virtual ICollection<HRUCharacteristic> HRUCharacteristicHRUCharacteristicLandUseCodes { get; set; }
-        [InverseProperty(nameof(ProjectHRUCharacteristic.BaselineHRUCharacteristicLandUseCode))]
+        [InverseProperty("BaselineHRUCharacteristicLandUseCode")]
         public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes { get; set; }
-        [InverseProperty(nameof(ProjectHRUCharacteristic.HRUCharacteristicLandUseCode))]
+        [InverseProperty("HRUCharacteristicLandUseCode")]
         public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristicHRUCharacteristicLandUseCodes { get; set; }
     }
 }

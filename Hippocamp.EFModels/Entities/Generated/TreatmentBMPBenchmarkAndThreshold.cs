@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPBenchmarkAndThreshold")]
-    [Index(nameof(TreatmentBMPID), nameof(TreatmentBMPAssessmentObservationTypeID), Name = "AK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPID_TreatmentBMPAssessmentObservationTypeID", IsUnique = true)]
+    [Index("TreatmentBMPID", "TreatmentBMPAssessmentObservationTypeID", Name = "AK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPID_TreatmentBMPAssessmentObservationTypeID", IsUnique = true)]
     public partial class TreatmentBMPBenchmarkAndThreshold
     {
         [Key]
@@ -21,18 +19,18 @@ namespace Hippocamp.EFModels.Entities
         public double BenchmarkValue { get; set; }
         public double ThresholdValue { get; set; }
 
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("TreatmentBMPBenchmarkAndThresholdTreatmentBMPs")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMP1 { get; set; }
-        [ForeignKey(nameof(TreatmentBMPAssessmentObservationTypeID))]
+        [ForeignKey("TreatmentBMPAssessmentObservationTypeID")]
         [InverseProperty("TreatmentBMPBenchmarkAndThresholds")]
         public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; }
         public virtual TreatmentBMP TreatmentBMPNavigation { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("TreatmentBMPBenchmarkAndThresholds")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeAssessmentObservationTypeID))]
+        [ForeignKey("TreatmentBMPTypeAssessmentObservationTypeID")]
         [InverseProperty("TreatmentBMPBenchmarkAndThresholdTreatmentBMPTypeAssessmentObservationTypes")]
         public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; }
     }

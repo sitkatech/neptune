@@ -5,14 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMP")]
-    [Index(nameof(StormwaterJurisdictionID), nameof(TreatmentBMPName), Name = "AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName", IsUnique = true)]
-    [Index(nameof(TreatmentBMPID), nameof(TreatmentBMPTypeID), Name = "AK_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID", IsUnique = true)]
-    [Index(nameof(LocationPoint), Name = "SPATIAL_TreatmentBMP_LocationPoint")]
+    [Index("StormwaterJurisdictionID", "TreatmentBMPName", Name = "AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName", IsUnique = true)]
+    [Index("TreatmentBMPID", "TreatmentBMPTypeID", Name = "AK_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID", IsUnique = true)]
+    [Index("LocationPoint", Name = "SPATIAL_TreatmentBMP_LocationPoint")]
     public partial class TreatmentBMP
     {
         public TreatmentBMP()
@@ -38,14 +36,17 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry LocationPoint { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         [StringLength(1000)]
+        [Unicode(false)]
         public string Notes { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string SystemOfRecordID { get; set; }
         public int? YearBuilt { get; set; }
         public int OwnerOrganizationID { get; set; }
@@ -73,76 +74,76 @@ namespace Hippocamp.EFModels.Entities
         public int? RegionalSubbasinID { get; set; }
         public int? ProjectID { get; set; }
 
-        [ForeignKey(nameof(InventoryVerifiedByPersonID))]
-        [InverseProperty(nameof(Person.TreatmentBMPs))]
+        [ForeignKey("InventoryVerifiedByPersonID")]
+        [InverseProperty("TreatmentBMPs")]
         public virtual Person InventoryVerifiedByPerson { get; set; }
-        [ForeignKey(nameof(ModelBasinID))]
+        [ForeignKey("ModelBasinID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual ModelBasin ModelBasin { get; set; }
-        [ForeignKey(nameof(OwnerOrganizationID))]
-        [InverseProperty(nameof(Organization.TreatmentBMPs))]
+        [ForeignKey("OwnerOrganizationID")]
+        [InverseProperty("TreatmentBMPs")]
         public virtual Organization OwnerOrganization { get; set; }
-        [ForeignKey(nameof(PrecipitationZoneID))]
+        [ForeignKey("PrecipitationZoneID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual PrecipitationZone PrecipitationZone { get; set; }
-        [ForeignKey(nameof(ProjectID))]
+        [ForeignKey("ProjectID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual Project Project { get; set; }
-        [ForeignKey(nameof(SizingBasisTypeID))]
+        [ForeignKey("SizingBasisTypeID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual SizingBasisType SizingBasisType { get; set; }
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [ForeignKey(nameof(TrashCaptureStatusTypeID))]
+        [ForeignKey("TrashCaptureStatusTypeID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual TrashCaptureStatusType TrashCaptureStatusType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPLifespanTypeID))]
+        [ForeignKey("TreatmentBMPLifespanTypeID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual TreatmentBMPLifespanType TreatmentBMPLifespanType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        [ForeignKey(nameof(UpstreamBMPID))]
-        [InverseProperty(nameof(TreatmentBMP.InverseUpstreamBMP))]
+        [ForeignKey("UpstreamBMPID")]
+        [InverseProperty("InverseUpstreamBMP")]
         public virtual TreatmentBMP UpstreamBMP { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        [ForeignKey(nameof(WatershedID))]
+        [ForeignKey("WatershedID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual Watershed Watershed { get; set; }
         [InverseProperty("TreatmentBMP")]
         public virtual Delineation Delineation { get; set; }
         [InverseProperty("TreatmentBMP")]
         public virtual FieldVisit FieldVisit { get; set; }
-        [InverseProperty(nameof(TreatmentBMPModelingAttribute.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual TreatmentBMPModelingAttribute TreatmentBMPModelingAttributeTreatmentBMP { get; set; }
         public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPNavigations { get; set; }
-        [InverseProperty(nameof(CustomAttribute.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPs { get; set; }
-        [InverseProperty(nameof(FundingEvent.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
-        [InverseProperty(nameof(TreatmentBMP.UpstreamBMP))]
+        [InverseProperty("UpstreamBMP")]
         public virtual ICollection<TreatmentBMP> InverseUpstreamBMP { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPNavigations { get; set; }
-        [InverseProperty(nameof(MaintenanceRecord.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPs { get; set; }
-        [InverseProperty(nameof(RegionalSubbasinRevisionRequest.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentTreatmentBMPNavigations { get; set; }
-        [InverseProperty(nameof(TreatmentBMPAssessment.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentTreatmentBMPs { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMPNavigations { get; set; }
-        [InverseProperty(nameof(TreatmentBMPBenchmarkAndThreshold.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMPs { get; set; }
-        [InverseProperty(nameof(TreatmentBMPDocument.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
-        [InverseProperty(nameof(TreatmentBMPImage.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }
-        [InverseProperty(nameof(TreatmentBMPModelingAttribute.UpstreamTreatmentBMP))]
+        [InverseProperty("UpstreamTreatmentBMP")]
         public virtual ICollection<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributeUpstreamTreatmentBMPs { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP))]
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
     }
 }

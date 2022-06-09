@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FundingEventType")]
-    [Index(nameof(FundingEventTypeName), Name = "AK_FundingEventType_FundingEventTypeName", IsUnique = true)]
+    [Index("FundingEventTypeName", Name = "AK_FundingEventType_FundingEventTypeName", IsUnique = true)]
     public partial class FundingEventType
     {
         public FundingEventType()
@@ -21,13 +19,15 @@ namespace Hippocamp.EFModels.Entities
         public int FundingEventTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string FundingEventTypeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string FundingEventTypeDisplayName { get; set; }
         public int SortOrder { get; set; }
 
-        [InverseProperty(nameof(FundingEvent.FundingEventType))]
+        [InverseProperty("FundingEventType")]
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
     }
 }

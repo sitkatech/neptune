@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -16,6 +14,7 @@ namespace Hippocamp.EFModels.Entities
         public int WaterQualityManagementPlanID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanName { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry WaterQualityManagementPlanBoundary { get; set; }

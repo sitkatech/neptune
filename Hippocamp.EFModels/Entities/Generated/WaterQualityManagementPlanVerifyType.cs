@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanVerifyType")]
@@ -20,9 +18,10 @@ namespace Hippocamp.EFModels.Entities
         public int WaterQualityManagementPlanVerifyTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanVerifyTypeName { get; set; }
 
-        [InverseProperty(nameof(WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType))]
+        [InverseProperty("WaterQualityManagementPlanVerifyType")]
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
     }
 }

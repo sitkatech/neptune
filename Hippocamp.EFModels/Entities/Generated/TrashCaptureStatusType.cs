@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TrashCaptureStatusType")]
-    [Index(nameof(TrashCaptureStatusTypeDisplayName), Name = "AK_TrashCaptureStatusType_TrashCaptureStatusTypeDisplayName", IsUnique = true)]
-    [Index(nameof(TrashCaptureStatusTypeName), Name = "AK_TrashCaptureStatusType_TrashCaptureStatusTypeName", IsUnique = true)]
+    [Index("TrashCaptureStatusTypeDisplayName", Name = "AK_TrashCaptureStatusType_TrashCaptureStatusTypeDisplayName", IsUnique = true)]
+    [Index("TrashCaptureStatusTypeName", Name = "AK_TrashCaptureStatusType_TrashCaptureStatusTypeName", IsUnique = true)]
     public partial class TrashCaptureStatusType
     {
         public TrashCaptureStatusType()
@@ -23,19 +21,22 @@ namespace Hippocamp.EFModels.Entities
         public int TrashCaptureStatusTypeID { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string TrashCaptureStatusTypeName { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string TrashCaptureStatusTypeDisplayName { get; set; }
         public int TrashCaptureStatusTypeSortOrder { get; set; }
         public int TrashCaptureStatusTypePriority { get; set; }
         [Required]
         [StringLength(6)]
+        [Unicode(false)]
         public string TrashCaptureStatusTypeColorCode { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMP.TrashCaptureStatusType))]
+        [InverseProperty("TrashCaptureStatusType")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlan.TrashCaptureStatusType))]
+        [InverseProperty("TrashCaptureStatusType")]
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
     }
 }

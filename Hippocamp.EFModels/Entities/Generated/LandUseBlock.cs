@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("LandUseBlock")]
-    [Index(nameof(LandUseBlockGeometry), Name = "SPATIAL_LandUseBlock_LandUseBlockGeometry")]
+    [Index("LandUseBlockGeometry", Name = "SPATIAL_LandUseBlock_LandUseBlockGeometry")]
     public partial class LandUseBlock
     {
         public LandUseBlock()
@@ -23,6 +21,7 @@ namespace Hippocamp.EFModels.Entities
         public int LandUseBlockID { get; set; }
         public int? PriorityLandUseTypeID { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string LandUseDescription { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
@@ -30,6 +29,7 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "decimal(4, 1)")]
         public decimal? TrashGenerationRate { get; set; }
         [StringLength(80)]
+        [Unicode(false)]
         public string LandUseForTGR { get; set; }
         [Column(TypeName = "numeric(18, 0)")]
         public decimal? MedianHouseholdIncomeResidential { get; set; }
@@ -40,18 +40,18 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry LandUseBlockGeometry4326 { get; set; }
 
-        [ForeignKey(nameof(PermitTypeID))]
+        [ForeignKey("PermitTypeID")]
         [InverseProperty("LandUseBlocks")]
         public virtual PermitType PermitType { get; set; }
-        [ForeignKey(nameof(PriorityLandUseTypeID))]
+        [ForeignKey("PriorityLandUseTypeID")]
         [InverseProperty("LandUseBlocks")]
         public virtual PriorityLandUseType PriorityLandUseType { get; set; }
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("LandUseBlocks")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [InverseProperty(nameof(TrashGeneratingUnit4326.LandUseBlock))]
+        [InverseProperty("LandUseBlock")]
         public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
-        [InverseProperty(nameof(TrashGeneratingUnit.LandUseBlock))]
+        [InverseProperty("LandUseBlock")]
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
     }
 }

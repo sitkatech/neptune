@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("ProjectHRUCharacteristic")]
@@ -16,6 +14,7 @@ namespace Hippocamp.EFModels.Entities
         public int ProjectID { get; set; }
         [Required]
         [StringLength(5)]
+        [Unicode(false)]
         public string HydrologicSoilGroup { get; set; }
         public int SlopePercentage { get; set; }
         public double ImperviousAcres { get; set; }
@@ -27,16 +26,16 @@ namespace Hippocamp.EFModels.Entities
         public double BaselineImperviousAcres { get; set; }
         public int BaselineHRUCharacteristicLandUseCodeID { get; set; }
 
-        [ForeignKey(nameof(BaselineHRUCharacteristicLandUseCodeID))]
+        [ForeignKey("BaselineHRUCharacteristicLandUseCodeID")]
         [InverseProperty("ProjectHRUCharacteristicBaselineHRUCharacteristicLandUseCodes")]
         public virtual HRUCharacteristicLandUseCode BaselineHRUCharacteristicLandUseCode { get; set; }
-        [ForeignKey(nameof(HRUCharacteristicLandUseCodeID))]
+        [ForeignKey("HRUCharacteristicLandUseCodeID")]
         [InverseProperty("ProjectHRUCharacteristicHRUCharacteristicLandUseCodes")]
         public virtual HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode { get; set; }
-        [ForeignKey(nameof(ProjectID))]
+        [ForeignKey("ProjectID")]
         [InverseProperty("ProjectHRUCharacteristics")]
         public virtual Project Project { get; set; }
-        [ForeignKey(nameof(ProjectLoadGeneratingUnitID))]
+        [ForeignKey("ProjectLoadGeneratingUnitID")]
         [InverseProperty("ProjectHRUCharacteristics")]
         public virtual ProjectLoadGeneratingUnit ProjectLoadGeneratingUnit { get; set; }
     }

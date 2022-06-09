@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("NeptunePage")]
@@ -19,12 +17,13 @@ namespace Hippocamp.EFModels.Entities
         [Key]
         public int NeptunePageID { get; set; }
         public int NeptunePageTypeID { get; set; }
+        [Unicode(false)]
         public string NeptunePageContent { get; set; }
 
-        [ForeignKey(nameof(NeptunePageTypeID))]
+        [ForeignKey("NeptunePageTypeID")]
         [InverseProperty("NeptunePages")]
         public virtual NeptunePageType NeptunePageType { get; set; }
-        [InverseProperty(nameof(NeptunePageImage.NeptunePage))]
+        [InverseProperty("NeptunePage")]
         public virtual ICollection<NeptunePageImage> NeptunePageImages { get; set; }
     }
 }

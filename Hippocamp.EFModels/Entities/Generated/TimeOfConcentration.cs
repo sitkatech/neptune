@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TimeOfConcentration")]
-    [Index(nameof(TimeOfConcentrationDisplayName), Name = "AK_TimeOfConcentration_TimeOfConcentrationDisplayName", IsUnique = true)]
-    [Index(nameof(TimeOfConcentrationName), Name = "AK_TimeOfConcentration_TimeOfConcentrationName", IsUnique = true)]
+    [Index("TimeOfConcentrationDisplayName", Name = "AK_TimeOfConcentration_TimeOfConcentrationDisplayName", IsUnique = true)]
+    [Index("TimeOfConcentrationName", Name = "AK_TimeOfConcentration_TimeOfConcentrationName", IsUnique = true)]
     public partial class TimeOfConcentration
     {
         public TimeOfConcentration()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int TimeOfConcentrationID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TimeOfConcentrationName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TimeOfConcentrationDisplayName { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMPModelingAttribute.TimeOfConcentration))]
+        [InverseProperty("TimeOfConcentration")]
         public virtual ICollection<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributes { get; set; }
     }
 }

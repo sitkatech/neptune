@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("ModelBasinStaging")]
-    [Index(nameof(ModelBasinKey), Name = "AK_ModelBasinStaging_ModelBasinKey", IsUnique = true)]
+    [Index("ModelBasinKey", Name = "AK_ModelBasinStaging_ModelBasinKey", IsUnique = true)]
     public partial class ModelBasinStaging
     {
         [Key]
@@ -21,9 +19,11 @@ namespace Hippocamp.EFModels.Entities
         public Geometry ModelBasinGeometry { get; set; }
         [Required]
         [StringLength(5)]
+        [Unicode(false)]
         public string ModelBasinState { get; set; }
         [Required]
         [StringLength(10)]
+        [Unicode(false)]
         public string ModelBasinRegion { get; set; }
     }
 }

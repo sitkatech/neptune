@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TrashGeneratingUnitAdjustment")]
-    [Index(nameof(DeletedGeometry), Name = "SPATIAL_TrashGeneratingUnitAdjustment_DeletedGeometry")]
+    [Index("DeletedGeometry", Name = "SPATIAL_TrashGeneratingUnitAdjustment_DeletedGeometry")]
     public partial class TrashGeneratingUnitAdjustment
     {
         [Key]
@@ -26,8 +24,8 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime? ProcessedDate { get; set; }
 
-        [ForeignKey(nameof(AdjustedByPersonID))]
-        [InverseProperty(nameof(Person.TrashGeneratingUnitAdjustments))]
+        [ForeignKey("AdjustedByPersonID")]
+        [InverseProperty("TrashGeneratingUnitAdjustments")]
         public virtual Person AdjustedByPerson { get; set; }
     }
 }

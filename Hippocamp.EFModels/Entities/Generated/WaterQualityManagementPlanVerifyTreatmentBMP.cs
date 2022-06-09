@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanVerifyTreatmentBMP")]
-    [Index(nameof(TreatmentBMPID), nameof(WaterQualityManagementPlanVerifyTreatmentBMPID), Name = "AK_WaterQualityManagementPlanVerifyTreatmentBMP_TreatmentBMPID_WaterQualityManagementPlanVerifyTreatmentBMPID", IsUnique = true)]
+    [Index("TreatmentBMPID", "WaterQualityManagementPlanVerifyTreatmentBMPID", Name = "AK_WaterQualityManagementPlanVerifyTreatmentBMP_TreatmentBMPID_WaterQualityManagementPlanVerifyTreatmentBMPID", IsUnique = true)]
     public partial class WaterQualityManagementPlanVerifyTreatmentBMP
     {
         [Key]
@@ -18,12 +16,13 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPID { get; set; }
         public bool? IsAdequate { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanVerifyTreatmentBMPNote { get; set; }
 
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("WaterQualityManagementPlanVerifyTreatmentBMPs")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanVerifyID))]
+        [ForeignKey("WaterQualityManagementPlanVerifyID")]
         [InverseProperty("WaterQualityManagementPlanVerifyTreatmentBMPs")]
         public virtual WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
     }

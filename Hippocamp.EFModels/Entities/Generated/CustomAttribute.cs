@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("CustomAttribute")]
-    [Index(nameof(TreatmentBMPID), nameof(TreatmentBMPTypeID), nameof(CustomAttributeTypeID), Name = "AK_CustomAttribute_TreatmentBMPID_TreatmentBMPTypeID_CustomAttributeTypeID", IsUnique = true)]
+    [Index("TreatmentBMPID", "TreatmentBMPTypeID", "CustomAttributeTypeID", Name = "AK_CustomAttribute_TreatmentBMPID_TreatmentBMPTypeID_CustomAttributeTypeID", IsUnique = true)]
     public partial class CustomAttribute
     {
         public CustomAttribute()
@@ -24,21 +22,21 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
 
-        [ForeignKey(nameof(CustomAttributeTypeID))]
+        [ForeignKey("CustomAttributeTypeID")]
         [InverseProperty("CustomAttributes")]
         public virtual CustomAttributeType CustomAttributeType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("CustomAttributeTreatmentBMPs")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMP TreatmentBMPNavigation { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("CustomAttributes")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeCustomAttributeTypeID))]
+        [ForeignKey("TreatmentBMPTypeCustomAttributeTypeID")]
         [InverseProperty("CustomAttributeTreatmentBMPTypeCustomAttributeTypes")]
         public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; }
         public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeTypeNavigation { get; set; }
-        [InverseProperty(nameof(CustomAttributeValue.CustomAttribute))]
+        [InverseProperty("CustomAttribute")]
         public virtual ICollection<CustomAttributeValue> CustomAttributeValues { get; set; }
     }
 }

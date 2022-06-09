@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("Notification")]
@@ -18,10 +16,10 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime NotificationDate { get; set; }
 
-        [ForeignKey(nameof(NotificationTypeID))]
+        [ForeignKey("NotificationTypeID")]
         [InverseProperty("Notifications")]
         public virtual NotificationType NotificationType { get; set; }
-        [ForeignKey(nameof(PersonID))]
+        [ForeignKey("PersonID")]
         [InverseProperty("Notifications")]
         public virtual Person Person { get; set; }
     }

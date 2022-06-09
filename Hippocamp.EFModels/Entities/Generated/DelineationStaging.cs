@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("DelineationStaging")]
-    [Index(nameof(TreatmentBMPName), nameof(StormwaterJurisdictionID), nameof(UploadedByPersonID), Name = "AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID", IsUnique = true)]
+    [Index("TreatmentBMPName", "StormwaterJurisdictionID", "UploadedByPersonID", Name = "AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID", IsUnique = true)]
     public partial class DelineationStaging
     {
         [Key]
@@ -21,14 +19,15 @@ namespace Hippocamp.EFModels.Entities
         public int UploadedByPersonID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
 
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("DelineationStagings")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [ForeignKey(nameof(UploadedByPersonID))]
-        [InverseProperty(nameof(Person.DelineationStagings))]
+        [ForeignKey("UploadedByPersonID")]
+        [InverseProperty("DelineationStagings")]
         public virtual Person UploadedByPerson { get; set; }
     }
 }

@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("HydromodificationAppliesType")]
-    [Index(nameof(HydromodificationAppliesTypeDisplayName), Name = "AK_HydromodificationAppliesType_HydromodificationAppliesTypeDisplayName", IsUnique = true)]
-    [Index(nameof(HydromodificationAppliesTypeName), Name = "AK_HydromodificationAppliesType_HydromodificationAppliesTypeName", IsUnique = true)]
+    [Index("HydromodificationAppliesTypeDisplayName", Name = "AK_HydromodificationAppliesType_HydromodificationAppliesTypeDisplayName", IsUnique = true)]
+    [Index("HydromodificationAppliesTypeName", Name = "AK_HydromodificationAppliesType_HydromodificationAppliesTypeName", IsUnique = true)]
     public partial class HydromodificationAppliesType
     {
         public HydromodificationAppliesType()
@@ -22,13 +20,15 @@ namespace Hippocamp.EFModels.Entities
         public int HydromodificationAppliesTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string HydromodificationAppliesTypeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string HydromodificationAppliesTypeDisplayName { get; set; }
         public int SortOrder { get; set; }
 
-        [InverseProperty(nameof(WaterQualityManagementPlan.HydromodificationAppliesType))]
+        [InverseProperty("HydromodificationAppliesType")]
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
     }
 }

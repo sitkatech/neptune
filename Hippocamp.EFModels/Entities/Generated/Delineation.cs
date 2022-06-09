@@ -5,13 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("Delineation")]
-    [Index(nameof(TreatmentBMPID), Name = "AK_Delineation_TreatmentBMPID", IsUnique = true)]
-    [Index(nameof(DelineationGeometry), Name = "SPATIAL_Delineation_DelineationGeometry")]
+    [Index("TreatmentBMPID", Name = "AK_Delineation_TreatmentBMPID", IsUnique = true)]
+    [Index("DelineationGeometry", Name = "SPATIAL_Delineation_DelineationGeometry")]
     public partial class Delineation
     {
         public Delineation()
@@ -39,22 +37,22 @@ namespace Hippocamp.EFModels.Entities
         public Geometry DelineationGeometry4326 { get; set; }
         public bool HasDiscrepancies { get; set; }
 
-        [ForeignKey(nameof(DelineationTypeID))]
+        [ForeignKey("DelineationTypeID")]
         [InverseProperty("Delineations")]
         public virtual DelineationType DelineationType { get; set; }
-        [ForeignKey(nameof(TreatmentBMPID))]
+        [ForeignKey("TreatmentBMPID")]
         [InverseProperty("Delineation")]
         public virtual TreatmentBMP TreatmentBMP { get; set; }
-        [ForeignKey(nameof(VerifiedByPersonID))]
-        [InverseProperty(nameof(Person.Delineations))]
+        [ForeignKey("VerifiedByPersonID")]
+        [InverseProperty("Delineations")]
         public virtual Person VerifiedByPerson { get; set; }
-        [InverseProperty(nameof(DelineationOverlap.Delineation))]
+        [InverseProperty("Delineation")]
         public virtual ICollection<DelineationOverlap> DelineationOverlapDelineations { get; set; }
-        [InverseProperty(nameof(DelineationOverlap.OverlappingDelineation))]
+        [InverseProperty("OverlappingDelineation")]
         public virtual ICollection<DelineationOverlap> DelineationOverlapOverlappingDelineations { get; set; }
-        [InverseProperty(nameof(LoadGeneratingUnit.Delineation))]
+        [InverseProperty("Delineation")]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(ProjectLoadGeneratingUnit.Delineation))]
+        [InverseProperty("Delineation")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
     }
 }

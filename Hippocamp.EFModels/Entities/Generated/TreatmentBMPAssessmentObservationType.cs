@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPAssessmentObservationType")]
-    [Index(nameof(TreatmentBMPAssessmentObservationTypeName), Name = "AK_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeName", IsUnique = true)]
+    [Index("TreatmentBMPAssessmentObservationTypeName", Name = "AK_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeName", IsUnique = true)]
     public partial class TreatmentBMPAssessmentObservationType
     {
         public TreatmentBMPAssessmentObservationType()
@@ -23,19 +21,20 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPAssessmentObservationTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string TreatmentBMPAssessmentObservationTypeName { get; set; }
         public int ObservationTypeSpecificationID { get; set; }
         [Required]
         public string TreatmentBMPAssessmentObservationTypeSchema { get; set; }
 
-        [ForeignKey(nameof(ObservationTypeSpecificationID))]
+        [ForeignKey("ObservationTypeSpecificationID")]
         [InverseProperty("TreatmentBMPAssessmentObservationTypes")]
         public virtual ObservationTypeSpecification ObservationTypeSpecification { get; set; }
-        [InverseProperty(nameof(TreatmentBMPBenchmarkAndThreshold.TreatmentBMPAssessmentObservationType))]
+        [InverseProperty("TreatmentBMPAssessmentObservationType")]
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
-        [InverseProperty(nameof(TreatmentBMPObservation.TreatmentBMPAssessmentObservationType))]
+        [InverseProperty("TreatmentBMPAssessmentObservationType")]
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
-        [InverseProperty(nameof(TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType))]
+        [InverseProperty("TreatmentBMPAssessmentObservationType")]
         public virtual ICollection<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
     }
 }

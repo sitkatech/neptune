@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("PrecipitationZone")]
-    [Index(nameof(PrecipitationZoneKey), Name = "AK_PrecipitationZone_PrecipitationZoneKey", IsUnique = true)]
+    [Index("PrecipitationZoneKey", Name = "AK_PrecipitationZone_PrecipitationZoneKey", IsUnique = true)]
     public partial class PrecipitationZone
     {
         public PrecipitationZone()
@@ -28,7 +26,7 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime LastUpdate { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMP.PrecipitationZone))]
+        [InverseProperty("PrecipitationZone")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

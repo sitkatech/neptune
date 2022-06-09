@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FileResourceMimeType")]
-    [Index(nameof(FileResourceMimeTypeDisplayName), Name = "AK_FileResourceMimeType_FileResourceMimeTypeDisplayName", IsUnique = true)]
-    [Index(nameof(FileResourceMimeTypeName), Name = "AK_FileResourceMimeType_FileResourceMimeTypeName", IsUnique = true)]
+    [Index("FileResourceMimeTypeDisplayName", Name = "AK_FileResourceMimeType_FileResourceMimeTypeDisplayName", IsUnique = true)]
+    [Index("FileResourceMimeTypeName", Name = "AK_FileResourceMimeType_FileResourceMimeTypeName", IsUnique = true)]
     public partial class FileResourceMimeType
     {
         public FileResourceMimeType()
@@ -22,19 +20,24 @@ namespace Hippocamp.EFModels.Entities
         public int FileResourceMimeTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string FileResourceMimeTypeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string FileResourceMimeTypeDisplayName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string FileResourceMimeTypeContentTypeName { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string FileResourceMimeTypeIconSmallFilename { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string FileResourceMimeTypeIconNormalFilename { get; set; }
 
-        [InverseProperty(nameof(FileResource.FileResourceMimeType))]
+        [InverseProperty("FileResourceMimeType")]
         public virtual ICollection<FileResource> FileResources { get; set; }
     }
 }

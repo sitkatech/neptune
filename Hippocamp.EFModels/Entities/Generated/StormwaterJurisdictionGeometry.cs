@@ -5,13 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("StormwaterJurisdictionGeometry")]
-    [Index(nameof(StormwaterJurisdictionID), Name = "AK_StormwaterJurisdictionGeometry_StormwaterJurisdictionID", IsUnique = true)]
-    [Index(nameof(GeometryNative), Name = "SPATIAL_StormwaterJurisdictionGeometry_GeometryNative")]
+    [Index("StormwaterJurisdictionID", Name = "AK_StormwaterJurisdictionGeometry_StormwaterJurisdictionID", IsUnique = true)]
+    [Index("GeometryNative", Name = "SPATIAL_StormwaterJurisdictionGeometry_GeometryNative")]
     public partial class StormwaterJurisdictionGeometry
     {
         [Key]
@@ -24,7 +22,7 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry Geometry4326 { get; set; }
 
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("StormwaterJurisdictionGeometry")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
     }

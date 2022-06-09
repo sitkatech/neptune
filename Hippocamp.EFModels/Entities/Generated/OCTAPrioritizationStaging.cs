@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("OCTAPrioritizationStaging")]
-    [Index(nameof(OCTAPrioritizationKey), Name = "AK_OCTAPrioritizationStaging_OCTAPrioritizationKey", IsUnique = true)]
+    [Index("OCTAPrioritizationKey", Name = "AK_OCTAPrioritizationStaging_OCTAPrioritizationKey", IsUnique = true)]
     public partial class OCTAPrioritizationStaging
     {
         [Key]
@@ -21,9 +19,11 @@ namespace Hippocamp.EFModels.Entities
         public Geometry OCTAPrioritizationGeometry { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string Watershed { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string CatchIDN { get; set; }
         public double TPI { get; set; }
         public double WQNLU { get; set; }
@@ -33,6 +33,7 @@ namespace Hippocamp.EFModels.Entities
         public double SEA { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string SEA_PCTL { get; set; }
         public double PC_VOL_PCT { get; set; }
         public double PC_NUT_PCT { get; set; }

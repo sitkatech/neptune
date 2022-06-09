@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanParcel")]
-    [Index(nameof(WaterQualityManagementPlanID), nameof(ParcelID), Name = "AK_WaterQualityManagementPlanParcel_WaterQualityManagementPlanID_ParcelID", IsUnique = true)]
+    [Index("WaterQualityManagementPlanID", "ParcelID", Name = "AK_WaterQualityManagementPlanParcel_WaterQualityManagementPlanID_ParcelID", IsUnique = true)]
     public partial class WaterQualityManagementPlanParcel
     {
         [Key]
@@ -17,10 +15,10 @@ namespace Hippocamp.EFModels.Entities
         public int WaterQualityManagementPlanID { get; set; }
         public int ParcelID { get; set; }
 
-        [ForeignKey(nameof(ParcelID))]
+        [ForeignKey("ParcelID")]
         [InverseProperty("WaterQualityManagementPlanParcels")]
         public virtual Parcel Parcel { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("WaterQualityManagementPlanParcels")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
     }

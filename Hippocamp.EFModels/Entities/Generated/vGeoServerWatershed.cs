@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -14,6 +12,7 @@ namespace Hippocamp.EFModels.Entities
     {
         public int WatershedID { get; set; }
         [StringLength(50)]
+        [Unicode(false)]
         public string WatershedName { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry WatershedGeometry { get; set; }

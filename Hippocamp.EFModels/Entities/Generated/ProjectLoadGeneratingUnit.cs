@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("ProjectLoadGeneratingUnit")]
@@ -29,22 +27,22 @@ namespace Hippocamp.EFModels.Entities
         public int? WaterQualityManagementPlanID { get; set; }
         public bool? IsEmptyResponseFromHRUService { get; set; }
 
-        [ForeignKey(nameof(DelineationID))]
+        [ForeignKey("DelineationID")]
         [InverseProperty("ProjectLoadGeneratingUnits")]
         public virtual Delineation Delineation { get; set; }
-        [ForeignKey(nameof(ModelBasinID))]
+        [ForeignKey("ModelBasinID")]
         [InverseProperty("ProjectLoadGeneratingUnits")]
         public virtual ModelBasin ModelBasin { get; set; }
-        [ForeignKey(nameof(ProjectID))]
+        [ForeignKey("ProjectID")]
         [InverseProperty("ProjectLoadGeneratingUnits")]
         public virtual Project Project { get; set; }
-        [ForeignKey(nameof(RegionalSubbasinID))]
+        [ForeignKey("RegionalSubbasinID")]
         [InverseProperty("ProjectLoadGeneratingUnits")]
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("ProjectLoadGeneratingUnits")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        [InverseProperty(nameof(ProjectHRUCharacteristic.ProjectLoadGeneratingUnit))]
+        [InverseProperty("ProjectLoadGeneratingUnit")]
         public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
     }
 }

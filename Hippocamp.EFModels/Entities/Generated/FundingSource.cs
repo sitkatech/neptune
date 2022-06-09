@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FundingSource")]
-    [Index(nameof(OrganizationID), nameof(FundingSourceName), Name = "AK_FundingSource_OrganizationID_FundingSourceName", IsUnique = true)]
+    [Index("OrganizationID", "FundingSourceName", Name = "AK_FundingSource_OrganizationID_FundingSourceName", IsUnique = true)]
     public partial class FundingSource
     {
         public FundingSource()
@@ -22,15 +20,17 @@ namespace Hippocamp.EFModels.Entities
         public int OrganizationID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string FundingSourceName { get; set; }
         public bool IsActive { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string FundingSourceDescription { get; set; }
 
-        [ForeignKey(nameof(OrganizationID))]
+        [ForeignKey("OrganizationID")]
         [InverseProperty("FundingSources")]
         public virtual Organization Organization { get; set; }
-        [InverseProperty(nameof(FundingEventFundingSource.FundingSource))]
+        [InverseProperty("FundingSource")]
         public virtual ICollection<FundingEventFundingSource> FundingEventFundingSources { get; set; }
     }
 }

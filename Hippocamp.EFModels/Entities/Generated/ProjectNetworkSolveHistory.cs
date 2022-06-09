@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("ProjectNetworkSolveHistory")]
@@ -18,16 +16,17 @@ namespace Hippocamp.EFModels.Entities
         public int ProjectNetworkSolveHistoryStatusTypeID { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime LastUpdated { get; set; }
+        [Unicode(false)]
         public string ErrorMessage { get; set; }
 
-        [ForeignKey(nameof(ProjectID))]
+        [ForeignKey("ProjectID")]
         [InverseProperty("ProjectNetworkSolveHistories")]
         public virtual Project Project { get; set; }
-        [ForeignKey(nameof(ProjectNetworkSolveHistoryStatusTypeID))]
+        [ForeignKey("ProjectNetworkSolveHistoryStatusTypeID")]
         [InverseProperty("ProjectNetworkSolveHistories")]
         public virtual ProjectNetworkSolveHistoryStatusType ProjectNetworkSolveHistoryStatusType { get; set; }
-        [ForeignKey(nameof(RequestedByPersonID))]
-        [InverseProperty(nameof(Person.ProjectNetworkSolveHistories))]
+        [ForeignKey("RequestedByPersonID")]
+        [InverseProperty("ProjectNetworkSolveHistories")]
         public virtual Person RequestedByPerson { get; set; }
     }
 }

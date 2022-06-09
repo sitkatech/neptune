@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("LoadGeneratingUnit")]
@@ -28,19 +26,19 @@ namespace Hippocamp.EFModels.Entities
         public int? WaterQualityManagementPlanID { get; set; }
         public bool? IsEmptyResponseFromHRUService { get; set; }
 
-        [ForeignKey(nameof(DelineationID))]
+        [ForeignKey("DelineationID")]
         [InverseProperty("LoadGeneratingUnits")]
         public virtual Delineation Delineation { get; set; }
-        [ForeignKey(nameof(ModelBasinID))]
+        [ForeignKey("ModelBasinID")]
         [InverseProperty("LoadGeneratingUnits")]
         public virtual ModelBasin ModelBasin { get; set; }
-        [ForeignKey(nameof(RegionalSubbasinID))]
+        [ForeignKey("RegionalSubbasinID")]
         [InverseProperty("LoadGeneratingUnits")]
         public virtual RegionalSubbasin RegionalSubbasin { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("LoadGeneratingUnits")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        [InverseProperty(nameof(HRUCharacteristic.LoadGeneratingUnit))]
+        [InverseProperty("LoadGeneratingUnit")]
         public virtual ICollection<HRUCharacteristic> HRUCharacteristics { get; set; }
     }
 }

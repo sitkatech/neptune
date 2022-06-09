@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -20,12 +18,15 @@ namespace Hippocamp.EFModels.Entities
         public int ModelBasinKey { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string LandUseCode { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string BaselineLandUseCode { get; set; }
         [Required]
         [StringLength(5)]
+        [Unicode(false)]
         public string HydrologicSoilGroup { get; set; }
         public int SlopePercentage { get; set; }
         public double Area { get; set; }

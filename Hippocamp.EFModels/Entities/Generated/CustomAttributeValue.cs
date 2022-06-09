@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("CustomAttributeValue")]
@@ -16,9 +14,10 @@ namespace Hippocamp.EFModels.Entities
         public int CustomAttributeID { get; set; }
         [Required]
         [StringLength(1000)]
+        [Unicode(false)]
         public string AttributeValue { get; set; }
 
-        [ForeignKey(nameof(CustomAttributeID))]
+        [ForeignKey("CustomAttributeID")]
         [InverseProperty("CustomAttributeValues")]
         public virtual CustomAttribute CustomAttribute { get; set; }
     }

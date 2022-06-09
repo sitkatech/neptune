@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPLifespanType")]
-    [Index(nameof(TreatmentBMPLifespanTypeDisplayName), Name = "AK_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeDisplayName", IsUnique = true)]
-    [Index(nameof(TreatmentBMPLifespanTypeName), Name = "AK_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeName", IsUnique = true)]
+    [Index("TreatmentBMPLifespanTypeDisplayName", Name = "AK_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeDisplayName", IsUnique = true)]
+    [Index("TreatmentBMPLifespanTypeName", Name = "AK_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeName", IsUnique = true)]
     public partial class TreatmentBMPLifespanType
     {
         public TreatmentBMPLifespanType()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPLifespanTypeID { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string TreatmentBMPLifespanTypeName { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string TreatmentBMPLifespanTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMP.TreatmentBMPLifespanType))]
+        [InverseProperty("TreatmentBMPLifespanType")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

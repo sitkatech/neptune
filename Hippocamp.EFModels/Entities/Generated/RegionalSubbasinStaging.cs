@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("RegionalSubbasinStaging")]
@@ -15,8 +13,10 @@ namespace Hippocamp.EFModels.Entities
         [Key]
         public int RegionalSubbasinStagingID { get; set; }
         [StringLength(10)]
+        [Unicode(false)]
         public string DrainID { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string Watershed { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry CatchmentGeometry { get; set; }

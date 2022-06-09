@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("NereidResult")]
@@ -17,8 +15,10 @@ namespace Hippocamp.EFModels.Entities
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
+        [Unicode(false)]
         public string NodeID { get; set; }
         [Required]
+        [Unicode(false)]
         public string FullResponse { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }

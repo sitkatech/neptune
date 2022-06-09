@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("OnlandVisualTrashAssessmentStatus")]
-    [Index(nameof(OnlandVisualTrashAssessmentStatusDisplayName), Name = "AK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusDisplayName", IsUnique = true)]
-    [Index(nameof(OnlandVisualTrashAssessmentStatusName), Name = "AK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusName", IsUnique = true)]
+    [Index("OnlandVisualTrashAssessmentStatusDisplayName", Name = "AK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusDisplayName", IsUnique = true)]
+    [Index("OnlandVisualTrashAssessmentStatusName", Name = "AK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusName", IsUnique = true)]
     public partial class OnlandVisualTrashAssessmentStatus
     {
         public OnlandVisualTrashAssessmentStatus()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int OnlandVisualTrashAssessmentStatusID { get; set; }
         [Required]
         [StringLength(20)]
+        [Unicode(false)]
         public string OnlandVisualTrashAssessmentStatusName { get; set; }
         [Required]
         [StringLength(20)]
+        [Unicode(false)]
         public string OnlandVisualTrashAssessmentStatusDisplayName { get; set; }
 
-        [InverseProperty(nameof(OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus))]
+        [InverseProperty("OnlandVisualTrashAssessmentStatus")]
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
     }
 }

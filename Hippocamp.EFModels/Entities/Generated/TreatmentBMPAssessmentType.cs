@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TreatmentBMPAssessmentType")]
-    [Index(nameof(TreatmentBMPAssessmentTypeDisplayName), Name = "AK_TreatmentBMPAssessmentType_TreatmentBMPAssessmentTypeDisplayName", IsUnique = true)]
-    [Index(nameof(TreatmentBMPAssessmentTypeName), Name = "AK_TreatmentBMPAssessmentType_TreatmentBMPAssessmentTypeName", IsUnique = true)]
+    [Index("TreatmentBMPAssessmentTypeDisplayName", Name = "AK_TreatmentBMPAssessmentType_TreatmentBMPAssessmentTypeDisplayName", IsUnique = true)]
+    [Index("TreatmentBMPAssessmentTypeName", Name = "AK_TreatmentBMPAssessmentType_TreatmentBMPAssessmentTypeName", IsUnique = true)]
     public partial class TreatmentBMPAssessmentType
     {
         public TreatmentBMPAssessmentType()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPAssessmentTypeID { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string TreatmentBMPAssessmentTypeName { get; set; }
         [Required]
         [StringLength(50)]
+        [Unicode(false)]
         public string TreatmentBMPAssessmentTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(TreatmentBMPAssessment.TreatmentBMPAssessmentType))]
+        [InverseProperty("TreatmentBMPAssessmentType")]
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
     }
 }

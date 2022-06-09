@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("CustomAttributeDataType")]
-    [Index(nameof(CustomAttributeDataTypeDisplayName), Name = "AK_CustomAttributeDataType_CustomAttributeDataTypeDisplayName", IsUnique = true)]
-    [Index(nameof(CustomAttributeDataTypeName), Name = "AK_CustomAttributeDataType_CustomAttributeDataTypeName", IsUnique = true)]
+    [Index("CustomAttributeDataTypeDisplayName", Name = "AK_CustomAttributeDataType_CustomAttributeDataTypeDisplayName", IsUnique = true)]
+    [Index("CustomAttributeDataTypeName", Name = "AK_CustomAttributeDataType_CustomAttributeDataTypeName", IsUnique = true)]
     public partial class CustomAttributeDataType
     {
         public CustomAttributeDataType()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int CustomAttributeDataTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string CustomAttributeDataTypeName { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string CustomAttributeDataTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(CustomAttributeType.CustomAttributeDataType))]
+        [InverseProperty("CustomAttributeDataType")]
         public virtual ICollection<CustomAttributeType> CustomAttributeTypes { get; set; }
     }
 }

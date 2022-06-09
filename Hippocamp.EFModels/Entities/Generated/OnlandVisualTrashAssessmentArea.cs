@@ -5,15 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("OnlandVisualTrashAssessmentArea")]
-    [Index(nameof(OnlandVisualTrashAssessmentAreaID), nameof(StormwaterJurisdictionID), Name = "AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID_StormwaterJurisdictionID", IsUnique = true)]
-    [Index(nameof(OnlandVisualTrashAssessmentAreaName), nameof(StormwaterJurisdictionID), Name = "AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaName_StormwaterJurisdictionID", IsUnique = true)]
-    [Index(nameof(OnlandVisualTrashAssessmentAreaGeometry), Name = "SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry")]
-    [Index(nameof(TransectLine), Name = "SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine")]
+    [Index("OnlandVisualTrashAssessmentAreaID", "StormwaterJurisdictionID", Name = "AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID_StormwaterJurisdictionID", IsUnique = true)]
+    [Index("OnlandVisualTrashAssessmentAreaName", "StormwaterJurisdictionID", Name = "AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaName_StormwaterJurisdictionID", IsUnique = true)]
+    [Index("OnlandVisualTrashAssessmentAreaGeometry", Name = "SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry")]
+    [Index("TransectLine", Name = "SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine")]
     public partial class OnlandVisualTrashAssessmentArea
     {
         public OnlandVisualTrashAssessmentArea()
@@ -25,6 +23,7 @@ namespace Hippocamp.EFModels.Entities
         public int OnlandVisualTrashAssessmentAreaID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string OnlandVisualTrashAssessmentAreaName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         [Required]
@@ -32,6 +31,7 @@ namespace Hippocamp.EFModels.Entities
         public Geometry OnlandVisualTrashAssessmentAreaGeometry { get; set; }
         public int? OnlandVisualTrashAssessmentBaselineScoreID { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string AssessmentAreaDescription { get; set; }
         [Column(TypeName = "geometry")]
         public Geometry TransectLine { get; set; }
@@ -41,16 +41,16 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry TransectLine4326 { get; set; }
 
-        [ForeignKey(nameof(OnlandVisualTrashAssessmentBaselineScoreID))]
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentAreaOnlandVisualTrashAssessmentBaselineScores))]
+        [ForeignKey("OnlandVisualTrashAssessmentBaselineScoreID")]
+        [InverseProperty("OnlandVisualTrashAssessmentAreaOnlandVisualTrashAssessmentBaselineScores")]
         public virtual OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentBaselineScore { get; set; }
-        [ForeignKey(nameof(OnlandVisualTrashAssessmentProgressScoreID))]
-        [InverseProperty(nameof(OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentAreaOnlandVisualTrashAssessmentProgressScores))]
+        [ForeignKey("OnlandVisualTrashAssessmentProgressScoreID")]
+        [InverseProperty("OnlandVisualTrashAssessmentAreaOnlandVisualTrashAssessmentProgressScores")]
         public virtual OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentProgressScore { get; set; }
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("OnlandVisualTrashAssessmentAreas")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [InverseProperty(nameof(OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea))]
+        [InverseProperty("OnlandVisualTrashAssessmentArea")]
         public virtual OnlandVisualTrashAssessment OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentArea { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentAreaNavigations { get; set; }
     }

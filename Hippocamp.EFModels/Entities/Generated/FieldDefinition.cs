@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("FieldDefinition")]
@@ -14,9 +12,10 @@ namespace Hippocamp.EFModels.Entities
         [Key]
         public int FieldDefinitionID { get; set; }
         public int FieldDefinitionTypeID { get; set; }
+        [Unicode(false)]
         public string FieldDefinitionValue { get; set; }
 
-        [ForeignKey(nameof(FieldDefinitionTypeID))]
+        [ForeignKey("FieldDefinitionTypeID")]
         [InverseProperty("FieldDefinitions")]
         public virtual FieldDefinitionType FieldDefinitionType { get; set; }
     }

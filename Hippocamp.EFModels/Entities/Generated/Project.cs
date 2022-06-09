@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("Project")]
-    [Index(nameof(ProjectName), Name = "AK_Project_ProjectName", IsUnique = true)]
+    [Index("ProjectName", Name = "AK_Project_ProjectName", IsUnique = true)]
     public partial class Project
     {
         public Project()
@@ -26,6 +24,7 @@ namespace Hippocamp.EFModels.Entities
         public int ProjectID { get; set; }
         [Required]
         [StringLength(200)]
+        [Unicode(false)]
         public string ProjectName { get; set; }
         public int OrganizationID { get; set; }
         public int StormwaterJurisdictionID { get; set; }
@@ -35,39 +34,41 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime DateCreated { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string ProjectDescription { get; set; }
         [StringLength(500)]
+        [Unicode(false)]
         public string AdditionalContactInformation { get; set; }
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
         public bool CalculateOCTAM2Tier2Scores { get; set; }
         public bool ShareOCTAM2Tier2Scores { get; set; }
 
-        [ForeignKey(nameof(CreatePersonID))]
-        [InverseProperty(nameof(Person.ProjectCreatePeople))]
+        [ForeignKey("CreatePersonID")]
+        [InverseProperty("ProjectCreatePeople")]
         public virtual Person CreatePerson { get; set; }
-        [ForeignKey(nameof(OrganizationID))]
+        [ForeignKey("OrganizationID")]
         [InverseProperty("Projects")]
         public virtual Organization Organization { get; set; }
-        [ForeignKey(nameof(PrimaryContactPersonID))]
-        [InverseProperty(nameof(Person.ProjectPrimaryContactPeople))]
+        [ForeignKey("PrimaryContactPersonID")]
+        [InverseProperty("ProjectPrimaryContactPeople")]
         public virtual Person PrimaryContactPerson { get; set; }
-        [ForeignKey(nameof(ProjectStatusID))]
+        [ForeignKey("ProjectStatusID")]
         [InverseProperty("Projects")]
         public virtual ProjectStatus ProjectStatus { get; set; }
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [InverseProperty(nameof(ProjectDocument.Project))]
+        [InverseProperty("Project")]
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
-        [InverseProperty(nameof(ProjectHRUCharacteristic.Project))]
+        [InverseProperty("Project")]
         public virtual ICollection<ProjectHRUCharacteristic> ProjectHRUCharacteristics { get; set; }
-        [InverseProperty(nameof(ProjectLoadGeneratingUnit.Project))]
+        [InverseProperty("Project")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
-        [InverseProperty(nameof(ProjectNereidResult.Project))]
+        [InverseProperty("Project")]
         public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
-        [InverseProperty(nameof(ProjectNetworkSolveHistory.Project))]
+        [InverseProperty("Project")]
         public virtual ICollection<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
-        [InverseProperty(nameof(TreatmentBMP.Project))]
+        [InverseProperty("Project")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
     }
 }

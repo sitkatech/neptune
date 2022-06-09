@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("StormwaterJurisdictionPublicBMPVisibilityType")]
-    [Index(nameof(StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName), Name = "AK_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName", IsUnique = true)]
-    [Index(nameof(StormwaterJurisdictionPublicBMPVisibilityTypeName), Name = "AK_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeName", IsUnique = true)]
+    [Index("StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName", Name = "AK_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName", IsUnique = true)]
+    [Index("StormwaterJurisdictionPublicBMPVisibilityTypeName", Name = "AK_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeName", IsUnique = true)]
     public partial class StormwaterJurisdictionPublicBMPVisibilityType
     {
         public StormwaterJurisdictionPublicBMPVisibilityType()
@@ -22,12 +20,14 @@ namespace Hippocamp.EFModels.Entities
         public int StormwaterJurisdictionPublicBMPVisibilityTypeID { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string StormwaterJurisdictionPublicBMPVisibilityTypeName { get; set; }
         [Required]
         [StringLength(80)]
+        [Unicode(false)]
         public string StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName { get; set; }
 
-        [InverseProperty(nameof(StormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityType))]
+        [InverseProperty("StormwaterJurisdictionPublicBMPVisibilityType")]
         public virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
     }
 }

@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("TrashGeneratingUnit")]
-    [Index(nameof(TrashGeneratingUnitGeometry), Name = "SPATIAL_TrashGeneratingUnit_TrashGeneratingUnitGeometry")]
+    [Index("TrashGeneratingUnitGeometry", Name = "SPATIAL_TrashGeneratingUnit_TrashGeneratingUnitGeometry")]
     public partial class TrashGeneratingUnit
     {
         [Key]
@@ -26,10 +24,10 @@ namespace Hippocamp.EFModels.Entities
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
 
-        [ForeignKey(nameof(LandUseBlockID))]
+        [ForeignKey("LandUseBlockID")]
         [InverseProperty("TrashGeneratingUnits")]
         public virtual LandUseBlock LandUseBlock { get; set; }
-        [ForeignKey(nameof(StormwaterJurisdictionID))]
+        [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("TrashGeneratingUnits")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
     }

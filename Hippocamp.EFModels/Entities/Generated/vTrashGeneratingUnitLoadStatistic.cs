@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -16,6 +14,7 @@ namespace Hippocamp.EFModels.Entities
         public int TrashGeneratingUnitID { get; set; }
         public int? TreatmentBMPID { get; set; }
         [StringLength(200)]
+        [Unicode(false)]
         public string TreatmentBMPName { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
@@ -24,6 +23,7 @@ namespace Hippocamp.EFModels.Entities
         public int StormwaterJurisdictionID { get; set; }
         public int? OrganizationID { get; set; }
         [StringLength(200)]
+        [Unicode(false)]
         public string OrganizationName { get; set; }
         [Column(TypeName = "decimal(4, 1)")]
         public decimal BaselineLoadingRate { get; set; }
@@ -31,6 +31,7 @@ namespace Hippocamp.EFModels.Entities
         public bool IsPartialTrashCapture { get; set; }
         public int PartialTrashCaptureEffectivenessPercentage { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string LandUseType { get; set; }
         public int? PriorityLandUseTypeID { get; set; }
         public bool? HasBaselineScore { get; set; }
@@ -43,10 +44,12 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime? LastCalculatedDate { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string PriorityLandUseTypeDisplayName { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string WaterQualityManagementPlanName { get; set; }
         public int? LandUseBlockID { get; set; }
         [Column(TypeName = "datetime")]

@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Keyless]
@@ -15,14 +13,17 @@ namespace Hippocamp.EFModels.Entities
         public int HRUCharacteristicID { get; set; }
         [Required]
         [StringLength(5)]
+        [Unicode(false)]
         public string HydrologicSoilGroup { get; set; }
         public int SlopePercentage { get; set; }
         public double ImperviousAcres { get; set; }
         public double Area { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string HRUCharacteristicLandUseCodeDisplayName { get; set; }
         public int? ModelBasinID { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string WatershedName { get; set; }
         public int? CatchIDN { get; set; }
         public int? DownCatchIDN { get; set; }
@@ -33,9 +34,11 @@ namespace Hippocamp.EFModels.Entities
         public int? LoadGeneratingUnitID { get; set; }
         public int? ModelBasinKey { get; set; }
         [StringLength(100)]
+        [Unicode(false)]
         public string LandUse { get; set; }
         [Required]
         [StringLength(132)]
+        [Unicode(false)]
         public string SurfaceKey { get; set; }
     }
 }

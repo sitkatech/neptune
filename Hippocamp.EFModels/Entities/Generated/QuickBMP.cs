@@ -4,12 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
 namespace Hippocamp.EFModels.Entities
 {
     [Table("QuickBMP")]
-    [Index(nameof(WaterQualityManagementPlanID), nameof(QuickBMPName), Name = "AK_QuickBMP_WaterQualityManagementPlanID_QuickBMPName", IsUnique = true)]
+    [Index("WaterQualityManagementPlanID", "QuickBMPName", Name = "AK_QuickBMP_WaterQualityManagementPlanID_QuickBMPName", IsUnique = true)]
     public partial class QuickBMP
     {
         public QuickBMP()
@@ -23,8 +21,10 @@ namespace Hippocamp.EFModels.Entities
         public int TreatmentBMPTypeID { get; set; }
         [Required]
         [StringLength(100)]
+        [Unicode(false)]
         public string QuickBMPName { get; set; }
         [StringLength(200)]
+        [Unicode(false)]
         public string QuickBMPNote { get; set; }
         [Column(TypeName = "decimal(5, 2)")]
         public decimal? PercentOfSiteTreated { get; set; }
@@ -34,16 +34,16 @@ namespace Hippocamp.EFModels.Entities
         public decimal? PercentRetained { get; set; }
         public int? DryWeatherFlowOverrideID { get; set; }
 
-        [ForeignKey(nameof(DryWeatherFlowOverrideID))]
+        [ForeignKey("DryWeatherFlowOverrideID")]
         [InverseProperty("QuickBMPs")]
         public virtual DryWeatherFlowOverride DryWeatherFlowOverride { get; set; }
-        [ForeignKey(nameof(TreatmentBMPTypeID))]
+        [ForeignKey("TreatmentBMPTypeID")]
         [InverseProperty("QuickBMPs")]
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        [ForeignKey(nameof(WaterQualityManagementPlanID))]
+        [ForeignKey("WaterQualityManagementPlanID")]
         [InverseProperty("QuickBMPs")]
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
-        [InverseProperty(nameof(WaterQualityManagementPlanVerifyQuickBMP.QuickBMP))]
+        [InverseProperty("QuickBMP")]
         public virtual ICollection<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
     }
 }
