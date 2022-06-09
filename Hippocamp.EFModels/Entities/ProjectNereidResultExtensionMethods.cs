@@ -1,5 +1,4 @@
 ﻿using Hippocamp.Models.DataTransferObjects;
-using Newtonsoft.Json.Linq;
 
 namespace Hippocamp.EFModels.Entities
 {
@@ -7,7 +6,6 @@ namespace Hippocamp.EFModels.Entities
     {
         public static TreatmentBMPModeledResultSimpleDto AsTreatmentBMPModeledResultSimpleDto(this vProjectModelingResult result)
         {
-            var parsedResults = JObject.Parse(result.FullResponse);
             var toReturn = new TreatmentBMPModeledResultSimpleDto()
             {
                 TreatmentBMPID = result.TreatmentBMPID.Value,

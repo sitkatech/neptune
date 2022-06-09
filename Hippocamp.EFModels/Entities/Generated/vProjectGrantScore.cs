@@ -12,6 +12,9 @@ namespace Hippocamp.EFModels.Entities
         public int PrimaryKey { get; set; }
         public int ProjectID { get; set; }
         public double? ProjectArea { get; set; }
+        [StringLength(8000)]
+        [Unicode(false)]
+        public string Watersheds { get; set; }
         public double? PollutantVolume { get; set; }
         public double? PollutantMetals { get; set; }
         public double? PollutantBacteria { get; set; }
@@ -19,5 +22,7 @@ namespace Hippocamp.EFModels.Entities
         public double? PollutantTSS { get; set; }
         public double? TPI { get; set; }
         public double? SEA { get; set; }
+        public double? DryWeatherWQLRI { get; set; }
+        public double? WetWeatherWQLRI { get; set; }
     }
 }

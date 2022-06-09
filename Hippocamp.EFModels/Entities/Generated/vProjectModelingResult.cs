@@ -26,8 +26,6 @@ namespace Hippocamp.EFModels.Entities
         public int? DelineationID { get; set; }
         [Unicode(false)]
         public string NodeID { get; set; }
-        [Unicode(false)]
-        public string FullResponse { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }
         public double? WetWeatherInflow { get; set; }

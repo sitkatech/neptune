@@ -134,5 +134,6 @@ export enum FieldDefinitionTypeEnum {
     FecalColiform = 129,
     TotalCopper = 130, 
     TotalLead = 131,
-    TotalZinc = 132
+    TotalZinc = 132,
+    OCTAWatershed = 133
 }

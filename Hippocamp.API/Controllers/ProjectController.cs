@@ -339,6 +339,14 @@ namespace Hippocamp.API.Controllers
             return false;
         }
 
+        [HttpGet("projects/{projectID}/OCTAM2Tier2GrantScores")]
+        [JurisdictionEditFeature]
+        public ActionResult<ProjectGrantScoreDto> GetGrantScoresByProjectID([FromRoute] int projectID)
+        {
+            var projectGrantScoreDto = _dbContext.vProjectGrantScores.SingleOrDefault(x => x.ProjectID == projectID)?.AsDto();
+            return Ok(projectGrantScoreDto);
+        }
+
         [HttpGet("projects/OCTAM2Tier2GrantProgram")]
         [JurisdictionEditFeature]
         public ActionResult<List<ProjectHRUCharacteristicsSummaryDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()

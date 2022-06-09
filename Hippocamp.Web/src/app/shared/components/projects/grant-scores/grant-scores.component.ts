@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { forkJoin } from 'rxjs';
+import { ProjectService } from 'src/app/services/project/project.service';
+import { ProjectGrantScoreDto } from 'src/app/shared/generated/model/project-grant-score-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 
 @Component({
@@ -10,12 +12,21 @@ import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text
 export class GrantScoresComponent implements OnInit {
   @Input('projectID') projectID: number;
 
-  public project: ProjectSimpleDto;
+  public projectGrantScore: ProjectGrantScoreDto;
   public OCTAM2Tier2RichTextTypeID = CustomRichTextType.OCTAM2Tier2GrantProgramMetrics
 
   constructor(
+    private projectService: ProjectService,
   ) { }
 
   ngOnInit(): void {
+    if (this.projectID) {
+      forkJoin({
+        projectGrantScore: this.projectService.getGrantScoreByProjectID(this.projectID)
+      })
+        .subscribe(({ projectGrantScore }) => {
+          this.projectGrantScore = projectGrantScore;
+        });
+    }
   }
 }

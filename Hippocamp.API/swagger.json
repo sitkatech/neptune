@@ -1084,6 +1084,46 @@
         }
       }
     },
+    "/projects/{projectID}/OCTAM2Tier2GrantScores": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectGrantScoreDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectGrantScoreDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectGrantScoreDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/OCTAM2Tier2GrantProgram": {
       "get": {
         "tags": [
@@ -2435,6 +2475,70 @@
           "DocumentDescription": {
             "maxLength": 500,
             "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectGrantScoreDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantMetals": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantBacteria": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantNutrients": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantTSS": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TPI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SEA": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Watersheds": {
             "type": "string",
             "nullable": true
           }

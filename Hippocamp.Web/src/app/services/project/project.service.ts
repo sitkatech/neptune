@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
-import { DelineationUpsertDto, ProjectHRUCharacteristicsSummaryDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
+import { DelineationUpsertDto, ProjectGrantScoreDto, ProjectHRUCharacteristicsSummaryDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -93,6 +93,11 @@ export class ProjectService {
 
   getModeledResultsByProjectID(projectID: number): Observable<Array<TreatmentBMPModeledResultSimpleDto>> {
     let route = `/projects/${projectID}/modeled-performance`;
+    return this.apiService.getFromApi(route);
+  }
+
+  getGrantScoreByProjectID(projectID: number): Observable<ProjectGrantScoreDto> {
+    let route = `/projects/${projectID}/OCTAM2Tier2GrantScores`;
     return this.apiService.getFromApi(route);
   }
 
