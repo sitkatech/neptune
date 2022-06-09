@@ -6,6 +6,9 @@
 <div class="row m-1">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
+<div class="row m-1">
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</div>
 <div class="row m-1 mb-3">
     <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'"
         [dismissible]="false">
@@ -18,92 +21,76 @@
             Calculate
         </button>
     </div>
-    <div class="row m-1">
-        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+    <div class="col-8 col-md-10">
+        <p class="font-weight-bold">Press 'Calculate' to run the model results for your project. You will be notified
+            via email
+            when the updated results are returned. Toggle the dropdown below to view results for individual BMPs.</p>
+        <p class="font-italic">{{getModelResultsLastCalculatedText()}}</p>
     </div>
-    <div class="row m-1 mb-3">
-        <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'"
-            [dismissible]="false">
-            Results for this project are currently being calculated. Triggering a new calculation will be disabled until the
-            current calculation completes.
-        </ngb-alert>
-        <div class="col-4 col-md-2">
-            <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()"
-                [disabled]="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)">
-                Calculate
-            </button>
-        </div>
-        <div class="col-8 col-md-10">
-            <p class="font-weight-bold">Press 'Calculate' to run the model results for your project. You will be notified
-                via email
-                when the updated results are returned. Toggle the dropdown below to view results for individual BMPs.</p>
-            <p class="font-italic">{{getModelResultsLastCalculatedText()}}</p>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    Location
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <table class="table d-block" style="overflow:auto" [style.max-height]="mapHeight">
-                                <thead>
-                                    <th>
-                                        BMP Name
-                                    </th>
-                                    <th>
-                                        <field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'">
-                                        </field-definition>
-                                    </th>
-                                    <th>
-                                        Delineation Area (ac)
-                                    </th>
-                                    <th>
-                                        <field-definition fieldDefinitionType="FullyParameterized"></field-definition>
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let treatmentBMP of treatmentBMPs" class="selectable"
-                                        [class.selected]="selectedTreatmentBMP?.TreatmentBMPID == treatmentBMP.TreatmentBMPID"
-                                        (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
-                                        <td>
-                                            {{treatmentBMP.TreatmentBMPName}}
-                                        </td>
-                                        <td>
-                                            {{treatmentBMP.TreatmentBMPTypeName}}
-                                        </td>
-                                        <td>
-                                            {{getDelineationAcreageForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}
-                                        </td>
-                                        <td>
-                                            {{treatmentBMP.IsFullyParameterized ? "Yes" : "No"}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div #mapDiv id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
-                        </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Location
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <table class="table d-block" style="overflow:auto" [style.max-height]="mapHeight">
+                            <thead>
+                                <th>
+                                    BMP Name
+                                </th>
+                                <th>
+                                    <field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'">
+                                    </field-definition>
+                                </th>
+                                <th>
+                                    Delineation Area (ac)
+                                </th>
+                                <th>
+                                    <field-definition fieldDefinitionType="FullyParameterized"></field-definition>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let treatmentBMP of treatmentBMPs" class="selectable"
+                                    [class.selected]="selectedTreatmentBMP?.TreatmentBMPID == treatmentBMP.TreatmentBMPID"
+                                    (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
+                                    <td>
+                                        {{treatmentBMP.TreatmentBMPName}}
+                                    </td>
+                                    <td>
+                                        {{treatmentBMP.TreatmentBMPTypeName}}
+                                    </td>
+                                    <td>
+                                        {{getDelineationAcreageForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}
+                                    </td>
+                                    <td>
+                                        {{treatmentBMP.IsFullyParameterized ? "Yes" : "No"}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div #mapDiv id={{mapID}} class="location-card" [style.height]="mapHeight"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-3 mb-3" *ngIf="showModelResultsPanel()">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    Model Results
-                </div>
-                <div class="card-body">
-                    <hippocamp-model-results [projectID]="projectID" [treatmentBMPs]="treatmentBMPs"
-                        [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
-                    </hippocamp-model-results>
-                </div>
+</div>
+<div class="row mt-3 mb-3" *ngIf="showModelResultsPanel()">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Model Results
+            </div>
+            <div class="card-body">
+                <hippocamp-model-results [projectID]="projectID" [treatmentBMPs]="treatmentBMPs"
+                    [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
+                </hippocamp-model-results>
             </div>
         </div>
     </div>
@@ -119,12 +106,12 @@
             </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-auto ml-auto">
-            <button class="btn btn-hippocamp ml-auto" (click)="continueToNextStep()">
-                Continue
-            </button>
-        </div>
+</div>
+<div class="row mt-4">
+    <div class="col-auto ml-auto">
+        <button class="btn btn-hippocamp ml-auto" (click)="continueToNextStep()">
+            Continue
+        </button>
     </div>
 </div>
 </ng-container>
