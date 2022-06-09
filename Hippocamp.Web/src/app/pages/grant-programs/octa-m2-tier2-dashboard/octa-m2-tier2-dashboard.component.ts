@@ -133,8 +133,16 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },
-        { headerName: 'Area Treated (ac)', field: 'Area'},
-        { headerName: 'Impervious Area Treated (ac)', field: 'ImperviousAcres'},
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'Area', labelOverride: 'Area Treated (ac)' },
+          field: 'Area'
+        },
+        { 
+          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponentParams: { fieldDefinitionType: 'ImperviousArea', labelOverride: 'Impervious Area Treated (ac)' },
+          field: 'ImperviousAcres'
+        },
         { 
           headerComponentFramework: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'SEAScore', labelOverride: 'SEA Score' },

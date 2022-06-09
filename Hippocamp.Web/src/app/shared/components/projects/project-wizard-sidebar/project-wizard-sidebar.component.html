@@ -44,7 +44,7 @@
             <ng-template ngbPanelContent>
                 <div class="indented-pages">
 
-                    <div class="card-body">
+                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName}">
                         <a [routerLink]="['stormwater-treatments', 'treatment-bmps']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
@@ -55,23 +55,23 @@
                         </a>
                     </div>
                     
-                    <div class="card-body" *ngIf="doesProjectHaveTreatmentBMPs()">
+                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
                         <a [routerLink]="['stormwater-treatments', 'delineations']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
-                        [ngClass]="{'disabled': !projectModel.ProjectName}">
+                        [ngClass]="{'disabled': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></hippocamp-progress-icon>
                         Delineations
                         </a>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
                         <a [routerLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
-                        [ngClass]="{'disabled': !projectModel.ProjectName}">
+                        [ngClass]="{'disabled': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
                         Modeled Performance and Grant Metrics
                         </a>
@@ -81,7 +81,7 @@
         </ngb-panel>
     </ngb-accordion>
 
-    <div class="card-body">
+    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName}">
         <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding"
             [ngClass]="{'disabled': !projectModel.ProjectName}">
             <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
@@ -89,7 +89,7 @@
         </a>
     </div>
 
-    <div class="card-body">
+    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName}">
         <a [routerLink]="['review-and-share']" routerLinkActive="active" class="icon-padding"
             [ngClass]="{'disabled': !projectModel.ProjectName}">
             <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
