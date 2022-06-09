@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vProjectModelingResults(int primaryKey, int projectNereidResultID, int projectID, string projectName, bool isBaselineCondition, int? treatmentBMPID, string treatmentBMPName, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, string fullResponse, DateTime? lastUpdate, double? wetWeatherInflow, double? wetWeatherTreated, double? wetWeatherRetained, double? wetWeatherUntreated, double? wetWeatherTSSRemoved, double? wetWeatherTNRemoved, double? wetWeatherTPRemoved, double? wetWeatherFCRemoved, double? wetWeatherTCuRemoved, double? wetWeatherTPbRemoved, double? wetWeatherTZnRemoved, double? wetWeatherTSSInflow, double? wetWeatherTNInflow, double? wetWeatherTPInflow, double? wetWeatherFCInflow, double? wetWeatherTCuInflow, double? wetWeatherTPbInflow, double? wetWeatherTZnInflow, double? summerDryWeatherInflow, double? summerDryWeatherTreated, double? summerDryWeatherRetained, double? summerDryWeatherUntreated, double? summerDryWeatherTSSRemoved, double? summerDryWeatherTNRemoved, double? summerDryWeatherTPRemoved, double? summerDryWeatherFCRemoved, double? summerDryWeatherTCuRemoved, double? summerDryWeatherTPbRemoved, double? summerDryWeatherTZnRemoved, double? summerDryWeatherTSSInflow, double? summerDryWeatherTNInflow, double? summerDryWeatherTPInflow, double? summerDryWeatherFCInflow, double? summerDryWeatherTCuInflow, double? summerDryWeatherTPbInflow, double? summerDryWeatherTZnInflow, double? winterDryWeatherInflow, double? winterDryWeatherTreated, double? winterDryWeatherRetained, double? winterDryWeatherUntreated, double? winterDryWeatherTSSRemoved, double? winterDryWeatherTNRemoved, double? winterDryWeatherTPRemoved, double? winterDryWeatherFCRemoved, double? winterDryWeatherTCuRemoved, double? winterDryWeatherTPbRemoved, double? winterDryWeatherTZnRemoved, double? winterDryWeatherTSSInflow, double? winterDryWeatherTNInflow, double? winterDryWeatherTPInflow, double? winterDryWeatherFCInflow, double? winterDryWeatherTCuInflow, double? winterDryWeatherTPbInflow, double? winterDryWeatherTZnInflow) : this()
+        public vProjectModelingResults(int primaryKey, int projectNereidResultID, int projectID, string projectName, bool isBaselineCondition, int? treatmentBMPID, string treatmentBMPName, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, DateTime? lastUpdate, double? wetWeatherInflow, double? wetWeatherTreated, double? wetWeatherRetained, double? wetWeatherUntreated, double? wetWeatherTSSRemoved, double? wetWeatherTNRemoved, double? wetWeatherTPRemoved, double? wetWeatherFCRemoved, double? wetWeatherTCuRemoved, double? wetWeatherTPbRemoved, double? wetWeatherTZnRemoved, double? wetWeatherTSSInflow, double? wetWeatherTNInflow, double? wetWeatherTPInflow, double? wetWeatherFCInflow, double? wetWeatherTCuInflow, double? wetWeatherTPbInflow, double? wetWeatherTZnInflow, double? summerDryWeatherInflow, double? summerDryWeatherTreated, double? summerDryWeatherRetained, double? summerDryWeatherUntreated, double? summerDryWeatherTSSRemoved, double? summerDryWeatherTNRemoved, double? summerDryWeatherTPRemoved, double? summerDryWeatherFCRemoved, double? summerDryWeatherTCuRemoved, double? summerDryWeatherTPbRemoved, double? summerDryWeatherTZnRemoved, double? summerDryWeatherTSSInflow, double? summerDryWeatherTNInflow, double? summerDryWeatherTPInflow, double? summerDryWeatherFCInflow, double? summerDryWeatherTCuInflow, double? summerDryWeatherTPbInflow, double? summerDryWeatherTZnInflow, double? winterDryWeatherInflow, double? winterDryWeatherTreated, double? winterDryWeatherRetained, double? winterDryWeatherUntreated, double? winterDryWeatherTSSRemoved, double? winterDryWeatherTNRemoved, double? winterDryWeatherTPRemoved, double? winterDryWeatherFCRemoved, double? winterDryWeatherTCuRemoved, double? winterDryWeatherTPbRemoved, double? winterDryWeatherTZnRemoved, double? winterDryWeatherTSSInflow, double? winterDryWeatherTNInflow, double? winterDryWeatherTPInflow, double? winterDryWeatherFCInflow, double? winterDryWeatherTCuInflow, double? winterDryWeatherTPbInflow, double? winterDryWeatherTZnInflow) : this()
         {
             this.PrimaryKey = primaryKey;
             this.ProjectNereidResultID = projectNereidResultID;
@@ -38,7 +38,6 @@ namespace Neptune.Web.Models
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DelineationID = delineationID;
             this.NodeID = nodeID;
-            this.FullResponse = fullResponse;
             this.LastUpdate = lastUpdate;
             this.WetWeatherInflow = wetWeatherInflow;
             this.WetWeatherTreated = wetWeatherTreated;
@@ -112,7 +111,6 @@ namespace Neptune.Web.Models
             this.RegionalSubbasinID = vProjectModelingResults.RegionalSubbasinID;
             this.DelineationID = vProjectModelingResults.DelineationID;
             this.NodeID = vProjectModelingResults.NodeID;
-            this.FullResponse = vProjectModelingResults.FullResponse;
             this.LastUpdate = vProjectModelingResults.LastUpdate;
             this.WetWeatherInflow = vProjectModelingResults.WetWeatherInflow;
             this.WetWeatherTreated = vProjectModelingResults.WetWeatherTreated;
@@ -184,7 +182,6 @@ namespace Neptune.Web.Models
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public string NodeID { get; set; }
-        public string FullResponse { get; set; }
         public DateTime? LastUpdate { get; set; }
         public double? WetWeatherInflow { get; set; }
         public double? WetWeatherTreated { get; set; }
