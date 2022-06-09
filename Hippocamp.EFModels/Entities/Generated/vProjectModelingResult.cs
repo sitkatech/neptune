@@ -12,8 +12,15 @@ namespace Hippocamp.EFModels.Entities
         public int PrimaryKey { get; set; }
         public int ProjectNereidResultID { get; set; }
         public int ProjectID { get; set; }
+        [Required]
+        [StringLength(200)]
+        [Unicode(false)]
+        public string ProjectName { get; set; }
         public bool IsBaselineCondition { get; set; }
         public int? TreatmentBMPID { get; set; }
+        [StringLength(200)]
+        [Unicode(false)]
+        public string TreatmentBMPName { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }

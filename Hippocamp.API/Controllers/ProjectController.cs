@@ -389,7 +389,7 @@ namespace Hippocamp.API.Controllers
 
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records =
-                ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosWithBMPFieldsByProjectIDs(_dbContext, projectIDs);
+                ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
