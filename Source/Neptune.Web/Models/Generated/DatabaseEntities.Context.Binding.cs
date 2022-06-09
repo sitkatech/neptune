@@ -143,6 +143,8 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vPowerBITreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanOAndMVerificationConfiguration());
+            modelBuilder.Configurations.Add(new vProjectGrantScoresConfiguration());
+            modelBuilder.Configurations.Add(new vProjectModelingResultsConfiguration());
             modelBuilder.Configurations.Add(new vRegionalSubbasinUpstreamCatchmentGeometry4326Configuration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
             modelBuilder.Configurations.Add(new vTreatmentBMPDetailedConfiguration());
@@ -258,6 +260,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
+        public virtual DbSet<vProjectGrantScores> vProjectGrantScores { get; set; }
+        public virtual DbSet<vProjectModelingResults> vProjectModelingResults { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
         public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }

@@ -13,7 +13,8 @@ as
     group by ProjectID
 )
 
-select  a.ProjectID,
+select  a.ProjectID as PrimaryKey,
+        a.ProjectID,
         Sum(OverlapArea) as ProjectArea
         , Sum(OverlapArea / TotalProjectArea * PC_VOL_PCT) as PollutantVolume
         , Sum(OverlapArea / TotalProjectArea * PC_MET_PCT) as PollutantMetals

@@ -10,13 +10,15 @@ as
 (
     select 0.453592 as PoundsToKilogramsFactor, 453.59 as PoundsToGramsFactor
 )
-select 
+select  ProjectNereidResultID as PrimaryKey,        
         ProjectNereidResultID,
-        ProjectID,
+        p.ProjectID,
+        p.ProjectName,
         IsBaselineCondition,
-        TreatmentBMPID,
-        WaterQualityManagementPlanID,
-        RegionalSubbasinID,
+        tbmp.TreatmentBMPID,
+        tbmp.TreatmentBMPName,
+        pnr.WaterQualityManagementPlanID,
+        pnr.RegionalSubbasinID,
         DelineationID,
         NodeID,
         FullResponse,
@@ -76,7 +78,9 @@ select
         WinterDryWeatherTPbInflow * UnitConversions.PoundsToGramsFactor as WinterDryWeatherTPbInflow,
         WinterDryWeatherTZnInflow * UnitConversions.PoundsToGramsFactor as WinterDryWeatherTZnInflow
 
-        from dbo.ProjectNereidResult
+        from dbo.ProjectNereidResult pnr
+        join dbo.Project p on pnr.ProjectID = p.ProjectID
+        left join dbo.TreatmentBMP tbmp on pnr.TreatmentBMPID = tbmp.TreatmentBMPID
         cross apply openjson(fullresponse) 
         with (
             WetWeatherInflow float '$.runoff_volume_cuft_inflow',

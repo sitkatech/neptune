@@ -79,6 +79,8 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeHippocampModeledPerformance HippocampModeledPerformance = NeptunePageTypeHippocampModeledPerformance.Instance;
         public static readonly NeptunePageTypeHippocampReview HippocampReview = NeptunePageTypeHippocampReview.Instance;
         public static readonly NeptunePageTypeHippocampPlanningMap HippocampPlanningMap = NeptunePageTypeHippocampPlanningMap.Instance;
+        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramMetrics OCTAM2Tier2GrantProgramMetrics = NeptunePageTypeOCTAM2Tier2GrantProgramMetrics.Instance;
+        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramDashboard OCTAM2Tier2GrantProgramDashboard = NeptunePageTypeOCTAM2Tier2GrantProgramDashboard.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -88,7 +90,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics, HippocampProjectAttachments, HippocampTreatmentBMPs, HippocampDelineations, HippocampModeledPerformance, HippocampReview, HippocampPlanningMap };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics, HippocampProjectAttachments, HippocampTreatmentBMPs, HippocampDelineations, HippocampModeledPerformance, HippocampReview, HippocampPlanningMap, OCTAM2Tier2GrantProgramMetrics, OCTAM2Tier2GrantProgramDashboard };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -248,6 +250,10 @@ namespace Neptune.Web.Models
                     return ManageTreatmentBMPTypesList;
                 case NeptunePageTypeEnum.ModelingHomePage:
                     return ModelingHomePage;
+                case NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard:
+                    return OCTAM2Tier2GrantProgramDashboard;
+                case NeptunePageTypeEnum.OCTAM2Tier2GrantProgramMetrics:
+                    return OCTAM2Tier2GrantProgramMetrics;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
                 case NeptunePageTypeEnum.OVTAIndex:
@@ -348,7 +354,9 @@ namespace Neptune.Web.Models
         HippocampDelineations = 61,
         HippocampModeledPerformance = 62,
         HippocampReview = 63,
-        HippocampPlanningMap = 64
+        HippocampPlanningMap = 64,
+        OCTAM2Tier2GrantProgramMetrics = 65,
+        OCTAM2Tier2GrantProgramDashboard = 66
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -715,5 +723,17 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeHippocampPlanningMap(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
         public static readonly NeptunePageTypeHippocampPlanningMap Instance = new NeptunePageTypeHippocampPlanningMap(64, @"HippocampPlanningMap", @"Hippocamp Planning Map");
+    }
+
+    public partial class NeptunePageTypeOCTAM2Tier2GrantProgramMetrics : NeptunePageType
+    {
+        private NeptunePageTypeOCTAM2Tier2GrantProgramMetrics(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramMetrics Instance = new NeptunePageTypeOCTAM2Tier2GrantProgramMetrics(65, @"OCTAM2Tier2GrantProgramMetrics", @"OCTA M2 Tier 2 Grant Program Metrics");
+    }
+
+    public partial class NeptunePageTypeOCTAM2Tier2GrantProgramDashboard : NeptunePageType
+    {
+        private NeptunePageTypeOCTAM2Tier2GrantProgramDashboard(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramDashboard Instance = new NeptunePageTypeOCTAM2Tier2GrantProgramDashboard(66, @"OCTAM2Tier2GrantProgramDashboard", @"OCTA M2 Tier 2 Grant Program Dashboard");
     }
 }
