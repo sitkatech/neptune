@@ -2,8 +2,6 @@ version: '3.7'
 
 services:
   hippocamp.api:
-    build:
-      dockerfile: Hippocamp.API/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - KEYSTONE_HOST=${KEYSTONE_HOST}
