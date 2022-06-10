@@ -917,7 +917,7 @@
         }
       }
     },
-    "/projects/{projectID}/modeled-performance": {
+    "/projects/{projectID}/load-reducing-results": {
       "get": {
         "tags": [
           "Project"
@@ -941,7 +941,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPModeledResultSimpleDto"
+                    "$ref": "#/components/schemas/ProjectLoadReducingResultDto"
                   }
                 }
               },
@@ -949,7 +949,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPModeledResultSimpleDto"
+                    "$ref": "#/components/schemas/ProjectLoadReducingResultDto"
                   }
                 }
               },
@@ -957,14 +957,65 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPModeledResultSimpleDto"
+                    "$ref": "#/components/schemas/ProjectLoadReducingResultDto"
                   }
                 }
               }
             }
           }
         }
-      },
+      }
+    },
+    "/projects/{projectID}/load-generating-results": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadGeneratingResultDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadGeneratingResultDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadGeneratingResultDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/modeled-performance": {
       "post": {
         "tags": [
           "Project"
@@ -2623,6 +2674,571 @@
         },
         "additionalProperties": false
       },
+      "ProjectLoadGeneratingResultDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DelineationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WetWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectLoadReducingResultDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "WetWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTZnInflow": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "ProjectNetworkSolveHistorySimpleDto": {
         "type": "object",
         "properties": {
@@ -2893,388 +3509,6 @@
             "format": "double"
           },
           "ImperviousCover": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TreatmentBMPModeledResultSimpleDto": {
-        "type": "object",
-        "properties": {
-          "TreatmentBMPID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "TreatmentBMPName": {
-            "type": "string",
-            "nullable": true
-          },
-          "ProjectID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectName": {
-            "type": "string",
-            "nullable": true
-          },
-          "WetWeatherInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherRetained": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherUntreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTSSRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTNRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTPRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherFCRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTCuRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTPbRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTZnRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTSSInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTNInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTPInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherFCInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTCuInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTPbInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WetWeatherTZnInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherRetained": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherUntreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTSSRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTNRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTPRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherFCRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTCuRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTPbRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTZnRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTSSInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTNInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTPInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherFCInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTCuInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTPbInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "SummerDryWeatherTZnInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherRetained": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherUntreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTSSRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTNRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTPRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherFCRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTCuRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTPbRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTZnRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTSSInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTNInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTPInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherFCInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTCuInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTPbInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "WinterDryWeatherTZnInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherRetained": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherUntreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTSSRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTNRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTPRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherFCRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTCuRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTPbRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTZnRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTSSInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTNInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTPInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherFCInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTCuInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTPbInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "DryWeatherTZnInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalRetained": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalUntreated": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTSSRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTNRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTPRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalFCRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTCuRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTPbRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTZnRemoved": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTSSInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTNInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTPInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalFCInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTCuInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTPbInflow": {
-            "type": "number",
-            "format": "double"
-          },
-          "TotalTZnInflow": {
             "type": "number",
             "format": "double"
           }

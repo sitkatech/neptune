@@ -241,9 +241,9 @@ namespace Hippocamp.API.Controllers
             return Ok(hruCharacteristics);
         }
 
-        [HttpGet("projects/{projectID}/modeled-performance")]
+        [HttpGet("projects/{projectID}/load-reducing-results")]
         [JurisdictionEditFeature]
-        public ActionResult<List<TreatmentBMPModeledResultSimpleDto>> GetModeledPerformanceForProject([FromRoute] int projectID)
+        public ActionResult<List<ProjectLoadReducingResultDto>> GetLoadRemovingResultsForProject([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
@@ -256,7 +256,27 @@ namespace Hippocamp.API.Controllers
                 return Forbid();
             }
 
-            var modeledResults = ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectID(_dbContext, projectID);
+            var modeledResults = ProjectLoadReducingResults.ListByProjectIDAsDto(_dbContext, projectID);
+
+            return Ok(modeledResults);
+        }
+
+        [HttpGet("projects/{projectID}/load-generating-results")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<ProjectLoadGeneratingResultDto>> GetLoadGeneratingResultsForProject([FromRoute] int projectID)
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
+            {
+                return actionResult;
+            }
+            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            {
+                return Forbid();
+            }
+
+            var modeledResults = ProjectLoadGeneratingResults.ListByProjectIDAsDto(_dbContext, projectID);
 
             return Ok(modeledResults);
         }
@@ -396,13 +416,12 @@ namespace Hippocamp.API.Controllers
         {
 
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
-            var records =
-                ProjectNereidResults.GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(_dbContext, projectIDs);
+            var records = ProjectLoadReducingResults.ListByProjectIDsAsDto(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
             await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.Context.RegisterClassMap<TreatmentBMPModeledResultMap>();
+            csv.Context.RegisterClassMap<ProjectLoadRemovingResultMap>();
 
             await csv.WriteRecordsAsync(records);
             await csv.FlushAsync();

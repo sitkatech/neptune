@@ -1,4 +1,4 @@
-<ng-container *ngIf="selectedModelResults">
+<ng-container *ngIf="selectedProjectLoadReducingResult">
 <ngb-alert *ngIf="getNotFullyParameterizedBMPNames().length > 0" [type]="'warning'" [dismissible]="false">
     Some of the proposed BMPs (see list below) are not fully parameterized for modeling, or have missing
     delineations, so these results may be incomplete or inaccurate.
@@ -20,8 +20,8 @@
 </ngb-alert>
 <div class="row">
     <div class="col-12 col-md-6 col-lg-4">
-        <ng-select class="mb-3" [(ngModel)]="treatmentBMPIDForSelectedModelResults" [items]="modelingSelectListOptions"
-            [clearable]="false" (change)="updateSelectedModelResults()" bindLabel="TreatmentBMPName"
+        <ng-select class="mb-3" [(ngModel)]="treatmentBMPIDForSelectedProjectLoadReducingResult" [items]="modelingSelectListOptions"
+            [clearable]="false" (change)="updateSelectedProjectLoadReducingResult()" bindLabel="TreatmentBMPName"
             bindValue="TreatmentBMPID">
         </ng-select>
     </div>
@@ -44,11 +44,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngIf="treatmentBMPIDForSelectedModelResults != 0">
+                    <tr *ngIf="treatmentBMPIDForSelectedProjectLoadReducingResult != 0">
                         <td class="left">
                             <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherInflow |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherInflow |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td>--</td>
                     </tr>
@@ -56,28 +56,28 @@
                         <td class="left">
                             <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTreated |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.WetWeatherTreated /
-                                selectedModelResults.WetWeatherInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.WetWeatherTreated /
+                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherRetained |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherRetained |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.WetWeatherRetained /
-                                selectedModelResults.WetWeatherInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.WetWeatherRetained /
+                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherUntreated |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherUntreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.WetWeatherUntreated /
-                                selectedModelResults.WetWeatherInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.WetWeatherUntreated /
+                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                 </tbody>
                 <thead>
@@ -92,70 +92,70 @@
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTSSRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTSSReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherTSSRemoved/selectedModelResults.WetWeatherTSSInflow
+                            selectedProjectLoadReducingResult.WetWeatherTSSReduced/selectedProjectLoadReducingResult.WetWeatherTSSInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTNRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTNReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherTNRemoved/selectedModelResults.WetWeatherTNInflow
+                            selectedProjectLoadReducingResult.WetWeatherTNReduced/selectedProjectLoadReducingResult.WetWeatherTNInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTPRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTPReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherTPRemoved/selectedModelResults.WetWeatherTPInflow
+                            selectedProjectLoadReducingResult.WetWeatherTPReduced/selectedProjectLoadReducingResult.WetWeatherTPInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="FecalColiform"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherFCRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherFCReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherFCRemoved/selectedModelResults.WetWeatherFCInflow
+                            selectedProjectLoadReducingResult.WetWeatherFCReduced/selectedProjectLoadReducingResult.WetWeatherFCInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalCopper"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTCuRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTCuReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherTCuRemoved/selectedModelResults.WetWeatherTCuInflow
+                            selectedProjectLoadReducingResult.WetWeatherTCuReduced/selectedProjectLoadReducingResult.WetWeatherTCuInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalLead"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTPbRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTPbReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherTPbRemoved/selectedModelResults.WetWeatherTPbInflow
+                            selectedProjectLoadReducingResult.WetWeatherTPbReduced/selectedProjectLoadReducingResult.WetWeatherTPbInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalZinc"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.WetWeatherTZnRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.WetWeatherTZnReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.WetWeatherTZnRemoved/selectedModelResults.WetWeatherTZnInflow
+                            selectedProjectLoadReducingResult.WetWeatherTZnReduced/selectedProjectLoadReducingResult.WetWeatherTZnInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                 </tbody>
@@ -170,11 +170,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngIf="treatmentBMPIDForSelectedModelResults != 0">
+                    <tr *ngIf="treatmentBMPIDForSelectedProjectLoadReducingResult != 0">
                         <td class="left">
                             <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherInflow |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherInflow |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td>--</td>
                     </tr>
@@ -182,28 +182,28 @@
                         <td class="left">
                             <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTreated |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.DryWeatherTreated /
-                                selectedModelResults.DryWeatherInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.DryWeatherTreated /
+                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherRetained |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherRetained |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.DryWeatherRetained /
-                                selectedModelResults.DryWeatherInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.DryWeatherRetained /
+                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherUntreated |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherUntreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.DryWeatherUntreated /
-                                selectedModelResults.DryWeatherInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.DryWeatherUntreated /
+                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                 </tbody>
                 <thead>
@@ -218,70 +218,70 @@
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTSSRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTSSReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherTSSRemoved/selectedModelResults.DryWeatherTSSInflow
+                            selectedProjectLoadReducingResult.DryWeatherTSSReduced/selectedProjectLoadReducingResult.DryWeatherTSSInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTNRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTNReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherTNRemoved/selectedModelResults.DryWeatherTNInflow
+                            selectedProjectLoadReducingResult.DryWeatherTNReduced/selectedProjectLoadReducingResult.DryWeatherTNInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTPRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTPReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherTPRemoved/selectedModelResults.DryWeatherTPInflow
+                            selectedProjectLoadReducingResult.DryWeatherTPReduced/selectedProjectLoadReducingResult.DryWeatherTPInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="FecalColiform"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherFCRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherFCReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherFCRemoved/selectedModelResults.DryWeatherFCInflow
+                            selectedProjectLoadReducingResult.DryWeatherFCReduced/selectedProjectLoadReducingResult.DryWeatherFCInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalCopper"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTCuRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTCuReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherTCuRemoved/selectedModelResults.DryWeatherTCuInflow
+                            selectedProjectLoadReducingResult.DryWeatherTCuReduced/selectedProjectLoadReducingResult.DryWeatherTCuInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalLead"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTPbRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTPbReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherTPbRemoved/selectedModelResults.DryWeatherTPbInflow
+                            selectedProjectLoadReducingResult.DryWeatherTPbReduced/selectedProjectLoadReducingResult.DryWeatherTPbInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalZinc"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.DryWeatherTZnRemoved |
+                        <td><span>{{selectedProjectLoadReducingResult.DryWeatherTZnReduced |
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.DryWeatherTZnRemoved/selectedModelResults.DryWeatherTZnInflow
+                            selectedProjectLoadReducingResult.DryWeatherTZnReduced/selectedProjectLoadReducingResult.DryWeatherTZnInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                 </tbody>
@@ -296,11 +296,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngIf="treatmentBMPIDForSelectedModelResults != 0">
+                    <tr *ngIf="treatmentBMPIDForSelectedProjectLoadReducingResult != 0">
                         <td class="left">
                             <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalInflow | neptuneModelingResultSigFig:3 |
+                        <td><span>{{selectedProjectLoadReducingResult.TotalInflow | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
                         <td>--</td>
                     </tr>
@@ -308,28 +308,28 @@
                         <td class="left">
                             <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTreated | neptuneModelingResultSigFig:3 |
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTreated | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.TotalTreated /
-                                selectedModelResults.TotalInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.TotalTreated /
+                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalRetained | neptuneModelingResultSigFig:3 |
+                        <td><span>{{selectedProjectLoadReducingResult.TotalRetained | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.TotalRetained /
-                                selectedModelResults.TotalInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.TotalRetained /
+                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalUntreated | neptuneModelingResultSigFig:3
+                        <td><span>{{selectedProjectLoadReducingResult.TotalUntreated | neptuneModelingResultSigFig:3
                                 | number}}</span></td>
-                        <td><span>{{100 * selectedModelResults.TotalUntreated /
-                                selectedModelResults.TotalInflow || 0 | number: 0}}</span>%</td>
+                        <td><span>{{100 * selectedProjectLoadReducingResult.TotalUntreated /
+                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: 0}}</span>%</td>
                     </tr>
                 </tbody>
                 <thead>
@@ -344,70 +344,70 @@
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTSSRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTSSReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalTSSRemoved/selectedModelResults.TotalTSSInflow
+                            selectedProjectLoadReducingResult.TotalTSSReduced/selectedProjectLoadReducingResult.TotalTSSInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTNRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTNReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalTNRemoved/selectedModelResults.TotalTNInflow
+                            selectedProjectLoadReducingResult.TotalTNReduced/selectedProjectLoadReducingResult.TotalTNInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTPRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTPReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalTPRemoved/selectedModelResults.TotalTPInflow
+                            selectedProjectLoadReducingResult.TotalTPReduced/selectedProjectLoadReducingResult.TotalTPInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="FecalColiform"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalFCRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalFCReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalFCRemoved/selectedModelResults.TotalFCInflow
+                            selectedProjectLoadReducingResult.TotalFCReduced/selectedProjectLoadReducingResult.TotalFCInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalCopper"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTCuRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTCuReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalTCuRemoved/selectedModelResults.TotalTCuInflow
+                            selectedProjectLoadReducingResult.TotalTCuReduced/selectedProjectLoadReducingResult.TotalTCuInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalLead"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTPbRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTPbReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalTPbRemoved/selectedModelResults.TotalTPbInflow
+                            selectedProjectLoadReducingResult.TotalTPbReduced/selectedProjectLoadReducingResult.TotalTPbInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
                             <field-definition fieldDefinitionType="TotalZinc"></field-definition>
                         </td>
-                        <td><span>{{selectedModelResults.TotalTZnRemoved | neptuneModelingResultSigFig:2
+                        <td><span>{{selectedProjectLoadReducingResult.TotalTZnReduced | neptuneModelingResultSigFig:2
                                 | number}}</span> g</td>
                         <td><span>{{100 *
-                                selectedModelResults.TotalTZnRemoved/selectedModelResults.TotalTZnInflow
+                            selectedProjectLoadReducingResult.TotalTZnReduced/selectedProjectLoadReducingResult.TotalTZnInflow
                                 || 0 | number: 0}}</span>%</td>
                     </tr>
                 </tbody>

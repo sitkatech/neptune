@@ -8,7 +8,7 @@ import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { DelineationUpsertDto } from '../../../generated/model/delineation-upsert-dto';
-import { TreatmentBMPModeledResultSimpleDto } from '../../../generated/model/models';
+import { ProjectLoadReducingResultDto } from '../../../generated/model/models';
 import { PersonDto } from '../../../generated/model/person-dto';
 import { ProjectUpsertDto } from '../../../generated/model/project-upsert-dto';
 import { TreatmentBMPUpsertDto } from '../../../generated/model/treatment-bmp-upsert-dto';
@@ -30,7 +30,7 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
   public projectID: number;
   public treatmentBMPs: TreatmentBMPUpsertDto[];
   public delineations: DelineationUpsertDto[];
-  public modeledResults: TreatmentBMPModeledResultSimpleDto[];
+  public projectLoadReducingResults: ProjectLoadReducingResultDto[];
 
   constructor(
     private router: Router,
@@ -87,11 +87,11 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
     forkJoin({
       treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
       delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-      modeledResults: this.projectService.getModeledResultsByProjectID(this.projectID)
+      modeledResults: this.projectService.getLoadReducingResultsByProjectID(this.projectID)
     }).subscribe(({ treatmentBMPs, delineations, modeledResults }) => {
       this.treatmentBMPs = treatmentBMPs;
       this.delineations = delineations;
-      this.modeledResults = modeledResults;
+      this.projectLoadReducingResults = modeledResults;
       this.cdr.detectChanges();
     });
   }
@@ -140,12 +140,12 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
       return this.projectModel.DoesNotIncludeTreatmentBMPs;
     }
 
-    if (this.modeledResults == null || this.modeledResults == undefined || this.modeledResults.length == 0 ||
-      this.treatmentBMPs.length != this.modeledResults.length) {
+    if (this.projectLoadReducingResults == null || this.projectLoadReducingResults == undefined || this.projectLoadReducingResults.length == 0 ||
+      this.treatmentBMPs.length != this.projectLoadReducingResults.length) {
       return false;
     }
 
-    return this.treatmentBMPs.every(x => this.modeledResults.some(y => y.TreatmentBMPID == x.TreatmentBMPID));
+    return this.treatmentBMPs.every(x => this.projectLoadReducingResults.some(y => y.TreatmentBMPID == x.TreatmentBMPID));
   }
 
 }

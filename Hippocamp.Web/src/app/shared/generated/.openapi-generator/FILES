@@ -22,6 +22,8 @@ model/project-document-simple-dto.ts
 model/project-document-update-dto.ts
 model/project-grant-score-dto.ts
 model/project-hru-characteristics-summary-dto.ts
+model/project-load-generating-result-dto.ts
+model/project-load-reducing-result-dto.ts
 model/project-network-solve-history-simple-dto.ts
 model/project-simple-dto.ts
 model/project-status-simple-dto.ts
@@ -29,7 +31,6 @@ model/project-upsert-dto.ts
 model/role-dto.ts
 model/stormwater-jurisdiction-simple-dto.ts
 model/treatment-bmp-display-dto.ts
-model/treatment-bmp-modeled-result-simple-dto.ts
 model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
 model/treatment-bmp-type-simple-dto.ts
 model/treatment-bmp-upsert-dto.ts

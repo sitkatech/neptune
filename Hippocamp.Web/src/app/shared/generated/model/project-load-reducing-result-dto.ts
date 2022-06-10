@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export class TreatmentBMPModeledResultSimpleDto { 
+export class ProjectLoadReducingResultDto { 
     TreatmentBMPID?: number;
     TreatmentBMPName?: string;
     ProjectID?: number;
@@ -19,13 +19,13 @@ export class TreatmentBMPModeledResultSimpleDto {
     WetWeatherTreated?: number;
     WetWeatherRetained?: number;
     WetWeatherUntreated?: number;
-    WetWeatherTSSRemoved?: number;
-    WetWeatherTNRemoved?: number;
-    WetWeatherTPRemoved?: number;
-    WetWeatherFCRemoved?: number;
-    WetWeatherTCuRemoved?: number;
-    WetWeatherTPbRemoved?: number;
-    WetWeatherTZnRemoved?: number;
+    WetWeatherTSSReduced?: number;
+    WetWeatherTNReduced?: number;
+    WetWeatherTPReduced?: number;
+    WetWeatherFCReduced?: number;
+    WetWeatherTCuReduced?: number;
+    WetWeatherTPbReduced?: number;
+    WetWeatherTZnReduced?: number;
     WetWeatherTSSInflow?: number;
     WetWeatherTNInflow?: number;
     WetWeatherTPInflow?: number;
@@ -37,13 +37,13 @@ export class TreatmentBMPModeledResultSimpleDto {
     SummerDryWeatherTreated?: number;
     SummerDryWeatherRetained?: number;
     SummerDryWeatherUntreated?: number;
-    SummerDryWeatherTSSRemoved?: number;
-    SummerDryWeatherTNRemoved?: number;
-    SummerDryWeatherTPRemoved?: number;
-    SummerDryWeatherFCRemoved?: number;
-    SummerDryWeatherTCuRemoved?: number;
-    SummerDryWeatherTPbRemoved?: number;
-    SummerDryWeatherTZnRemoved?: number;
+    SummerDryWeatherTSSReduced?: number;
+    SummerDryWeatherTNReduced?: number;
+    SummerDryWeatherTPReduced?: number;
+    SummerDryWeatherFCReduced?: number;
+    SummerDryWeatherTCuReduced?: number;
+    SummerDryWeatherTPbReduced?: number;
+    SummerDryWeatherTZnReduced?: number;
     SummerDryWeatherTSSInflow?: number;
     SummerDryWeatherTNInflow?: number;
     SummerDryWeatherTPInflow?: number;
@@ -55,13 +55,13 @@ export class TreatmentBMPModeledResultSimpleDto {
     WinterDryWeatherTreated?: number;
     WinterDryWeatherRetained?: number;
     WinterDryWeatherUntreated?: number;
-    WinterDryWeatherTSSRemoved?: number;
-    WinterDryWeatherTNRemoved?: number;
-    WinterDryWeatherTPRemoved?: number;
-    WinterDryWeatherFCRemoved?: number;
-    WinterDryWeatherTCuRemoved?: number;
-    WinterDryWeatherTPbRemoved?: number;
-    WinterDryWeatherTZnRemoved?: number;
+    WinterDryWeatherTSSReduced?: number;
+    WinterDryWeatherTNReduced?: number;
+    WinterDryWeatherTPReduced?: number;
+    WinterDryWeatherFCReduced?: number;
+    WinterDryWeatherTCuReduced?: number;
+    WinterDryWeatherTPbReduced?: number;
+    WinterDryWeatherTZnReduced?: number;
     WinterDryWeatherTSSInflow?: number;
     WinterDryWeatherTNInflow?: number;
     WinterDryWeatherTPInflow?: number;
@@ -73,13 +73,13 @@ export class TreatmentBMPModeledResultSimpleDto {
     DryWeatherTreated?: number;
     DryWeatherRetained?: number;
     DryWeatherUntreated?: number;
-    DryWeatherTSSRemoved?: number;
-    DryWeatherTNRemoved?: number;
-    DryWeatherTPRemoved?: number;
-    DryWeatherFCRemoved?: number;
-    DryWeatherTCuRemoved?: number;
-    DryWeatherTPbRemoved?: number;
-    DryWeatherTZnRemoved?: number;
+    DryWeatherTSSReduced?: number;
+    DryWeatherTNReduced?: number;
+    DryWeatherTPReduced?: number;
+    DryWeatherFCReduced?: number;
+    DryWeatherTCuReduced?: number;
+    DryWeatherTPbReduced?: number;
+    DryWeatherTZnReduced?: number;
     DryWeatherTSSInflow?: number;
     DryWeatherTNInflow?: number;
     DryWeatherTPInflow?: number;
@@ -91,13 +91,13 @@ export class TreatmentBMPModeledResultSimpleDto {
     TotalTreated?: number;
     TotalRetained?: number;
     TotalUntreated?: number;
-    TotalTSSRemoved?: number;
-    TotalTNRemoved?: number;
-    TotalTPRemoved?: number;
-    TotalFCRemoved?: number;
-    TotalTCuRemoved?: number;
-    TotalTPbRemoved?: number;
-    TotalTZnRemoved?: number;
+    TotalTSSReduced?: number;
+    TotalTNReduced?: number;
+    TotalTPReduced?: number;
+    TotalFCReduced?: number;
+    TotalTCuReduced?: number;
+    TotalTPbReduced?: number;
+    TotalTZnReduced?: number;
     TotalTSSInflow?: number;
     TotalTNInflow?: number;
     TotalTPInflow?: number;

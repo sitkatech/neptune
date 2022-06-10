@@ -156,8 +156,8 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<ProjectModeledResultSummaryDto> ListByIDsAsModeledResultSummaryDtos(HippocampDbContext dbContext, List<int> projectIDs)
         {
-            var treatmentBMPModeledResultByProject = ProjectNereidResults
-                .GetTreatmentBMPModeledResultSimpleDtosByProjectIDs(dbContext, projectIDs)
+            var treatmentBMPModeledResultByProject = ProjectLoadReducingResults
+                .ListByProjectIDsAsDto(dbContext, projectIDs)
                 .GroupBy(x => x.ProjectID);
 
             var projectModeledResultSummaryDtos = new List<ProjectModeledResultSummaryDto>();
@@ -185,13 +185,13 @@ namespace Hippocamp.EFModels.Entities
                         WetWeatherTreated = treatmentBMPGroup.Sum(x => x.WetWeatherTreated),
                         WetWeatherRetained = treatmentBMPGroup.Sum(x => x.WetWeatherRetained),
                         WetWeatherUntreated = treatmentBMPGroup.Sum(x => x.WetWeatherUntreated),
-                        WetWeatherTSSRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherTSSRemoved),
-                        WetWeatherTNRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherTNRemoved),
-                        WetWeatherTPRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherTPRemoved),
-                        WetWeatherFCRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherFCRemoved),
-                        WetWeatherTCuRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherTCuRemoved),
-                        WetWeatherTPbRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherTPbRemoved),
-                        WetWeatherTZnRemoved = treatmentBMPGroup.Sum(x => x.WetWeatherTZnRemoved),
+                        WetWeatherTSSReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTSSReduced),
+                        WetWeatherTNReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTNReduced),
+                        WetWeatherTPReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTPReduced),
+                        WetWeatherFCReduced = treatmentBMPGroup.Sum(x => x.WetWeatherFCReduced),
+                        WetWeatherTCuReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTCuReduced),
+                        WetWeatherTPbReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTPbReduced),
+                        WetWeatherTZnReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTZnReduced),
                         WetWeatherTSSInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTSSInflow),
                         WetWeatherTNInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTNInflow),
                         WetWeatherTPInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTPInflow),
@@ -204,13 +204,13 @@ namespace Hippocamp.EFModels.Entities
                         DryWeatherTreated = treatmentBMPGroup.Sum(x => x.DryWeatherTreated),
                         DryWeatherRetained = treatmentBMPGroup.Sum(x => x.DryWeatherRetained),
                         DryWeatherUntreated = treatmentBMPGroup.Sum(x => x.DryWeatherUntreated),
-                        DryWeatherTSSRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherTSSRemoved),
-                        DryWeatherTNRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherTNRemoved),
-                        DryWeatherTPRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherTPRemoved),
-                        DryWeatherFCRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherFCRemoved),
-                        DryWeatherTCuRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherTCuRemoved),
-                        DryWeatherTPbRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherTPbRemoved),
-                        DryWeatherTZnRemoved = treatmentBMPGroup.Sum(x => x.DryWeatherTZnRemoved),
+                        DryWeatherTSSReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTSSReduced),
+                        DryWeatherTNReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTNReduced),
+                        DryWeatherTPReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTPReduced),
+                        DryWeatherFCReduced = treatmentBMPGroup.Sum(x => x.DryWeatherFCReduced),
+                        DryWeatherTCuReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTCuReduced),
+                        DryWeatherTPbReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTPbReduced),
+                        DryWeatherTZnReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTZnReduced),
                         DryWeatherTSSInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTSSInflow),
                         DryWeatherTNInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTNInflow),
                         DryWeatherTPInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTPInflow),
@@ -223,13 +223,13 @@ namespace Hippocamp.EFModels.Entities
                         TotalTreated = treatmentBMPGroup.Sum(x => x.TotalTreated),
                         TotalRetained = treatmentBMPGroup.Sum(x => x.TotalRetained),
                         TotalUntreated = treatmentBMPGroup.Sum(x => x.TotalUntreated),
-                        TotalTSSRemoved = treatmentBMPGroup.Sum(x => x.TotalTSSRemoved),
-                        TotalTNRemoved = treatmentBMPGroup.Sum(x => x.TotalTNRemoved),
-                        TotalTPRemoved = treatmentBMPGroup.Sum(x => x.TotalTPRemoved),
-                        TotalFCRemoved = treatmentBMPGroup.Sum(x => x.TotalFCRemoved),
-                        TotalTCuRemoved = treatmentBMPGroup.Sum(x => x.TotalTCuRemoved),
-                        TotalTPbRemoved = treatmentBMPGroup.Sum(x => x.TotalTPbRemoved),
-                        TotalTZnRemoved = treatmentBMPGroup.Sum(x => x.TotalTZnRemoved),
+                        TotalTSSReduced = treatmentBMPGroup.Sum(x => x.TotalTSSReduced),
+                        TotalTNReduced = treatmentBMPGroup.Sum(x => x.TotalTNReduced),
+                        TotalTPReduced = treatmentBMPGroup.Sum(x => x.TotalTPReduced),
+                        TotalFCReduced = treatmentBMPGroup.Sum(x => x.TotalFCReduced),
+                        TotalTCuReduced = treatmentBMPGroup.Sum(x => x.TotalTCuReduced),
+                        TotalTPbReduced = treatmentBMPGroup.Sum(x => x.TotalTPbReduced),
+                        TotalTZnReduced = treatmentBMPGroup.Sum(x => x.TotalTZnReduced),
                         TotalTSSInflow = treatmentBMPGroup.Sum(x => x.TotalTSSInflow),
                         TotalTNInflow = treatmentBMPGroup.Sum(x => x.TotalTNInflow),
                         TotalTPInflow = treatmentBMPGroup.Sum(x => x.TotalTPInflow),

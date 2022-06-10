@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
+import { ProjectLoadReducingResultDto } from 'src/app/shared/generated/model/project-load-reducing-result-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
-import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/treatment-bmphru-characteristics-summary-simple-dto';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
@@ -17,9 +17,9 @@ export class ModelResultsComponent implements OnInit {
   public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;
   public activeID = ModeledPerformanceDisplayTypeEnum.Total;
   public modelingSelectListOptions: { TreatmentBMPID: number, TreatmentBMPName: string }[] = [];
-  public treatmentBMPIDForSelectedModelResults = 0;
-  public modeledResults: Array<TreatmentBMPModeledResultSimpleDto>;
-  public selectedModelResults: TreatmentBMPModeledResultSimpleDto;
+  public treatmentBMPIDForSelectedProjectLoadReducingResult = 0;
+  public projectLoadReducingResults: Array<ProjectLoadReducingResultDto>;
+  public selectedProjectLoadReducingResult: ProjectLoadReducingResultDto;
   public treatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
   public selectedTreatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
   public selectedTreatmentBMPHRUCharacteristicSummaryTotal: TreatmentBMPHRUCharacteristicsSummarySimpleDto = {
@@ -43,14 +43,14 @@ export class ModelResultsComponent implements OnInit {
       this.projectNetworkSolveHistories != undefined &&
       this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0) {
       forkJoin({
-        modeledResults: this.projectService.getModeledResultsByProjectID(this.projectID),
+        modeledResults: this.projectService.getLoadReducingResultsByProjectID(this.projectID),
         treatmentBMPHRUCharacteristicSummaries: this.projectService.getTreatmentBMPHRUCharacteristicSummariesByProjectID(this.projectID)
       })
         .subscribe(({ modeledResults, treatmentBMPHRUCharacteristicSummaries }) => {
-          this.modeledResults = modeledResults;
+          this.projectLoadReducingResults = modeledResults;
           this.treatmentBMPHRUCharacteristicSummaries = treatmentBMPHRUCharacteristicSummaries;
           this.populateModeledResultsOptions();
-          this.updateSelectedModelResults();
+          this.updateSelectedProjectLoadReducingResult();
         });
     }
   }
@@ -58,25 +58,25 @@ export class ModelResultsComponent implements OnInit {
   populateModeledResultsOptions() {
     var tempOptions = [];
     tempOptions.push({ TreatmentBMPID: 0, TreatmentBMPName: "All Treatment BMPs" });
-    this.modeledResults.forEach(x => {
+    this.projectLoadReducingResults.forEach(x => {
       var treatmentBMP = this.treatmentBMPs.filter(y => y.TreatmentBMPID == x.TreatmentBMPID)[0];
       tempOptions.push({ TreatmentBMPID: treatmentBMP.TreatmentBMPID, TreatmentBMPName: treatmentBMP.TreatmentBMPName });
     });
     this.modelingSelectListOptions = [...this.modelingSelectListOptions, ...tempOptions];
   }
 
-  updateSelectedModelResults() {
-    if (this.treatmentBMPIDForSelectedModelResults != 0) {
-      this.selectedModelResults = this.modeledResults.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedModelResults)[0];
-      this.selectedTreatmentBMPHRUCharacteristicSummaries = this.treatmentBMPHRUCharacteristicSummaries.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedModelResults).sort((a, b) => { if (a.LandUse > b.LandUse) { return 1; } if (b.LandUse > a.LandUse) { return -1; } return 0 });
+  updateSelectedProjectLoadReducingResult() {
+    if (this.treatmentBMPIDForSelectedProjectLoadReducingResult != 0) {
+      this.selectedProjectLoadReducingResult = this.projectLoadReducingResults.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult)[0];
+      this.selectedTreatmentBMPHRUCharacteristicSummaries = this.treatmentBMPHRUCharacteristicSummaries.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult).sort((a, b) => { if (a.LandUse > b.LandUse) { return 1; } if (b.LandUse > a.LandUse) { return -1; } return 0 });
       this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
       return;
     }
 
-    this.selectedModelResults = new TreatmentBMPModeledResultSimpleDto();
+    this.selectedProjectLoadReducingResult = new ProjectLoadReducingResultDto();
     //We get the property names of the first one so we have a fully populated object because Typescript doesn't always populate the keys which is VERY annoying
-    for (let key of Object.getOwnPropertyNames(this.modeledResults[0])) {
-      this.selectedModelResults[key] = this.modeledResults.reduce((sum, current) => sum + (current[key] ?? 0), 0);
+    for (let key of Object.getOwnPropertyNames(this.projectLoadReducingResults[0])) {
+      this.selectedProjectLoadReducingResult[key] = this.projectLoadReducingResults.reduce((sum, current) => sum + (current[key] ?? 0), 0);
     }
 
     this.selectedTreatmentBMPHRUCharacteristicSummaries = [...this.treatmentBMPHRUCharacteristicSummaries.reduce((r, o) => {

@@ -22,7 +22,17 @@ namespace Hippocamp.EFModels.Entities
         public double? PollutantTSS { get; set; }
         public double? TPI { get; set; }
         public double? SEA { get; set; }
+        public double? DryWeatherWeightedReductionVolume { get; set; }
+        public double? DryWeatherWeightedReductionMetals { get; set; }
+        public double? DryWeatherWeightedReductionBacteria { get; set; }
+        public double? DryWeatherWeightedReductionNutrients { get; set; }
+        public double? DryWeatherWeightedReductionTSS { get; set; }
         public double? DryWeatherWQLRI { get; set; }
+        public double? WetWeatherWeightedReductionVolume { get; set; }
+        public double? WetWeatherWeightedReductionMetals { get; set; }
+        public double? WetWeatherWeightedReductionBacteria { get; set; }
+        public double? WetWeatherWeightedReductionNutrients { get; set; }
+        public double? WetWeatherWeightedReductionTSS { get; set; }
         public double? WetWeatherWQLRI { get; set; }
     }
 }

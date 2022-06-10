@@ -2,13 +2,13 @@
 
 namespace Hippocamp.EFModels.Entities
 {
-    public static partial class ProjectNereidResultExtensionMethods
+    public static class vProjectLoadRemovingResultExtensionMethods
     {
-        public static TreatmentBMPModeledResultSimpleDto AsTreatmentBMPModeledResultSimpleDto(this vProjectModelingResult result)
+        public static ProjectLoadReducingResultDto AsDto(this vProjectLoadReducingResult result)
         {
-            var toReturn = new TreatmentBMPModeledResultSimpleDto()
+            var toReturn = new ProjectLoadReducingResultDto()
             {
-                TreatmentBMPID = result.TreatmentBMPID.Value,
+                TreatmentBMPID = result.TreatmentBMPID,
                 TreatmentBMPName = result.TreatmentBMPName,
                 ProjectID = result.ProjectID,
                 ProjectName = result.ProjectName,
@@ -17,13 +17,13 @@ namespace Hippocamp.EFModels.Entities
                 WetWeatherTreated = result.WetWeatherTreated ?? 0,
                 WetWeatherRetained = result.WetWeatherRetained ?? 0,
                 WetWeatherUntreated = result.WetWeatherUntreated ?? 0,
-                WetWeatherTSSRemoved = result.WetWeatherTSSRemoved ?? 0,
-                WetWeatherTNRemoved = result.WetWeatherTNRemoved ?? 0,
-                WetWeatherTPRemoved = result.WetWeatherTPRemoved ?? 0,
-                WetWeatherFCRemoved = result.WetWeatherFCRemoved ?? 0,
-                WetWeatherTCuRemoved = result.WetWeatherTCuRemoved ?? 0,
-                WetWeatherTPbRemoved = result.WetWeatherTPbRemoved ?? 0,
-                WetWeatherTZnRemoved = result.WetWeatherTZnRemoved ?? 0,
+                WetWeatherTSSReduced = result.WetWeatherTSSReduced ?? 0,
+                WetWeatherTNReduced = result.WetWeatherTNReduced ?? 0,
+                WetWeatherTPReduced = result.WetWeatherTPReduced ?? 0,
+                WetWeatherFCReduced = result.WetWeatherFCReduced ?? 0,
+                WetWeatherTCuReduced = result.WetWeatherTCuReduced ?? 0,
+                WetWeatherTPbReduced = result.WetWeatherTPbReduced ?? 0,
+                WetWeatherTZnReduced = result.WetWeatherTZnReduced ?? 0,
                 WetWeatherTSSInflow = result.WetWeatherTSSInflow ?? 0,
                 WetWeatherTNInflow = result.WetWeatherTNInflow ?? 0,
                 WetWeatherTPInflow = result.WetWeatherTPInflow ?? 0,
@@ -35,13 +35,13 @@ namespace Hippocamp.EFModels.Entities
                 SummerDryWeatherTreated = result.SummerDryWeatherTreated ?? 0,
                 SummerDryWeatherRetained = result.SummerDryWeatherRetained ?? 0,
                 SummerDryWeatherUntreated = result.SummerDryWeatherUntreated ?? 0,
-                SummerDryWeatherTSSRemoved = result.SummerDryWeatherTSSRemoved ?? 0,
-                SummerDryWeatherTNRemoved = result.SummerDryWeatherTNRemoved ?? 0,
-                SummerDryWeatherTPRemoved = result.SummerDryWeatherTPRemoved ?? 0,
-                SummerDryWeatherFCRemoved = result.SummerDryWeatherFCRemoved ?? 0,
-                SummerDryWeatherTCuRemoved = result.SummerDryWeatherTCuRemoved ?? 0,
-                SummerDryWeatherTPbRemoved = result.SummerDryWeatherTPbRemoved ?? 0,
-                SummerDryWeatherTZnRemoved = result.SummerDryWeatherTZnRemoved ?? 0,
+                SummerDryWeatherTSSReduced = result.SummerDryWeatherTSSReduced ?? 0,
+                SummerDryWeatherTNReduced = result.SummerDryWeatherTNReduced ?? 0,
+                SummerDryWeatherTPReduced = result.SummerDryWeatherTPReduced ?? 0,
+                SummerDryWeatherFCReduced = result.SummerDryWeatherFCReduced ?? 0,
+                SummerDryWeatherTCuReduced = result.SummerDryWeatherTCuReduced ?? 0,
+                SummerDryWeatherTPbReduced = result.SummerDryWeatherTPbReduced ?? 0,
+                SummerDryWeatherTZnReduced = result.SummerDryWeatherTZnReduced ?? 0,
                 SummerDryWeatherTSSInflow = result.SummerDryWeatherTSSInflow ?? 0,
                 SummerDryWeatherTNInflow = result.SummerDryWeatherTNInflow ?? 0,
                 SummerDryWeatherTPInflow = result.SummerDryWeatherTPInflow ?? 0,
@@ -53,13 +53,13 @@ namespace Hippocamp.EFModels.Entities
                 WinterDryWeatherTreated = result.WinterDryWeatherTreated ?? 0,
                 WinterDryWeatherRetained = result.WinterDryWeatherRetained ?? 0,
                 WinterDryWeatherUntreated = result.WinterDryWeatherUntreated ?? 0,
-                WinterDryWeatherTSSRemoved = result.WinterDryWeatherTSSRemoved ?? 0,
-                WinterDryWeatherTNRemoved = result.WinterDryWeatherTNRemoved ?? 0,
-                WinterDryWeatherTPRemoved = result.WinterDryWeatherTPRemoved ?? 0,
-                WinterDryWeatherFCRemoved = result.WinterDryWeatherFCRemoved ?? 0,
-                WinterDryWeatherTCuRemoved = result.WinterDryWeatherTCuRemoved ?? 0,
-                WinterDryWeatherTPbRemoved = result.WinterDryWeatherTPbRemoved ?? 0,
-                WinterDryWeatherTZnRemoved = result.WinterDryWeatherTZnRemoved ?? 0,
+                WinterDryWeatherTSSReduced = result.WinterDryWeatherTSSReduced ?? 0,
+                WinterDryWeatherTNReduced = result.WinterDryWeatherTNReduced ?? 0,
+                WinterDryWeatherTPReduced = result.WinterDryWeatherTPReduced ?? 0,
+                WinterDryWeatherFCReduced = result.WinterDryWeatherFCReduced ?? 0,
+                WinterDryWeatherTCuReduced = result.WinterDryWeatherTCuReduced ?? 0,
+                WinterDryWeatherTPbReduced = result.WinterDryWeatherTPbReduced ?? 0,
+                WinterDryWeatherTZnReduced = result.WinterDryWeatherTZnReduced ?? 0,
                 WinterDryWeatherTSSInflow = result.WinterDryWeatherTSSInflow ?? 0,
                 WinterDryWeatherTNInflow = result.WinterDryWeatherTNInflow ?? 0,
                 WinterDryWeatherTPInflow = result.WinterDryWeatherTPInflow ?? 0,
@@ -73,13 +73,13 @@ namespace Hippocamp.EFModels.Entities
             toReturn.DryWeatherTreated = toReturn.SummerDryWeatherTreated + toReturn.WinterDryWeatherTreated;
             toReturn.DryWeatherRetained = toReturn.SummerDryWeatherRetained + toReturn.WinterDryWeatherRetained;
             toReturn.DryWeatherUntreated = toReturn.SummerDryWeatherUntreated + toReturn.WinterDryWeatherUntreated;
-            toReturn.DryWeatherTSSRemoved = toReturn.SummerDryWeatherTSSRemoved + toReturn.WinterDryWeatherTSSRemoved;
-            toReturn.DryWeatherTNRemoved = toReturn.SummerDryWeatherTNRemoved + toReturn.WinterDryWeatherTNRemoved;
-            toReturn.DryWeatherTPRemoved = toReturn.SummerDryWeatherTPRemoved + toReturn.WinterDryWeatherTPRemoved;
-            toReturn.DryWeatherFCRemoved = toReturn.SummerDryWeatherFCRemoved + toReturn.WinterDryWeatherFCRemoved;
-            toReturn.DryWeatherTCuRemoved = toReturn.SummerDryWeatherTCuRemoved + toReturn.WinterDryWeatherTCuRemoved;
-            toReturn.DryWeatherTPbRemoved = toReturn.SummerDryWeatherTPbRemoved + toReturn.WinterDryWeatherTPbRemoved;
-            toReturn.DryWeatherTZnRemoved = toReturn.SummerDryWeatherTZnRemoved + toReturn.WinterDryWeatherTZnRemoved;
+            toReturn.DryWeatherTSSReduced = toReturn.SummerDryWeatherTSSReduced + toReturn.WinterDryWeatherTSSReduced;
+            toReturn.DryWeatherTNReduced = toReturn.SummerDryWeatherTNReduced + toReturn.WinterDryWeatherTNReduced;
+            toReturn.DryWeatherTPReduced = toReturn.SummerDryWeatherTPReduced + toReturn.WinterDryWeatherTPReduced;
+            toReturn.DryWeatherFCReduced = toReturn.SummerDryWeatherFCReduced + toReturn.WinterDryWeatherFCReduced;
+            toReturn.DryWeatherTCuReduced = toReturn.SummerDryWeatherTCuReduced + toReturn.WinterDryWeatherTCuReduced;
+            toReturn.DryWeatherTPbReduced = toReturn.SummerDryWeatherTPbReduced + toReturn.WinterDryWeatherTPbReduced;
+            toReturn.DryWeatherTZnReduced = toReturn.SummerDryWeatherTZnReduced + toReturn.WinterDryWeatherTZnReduced;
             toReturn.DryWeatherTSSInflow = toReturn.SummerDryWeatherTSSInflow + toReturn.WinterDryWeatherTSSInflow;
             toReturn.DryWeatherTNInflow = toReturn.SummerDryWeatherTNInflow + toReturn.WinterDryWeatherTNInflow;
             toReturn.DryWeatherTPInflow = toReturn.SummerDryWeatherTPInflow + toReturn.WinterDryWeatherTPInflow;
@@ -92,13 +92,13 @@ namespace Hippocamp.EFModels.Entities
             toReturn.TotalTreated = toReturn.DryWeatherTreated + toReturn.WetWeatherTreated;
             toReturn.TotalRetained = toReturn.DryWeatherRetained + toReturn.WetWeatherRetained;
             toReturn.TotalUntreated = toReturn.DryWeatherUntreated + toReturn.WetWeatherUntreated;
-            toReturn.TotalTSSRemoved = toReturn.DryWeatherTSSRemoved + toReturn.WetWeatherTSSRemoved;
-            toReturn.TotalTNRemoved = toReturn.DryWeatherTNRemoved + toReturn.WetWeatherTNRemoved;
-            toReturn.TotalTPRemoved = toReturn.DryWeatherTPRemoved + toReturn.WetWeatherTPRemoved;
-            toReturn.TotalFCRemoved = toReturn.DryWeatherFCRemoved + toReturn.WetWeatherFCRemoved;
-            toReturn.TotalTCuRemoved = toReturn.DryWeatherTCuRemoved + toReturn.WetWeatherTCuRemoved;
-            toReturn.TotalTPbRemoved = toReturn.DryWeatherTPbRemoved + toReturn.WetWeatherTPbRemoved;
-            toReturn.TotalTZnRemoved = toReturn.DryWeatherTZnRemoved + toReturn.WetWeatherTZnRemoved;
+            toReturn.TotalTSSReduced = toReturn.DryWeatherTSSReduced + toReturn.WetWeatherTSSReduced;
+            toReturn.TotalTNReduced = toReturn.DryWeatherTNReduced + toReturn.WetWeatherTNReduced;
+            toReturn.TotalTPReduced = toReturn.DryWeatherTPReduced + toReturn.WetWeatherTPReduced;
+            toReturn.TotalFCReduced = toReturn.DryWeatherFCReduced + toReturn.WetWeatherFCReduced;
+            toReturn.TotalTCuReduced = toReturn.DryWeatherTCuReduced + toReturn.WetWeatherTCuReduced;
+            toReturn.TotalTPbReduced = toReturn.DryWeatherTPbReduced + toReturn.WetWeatherTPbReduced;
+            toReturn.TotalTZnReduced = toReturn.DryWeatherTZnReduced + toReturn.WetWeatherTZnReduced;
             toReturn.TotalTSSInflow = toReturn.DryWeatherTSSInflow + toReturn.WetWeatherTSSInflow;
             toReturn.TotalTNInflow = toReturn.DryWeatherTNInflow + toReturn.WetWeatherTNInflow;
             toReturn.TotalTPInflow = toReturn.DryWeatherTPInflow + toReturn.WetWeatherTPInflow;
@@ -106,14 +106,6 @@ namespace Hippocamp.EFModels.Entities
             toReturn.TotalTCuInflow = toReturn.DryWeatherTCuInflow + toReturn.WetWeatherTCuInflow;
             toReturn.TotalTPbInflow = toReturn.DryWeatherTPbInflow + toReturn.WetWeatherTPbInflow;
             toReturn.TotalTZnInflow = toReturn.DryWeatherTZnInflow + toReturn.WetWeatherTZnInflow;
-
-            return toReturn;
-        }
-
-        public static TreatmentBMPModeledResultSimpleDto AsTreatmentBMPModeledResultSimpleDtoWithTreatmentBMPFields(this vProjectModelingResult result, TreatmentBMP treatmentBMP)
-        {
-            var toReturn = result.AsTreatmentBMPModeledResultSimpleDto();
-            toReturn.TreatmentBMPName = treatmentBMP.TreatmentBMPName;
 
             return toReturn;
         }

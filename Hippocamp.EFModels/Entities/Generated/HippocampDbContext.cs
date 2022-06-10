@@ -188,6 +188,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vGeoServerWatershed> vGeoServerWatersheds { get; set; }
         public virtual DbSet<vLandUseBlockTGUInput> vLandUseBlockTGUInputs { get; set; }
         public virtual DbSet<vModelBasinLGUInput> vModelBasinLGUInputs { get; set; }
+        public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
@@ -204,8 +205,11 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
         public virtual DbSet<vProjectDelineationLGUInput> vProjectDelineationLGUInputs { get; set; }
+        public virtual DbSet<vProjectDryWeatherWQLRIScore> vProjectDryWeatherWQLRIScores { get; set; }
         public virtual DbSet<vProjectGrantScore> vProjectGrantScores { get; set; }
-        public virtual DbSet<vProjectModelingResult> vProjectModelingResults { get; set; }
+        public virtual DbSet<vProjectLoadGeneratingResult> vProjectLoadGeneratingResults { get; set; }
+        public virtual DbSet<vProjectLoadReducingResult> vProjectLoadReducingResults { get; set; }
+        public virtual DbSet<vProjectWetWeatherWQLRIScore> vProjectWetWeatherWQLRIScores { get; set; }
         public virtual DbSet<vRegionalSubbasinLGUInput> vRegionalSubbasinLGUInputs { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vStormwaterJurisdictionOrganizationMapping> vStormwaterJurisdictionOrganizationMappings { get; set; }
@@ -1798,6 +1802,11 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.ModelID).ValueGeneratedOnAdd();
             });
 
+            modelBuilder.Entity<vModelingResultUnitConversion>(entity =>
+            {
+                entity.ToView("vModelingResultUnitConversion");
+            });
+
             modelBuilder.Entity<vMostRecentTreatmentBMPAssessment>(entity =>
             {
                 entity.ToView("vMostRecentTreatmentBMPAssessment");
@@ -1878,14 +1887,29 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vProjectDelineationLGUInput");
             });
 
-            modelBuilder.Entity<vProjectGrantScore>(entity =>
+            modelBuilder.Entity<vProjectDryWeatherWQLRIScore>(entity =>
             {
-                entity.ToView("vProjectGrantScores");
+                entity.ToView("vProjectDryWeatherWQLRIScore");
             });
 
-            modelBuilder.Entity<vProjectModelingResult>(entity =>
+            modelBuilder.Entity<vProjectGrantScore>(entity =>
             {
-                entity.ToView("vProjectModelingResults");
+                entity.ToView("vProjectGrantScore");
+            });
+
+            modelBuilder.Entity<vProjectLoadGeneratingResult>(entity =>
+            {
+                entity.ToView("vProjectLoadGeneratingResult");
+            });
+
+            modelBuilder.Entity<vProjectLoadReducingResult>(entity =>
+            {
+                entity.ToView("vProjectLoadReducingResult");
+            });
+
+            modelBuilder.Entity<vProjectWetWeatherWQLRIScore>(entity =>
+            {
+                entity.ToView("vProjectWetWeatherWQLRIScore");
             });
 
             modelBuilder.Entity<vRegionalSubbasinLGUInput>(entity =>

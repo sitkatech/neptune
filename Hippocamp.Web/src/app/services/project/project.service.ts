@@ -5,12 +5,11 @@ import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { ProjectDocumentUpsertDto } from 'src/app/shared/models/project-document-upsert-dto';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
-import { TreatmentBMPModeledResultSimpleDto } from 'src/app/shared/generated/model/treatment-bmp-modeled-result-simple-dto';
-import { DelineationUpsertDto, ProjectGrantScoreDto, ProjectHRUCharacteristicsSummaryDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
+import { DelineationUpsertDto, ProjectGrantScoreDto, ProjectLoadReducingResultDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -91,8 +90,8 @@ export class ProjectService {
     return this.apiService.deleteToApi(route);
   }
 
-  getModeledResultsByProjectID(projectID: number): Observable<Array<TreatmentBMPModeledResultSimpleDto>> {
-    let route = `/projects/${projectID}/modeled-performance`;
+  getLoadReducingResultsByProjectID(projectID: number): Observable<Array<ProjectLoadReducingResultDto>> {
+    let route = `/projects/${projectID}/load-reducing-results`;
     return this.apiService.getFromApi(route);
   }
 
