@@ -129,6 +129,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WatershedConfiguration());
             modelBuilder.Configurations.Add(new vFieldVisitDetailedConfiguration());
             modelBuilder.Configurations.Add(new vGeoServerWaterQualityManagementPlanConfiguration());
+            modelBuilder.Configurations.Add(new vModelingResultUnitConversionConfiguration());
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new vNereidBMPColocationConfiguration());
             modelBuilder.Configurations.Add(new vNereidLoadingInputConfiguration());
@@ -143,8 +144,11 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vPowerBITreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vPowerBIWaterQualityManagementPlanOAndMVerificationConfiguration());
-            modelBuilder.Configurations.Add(new vProjectGrantScoresConfiguration());
-            modelBuilder.Configurations.Add(new vProjectModelingResultsConfiguration());
+            modelBuilder.Configurations.Add(new vProjectDryWeatherWQLRIScoreConfiguration());
+            modelBuilder.Configurations.Add(new vProjectGrantScoreConfiguration());
+            modelBuilder.Configurations.Add(new vProjectLoadGeneratingResultConfiguration());
+            modelBuilder.Configurations.Add(new vProjectLoadReducingResultConfiguration());
+            modelBuilder.Configurations.Add(new vProjectWetWeatherWQLRIScoreConfiguration());
             modelBuilder.Configurations.Add(new vRegionalSubbasinUpstreamCatchmentGeometry4326Configuration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
             modelBuilder.Configurations.Add(new vTreatmentBMPDetailedConfiguration());
@@ -246,6 +250,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<Watershed> Watersheds { get; set; }
         public virtual DbSet<vFieldVisitDetailed> vFieldVisitDetaileds { get; set; }
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
+        public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
         public virtual DbSet<vNereidLoadingInput> vNereidLoadingInputs { get; set; }
@@ -260,8 +265,11 @@ namespace Neptune.Web.Models
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
-        public virtual DbSet<vProjectGrantScores> vProjectGrantScores { get; set; }
-        public virtual DbSet<vProjectModelingResults> vProjectModelingResults { get; set; }
+        public virtual DbSet<vProjectDryWeatherWQLRIScore> vProjectDryWeatherWQLRIScores { get; set; }
+        public virtual DbSet<vProjectGrantScore> vProjectGrantScores { get; set; }
+        public virtual DbSet<vProjectLoadGeneratingResult> vProjectLoadGeneratingResults { get; set; }
+        public virtual DbSet<vProjectLoadReducingResult> vProjectLoadReducingResults { get; set; }
+        public virtual DbSet<vProjectWetWeatherWQLRIScore> vProjectWetWeatherWQLRIScores { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
         public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }

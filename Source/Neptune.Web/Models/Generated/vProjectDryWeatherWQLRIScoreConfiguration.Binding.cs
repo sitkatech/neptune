@@ -1,21 +1,20 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source View: [dbo].[vProjectGrantScores]
+//  Source View: [dbo].[vProjectDryWeatherWQLRIScore]
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Neptune.Web.Models
 {
-    public class vProjectGrantScoresConfiguration : EntityTypeConfiguration<vProjectGrantScores>
+    public class vProjectDryWeatherWQLRIScoreConfiguration : EntityTypeConfiguration<vProjectDryWeatherWQLRIScore>
     {
-        public vProjectGrantScoresConfiguration() : this("dbo"){}
+        public vProjectDryWeatherWQLRIScoreConfiguration() : this("dbo"){}
 
-        public vProjectGrantScoresConfiguration(string schema)
+        public vProjectDryWeatherWQLRIScoreConfiguration(string schema)
         {
-            ToTable("vProjectGrantScores", schema);
+            ToTable("vProjectDryWeatherWQLRIScore", schema);
             HasKey(x => x.PrimaryKey);
-            
             
             
             

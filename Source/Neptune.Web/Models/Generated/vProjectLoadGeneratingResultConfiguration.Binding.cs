@@ -1,52 +1,20 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source View: [dbo].[vProjectModelingResults]
+//  Source View: [dbo].[vProjectLoadGeneratingResult]
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Neptune.Web.Models
 {
-    public class vProjectModelingResultsConfiguration : EntityTypeConfiguration<vProjectModelingResults>
+    public class vProjectLoadGeneratingResultConfiguration : EntityTypeConfiguration<vProjectLoadGeneratingResult>
     {
-        public vProjectModelingResultsConfiguration() : this("dbo"){}
+        public vProjectLoadGeneratingResultConfiguration() : this("dbo"){}
 
-        public vProjectModelingResultsConfiguration(string schema)
+        public vProjectLoadGeneratingResultConfiguration(string schema)
         {
-            ToTable("vProjectModelingResults", schema);
+            ToTable("vProjectLoadGeneratingResult", schema);
             HasKey(x => x.PrimaryKey);
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             
             
             
