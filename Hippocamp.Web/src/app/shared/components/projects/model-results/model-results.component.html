@@ -447,6 +447,38 @@
                 </tr>
             </tbody>
         </table>
+        <table id="designSizingInfoPanel" class="table table-striped mt-4" *ngIf="treatmentBMPIDForSelectedProjectLoadReducingResult > 0">
+            <thead>
+                <tr>
+                    <th colspan="2">Design Sizing Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <field-definition fieldDefinitionType="EffectiveAreaAcres"></field-definition>
+                    </td>
+                    <td style="text-align: left">
+                        {{selectedProjectLoadReducingResult.EffectiveAreaAcres | number: '1.2-2'}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <field-definition fieldDefinitionType="DesignStormDepth85thPercentile">
+                        </field-definition>
+                    </td>
+                    <td>{{selectedProjectLoadReducingResult.DesignStormDepth85thPercentile | number:'1.2-2'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <field-definition fieldDefinitionType="DesignVolume85thPercentile">
+                        </field-definition>
+                    </td>
+                    <td>{{selectedProjectLoadReducingResult.DesignVolume85thPercentile |
+                        number:'1.2-2'}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <p class="font-italic">{{getModelResultsLastCalculatedText()}}</p>

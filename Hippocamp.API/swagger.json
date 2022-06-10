@@ -2876,6 +2876,21 @@
             "type": "string",
             "nullable": true
           },
+          "EffectiveAreaAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignStormDepth85thPercentile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignVolume85thPercentile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "WetWeatherInflow": {
             "type": "number",
             "format": "double"

@@ -15,6 +15,9 @@ export class ProjectLoadReducingResultDto {
     TreatmentBMPName?: string;
     ProjectID?: number;
     ProjectName?: string;
+    EffectiveAreaAcres?: number;
+    DesignStormDepth85thPercentile?: number;
+    DesignVolume85thPercentile?: number;
     WetWeatherInflow?: number;
     WetWeatherTreated?: number;
     WetWeatherRetained?: number;

@@ -9,6 +9,9 @@ namespace Hippocamp.Models.DataTransferObjects
         public string TreatmentBMPName { get; set; }
         public int ProjectID { get; set; }
         public string ProjectName { get; set; }
+        public double? EffectiveAreaAcres { get; set; }
+        public double? DesignStormDepth85thPercentile { get; set; }
+        public double? DesignVolume85thPercentile { get; set; }
         public double WetWeatherInflow { get; set; }
         public double WetWeatherTreated { get; set; }
         public double WetWeatherRetained { get; set; }

@@ -135,5 +135,8 @@ export enum FieldDefinitionTypeEnum {
     TotalCopper = 130, 
     TotalLead = 131,
     TotalZinc = 132,
-    OCTAWatershed = 133
+    OCTAWatershed = 133,
+    EffectiveAreaAcres = 134,
+    DesignStormDepth85thPercentile = 135,
+    DesignVolume85thPercentile = 136
 }

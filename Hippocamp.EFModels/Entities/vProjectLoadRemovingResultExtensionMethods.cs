@@ -13,6 +13,10 @@ namespace Hippocamp.EFModels.Entities
                 ProjectID = result.ProjectID,
                 ProjectName = result.ProjectName,
 
+                EffectiveAreaAcres = result.EffectiveAreaAcres,
+                DesignStormDepth85thPercentile = result.DesignStormDepth85thPercentile,
+                DesignVolume85thPercentile = result.DesignVolume85thPercentile,
+
                 WetWeatherInflow = result.WetWeatherInflow ?? 0,
                 WetWeatherTreated = result.WetWeatherTreated ?? 0,
                 WetWeatherRetained = result.WetWeatherRetained ?? 0,
