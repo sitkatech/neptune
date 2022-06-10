@@ -29,6 +29,9 @@ namespace Hippocamp.EFModels.Entities
         public string NodeID { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }
+        public double? EffectiveAreaAcres { get; set; }
+        public double? DesignStormDepth85thPercentile { get; set; }
+        public double? DesignVolume85thPercentile { get; set; }
         public double? WetWeatherInflow { get; set; }
         public double? WetWeatherTreated { get; set; }
         public double? WetWeatherRetained { get; set; }
