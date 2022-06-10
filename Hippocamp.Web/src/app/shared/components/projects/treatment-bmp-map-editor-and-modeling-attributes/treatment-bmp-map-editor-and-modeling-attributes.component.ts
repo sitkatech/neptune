@@ -670,8 +670,11 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
           window.scroll(0, 0);
           this.cdr.detectChanges();
         });
-        })
-      
+        }, error => {
+          this.isLoadingSubmit = false;
+          window.scroll(0,0);
+          this.cdr.detectChanges();
+        });
     }, error => {
       this.isLoadingSubmit = false;
       window.scroll(0, 0);

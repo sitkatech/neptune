@@ -6,9 +6,6 @@
 <div class="row m-1">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
-<div class="row m-1">
-    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
-</div>
 <div class="row m-1 mb-3">
     <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'"
         [dismissible]="false">
@@ -17,7 +14,7 @@
     </ngb-alert>
     <div class="col-4 col-md-2">
         <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()"
-            [disabled]="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)">
+            [disabled]="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued) || delineations?.length == 0">
             Calculate
         </button>
     </div>
