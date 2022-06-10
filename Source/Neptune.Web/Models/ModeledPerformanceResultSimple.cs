@@ -9,6 +9,9 @@ namespace Neptune.Web.Models
 {
     public class ModeledPerformanceResultSimple
     {
+        public double EffectiveAreaAcres { get; set; }
+        public double DesignStormDepth85thPercentile { get; set; }
+        public double DesignVolume85thPercentile { get; set; }
         public double WetWeatherInflow { get; set; }
         public double WetWeatherTreated { get; set; }
         public double WetWeatherRetained { get; set; }
@@ -146,6 +149,12 @@ namespace Neptune.Web.Models
             Outdated = lastDeltaQueue != null && lastDeltaQueue.Value > nereidResultLastUpdate;
 
             var fullResults = nereidResults.Select(x => JObject.Parse(x.FullResponse)).ToList();
+
+            EffectiveAreaAcres = fullResults.Select(x => x.ExtractDoubleValue("eff_area_acres_cumul")).Sum();
+            DesignStormDepth85thPercentile = fullResults.Select(x => x.ExtractDoubleValue("design_storm_depth_inches")).Sum();
+            DesignVolume85thPercentile = fullResults.Select(x => x.ExtractDoubleValue("design_volume_cuft_cumul")).Sum();
+
+
             WetWeatherInflow = fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_inflow")).Sum();
             WetWeatherTreated = fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_treated")).Sum();
             WetWeatherRetained = fullResults.Select(x => x.ExtractDoubleValue("runoff_volume_cuft_retained")).Sum();
