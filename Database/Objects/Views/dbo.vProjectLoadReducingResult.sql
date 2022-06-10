@@ -18,6 +18,9 @@ select  ProjectNereidResultID as PrimaryKey,
         NodeID,
         --FullResponse,
         LastUpdate,
+        EffectiveAreaAcres,
+        DesignStormDepth85thPercentile,
+        DesignVolume85thPercentile,
         WetWeatherInflow as WetWeatherInflow,
         WetWeatherTreated as WetWeatherTreated,
         WetWeatherRetained as WetWeatherRetained,
@@ -131,7 +134,10 @@ select  ProjectNereidResultID as PrimaryKey,
             WinterDryWeatherFCInflow float '$.winter_dwFC_load_mpn_inflow',
             WinterDryWeatherTCuInflow float '$.winter_dwTCu_load_lbs_inflow',
             WinterDryWeatherTPbInflow float '$.winter_dwTPb_load_lbs_inflow',
-            WinterDryWeatherTZnInflow float '$.winter_dwTZn_load_lbs_inflow'
+            WinterDryWeatherTZnInflow float '$.winter_dwTZn_load_lbs_inflow',
+            EffectiveAreaAcres float '$.eff_area_acres_cumul',
+            DesignStormDepth85thPercentile float '$.design_storm_depth_inches',
+            DesignVolume85thPercentile float '$.design_volume_cuft_cumul'
         ) as ModelResults
         cross join dbo.vModelingResultUnitConversion uc
 
