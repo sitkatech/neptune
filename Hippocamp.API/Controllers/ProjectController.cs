@@ -371,10 +371,23 @@ namespace Hippocamp.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<ProjectHRUCharacteristicsSummaryDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var projectDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
-                .Select(x => x.AsProjectHRUCharacteristicsSummaryDto());
-
-            return Ok(projectDtos);
+            var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
+                .Select(x => x.AsProjectHRUCharacteristicsSummaryDto()).ToList();
+            var projectIDs = projectHruCharacteristicsSummaryDtos.Select(x => x.ProjectID);
+            var projectGrantScores = _dbContext.vProjectGrantScores.Where(x => projectIDs.Contains(x.ProjectID)).ToList();
+            foreach (var projectHruCharacteristicsSummaryDto in projectHruCharacteristicsSummaryDtos)
+            {
+                var projectGrantScore =
+                    projectGrantScores.SingleOrDefault(x => x.ProjectID == projectHruCharacteristicsSummaryDto.ProjectID);
+                if (projectGrantScore != null)
+                {
+                    projectHruCharacteristicsSummaryDto.SEA = projectGrantScore.SEA;
+                    projectHruCharacteristicsSummaryDto.TPI = projectGrantScore.TPI;
+                    projectHruCharacteristicsSummaryDto.DryWeatherWQLRI = projectGrantScore.DryWeatherWQLRI;
+                    projectHruCharacteristicsSummaryDto.WetWeatherWQLRI = projectGrantScore.WetWeatherWQLRI;
+                }
+            }
+            return Ok(projectHruCharacteristicsSummaryDtos);
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram/download")]

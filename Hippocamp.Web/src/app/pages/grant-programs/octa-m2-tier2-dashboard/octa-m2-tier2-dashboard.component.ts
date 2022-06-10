@@ -8,7 +8,7 @@ import 'leaflet-loading';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DelineationService } from 'src/app/services/delineation.service';
-import { BoundingBoxDto, DelineationSimpleDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationSimpleDto, ProjectHRUCharacteristicsSummaryDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
@@ -42,14 +42,14 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   private currentUser: PersonDto;
   public richTextTypeID = CustomRichTextType.OCTAM2Tier2GrantProgramDashboard;
 
-  public projects: Array<ProjectSimpleDto>;
+  public projects: Array<ProjectHRUCharacteristicsSummaryDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationSimpleDto>;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public relateedTreatmentBMPsToDisplay: Array<TreatmentBMPDisplayDto>;
   public selectedDelineation: DelineationSimpleDto;
-  public selectedProject: ProjectSimpleDto;
+  public selectedProject: ProjectHRUCharacteristicsSummaryDto;
 
   public mapID: string = 'planningMap';
   public mapHeight = (window.innerHeight - (window.innerHeight * 0.2)) + "px";
@@ -133,28 +133,12 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },
-        { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
-          headerComponentParams: { fieldDefinitionType: 'Area', labelOverride: 'Area Treated (ac)' },
-          field: 'Area'
-        },
-        { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
-          headerComponentParams: { fieldDefinitionType: 'ImperviousArea', labelOverride: 'Impervious Area Treated (ac)' },
-          field: 'ImperviousAcres'
-        },
-        { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
-          headerComponentParams: { fieldDefinitionType: 'SEAScore', labelOverride: 'SEA Score' },
-        },
-        { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
-          headerComponentParams: { fieldDefinitionType: 'TPIScore', labelOverride: 'TPI Score' },
-        },
-        { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
-          headerComponentParams: { fieldDefinitionType: 'WQLRI', labelOverride: 'WQLRI' },
-        }
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('Area', 'Area', 'Area', 'Area Treated (ac)', null, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('ImperviousAcres', 'ImperviousAcres', 'ImperviousArea', 'Impervious Area Treated (ac)', 220, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('SEAScore', 'SEA', 'SEAScore', 'SEA Score', 90, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('TPIScore', 'TPI', 'TPIScore', 'TPI Score', 90, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('WQLRI', 'DryWeatherWQLRI', 'WQLRI', 'Dry Weather WQLRI', null, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('WQLRI', 'WetWeatherWQLRI', 'WQLRI', 'Wet Weather WQLRI', null, 2),
       ];
 
       this.defaultColDef = {

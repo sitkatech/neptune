@@ -2607,6 +2607,26 @@
             "type": "number",
             "format": "double"
           },
+          "TPI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SEA": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "ProjectID": {
             "type": "integer",
             "format": "int32"

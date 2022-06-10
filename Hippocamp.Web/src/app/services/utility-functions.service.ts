@@ -2,6 +2,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, CsvExportParams } from 'ag-grid-community';
+import { FieldDefinitionGridHeaderComponent } from '../shared/components/field-definition-grid-header/field-definition-grid-header.component';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,20 @@ export class UtilityFunctionsService {
   
     return decimalColDef;
   }
+
+  public createDecimalColumnDefWithFieldDefinition(headerName: string, fieldName: string, fieldDefinitionType: string, labelOverride?: string, width?: number, decimalPlacesToDisplay?: number): ColDef {
+    var colDef = this.createDecimalColumnDef(headerName, fieldName, width, decimalPlacesToDisplay);
+
+    colDef.headerComponentFramework = FieldDefinitionGridHeaderComponent;
+    colDef.headerComponentParams = { fieldDefinitionType: fieldDefinitionType };
+
+    if (labelOverride) {
+      colDef.headerComponentParams.labelOverride = labelOverride;
+    }
+
+    return colDef;
+  }
+
 
   private dateFilterComparator(filterLocalDateAtMidnight, cellValue) {
     const filterDate = Date.parse(filterLocalDateAtMidnight);

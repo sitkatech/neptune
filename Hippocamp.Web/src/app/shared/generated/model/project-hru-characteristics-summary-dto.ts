@@ -17,6 +17,10 @@ import { StormwaterJurisdictionSimpleDto } from '././stormwater-jurisdiction-sim
 export class ProjectHRUCharacteristicsSummaryDto { 
     Area?: number;
     ImperviousAcres?: number;
+    TPI?: number;
+    SEA?: number;
+    DryWeatherWQLRI?: number;
+    WetWeatherWQLRI?: number;
     ProjectID?: number;
     ProjectName?: string;
     OrganizationID?: number;
