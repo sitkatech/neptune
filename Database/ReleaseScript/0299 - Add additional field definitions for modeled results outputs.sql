@@ -11,7 +11,10 @@ values
 	(130, 'TotalCopper', 'Total Copper'),
 	(131, 'TotalLead', 'Total Lead'),
 	(132, 'TotalZinc', 'Total Zinc'),
-    (133, 'OCTAWatershed', 'OCTA Watershed')
+    (133, 'OCTAWatershed', 'OCTA Watershed'),
+    (134, 'EffectiveAreaAcres', 'Effective Area (acres)'),
+    (135, 'DesignStormDepth85thPercentile', '85th Percentile Design Storm Depth (inches)'),
+    (136, 'DesignVolume85thPercentile', '85th Percentile Design Volume (cuft)')
 go
 
 insert into dbo.FieldDefinition (FieldDefinitionTypeID, FieldDefinitionValue)
@@ -27,4 +30,7 @@ values
 	(130, 'Total Copper Definition'),
 	(131, 'Total Lead Definition'),
 	(132, 'Total Zinc Definition'),
-    (133, 'OCTA Watershed')
+    (133, 'OCTA Watershed'),
+    (134, 'Effective Area (acres)'),
+    (135, '85th Percentile Design Storm Depth (inches)'),
+    (136, '85th Percentile Design Volume (cuft)')

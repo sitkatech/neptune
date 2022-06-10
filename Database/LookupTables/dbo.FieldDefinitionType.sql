@@ -134,5 +134,8 @@ VALUES
 (130, 'TotalCopper', 'Total Copper'),
 (131, 'TotalLead', 'Total Lead'),
 (132, 'TotalZinc', 'Total Zinc'),
-(133, 'OCTAWatershed', 'OCTA Watershed')
+(133, 'OCTAWatershed', 'OCTA Watershed'),
+(134, 'EffectiveAreaAcres', 'Effective Area (acres)'),
+(135, 'DesignStormDepth85thPercentile', '85th Percentile Design Storm Depth (inches)'),
+(136, 'DesignVolume85thPercentile', '85th Percentile Design Volume (cuft)')
 
