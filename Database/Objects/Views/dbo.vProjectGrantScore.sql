@@ -10,6 +10,7 @@ as
 (
     select plg.ProjectID, geometry::UnionAggregate(plg.ProjectLoadGeneratingUnitGeometry)
     from  dbo.ProjectLoadGeneratingUnit plg
+    where plg.DelineationID is not null
     group by ProjectID
 ),
 octaProject(ProjectID, TotalProjectArea, CatchIDN, OCTAPrioritizationKey, OverlapArea, Watershed, TPI, WQNLU, WQNMON, IMPAIR, MON, SEA, SEA_PCTL, PC_VOL_PCT, PC_NUT_PCT, PC_BAC_PCT, PC_MET_PCT, PC_TSS_PCT)
