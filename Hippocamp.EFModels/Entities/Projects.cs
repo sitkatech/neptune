@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Hippocamp.Models.DataTransferObjects;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hippocamp.EFModels.Entities
@@ -60,7 +58,7 @@ namespace Hippocamp.EFModels.Entities
                 ProjectName = projectUpsertDto.ProjectName,
                 OrganizationID = projectUpsertDto.OrganizationID.Value,
                 StormwaterJurisdictionID = projectUpsertDto.StormwaterJurisdictionID.Value,
-                ProjectStatusID = (int) ProjectStatusEnum.Draft,
+                ProjectStatusID = (int)ProjectStatusEnum.Draft,
                 PrimaryContactPersonID = projectUpsertDto.PrimaryContactPersonID.Value,
                 CreatePersonID = personDto.PersonID,
                 DateCreated = DateTime.UtcNow,
@@ -102,7 +100,7 @@ namespace Hippocamp.EFModels.Entities
             var project = dbContext.Projects.Include(x => x.TreatmentBMPs).Where(x => x.ProjectID == projectID).First();
             var treatmentBMPIDs = project.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
             var delineationIDs = dbContext.Delineations.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).Select(x => x.DelineationID).ToList();
-            
+
             dbContext.ProjectHRUCharacteristics.RemoveRange(dbContext.ProjectHRUCharacteristics.Where(x => x.ProjectID == projectID).ToList());
             dbContext.ProjectLoadGeneratingUnits.RemoveRange(dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID).ToList());
             dbContext.ProjectNereidResults.RemoveRange(dbContext.ProjectNereidResults.Where(x => x.ProjectID == projectID).ToList());
@@ -156,115 +154,98 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<ProjectModeledResultSummaryDto> ListByIDsAsModeledResultSummaryDtos(HippocampDbContext dbContext, List<int> projectIDs)
         {
-            var treatmentBMPModeledResultByProject = ProjectLoadReducingResults
-                .ListByProjectIDsAsDto(dbContext, projectIDs)
+            var projectLoadReducingResultsGroups = ProjectLoadReducingResults
+                .ListByProjectIDs(dbContext, projectIDs)
                 .GroupBy(x => x.ProjectID);
 
+            var allProjectHRUCharacteristics = dbContext.ProjectHRUCharacteristics
+                .Where(x => projectIDs.Contains(x.ProjectID)).ToList();
+            var projectGrantScores = dbContext.vProjectGrantScores.Where(x => projectIDs.Contains(x.ProjectID)).ToList();
             var projectModeledResultSummaryDtos = new List<ProjectModeledResultSummaryDto>();
 
-            foreach (var treatmentBMPGroup in treatmentBMPModeledResultByProject)
+            foreach (var projectLoadReducingResultsGroup in projectLoadReducingResultsGroups)
             {
-                var project = dbContext.Projects.Include(x => x.Organization)
-                    .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
-                    .SingleOrDefault(x => x.ProjectID == treatmentBMPGroup.Key);
+                var projectID = projectLoadReducingResultsGroup.Key;
+                var projectHRUCharacteristics = allProjectHRUCharacteristics.Where(x => x.ProjectID == projectID).ToList();
+                var area = projectHRUCharacteristics.Any() ? projectHRUCharacteristics.Sum(x => x.Area) : (double?)null;
+                var imperviousAcres = projectHRUCharacteristics.Any() ? projectHRUCharacteristics.Sum(x => x.ImperviousAcres) : (double?)null;
 
-                var projectHRUCharacteristics = dbContext.ProjectHRUCharacteristics
-                    .Where(x => x.ProjectID == treatmentBMPGroup.Key);
-                var area = projectHRUCharacteristics.Sum(x => x.Area);
-                var imperviousAcres = projectHRUCharacteristics.Sum(x => x.ImperviousAcres);
-
-                projectModeledResultSummaryDtos.Add(new ProjectModeledResultSummaryDto() 
-                    {
-                        ProjectName = project?.ProjectName,
-                        Jurisdiction = project?.StormwaterJurisdiction.Organization.OrganizationName,
-                        Organization = project?.Organization.OrganizationName,
-                        AcresTreated = area,
-                        ImperviousAcresTreated = imperviousAcres,
-
-                        WetWeatherInflow = treatmentBMPGroup.Sum(x => x.WetWeatherInflow),
-                        WetWeatherTreated = treatmentBMPGroup.Sum(x => x.WetWeatherTreated),
-                        WetWeatherRetained = treatmentBMPGroup.Sum(x => x.WetWeatherRetained),
-                        WetWeatherUntreated = treatmentBMPGroup.Sum(x => x.WetWeatherUntreated),
-                        WetWeatherTSSReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTSSReduced),
-                        WetWeatherTNReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTNReduced),
-                        WetWeatherTPReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTPReduced),
-                        WetWeatherFCReduced = treatmentBMPGroup.Sum(x => x.WetWeatherFCReduced),
-                        WetWeatherTCuReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTCuReduced),
-                        WetWeatherTPbReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTPbReduced),
-                        WetWeatherTZnReduced = treatmentBMPGroup.Sum(x => x.WetWeatherTZnReduced),
-                        WetWeatherTSSInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTSSInflow),
-                        WetWeatherTNInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTNInflow),
-                        WetWeatherTPInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTPInflow),
-                        WetWeatherFCInflow = treatmentBMPGroup.Sum(x => x.WetWeatherFCInflow),
-                        WetWeatherTCuInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTCuInflow),
-                        WetWeatherTPbInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTPbInflow),
-                        WetWeatherTZnInflow = treatmentBMPGroup.Sum(x => x.WetWeatherTZnInflow),
-                        
-                        DryWeatherInflow = treatmentBMPGroup.Sum(x => x.DryWeatherInflow),
-                        DryWeatherTreated = treatmentBMPGroup.Sum(x => x.DryWeatherTreated),
-                        DryWeatherRetained = treatmentBMPGroup.Sum(x => x.DryWeatherRetained),
-                        DryWeatherUntreated = treatmentBMPGroup.Sum(x => x.DryWeatherUntreated),
-                        DryWeatherTSSReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTSSReduced),
-                        DryWeatherTNReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTNReduced),
-                        DryWeatherTPReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTPReduced),
-                        DryWeatherFCReduced = treatmentBMPGroup.Sum(x => x.DryWeatherFCReduced),
-                        DryWeatherTCuReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTCuReduced),
-                        DryWeatherTPbReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTPbReduced),
-                        DryWeatherTZnReduced = treatmentBMPGroup.Sum(x => x.DryWeatherTZnReduced),
-                        DryWeatherTSSInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTSSInflow),
-                        DryWeatherTNInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTNInflow),
-                        DryWeatherTPInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTPInflow),
-                        DryWeatherFCInflow = treatmentBMPGroup.Sum(x => x.DryWeatherFCInflow),
-                        DryWeatherTCuInflow = treatmentBMPGroup.Sum(x => x.DryWeatherFCInflow),
-                        DryWeatherTPbInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTPbInflow),
-                        DryWeatherTZnInflow = treatmentBMPGroup.Sum(x => x.DryWeatherTZnInflow),
-
-                        TotalInflow = treatmentBMPGroup.Sum(x => x.TotalInflow),
-                        TotalTreated = treatmentBMPGroup.Sum(x => x.TotalTreated),
-                        TotalRetained = treatmentBMPGroup.Sum(x => x.TotalRetained),
-                        TotalUntreated = treatmentBMPGroup.Sum(x => x.TotalUntreated),
-                        TotalTSSReduced = treatmentBMPGroup.Sum(x => x.TotalTSSReduced),
-                        TotalTNReduced = treatmentBMPGroup.Sum(x => x.TotalTNReduced),
-                        TotalTPReduced = treatmentBMPGroup.Sum(x => x.TotalTPReduced),
-                        TotalFCReduced = treatmentBMPGroup.Sum(x => x.TotalFCReduced),
-                        TotalTCuReduced = treatmentBMPGroup.Sum(x => x.TotalTCuReduced),
-                        TotalTPbReduced = treatmentBMPGroup.Sum(x => x.TotalTPbReduced),
-                        TotalTZnReduced = treatmentBMPGroup.Sum(x => x.TotalTZnReduced),
-                        TotalTSSInflow = treatmentBMPGroup.Sum(x => x.TotalTSSInflow),
-                        TotalTNInflow = treatmentBMPGroup.Sum(x => x.TotalTNInflow),
-                        TotalTPInflow = treatmentBMPGroup.Sum(x => x.TotalTPInflow),
-                        TotalFCInflow = treatmentBMPGroup.Sum(x => x.TotalFCInflow),
-                        TotalTCuInflow = treatmentBMPGroup.Sum(x => x.TotalFCInflow),
-                        TotalTPbInflow = treatmentBMPGroup.Sum(x => x.TotalTPbInflow),
-                        TotalTZnInflow = treatmentBMPGroup.Sum(x => x.TotalTZnInflow)
-                    }
-                );
-            }
-
-            foreach (var projectID in projectIDs)
-            {
-                if (treatmentBMPModeledResultByProject.Any(x => x.Key == projectID))
+                var projectModeledResultSummaryDto = new ProjectModeledResultSummaryDto()
                 {
-                    continue;
+                    ProjectName = projectLoadReducingResultsGroup.First().ProjectName,
+                    Jurisdiction = projectLoadReducingResultsGroup.First().JurisdictionName,
+                    Organization = projectLoadReducingResultsGroup.First().OrganizationName,
+                    AcresTreated = area ?? 0,
+                    ImperviousAcresTreated = imperviousAcres ?? 0,
+
+                    WetWeatherInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherInflow ?? 0),
+                    WetWeatherTreated = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTreated ?? 0),
+                    WetWeatherRetained = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherRetained ?? 0),
+                    WetWeatherUntreated = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherUntreated ?? 0),
+                    WetWeatherTSSReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTSSReduced ?? 0),
+                    WetWeatherTNReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTNReduced ?? 0),
+                    WetWeatherTPReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTPReduced ?? 0),
+                    WetWeatherFCReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherFCReduced ?? 0),
+                    WetWeatherTCuReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTCuReduced ?? 0),
+                    WetWeatherTPbReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTPbReduced ?? 0),
+                    WetWeatherTZnReduced = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTZnReduced ?? 0),
+                    WetWeatherTSSInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTSSInflow ?? 0),
+                    WetWeatherTNInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTNInflow ?? 0),
+                    WetWeatherTPInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTPInflow ?? 0),
+                    WetWeatherFCInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherFCInflow ?? 0),
+                    WetWeatherTCuInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTCuInflow ?? 0),
+                    WetWeatherTPbInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTPbInflow ?? 0),
+                    WetWeatherTZnInflow = projectLoadReducingResultsGroup.Sum(x => x.WetWeatherTZnInflow ?? 0),
+
+                    DryWeatherInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherInflow),
+                    DryWeatherTreated = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTreated),
+                    DryWeatherRetained = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherRetained),
+                    DryWeatherUntreated = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherUntreated),
+                    DryWeatherTSSReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTSSReduced),
+                    DryWeatherTNReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTNReduced),
+                    DryWeatherTPReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTPReduced),
+                    DryWeatherFCReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherFCReduced),
+                    DryWeatherTCuReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTCuReduced),
+                    DryWeatherTPbReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTPbReduced),
+                    DryWeatherTZnReduced = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTZnReduced),
+                    DryWeatherTSSInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTSSInflow),
+                    DryWeatherTNInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTNInflow),
+                    DryWeatherTPInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTPInflow),
+                    DryWeatherFCInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherFCInflow),
+                    DryWeatherTCuInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherFCInflow),
+                    DryWeatherTPbInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTPbInflow),
+                    DryWeatherTZnInflow = projectLoadReducingResultsGroup.Sum(x => x.DryWeatherTZnInflow),
+
+                    TotalInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalInflow),
+                    TotalTreated = projectLoadReducingResultsGroup.Sum(x => x.TotalTreated),
+                    TotalRetained = projectLoadReducingResultsGroup.Sum(x => x.TotalRetained),
+                    TotalUntreated = projectLoadReducingResultsGroup.Sum(x => x.TotalUntreated),
+                    TotalTSSReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalTSSReduced),
+                    TotalTNReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalTNReduced),
+                    TotalTPReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalTPReduced),
+                    TotalFCReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalFCReduced),
+                    TotalTCuReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalTCuReduced),
+                    TotalTPbReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalTPbReduced),
+                    TotalTZnReduced = projectLoadReducingResultsGroup.Sum(x => x.TotalTZnReduced),
+                    TotalTSSInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalTSSInflow),
+                    TotalTNInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalTNInflow),
+                    TotalTPInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalTPInflow),
+                    TotalFCInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalFCInflow),
+                    TotalTCuInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalFCInflow),
+                    TotalTPbInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalTPbInflow),
+                    TotalTZnInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalTZnInflow)
+                };
+
+                var projectGrantScore = projectGrantScores.SingleOrDefault(x => x.ProjectID == projectID);
+                if (projectGrantScore != null)
+                {
+                    projectModeledResultSummaryDto.SEA = projectGrantScore.SEA;
+                    projectModeledResultSummaryDto.TPI = projectGrantScore.TPI;
+                    projectModeledResultSummaryDto.DryWeatherWQLRI = projectGrantScore.DryWeatherWQLRI;
+                    projectModeledResultSummaryDto.WetWeatherWQLRI = projectGrantScore.WetWeatherWQLRI;
                 }
 
-                var project = dbContext.Projects.Include(x => x.Organization)
-                    .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
-                    .SingleOrDefault(x => x.ProjectID == projectID);
-
-                var projectHRUCharacteristics = dbContext.ProjectHRUCharacteristics
-                    .Where(x => x.ProjectID == projectID);
-                var area = projectHRUCharacteristics.Sum(x => x.Area);
-                var imperviousAcres = projectHRUCharacteristics.Sum(x => x.ImperviousAcres);
-
-                projectModeledResultSummaryDtos.Add(new ProjectModeledResultSummaryDto()
-                {
-                    ProjectName = project?.ProjectName,
-                    Jurisdiction = project?.StormwaterJurisdiction.Organization.OrganizationName,
-                    Organization = project?.Organization.OrganizationName,
-                    AcresTreated = area,
-                    ImperviousAcresTreated = imperviousAcres
-                });
+                projectModeledResultSummaryDtos.Add(projectModeledResultSummaryDto);
             }
 
             return projectModeledResultSummaryDtos;

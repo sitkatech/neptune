@@ -16,6 +16,14 @@ namespace Hippocamp.EFModels.Entities
         [StringLength(200)]
         [Unicode(false)]
         public string ProjectName { get; set; }
+        [Required]
+        [StringLength(200)]
+        [Unicode(false)]
+        public string OrganizationName { get; set; }
+        [Required]
+        [StringLength(200)]
+        [Unicode(false)]
+        public string JurisdictionName { get; set; }
         public bool IsBaselineCondition { get; set; }
         public int TreatmentBMPID { get; set; }
         [Required]

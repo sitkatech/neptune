@@ -21,7 +21,7 @@ namespace Hippocamp.EFModels.Entities
                 .AsNoTracking();
         }
 
-        private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayDtoImpl(HippocampDbContext dbContext)
+        private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(HippocampDbContext dbContext)
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
@@ -57,7 +57,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<TreatmentBMPDisplayDto> ListAsDisplayDto(HippocampDbContext dbContext)
         {
-            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayDtoImpl(dbContext)
+            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
                 .Select(x => x.AsDisplayDto())
                 .ToList();
 
@@ -66,7 +66,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<TreatmentBMPDisplayDto> ListByProjectIDsAsDisplayDto(HippocampDbContext dbContext, List<int> projectIDs)
         {
-            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayDtoImpl(dbContext)
+            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
                 .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
                 .Select(x => x.AsDisplayDto())
                 .ToList();
@@ -84,7 +84,7 @@ namespace Hippocamp.EFModels.Entities
 
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
-            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayDtoImpl(dbContext)
+            var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .Select(x => x.AsDisplayDto())
                 .ToList();

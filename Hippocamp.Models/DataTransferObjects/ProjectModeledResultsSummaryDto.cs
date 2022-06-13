@@ -13,9 +13,10 @@ namespace Hippocamp.Models.DataTransferObjects
         public string Jurisdiction { get; set; }
         public double AcresTreated { get; set; }
         public double ImperviousAcresTreated { get; set; }
-        public double SEAScore { get; set; }
-        public double TPIScore { get; set; }
-        public double WQLRI { get; set; }
+        public double? TPI { get; set; }
+        public double? SEA { get; set; }
+        public double? DryWeatherWQLRI { get; set; }
+        public double? WetWeatherWQLRI { get; set; }
         public double WetWeatherInflow { get; set; }
         public double WetWeatherTreated { get; set; }
         public double WetWeatherRetained { get; set; }
@@ -82,9 +83,10 @@ namespace Hippocamp.Models.DataTransferObjects
             Map(m => m.Jurisdiction).Name("Jurisdiction");
             Map(m => m.AcresTreated).Name("Acres Treated");
             Map(m => m.ImperviousAcresTreated).Name("Impervious Acres Treated");
-            Map(m => m.SEAScore).Name("SEA Score");
-            Map(m => m.TPIScore).Name("TPI Score");
-            Map(m => m.WQLRI).Name("WQLRI");
+            Map(m => m.SEA).Name("SEA Score");
+            Map(m => m.TPI).Name("TPI Score");
+            Map(m => m.DryWeatherWQLRI).Name("Dry Weather WQLRI");
+            Map(m => m.WetWeatherWQLRI).Name("Wet Weather WQLRI");
 
             Map(m => m.WetWeatherInflow).Name("WetWeatherInflow (cu-ft/yr)");
             Map(m => m.WetWeatherTreated).Name("WetWeatherTreated (cu-ft/yr)");

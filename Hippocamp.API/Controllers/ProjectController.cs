@@ -429,7 +429,7 @@ namespace Hippocamp.API.Controllers
         {
 
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
-            var records = ProjectLoadReducingResults.ListByProjectIDsAsDto(_dbContext, projectIDs);
+            var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);

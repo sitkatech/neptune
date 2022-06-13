@@ -19,16 +19,10 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        public static List<ProjectLoadReducingResultDto> ListByProjectIDsAsDto(HippocampDbContext dbContext, List<int> projectIDs)
+        public static List<vProjectLoadReducingResult> ListByProjectIDs(HippocampDbContext dbContext, List<int> projectIDs)
         {
-            var treatmentBMPIDs = dbContext.TreatmentBMPs
-                .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
-                .Select(x => x.TreatmentBMPID).ToList();
-
             return dbContext.vProjectLoadReducingResults
-                .Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID))
-                .Select(x => x.AsDto())
-                .ToList();
+                .Where(x => projectIDs.Contains(x.ProjectID)).ToList();
         }
     }
 }
