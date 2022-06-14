@@ -233,7 +233,8 @@ namespace Neptune.Web
                     true,
                     unknownOrganization.OrganizationID,
                     false,
-                    keystoneUserClaims.LoginName, false, Guid.NewGuid());
+                    keystoneUserClaims.LoginName, false, Guid.NewGuid(),
+                    false);
                 HttpRequestStorage.DatabaseEntities.People.Add(person);
                 sendNewUserNotification = true;
             }

@@ -392,7 +392,7 @@ namespace Neptune.Web.Controllers
 
             var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
                 keystoneUser.Email, Role.Unassigned, DateTime.Now, true, organization, false,
-                keystoneUser.LoginName, false, Guid.NewGuid());
+                keystoneUser.LoginName, false, Guid.NewGuid(), false);
             HttpRequestStorage.DatabaseEntities.People.Add(firmaPerson);
             return firmaPerson;
         }

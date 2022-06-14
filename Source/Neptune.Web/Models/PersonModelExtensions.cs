@@ -138,7 +138,8 @@ namespace Neptune.Web.Models
                 true,
                 -1,
                 false,
-                null, false, Guid.NewGuid());
+                null, false, Guid.NewGuid(), 
+                false);
             return anonymousSitkaUser;
         }
 
