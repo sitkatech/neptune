@@ -44,6 +44,9 @@ namespace Neptune.Web.Views.User
         [DisplayName("Should Receive System Communications?")]
         public bool ShouldReceiveSystemCommunications { get; set; }
 
+        [DisplayName("OCTA Grant Reviewer")]
+        public bool IsOCTAGrantReviewer { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -57,6 +60,7 @@ namespace Neptune.Web.Views.User
             RoleID = person.RoleID;
             ShouldReceiveSystemCommunications = person.ReceiveSupportEmails;
             ShouldReceiveRSBRevisionRequests = person.ReceiveRSBRevisionRequestEmails;
+            IsOCTAGrantReviewer = person.IsOCTAGrantReviewer;
         }
 
         public void UpdateModel(Person person, Person currentPerson)
@@ -64,6 +68,7 @@ namespace Neptune.Web.Views.User
             person.RoleID = RoleID.GetValueOrDefault();  // will never default due to RequiredAttribute
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
             person.ReceiveRSBRevisionRequestEmails = ShouldReceiveRSBRevisionRequests;
+            person.IsOCTAGrantReviewer = IsOCTAGrantReviewer;
 
             var assignedRole = Models.Role.AllLookupDictionary[RoleID.GetValueOrDefault()];
             if (assignedRole == Models.Role.Admin || assignedRole == Models.Role.SitkaAdmin)
