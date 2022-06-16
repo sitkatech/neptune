@@ -18,6 +18,7 @@ import { ConfirmModalComponent } from '../components/confirm-modal/confirm-modal
   message: string,
 
   buttonClassYes: string
+  buttonDisabledYes?: boolean;
   buttonTextYes: string
   buttonTextNo: string
 }

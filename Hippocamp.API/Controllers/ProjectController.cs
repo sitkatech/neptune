@@ -400,21 +400,14 @@ namespace Hippocamp.API.Controllers
         [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        public async Task<ActionResult<FileContentResult>> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<FileContentResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!currentUser.IsOCTAGrantReviewer)
-            {
-                return Forbid();
-            }
-
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
-
-            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csv.Context.RegisterClassMap<ProjectModeledResultsSummaryMap>();
 
             await csv.WriteRecordsAsync(records);
@@ -444,14 +437,8 @@ namespace Hippocamp.API.Controllers
         [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        public async Task<ActionResult<FileContentResult>> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<FileContentResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!currentUser.IsOCTAGrantReviewer)
-            {
-                return Forbid();
-            }
-
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);
 
