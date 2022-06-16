@@ -35,16 +35,21 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<ProjectSimpleDto> GetByID([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectSimpleDto = Projects.GetByIDAsSimpleDto(_dbContext, projectID);
-            if (!UserCanEditJurisdiction(personDto, projectSimpleDto.StormwaterJurisdictionID))
+
+            if (personDto.IsOCTAGrantReviewer && projectSimpleDto.ShareOCTAM2Tier2Scores)
             {
-                return Forbid();
+                return Ok(projectSimpleDto);
             }
-            return Ok(projectSimpleDto);
+            if (UserCanEditJurisdiction(personDto, projectSimpleDto.StormwaterJurisdictionID))
+            {
+                return Ok(projectSimpleDto);
+            }
+            return Forbid();
         }
 
         [HttpGet("projects")]
@@ -103,7 +108,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/attachments")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<ProjectDocumentSimpleDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
         {
             var project = Projects.GetByID(_dbContext, projectID);
@@ -203,7 +208,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/project-network-solve-histories")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject(int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
@@ -212,7 +217,7 @@ namespace Hippocamp.API.Controllers
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -222,7 +227,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/treatment-bmp-hru-characteristics")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> GetTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
@@ -231,7 +236,7 @@ namespace Hippocamp.API.Controllers
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -242,7 +247,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/load-reducing-results")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<ProjectLoadReducingResultDto>> GetLoadRemovingResultsForProject([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
@@ -251,7 +256,7 @@ namespace Hippocamp.API.Controllers
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -262,7 +267,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/load-generating-results")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<ProjectLoadGeneratingResultDto>> GetLoadGeneratingResultsForProject([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
@@ -271,7 +276,7 @@ namespace Hippocamp.API.Controllers
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -320,7 +325,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/delineations")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<DelineationUpsertDto> GetDelineationsByProjectID([FromRoute] int projectID)
         {
             var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);

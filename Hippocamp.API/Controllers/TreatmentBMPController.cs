@@ -20,7 +20,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("treatmentBMPs/{projectID}/getByProjectID")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<TreatmentBMPUpsertDto> GetByProjectID([FromRoute] int projectID)
         {
             var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(_dbContext, projectID);
@@ -37,7 +37,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("treatmentBMPs/types")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<TreatmentBMPTypeSimpleDto> ListTypes()
         {
             var treatmentBMPTypeSimpleDtos = TreatmentBMPs.ListTypesAsSimpleDto(_dbContext);
@@ -45,7 +45,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems()
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
@@ -86,7 +86,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("treatmentBMPs/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<GeometryGeoJSONAndAreaDto> GetUpstreamRSBCatchmentGeoJSONForTreatmentBMP([FromRoute] int treatmentBMPID)
         {
             var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID);

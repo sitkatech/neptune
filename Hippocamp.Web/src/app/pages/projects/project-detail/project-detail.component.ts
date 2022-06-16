@@ -5,11 +5,12 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
-import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/models';
+import { PersonDto, ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/models';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
+import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 
 @Component({
   selector: 'hippocamp-project-detail',
@@ -19,11 +20,14 @@ import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/
 export class ProjectDetailComponent implements OnInit {
 
   private projectID: number;
+  private currentUser: PersonDto;
+
   public project: ProjectSimpleDto;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: Array<DelineationUpsertDto>;
   public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
   public attachments: Array<ProjectDocumentSimpleDto>;
+  public isReadOnly: boolean;
 
 
   constructor(
@@ -34,7 +38,10 @@ export class ProjectDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authenticationService.getCurrentUser().subscribe(result => {
+    this.authenticationService.getCurrentUser().subscribe(currentUser => {
+      this.currentUser = currentUser;
+      this.isReadOnly = this.authenticationService.isUserUnassigned(currentUser);
+
       const projectID = this.route.snapshot.paramMap.get("projectID");
       if (projectID) {
         this.projectID = parseInt(projectID);
@@ -58,5 +65,4 @@ export class ProjectDetailComponent implements OnInit {
   showModelResultsPanel(): boolean {
     return !this.project?.DoesNotIncludeTreatmentBMPs && this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories.length > 0 && this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0;
   }
-
 }

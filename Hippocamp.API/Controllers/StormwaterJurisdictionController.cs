@@ -26,7 +26,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("jurisdictions/{projectID}/getBoundingBoxByProjectID")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<BoundingBoxDto>> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
             var stormwaterJurisdictionID = Projects.GetByID(_dbContext, projectID).StormwaterJurisdictionID;
