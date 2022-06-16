@@ -25,6 +25,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public string LoginName { get; set; }
         public bool ReceiveRSBRevisionRequestEmails { get; set; }
         public Guid WebServiceAccessToken { get; set; }
+        public bool IsOCTAGrantReviewer { get; set; }
     }
 
     public partial class PersonSimpleDto
@@ -45,6 +46,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public string LoginName { get; set; }
         public bool ReceiveRSBRevisionRequestEmails { get; set; }
         public Guid WebServiceAccessToken { get; set; }
+        public bool IsOCTAGrantReviewer { get; set; }
     }
 
 }

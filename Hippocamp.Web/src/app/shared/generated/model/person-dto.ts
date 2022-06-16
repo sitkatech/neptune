@@ -29,6 +29,7 @@ export class PersonDto {
     LoginName?: string;
     ReceiveRSBRevisionRequestEmails?: boolean;
     WebServiceAccessToken?: string;
+    IsOCTAGrantReviewer?: boolean;
     readonly FullName?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
