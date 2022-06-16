@@ -35,7 +35,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("jurisdictions/boundingBox")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<BoundingBoxDto>> GetBoundingBoxByPersonID([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);

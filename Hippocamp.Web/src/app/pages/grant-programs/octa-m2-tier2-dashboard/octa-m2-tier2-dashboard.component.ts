@@ -28,6 +28,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
+import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 
 declare var $: any;
 
@@ -101,7 +102,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         forkJoin({
           projects: this.projectService.getProjectsSharedWithOCTAM2Tier2GrantProgram(),
           treatmentBMPs: this.projectService.getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(),
-          delineations: this.delineationService.getDelineations(),
+          delineations: this.delineationService.getAllDelineations(),
         }).subscribe(({ projects, treatmentBMPs, delineations}) => {
           this.projects = projects;
           this.treatmentBMPs = treatmentBMPs;
@@ -113,16 +114,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
       });
 
       this.columnDefs = [
-        {
-          headerName: 'Project Name', valueGetter: (params: any) => {
-            return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-          }, cellRendererFramework: LinkRendererComponent,
-          cellRendererParams: { inRouterLink: "/projects/" },
-          filterValueGetter: (params: any) => {
-            return params.data.ProjectID;
-          },
-          comparator: this.utilityFunctionsService.linkRendererComparator
-        },
         { 
           headerComponentFramework: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'Organization' },
@@ -140,6 +131,25 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('WQLRI', 'DryWeatherWQLRI', 'WQLRI', 'Dry Weather WQLRI', null, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('WQLRI', 'WetWeatherWQLRI', 'WQLRI', 'Wet Weather WQLRI', null, 2),
       ];
+
+      var projectNameColDef: ColDef;
+      if ([RoleEnum.Admin, RoleEnum.SitkaAdmin].includes(this.currentUser.Role.RoleID)) {
+        projectNameColDef = {
+          headerName: 'Project Name', valueGetter: (params: any) => {
+            return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
+          }, cellRendererFramework: LinkRendererComponent,
+          cellRendererParams: { inRouterLink: "/projects/" },
+          filterValueGetter: (params: any) => {
+            return params.data.ProjectID;
+          },
+          comparator: this.utilityFunctionsService.linkRendererComparator
+        };
+      } else {
+        projectNameColDef = {
+          headerName: 'Project Name', field: 'ProjectName'
+        };
+      }
+      this.columnDefs.splice(0, 0, projectNameColDef);
 
       this.defaultColDef = {
         filter: true, sortable: true, resizable: true

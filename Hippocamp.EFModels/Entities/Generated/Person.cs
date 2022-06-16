@@ -66,6 +66,7 @@ namespace Hippocamp.EFModels.Entities
         public string LoginName { get; set; }
         public bool ReceiveRSBRevisionRequestEmails { get; set; }
         public Guid WebServiceAccessToken { get; set; }
+        public bool IsOCTAGrantReviewer { get; set; }
 
         [ForeignKey("OrganizationID")]
         [InverseProperty("People")]

@@ -26,6 +26,17 @@ namespace Hippocamp.API.Controllers
             return Ok(delineationsUpsertDtos);
         }
 
-
+        [HttpGet("delineations/all")]
+        [UserViewFeature]
+        public ActionResult<DelineationSimpleDto> List()
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!personDto.IsOCTAGrantReviewer)
+            {
+                return Forbid();
+            }
+            var delineationsSimpleDtos = Delineations.ListAsSimpleDto(_dbContext);
+            return Ok(delineationsSimpleDtos);
+        }
     }
 }

@@ -360,7 +360,7 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/{projectID}/OCTAM2Tier2GrantScores")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<ProjectGrantScoreDto> GetGrantScoresByProjectID([FromRoute] int projectID)
         {
             var projectGrantScoreDto = _dbContext.vProjectGrantScores.SingleOrDefault(x => x.ProjectID == projectID)?.AsDto();
@@ -368,9 +368,15 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<ProjectHRUCharacteristicsSummaryDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
+            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!currentUser.IsOCTAGrantReviewer)
+            {
+                return Forbid();
+            }
+
             var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
                 .Select(x => x.AsProjectHRUCharacteristicsSummaryDto()).ToList();
             var projectIDs = projectHruCharacteristicsSummaryDtos.Select(x => x.ProjectID);
@@ -391,10 +397,17 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram/download")]
+        [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        public async Task<FileContentResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<ActionResult<FileContentResult>> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
+            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!currentUser.IsOCTAGrantReviewer)
+            {
+                return Forbid();
+            }
+
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
 
@@ -412,9 +425,15 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
+            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!currentUser.IsOCTAGrantReviewer)
+            {
+                return Forbid();
+            }
+
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(_dbContext, projectIDs);
 
@@ -422,11 +441,16 @@ namespace Hippocamp.API.Controllers
         }
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
-        public async Task<FileContentResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<ActionResult<FileContentResult>> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
+            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!currentUser.IsOCTAGrantReviewer)
+            {
+                return Forbid();
+            }
 
             var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
             var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);

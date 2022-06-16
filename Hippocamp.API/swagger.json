@@ -136,6 +136,35 @@
         }
       }
     },
+    "/delineations/all": {
+      "get": {
+        "tags": [
+          "Delineation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelineationSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelineationSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelineationSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/fieldDefinitions": {
       "get": {
         "tags": [
@@ -2365,6 +2394,9 @@
             "type": "string",
             "format": "uuid"
           },
+          "IsOCTAGrantReviewer": {
+            "type": "boolean"
+          },
           "FullName": {
             "type": "string",
             "nullable": true,
@@ -2438,6 +2470,9 @@
           "WebServiceAccessToken": {
             "type": "string",
             "format": "uuid"
+          },
+          "IsOCTAGrantReviewer": {
+            "type": "boolean"
           },
           "FullName": {
             "type": "string",

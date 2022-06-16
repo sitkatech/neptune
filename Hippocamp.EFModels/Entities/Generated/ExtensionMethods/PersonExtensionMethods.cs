@@ -28,7 +28,8 @@ namespace Hippocamp.EFModels.Entities
                 ReceiveSupportEmails = person.ReceiveSupportEmails,
                 LoginName = person.LoginName,
                 ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
-                WebServiceAccessToken = person.WebServiceAccessToken
+                WebServiceAccessToken = person.WebServiceAccessToken,
+                IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
             };
             DoCustomMappings(person, personDto);
             return personDto;
@@ -55,7 +56,8 @@ namespace Hippocamp.EFModels.Entities
                 ReceiveSupportEmails = person.ReceiveSupportEmails,
                 LoginName = person.LoginName,
                 ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
-                WebServiceAccessToken = person.WebServiceAccessToken
+                WebServiceAccessToken = person.WebServiceAccessToken,
+                IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
             };
             DoCustomSimpleDtoMappings(person, personSimpleDto);
             return personSimpleDto;
