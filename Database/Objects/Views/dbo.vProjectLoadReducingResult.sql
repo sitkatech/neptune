@@ -9,6 +9,8 @@ select  ProjectNereidResultID as PrimaryKey,
         ProjectNereidResultID,
         p.ProjectID,
         p.ProjectName,
+		sjo.OrganizationName as JurisdictionName,
+		o.OrganizationName as OrganizationName,
         IsBaselineCondition,
         tbmp.TreatmentBMPID,
         tbmp.TreatmentBMPName,
@@ -78,6 +80,9 @@ select  ProjectNereidResultID as PrimaryKey,
 
         from dbo.ProjectNereidResult pnr
         join dbo.Project p on pnr.ProjectID = p.ProjectID
+		join dbo.StormwaterJurisdiction sj on p.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
+		join dbo.Organization sjo on sj.OrganizationID = sjo.OrganizationID
+		join dbo.Organization o on p.OrganizationID = o.OrganizationID
         join dbo.TreatmentBMP tbmp on pnr.TreatmentBMPID = tbmp.TreatmentBMPID
         cross apply openjson(fullresponse) 
         with (
