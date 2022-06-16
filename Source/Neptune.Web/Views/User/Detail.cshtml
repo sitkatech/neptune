@@ -111,8 +111,8 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-xs-5 fieldLabel text-right">Role</div>
-                    <div class="col-xs-7">
+                    <div class="col-xs-6 fieldLabel text-right">Role</div>
+                    <div class="col-xs-6">
                         @if (ViewDataTyped.UserCanManagePeople)
                         {
                             @ViewDataTyped.Person.Role.GetDisplayNameAsUrl()
@@ -124,12 +124,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
-                    <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
+                    <div class="col-xs-6 fieldLabel text-right">OCTA Grant Reviewer</div>
+                    <div class="col-xs-6">@ViewDataTyped.Person.IsOCTAGrantReviewer.ToYesNo()</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-5 fieldLabel text-right">Receives RSB Revision Requests</div>
-                    <div class="col-xs-7">@ViewDataTyped.Person.ReceiveRSBRevisionRequestEmails.ToYesNo()</div>
+                    <div class="col-xs-6 fieldLabel text-right">Receives System Communications</div>
+                    <div class="col-xs-6">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 fieldLabel text-right">Receives RSB Revision Requests</div>
+                    <div class="col-xs-6">@ViewDataTyped.Person.ReceiveRSBRevisionRequestEmails.ToYesNo()</div>
                 </div>
             </div>
         </div>

@@ -18,7 +18,9 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using DocumentFormat.OpenXml.Bibliography
 @using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Views.User
 @inherits Neptune.Web.Views.User.EditRoles
 
 <style type="text/css">
@@ -38,6 +40,15 @@
             <div class="col-xs-12 col-sm-9">
                 @Html.DropDownListFor(m => m.RoleID, ViewDataTyped.Roles, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.RoleID)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-3"></div>
+            <div class="col-xs-12 col-sm-9">
+                <label>
+                    @Html.CheckBoxFor(m => m.IsOCTAGrantReviewer) &nbsp;&nbsp;
+                    OCTA Grant Reviewer
+                </label>
             </div>
         </div>
         <div class="form-group">
