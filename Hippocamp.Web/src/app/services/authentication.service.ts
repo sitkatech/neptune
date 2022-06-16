@@ -188,6 +188,13 @@ export class AuthenticationService {
     return this.isUserAnAdministrator(this.currentUser);
   }
 
+  public isCurrentUserAnOCTAGrantReviewer(): boolean {
+    if (!this.currentUser) {
+      return false;
+    }
+    return this.currentUser.IsOCTAGrantReviewer;
+  }
+
   public isUserUnassigned(user: PersonDto): boolean {
     const role = user && user.Role
       ? user.Role.RoleID

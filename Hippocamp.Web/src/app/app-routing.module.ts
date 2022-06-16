@@ -16,7 +16,6 @@ import { ProjectWorkflowOutletComponent } from './pages/projects/project-workflo
 import { JurisdictionManagerOrEditorOnlyGuard } from './shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard';
 import { ProjectInstructionsComponent } from './pages/projects/project-workflow/project-instructions/project-instructions.component';
 import { ProjectBasicsComponent } from './pages/projects/project-workflow/project-basics/project-basics.component';
-import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 import { TreatmentBmpsComponent } from './pages/projects/project-workflow/treatment-bmps/treatment-bmps.component';
 import { ProjectAttachmentsComponent } from './pages/projects/project-workflow/project-attachments/project-attachments.component';
 import { DelineationsComponent } from './pages/projects/project-workflow/delineations/delineations.component';
@@ -26,6 +25,7 @@ import { ProjectDetailComponent } from './pages/projects/project-detail/project-
 import { ReviewComponent } from './pages/projects/project-workflow/review/review.component';
 import { PlanningMapComponent } from './pages/planning-map/planning-map.component';
 import { OCTAM2Tier2DashboardComponent } from './pages/grant-programs/octa-m2-tier2-dashboard/octa-m2-tier2-dashboard.component';
+import { OCTAGrantReviewerOnlyGuard } from './shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard';
 
 export const routeParams = {
   definitionID: ':definitionID',
@@ -67,9 +67,9 @@ const routes: Routes = [
     ]
   },
   {
-    path: "grant-programs", canActivate: [UnauthenticatedAccessGuard],
+    path: "grant-programs", canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
     children: [
-      { path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
+      { path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent },
     ]
   },
   { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },

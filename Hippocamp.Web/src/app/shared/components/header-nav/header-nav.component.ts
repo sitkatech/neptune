@@ -51,8 +51,15 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         return this.authenticationService.isUserAnAdministrator(this.currentUser);
     }
 
-    public isUnassigned(): boolean{
-        return this.authenticationService.isUserUnassigned(this.currentUser);
+    public isNotUnassigned(): boolean{
+        if (!this.currentUser) {
+            return false;
+        }
+        return !this.authenticationService.isUserUnassigned(this.currentUser);
+    }
+
+    public isOCTAGrantReviewer(): boolean {
+        return this.authenticationService.isCurrentUserAnOCTAGrantReviewer();
     }
 
     public getUserName() {

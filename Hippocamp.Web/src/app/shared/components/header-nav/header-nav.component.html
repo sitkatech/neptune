@@ -59,7 +59,7 @@
 <nav class="navbar navbar-expand-xl navbar-hippocamp">
     <div class="collapse navbar-collapse" id="navbar2">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <ng-container *ngIf="isAuthenticated() && !isUnassigned()">
+            <ng-container *ngIf="isAuthenticated() && isNotUnassigned()">
                 <li class="nav-item" routerLinkActive="active">
                     <a href="/projects" class="nav-link" role="button">
                         Projects
@@ -88,7 +88,7 @@
                     </a>
                 </div>
             </li>
-            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
+            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isOCTAGrantReviewer()">
                 <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     Grant Programs
