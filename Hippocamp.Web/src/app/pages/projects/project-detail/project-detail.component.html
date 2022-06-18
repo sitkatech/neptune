@@ -5,7 +5,10 @@
         </div>
         <div class="col-auto">
             <a routerLink="/projects/edit/{{project.ProjectID}}" class="btn btn-hippocamp mr-2">Edit</a>
-            <a (click)="makeProjectCopy()" class="btn btn-outline-primary">Copy Project</a>
+            <a (click)="makeProjectCopy()" class="btn btn-outline-primary" [class.disabled]="isCopyingProject">
+                <span *ngIf="isCopyingProject" class="fa fa-spinner loading-spinner"></span>
+                Copy Project
+            </a>
         </div>
     </div>
     <div class="row mt-2 mb-3">

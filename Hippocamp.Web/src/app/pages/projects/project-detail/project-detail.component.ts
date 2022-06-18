@@ -32,7 +32,7 @@ export class ProjectDetailComponent implements OnInit {
   public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
   public attachments: Array<ProjectDocumentSimpleDto>;
   public isReadOnly: boolean;
-
+  public isCopyingProject = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -79,10 +79,13 @@ export class ProjectDetailComponent implements OnInit {
     const modalContents = "<p>Here's what will happen when you copy a project.</p>";
     this.confirmService.confirm({ modalSize: "md", buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents }).then(confirmed => {
       if (confirmed) {
+        this.isCopyingProject = true;
         this.projectService.newProjectCopy(this.projectID).subscribe(newProjectID => {
           this.router.navigateByUrl(`/projects/${newProjectID}`).then(() => {
             this.alertService.pushAlert(new Alert('Project successfully copied.', AlertContext.Success));
           });
+        }, error => {
+          this.isCopyingProject = false;
         });
       }
     });
