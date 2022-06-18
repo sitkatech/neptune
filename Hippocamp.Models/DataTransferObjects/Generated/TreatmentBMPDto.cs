@@ -35,6 +35,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public ProjectDto Project { get; set; }
+        public int? CopyOfTreatmentBMPID { get; set; }
     }
 
     public partial class TreatmentBMPSimpleDto
@@ -65,6 +66,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? ProjectID { get; set; }
+        public int? CopyOfTreatmentBMPID { get; set; }
     }
 
 }

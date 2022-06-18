@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -346,6 +347,21 @@ namespace Hippocamp.API.Controllers
             Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
 
             return Ok();
+        }
+
+        [HttpPost("projects/{projectID}/copy")]
+        [JurisdictionEditFeature]
+        public ActionResult<int> CreateProjectCopy([FromRoute] int projectID)
+        {
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var project = Projects.GetByID(_dbContext, projectID);
+            if (!UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
+            {
+                return Forbid();
+            }
+
+            var newProject = Projects.CreateCopy(_dbContext, project, person.PersonID);
+            return Ok(newProject.ProjectID);
         }
 
         private bool UserCanEditJurisdiction(PersonDto personDto, int stormwaterJurisdictionID)

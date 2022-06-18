@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/services/project/project.service';
@@ -9,8 +9,12 @@ import { PersonDto, ProjectDocumentSimpleDto } from 'src/app/shared/generated/mo
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
+import { Alert } from 'src/app/shared/models/alert';
+import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
 import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { ConfirmService } from 'src/app/shared/services/confirm.service';
 
 @Component({
   selector: 'hippocamp-project-detail',
@@ -34,8 +38,13 @@ export class ProjectDetailComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private projectService: ProjectService,
     private treatmentBMPService: TreatmentBMPService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private router: Router,
+    private confirmService: ConfirmService,
+    private alertService: AlertService
+  ) { 
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
@@ -64,5 +73,18 @@ export class ProjectDetailComponent implements OnInit {
 
   showModelResultsPanel(): boolean {
     return !this.project?.DoesNotIncludeTreatmentBMPs && this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories.length > 0 && this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0;
+  }
+
+  makeProjectCopy() {
+    const modalContents = "<p>Here's what will happen when you copy a project.</p>";
+    this.confirmService.confirm({ modalSize: "md", buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents }).then(confirmed => {
+      if (confirmed) {
+        this.projectService.newProjectCopy(this.projectID).subscribe(newProjectID => {
+          this.router.navigateByUrl(`/projects/${newProjectID}`).then(() => {
+            this.alertService.pushAlert(new Alert('Project successfully copied.', AlertContext.Success));
+          });
+        });
+      }
+    });
   }
 }

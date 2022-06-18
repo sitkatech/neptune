@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -111,6 +112,124 @@ namespace Hippocamp.EFModels.Entities
             dbContext.TreatmentBMPs.RemoveRange(project.TreatmentBMPs.ToList());
             dbContext.Projects.Remove(project);
             dbContext.SaveChanges();
+        }
+
+        public static Project CreateCopy(HippocampDbContext dbContext, Project projectToCopy, int createPersonID)
+        {
+            var existingCopyCount = dbContext.Projects.Count(x => x.CopyOfProjectID == projectToCopy.ProjectID);
+            var copyString = existingCopyCount > 0 ? $"- Copy ({existingCopyCount})" : "- Copy";
+            
+            var newProject = new Project()
+            {
+                CopyOfProjectID = projectToCopy.ProjectID,
+                ProjectName = $"{projectToCopy.ProjectName} {copyString}",
+                OrganizationID = projectToCopy.OrganizationID,
+                StormwaterJurisdictionID = projectToCopy.StormwaterJurisdictionID,
+                ProjectStatusID = (int)ProjectStatusEnum.Draft,
+                PrimaryContactPersonID = createPersonID,
+                CreatePersonID = createPersonID,
+                DateCreated = DateTime.UtcNow,
+                ProjectDescription = projectToCopy.ProjectDescription,
+                AdditionalContactInformation = projectToCopy.AdditionalContactInformation,
+                DoesNotIncludeTreatmentBMPs = projectToCopy.DoesNotIncludeTreatmentBMPs,
+                CalculateOCTAM2Tier2Scores = projectToCopy.CalculateOCTAM2Tier2Scores,
+                ShareOCTAM2Tier2Scores = false
+            };
+
+            dbContext.Projects.Add(newProject);
+            dbContext.SaveChanges();
+
+            var treatmentBMPsToCopy = dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectToCopy.ProjectID);
+
+            var newTreatmentBMPs = treatmentBMPsToCopy.Select(x => new TreatmentBMP()
+            {
+                ProjectID = newProject.ProjectID,
+                CopyOfTreatmentBMPID = x.TreatmentBMPID,
+                TreatmentBMPName = $"{x.TreatmentBMPName} {copyString}",
+                TreatmentBMPTypeID = x.TreatmentBMPTypeID,
+                LocationPoint = x.LocationPoint,
+                StormwaterJurisdictionID = x.StormwaterJurisdictionID,
+                Notes = x.Notes,
+                OwnerOrganizationID = x.OwnerOrganizationID,
+                InventoryIsVerified = x.InventoryIsVerified,
+                LocationPoint4326 = x.LocationPoint4326,
+                TrashCaptureStatusTypeID = x.TrashCaptureStatusTypeID,
+                SizingBasisTypeID = x.SizingBasisTypeID
+            }).ToList();
+
+            dbContext.TreatmentBMPs.AddRange(newTreatmentBMPs);
+            dbContext.SaveChanges();
+
+            var treatmentBMPIDsToCopy = treatmentBMPsToCopy.Select(x => x.TreatmentBMPID).ToList();
+
+            var newModelingAttributes = dbContext.TreatmentBMPModelingAttributes
+                .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).AsEnumerable()
+                .Select(x =>
+                {
+                    var treatmentBMPID = newTreatmentBMPs.Single(y => y.CopyOfTreatmentBMPID == x.TreatmentBMPID).TreatmentBMPID;
+
+                    return new TreatmentBMPModelingAttribute()
+                    {
+                        TreatmentBMPID = treatmentBMPID,
+                        UpstreamTreatmentBMPID = x.UpstreamTreatmentBMPID,
+                        AverageDivertedFlowrate = x.AverageDivertedFlowrate,
+                        AverageTreatmentFlowrate = x.AverageTreatmentFlowrate,
+                        DesignDryWeatherTreatmentCapacity = x.DesignDryWeatherTreatmentCapacity,
+                        DesignLowFlowDiversionCapacity = x.DesignLowFlowDiversionCapacity,
+                        DesignMediaFiltrationRate = x.DesignMediaFiltrationRate,
+                        DesignResidenceTimeforPermanentPool = x.DesignResidenceTimeforPermanentPool,
+                        DiversionRate = x.DiversionRate,
+                        DrawdownTimeforWQDetentionVolume = x.DrawdownTimeforWQDetentionVolume,
+                        EffectiveFootprint = x.EffectiveFootprint,
+                        EffectiveRetentionDepth = x.EffectiveRetentionDepth,
+                        InfiltrationDischargeRate = x.InfiltrationDischargeRate,
+                        InfiltrationSurfaceArea = x.InfiltrationSurfaceArea,
+                        MediaBedFootprint = x.MediaBedFootprint,
+                        PermanentPoolorWetlandVolume = x.PermanentPoolorWetlandVolume,
+                        RoutingConfigurationID = x.RoutingConfigurationID,
+                        StorageVolumeBelowLowestOutletElevation = x.StorageVolumeBelowLowestOutletElevation,
+                        SummerHarvestedWaterDemand = x.SummerHarvestedWaterDemand,
+                        TimeOfConcentrationID = x.TimeOfConcentrationID,
+                        DrawdownTimeForDetentionVolume = x.DrawdownTimeForDetentionVolume,
+                        TotalEffectiveBMPVolume = x.TotalEffectiveBMPVolume,
+                        TotalEffectiveDrywellBMPVolume = x.TotalEffectiveDrywellBMPVolume,
+                        TreatmentRate = x.TreatmentRate,
+                        UnderlyingHydrologicSoilGroupID = x.UnderlyingHydrologicSoilGroupID,
+                        UnderlyingInfiltrationRate = x.UnderlyingInfiltrationRate,
+                        WaterQualityDetentionVolume = x.WaterQualityDetentionVolume,
+                        WettedFootprint = x.WettedFootprint,
+                        WinterHarvestedWaterDemand = x.WinterHarvestedWaterDemand,
+                        MonthsOfOperationID = x.MonthsOfOperationID,
+                        DryWeatherFlowOverrideID = x.DryWeatherFlowOverrideID
+                    };
+                });
+            
+            dbContext.TreatmentBMPModelingAttributes.AddRange(newModelingAttributes);
+
+            var newDelineations = dbContext.Delineations
+                .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).AsEnumerable()
+
+                .Select(x => 
+                {
+                    var treatmentBMPID = newTreatmentBMPs.Single(y => y.CopyOfTreatmentBMPID == x.TreatmentBMPID).TreatmentBMPID;
+
+                    return new Delineation()
+                    {
+                        TreatmentBMPID = treatmentBMPID,
+                        DelineationGeometry = x.DelineationGeometry,
+                        DelineationGeometry4326 = x.DelineationGeometry4326,
+                        DelineationTypeID = x.DelineationTypeID,
+                        IsVerified = x.IsVerified,
+                        VerifiedByPersonID = x.VerifiedByPersonID,
+                        DateLastModified = DateTime.UtcNow,
+                        HasDiscrepancies = x.HasDiscrepancies
+                    };
+                }).ToList();
+                
+            dbContext.Delineations.AddRange(newDelineations);
+            dbContext.SaveChanges();
+
+            return newProject;
         }
 
         public static List<TreatmentBMPHRUCharacteristicsSummarySimpleDto> GetTreatmentBMPHRUCharacteristicSimplesForProject(HippocampDbContext dbContext, int projectID)

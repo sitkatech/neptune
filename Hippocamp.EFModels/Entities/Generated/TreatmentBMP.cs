@@ -18,6 +18,7 @@ namespace Hippocamp.EFModels.Entities
             CustomAttributeTreatmentBMPNavigations = new HashSet<CustomAttribute>();
             CustomAttributeTreatmentBMPs = new HashSet<CustomAttribute>();
             FundingEvents = new HashSet<FundingEvent>();
+            InverseCopyOfTreatmentBMP = new HashSet<TreatmentBMP>();
             InverseUpstreamBMP = new HashSet<TreatmentBMP>();
             MaintenanceRecordTreatmentBMPNavigations = new HashSet<MaintenanceRecord>();
             MaintenanceRecordTreatmentBMPs = new HashSet<MaintenanceRecord>();
@@ -73,7 +74,11 @@ namespace Hippocamp.EFModels.Entities
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? ProjectID { get; set; }
+        public int? CopyOfTreatmentBMPID { get; set; }
 
+        [ForeignKey("CopyOfTreatmentBMPID")]
+        [InverseProperty("InverseCopyOfTreatmentBMP")]
+        public virtual TreatmentBMP CopyOfTreatmentBMP { get; set; }
         [ForeignKey("InventoryVerifiedByPersonID")]
         [InverseProperty("TreatmentBMPs")]
         public virtual Person InventoryVerifiedByPerson { get; set; }
@@ -124,6 +129,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPs { get; set; }
         [InverseProperty("TreatmentBMP")]
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
+        [InverseProperty("CopyOfTreatmentBMP")]
+        public virtual ICollection<TreatmentBMP> InverseCopyOfTreatmentBMP { get; set; }
         [InverseProperty("UpstreamBMP")]
         public virtual ICollection<TreatmentBMP> InverseUpstreamBMP { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPNavigations { get; set; }

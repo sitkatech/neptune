@@ -1164,6 +1164,49 @@
         }
       }
     },
+    "/projects/{projectID}/copy": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectID}/OCTAM2Tier2GrantScores": {
       "get": {
         "tags": [
@@ -2711,6 +2754,11 @@
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
           },
+          "CopyOfProjectID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
@@ -3390,6 +3438,11 @@
           },
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
+          },
+          "CopyOfProjectID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"

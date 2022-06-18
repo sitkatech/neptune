@@ -908,6 +908,11 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<Project>(entity =>
             {
+                entity.HasOne(d => d.CopyOfProject)
+                    .WithMany(p => p.InverseCopyOfProject)
+                    .HasForeignKey(d => d.CopyOfProjectID)
+                    .HasConstraintName("FK_Project_CopyOfProjectID_ProjectID");
+
                 entity.HasOne(d => d.CreatePerson)
                     .WithMany(p => p.ProjectCreatePeople)
                     .HasForeignKey(d => d.CreatePersonID)
@@ -1238,6 +1243,11 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMP>(entity =>
             {
+                entity.HasOne(d => d.CopyOfTreatmentBMP)
+                    .WithMany(p => p.InverseCopyOfTreatmentBMP)
+                    .HasForeignKey(d => d.CopyOfTreatmentBMPID)
+                    .HasConstraintName("FK_TreatmentBMP_CopyOfTreatmentBMPID_TreatmentBMPID");
+
                 entity.HasOne(d => d.InventoryVerifiedByPerson)
                     .WithMany(p => p.TreatmentBMPs)
                     .HasForeignKey(d => d.InventoryVerifiedByPersonID)
