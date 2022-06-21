@@ -28,6 +28,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
+using Neptune.Web.Controllers;
+using Neptune.Web.Common;
 
 
 namespace Neptune.Web.Views.TreatmentBMP
@@ -38,6 +40,14 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             if (showDelete)
             {
+                BulkDeleteModalDialogForm = new BulkDeleteModalDialogForm(
+                        SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.BulkDeleteTreatmentBMPs(null)),
+                        "Delete Checked BMPs",
+                        "Delete Treatment BMPs",
+                        "TreatmentBMPID",
+                        "TreatmentBMPIDList");
+                AddCheckBoxColumn();
+                Add("TreatmentBMPID", x => x.TreatmentBMPID, 0);
                 Add(string.Empty, x =>
                 {
                     var userHasDeletePermission = currentPerson.IsManagerOrAdmin() && currentPerson.IsAssignedToStormwaterJurisdiction(x.StormwaterJurisdictionID);
