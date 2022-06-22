@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using Neptune.Web.Security.Shared;
 
 namespace Neptune.Web.Controllers
@@ -453,6 +454,54 @@ namespace Neptune.Web.Controllers
         }
 
         #endregion
+
+        private ViewResult ViewEditWqmpBoundary(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpBoundaryViewModel viewModel)
+        {
+            // TODO: can remove projection on null when we script out the existing boundaries to 4326
+            var waterQualityManagementPlanBoundary4326 =
+                waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 ?? CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(waterQualityManagementPlan.WaterQualityManagementPlanBoundary);
+
+            var mapInitJson = new MapInitJson("editWqmpBoundaryMap", 0, new List<LayerGeoJson>(), new BoundingBox(waterQualityManagementPlanBoundary4326));
+            var viewData = new EditWqmpBoundaryViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
+            return RazorView<EditWqmpBoundary, EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public ViewResult EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditWqmpBoundaryViewModel(waterQualityManagementPlan);
+            return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpBoundaryViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
+            }
+
+            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+
+            viewModel.UpdateModel(waterQualityManagementPlan);
+            SetMessageForDisplay($"Successfully edited boundary for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
+
+            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+
+            if (!(oldBoundary == null && newBoundary == null))
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary);
+            }
+
+            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.EditWqmpParcels(waterQualityManagementPlan)));
+        }
 
         #region WQMP O&M Verification Record
 

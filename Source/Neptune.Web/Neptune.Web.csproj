@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -640,6 +640,9 @@
     <Compile Include="Views\WaterQualityManagementPlan\EditSourceControlBMPs.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditSourceControlBMPsViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditSourceControlBMPsViewModel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpBoundary.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpBoundaryViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpBoundaryViewModel.cs" />
     <Compile Include="Views\WebServices\Index.cs" />
     <Compile Include="Views\WebServices\IndexViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />
@@ -2180,6 +2183,7 @@
     <Content Include="Views\WaterQualityManagementPlan\EditSourceControlBMPs.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditModelingApproach.cshtml" />
     <Content Include="Views\Jurisdiction\Edit.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpBoundary.cshtml" />
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
