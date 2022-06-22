@@ -58,6 +58,7 @@ namespace LtInfo.Common.DhtmlWrappers
         public string GridInstructionsWhenEmpty { get; set; }
         public ModalDialogForm CreateEntityModalDialogForm { get; set; }
         public BulkTagModalDialogForm BulkTagModalDialogForm { get; set; }
+        public BulkDeleteModalDialogForm BulkDeleteModalDialogForm { get; set; }
 
         public bool ShowFilterBar { get; set; }
 
