@@ -52,10 +52,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var dbGeometrys = WktAndAnnotations.Select(x =>
                     DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry().MakeValid()
                     .ToDbGeometry());
-            var newGeometry4326 = dbGeometrys.ToList().UnionListGeometries();
+            var newGeometry4326 = dbGeometrys.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
 
             var newWaterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => x.ParcelGeometry4326.Intersects(newGeometry4326) || x.ParcelGeometry4326.Within(newGeometry4326))
+                .Where(x => x.ParcelGeometry4326.Intersects(newGeometry4326))
                 .ToList()
                 .Select(x =>
                     new WaterQualityManagementPlanParcel(waterQualityManagementPlan.WaterQualityManagementPlanID, x.ParcelID))
@@ -71,7 +71,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(newGeometry4326);
 
             waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 =
-                newGeometry4326.FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+                newGeometry4326;
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             
