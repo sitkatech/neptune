@@ -14,6 +14,7 @@ using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common;
 using Neptune.Web.Security.Shared;
+using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 
 namespace Neptune.Web.Controllers
 {
@@ -460,8 +461,8 @@ namespace Neptune.Web.Controllers
             // TODO: can remove projection on null when we script out the existing boundaries to 4326
             var waterQualityManagementPlanBoundary4326 =
                 waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 ?? CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(waterQualityManagementPlan.WaterQualityManagementPlanBoundary);
-
-            var mapInitJson = new MapInitJson("editWqmpBoundaryMap", 0, new List<LayerGeoJson>(), new BoundingBox(waterQualityManagementPlanBoundary4326));
+            var boundaryLayerGeoJson = waterQualityManagementPlan.GetBoundaryLayerGeoJson();
+            var mapInitJson = new BoundaryAreaMapInitJson("editWqmpBoundaryMap", boundaryLayerGeoJson);
             var viewData = new EditWqmpBoundaryViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpBoundary, EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>(viewData, viewModel);
         }

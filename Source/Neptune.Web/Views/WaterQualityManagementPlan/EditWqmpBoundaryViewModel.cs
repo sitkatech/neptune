@@ -27,6 +27,7 @@ using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
@@ -52,6 +53,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry().MakeValid()
                     .ToDbGeometry());
             var newGeometry4326 = dbGeometrys.ToList().UnionListGeometries();
+
+            var newWaterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
+                .Where(x => x.ParcelGeometry4326.Intersects(newGeometry4326) || x.ParcelGeometry4326.Within(newGeometry4326))
+                .ToList()
+                .Select(x =>
+                    new WaterQualityManagementPlanParcel(waterQualityManagementPlan.WaterQualityManagementPlanID, x.ParcelID))
+                .ToList();
+
+            waterQualityManagementPlan.WaterQualityManagementPlanParcels.Merge(
+                newWaterQualityManagementPlanParcels,
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.Local,
+                (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
 
             // since this is coming from the browser, we have to transform to State Plane
             waterQualityManagementPlan.WaterQualityManagementPlanBoundary =

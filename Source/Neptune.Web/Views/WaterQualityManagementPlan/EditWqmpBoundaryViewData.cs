@@ -22,12 +22,13 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditWqmpBoundaryViewData : NeptuneViewData
     {
-        public EditWqmpBoundaryViewData(Person currentPerson, Models.WaterQualityManagementPlan wqmp, MapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditWqmpBoundaryViewData(Person currentPerson, Models.WaterQualityManagementPlan wqmp, BoundaryAreaMapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = wqmp;
             MapInitJson = mapInitJson;
@@ -48,7 +49,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public string MapFormID { get; }
         public string GeoServerUrl { get; }
-        public MapInitJson MapInitJson { get; }
+        public BoundaryAreaMapInitJson MapInitJson { get; }
         public int WaterQualityManagementPlanID { get; }
         public string DetailUrl { get; }
 

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GeoJSON.Net.Feature;
+using LtInfo.Common.GeoJson;
 
 namespace Neptune.Web.Models
 {
@@ -18,6 +21,19 @@ namespace Neptune.Web.Models
                 return waterQualityManagementPlan.QuickBMPs.Any() &&
                        waterQualityManagementPlan.QuickBMPs.Any(x => x.IsFullyParameterized());
             }
+        }
+
+        public static LayerGeoJson GetBoundaryLayerGeoJson(this Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        {
+            var featureCollection = new FeatureCollection();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(waterQualityManagementPlan.WaterQualityManagementPlanBoundary);
+            featureCollection.Features.AddRange(new List<Feature> { feature });
+
+            LayerGeoJson boundaryLayerGeoJson = new LayerGeoJson("wqmpBoundary", featureCollection, "#4782ff",
+                1,
+                LayerInitialVisibility.Show);
+
+            return boundaryLayerGeoJson;
         }
     }
 }

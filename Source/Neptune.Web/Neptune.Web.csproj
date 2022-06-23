@@ -643,6 +643,7 @@
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpBoundary.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpBoundaryViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpBoundaryViewModel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\BoundaryMapInitJson\BoundaryAreaMapInitJson.cs" />
     <Compile Include="Views\WebServices\Index.cs" />
     <Compile Include="Views\WebServices\IndexViewData.cs" />
     <Compile Include="Views\TreatmentBMP\ViewTreatmentBMPModelingAttributes.cs" />
@@ -2121,6 +2122,8 @@
     <Content Include="Views\User\Invite.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\Detail.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditSourceControlBMPsController.js" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpBoundaryMap\EditWqmpBoundary.js" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpBoundaryMap\NeptuneMaps.WqmpBoundaryMap.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcelsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditSimplifiedStructuralBMPsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmpsController.js" />
