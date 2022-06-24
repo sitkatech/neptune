@@ -49,10 +49,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public void UpdateModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
-            var dbGeometrys = WktAndAnnotations.Select(x =>
+            var dbGeometries = WktAndAnnotations.Select(x =>
                     DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry().MakeValid()
                     .ToDbGeometry());
-            var newGeometry4326 = dbGeometrys.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
+            var newGeometry4326 = dbGeometries.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
 
             var newWaterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => x.ParcelGeometry4326.Intersects(newGeometry4326))

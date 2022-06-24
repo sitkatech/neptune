@@ -1,21 +1,11 @@
 ﻿/* Extension of Neptune.Maps with functionality for changing WQMP boundary */
 
 NeptuneMaps.WQMPBoundaryMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl, options) {
-
     if (!options) {
         options = {};
     }
     jQuery.extend(this.options, options);
     NeptuneMaps.Map.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl, this.options);
-
-    var parcelsLegendUrl = geoserverUrl +
-        "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AParcels&style=parcel_alt&scale=5000&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-    var parcelsLabel = "<span>Parcels </br><img src='" + parcelsLegendUrl + "'/></span>";
-
-    this.addWmsLayer("OCStormwater:Parcels", parcelsLabel,
-        {
-            styles: "parcel_alt"
-        });
 
     if (mapInitJson.wqmpBoundary) {
         this.CreateBoundaryLayer(mapInitJson.wqmpBoundary.GeoJsonFeatureCollection, {});

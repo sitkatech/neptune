@@ -29,9 +29,11 @@
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
+
     <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
     <script src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpBoundaryMap/NeptuneMaps.WqmpBoundaryMap.js")"></script>
     <script src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpBoundaryMap/EditWqmpBoundary.js")"></script>
+
 }
 
 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 450px; margin: 0"></div>
@@ -42,17 +44,6 @@
         <div id="@ViewDataTyped.MapFormID">
 
         </div>
-        @*<div class="row" style="margin-top: 10px;">
-            <div class="col-xs-12" style="margin-bottom: 5px;">
-                <p class="text-danger" id="kinkDanger" style="display: none;">The Assessment Area contains edges that intersect each other. Please correct it before submitting.</p>
-            </div>
-            <div class="col-xs-6">
-                <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom</button>
-            </div>
-            <div class="col-xs-6 text-right">
-                <button type="button" id="pickParcelsButton" class="btn btn-neptune" onclick="pickParcels()">Pick Parcels</button>
-            </div>
-        </div>*@
 
         <hr />
         <div class="row">
@@ -81,26 +72,15 @@
     jQuery(document).ready(function () {
         boundaryAreaMap = new NeptuneMaps.WQMPBoundaryAreaMap(mapInitJson, "Terrain", geoServerUrl, editableFeatureJsonObject, boundaryAreaMapOptions);
         boundaryAreaMap.createUpdateFeatureCollectionJsonFunctionAsClosure(
-            "@Html.NameFor(m=>m.WktAndAnnotations[0].Wkt)",
+            "@Html.NameFor(m => m.WktAndAnnotations[0].Wkt)",
             "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",
             "@ViewDataTyped.MapFormID");
         boundaryAreaMap.updateFeatureCollectionJson();
-        /*boundaryAreaMap.prepFeatureGroupAndDrawControl();*/
     });
-    
+
     var resetZoom = function() {
         boundaryAreaMap.map.fitBounds(boundaryAreaMap.editableFeatureGroup.getBounds());
     };
-
-    //var pickParcels = function () {
-    //    if (!boundaryAreaMap.parcelPickerModeActive) {
-    //        boundaryAreaMap.getParcelsAndPick();
-    //        jQuery("#pickParcelsButton").html("Accept and Refine");
-    //    } else {
-    //        boundaryAreaMap.acceptParcelsAndRefine();
-    //        jQuery("#pickParcelsButton").html("Pick Parcels");
-    //    }
-    //};
 
     HookupCheckIfFormIsDirtyNoDisable(undefined);
 
