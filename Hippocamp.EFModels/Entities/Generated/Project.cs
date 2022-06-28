@@ -12,7 +12,6 @@ namespace Hippocamp.EFModels.Entities
     {
         public Project()
         {
-            InverseCopyOfProject = new HashSet<Project>();
             ProjectDocuments = new HashSet<ProjectDocument>();
             ProjectHRUCharacteristics = new HashSet<ProjectHRUCharacteristic>();
             ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
@@ -43,11 +42,7 @@ namespace Hippocamp.EFModels.Entities
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
         public bool CalculateOCTAM2Tier2Scores { get; set; }
         public bool ShareOCTAM2Tier2Scores { get; set; }
-        public int? CopyOfProjectID { get; set; }
 
-        [ForeignKey("CopyOfProjectID")]
-        [InverseProperty("InverseCopyOfProject")]
-        public virtual Project CopyOfProject { get; set; }
         [ForeignKey("CreatePersonID")]
         [InverseProperty("ProjectCreatePeople")]
         public virtual Person CreatePerson { get; set; }
@@ -63,8 +58,6 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        [InverseProperty("CopyOfProject")]
-        public virtual ICollection<Project> InverseCopyOfProject { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         [InverseProperty("Project")]

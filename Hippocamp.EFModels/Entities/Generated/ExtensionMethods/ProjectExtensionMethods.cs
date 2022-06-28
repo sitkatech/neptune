@@ -25,8 +25,7 @@ namespace Hippocamp.EFModels.Entities
                 AdditionalContactInformation = project.AdditionalContactInformation,
                 DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
-                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
-                CopyOfProjectID = project.CopyOfProjectID
+                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores
             };
             DoCustomMappings(project, projectDto);
             return projectDto;
@@ -50,8 +49,7 @@ namespace Hippocamp.EFModels.Entities
                 AdditionalContactInformation = project.AdditionalContactInformation,
                 DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
-                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
-                CopyOfProjectID = project.CopyOfProjectID
+                ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores
             };
             DoCustomSimpleDtoMappings(project, projectSimpleDto);
             return projectSimpleDto;

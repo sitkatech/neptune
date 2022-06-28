@@ -38,8 +38,7 @@ namespace Hippocamp.EFModels.Entities
                 PrecipitationZone = treatmentBMP.PrecipitationZone?.AsDto(),
                 UpstreamBMPID = treatmentBMP.UpstreamBMPID,
                 RegionalSubbasinID = treatmentBMP.RegionalSubbasinID,
-                Project = treatmentBMP.Project?.AsDto(),
-                CopyOfTreatmentBMPID = treatmentBMP.CopyOfTreatmentBMPID
+                Project = treatmentBMP.Project?.AsDto()
             };
             DoCustomMappings(treatmentBMP, treatmentBMPDto);
             return treatmentBMPDto;
@@ -76,8 +75,7 @@ namespace Hippocamp.EFModels.Entities
                 PrecipitationZoneID = treatmentBMP.PrecipitationZoneID,
                 UpstreamBMPID = treatmentBMP.UpstreamBMPID,
                 RegionalSubbasinID = treatmentBMP.RegionalSubbasinID,
-                ProjectID = treatmentBMP.ProjectID,
-                CopyOfTreatmentBMPID = treatmentBMP.CopyOfTreatmentBMPID
+                ProjectID = treatmentBMP.ProjectID
             };
             DoCustomSimpleDtoMappings(treatmentBMP, treatmentBMPSimpleDto);
             return treatmentBMPSimpleDto;

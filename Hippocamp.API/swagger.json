@@ -2754,11 +2754,6 @@
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
           },
-          "CopyOfProjectID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
@@ -3438,11 +3433,6 @@
           },
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
-          },
-          "CopyOfProjectID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
