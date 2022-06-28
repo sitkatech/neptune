@@ -76,7 +76,11 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   makeProjectCopy() {
-    const modalContents = "<p>Here's what will happen when you copy a project.</p>";
+    const modalContents = 
+      `<p>Are you sure you want to copy project <b>${this.project.ProjectName}</b>?
+      The new copy will be assigned the same name with the addition of <em>- Copy</em> and the current time and date. 
+      You can change the name in the project editing workflow afterwards.</p>
+      <p>Note: Model results and attachments will not be copied.</p>`;
     this.confirmService.confirm({ modalSize: "md", buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents }).then(confirmed => {
       if (confirmed) {
         this.isCopyingProject = true;
