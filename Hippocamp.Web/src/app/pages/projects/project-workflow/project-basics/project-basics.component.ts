@@ -56,10 +56,15 @@ export class ProjectBasicsComponent implements OnInit {
     const projectID = this.route.snapshot.paramMap.get("projectID");
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-      this.projectModel = new ProjectUpsertDto();
       if (projectID) {
         this.projectID = parseInt(projectID);
         this.projectService.getByID(this.projectID).subscribe(project => {
+          // redirect to review step if project is shared with OCTA grant program
+          if (project.ShareOCTAM2Tier2Scores) {
+            this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+          }
+
+          this.projectModel = new ProjectUpsertDto();
           this.mapProjectSimpleDtoToProjectModel(project);
           this.originalProjectModel = JSON.stringify(this.projectModel);
         });

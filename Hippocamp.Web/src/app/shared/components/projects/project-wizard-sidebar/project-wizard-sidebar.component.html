@@ -21,10 +21,11 @@
             Instructions
         </a>
     </div>
-    <div class="card-body">
+    <div class="card-body" [ngClass]="{'not-allowed': projectModel.ShareOCTAM2Tier2Scores}">
         <a [routerLink]="['project-basics']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
+            [ngClass]="{'disabled': projectModel.ShareOCTAM2Tier2Scores}"
             class="icon-padding">
             <hippocamp-progress-icon [isComplete]="isProjectBasicsComplete()"></hippocamp-progress-icon>
             Project Basics
@@ -44,34 +45,34 @@
             <ng-template ngbPanelContent>
                 <div class="indented-pages">
 
-                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName}">
+                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores}">
                         <a [routerLink]="['stormwater-treatments', 'treatment-bmps']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
-                        [ngClass]="{'disabled': !projectModel.ProjectName}">
+                        [ngClass]="{'disabled': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveModelingParameters()"></hippocamp-progress-icon>
                         Treatment BMPs
                         </a>
                     </div>
                     
-                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
+                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs()}">
                         <a [routerLink]="['stormwater-treatments', 'delineations']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
-                        [ngClass]="{'disabled': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
+                        [ngClass]="{'disabled': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs()}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></hippocamp-progress-icon>
                         Delineations
                         </a>
                     </div>
 
-                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
+                    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs()}">
                         <a [routerLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
                         routerLinkActive="active"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="icon-padding"
-                        [ngClass]="{'disabled': !projectModel.ProjectName || !doesProjectHaveTreatmentBMPs()}">
+                        [ngClass]="{'disabled': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs()}">
                         <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
                         Modeled Performance and Grant Metrics
                         </a>
@@ -81,9 +82,9 @@
         </ngb-panel>
     </ngb-accordion>
 
-    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName}">
+    <div class="card-body" [ngClass]="{'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores}">
         <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding"
-            [ngClass]="{'disabled': !projectModel.ProjectName}">
+            [ngClass]="{'disabled': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores}">
             <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
             Attachments
         </a>

@@ -23,7 +23,7 @@ import { CustomCompileService } from 'src/app/shared/services/custom-compile.ser
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { Feature } from 'geojson';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
@@ -66,9 +66,10 @@ export class TreatmentBmpsComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) {
-  }
+    private cdr: ChangeDetectorRef,
+    private projectService: ProjectService,
+    private router: Router
+  ) { }
 
   canExit(){
     if (this.projectID) {
@@ -83,7 +84,14 @@ export class TreatmentBmpsComponent implements OnInit {
 
       const projectID = this.route.snapshot.paramMap.get("projectID");
       if (projectID) {
-        this.projectID = parseInt(projectID);
+        this.projectService.getByID(parseInt(projectID)).subscribe(project => {
+          // redirect to review step if project is shared with OCTA grant program
+          if (project.ShareOCTAM2Tier2Scores) {
+            this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+          } else {
+            this.projectID = parseInt(projectID);
+          }
+        });
         this.cdr.detectChanges();
       }
     });

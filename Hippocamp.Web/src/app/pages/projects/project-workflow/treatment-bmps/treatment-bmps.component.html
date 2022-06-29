@@ -1,10 +1,12 @@
-<h2 class="d-inline-block mt-md-0 mt-4">
-    Proposed Treatment BMPs
-</h2>
-<div class="row m-1">
-    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
-</div>
-<ng-container *ngIf="projectID; else noProjectID">
-    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes [readOnly]="false" [includeDelineations]="false" [projectID]="projectID"></hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+<ng-container *ngIf="projectID">
+    <h2 class="d-inline-block mt-md-0 mt-4">
+        Proposed Treatment BMPs
+    </h2>
+    <div class="row m-1">
+        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+    </div>
+    <ng-container *ngIf="projectID; else noProjectID">
+        <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes [readOnly]="false" [includeDelineations]="false" [projectID]="projectID"></hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+    </ng-container>
+    <ng-template #noProjectID>No ProjectID identified</ng-template>
 </ng-container>
-<ng-template #noProjectID>No ProjectID identified</ng-template>

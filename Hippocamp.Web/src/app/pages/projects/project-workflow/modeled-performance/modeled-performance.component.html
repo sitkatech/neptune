@@ -1,4 +1,4 @@
-<ng-container *ngIf="treatmentBMPs">
+<ng-container [class.d-none]="!treatmentBMPs">
 <div class="mt-md-0 mt-4">
     <h2 class="d-inline-block">Modeled Performance and Grant Metrics</h2>
     <a href="{{getAboutModelingPerformanceURL()}}" class="float-right">About Modeling Performance</a>

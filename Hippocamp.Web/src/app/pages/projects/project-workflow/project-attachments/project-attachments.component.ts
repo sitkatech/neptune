@@ -59,11 +59,19 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.model = new ProjectDocumentUpsertDto();
     this.projectID = parseInt(this.route.snapshot.paramMap.get("projectID"));
-    this.model.ProjectID = this.projectID;
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
+
+      this.projectService.getByID(this.projectID).subscribe(project => {
+        // redirect to review step if project is shared with OCTA grant program
+        if (project.ShareOCTAM2Tier2Scores) {
+          this.router.navigateByUrl(`projects/edit/${this.projectID}/review-and-share`);
+        }
+
+        this.model = new ProjectDocumentUpsertDto();
+        this.model.ProjectID = this.projectID;
+      });
       this.cdr.detectChanges();
     });
     this.refreshAttachments();

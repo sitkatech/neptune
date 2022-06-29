@@ -76,7 +76,9 @@ export class ProjectWorkflowOutletComponent implements OnInit {
     this.projectModel.PrimaryContactPersonID = project.PrimaryContactPersonID;
     this.projectModel.ProjectDescription = project.ProjectDescription;
     this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
-    this.projectModel.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs
+    this.projectModel.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
+    this.projectModel.CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores;
+    this.projectModel.ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores;
   }
 
 }

@@ -143,10 +143,15 @@ export class DelineationsComponent implements OnInit {
       this.projectID = parseInt(projectID);
 
       forkJoin({
+        project: this.projectService.getByID(this.projectID),
         treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
         delineations: this.projectService.getDelineationsByProjectID(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-      }).subscribe(({ treatmentBMPs, delineations, boundingBox }) => {
+      }).subscribe(({ project, treatmentBMPs, delineations, boundingBox }) => {
+        // redirect to review step if project is shared with OCTA grant program
+        if (project.ShareOCTAM2Tier2Scores) {
+          this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+        }
         if (treatmentBMPs.length == 0) {
           this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
         }

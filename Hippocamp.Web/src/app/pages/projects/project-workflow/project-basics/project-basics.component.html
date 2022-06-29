@@ -1,7 +1,9 @@
-<h2 class="d-inline-block">
-    Project Basics
-</h2>
-<custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+<ng-container *ngIf="projectModel">
+    <h2 class="d-inline-block">
+        Project Basics
+    </h2>
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</ng-container>
 <form (ngSubmit)="onSubmit(createProjectForm)" #createProjectForm="ngForm" *ngIf="projectModel && stormwaterJurisdictions">
     <h5 class="mt-4">Project Basics</h5>
     <div class="row mt-4">

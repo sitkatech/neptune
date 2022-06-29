@@ -4,9 +4,15 @@
 <div class="row m-1">
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
+
+<ngb-alert *ngIf="project?.ShareOCTAM2Tier2Scores" [type]="'warning'" [dismissible]="false">
+    This project has been shared with the OCTA M2 Tier 2 Grant Program. 
+    If you would like to edit this project, you must first revoke sharing for all grant programs.
+</ngb-alert>
+
 <ng-container *ngIf="project">
     <div class="row mt-3 mb-3">
-        <div class="col-lg-7">
+        <div class="col-xl-7">
             <div class="card">
                 <div class="card-header">
                     Project Basics
@@ -65,27 +71,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 mt-lg-0 mt-3">
+        <div class="col-xl-5 mt-xl-0 mt-3">
             <div class="card">
                 <div class="card-header">
                     Share Project
                 </div>
                 <div class="card-body">
-                    <p class="mt-2">Make visible to:</p>
-                    <div class="row ml-4">
-                        <div class="col">
-                            <input type="checkbox" name="OCTAM2Tier2" id="OCTAM2Tier2" [(ngModel)]="shareOCTAM2Tier2Scores">
-                            <label for="OCTAM2Tier2" class="control-label ml-2">
-                                <field-definition fieldDefinitionType="OCTAM2Tier2GrantProgram"></field-definition>
-                            </label>
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i [ngClass]="project.ShareOCTAM2Tier2Scores ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-auto ml-auto">
-
-                            <button (click)="onSubmit()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                        <div class="col">
+                            OCTA M2 Tier 2 Grant Program
+                        </div>
+                        <div class="col-4">
+                            <button (click)="shareOrRevokeOCTAScores()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
                                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-                                Save and Share
+                                {{ project.ShareOCTAM2Tier2Scores ? 'Revoke' : 'Share'}}
                             </button>
                         </div>
                     </div>

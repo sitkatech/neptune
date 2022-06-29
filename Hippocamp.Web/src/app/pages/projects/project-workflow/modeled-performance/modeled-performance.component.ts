@@ -89,6 +89,10 @@ export class ModeledPerformanceComponent implements OnInit {
           boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
           projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID)
         }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
+          // redirect to review step if project is shared with OCTA grant program
+          if (project.ShareOCTAM2Tier2Scores) {
+            this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+          }
           if (treatmentBMPs.length == 0) {
             this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
           }
