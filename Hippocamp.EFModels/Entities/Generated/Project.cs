@@ -42,6 +42,8 @@ namespace Hippocamp.EFModels.Entities
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
         public bool CalculateOCTAM2Tier2Scores { get; set; }
         public bool ShareOCTAM2Tier2Scores { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? OCTAM2Tier2ScoresLastSharedDate { get; set; }
 
         [ForeignKey("CreatePersonID")]
         [InverseProperty("ProjectCreatePeople")]

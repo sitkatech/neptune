@@ -2711,6 +2711,11 @@
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
           },
+          "OCTAM2Tier2ScoresLastSharedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
@@ -3390,6 +3395,11 @@
           },
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
+          },
+          "OCTAM2Tier2ScoresLastSharedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
