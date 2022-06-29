@@ -34,6 +34,11 @@ export class ProjectService {
     return this.apiService.postToApi(route, projectModel);
   }
 
+  newProjectCopy(projectID: number): Observable<number> {
+    let route = `/projects/${projectID}/copy`;
+    return this.apiService.postToApi(route, {});
+  }
+
   updateProject(projectID: number, projectModel: ProjectUpsertDto) {
     let route = `/projects/${projectID}/update`;
     return this.apiService.postToApi(route, projectModel);
