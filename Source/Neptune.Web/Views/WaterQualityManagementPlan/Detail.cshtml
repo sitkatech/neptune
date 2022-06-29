@@ -24,11 +24,11 @@
             var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
             map = new NeptuneMaps.Map(mapInitJson);
 
-            map.addLayerToLayerControl(map.vectorLayers[0], "<img src='/Content/img/legendImages/parcel-wqmp.png' style='margin-bottom:2px' height='15px'>WQMPs", false);
+            map.addLayerToLayerControl(map.vectorLayers[0], "<img src='/Content/img/legendImages/parcel-wqmp.png' style='margin-bottom:2px' height='15px'> WQMPs", false);
             map.addLayerToLayerControl(map.vectorLayers[1], "<img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' style='margin-bottom:-7px'>Treatment BMPs", false);
-            map.vectorLayers.length > 2
-                ? map.addLayerToLayerControl(map.vectorLayers[2], "<img src='/Content/img/legendImages/delineationCentralized.png' style='margin-bottom:3px' height='12px'>BMP Delineations", false)
-                : null;
+            //map.vectorLayers.length > 2
+            //    ? map.addLayerToLayerControl(map.vectorLayers[2], "<img src='/Content/img/legendImages/delineationCentralized.png' style='margin-bottom:3px' height='12px'> WQMP Delineation", false)
+            //    : null;
         });
 
         var expandOrCollapseNotesField = function(tableID, buttonClicked) {

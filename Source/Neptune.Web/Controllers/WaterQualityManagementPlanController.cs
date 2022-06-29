@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
+using LtInfo.Common.GeoJson;
 using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 
@@ -99,22 +101,30 @@ namespace Neptune.Web.Controllers
                 }
             });
 
+            var boundaryAreaFeatureCollection = new FeatureCollection();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(waterQualityManagementPlan.WaterQualityManagementPlanBoundary);
+            boundaryAreaFeatureCollection.Features.AddRange(new List<Feature> { feature });
+
             //var boundingBoxGeometries = new List<DbGeometry>();
             //boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
             //boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
-                new LayerGeoJson(FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized(),
-                    parcelGeoJsonFeatureCollection,
-                    ParcelModelExtensions.ParcelColor,
+                new LayerGeoJson("wqmpBoundary", boundaryAreaFeatureCollection, "#fb00be",
                     1,
                     LayerInitialVisibility.Show),
+                //new LayerGeoJson(FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized(),
+                //    parcelGeoJsonFeatureCollection,
+                //    ParcelModelExtensions.ParcelColor,
+                //    1,
+                //    LayerInitialVisibility.Show),
                 new LayerGeoJson(FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
                     treatmentBmpGeoJsonFeatureCollection,
                     "#935f59",
                     1,
-                    LayerInitialVisibility.Show)
+                    LayerInitialVisibility.Show),
+
             };
             //var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
             //    new BoundingBox(boundingBoxGeometries));
@@ -458,9 +468,6 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpBoundary(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpBoundaryViewModel viewModel)
         {
-            // TODO: can remove projection on null when we script out the existing boundaries to 4326
-            var waterQualityManagementPlanBoundary4326 =
-                waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 ?? CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(waterQualityManagementPlan.WaterQualityManagementPlanBoundary);
             var boundaryLayerGeoJson = waterQualityManagementPlan.GetBoundaryLayerGeoJson();
             var mapInitJson = new BoundaryAreaMapInitJson("editWqmpBoundaryMap", boundaryLayerGeoJson);
             var viewData = new EditWqmpBoundaryViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
