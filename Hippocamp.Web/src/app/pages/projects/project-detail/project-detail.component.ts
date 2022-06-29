@@ -65,4 +65,8 @@ export class ProjectDetailComponent implements OnInit {
   showModelResultsPanel(): boolean {
     return !this.project?.DoesNotIncludeTreatmentBMPs && this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories.length > 0 && this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0;
   }
+
+  getWorkflowLink() {
+    return `/projects/edit/${this.projectID}` + (this.project.ShareOCTAM2Tier2Scores ? '/review-and-share' : '');
+  }
 }

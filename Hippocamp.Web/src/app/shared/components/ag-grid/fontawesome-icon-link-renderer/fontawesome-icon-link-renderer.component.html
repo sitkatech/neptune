@@ -1,5 +1,5 @@
 <ng-container *ngIf="params && !params.isSpan">
-    <a [routerLink]="[params.inRouterLink, params.value]" *ngIf="params"><span class="fas fa-{{params.fontawesomeIconName}} {{params.CssClasses}}"></span></a>
+    <a [routerLink]="[params.inRouterLink + params.value]" *ngIf="params"><span class="fas fa-{{params.fontawesomeIconName}} {{params.CssClasses}}"></span></a>
 </ng-container>
 <ng-container *ngIf="params && params.isSpan">
     <span class="fas fa-{{params.fontawesomeIconName}}  {{params.CssClasses}}" style="cursor:pointer"></span>

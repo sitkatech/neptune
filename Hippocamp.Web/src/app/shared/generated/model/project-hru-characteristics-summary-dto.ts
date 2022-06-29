@@ -34,6 +34,7 @@ export class ProjectHRUCharacteristicsSummaryDto {
     DoesNotIncludeTreatmentBMPs?: boolean;
     CalculateOCTAM2Tier2Scores?: boolean;
     ShareOCTAM2Tier2Scores?: boolean;
+    OCTAM2Tier2ScoresLastSharedDate?: string;
     Organization?: OrganizationSimpleDto;
     StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
     ProjectStatus?: ProjectStatusSimpleDto;

@@ -14,6 +14,9 @@ import { FontAwesomeIconLinkRendererComponent } from 'src/app/shared/components/
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
+import { HttpParams } from '@angular/common/http';
+import { dataSanitizeException } from '@microsoft/applicationinsights-common';
+import { CustomDropdownFilterComponent } from 'src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component';
 
 
 @Component({
@@ -72,7 +75,7 @@ export class ProjectListComponent implements OnInit {
   private createProjectGridColDefs() {
     this.projectColumnDefs = [
       {
-        valueGetter: params => params.data.ProjectID,
+        valueGetter: params => params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? '/review-and-share' : ''),
         cellRendererFramework: FontAwesomeIconLinkRendererComponent,
         cellRendererParams: { inRouterLink: '/projects/edit/', fontawesomeIconName: 'edit', CssClasses: 'text-primary' },
         width: 40, sortable: false, filter: false
@@ -121,7 +124,14 @@ export class ProjectListComponent implements OnInit {
       },
       { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
       this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
-      { headerName: 'Project Description', field: 'ProjectDescription' }
+      { headerName: 'Project Description', field: 'ProjectDescription' },
+      { 
+        headerName: 'Shared with OCTA M2 Tier 2 Grant Program', 
+        valueGetter: params => params.data.ShareOCTAM2Tier2Scores ? 'Yes' : 'No',
+        filterFramework: CustomDropdownFilterComponent,
+        filterParams: { field: 'ShareOCTAM2Tier2Scores'}
+      },
+      this.utilityFunctionsService.createDateColumnDef('Last Shared with OCTA M2 Tier 2 Grant Program', 'OCTAM2Tier2ScoresLastSharedDate', 'short')
     ];
 
     this.defaultColDef = {
