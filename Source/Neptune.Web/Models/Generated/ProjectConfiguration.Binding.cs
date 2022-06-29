@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
             Property(x => x.DoesNotIncludeTreatmentBMPs).HasColumnName(@"DoesNotIncludeTreatmentBMPs").HasColumnType("bit").IsRequired();
             Property(x => x.CalculateOCTAM2Tier2Scores).HasColumnName(@"CalculateOCTAM2Tier2Scores").HasColumnType("bit").IsRequired();
             Property(x => x.ShareOCTAM2Tier2Scores).HasColumnName(@"ShareOCTAM2Tier2Scores").HasColumnType("bit").IsRequired();
+            Property(x => x.OCTAM2Tier2ScoresLastSharedDate).HasColumnName(@"OCTAM2Tier2ScoresLastSharedDate").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.Projects).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Project_Organization_OrganizationID

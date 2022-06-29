@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs, bool calculateOCTAM2Tier2Scores, bool shareOCTAM2Tier2Scores) : this()
+        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs, bool calculateOCTAM2Tier2Scores, bool shareOCTAM2Tier2Scores, DateTime? oCTAM2Tier2ScoresLastSharedDate) : this()
         {
             this.ProjectID = projectID;
             this.ProjectName = projectName;
@@ -50,6 +50,7 @@ namespace Neptune.Web.Models
             this.DoesNotIncludeTreatmentBMPs = doesNotIncludeTreatmentBMPs;
             this.CalculateOCTAM2Tier2Scores = calculateOCTAM2Tier2Scores;
             this.ShareOCTAM2Tier2Scores = shareOCTAM2Tier2Scores;
+            this.OCTAM2Tier2ScoresLastSharedDate = oCTAM2Tier2ScoresLastSharedDate;
         }
 
         /// <summary>
@@ -230,6 +231,7 @@ namespace Neptune.Web.Models
         public bool DoesNotIncludeTreatmentBMPs { get; set; }
         public bool CalculateOCTAM2Tier2Scores { get; set; }
         public bool ShareOCTAM2Tier2Scores { get; set; }
+        public DateTime? OCTAM2Tier2ScoresLastSharedDate { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 

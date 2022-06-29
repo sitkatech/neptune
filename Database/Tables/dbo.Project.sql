@@ -16,6 +16,7 @@ CREATE TABLE [dbo].[Project](
 	[DoesNotIncludeTreatmentBMPs] [bit] NOT NULL,
 	[CalculateOCTAM2Tier2Scores] [bit] NOT NULL,
 	[ShareOCTAM2Tier2Scores] [bit] NOT NULL,
+	[OCTAM2Tier2ScoresLastSharedDate] [datetime] NULL,
  CONSTRAINT [PK_Project_ProjectID] PRIMARY KEY CLUSTERED 
 (
 	[ProjectID] ASC
