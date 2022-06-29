@@ -134,6 +134,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },
+        this.utilityFunctionsService.createDateColumnDef('Last Shared On', 'OCTAM2Tier2ScoresLastSharedDate', 'short', 140),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('Area', 'Area', 'Area', 'Area Treated (ac)', null, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('ImperviousAcres', 'ImperviousAcres', 'ImperviousArea', 'Impervious Area Treated (ac)', 220, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('SEAScore', 'SEA', 'SEAScore', 'SEA Score', 90, 2),

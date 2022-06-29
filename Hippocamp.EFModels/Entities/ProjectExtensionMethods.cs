@@ -31,6 +31,7 @@ namespace Hippocamp.EFModels.Entities
                 DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
                 ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
+                OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate,
                 Organization = project.Organization.AsSimpleDto(),
                 StormwaterJurisdiction = project.StormwaterJurisdiction.AsSimpleDto(),
                 ProjectStatus = project.ProjectStatus.AsSimpleDto(),
