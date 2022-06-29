@@ -116,7 +116,7 @@ export class ReviewComponent implements OnInit {
           this.isLoadingSubmit = false;
           this.projectWorkflowService.emitWorkflowUpdate();
           this.project.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
-          this.alertService.pushAlert(new Alert("Your project was successfully updated.", AlertContext.Success));
+          this.alertService.pushAlert(new Alert(`Your project was successfully ${buttonTextYes == 'Share' ? 'shared' : 'revoked'}.`, AlertContext.Success));
           window.scroll(0,0);
         }, error => {
           this.isLoadingSubmit = false;
