@@ -1042,7 +1042,10 @@ if (ViewDataTyped.OpenRevisionRequest != null)
         var regionalSubbasinLayer =
             map.addWmsLayer("OCStormwater:RegionalSubbasins",
                 "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                { styles: "regional_subbasin_wide", maxZoom:22}, true);
+                { styles: "regional_subbasin_wide", maxZoom: 22 }, true);
+
+        map.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+            "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
 
         if (mapInitJson.DelineationLayer) {
             var delineationLayer = L.geoJSON(mapInitJson.DelineationLayer.GeoJsonFeatureCollection);
