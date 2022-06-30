@@ -11,7 +11,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public EditWqmpParcelsViewDataForAngular ViewDataForAngular { get; }
         public decimal? RecordedWQMPAreaInAcres { get; }
-        public string RefineAreaUrl { get; set; }
 
         public EditWqmpParcelsViewData(Person currentPerson,
             Models.WaterQualityManagementPlan waterQualityManagementPlan,
@@ -23,9 +22,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Index());
             SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = waterQualityManagementPlan.GetDetailUrl();
-            RefineAreaUrl =
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.EditWqmpBoundary(WaterQualityManagementPlan));
             PageTitle = "Edit Associated Parcels";
             RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
             ViewDataForAngular = new EditWqmpParcelsViewDataForAngular(mapInitJson,

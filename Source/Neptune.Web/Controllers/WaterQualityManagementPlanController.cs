@@ -97,8 +97,12 @@ namespace Neptune.Web.Controllers
             });
 
             var boundaryAreaFeatureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
-            boundaryAreaFeatureCollection.Features.AddRange(new List<Feature> { feature });
+
+            if (waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 != null)
+            {
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
+                boundaryAreaFeatureCollection.Features.AddRange(new List<Feature> { feature });
+            }
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
@@ -113,8 +117,11 @@ namespace Neptune.Web.Controllers
 
             };
 
+            var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
-                BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
+                waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 != null ? 
+                    BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons) :
+                    BoundingBox.GetBoundingBox(new List<StormwaterJurisdiction> {wqmpJurisdiction}));
 
             if (treatmentBMPs.Any(x => x.Delineation != null))
             {
@@ -443,7 +450,9 @@ namespace Neptune.Web.Controllers
         {
             var wqmpParcelGeometries =
                 waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel.ParcelGeometry4326);
-            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), new BoundingBox(wqmpParcelGeometries));
+            var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
+            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), wqmpParcelGeometries.Count() > 0 ? 
+                    new BoundingBox(wqmpParcelGeometries) : BoundingBox.GetBoundingBox(new List<StormwaterJurisdiction> { wqmpJurisdiction }));
             var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
         }
@@ -492,7 +501,7 @@ namespace Neptune.Web.Controllers
 
             NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
 
-            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.EditWqmpParcels(waterQualityManagementPlan)));
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }
 
         #region WQMP O&M Verification Record
