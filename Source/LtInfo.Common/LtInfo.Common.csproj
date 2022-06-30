@@ -207,6 +207,7 @@
     <Compile Include="DesignByContract\PostconditionException.cs" />
     <Compile Include="DesignByContract\PreconditionException.cs" />
     <Compile Include="DhtmlWrappers\AutoGridSpec.cs" />
+    <Compile Include="DhtmlWrappers\BulkDeleteModalDialogForm.cs" />
     <Compile Include="DhtmlWrappers\BulkTagModalDialogForm.cs" />
     <Compile Include="DhtmlWrappers\DhtmlxGridColumnAlignType.cs" />
     <Compile Include="DhtmlWrappers\DhtmlxGridColumnDataType.cs" />

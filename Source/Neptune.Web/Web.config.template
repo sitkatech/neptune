@@ -102,7 +102,7 @@
     <httpErrors existingResponse="PassThrough"/>
     <security>
         <requestFiltering>
-            <requestLimits maxAllowedContentLength="65000000" />
+            <requestLimits maxAllowedContentLength="${max-request-length}" />
         </requestFiltering>
     </security>
     <staticContent>

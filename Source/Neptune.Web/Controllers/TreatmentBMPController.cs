@@ -561,6 +561,84 @@ namespace Neptune.Web.Controllers
                 viewModel);
         }
 
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ContentResult BulkDeleteTreatmentBMPs()
+        {
+            return new ContentResult();
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public PartialViewResult BulkDeleteTreatmentBMPs(BulkDeleteTreatmentBMPsViewModel viewModel)
+        {
+            var treatmentBMPs = new List<TreatmentBMP>();
+
+            if (viewModel.TreatmentBMPIDList != null)
+            {
+                treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.TreatmentBMPIDList.Contains(x.TreatmentBMPID)).ToList();
+            }
+            var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs);
+            return RazorPartialView<BulkDeleteTreatmentBMPs, BulkDeleteTreatmentBMPsViewData, BulkDeleteTreatmentBMPsViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ContentResult BulkDeleteTreatmentBMPsModal()
+        {
+            return new ContentResult();
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult BulkDeleteTreatmentBMPsModal(BulkDeleteTreatmentBMPsViewModel viewModel)
+        {
+            var treatmentBMPDisplayNames = new List<string>();
+            if (!ModelState.IsValid)
+            {
+                return new ModalDialogFormJsonResult();
+            }
+
+            if (viewModel.TreatmentBMPIDList != null)
+            {
+                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.TreatmentBMPIDList.Contains(x.TreatmentBMPID)).ToList();
+                treatmentBMPDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
+
+                foreach (var treatmentBMP in treatmentBMPs)
+                {
+                    var delineationGeometry = treatmentBMP.Delineation?.DelineationGeometry;
+                    var isDelineationDistributed = treatmentBMP.Delineation?.DelineationType == DelineationType.Distributed;
+
+                    NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, HttpRequestStorage.DatabaseEntities);
+
+                    foreach (var downstreamBMP in treatmentBMP.TreatmentBMPsWhereYouAreTheUpstreamBMP)
+                    {
+                        downstreamBMP.UpstreamBMPID = null;
+                    }
+                    HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                    // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
+                    // We should write a more finely-grained delete that deletes delineations via the
+                    // pattern established in DelineationController
+                    treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
+                    HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                    // queue an LGU refresh for the area no longer governed by this BMP
+                    if (isDelineationDistributed && delineationGeometry != null)
+                    {
+                        ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null);
+                    }
+                }
+
+            }
+
+            SetMessageForDisplay($"Successfully deleted Treatment BMPs: {string.Join(", ", treatmentBMPDisplayNames)}");
+            return new ModalDialogFormJsonResult();
+            
+        }
+
         [AnonymousUnclassifiedFeature]
         public PartialViewResult SummaryForMap(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
