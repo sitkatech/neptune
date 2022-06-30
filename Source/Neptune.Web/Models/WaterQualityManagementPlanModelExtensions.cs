@@ -26,7 +26,7 @@ namespace Neptune.Web.Models
         public static LayerGeoJson GetBoundaryLayerGeoJson(this Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(waterQualityManagementPlan.WaterQualityManagementPlanBoundary);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
             featureCollection.Features.AddRange(new List<Feature> { feature });
 
             LayerGeoJson boundaryLayerGeoJson = new LayerGeoJson("wqmpBoundary", featureCollection, "#4782ff",
