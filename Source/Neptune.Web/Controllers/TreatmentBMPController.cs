@@ -231,7 +231,8 @@ namespace Neptune.Web.Controllers
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
             var boundingBox = treatmentBMP?.LocationPoint != null
                 ? new BoundingBox(treatmentBMP.LocationPoint4326)
-                : BoundingBox.MakeNewDefaultBoundingBox();
+                : BoundingBox.GetBoundingBox(stormwaterJurisdictions);
+
             var mapInitJson =
                 new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
                 {
