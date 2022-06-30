@@ -41,6 +41,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.WaterQualityManagementPlanBoundary = (ParcelIDs != null ? HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList() : new List<DbGeometry>())
                 .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+            waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 =
+                CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(waterQualityManagementPlan
+                    .WaterQualityManagementPlanBoundary);
         }
     }
 }

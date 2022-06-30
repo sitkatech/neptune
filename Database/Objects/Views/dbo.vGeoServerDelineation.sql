@@ -9,7 +9,7 @@ as
 Select
 	w.WaterQualityManagementPlanID as PrimaryKey,
 	w.WaterQualityManagementPlanID,
-	WaterQualityManagementPlanGeometry,
+	w.WaterQualityManagementPlanBoundary4326 as WaterQualityManagementPlanGeometry,
 	w.StormwaterJurisdictionID,
 	som.OrganizationName as OrganizationName,
 	ISNULL(Case
@@ -20,15 +20,7 @@ Select
 	end, 0.0) as TrashCaptureEffectiveness,
 	tcs.TrashCaptureStatusTypeDisplayName
 From
-	dbo.WaterQualityManagementPlan w join (
-		Select 
-			wp.WaterQualityManagementPlanID,
-			geometry::UnionAggregate(ParcelGeometry4326) as WaterQualityManagementPlanGeometry
-		from WaterQualityManagementPlanParcel wp join Parcel p
-			on wp.ParcelID = p.ParcelID
-		group by wp.WaterQualityManagementPlanID
-	) wp
-		on w.WaterQualityManagementPlanID = wp.WaterQualityManagementPlanID
+	dbo.WaterQualityManagementPlan w
 	join dbo.TrashCaptureStatusType tcs
 		on w.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
 	join dbo.vStormwaterJurisdictionOrganizationMapping som

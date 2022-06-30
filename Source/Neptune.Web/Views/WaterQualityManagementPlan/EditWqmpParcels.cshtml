@@ -90,28 +90,30 @@
                 Select a @FieldDefinitionType.Parcel.GetFieldDefinitionLabel().
             </div>
             <div ng-if="AngularModel.ParcelIDs.length >= 1">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>@FieldDefinitionType.Parcel.GetFieldDefinitionLabel() Number</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="parcelId in AngularModel.ParcelIDs">
-                        <td>
-                            <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}"/>
-                            <a ng-click="toggleParcel(parcelId); $event.preventDefault();" href="#">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <div ng-bind="getParcelNumber(parcelId)"></div>
-                            <div class="help-block" ng-bind="getParcelAddress(parcelId)"></div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div style="min-height: 150px; max-height: 500px; overflow-y: auto;">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>@FieldDefinitionType.Parcel.GetFieldDefinitionLabel() Number</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="parcelId in AngularModel.ParcelIDs">
+                            <td>
+                                <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}" />
+                                <a ng-click="toggleParcel(parcelId); $event.preventDefault();" href="#">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <div ng-bind="getParcelNumber(parcelId)"></div>
+                                <div class="help-block" ng-bind="getParcelAddress(parcelId)"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="col-xs-12">
@@ -119,6 +121,7 @@
         </div>
         <div class="col-xs-12 col-sm-2">
             <div>
+                <a href="@ViewDataTyped.RefineAreaUrl" class="btn btn-neptune"> Refine Area </a>
                 @*<sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field*@
             </div>
         </div>

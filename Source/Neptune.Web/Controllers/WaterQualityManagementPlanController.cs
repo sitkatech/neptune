@@ -9,10 +9,12 @@ using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using GeoJSON.Net.Feature;
+using LtInfo.Common.GeoJson;
 using Neptune.Web.Security.Shared;
+using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 
 namespace Neptune.Web.Controllers
 {
@@ -79,9 +81,6 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
 
-            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels
-                .Select(x => x.Parcel).ToList();
-            var parcelGeoJsonFeatureCollection = parcels.ToGeoJsonFeatureCollection();
             var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlanPrimaryKey);
             var treatmentBmpGeoJsonFeatureCollection =
                 treatmentBMPs.ToGeoJsonFeatureCollection();
@@ -97,25 +96,22 @@ namespace Neptune.Web.Controllers
                 }
             });
 
-            //var boundingBoxGeometries = new List<DbGeometry>();
-            //boundingBoxGeometries.AddRange(treatmentBMPs.Select(x=>x.LocationPoint4326));
-            //boundingBoxGeometries.AddRange(parcels.Select(x=>x.ParcelGeometry4326));
+            var boundaryAreaFeatureCollection = new FeatureCollection();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
+            boundaryAreaFeatureCollection.Features.AddRange(new List<Feature> { feature });
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
-                new LayerGeoJson(FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized(),
-                    parcelGeoJsonFeatureCollection,
-                    ParcelModelExtensions.ParcelColor,
+                new LayerGeoJson("wqmpBoundary", boundaryAreaFeatureCollection, "#fb00be",
                     1,
                     LayerInitialVisibility.Show),
                 new LayerGeoJson(FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
                     treatmentBmpGeoJsonFeatureCollection,
                     "#935f59",
                     1,
-                    LayerInitialVisibility.Show)
+                    LayerInitialVisibility.Show),
+
             };
-            //var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
-            //    new BoundingBox(boundingBoxGeometries));
 
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
@@ -453,6 +449,51 @@ namespace Neptune.Web.Controllers
         }
 
         #endregion
+
+        private ViewResult ViewEditWqmpBoundary(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpBoundaryViewModel viewModel)
+        {
+            var boundaryLayerGeoJson = waterQualityManagementPlan.GetBoundaryLayerGeoJson();
+            var mapInitJson = new BoundaryAreaMapInitJson("editWqmpBoundaryMap", boundaryLayerGeoJson);
+            var viewData = new EditWqmpBoundaryViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
+            return RazorView<EditWqmpBoundary, EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public ViewResult EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditWqmpBoundaryViewModel(waterQualityManagementPlan);
+            return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpBoundaryViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
+            }
+
+            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+
+            viewModel.UpdateModel(waterQualityManagementPlan);
+            SetMessageForDisplay($"Successfully edited boundary for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
+
+            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+
+            if (!(oldBoundary == null && newBoundary == null))
+            {
+                ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary);
+            }
+
+            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.EditWqmpParcels(waterQualityManagementPlan)));
+        }
 
         #region WQMP O&M Verification Record
 
