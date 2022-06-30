@@ -97,7 +97,7 @@ namespace Neptune.Web.Controllers
             });
 
             var boundaryAreaFeatureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithReprojectionCheck(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
             boundaryAreaFeatureCollection.Features.AddRange(new List<Feature> { feature });
 
             var layerGeoJsons = new List<LayerGeoJson>
