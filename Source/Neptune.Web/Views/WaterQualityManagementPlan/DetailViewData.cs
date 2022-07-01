@@ -21,6 +21,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string EditSimplifiedStructuralBMPsUrl { get; }
         public string EditSourceControlBMPsUrl { get; }
         public string EditParcelsUrl { get; }
+        public string EditWqmpBoundaryUrl { get; }
         public string NewDocumentUrl { get; }
         public MapInitJson MapInitJson { get; }
         public ParcelGridSpec ParcelGridSpec { get; }
@@ -93,6 +94,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EditParcelsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpParcels(WaterQualityManagementPlan));
+            EditWqmpBoundaryUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.EditWqmpBoundary(WaterQualityManagementPlan));
             NewDocumentUrl =
                 SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(c =>
                     c.New(waterQualityManagementPlan));
