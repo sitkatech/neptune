@@ -463,7 +463,8 @@ namespace Neptune.Web.Controllers
         {
             var boundaryLayerGeoJson = waterQualityManagementPlan.GetBoundaryLayerGeoJson();
             var mapInitJson = new BoundaryAreaMapInitJson("editWqmpBoundaryMap", boundaryLayerGeoJson);
-            var viewData = new EditWqmpBoundaryViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.EditWQMPBoundary);
+            var viewData = new EditWqmpBoundaryViewData(CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpBoundary, EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>(viewData, viewModel);
         }
 
