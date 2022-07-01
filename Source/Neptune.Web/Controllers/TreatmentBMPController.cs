@@ -232,9 +232,10 @@ namespace Neptune.Web.Controllers
             var boundingBox = treatmentBMP?.LocationPoint != null
                 ? new BoundingBox(treatmentBMP.LocationPoint4326)
                 : BoundingBox.GetBoundingBox(stormwaterJurisdictions);
+            var zoomLevel = CurrentPerson.IsAdministrator() ? MapInitJson.DefaultZoomLevel : MapInitJson.DefaultZoomLevel + 2;
 
             var mapInitJson =
-                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", zoomLevel, layerGeoJsons, boundingBox, false)
                 {
                     AllowFullScreen = false
                 };
@@ -833,13 +834,14 @@ namespace Neptune.Web.Controllers
         {
             var mapFormID = "treatmentBMPEditLocation";
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
-
-            var boundingBox = treatmentBMP.LocationPoint4326 != null
+            var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
+            var boundingBox = treatmentBMP.LocationPoint != null
                 ? new BoundingBox(treatmentBMP.LocationPoint4326)
-                : BoundingBox.MakeNewDefaultBoundingBox();
+                : BoundingBox.GetBoundingBox(stormwaterJurisdictions);
+            var zoomLevel = MapInitJson.DefaultZoomLevel + 6;
 
             var mapInitJson =
-                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", zoomLevel, layerGeoJsons, boundingBox, false)
                 {
                     AllowFullScreen = false
                 };
