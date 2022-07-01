@@ -333,10 +333,10 @@
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     Locations
-                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
                     {
                         <span class="pull-right">
-                            <a href="@ViewDataTyped.EditParcelsUrl">
+                            <a href="@ViewDataTyped.EditWqmpBoundaryUrl">
                                 @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")
                             </a>
                         </span>
