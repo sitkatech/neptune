@@ -333,20 +333,19 @@
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     Locations
-                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
-                    {
-                        <span class="pull-right">
-                            <a href="@ViewDataTyped.EditWqmpBoundaryUrl">
-                                @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")
-                            </a>
-                        </span>
-                    }
                 </div>
                 <div class="panel-body">
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    {
+                        <div>
+                            <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
+                            <a class="btn btn-neptune @(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null ? "btn-default disabled" : String.Empty)" href="@ViewDataTyped.EditWqmpBoundaryUrl">Refine Area</a>
+                        </div>
+                    }
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
                     <div class="row" style="margin-top: 12px;">
-                        <label class="col-sm-5 control-label">Calculated Parcel Area:</label>
-                        <div class="col-sm-7">@ViewDataTyped.CalculatedParcelArea</div>
+                        <label class="col-sm-5 control-label">Calculated WQMP Acreage:</label>
+                        <div class="col-sm-7">@ViewDataTyped.CalculatedWQMPAcreage</div>
                     </div>
                 </div>
             </div>

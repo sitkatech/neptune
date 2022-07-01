@@ -65,4 +65,5 @@ values
 (63, 'HippocampReview', 'Hippocamp Review'),
 (64, 'HippocampPlanningMap', 'Hippocamp Planning Map'),
 (65, 'OCTAM2Tier2GrantProgramMetrics', 'OCTA M2 Tier 2 Grant Program Metrics'),
-(66, 'OCTAM2Tier2GrantProgramDashboard', 'OCTA M2 Tier 2 Grant Program Dashboard')
+(66, 'OCTAM2Tier2GrantProgramDashboard', 'OCTA M2 Tier 2 Grant Program Dashboard'),
+(67, 'EditWQMPBoundary', 'Refine WQMP Boundary Area')

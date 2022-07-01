@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
         public List<WaterQualityManagementPlanModelingApproach> WaterQualityManagementPlanModelingApproaches { get; }
-        public string CalculatedParcelArea { get; }
+        public string CalculatedWQMPAcreage { get; }
 
         public string TrashCaptureEffectiveness { get; }
         public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
@@ -132,13 +132,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
                 .OrderBy(x => x.SourceControlBMPAttributeID)
                 .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
-            var calculatedParcelAcres =
+
+            var calculatedWQMPAcreage =
                 WaterQualityManagementPlan
-                    .CalculateParcelAcreageTotal(); // This is 'calculated' by summing parcel recorded acres - not sure that's what's intended by calculated in this case
+                    .CalculateTotalAcreage();
 
             // TODO: Never compare floating-point values to zero. We should establish an application-wide error tolerance and use that instead of the direct comparison
-            CalculatedParcelArea = calculatedParcelAcres != 0
-                ? $"{Math.Round(calculatedParcelAcres, 2).ToString(CultureInfo.InvariantCulture)} acres"
+            CalculatedWQMPAcreage = calculatedWQMPAcreage != 0
+                ? $"{Math.Round(calculatedWQMPAcreage, 2).ToString(CultureInfo.InvariantCulture)} acres"
                 : "No parcels have been associated with this WQMP";
 
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
@@ -181,18 +182,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public bool AnySimpleBMPsNotFullyParameterized { get; set; }
 
-
-        public double? CalculateAreaWithinWQMP(Models.TreatmentBMP treatmentBMP)
-        {
-            if (treatmentBMP.Delineation != null &&
-                WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
-            {
-                return treatmentBMP.Delineation.DelineationGeometry.Intersection(WaterQualityManagementPlan
-                    .WaterQualityManagementPlanBoundary).Area * DbSpatialHelper.SquareMetersToAcres;
-            }
-
-            return null;
-        }
 
         //There are more errors to come I believe, that's why this is producing a list
         public List<HtmlString> CheckForParameterizationErrors(Models.WaterQualityManagementPlan waterQualityManagement)
