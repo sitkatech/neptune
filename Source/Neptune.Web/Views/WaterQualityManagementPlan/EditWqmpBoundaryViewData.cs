@@ -28,7 +28,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditWqmpBoundaryViewData : NeptuneViewData
     {
-        public EditWqmpBoundaryViewData(Person currentPerson, Models.WaterQualityManagementPlan wqmp, BoundaryAreaMapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditWqmpBoundaryViewData(Person currentPerson, Models.NeptunePage neptunePage, Models.WaterQualityManagementPlan wqmp, BoundaryAreaMapInitJson mapInitJson) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = wqmp;
             MapInitJson = mapInitJson;

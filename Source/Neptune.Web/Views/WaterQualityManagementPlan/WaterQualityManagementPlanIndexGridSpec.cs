@@ -78,7 +78,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 , 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Record Number", x => x.RecordNumber, 150);
             Add("Recorded Parcel Acreage", x => x.RecordedWQMPAreaInAcres, 100);
-            Add("Calculated Parcel Acreage", x => Math.Round(x.CalculateParcelAcreageTotal(), 1), 100);
+            Add("Calculated WQMP Acreage", x => Math.Round(x.CalculateTotalAcreage(), 1), 100);
             Add("Latest O&M Verification",
                 x =>currentPerson.IsAnonymousOrUnassigned() ? new HtmlString(x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace()
                     ? "N/A" : x.GetLatestOandMVerificationDate()) :new HtmlString(!x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace()

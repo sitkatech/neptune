@@ -30,6 +30,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[WaterQualityManagementPlanBoundary] [geometry] NULL,
 	[WaterQualityManagementPlanModelingApproachID] [int] NOT NULL,
 	[WaterQualityManagementPlanBoundary4326] [geometry] NULL,
+	[WaterQualityManagementPlanAreaInAcres] [float] NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanID] ASC

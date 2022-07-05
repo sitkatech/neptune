@@ -59,7 +59,7 @@ namespace Neptune.Web.Models
                 }.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
 
-        public double CalculateParcelAcreageTotal()
+        public double CalculateTotalAcreage()
         {
             return
                 (this
