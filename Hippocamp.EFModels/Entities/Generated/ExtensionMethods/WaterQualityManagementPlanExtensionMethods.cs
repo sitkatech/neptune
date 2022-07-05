@@ -37,7 +37,8 @@ namespace Hippocamp.EFModels.Entities
                 RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
                 TrashCaptureStatusType = waterQualityManagementPlan.TrashCaptureStatusType.AsDto(),
                 TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness,
-                WaterQualityManagementPlanModelingApproach = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.AsDto()
+                WaterQualityManagementPlanModelingApproach = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.AsDto(),
+                WaterQualityManagementPlanAreaInAcres = waterQualityManagementPlan.WaterQualityManagementPlanAreaInAcres
             };
             DoCustomMappings(waterQualityManagementPlan, waterQualityManagementPlanDto);
             return waterQualityManagementPlanDto;
@@ -73,7 +74,8 @@ namespace Hippocamp.EFModels.Entities
                 RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
                 TrashCaptureStatusTypeID = waterQualityManagementPlan.TrashCaptureStatusTypeID,
                 TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness,
-                WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID
+                WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID,
+                WaterQualityManagementPlanAreaInAcres = waterQualityManagementPlan.WaterQualityManagementPlanAreaInAcres
             };
             DoCustomSimpleDtoMappings(waterQualityManagementPlan, waterQualityManagementPlanSimpleDto);
             return waterQualityManagementPlanSimpleDto;

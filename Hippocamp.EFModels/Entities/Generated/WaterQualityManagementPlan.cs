@@ -75,6 +75,9 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "geometry")]
         public Geometry WaterQualityManagementPlanBoundary { get; set; }
         public int WaterQualityManagementPlanModelingApproachID { get; set; }
+        [Column(TypeName = "geometry")]
+        public Geometry WaterQualityManagementPlanBoundary4326 { get; set; }
+        public double? WaterQualityManagementPlanAreaInAcres { get; set; }
 
         [ForeignKey("HydrologicSubareaID")]
         [InverseProperty("WaterQualityManagementPlans")]

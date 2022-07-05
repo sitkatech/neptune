@@ -34,6 +34,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public TrashCaptureStatusTypeDto TrashCaptureStatusType { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public WaterQualityManagementPlanModelingApproachDto WaterQualityManagementPlanModelingApproach { get; set; }
+        public double? WaterQualityManagementPlanAreaInAcres { get; set; }
     }
 
     public partial class WaterQualityManagementPlanSimpleDto
@@ -63,6 +64,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public int TrashCaptureStatusTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public int WaterQualityManagementPlanModelingApproachID { get; set; }
+        public double? WaterQualityManagementPlanAreaInAcres { get; set; }
     }
 
 }
