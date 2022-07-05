@@ -184,7 +184,7 @@ export class PlanningMapComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-      cql_filter: "DelineationStatus = 'Verified'"
+      cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1"
     } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({

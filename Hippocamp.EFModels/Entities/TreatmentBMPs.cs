@@ -24,7 +24,7 @@ namespace Hippocamp.EFModels.Entities
         private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(HippocampDbContext dbContext)
         {
             return dbContext.TreatmentBMPs
-                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMPType).Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .AsNoTracking();
         }
 
