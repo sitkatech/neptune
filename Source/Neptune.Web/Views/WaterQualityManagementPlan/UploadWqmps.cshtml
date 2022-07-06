@@ -42,8 +42,6 @@
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
-<hr/>
-
 <form method="post" enctype="multipart/form-data">
     <div class="form-horizontal">
         <div class="form-group ">
@@ -54,7 +52,10 @@
                 @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control" })
             </div>
         </div>
-        <div class="pull-right">
+        <div class="pull-right" style="margin-left: 1em;">
+            <a class="btn btn-neptune" href="@ViewDataTyped.WqmpIndexUrl">Cancel</a>
+        </div>
+        <div class="pull-right" style="margin-left: 1em;">
             <button type="submit" class="btn btn-neptune">Upload</button>
         </div>
         <div class="clearfix"></div>
