@@ -17,8 +17,14 @@
 {
     @if (ViewDataTyped.CurrentPersonCanCreate)
     {
-        <div class="pull-right">
+        <div class="pull-right" style="margin-left: 1em;">
             @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Add Plan", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")), ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
+        </div>
+    }
+    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+    {
+        <div class="pull-right" style="margin-left: 1em;">
+            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl"><span class="glyphicon glyphicon-plus"></span> Bulk Upload WQMPs</a>
         </div>
     }
 }
