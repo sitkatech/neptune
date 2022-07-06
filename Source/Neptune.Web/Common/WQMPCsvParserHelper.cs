@@ -35,7 +35,8 @@ namespace Neptune.Web.Common
             var requiredFields = new List<string> { "WQMP Name", "Jurisdiction", "Land Use", "Priority", "Status", "Development Type", "Trash Capture Status" };
             var optionalFields = new List<string> { "Maintenance Contact Name", "Maintenance Contact Organization", "Maintenance Contact Phone",
                 "Maintenance Contact Address 1", "Maintenance Contact Address 2", "Maintenance Contact City", "Maintenance Contact State", "Maintenance Contact Zip",
-                "Permit Term", "Hydromodification Controls Apply", "Approval Date", "Date of Construction", "Hydrologic Subarea", "Record Number", "Recorded WQMP Area (Acres)"
+                "Permit Term", "Hydromodification Controls Apply", "Approval Date", "Date of Construction", "Hydrologic Subarea", "Record Number", "Recorded WQMP Area (Acres)",
+                "Trash Capture Effectiveness"
             };
 
             try
@@ -110,7 +111,6 @@ namespace Neptune.Web.Common
                     default, (int)WaterQualityManagementPlanModelingApproachEnum.Detailed
                 );
             }
-            var isNew = !ModelObjectHelpers.IsRealPrimaryKeyValue(wqmp.WaterQualityManagementPlanID);
 
             var landUseID = FindLookupValue(row, fieldsDict, "Land Use", rowNumber, errorList, WaterQualityManagementPlanLandUse.All,
                 x => x.WaterQualityManagementPlanLandUseDisplayName, x => x.WaterQualityManagementPlanLandUseID, true, true);
@@ -274,6 +274,12 @@ namespace Neptune.Web.Common
                 wqmp.RecordedWQMPAreaInAcres = recordedWqmpArea;
             }
 
+            var trashCaptureEffectiveness = GetOptionalIntFieldValue(row, fieldsDict, rowNumber, errorList, "Trash Capture Effectiveness");
+            if (trashCaptureEffectiveness.HasValue)
+            {
+                wqmp.TrashCaptureEffectiveness = trashCaptureEffectiveness;
+            }
+
             //End of Optional Fields
 
             return wqmp;
@@ -352,6 +358,27 @@ namespace Neptune.Web.Common
                     if (!decimal.TryParse(fieldValue, out var fieldValueAsInt))
                     {
                         errorList.Add($"{fieldName} can not be converted to decimal at row: {rowNumber}");
+                    }
+                    else
+                    {
+                        return fieldValueAsInt;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static int? GetOptionalIntFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName)
+        {
+            if (fieldsDict.ContainsKey(fieldName))
+            {
+                var fieldValue = row[fieldsDict[fieldName]];
+                if (!string.IsNullOrWhiteSpace(fieldValue))
+                {
+                    if (!int.TryParse(fieldValue, out var fieldValueAsInt))
+                    {
+                        errorList.Add($"{fieldName} can not be converted to Int at row: {rowNumber}");
                     }
                     else
                     {

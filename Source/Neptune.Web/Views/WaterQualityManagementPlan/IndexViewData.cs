@@ -17,6 +17,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string NewWaterQualityManagementPlanUrl { get; }
         public bool CurrentPersonCanCreate { get; }
         public ViewPageContentViewData VerificationNeptunePage { get; }
+        public string BulkUploadWQMPUrl { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
             WaterQualityManagementPlanIndexGridSpec indexGridSpec, Models.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
@@ -41,6 +42,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             NewWaterQualityManagementPlanUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.New());
             CurrentPersonCanCreate = new WaterQualityManagementPlanCreateFeature().HasPermissionByPerson(currentPerson);
+            BulkUploadWQMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.UploadWqmps());
         }
 
     }

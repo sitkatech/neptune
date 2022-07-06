@@ -754,5 +754,46 @@ namespace Neptune.Web.Controllers
             var modeledPerformanceResultSimple = new ModeledPerformanceResultSimple(waterQualityManagementPlan);
             return Json(modeledPerformanceResultSimple, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ViewResult UploadWqmps()
+        {
+            var viewModel = new UploadWqmpsViewModel();
+            var errorList = new List<string>();
+            return ViewUploadWqmps(viewModel, errorList);
+        }
+        
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult UploadWqmps(UploadWqmpsViewModel viewModel)
+        {
+            var uploadedCSVFile = viewModel.UploadCSV;
+            var wqmps = WQMPCsvParserHelper.CSVUpload(uploadedCSVFile.InputStream, out var errorList);
+
+            if (errorList.Any())
+            {
+                return ViewUploadWqmps(viewModel, errorList);
+            }
+
+            var wqmpsAdded = wqmps.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var wqmpsUpdated = wqmps.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+
+            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.AddRange(wqmpsAdded);
+            HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
+            
+            var message = $"Upload Successful: {wqmpsAdded.Count} records added, {wqmpsUpdated.Count} records updated!";
+            SetMessageForDisplay(message);
+            return new RedirectResult(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index()));
+        }
+
+        private ViewResult ViewUploadWqmps(UploadWqmpsViewModel viewModel, List<string> errorList)
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.UploadWQMPs);
+            var viewData = new UploadWqmpsViewData(CurrentPerson, errorList, neptunePage,
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.UploadWqmps()));
+            return RazorView<UploadWqmps, UploadWqmpsViewData, UploadWqmpsViewModel>(viewData,
+                viewModel);
+        }
     }
 }
