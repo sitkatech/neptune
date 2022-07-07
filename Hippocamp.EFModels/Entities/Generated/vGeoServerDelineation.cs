@@ -31,5 +31,6 @@ namespace Hippocamp.EFModels.Entities
         [StringLength(11)]
         [Unicode(false)]
         public string DelineationStatus { get; set; }
+        public bool? IsAnalyzedInModelingModule { get; set; }
     }
 }
