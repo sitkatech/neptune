@@ -131,13 +131,14 @@ namespace Hippocamp.EFModels.Entities
 
             var allTreatmentBMPsInDatabase = dbContext.TreatmentBMPs;
             var allTreatmentBMPModelingAttributesInDatabase = dbContext.TreatmentBMPModelingAttributes;
-
-            // merge new Treatment BMPs
+            
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos
                 .Select(x => TreatmentBMPFromUpsertDtoAndProject(dbContext, x, project));
 
             var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326)))).Select(x => x.TreatmentBMPID).ToList();
-            existingProjectTreatmentBMPs.MergeNew(updatedTreatmentBMPs, allTreatmentBMPsInDatabase,
+
+            // merge new Treatment BMPs
+            existingProjectTreatmentBMPs.MergeNew(updatedTreatmentBMPs.Where(x => x.TreatmentBMPID == 0), allTreatmentBMPsInDatabase,
                 (x, y) => x.TreatmentBMPName == y.TreatmentBMPName);
 
             dbContext.SaveChanges();
@@ -145,6 +146,11 @@ namespace Hippocamp.EFModels.Entities
             // update upsert dtos with new TreatmentBMPIDs
             foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos)
             {
+                if (treatmentBMPUpsertDto.TreatmentBMPID > 0)
+                {
+                    continue;
+                }
+
                 treatmentBMPUpsertDto.TreatmentBMPID = existingProjectTreatmentBMPs
                     .Single(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName).TreatmentBMPID;
             }
@@ -316,7 +322,7 @@ namespace Hippocamp.EFModels.Entities
                 (int)TreatmentBMPModelingTypeEnum.LowFlowDiversions, (int)TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems
             };
 
-            if (modelingTypeIDsWithoutAdditionalFields.Contains(treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.Value))
+            if (!treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.HasValue || modelingTypeIDsWithoutAdditionalFields.Contains(treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.Value))
             {
                 return treatmentBMPModelingAttribute;
             }
