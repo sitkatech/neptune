@@ -140,7 +140,6 @@ export class PlanningMapComponent implements OnInit {
           headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },
-        { headerName: 'Status', field: 'ProjectStatus.ProjectStatusName', width: 120 },
         this.utilityFunctionsService.createDateColumnDef('Date Created', 'DateCreated', 'M/d/yyyy', 120),
         { headerName: 'Project Description', field: 'ProjectDescription' }
       ];
