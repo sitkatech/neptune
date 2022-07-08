@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using log4net;
-using LtInfo.Common;
 
 namespace Neptune.Web.Common
 {
@@ -76,7 +75,7 @@ namespace Neptune.Web.Common
             nodes.AddRange(colocationNodes);
             edges.AddRange(colocationEdges);
 
-            MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes);
+            MakeWQMPNodesAndEdges(dbContext, out var wqmpEdges, out var wqmpNodes, projectID, projectRSBIDs);
             nodes.AddRange(wqmpNodes);
             edges.AddRange(wqmpEdges);
 
@@ -88,40 +87,31 @@ namespace Neptune.Web.Common
             return graph;
         }
 
-        public static string RegionalSubbasinNodeID(RegionalSubbasin regionalSubbasin)
-        {
-            return "RSB_" + regionalSubbasin.OCSurveyCatchmentID;
-        }
         public static string RegionalSubbasinNodeID(int regionalSubbasinCatchmentID)
         {
-            return "RSB_" + regionalSubbasinCatchmentID;
-        }
-
-        public static string TreatmentBMPNodeID(TreatmentBMP treatmentBMP)
-        {
-            return "BMP_" + treatmentBMP.TreatmentBMPID;
+            return $"RSB_{regionalSubbasinCatchmentID}";
         }
 
         public static string TreatmentBMPNodeID(int treatmentBMPID)
         {
-            return "BMP_" + treatmentBMPID;
+            return $"BMP_{treatmentBMPID}";
         }
 
         public static string WaterQualityManagementPlanNodeID(int waterQualityManagementPlanID,
             int regionalSubbasinCatchmentID)
         {
-            return "WQMP_" + waterQualityManagementPlanID + "_RSB_" + regionalSubbasinCatchmentID;
+            return $"WQMP_{waterQualityManagementPlanID}_RSB_{regionalSubbasinCatchmentID}";
         }
 
         public static string WaterQualityManagementPlanTreatmentNodeID(int waterQualityManagementPlanID,
             int regionalSubbasinCatchmentID)
         {
-            return "WQMP_" + waterQualityManagementPlanID + "_RSB_" + regionalSubbasinCatchmentID + "-TMNT";
+            return $"WQMP_{waterQualityManagementPlanID}_RSB_{regionalSubbasinCatchmentID}-TMNT";
         }
 
-        public static string DelineationNodeID(Delineation delineation)
+        private static string DelineationNodeID(int delineationID)
         {
-            return "Delineation_" + delineation.DelineationID;
+            return $"Delineation_{delineationID}";
         }
 
         public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit, List<int> projectDelineationIDs = null)
@@ -149,21 +139,16 @@ namespace Neptune.Web.Common
             return RegionalSubbasinNodeID(loadGeneratingUnit.OCSurveyCatchmentID);
         }
 
-        private static string DelineationNodeID(int delineationID)
-        {
-            return "Delineation_" + delineationID;
-        }
-
         public static void MakeRSBNodesAndEdges(List<RegionalSubbasin> regionalSubbasinsInCoverage, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         {
             rsbNodes = regionalSubbasinsInCoverage
-                .Select(x => new Node { ID = RegionalSubbasinNodeID(x), RegionalSubbasinID = x.RegionalSubbasinID }).ToList();
+                .Select(x => new Node { ID = RegionalSubbasinNodeID(x.OCSurveyCatchmentID), RegionalSubbasinID = x.RegionalSubbasinID }).ToList();
 
             rsbEdges = regionalSubbasinsInCoverage
                 .Where(x => x.OCSurveyDownstreamCatchmentID != null).Select(x =>
                     new Edge()
                     {
-                        SourceID = RegionalSubbasinNodeID(x),
+                        SourceID = RegionalSubbasinNodeID(x.OCSurveyCatchmentID),
                         TargetID = RegionalSubbasinNodeID(x.OCSurveyDownstreamCatchmentID.Value)
                     }).ToList();
         }
@@ -223,15 +208,15 @@ namespace Neptune.Web.Common
             delineationNodes = distributedDelineations
                 .Select(x => new Node()
                 {
-                    ID = DelineationNodeID(x),
+                    ID = DelineationNodeID(x.DelineationID),
                     Delineation = x
                 }).ToList();
 
             delineationEdges = distributedDelineations
                 .Select(x => new Edge()
                 {
-                    SourceID = DelineationNodeID(x),
-                    TargetID = TreatmentBMPNodeID(x.TreatmentBMP)
+                    SourceID = DelineationNodeID(x.DelineationID),
+                    TargetID = TreatmentBMPNodeID(x.TreatmentBMP.TreatmentBMPID)
                 }).ToList();
         }
 
@@ -260,9 +245,9 @@ namespace Neptune.Web.Common
                 }).ToList();
         }
 
-        private static void MakeWQMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> wqmpEdges, out List<Node> wqmpNodes)
+        private static void MakeWQMPNodesAndEdges(DatabaseEntities dbContext, out List<Edge> wqmpEdges, out List<Node> wqmpNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
         {
-            var wqmpRSBPairings = GetWaterQualityManagementPlanNodes(dbContext).ToList();
+            var wqmpRSBPairings = GetWaterQualityManagementPlanNodes(dbContext, projectID, projectRegionalSubbasinIDs).ToList();
 
             wqmpNodes = wqmpRSBPairings.Select(x => new Node
             {

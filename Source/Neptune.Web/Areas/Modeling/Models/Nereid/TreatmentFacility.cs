@@ -95,7 +95,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
     {
         public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition)
         {
-            var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP);
+            var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPID);
             var modelBasinKey = treatmentBMP.ModelBasin?.ModelBasinKey.ToString();
             var isFullyParameterized = treatmentBMP.IsFullyParameterized();
             double? treatmentRate = null;
