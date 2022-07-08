@@ -171,6 +171,12 @@
                         }
                         $scope.calculatedParcelArea = calculatedParcelArea.toFixed(1);
                     }
+
+                    var bounds = L.geoJson(response).getBounds();
+                    if (bounds.isValid()) {
+                        $scope.neptuneMap.map.fitBounds(bounds);
+                    }
+
                     $scope.$apply();
                 },
                 function () {
