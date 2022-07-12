@@ -232,7 +232,10 @@
                                     <label>Type:</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    @ViewDataTyped.MaintenanceRecord.MaintenanceRecordType.MaintenanceRecordTypeDisplayName
+                                    @if (ViewDataTyped.MaintenanceRecord.MaintenanceRecordType != null)
+                                    {
+                                        @ViewDataTyped.MaintenanceRecord.MaintenanceRecordType.MaintenanceRecordTypeDisplayName
+                                    }
                                 </div>
                             </div>
                             <div class="row">
