@@ -60,7 +60,7 @@ namespace Neptune.Web.Views.FieldVisit
                     ImageHelper.ScaleImage(
                         FileResource.ConvertHttpPostedFileToByteArray(Photo), 800, 800);
 
-                var resizedImageBytes = ImageHelper.ImageToByteArray(resizedImage);
+                var resizedImageBytes = ImageHelper.ImageToByteArrayAndCompress(resizedImage);
 
                 var fileResource = FileResource.CreateNewResizedImageFileResource(Photo, resizedImageBytes, currentPerson);
 

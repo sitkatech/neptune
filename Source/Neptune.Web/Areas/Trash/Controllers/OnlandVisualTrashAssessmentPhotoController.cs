@@ -55,7 +55,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 ImageHelper.ScaleImage(
                     FileResource.ConvertHttpPostedFileToByteArray(observationPhotoStagingSimple.Photo), 750, 750);
 
-            var resizedImageBytes = ImageHelper.ImageToByteArray(resizedImage);
+
+            var resizedImageBytes = ImageHelper.ImageToByteArrayAndCompress(resizedImage);
 
             var fileResource = FileResource.CreateNewResizedImageFileResource(observationPhotoStagingSimple.Photo, resizedImageBytes, CurrentPerson);
 
