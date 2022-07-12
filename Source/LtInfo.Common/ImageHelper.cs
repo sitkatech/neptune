@@ -314,6 +314,13 @@ namespace LtInfo.Common
             return maxWidth;
         }
 
+        public static byte[] ImageToByteArray(Image imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, ImageFormat.Bmp);
+            return ms.ToArray();
+        }
+
         public static Image ScaleImage(byte[] imageData, int maxWidth, int maxHeight)
         {
             using (var ms = new MemoryStream(imageData))

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -49,7 +50,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 });
             }
 
-            var fileResource = FileResource.CreateNewFromHttpPostedFile(observationPhotoStagingSimple.Photo, CurrentPerson);
+            // for now, setting arbitrary-ish (750) max height and width that roughly corresponds with the largest rendered size on the detail page
+            var resizedImage =
+                ImageHelper.ScaleImage(
+                    FileResource.ConvertHttpPostedFileToByteArray(observationPhotoStagingSimple.Photo), 750, 750);
+
+            var resizedImageBytes = ImageHelper.ImageToByteArray(resizedImage);
+
+            var fileResource = FileResource.CreateNewResizedImageFileResource(observationPhotoStagingSimple.Photo, resizedImageBytes, CurrentPerson);
 
             var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,
                 onlandVisualTrashAssessmentPrimaryKey.EntityObject);
