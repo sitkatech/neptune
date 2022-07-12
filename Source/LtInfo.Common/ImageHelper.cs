@@ -348,6 +348,7 @@ namespace LtInfo.Common
                 {
                     var qualityEncoder = Encoder.Quality;
                     var encoderParameters = new EncoderParameters(1);
+                    //defaulting to 80% quality seems like a good compromise in basic eye testing 
                     encoderParameters.Param[0] = new EncoderParameter(qualityEncoder, 80L);
                     image.Save(outStream, jpgEncoder, encoderParameters);
                 }
