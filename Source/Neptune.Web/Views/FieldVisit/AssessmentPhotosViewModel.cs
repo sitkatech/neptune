@@ -55,7 +55,15 @@ namespace Neptune.Web.Views.FieldVisit
             // Create new photo if it exists
             if (Photo != null)
             {
-                var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
+                // for now, setting arbitrary-ish (800) max height and width that roughly corresponds with the largest rendered size on the detail page
+                var resizedImage =
+                    ImageHelper.ScaleImage(
+                        FileResource.ConvertHttpPostedFileToByteArray(Photo), 800, 800);
+
+                var resizedImageBytes = ImageHelper.ImageToByteArrayAndCompress(resizedImage);
+
+                var fileResource = FileResource.CreateNewResizedImageFileResource(Photo, resizedImageBytes, currentPerson);
+
                 new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment) {Caption = Caption};
             }
         }

@@ -313,6 +313,50 @@ namespace LtInfo.Common
             }
             return maxWidth;
         }
+        private static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            var codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (var codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+
+            return null;
+        }
+
+        public static byte[] ImageToByteArrayAndCompress(Image imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, ImageFormat.Jpeg);
+            var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+            using (var inStream = ms)
+            using (var outStream = new MemoryStream())
+            {
+                var image = Image.FromStream(inStream);
+
+                // if we aren't able to retrieve our encoder
+                // we should just save the current image and
+                // return to prevent any exceptions from happening
+                if (jpgEncoder == null)
+                {
+                    image.Save(outStream, ImageFormat.Jpeg);
+                }
+                else
+                {
+                    var qualityEncoder = Encoder.Quality;
+                    var encoderParameters = new EncoderParameters(1);
+                    //defaulting to 80% quality seems like a good compromise in basic eye testing 
+                    encoderParameters.Param[0] = new EncoderParameter(qualityEncoder, 80L);
+                    image.Save(outStream, jpgEncoder, encoderParameters);
+                }
+
+                return outStream.ToArray();
+            }
+
+        }
 
         public static Image ScaleImage(byte[] imageData, int maxWidth, int maxHeight)
         {
@@ -320,7 +364,9 @@ namespace LtInfo.Common
             {
                 using (var image = Image.FromStream(ms))
                 {
-                    return ScaleImage(image, maxWidth, maxHeight);
+                    var scaledImage = ScaleImage(image, maxWidth, maxHeight);
+
+                    return scaledImage;
                 }
             }
         }
@@ -336,6 +382,8 @@ namespace LtInfo.Common
 
             var newImage = new Bitmap(newWidth, newHeight);
             Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
+
+
             return newImage;
         }
     }

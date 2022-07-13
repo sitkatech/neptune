@@ -118,7 +118,7 @@ namespace Neptune.Web.Models
         /// </summary>
         /// <param name="httpPostedFileBase"></param>
         /// <returns></returns>
-        private static byte[] ConvertHttpPostedFileToByteArray(HttpPostedFileBase httpPostedFileBase)
+        public static byte[] ConvertHttpPostedFileToByteArray(HttpPostedFileBase httpPostedFileBase)
         {
             byte[] fileResourceData;
             using (var binaryReader = new BinaryReader(httpPostedFileBase.InputStream))
@@ -156,6 +156,22 @@ namespace Neptune.Web.Models
             var originalFilenameInfo = new FileInfo(fileName);
             var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
             var fileResourceData = ConvertHttpPostedFileToByteArray(httpPostedFileBase);
+            var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(httpPostedFileBase).FileResourceMimeTypeID;
+            var fileResource = new FileResource(fileResourceMimeTypeID, baseFilenameWithoutExtension, originalFilenameInfo.Extension, Guid.NewGuid(), fileResourceData, currentPerson.PersonID, DateTime.Now);
+            return fileResource;
+        }
+
+        public static FileResource CreateNewResizedImageFileResource(HttpPostedFileBase httpPostedFileBase, byte[] resizedImageBytes, Person currentPerson)
+        {
+            var fileName = httpPostedFileBase.FileName;
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = Guid.NewGuid().ToString() + ".jpg";
+            }
+
+            var originalFilenameInfo = new FileInfo(fileName);
+            var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
+            var fileResourceData = resizedImageBytes;
             var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(httpPostedFileBase).FileResourceMimeTypeID;
             var fileResource = new FileResource(fileResourceMimeTypeID, baseFilenameWithoutExtension, originalFilenameInfo.Extension, Guid.NewGuid(), fileResourceData, currentPerson.PersonID, DateTime.Now);
             return fileResource;
