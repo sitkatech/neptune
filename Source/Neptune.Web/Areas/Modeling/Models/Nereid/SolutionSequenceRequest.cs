@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Helpers;
 using Newtonsoft.Json;
 
@@ -19,7 +20,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
 
         public SolutionSequenceRequest(Graph graph)
         {
-            Edges = graph.Edges;
+            Edges = graph.Edges.GroupBy(x => x.SourceID).Select(x => new Edge(x.Key, x.First().TargetID)).ToList();
             Directed = true;
         }
     }
