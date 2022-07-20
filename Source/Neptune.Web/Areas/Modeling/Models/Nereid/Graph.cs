@@ -17,7 +17,7 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         {
             Directed = directed;
             Nodes = nodes;
-            Edges = edges.GroupBy(x => x.SourceID).Select(x => new Edge(x.Key, x.First().TargetID)).ToList(); ;
+            Edges = edges.GroupBy(x => x.SourceID).Select(x => new Edge(x.Key, x.First().TargetID)).ToList();
         }
 
         public Graph() { }

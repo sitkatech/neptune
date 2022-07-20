@@ -285,8 +285,8 @@ namespace Neptune.Web.Common
 
         public static List<WaterQualityManagementPlanNode> GetWaterQualityManagementPlanNodes(DatabaseEntities dbContext, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
         {
-            var wqmpns = dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin)
-                .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null)
+            var wqmpns = dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin).Include(x => x.WaterQualityManagementPlan)
+                .Where(x => x.WaterQualityManagementPlanID != null && x.RegionalSubbasinID != null)
                 .Select(x => new WaterQualityManagementPlanNode
                 {
                     WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
@@ -297,8 +297,8 @@ namespace Neptune.Web.Common
 
             if (projectID != null && projectRegionalSubbasinIDs != null)
             {
-                var ppwqmpns = dbContext.ProjectLoadGeneratingUnits.Include(x => x.RegionalSubbasin)
-                    .Where(x => x.WaterQualityManagementPlan != null && x.RegionalSubbasinID != null && x.ProjectID == projectID)
+                var ppwqmpns = dbContext.ProjectLoadGeneratingUnits.Include(x => x.RegionalSubbasin).Include(x => x.WaterQualityManagementPlan)
+                    .Where(x => x.WaterQualityManagementPlanID != null && x.RegionalSubbasinID != null && x.ProjectID == projectID)
                     .Select(x => new WaterQualityManagementPlanNode
                     {
                         WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
@@ -308,7 +308,7 @@ namespace Neptune.Web.Common
                     }).Distinct().ToList();
                 wqmpns = wqmpns.Where(x => projectRegionalSubbasinIDs.Contains(x.RegionalSubbasinID)).ToList();
                 wqmpns.AddRange(ppwqmpns);
-                wqmpns = wqmpns.Distinct().ToList();
+                wqmpns = wqmpns.Distinct(new WaterQualityManagementPlanNodeComparer()).ToList();
             }
 
             return wqmpns;
@@ -977,5 +977,20 @@ namespace Neptune.Web.Common
         public int RegionalSubbasinID { get; set; }
         public int OCSurveyCatchmentID { get; set; }
         public DateTime? DateOfConstruction { get; set; }
+
+        public string UniqueID => $"{WaterQualityManagementPlanID}_{OCSurveyCatchmentID}";
+    }
+
+    public class WaterQualityManagementPlanNodeComparer : IEqualityComparer<WaterQualityManagementPlanNode>
+    {
+        public bool Equals(WaterQualityManagementPlanNode x, WaterQualityManagementPlanNode y)
+        {
+            return x.UniqueID.Equals(y.UniqueID, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public int GetHashCode(WaterQualityManagementPlanNode obj)
+        {
+            return obj.UniqueID.GetHashCode() ^ obj.UniqueID.GetHashCode();
+        }
     }
 }
