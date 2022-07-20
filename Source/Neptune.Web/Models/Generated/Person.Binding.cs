@@ -33,6 +33,7 @@ namespace Neptune.Web.Models
             this.Notifications = new HashSet<Notification>();
             this.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson = new HashSet<OnlandVisualTrashAssessment>();
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
+            this.ParcelStagingsWhereYouAreTheUploadedByPerson = new HashSet<ParcelStaging>();
             this.ProjectsWhereYouAreTheCreatePerson = new HashSet<Project>();
             this.ProjectsWhereYouAreThePrimaryContactPerson = new HashSet<Project>();
             this.ProjectNetworkSolveHistoriesWhereYouAreTheRequestedByPerson = new HashSet<ProjectNetworkSolveHistory>();
@@ -130,7 +131,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || DelineationsWhereYouAreTheVerifiedByPerson.Any() || DelineationStagingsWhereYouAreTheUploadedByPerson.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || LandUseBlockStagingsWhereYouAreTheUploadedByPerson.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || ProjectsWhereYouAreTheCreatePerson.Any() || ProjectsWhereYouAreThePrimaryContactPerson.Any() || ProjectNetworkSolveHistoriesWhereYouAreTheRequestedByPerson.Any() || RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson.Any() || RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
+            return AuditLogs.Any() || DelineationsWhereYouAreTheVerifiedByPerson.Any() || DelineationStagingsWhereYouAreTheUploadedByPerson.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || LandUseBlockStagingsWhereYouAreTheUploadedByPerson.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || ParcelStagingsWhereYouAreTheUploadedByPerson.Any() || ProjectsWhereYouAreTheCreatePerson.Any() || ProjectsWhereYouAreThePrimaryContactPerson.Any() || ProjectNetworkSolveHistoriesWhereYouAreTheRequestedByPerson.Any() || RegionalSubbasinRevisionRequestsWhereYouAreTheClosedByPerson.Any() || RegionalSubbasinRevisionRequestsWhereYouAreTheRequestPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TrashGeneratingUnitAdjustmentsWhereYouAreTheAdjustedByPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
         }
 
         /// <summary>
@@ -183,6 +184,11 @@ namespace Neptune.Web.Models
             if(OrganizationsWhereYouAreThePrimaryContactPerson.Any())
             {
                 dependentObjects.Add(typeof(Organization).Name);
+            }
+
+            if(ParcelStagingsWhereYouAreTheUploadedByPerson.Any())
+            {
+                dependentObjects.Add(typeof(ParcelStaging).Name);
             }
 
             if(ProjectsWhereYouAreTheCreatePerson.Any())
@@ -240,7 +246,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(Project).Name, typeof(ProjectNetworkSolveHistory).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(Delineation).Name, typeof(DelineationStaging).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(LandUseBlockStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(ParcelStaging).Name, typeof(Project).Name, typeof(ProjectNetworkSolveHistory).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TrashGeneratingUnitAdjustment).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -306,6 +312,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in OrganizationsWhereYouAreThePrimaryContactPerson.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ParcelStagingsWhereYouAreTheUploadedByPerson.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -391,6 +402,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }
+        public virtual ICollection<ParcelStaging> ParcelStagingsWhereYouAreTheUploadedByPerson { get; set; }
         public virtual ICollection<Project> ProjectsWhereYouAreTheCreatePerson { get; set; }
         public virtual ICollection<Project> ProjectsWhereYouAreThePrimaryContactPerson { get; set; }
         public virtual ICollection<ProjectNetworkSolveHistory> ProjectNetworkSolveHistoriesWhereYouAreTheRequestedByPerson { get; set; }

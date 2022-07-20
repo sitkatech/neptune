@@ -17,6 +17,12 @@ namespace Neptune.Web.ScheduledJobs
             landUseBlockUploadBackgroundJob.RunJob();
         }
 
+        public static void RunParcelLayerUploadBackgroundJob(int personID)
+        {
+            var parcelLayerUploadBackgroundJob = new ParcelLayerUploadBackgroundJob(personID);
+            parcelLayerUploadBackgroundJob.RunJob();
+        }
+
         public static void RunRegionalSubbasinRefreshBackgroundJob(int personID, bool queueLGURefresh)
         {
             var regionalSubbasinRefreshScheduledBackgroundJob = new RegionalSubbasinRefreshScheduledBackgroundJob(personID, queueLGURefresh);

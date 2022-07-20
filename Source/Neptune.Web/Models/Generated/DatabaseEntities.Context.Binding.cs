@@ -76,6 +76,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
+            modelBuilder.Configurations.Add(new ParcelStagingConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneStagingConfiguration());
@@ -197,6 +198,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
+        public virtual DbSet<ParcelStaging> ParcelStagings { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
         public virtual DbSet<PrecipitationZoneStaging> PrecipitationZoneStagings { get; set; }
@@ -540,6 +542,9 @@ namespace Neptune.Web.Models
 
                 case "Parcel":
                     return Parcels.GetParcel(primaryKey);
+
+                case "ParcelStaging":
+                    return ParcelStagings.GetParcelStaging(primaryKey);
 
                 case "Person":
                     return People.GetPerson(primaryKey);
