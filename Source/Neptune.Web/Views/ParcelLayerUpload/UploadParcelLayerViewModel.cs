@@ -76,13 +76,13 @@ namespace Neptune.Web.Views.ParcelLayerUpload
                             "ASSESSMENT_NO as ParcelNumber",
                             "OWNER_NAMES as OwnerName",
                             "SITE_ADDR_NO as ParcelStreetNumber",
-                            //" as ParcelAddress",
+                            "SITE_ADDRESS as ParcelAddress",
                             "SITE_ZIP5 as ParcelZipCode",
-                            "Permit as PermitType",
                             "USE_DQ_LANDUSE as LandUse",
                             "SQFT_HOME as SquareFeetHome",
                             "SQFT_LOT as SquareFeetLot",
                             "SHAPE_Area as ParcelStagingAreaSquareFeet",
+                            //"geometry as ParcelStagingGeometry",
                             $"{currentPerson.PersonID} as UploadedByPersonID"
                         };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
@@ -92,12 +92,12 @@ namespace Neptune.Web.Views.ParcelLayerUpload
                     }
                     catch (Ogr2OgrCommandLineException e)
                     {
-                        if (e.Message.Contains("column does not allow nulls",
-                            StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            errors.Add(new ValidationResult("The upload contained features with null values. All fields are required."));
-                        }
-                        else if (e.Message.Contains("Unrecognized field name",
+                        //if (e.Message.Contains("column does not allow nulls",
+                        //    StringComparison.InvariantCultureIgnoreCase))
+                        //{
+                        //    errors.Add(new ValidationResult("The upload contained features with null values. All fields are required."));
+                        //}
+                        if (e.Message.Contains("Unrecognized field name",
                             StringComparison.InvariantCultureIgnoreCase))
                         {
                             errors.Add(new ValidationResult("The columns in the uploaded file did not match the Parcel schema. The file is invalid and cannot be uploaded."));

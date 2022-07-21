@@ -2,7 +2,7 @@ CREATE TABLE [dbo].[ParcelStaging] (
 	[ParcelStagingID] [int] IDENTITY(1,1) NOT NULL constraint PK_ParcelStaging_ParcelStagingID primary key,
 	[ParcelNumber] [varchar](22) NOT NULL,
 	[ParcelStagingGeometry] [geometry] NOT NULL,
-	[ParcelStagingAreaSquareFeet] [float] NULL,
+	[ParcelStagingAreaSquareFeet] [float] NOT NULL,
 	[OwnerName] [varchar](100) NULL,
 	[ParcelStreetNumber] [varchar](10) NULL,
 	[ParcelAddress] [varchar](150) NULL,

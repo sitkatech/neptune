@@ -71,6 +71,19 @@ namespace Neptune.Web.ScheduledJobs
                             CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
                     }
 
+                    if (parcelStaging.ParcelStagingAreaSquareFeet == null)
+                    {
+                        errorList.Add(
+                            $"The Parcel Area at row {count} is null. A value must be provided");
+                    }
+                    else
+                    {
+                        // already null-checked
+                        parcel.ParcelAreaInAcres = (double)(parcelStaging.ParcelStagingAreaSquareFeet / CoordinateSystemHelper.SquareFeetToAcresDivisor);
+                        parcel.ParcelGeometry4326 =
+                            CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
+                    }
+
                     parcel.OwnerName = parcelStaging.OwnerName;
                     parcel.ParcelStreetNumber = parcelStaging.ParcelStreetNumber;
                     parcel.ParcelAddress = parcelStaging.ParcelAddress;
@@ -78,7 +91,6 @@ namespace Neptune.Web.ScheduledJobs
                     parcel.LandUse = parcelStaging.LandUse;
                     parcel.SquareFeetHome = parcelStaging.SquareFeetHome;
                     parcel.SquareFeetLot = parcelStaging.SquareFeetLot;
-                    parcel.ParcelAreaInAcres = parcelStaging.ParcelStagingAreaSquareFeet ?? 0 / CoordinateSystemHelper.SquareFeetToAcresDivisor;
 
                     parcelsToUpload.Add(parcel);
                     count++;

@@ -175,7 +175,7 @@ namespace LtInfo.Common.GdalOgr
         /// </summary>
         internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce)
         {
-            var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
+            var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry", "geometry" };
             var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
             const string ogr2OgrColumnListSeparator = ",";
             Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),
