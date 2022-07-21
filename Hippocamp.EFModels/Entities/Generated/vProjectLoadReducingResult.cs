@@ -35,6 +35,7 @@ namespace Hippocamp.EFModels.Entities
         public int? DelineationID { get; set; }
         [Unicode(false)]
         public string NodeID { get; set; }
+        public bool? IsPartOfProject { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }
         public double? EffectiveAreaAcres { get; set; }
