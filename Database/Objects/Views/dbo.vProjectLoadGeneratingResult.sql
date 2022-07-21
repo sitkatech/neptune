@@ -72,7 +72,6 @@ select  ProjectNereidResultID as PrimaryKey,
             WinterDryWeatherTZnGenerated float '$.winter_dwTZn_load_lbs'
             ) as ModelResults
         cross join dbo.vModelingResultUnitConversion uc
-        where pnr.DelineationID is not null
 GO
 /*
 select * from dbo.vProjectLoadGeneratingResult where ProjectID = 14

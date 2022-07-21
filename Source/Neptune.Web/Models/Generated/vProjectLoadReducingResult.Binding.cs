@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vProjectLoadReducingResult(int primaryKey, int projectNereidResultID, int projectID, string projectName, string organizationName, string jurisdictionName, bool isBaselineCondition, int treatmentBMPID, string treatmentBMPName, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, DateTime? lastUpdate, double? effectiveAreaAcres, double? designStormDepth85thPercentile, double? designVolume85thPercentile, double? wetWeatherInflow, double? wetWeatherTreated, double? wetWeatherRetained, double? wetWeatherUntreated, double? wetWeatherTSSReduced, double? wetWeatherTNReduced, double? wetWeatherTPReduced, double? wetWeatherFCReduced, double? wetWeatherTCuReduced, double? wetWeatherTPbReduced, double? wetWeatherTZnReduced, double? wetWeatherTSSInflow, double? wetWeatherTNInflow, double? wetWeatherTPInflow, double? wetWeatherFCInflow, double? wetWeatherTCuInflow, double? wetWeatherTPbInflow, double? wetWeatherTZnInflow, double? summerDryWeatherInflow, double? summerDryWeatherTreated, double? summerDryWeatherRetained, double? summerDryWeatherUntreated, double? summerDryWeatherTSSReduced, double? summerDryWeatherTNReduced, double? summerDryWeatherTPReduced, double? summerDryWeatherFCReduced, double? summerDryWeatherTCuReduced, double? summerDryWeatherTPbReduced, double? summerDryWeatherTZnReduced, double? summerDryWeatherTSSInflow, double? summerDryWeatherTNInflow, double? summerDryWeatherTPInflow, double? summerDryWeatherFCInflow, double? summerDryWeatherTCuInflow, double? summerDryWeatherTPbInflow, double? summerDryWeatherTZnInflow, double? winterDryWeatherInflow, double? winterDryWeatherTreated, double? winterDryWeatherRetained, double? winterDryWeatherUntreated, double? winterDryWeatherTSSReduced, double? winterDryWeatherTNReduced, double? winterDryWeatherTPReduced, double? winterDryWeatherFCReduced, double? winterDryWeatherTCuReduced, double? winterDryWeatherTPbReduced, double? winterDryWeatherTZnReduced, double? winterDryWeatherTSSInflow, double? winterDryWeatherTNInflow, double? winterDryWeatherTPInflow, double? winterDryWeatherFCInflow, double? winterDryWeatherTCuInflow, double? winterDryWeatherTPbInflow, double? winterDryWeatherTZnInflow) : this()
+        public vProjectLoadReducingResult(int primaryKey, int projectNereidResultID, int projectID, string projectName, string organizationName, string jurisdictionName, bool isBaselineCondition, int treatmentBMPID, string treatmentBMPName, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, bool? isPartOfProject, DateTime? lastUpdate, double? effectiveAreaAcres, double? designStormDepth85thPercentile, double? designVolume85thPercentile, double? wetWeatherInflow, double? wetWeatherTreated, double? wetWeatherRetained, double? wetWeatherUntreated, double? wetWeatherTSSReduced, double? wetWeatherTNReduced, double? wetWeatherTPReduced, double? wetWeatherFCReduced, double? wetWeatherTCuReduced, double? wetWeatherTPbReduced, double? wetWeatherTZnReduced, double? wetWeatherTSSInflow, double? wetWeatherTNInflow, double? wetWeatherTPInflow, double? wetWeatherFCInflow, double? wetWeatherTCuInflow, double? wetWeatherTPbInflow, double? wetWeatherTZnInflow, double? summerDryWeatherInflow, double? summerDryWeatherTreated, double? summerDryWeatherRetained, double? summerDryWeatherUntreated, double? summerDryWeatherTSSReduced, double? summerDryWeatherTNReduced, double? summerDryWeatherTPReduced, double? summerDryWeatherFCReduced, double? summerDryWeatherTCuReduced, double? summerDryWeatherTPbReduced, double? summerDryWeatherTZnReduced, double? summerDryWeatherTSSInflow, double? summerDryWeatherTNInflow, double? summerDryWeatherTPInflow, double? summerDryWeatherFCInflow, double? summerDryWeatherTCuInflow, double? summerDryWeatherTPbInflow, double? summerDryWeatherTZnInflow, double? winterDryWeatherInflow, double? winterDryWeatherTreated, double? winterDryWeatherRetained, double? winterDryWeatherUntreated, double? winterDryWeatherTSSReduced, double? winterDryWeatherTNReduced, double? winterDryWeatherTPReduced, double? winterDryWeatherFCReduced, double? winterDryWeatherTCuReduced, double? winterDryWeatherTPbReduced, double? winterDryWeatherTZnReduced, double? winterDryWeatherTSSInflow, double? winterDryWeatherTNInflow, double? winterDryWeatherTPInflow, double? winterDryWeatherFCInflow, double? winterDryWeatherTCuInflow, double? winterDryWeatherTPbInflow, double? winterDryWeatherTZnInflow) : this()
         {
             this.PrimaryKey = primaryKey;
             this.ProjectNereidResultID = projectNereidResultID;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.RegionalSubbasinID = regionalSubbasinID;
             this.DelineationID = delineationID;
             this.NodeID = nodeID;
+            this.IsPartOfProject = isPartOfProject;
             this.LastUpdate = lastUpdate;
             this.EffectiveAreaAcres = effectiveAreaAcres;
             this.DesignStormDepth85thPercentile = designStormDepth85thPercentile;
@@ -118,6 +119,7 @@ namespace Neptune.Web.Models
             this.RegionalSubbasinID = vProjectLoadReducingResult.RegionalSubbasinID;
             this.DelineationID = vProjectLoadReducingResult.DelineationID;
             this.NodeID = vProjectLoadReducingResult.NodeID;
+            this.IsPartOfProject = vProjectLoadReducingResult.IsPartOfProject;
             this.LastUpdate = vProjectLoadReducingResult.LastUpdate;
             this.EffectiveAreaAcres = vProjectLoadReducingResult.EffectiveAreaAcres;
             this.DesignStormDepth85thPercentile = vProjectLoadReducingResult.DesignStormDepth85thPercentile;
@@ -194,6 +196,7 @@ namespace Neptune.Web.Models
         public int? RegionalSubbasinID { get; set; }
         public int? DelineationID { get; set; }
         public string NodeID { get; set; }
+        public bool? IsPartOfProject { get; set; }
         public DateTime? LastUpdate { get; set; }
         public double? EffectiveAreaAcres { get; set; }
         public double? DesignStormDepth85thPercentile { get; set; }
