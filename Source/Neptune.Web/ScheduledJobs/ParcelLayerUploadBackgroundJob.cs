@@ -39,7 +39,6 @@ namespace Neptune.Web.ScheduledJobs
             }
             try
             {
-
                 var parcelStagings = person.ParcelStagingsWhereYouAreTheUploadedByPerson;
 
                 var count = 0;
@@ -90,6 +89,8 @@ namespace Neptune.Web.ScheduledJobs
 
                 if (!errorList.Any())
                 {
+                    // wipe the old parcels
+                    DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
                     DbContext.Parcels.AddRange(parcelsToUpload);
                     DbContext.SaveChanges(person);
 

@@ -30,7 +30,8 @@
                     </li>
                     <li>File geodatabases created in ArcMap 10.1+ or ArcGIS Pro are supported</li>
                 </ul>
-                <p>After you upload your file the new Parcels will be added and overwrite any existing Parcels for the entire county. The system will perform an overlay analysis to update list of parcels associated with each WQMP.</p>
+                <p><strong>After you upload your file the new Parcels will be added and overwrite any existing Parcels for the entire county. This action is irreversible.</strong></p>
+                <p>The system will perform an overlay analysis to update the list of parcels associated with each WQMP.</p>
                 <div>
                     @Html.EditorFor(x => x.FileResourceData)
                     @Html.ValidationMessageFor(x => x.FileResourceData)
