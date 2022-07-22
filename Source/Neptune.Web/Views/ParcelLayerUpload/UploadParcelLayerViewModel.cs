@@ -88,7 +88,7 @@ namespace Neptune.Web.Views.ParcelLayerUpload
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
                             "ParcelStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString, true,
-                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_MULTIPOLYGON, false);
+                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_MULTIPOLYGON);
                     }
                     catch (Ogr2OgrCommandLineException e)
                     {

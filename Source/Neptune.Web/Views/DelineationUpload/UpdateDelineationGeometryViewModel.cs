@@ -109,7 +109,7 @@ namespace Neptune.Web.Views.DelineationUpload
                                 $"{StormwaterJurisdictionID} as StormwaterJurisdictionID"
                             };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "DelineationStaging", columns,
-                            NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON, false);
+                            NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
 
                     }
                 }
