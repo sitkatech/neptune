@@ -85,7 +85,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
                             "LandUseBlockStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString, true,
-                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
+                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON, false);
                     }
                     catch (Ogr2OgrCommandLineException e)
                     {

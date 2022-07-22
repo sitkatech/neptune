@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[ParcelStaging](
 	[ParcelStagingID] [int] IDENTITY(1,1) NOT NULL,
 	[ParcelNumber] [varchar](22) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[ParcelStagingGeometry] [geometry] NOT NULL,
-	[ParcelStagingAreaSquareFeet] [float] NULL,
+	[ParcelStagingAreaSquareFeet] [float] NOT NULL,
 	[OwnerName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ParcelStreetNumber] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ParcelAddress] [varchar](150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

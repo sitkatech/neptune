@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ParcelStaging(int parcelStagingID, string parcelNumber, DbGeometry parcelStagingGeometry, double? parcelStagingAreaSquareFeet, string ownerName, string parcelStreetNumber, string parcelAddress, string parcelZipCode, string landUse, int? squareFeetHome, int? squareFeetLot, int uploadedByPersonID) : this()
+        public ParcelStaging(int parcelStagingID, string parcelNumber, DbGeometry parcelStagingGeometry, double parcelStagingAreaSquareFeet, string ownerName, string parcelStreetNumber, string parcelAddress, string parcelZipCode, string landUse, int? squareFeetHome, int? squareFeetLot, int uploadedByPersonID) : this()
         {
             this.ParcelStagingID = parcelStagingID;
             this.ParcelNumber = parcelNumber;
@@ -49,25 +49,27 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ParcelStaging(string parcelNumber, DbGeometry parcelStagingGeometry, int uploadedByPersonID) : this()
+        public ParcelStaging(string parcelNumber, DbGeometry parcelStagingGeometry, double parcelStagingAreaSquareFeet, int uploadedByPersonID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ParcelStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ParcelNumber = parcelNumber;
             this.ParcelStagingGeometry = parcelStagingGeometry;
+            this.ParcelStagingAreaSquareFeet = parcelStagingAreaSquareFeet;
             this.UploadedByPersonID = uploadedByPersonID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public ParcelStaging(string parcelNumber, DbGeometry parcelStagingGeometry, Person uploadedByPerson) : this()
+        public ParcelStaging(string parcelNumber, DbGeometry parcelStagingGeometry, double parcelStagingAreaSquareFeet, Person uploadedByPerson) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ParcelStagingID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.ParcelNumber = parcelNumber;
             this.ParcelStagingGeometry = parcelStagingGeometry;
+            this.ParcelStagingAreaSquareFeet = parcelStagingAreaSquareFeet;
             this.UploadedByPersonID = uploadedByPerson.PersonID;
             this.UploadedByPerson = uploadedByPerson;
             uploadedByPerson.ParcelStagingsWhereYouAreTheUploadedByPerson.Add(this);
@@ -78,7 +80,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static ParcelStaging CreateNewBlank(Person uploadedByPerson)
         {
-            return new ParcelStaging(default(string), default(DbGeometry), uploadedByPerson);
+            return new ParcelStaging(default(string), default(DbGeometry), default(double), uploadedByPerson);
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace Neptune.Web.Models
         public int ParcelStagingID { get; set; }
         public string ParcelNumber { get; set; }
         public DbGeometry ParcelStagingGeometry { get; set; }
-        public double? ParcelStagingAreaSquareFeet { get; set; }
+        public double ParcelStagingAreaSquareFeet { get; set; }
         public string OwnerName { get; set; }
         public string ParcelStreetNumber { get; set; }
         public string ParcelAddress { get; set; }

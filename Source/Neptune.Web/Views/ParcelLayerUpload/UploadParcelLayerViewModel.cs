@@ -82,23 +82,18 @@ namespace Neptune.Web.Views.ParcelLayerUpload
                             "SQFT_HOME as SquareFeetHome",
                             "SQFT_LOT as SquareFeetLot",
                             "SHAPE_Area as ParcelStagingAreaSquareFeet",
-                            //"geometry as ParcelStagingGeometry",
+                            "SHAPE as ParcelStagingGeometry",
                             $"{currentPerson.PersonID} as UploadedByPersonID"
                         };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
                             "ParcelStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString, true,
-                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
+                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_MULTIPOLYGON, false);
                     }
                     catch (Ogr2OgrCommandLineException e)
                     {
-                        //if (e.Message.Contains("column does not allow nulls",
-                        //    StringComparison.InvariantCultureIgnoreCase))
-                        //{
-                        //    errors.Add(new ValidationResult("The upload contained features with null values. All fields are required."));
-                        //}
                         if (e.Message.Contains("Unrecognized field name",
-                            StringComparison.InvariantCultureIgnoreCase))
+                                StringComparison.InvariantCultureIgnoreCase))
                         {
                             errors.Add(new ValidationResult("The columns in the uploaded file did not match the Parcel schema. The file is invalid and cannot be uploaded."));
                         }

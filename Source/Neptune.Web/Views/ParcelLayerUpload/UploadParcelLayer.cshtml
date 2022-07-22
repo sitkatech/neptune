@@ -21,8 +21,8 @@
                     <li>The zip file must contain only one file geodatabase and no other data</li>
                     <li>The file geodatabase must contain only one feature class</li>
                     <li>The feature class must have fields exactly matching the Parcel schema:</li>
-                    <li>The following fields are required and null values will cause the upload to fail: ParcelNumber and Geometry</li>
-                    <li>The following field headers are required in the schema however null values in the rows are acceptable: OwnerName, ParcelStreetNumber, ParcelAddress, ParcelZipCode, LandUse, SquareFeetHome, SquareFeetLot</li>
+                    <li>The following fields are required and null values will cause the upload to fail: ASSESSMENT_NO, geometry, and SHAPE_Area</li>
+                    <li>The following field headers are required in the schema however null values in the rows are acceptable: OWNER_NAMES, SITE_ADDR_NO, SITE_ADDRESS, SITE_ZIP5, USE_DQ_LANDUSE, SQFT_HOME, SQFT_LOT</li>
                     <li>
                         Geodatabases using ESRI Smart Database Compression (SDC) are not supported. Please
                         <a href="http://desktop.arcgis.com/en/arcmap/10.3/tools/data-management-toolbox/uncompress-file-geodatabase-data.htm">uncompress</a>

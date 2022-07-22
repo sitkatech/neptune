@@ -36,6 +36,7 @@ namespace LtInfo.Common.GdalOgr
         public const string OgrGeoJsonTableName = "OGRGeoJSON";
 
         public const string GEOMETRY_TYPE_POLYGON = "POLYGON";
+        public const string GEOMETRY_TYPE_MULTIPOLYGON = "MULTIPOLYGON";
 
         private readonly FileInfo _ogr2OgrExecutable;
         private readonly int _coordinateSystemId;
@@ -60,15 +61,60 @@ namespace LtInfo.Common.GdalOgr
         /// </summary>
         public void ImportFileGdbToMsSql(FileInfo inputGdbFile, string sourceLayerName, string destinationTableName,
             List<string> columnNameList, string connectionString, bool enforceGeometryType,
-            string geometryTypeToEnforce)
+            string geometryTypeToEnforce, bool omitConfigArguments)
         {
             Check.Require(inputGdbFile.FullName.ToLower().EndsWith(".gdb.zip"),
                 $"Input filename for GDB input must end with .gdb.zip. Filename passed is {inputGdbFile.FullName}");
             Check.RequireFileExists(inputGdbFile, "Can't find input File GDB for import with ogr2ogr");
 
             var databaseConnectionString = $"MSSQL:{connectionString}";
-            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce);
+            List<string> commandLineArguments;
+
+            if (omitConfigArguments)
+            { 
+                commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSqlWithoutConfigArgs(inputGdbFile, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce);
+            }
+            else
+            {
+                commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce);
+            }
+
             ExecuteOgr2OgrCommand(commandLineArguments);
+        }
+
+        /// <summary>
+        /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
+        /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -append -sql "select ASSESSMENT_NO as ParcelNumber, SHAPE as ParcelStagingGeometry from LEGAL_LOTS_ATTRIBUTES" -t_srs EPSG:2771 -f MSSQLSpatial MSSQL:server=(local);database=Scratch;trusted_connection=yes C:\temp\GdalScratch\Sub_Actions_20131219.gdb.zip -nln MyTable -nlt MULTIPOLYGON</example>
+        /// </summary>
+        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSqlWithoutConfigArgs(FileInfo inputGdbFile, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce)
+        {
+            var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
+            var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
+            const string ogr2OgrColumnListSeparator = ",";
+            Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),
+                $"Found column names with separator character \"{ogr2OgrColumnListSeparator}\", can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
+
+            var selectStatement =
+                $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName}";
+            var commandLineArguments = new List<string>
+            {
+                "-append",
+                "-sql",
+                selectStatement,
+                "-t_srs",
+                GetMapProjection(coordinateSystemId),
+                "-f",
+                "MSSQLSpatial",
+                databaseConnectionString,
+                inputGdbFile.FullName,
+                "-nln",
+                targetTableName,
+                enforceGeometryType ? "-nlt" : null,
+                enforceGeometryType ? geometryTypeToEnforce : null
+            };
+
+            return commandLineArguments.Where(x => x != null).ToList();
+
         }
 
         public string ImportFileGdbToGeoJson(FileInfo inputGdbFile, string sourceLayerName, bool explodeCollections)
@@ -175,7 +221,7 @@ namespace LtInfo.Common.GdalOgr
         /// </summary>
         internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce)
         {
-            var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry", "geometry" };
+            var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
             var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
             const string ogr2OgrColumnListSeparator = ",";
             Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),

@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
             Property(x => x.ParcelStagingID).HasColumnName(@"ParcelStagingID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.ParcelNumber).HasColumnName(@"ParcelNumber").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(22);
             Property(x => x.ParcelStagingGeometry).HasColumnName(@"ParcelStagingGeometry").HasColumnType("geometry").IsRequired();
-            Property(x => x.ParcelStagingAreaSquareFeet).HasColumnName(@"ParcelStagingAreaSquareFeet").HasColumnType("float").IsOptional();
+            Property(x => x.ParcelStagingAreaSquareFeet).HasColumnName(@"ParcelStagingAreaSquareFeet").HasColumnType("float").IsRequired();
             Property(x => x.OwnerName).HasColumnName(@"OwnerName").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.ParcelStreetNumber).HasColumnName(@"ParcelStreetNumber").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(10);
             Property(x => x.ParcelAddress).HasColumnName(@"ParcelAddress").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(150);

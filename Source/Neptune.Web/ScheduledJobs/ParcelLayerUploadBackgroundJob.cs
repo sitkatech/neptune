@@ -3,6 +3,7 @@ using Neptune.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using LtInfo.Common;
@@ -70,20 +71,11 @@ namespace Neptune.Web.ScheduledJobs
                         parcel.ParcelGeometry4326 =
                             CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
                     }
-
-                    if (parcelStaging.ParcelStagingAreaSquareFeet == null)
-                    {
-                        errorList.Add(
-                            $"The Parcel Area at row {count} is null. A value must be provided");
-                    }
-                    else
-                    {
-                        // already null-checked
-                        parcel.ParcelAreaInAcres = (double)(parcelStaging.ParcelStagingAreaSquareFeet / CoordinateSystemHelper.SquareFeetToAcresDivisor);
-                        parcel.ParcelGeometry4326 =
-                            CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
-                    }
-
+                    
+                    parcel.ParcelAreaInAcres = parcelStaging.ParcelStagingAreaSquareFeet / CoordinateSystemHelper.SquareFeetToAcresDivisor;
+                    parcel.ParcelGeometry4326 =
+                        CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
+                    
                     parcel.OwnerName = parcelStaging.OwnerName;
                     parcel.ParcelStreetNumber = parcelStaging.ParcelStreetNumber;
                     parcel.ParcelAddress = parcelStaging.ParcelAddress;
@@ -102,7 +94,7 @@ namespace Neptune.Web.ScheduledJobs
                     DbContext.SaveChanges(person);
 
                     var body =
-                        "Your Parcel Upload has been processed. The updated Parcels are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
+                        $"Your Parcel Upload has been processed. {count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
 
                     var mailMessage = new MailMessage
                     {
@@ -122,7 +114,7 @@ namespace Neptune.Web.ScheduledJobs
 
                     var mailMessage = new MailMessage
                     {
-                        Subject = "Land Use Block Upload Error",
+                        Subject = "Parcel Upload Error",
                         Body = body,
                         From = DoNotReplyMailAddress()
                     };
@@ -136,11 +128,11 @@ namespace Neptune.Web.ScheduledJobs
             catch (Exception)
             {
                 var body =
-                    "There was an unexpected system error during processing of your Land Use Block Upload. The Orange County Stormwater Tools development team will investigate and be in touch when this issue is resolved.";
+                    "There was an unexpected system error during processing of your Parcel Upload. The Orange County Stormwater Tools development team will investigate and be in touch when this issue is resolved.";
 
                 var mailMessage = new MailMessage
                 {
-                    Subject = "Land Use Block Upload Error",
+                    Subject = "Parcel Upload Error",
                     Body = body,
                     From = DoNotReplyMailAddress()
                 };
