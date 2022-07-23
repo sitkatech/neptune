@@ -141,7 +141,7 @@ namespace LtInfo.Common.GdalOgr
         protected ProcessUtilityResult ExecuteOgr2OgrCommand(List<string> commandLineArguments)
         {
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
-            if (processUtilityResult.ReturnCode != 0)
+            if (processUtilityResult.ReturnCode != 0 && processUtilityResult.ReturnCode != -1073741819) // RL 7/22/02 Ignore Warning 1: Ring Self-intersection
             {
                 var argumentsAsString = String.Join(" ", commandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
                 var fullProcessAndArguments =
