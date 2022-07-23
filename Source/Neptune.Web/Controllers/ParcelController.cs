@@ -21,6 +21,8 @@ namespace Neptune.Web.Controllers
             var findParcelByAPNUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.FindByAPN(null));
             var parcelMapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
             var parcelSummaryForMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.SummaryForMap(null));
+            var parcelLayerUploadUrl =
+                SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(x => x.UpdateParcelLayerGeometry(null));
             var mapInitJson = GetMapInitJson();
 
             var viewData = new IndexViewData(CurrentPerson,
@@ -30,7 +32,8 @@ namespace Neptune.Web.Controllers
                 findParcelByAddressUrl,
                 findParcelByAPNUrl,
                 parcelMapServiceUrl,
-                parcelSummaryForMapUrl);
+                parcelSummaryForMapUrl,
+                parcelLayerUploadUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
 

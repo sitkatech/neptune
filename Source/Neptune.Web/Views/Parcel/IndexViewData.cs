@@ -32,6 +32,7 @@ namespace Neptune.Web.Views.Parcel
         public readonly string FindParcelByApnUrl;
         public readonly string ParcelSummaryForMapUrl;
         public readonly string GeoserverUrl;
+        public readonly string ParcelLayerUploadUrl;
 
         public IndexViewData(Person currentPerson,
             Models.NeptunePage neptunePage,
@@ -40,7 +41,8 @@ namespace Neptune.Web.Views.Parcel
             string findParcelByAddressUrl,
             string findParcelByApnUrl,
             string geoserverUrl,
-            string parcelSummaryForMapUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            string parcelSummaryForMapUrl,
+            string parcelLayerUploadUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             IntroNarrativeContent = introNarrativeContent;
             EntityName = "Parcels";
@@ -51,6 +53,7 @@ namespace Neptune.Web.Views.Parcel
             FindParcelByApnUrl = findParcelByApnUrl;
             GeoserverUrl = geoserverUrl;
             ParcelSummaryForMapUrl = parcelSummaryForMapUrl;
+            ParcelLayerUploadUrl = parcelLayerUploadUrl;
         }
     }
 }

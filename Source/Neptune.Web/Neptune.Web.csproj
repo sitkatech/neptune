@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -271,6 +271,10 @@
     <Compile Include="Models\Generated\Parcel.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\ParcelConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\ParcelPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ParcelStaging.Binding.cs" />
+    <Compile Include="Models\Generated\ParcelStaging.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ParcelStagingConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\ParcelStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\PermitType.Binding.cs" />
     <Compile Include="Models\Generated\PermitTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Person.Binding.cs" />
@@ -581,6 +585,7 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Controllers\ParcelLayerUploadController.cs" />
     <Compile Include="Common\WQMPCsvParserHelper.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\SolutionSequenceResult.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\Edge.cs" />
@@ -596,6 +601,7 @@
     <Compile Include="Areas\Modeling\Models\Nereid\SubgraphResult.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentFacility.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentSite.cs" />
+    <Compile Include="Models\ParcelStaging.DatabaseContextExtensions.cs" />
     <Compile Include="Models\ModeledPerformanceResultSimple.cs" />
     <Compile Include="Models\ModelResultsDisplayHelper.cs" />
     <Compile Include="Models\NereidResultExtensionMethods.cs" />
@@ -606,6 +612,7 @@
     <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
+    <Compile Include="ScheduledJobs\ParcelLayerUploadBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\OCTAPrioritizationRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\ProjectNetworkSolveJob.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
@@ -630,6 +637,10 @@
     <Compile Include="Views\Jurisdiction\Edit.cs" />
     <Compile Include="Views\Jurisdiction\EditViewData.cs" />
     <Compile Include="Views\Jurisdiction\EditViewModel.cs" />
+    <Compile Include="Views\ParcelLayerUpload\UploadParcelLayer.cs" />
+    <Compile Include="Views\ParcelLayerUpload\UploadParcelLayerErrors.cs" />
+    <Compile Include="Views\ParcelLayerUpload\UploadParcelLayerViewData.cs" />
+    <Compile Include="Views\ParcelLayerUpload\UploadParcelLayerViewModel.cs" />
     <Compile Include="Views\Shared\ModeledPerformance\ModeledPerformance.cs" />
     <Compile Include="Views\Shared\ModeledPerformance\ModeledPerformanceViewData.cs" />
     <Compile Include="Views\TreatmentBMP\BulkDeleteTreatmentBMPs.cs" />
@@ -2196,6 +2207,8 @@
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpBoundary.cshtml" />
     <Content Include="Views\TreatmentBMP\BulkDeleteTreatmentBMPs.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\UploadWqmps.cshtml" />
+    <Content Include="Views\ParcelLayerUpload\UploadParcelLayer.cshtml" />
+    <Content Include="Views\ParcelLayerUpload\UploadParcelLayerErrors.cshtml" />
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
