@@ -79,6 +79,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Record Number", x => x.RecordNumber, 150);
             Add("Recorded Parcel Acreage", x => x.RecordedWQMPAreaInAcres, 100);
             Add("Calculated WQMP Acreage", x => Math.Round(x.CalculateTotalAcreage(), 1), 100);
+            Add("Associated APNs", x => string.Join(", ", x.WaterQualityManagementPlanParcels.Select(y => y.Parcel.ParcelNumber)), 100);
             Add("Latest O&M Verification",
                 x =>currentPerson.IsAnonymousOrUnassigned() ? new HtmlString(x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace()
                     ? "N/A" : x.GetLatestOandMVerificationDate()) :new HtmlString(!x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace()
