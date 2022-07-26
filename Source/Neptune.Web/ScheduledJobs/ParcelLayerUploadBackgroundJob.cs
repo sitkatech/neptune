@@ -89,10 +89,12 @@ namespace Neptune.Web.ScheduledJobs
 
                 if (!errorList.Any())
                 {
-                    // wipe the old parcels
+                    // first wipe the dependent WQMPParcel table, then wipe the old parcels
+                    DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
                     DbContext.Parcels.AddRange(parcelsToUpload);
                     DbContext.SaveChanges(person);
+                    DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pRebuildWaterQualityManagementPlanParcel");
 
                     var body =
                         $"Your Parcel Upload has been processed. {count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
