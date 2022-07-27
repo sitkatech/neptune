@@ -130,5 +130,17 @@
     "inputFiles": [
       "Content/JQuery/jquery.slideout/jquery.slideout.js"
     ]
+  },
+  {
+    "outputFileName": "Views/Delineation/DelineationMap.min.js",
+    "inputFiles": [
+      "Views/Delineation/DelineationMap.js"
+    ]
+  },
+  {
+    "outputFileName": "Views/Delineation/DelineationMapControls.min.js",
+    "inputFiles": [
+      "Views/Delineation/DelineationMapControls.js"
+    ]
   }
 ]
