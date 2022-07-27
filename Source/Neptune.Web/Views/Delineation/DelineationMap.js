@@ -664,22 +664,20 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 
 
     promise.then(function (featureCollection) {
-        var newcoords = [];
-        var coordinates = featureCollection.features[0].geometry.coordinates[0];
+        // RL 7/15/22 - Per Austin we only need to look for local upstream (not the total upstream) when we are grabbing the result. 
+        // This would be a one part feature instead of a multi - part.
+        var localUpstreamFeature = _.find(featureCollection.features, function (f) { return f.properties.WshdType === "Local Upstream"; });
+        if (localUpstreamFeature == null) {
+            window.alert("No local upstream returned from the remote service.  If the issue persists, please contact Support.");
+            self.removeLoading();
+            self.enableUserInteraction();
 
-        // CRS should always be EPSG:2230 and yet...
-        if (featureCollection.crs.properties.name !== "EPSG:4326") {
-            var wgs = proj4("EPSG:4326");
-            var casp = proj4("EPSG:2230");
-            for (var i = 0; i < coordinates.length; i++) {
-                var newcoord = proj4(casp, wgs, coordinates[i]);
-                newcoords.push(newcoord);
-            }
-
-            featureCollection.features[0].geometry.coordinates[0] = newcoords;
+            self.enableSelectOnClick();
+            self.delineationMapService.resetDelineationMapEditingState();
+            return;
         }
 
-        self.addBMPDelineationLayerFromDEM(featureCollection);
+        self.addBMPDelineationLayerFromDEM(localUpstreamFeature);
 
         self.removeLoading();
         self.enableUserInteraction();
@@ -830,7 +828,7 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayer = function (geoJson)
     this.selectedBMPDelineationLayer.addTo(this.map);
 };
 
-NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (geoJsonResponse) {
+NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (localUpstreamFeature) {
     if (this.selectedBMPDelineationLayer) {
         this.selectedBMPDelineationLayer.remove();
         this.selectedBMPDelineationLayer = null;
@@ -839,17 +837,14 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (g
     // Justin's service is sending back a feature collection of multi polygons, instead of a polygon, which would be the appropriate thing to send.
     // they do always seem to be in a form that this code here can pull them from.
     var hacky;
-    var totalUpstream = _.find(geoJsonResponse.features, function (f) { return f.properties.WshdType === "Total Upstream"; }).geometry;
-    if (totalUpstream.type === "Polygon") {
-        hacky = totalUpstream;
+    var localUpstreamGeometry = localUpstreamFeature.geometry;
+    if (localUpstreamGeometry.type === "Polygon") {
+        hacky = localUpstreamGeometry;
     } else {
 
         hacky = {
             type: "Polygon",
-            coordinates: _
-                .find(geoJsonResponse.features, function (f) { return f.properties.WshdType === "Total Upstream"; })
-                .geometry
-                .coordinates[1]
+            coordinates: localUpstreamGeometry.coordinates[1]
         };
     }
 
