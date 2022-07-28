@@ -12,6 +12,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 using System.Net.Mail;
+using DotSpatial.Projections.Transforms;
 using LtInfo.Common.Email;
 
 namespace Neptune.Web.ScheduledJobs
@@ -40,7 +41,11 @@ namespace Neptune.Web.ScheduledJobs
 
         protected override void RunJobImplementation()
         {
-            var project = DbContext.Projects.First(x => x.ProjectID == ProjectID);
+            var project = DbContext.Projects.SingleOrDefault(x => x.ProjectID == ProjectID);
+            if (project == null)
+            {
+                throw new NullReferenceException($"Project with ID {ProjectID} does not exist!");
+            }
             var projectNetworkSolveHistory = DbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).First(x => x.ProjectNetworkSolveHistoryID == ProjectNetworkSolveHistoryID);
             var regionalSubbasinIDs = project.GetRegionalSubbasinIDs(DbContext);
             var projectDistributedDelineationIDs = project.TreatmentBMPs.SelectMany(x => x.Delineations.Where(y => y.DelineationTypeID == (int)DelineationTypeEnum.Distributed)).Select(x => x.DelineationID).ToList();
@@ -54,6 +59,22 @@ namespace Neptune.Web.ScheduledJobs
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
                 projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
                 DbContext.SaveChangesWithNoAuditing();
+                // we are intentionally caching the score here to the project table for speed purposes
+                var calculatedProjectGrantScore = DbContext.vProjectGrantScores.SingleOrDefault(x => x.ProjectID == ProjectID);
+                if (calculatedProjectGrantScore != null)
+                {
+                    project.OCTAWatersheds  = calculatedProjectGrantScore.Watersheds;
+                    project.PollutantVolume  = calculatedProjectGrantScore.PollutantVolume;
+                    project.PollutantMetals = calculatedProjectGrantScore.PollutantMetals;
+                    project.PollutantBacteria = calculatedProjectGrantScore.PollutantBacteria;
+                    project.PollutantNutrients = calculatedProjectGrantScore.PollutantNutrients;
+                    project.PollutantTSS = calculatedProjectGrantScore.PollutantTSS;
+                    project.TPI = calculatedProjectGrantScore.TPI;
+                    project.SEA = calculatedProjectGrantScore.SEA;
+                    project.DryWeatherWQLRI = calculatedProjectGrantScore.DryWeatherWQLRI;
+                    project.WetWeatherWQLRI = calculatedProjectGrantScore.WetWeatherWQLRI;
+                }
+
                 SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
             }
             catch (Exception ex)

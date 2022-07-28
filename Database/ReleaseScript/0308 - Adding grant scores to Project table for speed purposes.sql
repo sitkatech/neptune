@@ -1,0 +1,1 @@
+alter table dbo.Project add OCTAWatersheds varchar(500), PollutantVolume float, PollutantMetals float, PollutantBacteria float, PollutantNutrients float, PollutantTSS float, TPI float, SEA float, DryWeatherWQLRI float, WetWeatherWQLRI float

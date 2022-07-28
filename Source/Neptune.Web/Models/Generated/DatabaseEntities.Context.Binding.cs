@@ -150,6 +150,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new vProjectLoadGeneratingResultConfiguration());
             modelBuilder.Configurations.Add(new vProjectLoadReducingResultConfiguration());
             modelBuilder.Configurations.Add(new vProjectWetWeatherWQLRIScoreConfiguration());
+            modelBuilder.Configurations.Add(new vRegionalSubbasinUpstreamConfiguration());
             modelBuilder.Configurations.Add(new vRegionalSubbasinUpstreamCatchmentGeometry4326Configuration());
             modelBuilder.Configurations.Add(new vTrashGeneratingUnitLoadStatisticConfiguration());
             modelBuilder.Configurations.Add(new vTreatmentBMPDetailedConfiguration());
@@ -273,6 +274,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<vProjectLoadReducingResult> vProjectLoadReducingResults { get; set; }
         public virtual DbSet<vProjectWetWeatherWQLRIScore> vProjectWetWeatherWQLRIScores { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
+        public virtual DbSet<vRegionalSubbasinUpstream> vRegionalSubbasinUpstreams { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
         public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }
         public virtual DbSet<vViewTreatmentBMPModelingAttributes> vViewTreatmentBMPModelingAttributes { get; set; }
