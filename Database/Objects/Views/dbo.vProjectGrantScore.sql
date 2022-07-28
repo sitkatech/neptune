@@ -5,10 +5,10 @@ go
 create view dbo.vProjectGrantScore
 as
 
-with projectDelineations(ProjectID, DelineationID, DelineationTypeID)
+with projectDelineations(ProjectID, DelineationID, DelineationTypeID, RegionalSubbasinID)
 as
 (
-    select t.ProjectID, d.DelineationID, d.DelineationTypeID 
+    select t.ProjectID, d.DelineationID, d.DelineationTypeID, t.RegionalSubbasinID
     from dbo.TreatmentBMP t
     join dbo.Delineation d on t.TreatmentBMPID = d.TreatmentBMPID
     where t.ProjectID is not null
@@ -20,55 +20,41 @@ as
     from projectDelineations
     group by ProjectID
 ),
-projectGeometriesIntersectedWithNereidResults(ProjectID, ProjectLoadGeneratingUnitID, ProjectLoadGeneratingUnitGeometry, ModelBasinID, RegionalSubbasinID, DelineationID, WaterQualityManagementPlanID, NodeID, ProjectNereidResultID)
+projectGeometryUnits(ProjectID, ProjectLoadGeneratingUnitID, ProjectLoadGeneratingUnitGeometry, ModelBasinID, RegionalSubbasinID, DelineationID, WaterQualityManagementPlanID)
 as
 (
-    select a.ProjectID
-        , a.ProjectLoadGeneratingUnitID
-        , a.ProjectLoadGeneratingUnitGeometry
-        , a.ModelBasinID
-        , a.RegionalSubbasinID
-        , a.DelineationID
-        , a.WaterQualityManagementPlanID
-        , a.NodeID
-        , pnr.ProjectNereidResultID
-    from
-    (
-        select plgu.ProjectLoadGeneratingUnitID
+        -- distributed delineations
+        select plgu.ProjectID
+        , plgu.ProjectLoadGeneratingUnitID
         , plgu.ProjectLoadGeneratingUnitGeometry
-        , plgu.ProjectID
         , plgu.ModelBasinID
         , plgu.RegionalSubbasinID
         , plgu.DelineationID
         , plgu.WaterQualityManagementPlanID
-        , case 
-            when plgu.DelineationID is not null then concat('Delineation_', plgu.DelineationID)
-            when plgu.RegionalSubbasinID is not null and plgu.WaterQualityManagementPlanID is not null then concat('WQMP_', plgu.WaterQualityManagementPlanID, '_RSB_', rsb.OCSurveyCatchmentID)
-            when plgu.RegionalSubbasinID is not null then concat('RSB_', rsb.OCSurveyCatchmentID)
-            when plgu.WaterQualityManagementPlanID is not null then concat('WQMP_', plgu.WaterQualityManagementPlanID)
-            else null
-        end as NodeID
         from dbo.ProjectLoadGeneratingUnit plgu
-        join projectIsDistributedOnly pidu on plgu.ProjectID = pidu.ProjectID
-        left join dbo.RegionalSubbasin rsb on plgu.RegionalSubbasinID = rsb.RegionalSubbasinID
-        where (
-            (pidu.IsDistributedOnly = 1 and plgu.DelineationID in (select DelineationID from projectDelineations)) -- if all distributed bmps, we only care for the delineations for this project
-            or pidu.IsDistributedOnly = 0 -- else it's a mix of distributed and centralized so we get them all
-        )
-    ) a
-    join dbo.ProjectNereidResult pnr on a.ProjectID = pnr.ProjectID and a.NodeID = pnr.NodeID
-),
-relevantProjectNereidResultIDs(ProjectID, ProjectNereidResultID)
-as
-(
-    select distinct ProjectID, ProjectNereidResultID
-    from projectGeometriesIntersectedWithNereidResults
+        join projectDelineations pd on plgu.DelineationID = pd.DelineationID
+        where pd.DelineationTypeID = 2
+
+        union all
+
+        -- centralized delineations that are within your upstream
+        select plgu.ProjectID        
+        , plgu.ProjectLoadGeneratingUnitID
+        , plgu.ProjectLoadGeneratingUnitGeometry
+        , plgu.ModelBasinID
+        , plgu.RegionalSubbasinID
+        , plgu.DelineationID
+        , plgu.WaterQualityManagementPlanID
+        from projectDelineations pd
+        join vRegionalSubbasinUpstream u on pd.RegionalSubbasinID = u.PrimaryKey
+        join dbo.ProjectLoadGeneratingUnit plgu on u.RegionalSubbasinID = plgu.RegionalSubbasinID
+        where pd.DelineationTypeID = 1
 ),
 projectGeometries(ProjectID, ProjectGeometry)
 as
 (
     select plg.ProjectID, geometry::UnionAggregate(plg.ProjectLoadGeneratingUnitGeometry)
-    from  projectGeometriesIntersectedWithNereidResults plg
+    from  projectGeometryUnits plg
     group by ProjectID
 ),
 octaProject(ProjectID, TotalProjectArea, CatchIDN, OCTAPrioritizationKey, OverlapArea, Watershed, TPI, WQNLU, WQNMON, IMPAIR, MON, SEA, SEA_PCTL, PC_VOL_PCT, PC_NUT_PCT, PC_BAC_PCT, PC_MET_PCT, PC_TSS_PCT)
@@ -100,7 +86,6 @@ as
         sum(WetWeatherTPbGenerated) as WetWeatherTPbGenerated,
         sum(WetWeatherTZnGenerated) as WetWeatherTZnGenerated
     from dbo.vProjectLoadGeneratingResult p
-    join relevantProjectNereidResultIDs pg on p.ProjectNereidResultID = pg.ProjectNereidResultID
     group by p.ProjectID
 ),
 projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, IsPartOfProject)
