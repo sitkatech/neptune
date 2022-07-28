@@ -12,7 +12,7 @@ select  ProjectNereidResultID as PrimaryKey,
         IsBaselineCondition,
         pnr.WaterQualityManagementPlanID,
         pnr.RegionalSubbasinID,
-        d.DelineationID,
+        pnr.DelineationID,
         NodeID,
 --        FullResponse,
         LastUpdate,
@@ -43,7 +43,6 @@ select  ProjectNereidResultID as PrimaryKey,
 
         from dbo.ProjectNereidResult pnr
         join dbo.Project p on pnr.ProjectID = p.ProjectID
-        left join dbo.Delineation d on pnr.DelineationID = d.DelineationID
         cross apply openjson(fullresponse) 
                     with (
             WetWeatherVolumeGenerated float '$.runoff_volume_cuft',

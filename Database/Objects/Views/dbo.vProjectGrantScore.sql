@@ -5,10 +5,10 @@ go
 create view dbo.vProjectGrantScore
 as
 
-with projectDelineations(ProjectID, DelineationID, DelineationTypeID, RegionalSubbasinID)
+with projectDelineations(ProjectID, TreatmentBMPID, DelineationID, DelineationTypeID, RegionalSubbasinID)
 as
 (
-    select t.ProjectID, d.DelineationID, d.DelineationTypeID, t.RegionalSubbasinID
+    select t.ProjectID, t.TreatmentBMPID, d.DelineationID, d.DelineationTypeID, t.RegionalSubbasinID
     from dbo.TreatmentBMP t
     join dbo.Delineation d on t.TreatmentBMPID = d.TreatmentBMPID
     where t.ProjectID is not null
@@ -20,7 +20,7 @@ as
     from projectDelineations
     group by ProjectID
 ),
-projectGeometryUnits(ProjectID, ProjectLoadGeneratingUnitID, ProjectLoadGeneratingUnitGeometry, ModelBasinID, RegionalSubbasinID, DelineationID, WaterQualityManagementPlanID)
+projectGeometryUnits(ProjectID, ProjectLoadGeneratingUnitID, ProjectLoadGeneratingUnitGeometry, ModelBasinID, RegionalSubbasinID, DelineationID, WaterQualityManagementPlanID, DelineationTypeID)
 as
 (
         -- distributed delineations
@@ -31,6 +31,7 @@ as
         , plgu.RegionalSubbasinID
         , plgu.DelineationID
         , plgu.WaterQualityManagementPlanID
+        , pd.DelineationTypeID
         from dbo.ProjectLoadGeneratingUnit plgu
         join projectDelineations pd on plgu.DelineationID = pd.DelineationID
         where pd.DelineationTypeID = 2
@@ -45,6 +46,7 @@ as
         , plgu.RegionalSubbasinID
         , plgu.DelineationID
         , plgu.WaterQualityManagementPlanID
+        , pd.DelineationTypeID
         from projectDelineations pd
         join vRegionalSubbasinUpstream u on pd.RegionalSubbasinID = u.PrimaryKey
         join dbo.ProjectLoadGeneratingUnit plgu on u.RegionalSubbasinID = plgu.RegionalSubbasinID
@@ -64,6 +66,50 @@ as
 [Watershed], [TPI], [WQNLU], [WQNMON], [IMPAIR], [MON], [SEA], [SEA_PCTL], [PC_VOL_PCT], [PC_NUT_PCT], [PC_BAC_PCT], [PC_MET_PCT], [PC_TSS_PCT]
 	from dbo.OCTAPrioritization o
     join projectGeometries pg on o.OCTAPrioritizationGeometry.STIntersects(pg.ProjectGeometry) = 1
+),
+projectCentralizedRSBs(ProjectID, RegionalSubbasinID)
+as
+(
+    select  distinct pd.ProjectID        
+            , pd.RegionalSubbasinID
+    from projectGeometryUnits pd
+    where pd.DelineationTypeID = 1
+),
+relevantProjectNeriedResults(ProjectNereidResultID, ProjectID, NodeID, NereidResultType)
+as
+(
+    -- LG
+    select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
+    from dbo.ProjectNereidResult pnr
+    join projectCentralizedRSBs prsb on pnr.ProjectID = prsb.ProjectID and pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
+    where TreatmentBMPID is null and NodeID not like '%-TMNT'
+
+    union all
+
+    select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
+    from ProjectNereidResult pnr
+    join projectDelineations pd on pnr.ProjectID = pd.ProjectID and pnr.DelineationID = pd.DelineationID 
+
+    union all
+    -- LR existing
+    select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingExisting' as NereidResultType
+    from dbo.ProjectNereidResult pnr
+    join projectDelineations pd on pnr.ProjectID != pd.ProjectID and pnr.TreatmentBMPID = pd.TreatmentBMPID
+    join projectCentralizedRSBs prsb on pnr.ProjectID = prsb.ProjectID and pd.RegionalSubbasinID = prsb.RegionalSubbasinID
+
+    union all
+    select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingExisting' as NereidResultType
+    from dbo.ProjectNereidResult pnr
+    join dbo.WaterQualityManagementPlan t on pnr.WaterQualityManagementPlanID = t.WaterQualityManagementPlanID
+    join projectCentralizedRSBs prsb on pnr.ProjectID = prsb.ProjectID and pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
+    where NodeID like '%-TMNT'
+
+    union all
+
+    -- LR for Project
+    select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingNew' as NereidResultType
+    from dbo.ProjectNereidResult pnr
+    join projectDelineations pd on pnr.ProjectID = pd.ProjectID and pnr.TreatmentBMPID = pd.TreatmentBMPID
 ),
 projectLoadGenerated(ProjectID, DryWeatherVolumeGenerated, DryWeatherTSSGenerated, DryWeatherTNGenerated, DryWeatherTPGenerated, DryWeatherFCGenerated, DryWeatherTCuGenerated, DryWeatherTPbGenerated, DryWeatherTZnGenerated, WetWeatherVolumeGenerated, WetWeatherTSSGenerated, WetWeatherTNGenerated, WetWeatherTPGenerated, WetWeatherFCGenerated, WetWeatherTCuGenerated, WetWeatherTPbGenerated, WetWeatherTZnGenerated)
 as
@@ -86,6 +132,7 @@ as
         sum(WetWeatherTPbGenerated) as WetWeatherTPbGenerated,
         sum(WetWeatherTZnGenerated) as WetWeatherTZnGenerated
     from dbo.vProjectLoadGeneratingResult p
+    join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
     group by p.ProjectID
 ),
 projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, IsPartOfProject)
@@ -112,6 +159,7 @@ as
 
         p.IsPartOfProject
     from dbo.vProjectLoadReducingResult p
+    join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
 )
 
 
@@ -285,5 +333,5 @@ left join
 GO
 
 /*
-select * from dbo.vProjectGrantScore where ProjectID = 14
+select * from dbo.vProjectGrantScore where ProjectID = 1033
 */
