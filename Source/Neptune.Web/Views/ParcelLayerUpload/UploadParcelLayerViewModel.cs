@@ -82,7 +82,7 @@ namespace Neptune.Web.Views.ParcelLayerUpload
                             "SQFT_HOME as SquareFeetHome",
                             "SQFT_LOT as SquareFeetLot",
                             "SHAPE_Area as ParcelStagingAreaSquareFeet",
-                            "SHAPE as ParcelStagingGeometry",
+//                            "SHAPE as ParcelStagingGeometry", // only needed if in local dev since we are using gdal 3 but qa and prod use gdal 2
                             $"{currentPerson.PersonID} as UploadedByPersonID"
                         };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
