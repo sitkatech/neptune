@@ -538,9 +538,6 @@ namespace Neptune.Web.Common
             dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();
 
-            dbContext.Database.ExecuteSqlCommand(
-                "EXEC dbo.pCalculateProjectGrantScore @projectID", projectIDSqlParam);
-
             return nereidResults;
         }
 
