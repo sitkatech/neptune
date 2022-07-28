@@ -73,6 +73,7 @@ namespace Neptune.Web.ScheduledJobs
                     project.SEA = calculatedProjectGrantScore.SEA;
                     project.DryWeatherWQLRI = calculatedProjectGrantScore.DryWeatherWQLRI;
                     project.WetWeatherWQLRI = calculatedProjectGrantScore.WetWeatherWQLRI;
+                    DbContext.SaveChangesWithNoAuditing();
                 }
 
                 SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
