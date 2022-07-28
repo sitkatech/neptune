@@ -88,6 +88,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
+        public virtual DbSet<ParcelStaging> ParcelStagings { get; set; }
         public virtual DbSet<PermitType> PermitTypes { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<PrecipitationZone> PrecipitationZones { get; set; }
@@ -211,6 +212,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vProjectLoadReducingResult> vProjectLoadReducingResults { get; set; }
         public virtual DbSet<vProjectWetWeatherWQLRIScore> vProjectWetWeatherWQLRIScores { get; set; }
         public virtual DbSet<vRegionalSubbasinLGUInput> vRegionalSubbasinLGUInputs { get; set; }
+        public virtual DbSet<vRegionalSubbasinUpstream> vRegionalSubbasinUpstreams { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vStormwaterJurisdictionOrganizationMapping> vStormwaterJurisdictionOrganizationMappings { get; set; }
         public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
@@ -866,6 +868,15 @@ namespace Hippocamp.EFModels.Entities
                     .WithMany(p => p.Organizations)
                     .HasForeignKey(d => d.PrimaryContactPersonID)
                     .HasConstraintName("FK_Organization_Person_PrimaryContactPersonID_PersonID");
+            });
+
+            modelBuilder.Entity<ParcelStaging>(entity =>
+            {
+                entity.HasOne(d => d.UploadedByPerson)
+                    .WithMany(p => p.ParcelStagings)
+                    .HasForeignKey(d => d.UploadedByPersonID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ParcelStaging_Person_UploadedByPersonID_PersonID");
             });
 
             modelBuilder.Entity<PermitType>(entity =>
@@ -1917,6 +1928,11 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vRegionalSubbasinLGUInput");
 
                 entity.Property(e => e.RSBID).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<vRegionalSubbasinUpstream>(entity =>
+            {
+                entity.ToView("vRegionalSubbasinUpstream");
             });
 
             modelBuilder.Entity<vRegionalSubbasinUpstreamCatchmentGeometry4326>(entity =>

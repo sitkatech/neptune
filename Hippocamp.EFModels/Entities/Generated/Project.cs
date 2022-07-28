@@ -44,6 +44,18 @@ namespace Hippocamp.EFModels.Entities
         public bool ShareOCTAM2Tier2Scores { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? OCTAM2Tier2ScoresLastSharedDate { get; set; }
+        public double? PollutantVolume { get; set; }
+        public double? PollutantMetals { get; set; }
+        public double? PollutantBacteria { get; set; }
+        public double? PollutantNutrients { get; set; }
+        public double? PollutantTSS { get; set; }
+        public double? TPI { get; set; }
+        public double? SEA { get; set; }
+        public double? DryWeatherWQLRI { get; set; }
+        public double? WetWeatherWQLRI { get; set; }
+        [StringLength(500)]
+        [Unicode(false)]
+        public string OCTAWatersheds { get; set; }
 
         [ForeignKey("CreatePersonID")]
         [InverseProperty("ProjectCreatePeople")]

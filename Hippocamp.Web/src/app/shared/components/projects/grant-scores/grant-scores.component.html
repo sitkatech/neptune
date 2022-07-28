@@ -7,7 +7,7 @@
         </ul>
     </div>
 </div>
-<div class="row bg-white border mr-1 ml-1 pb-4" *ngIf="projectGrantScore">
+<div class="row bg-white border mr-1 ml-1 pb-4" *ngIf="project">
     <div class="col-xl-6">
         <div class="row mt-3">
             <div class="col-12">
@@ -18,31 +18,31 @@
                 <field-definition fieldDefinitionType="OCTAWatershed" labelOverride="Watershed(s)"></field-definition>
             </div>
             <div class="col-sm-8">
-                <span *ngIf="projectGrantScore.Watersheds; else notCalculated">{{ projectGrantScore.Watersheds }}</span>
+                <span *ngIf="project.OCTAWatersheds; else notCalculated">{{ project.OCTAWatersheds }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">
                 <field-definition fieldDefinitionType="SEAScore" labelOverride="SEA Score"></field-definition>
             </div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.SEA; else notCalculated">{{ projectGrantScore.SEA | number: '1.1-1' }}</span>
+                <span *ngIf="project.SEA; else notCalculated">{{ project.SEA | number: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">
                 <field-definition fieldDefinitionType="TPIScore" labelOverride="TPI Score"></field-definition>
             </div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.TPI; else notCalculated">{{ projectGrantScore.TPI | number: '1.1-1' }}</span>
+                <span *ngIf="project.TPI; else notCalculated">{{ project.TPI | number: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">
                 <field-definition fieldDefinitionType="WQLRI" labelOverride="Dry Weather WQLRI"></field-definition>
             </div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.DryWeatherWQLRI; else notCalculated">{{ projectGrantScore.DryWeatherWQLRI | number: '1.1-1' }}</span>
+                <span *ngIf="project.DryWeatherWQLRI; else notCalculated">{{ project.DryWeatherWQLRI | number: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">
                 <field-definition fieldDefinitionType="WQLRI" labelOverride="Wet Weather WQLRI"></field-definition>
             </div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.WetWeatherWQLRI; else notCalculated">{{ projectGrantScore.WetWeatherWQLRI | number: '1.1-1' }}</span>
+                <span *ngIf="project.WetWeatherWQLRI; else notCalculated">{{ project.WetWeatherWQLRI | number: '1.1-1' }}</span>
             </div>
         </div>
     </div>
@@ -55,23 +55,23 @@
             </div>
             <div class="col-sm-4 text-sm-right">TSS</div>
             <div class="col-sm-8">
-                <span *ngIf="projectGrantScore.PollutantTSS; else notCalculated">{{ projectGrantScore.PollutantTSS | percent: '1.1-1' }}</span>
+                <span *ngIf="project.PollutantTSS; else notCalculated">{{ project.PollutantTSS | percent: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">Nutrients</div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.PollutantNutrients; else notCalculated">{{ projectGrantScore.PollutantNutrients | percent: '1.1-1' }}</span>
+                <span *ngIf="project.PollutantNutrients; else notCalculated">{{ project.PollutantNutrients | percent: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">Metals</div>
-            <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.PollutantMetals; else notCalculated">{{ projectGrantScore.PollutantMetals | percent: '1.1-1' }}</span>
+            <div class="col-sm-8 mt-1"> 
+                <span *ngIf="project.PollutantMetals; else notCalculated">{{ project.PollutantMetals | percent: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">Bacteria</div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.PollutantBacteria; else notCalculated">{{ projectGrantScore.PollutantBacteria | percent: '1.1-1' }}</span>
+                <span *ngIf="project.PollutantBacteria; else notCalculated">{{ project.PollutantBacteria | percent: '1.1-1' }}</span>
             </div>
             <div class="col-sm-4 mt-1 text-sm-right">Volume</div>
             <div class="col-sm-8 mt-1">
-                <span *ngIf="projectGrantScore.PollutantVolume; else notCalculated">{{ projectGrantScore.PollutantVolume | percent: '1.1-1' }}</span>
+                <span *ngIf="project.PollutantVolume; else notCalculated">{{ project.PollutantVolume | percent: '1.1-1' }}</span>
             </div>
         </div>
     </div>

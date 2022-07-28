@@ -38,8 +38,13 @@ namespace Hippocamp.EFModels.Entities
                 PrimaryContactPerson = project.PrimaryContactPerson.AsSimpleDto(),
                 CreatePerson = project.CreatePerson.AsSimpleDto(),
                 Area = project.ProjectHRUCharacteristics.Sum(x => x.Area),
-                ImperviousAcres = project.ProjectHRUCharacteristics.Sum(x => x.ImperviousAcres)
-            };
+                ImperviousAcres = project.ProjectHRUCharacteristics.Sum(x => x.ImperviousAcres),
+                SEA = project.SEA,
+                TPI = project.TPI,
+                DryWeatherWQLRI = project.DryWeatherWQLRI,
+                WetWeatherWQLRI = project.WetWeatherWQLRI
+
+        };
 
             return projectDto;
         }

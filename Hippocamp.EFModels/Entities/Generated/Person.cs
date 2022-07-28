@@ -20,6 +20,7 @@ namespace Hippocamp.EFModels.Entities
             Notifications = new HashSet<Notification>();
             OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
             Organizations = new HashSet<Organization>();
+            ParcelStagings = new HashSet<ParcelStaging>();
             ProjectCreatePeople = new HashSet<Project>();
             ProjectNetworkSolveHistories = new HashSet<ProjectNetworkSolveHistory>();
             ProjectPrimaryContactPeople = new HashSet<Project>();
@@ -92,6 +93,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         [InverseProperty("PrimaryContactPerson")]
         public virtual ICollection<Organization> Organizations { get; set; }
+        [InverseProperty("UploadedByPerson")]
+        public virtual ICollection<ParcelStaging> ParcelStagings { get; set; }
         [InverseProperty("CreatePerson")]
         public virtual ICollection<Project> ProjectCreatePeople { get; set; }
         [InverseProperty("RequestedByPerson")]

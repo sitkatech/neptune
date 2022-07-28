@@ -380,14 +380,6 @@ namespace Hippocamp.API.Controllers
             return false;
         }
 
-        [HttpGet("projects/{projectID}/OCTAM2Tier2GrantScores")]
-        [UserViewFeature]
-        public ActionResult<ProjectGrantScoreDto> GetGrantScoresByProjectID([FromRoute] int projectID)
-        {
-            var projectGrantScoreDto = _dbContext.vProjectGrantScores.SingleOrDefault(x => x.ProjectID == projectID)?.AsDto();
-            return Ok(projectGrantScoreDto);
-        }
-
         [HttpGet("projects/OCTAM2Tier2GrantProgram")]
         [UserViewFeature]
         public ActionResult<List<ProjectHRUCharacteristicsSummaryDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
@@ -400,20 +392,6 @@ namespace Hippocamp.API.Controllers
 
             var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
                 .Select(x => x.AsProjectHRUCharacteristicsSummaryDto()).ToList();
-            var projectIDs = projectHruCharacteristicsSummaryDtos.Select(x => x.ProjectID);
-            var projectGrantScores = _dbContext.vProjectGrantScores.Where(x => projectIDs.Contains(x.ProjectID)).ToList();
-            foreach (var projectHruCharacteristicsSummaryDto in projectHruCharacteristicsSummaryDtos)
-            {
-                var projectGrantScore =
-                    projectGrantScores.SingleOrDefault(x => x.ProjectID == projectHruCharacteristicsSummaryDto.ProjectID);
-                if (projectGrantScore != null)
-                {
-                    projectHruCharacteristicsSummaryDto.SEA = projectGrantScore.SEA;
-                    projectHruCharacteristicsSummaryDto.TPI = projectGrantScore.TPI;
-                    projectHruCharacteristicsSummaryDto.DryWeatherWQLRI = projectGrantScore.DryWeatherWQLRI;
-                    projectHruCharacteristicsSummaryDto.WetWeatherWQLRI = projectGrantScore.WetWeatherWQLRI;
-                }
-            }
             return Ok(projectHruCharacteristicsSummaryDtos);
         }
 

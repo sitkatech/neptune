@@ -17,10 +17,6 @@ import { StormwaterJurisdictionSimpleDto } from '././stormwater-jurisdiction-sim
 export class ProjectHRUCharacteristicsSummaryDto { 
     Area?: number;
     ImperviousAcres?: number;
-    TPI?: number;
-    SEA?: number;
-    DryWeatherWQLRI?: number;
-    WetWeatherWQLRI?: number;
     ProjectID?: number;
     ProjectName?: string;
     OrganizationID?: number;
@@ -35,6 +31,16 @@ export class ProjectHRUCharacteristicsSummaryDto {
     CalculateOCTAM2Tier2Scores?: boolean;
     ShareOCTAM2Tier2Scores?: boolean;
     OCTAM2Tier2ScoresLastSharedDate?: string;
+    PollutantVolume?: number;
+    PollutantMetals?: number;
+    PollutantBacteria?: number;
+    PollutantNutrients?: number;
+    PollutantTSS?: number;
+    TPI?: number;
+    SEA?: number;
+    DryWeatherWQLRI?: number;
+    WetWeatherWQLRI?: number;
+    OCTAWatersheds?: string;
     Organization?: OrganizationSimpleDto;
     StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
     ProjectStatus?: ProjectStatusSimpleDto;

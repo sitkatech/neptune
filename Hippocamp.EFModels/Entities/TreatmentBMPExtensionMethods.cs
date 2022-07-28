@@ -22,7 +22,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPUpsertDto;
         }
 
-        public static TreatmentBMPUpsertDto AsUpsertDtoWithModelingAttributes(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute? treatmentBMPModelingAttribute)
+        public static TreatmentBMPUpsertDto AsUpsertDtoWithModelingAttributes(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute treatmentBMPModelingAttribute)
         {
             var treatmentBMPUpsertDto = new TreatmentBMPUpsertDto()
             {
@@ -87,7 +87,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDto;
         }
 
-        private static bool AreAllModelingAttributesComplete(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute? bmpModelingAttributes)
+        private static bool AreAllModelingAttributesComplete(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute bmpModelingAttributes)
         {
             var bmpModelingTypeID = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID;
 
@@ -214,7 +214,7 @@ namespace Hippocamp.EFModels.Entities
             return true;
         }
 
-        private static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute? bmpModelingAttributes)
+        private static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute bmpModelingAttributes)
         {
             if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID == null)
             {

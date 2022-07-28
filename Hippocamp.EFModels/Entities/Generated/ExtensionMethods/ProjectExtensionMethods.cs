@@ -26,7 +26,17 @@ namespace Hippocamp.EFModels.Entities
                 DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
                 ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
-                OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate
+                OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate,
+                PollutantVolume = project.PollutantVolume,
+                PollutantMetals = project.PollutantMetals,
+                PollutantBacteria = project.PollutantBacteria,
+                PollutantNutrients = project.PollutantNutrients,
+                PollutantTSS = project.PollutantTSS,
+                TPI = project.TPI,
+                SEA = project.SEA,
+                DryWeatherWQLRI = project.DryWeatherWQLRI,
+                WetWeatherWQLRI = project.WetWeatherWQLRI,
+                OCTAWatersheds = project.OCTAWatersheds
             };
             DoCustomMappings(project, projectDto);
             return projectDto;
@@ -51,7 +61,17 @@ namespace Hippocamp.EFModels.Entities
                 DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs,
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
                 ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
-                OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate
+                OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate,
+                PollutantVolume = project.PollutantVolume,
+                PollutantMetals = project.PollutantMetals,
+                PollutantBacteria = project.PollutantBacteria,
+                PollutantNutrients = project.PollutantNutrients,
+                PollutantTSS = project.PollutantTSS,
+                TPI = project.TPI,
+                SEA = project.SEA,
+                DryWeatherWQLRI = project.DryWeatherWQLRI,
+                WetWeatherWQLRI = project.WetWeatherWQLRI,
+                OCTAWatersheds = project.OCTAWatersheds
             };
             DoCustomSimpleDtoMappings(project, projectSimpleDto);
             return projectSimpleDto;

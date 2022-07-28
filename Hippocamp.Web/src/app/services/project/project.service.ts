@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
-import { DelineationUpsertDto, ProjectGrantScoreDto, ProjectLoadReducingResultDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
+import { DelineationUpsertDto, ProjectLoadReducingResultDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -97,11 +97,6 @@ export class ProjectService {
 
   getLoadReducingResultsByProjectID(projectID: number): Observable<Array<ProjectLoadReducingResultDto>> {
     let route = `/projects/${projectID}/load-reducing-results`;
-    return this.apiService.getFromApi(route);
-  }
-
-  getGrantScoreByProjectID(projectID: number): Observable<ProjectGrantScoreDto> {
-    let route = `/projects/${projectID}/OCTAM2Tier2GrantScores`;
     return this.apiService.getFromApi(route);
   }
 

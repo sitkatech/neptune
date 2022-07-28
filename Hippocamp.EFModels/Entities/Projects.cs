@@ -272,18 +272,19 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<ProjectModeledResultSummaryDto> ListByIDsAsModeledResultSummaryDtos(HippocampDbContext dbContext, List<int> projectIDs)
         {
+            var projects = dbContext.Projects.Where(x => projectIDs.Contains(x.ProjectID)).ToList();
             var projectLoadReducingResultsGroups = ProjectLoadReducingResults
                 .ListByProjectIDs(dbContext, projectIDs)
                 .GroupBy(x => x.ProjectID);
 
             var allProjectHRUCharacteristics = dbContext.ProjectHRUCharacteristics
                 .Where(x => projectIDs.Contains(x.ProjectID)).ToList();
-            var projectGrantScores = dbContext.vProjectGrantScores.Where(x => projectIDs.Contains(x.ProjectID)).ToList();
             var projectModeledResultSummaryDtos = new List<ProjectModeledResultSummaryDto>();
 
             foreach (var projectLoadReducingResultsGroup in projectLoadReducingResultsGroups)
             {
                 var projectID = projectLoadReducingResultsGroup.Key;
+                var project = projects.SingleOrDefault(x => x.ProjectID == projectID);
                 var projectHRUCharacteristics = allProjectHRUCharacteristics.Where(x => x.ProjectID == projectID).ToList();
                 var area = projectHRUCharacteristics.Any() ? projectHRUCharacteristics.Sum(x => x.Area) : (double?)null;
                 var imperviousAcres = projectHRUCharacteristics.Any() ? projectHRUCharacteristics.Sum(x => x.ImperviousAcres) : (double?)null;
@@ -354,14 +355,10 @@ namespace Hippocamp.EFModels.Entities
                     TotalTZnInflow = projectLoadReducingResultsGroup.Sum(x => x.TotalTZnInflow)
                 };
 
-                var projectGrantScore = projectGrantScores.SingleOrDefault(x => x.ProjectID == projectID);
-                if (projectGrantScore != null)
-                {
-                    projectModeledResultSummaryDto.SEA = projectGrantScore.SEA;
-                    projectModeledResultSummaryDto.TPI = projectGrantScore.TPI;
-                    projectModeledResultSummaryDto.DryWeatherWQLRI = projectGrantScore.DryWeatherWQLRI;
-                    projectModeledResultSummaryDto.WetWeatherWQLRI = projectGrantScore.WetWeatherWQLRI;
-                }
+                projectModeledResultSummaryDto.SEA = project.SEA;
+                projectModeledResultSummaryDto.TPI = project.TPI;
+                projectModeledResultSummaryDto.DryWeatherWQLRI = project.DryWeatherWQLRI;
+                projectModeledResultSummaryDto.WetWeatherWQLRI = project.WetWeatherWQLRI;
 
                 projectModeledResultSummaryDtos.Add(projectModeledResultSummaryDto);
             }

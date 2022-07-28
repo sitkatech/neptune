@@ -20,7 +20,6 @@ model/person-simple-dto.ts
 model/problem-details.ts
 model/project-document-simple-dto.ts
 model/project-document-update-dto.ts
-model/project-grant-score-dto.ts
 model/project-hru-characteristics-summary-dto.ts
 model/project-load-generating-result-dto.ts
 model/project-load-reducing-result-dto.ts

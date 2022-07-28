@@ -7,25 +7,19 @@ using NetTopologySuite.Geometries;
 
 namespace Hippocamp.EFModels.Entities
 {
-    [Table("Parcel")]
-    [Index("ParcelGeometry", Name = "SPATIAL_Parcel_ParcelGeometry")]
-    [Index("ParcelGeometry4326", Name = "SPATIAL_Parcel_ParcelGeometry4326")]
-    public partial class Parcel
+    [Table("ParcelStaging")]
+    public partial class ParcelStaging
     {
-        public Parcel()
-        {
-            WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
-        }
-
         [Key]
-        public int ParcelID { get; set; }
+        public int ParcelStagingID { get; set; }
         [Required]
         [StringLength(22)]
         [Unicode(false)]
         public string ParcelNumber { get; set; }
         [Required]
         [Column(TypeName = "geometry")]
-        public Geometry ParcelGeometry { get; set; }
+        public Geometry ParcelStagingGeometry { get; set; }
+        public double ParcelStagingAreaSquareFeet { get; set; }
         [StringLength(100)]
         [Unicode(false)]
         public string OwnerName { get; set; }
@@ -43,11 +37,10 @@ namespace Hippocamp.EFModels.Entities
         public string LandUse { get; set; }
         public int? SquareFeetHome { get; set; }
         public int? SquareFeetLot { get; set; }
-        public double ParcelAreaInAcres { get; set; }
-        [Column(TypeName = "geometry")]
-        public Geometry ParcelGeometry4326 { get; set; }
+        public int UploadedByPersonID { get; set; }
 
-        [InverseProperty("Parcel")]
-        public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
+        [ForeignKey("UploadedByPersonID")]
+        [InverseProperty("ParcelStagings")]
+        public virtual Person UploadedByPerson { get; set; }
     }
 }

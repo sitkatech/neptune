@@ -18,7 +18,6 @@ export * from '././person-simple-dto';
 export * from '././problem-details';
 export * from '././project-document-simple-dto';
 export * from '././project-document-update-dto';
-export * from '././project-grant-score-dto';
 export * from '././project-hru-characteristics-summary-dto';
 export * from '././project-load-generating-result-dto';
 export * from '././project-load-reducing-result-dto';

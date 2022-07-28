@@ -9,6 +9,8 @@ namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlan")]
     [Index("WaterQualityManagementPlanName", "StormwaterJurisdictionID", Name = "AK_WaterQualityManagementPlan_WaterQualityManagementPlanName_StormwaterJurisdictionID", IsUnique = true)]
+    [Index("WaterQualityManagementPlanBoundary", Name = "SPATIAL_WaterQualityManagementPlan_WaterQualityManagementPlanBoundary")]
+    [Index("WaterQualityManagementPlanBoundary4326", Name = "SPATIAL_WaterQualityManagementPlan_WaterQualityManagementPlanBoundary4326")]
     public partial class WaterQualityManagementPlan
     {
         public WaterQualityManagementPlan()
