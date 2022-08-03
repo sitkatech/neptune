@@ -137,5 +137,7 @@ VALUES
 (133, 'OCTAWatershed', 'OCTA Watershed'),
 (134, 'EffectiveAreaAcres', 'Effective Area (acres)'),
 (135, 'DesignStormDepth85thPercentile', '85th Percentile Design Storm Depth (inches)'),
-(136, 'DesignVolume85thPercentile', '85th Percentile Design Volume (cuft)')
+(136, 'DesignVolume85thPercentile', '85th Percentile Design Volume (cuft)'),
+(137, 'LandUseBasedWaterQualityScore', 'Land Use Based Water Quality Score'),
+(138, 'ReceivingWaterScore', 'Receiving Water Score')
 

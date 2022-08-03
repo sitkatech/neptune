@@ -153,6 +153,8 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTypeEffectiveAreaAcres EffectiveAreaAcres = FieldDefinitionTypeEffectiveAreaAcres.Instance;
         public static readonly FieldDefinitionTypeDesignStormDepth85thPercentile DesignStormDepth85thPercentile = FieldDefinitionTypeDesignStormDepth85thPercentile.Instance;
         public static readonly FieldDefinitionTypeDesignVolume85thPercentile DesignVolume85thPercentile = FieldDefinitionTypeDesignVolume85thPercentile.Instance;
+        public static readonly FieldDefinitionTypeLandUseBasedWaterQualityScore LandUseBasedWaterQualityScore = FieldDefinitionTypeLandUseBasedWaterQualityScore.Instance;
+        public static readonly FieldDefinitionTypeReceivingWaterScore ReceivingWaterScore = FieldDefinitionTypeReceivingWaterScore.Instance;
 
         public static readonly List<FieldDefinitionType> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinitionType> AllLookupDictionary;
@@ -162,7 +164,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinitionType()
         {
-            All = new List<FieldDefinitionType> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOperational, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized, HydromodificationApplies, DelineationStatus, DryWeatherFlowOverride, ModeledPerformance, OCTAM2Tier2GrantProgram, SEAScore, TPIScore, WQLRI, PollutantContributiontoSEA, SiteRunoff, TreatedAndDischarged, RetainedOrRecycled, UntreatedBypassOrOverflow, TotalSuspendedSolids, TotalNitrogen, TotalPhosphorous, FecalColiform, TotalCopper, TotalLead, TotalZinc, OCTAWatershed, EffectiveAreaAcres, DesignStormDepth85thPercentile, DesignVolume85thPercentile };
+            All = new List<FieldDefinitionType> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOperational, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized, HydromodificationApplies, DelineationStatus, DryWeatherFlowOverride, ModeledPerformance, OCTAM2Tier2GrantProgram, SEAScore, TPIScore, WQLRI, PollutantContributiontoSEA, SiteRunoff, TreatedAndDischarged, RetainedOrRecycled, UntreatedBypassOrOverflow, TotalSuspendedSolids, TotalNitrogen, TotalPhosphorous, FecalColiform, TotalCopper, TotalLead, TotalZinc, OCTAWatershed, EffectiveAreaAcres, DesignStormDepth85thPercentile, DesignVolume85thPercentile, LandUseBasedWaterQualityScore, ReceivingWaterScore };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinitionType>(All.ToDictionary(x => x.FieldDefinitionTypeID));
         }
 
@@ -336,6 +338,8 @@ namespace Neptune.Web.Models
                     return Jurisdiction;
                 case FieldDefinitionTypeEnum.LandUse:
                     return LandUse;
+                case FieldDefinitionTypeEnum.LandUseBasedWaterQualityScore:
+                    return LandUseBasedWaterQualityScore;
                 case FieldDefinitionTypeEnum.LandUseStatistics:
                     return LandUseStatistics;
                 case FieldDefinitionTypeEnum.LoadingRate:
@@ -410,6 +414,8 @@ namespace Neptune.Web.Models
                     return PropertiesToObserve;
                 case FieldDefinitionTypeEnum.ReceivesSystemCommunications:
                     return ReceivesSystemCommunications;
+                case FieldDefinitionTypeEnum.ReceivingWaterScore:
+                    return ReceivingWaterScore;
                 case FieldDefinitionTypeEnum.RegionalSubbasin:
                     return RegionalSubbasin;
                 case FieldDefinitionTypeEnum.RequiredFieldVisitsPerYear:
@@ -644,7 +650,9 @@ namespace Neptune.Web.Models
         OCTAWatershed = 133,
         EffectiveAreaAcres = 134,
         DesignStormDepth85thPercentile = 135,
-        DesignVolume85thPercentile = 136
+        DesignVolume85thPercentile = 136,
+        LandUseBasedWaterQualityScore = 137,
+        ReceivingWaterScore = 138
     }
 
     public partial class FieldDefinitionTypeIsPrimaryContactOrganization : FieldDefinitionType
@@ -1455,5 +1463,17 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionTypeDesignVolume85thPercentile(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
         public static readonly FieldDefinitionTypeDesignVolume85thPercentile Instance = new FieldDefinitionTypeDesignVolume85thPercentile(136, @"DesignVolume85thPercentile", @"85th Percentile Design Volume (cuft)");
+    }
+
+    public partial class FieldDefinitionTypeLandUseBasedWaterQualityScore : FieldDefinitionType
+    {
+        private FieldDefinitionTypeLandUseBasedWaterQualityScore(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeLandUseBasedWaterQualityScore Instance = new FieldDefinitionTypeLandUseBasedWaterQualityScore(137, @"LandUseBasedWaterQualityScore", @"Land Use Based Water Quality Score");
+    }
+
+    public partial class FieldDefinitionTypeReceivingWaterScore : FieldDefinitionType
+    {
+        private FieldDefinitionTypeReceivingWaterScore(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeReceivingWaterScore Instance = new FieldDefinitionTypeReceivingWaterScore(138, @"ReceivingWaterScore", @"Receiving Water Score");
     }
 }
