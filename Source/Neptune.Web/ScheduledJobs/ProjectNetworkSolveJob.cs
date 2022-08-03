@@ -59,23 +59,6 @@ namespace Neptune.Web.ScheduledJobs
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
                 projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
                 DbContext.SaveChangesWithNoAuditing();
-                // we are intentionally caching the score here to the project table for speed purposes
-                var calculatedProjectGrantScore = DbContext.vProjectGrantScores.SingleOrDefault(x => x.ProjectID == ProjectID);
-                if (calculatedProjectGrantScore != null)
-                {
-                    project.OCTAWatersheds  = calculatedProjectGrantScore.Watersheds;
-                    project.PollutantVolume  = calculatedProjectGrantScore.PollutantVolume;
-                    project.PollutantMetals = calculatedProjectGrantScore.PollutantMetals;
-                    project.PollutantBacteria = calculatedProjectGrantScore.PollutantBacteria;
-                    project.PollutantNutrients = calculatedProjectGrantScore.PollutantNutrients;
-                    project.PollutantTSS = calculatedProjectGrantScore.PollutantTSS;
-                    project.TPI = calculatedProjectGrantScore.TPI;
-                    project.SEA = calculatedProjectGrantScore.SEA;
-                    project.DryWeatherWQLRI = calculatedProjectGrantScore.DryWeatherWQLRI;
-                    project.WetWeatherWQLRI = calculatedProjectGrantScore.WetWeatherWQLRI;
-                    DbContext.SaveChangesWithNoAuditing();
-                }
-
                 SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
             }
             catch (Exception ex)

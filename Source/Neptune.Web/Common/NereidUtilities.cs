@@ -530,13 +530,15 @@ namespace Neptune.Web.Common
             var nereidResults = NetworkSolveImpl(missingNodeIDs, graph, dbContext, httpClient, false, isBaselineCondition, projectID, projectRSBIDs, projectDistributedDelineationIDs);
 
             var projectIDSqlParam = new SqlParameter("@projectID", projectID);
-            dbContext.Database.ExecuteSqlCommand(
-                "EXEC dbo.pDeleteProjectNereidResults @projectID", projectIDSqlParam);
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pDeleteProjectNereidResults @projectID", projectIDSqlParam);
 
             dbContext.ProjectNereidResults.AddRange(nereidResults.Select(x => x.toProjectNereidResult(projectID)).ToList());
             // this is a relatively hefty set, so boost the timeout way beyond reasonable to make absolutely sure it doesn't die out on us.
             dbContext.Database.CommandTimeout = 600;
             dbContext.SaveChangesWithNoAuditing();
+
+            // we are intentionally caching the score here to the project table for speed purposes
+            dbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectGrantScoreUpdate @projectID", projectIDSqlParam);
 
             return nereidResults;
         }

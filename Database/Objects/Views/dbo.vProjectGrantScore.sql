@@ -33,7 +33,7 @@ as
         , plgu.WaterQualityManagementPlanID
         , pd.DelineationTypeID
         from dbo.ProjectLoadGeneratingUnit plgu
-        join projectDelineations pd on plgu.DelineationID = pd.DelineationID
+        join projectDelineations pd on plgu.DelineationID = pd.DelineationID and pd.ProjectID = plgu.ProjectID
         where pd.DelineationTypeID = 2
 
         union all
@@ -49,7 +49,7 @@ as
         , pd.DelineationTypeID
         from projectDelineations pd
         join vRegionalSubbasinUpstream u on pd.RegionalSubbasinID = u.PrimaryKey
-        join dbo.ProjectLoadGeneratingUnit plgu on u.RegionalSubbasinID = plgu.RegionalSubbasinID
+        join dbo.ProjectLoadGeneratingUnit plgu on u.RegionalSubbasinID = plgu.RegionalSubbasinID and pd.ProjectID = plgu.ProjectID
         where pd.DelineationTypeID = 1
 ),
 projectGeometries(ProjectID, ProjectGeometry)
