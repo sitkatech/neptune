@@ -344,6 +344,7 @@ namespace Hippocamp.API.Controllers
                 return BadRequest();
             }
 
+            Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
             Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
 
             return Ok();

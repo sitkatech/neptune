@@ -12,6 +12,7 @@ namespace Hippocamp.EFModels.Entities
             projectSimpleDto.ProjectStatus = project.ProjectStatus.AsSimpleDto();
             projectSimpleDto.PrimaryContactPerson = project.PrimaryContactPerson.AsSimpleDto();
             projectSimpleDto.CreatePerson = project.CreatePerson.AsSimpleDto();
+            projectSimpleDto.HasModeledResults = project.ProjectNereidResults.Any();
         }
 
         public static ProjectHRUCharacteristicsSummaryDto AsProjectHRUCharacteristicsSummaryDto(this Project project)

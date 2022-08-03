@@ -80,6 +80,7 @@ namespace Hippocamp.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
             TreatmentBMPs.MergeProjectTreatmentBMPs(_dbContext, treatmentBMPUpsertDtos, existingTreatmentBMPs, project);
 
             return Ok();

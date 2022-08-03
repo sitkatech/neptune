@@ -2698,6 +2698,9 @@
           },
           "CreatePerson": {
             "$ref": "#/components/schemas/PersonSimpleDto"
+          },
+          "HasModeledResults": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3369,6 +3372,10 @@
             "format": "date-time",
             "nullable": true
           },
+          "OCTAWatersheds": {
+            "type": "string",
+            "nullable": true
+          },
           "PollutantVolume": {
             "type": "number",
             "format": "double",
@@ -3414,10 +3421,6 @@
             "format": "double",
             "nullable": true
           },
-          "OCTAWatersheds": {
-            "type": "string",
-            "nullable": true
-          },
           "Organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
@@ -3432,6 +3435,9 @@
           },
           "CreatePerson": {
             "$ref": "#/components/schemas/PersonSimpleDto"
+          },
+          "HasModeledResults": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

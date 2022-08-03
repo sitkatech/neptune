@@ -17,6 +17,7 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.ProjectStatus)
                 .Include(x => x.CreatePerson)
                 .Include(x => x.PrimaryContactPerson)
+                .Include(x => x.ProjectNereidResults)
                 .AsNoTracking();
         }
 
@@ -116,6 +117,26 @@ namespace Hippocamp.EFModels.Entities
             dbContext.TreatmentBMPModelingAttributes.RemoveRange(dbContext.TreatmentBMPModelingAttributes.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToList());
             dbContext.TreatmentBMPs.RemoveRange(project.TreatmentBMPs.ToList());
             dbContext.Projects.Remove(project);
+            dbContext.SaveChanges();
+        }
+
+        public static void DeleteProjectNereidResultsAndGrantScores(HippocampDbContext dbContext, int projectID)
+        {
+            var projectNereidResults = dbContext.ProjectNereidResults.Where(x => x.ProjectID == projectID).ToList();
+            dbContext.ProjectNereidResults.RemoveRange(projectNereidResults);
+
+            var project = dbContext.Projects.Single(x => x.ProjectID == projectID);
+            project.OCTAWatersheds = null;
+            project.PollutantVolume = null;
+            project.PollutantMetals = null;
+            project.PollutantBacteria = null;
+            project.PollutantNutrients = null;
+            project.PollutantTSS = null;
+            project.TPI = null;
+            project.SEA = null;
+            project.DryWeatherWQLRI = null;
+            project.WetWeatherWQLRI = null;
+
             dbContext.SaveChanges();
         }
 

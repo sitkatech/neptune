@@ -1,4 +1,6 @@
-﻿namespace Hippocamp.Models.DataTransferObjects
+﻿using System;
+
+namespace Hippocamp.Models.DataTransferObjects
 {
     public partial class ProjectSimpleDto
     {
@@ -7,5 +9,6 @@
         public ProjectStatusSimpleDto ProjectStatus { get; set; }
         public PersonSimpleDto PrimaryContactPerson { get; set; }
         public PersonSimpleDto CreatePerson { get; set; }
+        public bool HasModeledResults { get; set; }
     }
 }
