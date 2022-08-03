@@ -11,8 +11,6 @@ import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
-import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
-import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ConfirmService } from 'src/app/shared/services/confirm.service';
 
@@ -72,7 +70,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   showModelResultsPanel(): boolean {
-    return !this.project?.DoesNotIncludeTreatmentBMPs && this.projectNetworkSolveHistories != null && this.projectNetworkSolveHistories.length > 0 && this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0;
+    return !this.project?.DoesNotIncludeTreatmentBMPs && this.project?.HasModeledResults;
   }
 
   getWorkflowLink() {

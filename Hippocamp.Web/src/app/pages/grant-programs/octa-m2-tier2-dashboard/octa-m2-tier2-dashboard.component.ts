@@ -124,6 +124,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           },
           comparator: this.utilityFunctionsService.linkRendererComparator
         },
+        { headerName: 'Project Description', field: 'ProjectDescription' },
         { 
           headerComponentFramework: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'Organization' },
@@ -500,16 +501,5 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }, (() => {
       this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
     }))
-  }
-
-  public getSelectedPrioritizationMetricFieldDefinitionType(): string {
-    switch (this.selectedPrioritizationMetric.toString()) {
-      case 'Strategically Effective Area Score':
-        return 'SEAScore';
-      case 'Transportation Nexus Score':
-        return 'TPIScore';
-      default:
-        return null;
-    }
   }
 }

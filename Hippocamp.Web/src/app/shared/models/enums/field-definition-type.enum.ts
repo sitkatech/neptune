@@ -138,5 +138,7 @@ export enum FieldDefinitionTypeEnum {
     OCTAWatershed = 133,
     EffectiveAreaAcres = 134,
     DesignStormDepth85thPercentile = 135,
-    DesignVolume85thPercentile = 136
+    DesignVolume85thPercentile = 136,
+    LandUseBasedWaterQualityScore = 137,
+	ReceivingWaterScore = 138
 }

@@ -46,6 +46,7 @@ export class ProjectHRUCharacteristicsSummaryDto {
     ProjectStatus?: ProjectStatusSimpleDto;
     PrimaryContactPerson?: PersonSimpleDto;
     CreatePerson?: PersonSimpleDto;
+    HasModeledResults?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
