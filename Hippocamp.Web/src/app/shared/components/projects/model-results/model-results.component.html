@@ -59,7 +59,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.WetWeatherTreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.WetWeatherTreated /
-                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -68,7 +68,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.WetWeatherRetained |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.WetWeatherRetained /
-                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -77,7 +77,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.WetWeatherUntreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.WetWeatherUntreated /
-                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.WetWeatherInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                 </tbody>
                 <thead>
@@ -96,7 +96,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherTSSReduced/selectedProjectLoadReducingResult.WetWeatherTSSInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -106,7 +106,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherTNReduced/selectedProjectLoadReducingResult.WetWeatherTNInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -116,7 +116,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherTPReduced/selectedProjectLoadReducingResult.WetWeatherTPInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -126,7 +126,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherFCReduced/selectedProjectLoadReducingResult.WetWeatherFCInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -136,7 +136,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherTCuReduced/selectedProjectLoadReducingResult.WetWeatherTCuInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -146,7 +146,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherTPbReduced/selectedProjectLoadReducingResult.WetWeatherTPbInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -156,7 +156,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.WetWeatherTZnReduced/selectedProjectLoadReducingResult.WetWeatherTZnInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                 </tbody>
             </table>
@@ -185,7 +185,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.DryWeatherTreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.DryWeatherTreated /
-                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -194,7 +194,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.DryWeatherRetained |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.DryWeatherRetained /
-                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -203,7 +203,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.DryWeatherUntreated |
                                 neptuneModelingResultSigFig:3 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.DryWeatherUntreated /
-                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.DryWeatherInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                 </tbody>
                 <thead>
@@ -222,7 +222,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherTSSReduced/selectedProjectLoadReducingResult.DryWeatherTSSInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -232,7 +232,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherTNReduced/selectedProjectLoadReducingResult.DryWeatherTNInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -242,7 +242,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherTPReduced/selectedProjectLoadReducingResult.DryWeatherTPInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -252,7 +252,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherFCReduced/selectedProjectLoadReducingResult.DryWeatherFCInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -262,7 +262,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherTCuReduced/selectedProjectLoadReducingResult.DryWeatherTCuInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -272,7 +272,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherTPbReduced/selectedProjectLoadReducingResult.DryWeatherTPbInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -282,7 +282,7 @@
                                 neptuneModelingResultSigFig:2 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.DryWeatherTZnReduced/selectedProjectLoadReducingResult.DryWeatherTZnInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                 </tbody>
             </table>
@@ -311,7 +311,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.TotalTreated | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.TotalTreated /
-                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -320,7 +320,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.TotalRetained | neptuneModelingResultSigFig:3 |
                                 number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.TotalRetained /
-                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -329,7 +329,7 @@
                         <td><span>{{selectedProjectLoadReducingResult.TotalUntreated | neptuneModelingResultSigFig:3
                                 | number}}</span></td>
                         <td><span>{{100 * selectedProjectLoadReducingResult.TotalUntreated /
-                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: 0}}</span>%</td>
+                            selectedProjectLoadReducingResult.TotalInflow || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                 </tbody>
                 <thead>
@@ -348,7 +348,7 @@
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalTSSReduced/selectedProjectLoadReducingResult.TotalTSSInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -358,7 +358,7 @@
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalTNReduced/selectedProjectLoadReducingResult.TotalTNInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -368,7 +368,7 @@
                                 | number}}</span> kg</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalTPReduced/selectedProjectLoadReducingResult.TotalTPInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -378,7 +378,7 @@
                                 | number}}</span> billion CFUs</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalFCReduced/selectedProjectLoadReducingResult.TotalFCInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -388,7 +388,7 @@
                                 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalTCuReduced/selectedProjectLoadReducingResult.TotalTCuInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -398,7 +398,7 @@
                                 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalTPbReduced/selectedProjectLoadReducingResult.TotalTPbInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                     <tr>
                         <td class="left">
@@ -408,7 +408,7 @@
                                 | number}}</span> g</td>
                         <td><span>{{100 *
                             selectedProjectLoadReducingResult.TotalTZnReduced/selectedProjectLoadReducingResult.TotalTZnInflow
-                                || 0 | number: 0}}</span>%</td>
+                                || 0 | number: '1.0-0'}}</span>%</td>
                     </tr>
                 </tbody>
             </table>
