@@ -86,6 +86,17 @@ as return
     as
     (
         -- LG
+        -- LG for distributed delineations inside centralized upstream RSBs
+        select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
+        from dbo.ProjectNereidResult pnr
+        join dbo.Delineation d on pnr.DelineationID = d.DelineationID
+        join dbo.TreatmentBMP t on d.TreatmentBMPID = t.TreatmentBMPID
+        join projectCentralizedRSBs prsb on t.RegionalSubbasinID = prsb.RegionalSubbasinID
+        where pnr.ProjectID = @projectID
+
+        union all
+
+        -- LG for RSBs and WQMPs inside centralized upstream RSBs
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
         from dbo.ProjectNereidResult pnr
         join projectCentralizedRSBs prsb on pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
@@ -93,6 +104,7 @@ as return
 
         union all
 
+        -- LG for distributed delineations for this project
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
         from dbo.ProjectNereidResult pnr
         join projectDelineations pd on pnr.ProjectID = pd.ProjectID and pnr.DelineationID = pd.DelineationID 
