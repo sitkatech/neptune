@@ -89,7 +89,7 @@ as return
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
         from dbo.ProjectNereidResult pnr
         join projectCentralizedRSBs prsb on pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
-        where TreatmentBMPID is null and NodeID not like '%-TMNT'
+        where pnr.ProjectID = @projectID and TreatmentBMPID is null and NodeID not like '%-TMNT'
 
         union all
 
@@ -101,7 +101,7 @@ as return
         -- LR existing
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingExisting' as NereidResultType
         from dbo.ProjectNereidResult pnr
-        join projectDelineations pd on pnr.ProjectID != pd.ProjectID and pnr.TreatmentBMPID = pd.TreatmentBMPID
+        join dbo.TreatmentBMP pd on pnr.TreatmentBMPID = pd.TreatmentBMPID and pnr.ProjectID != isnull(pd.ProjectID, 0)
         join projectCentralizedRSBs prsb on pd.RegionalSubbasinID = prsb.RegionalSubbasinID
         where pnr.ProjectID = @projectID
 
@@ -110,7 +110,7 @@ as return
         from dbo.ProjectNereidResult pnr
         join dbo.WaterQualityManagementPlan t on pnr.WaterQualityManagementPlanID = t.WaterQualityManagementPlanID
         join projectCentralizedRSBs prsb on pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
-        where NodeID like '%-TMNT'
+        where pnr.ProjectID = @projectID and NodeID like '%-TMNT'
 
         union all
 
@@ -140,7 +140,7 @@ as return
             sum(WetWeatherTPbGenerated) as WetWeatherTPbGenerated,
             sum(WetWeatherTZnGenerated) as WetWeatherTZnGenerated
         from dbo.vProjectLoadGeneratingResult p
-        join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
+        join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = pnr.ProjectNereidResultID
         group by p.ProjectID
     ),
     projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, IsPartOfProject)
@@ -167,7 +167,7 @@ as return
 
             p.IsPartOfProject
         from dbo.vProjectLoadReducingResult p
-        join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
+        join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = pnr.ProjectNereidResultID
     )
 
 
