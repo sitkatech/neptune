@@ -7,7 +7,6 @@ import 'leaflet.marker.highlight';
 import 'leaflet-loading';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DelineationService } from 'src/app/services/delineation.service';
 import { BoundingBoxDto, DelineationSimpleDto, ProjectHRUCharacteristicsSummaryDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
@@ -15,7 +14,6 @@ import { environment } from 'src/environments/environment';
 import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { ProjectService } from 'src/app/services/project/project.service';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
@@ -28,7 +26,6 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
-import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 
 declare var $: any;
 
@@ -83,7 +80,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private delineationService: DelineationService,
     private appRef: ApplicationRef,
     private compileService: CustomCompileService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
@@ -102,9 +98,10 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         forkJoin({
           projects: this.projectService.getProjectsSharedWithOCTAM2Tier2GrantProgram(),
           treatmentBMPs: this.projectService.getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(),
-          delineations: this.delineationService.getAllDelineations(),
+          delineations: this.projectService.getAllDelineations(),
         }).subscribe(({ projects, treatmentBMPs, delineations}) => {
           this.projects = projects;
+          console.log(projects);
           this.treatmentBMPs = treatmentBMPs;
           this.addPlannedProjectTreatmentBMPLayerToMap();
           this.delineations = delineations;

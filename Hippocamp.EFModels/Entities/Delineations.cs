@@ -25,9 +25,9 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        public static List<DelineationSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
+        public static List<DelineationSimpleDto> ListProjectDelineationsAsSimpleDto(HippocampDbContext dbContext)
         {
-            var treatmentBMPDisplayDtos = GetDelineationsImpl(dbContext)
+            var treatmentBMPDisplayDtos = GetDelineationsImpl(dbContext).Where(x => x.TreatmentBMP.ProjectID != null)
                 .Select(x => x.AsSimpleDto())
                 .ToList();
 
@@ -39,7 +39,7 @@ namespace Hippocamp.EFModels.Entities
             var person = People.GetByID(dbContext, personID);
             if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
             {
-                return ListAsSimpleDto(dbContext);
+                return ListProjectDelineationsAsSimpleDto(dbContext);
             }
 
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);

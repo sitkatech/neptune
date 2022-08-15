@@ -402,7 +402,7 @@ namespace Hippocamp.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
+            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(_dbContext);
             var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
@@ -427,7 +427,7 @@ namespace Hippocamp.API.Controllers
                 return Forbid();
             }
 
-            var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
+            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(_dbContext);
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(_dbContext, projectIDs);
 
             return Ok(treatmentBMPDisplayDtos);
@@ -439,7 +439,7 @@ namespace Hippocamp.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var projectIDs = Projects.ListOCTAM2Tier2Projects(_dbContext).Select(x => x.ProjectID).ToList();
+            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(_dbContext);
             var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);
 
             await using var stream = new MemoryStream();
@@ -453,5 +453,19 @@ namespace Hippocamp.API.Controllers
 
             return File(stream.ToArray(), "text/csv");
         }
+
+        [HttpGet("projects/delineations")]
+        [UserViewFeature]
+        public ActionResult<DelineationSimpleDto> List()
+        {
+            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!personDto.IsOCTAGrantReviewer)
+            {
+                return Forbid();
+            }
+            var delineationsSimpleDtos = Delineations.ListProjectDelineationsAsSimpleDto(_dbContext);
+            return Ok(delineationsSimpleDtos);
+        }
+
     }
 }

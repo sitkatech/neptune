@@ -16,9 +16,4 @@ export class DelineationService {
     let route = `delineations`;
     return this.apiService.getFromApi(route);
   }
-
-  getAllDelineations() : Observable<Array<DelineationSimpleDto>> {
-    let route = `delineations/all`;
-    return this.apiService.getFromApi(route);
-  }
 }

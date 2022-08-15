@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
-import { DelineationUpsertDto, ProjectLoadReducingResultDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
+import { DelineationSimpleDto, DelineationUpsertDto, ProjectLoadReducingResultDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto} from 'src/app/shared/generated/model/models';
 
 
 @Injectable({
@@ -143,5 +143,10 @@ export class ProjectService {
   downloadOCTAM2Tier2GrantProgramBMPModelResults(): Observable<Blob> {
     let route = `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download`;
     return this.httpClient.get(route, { responseType: "blob"});
+  }
+
+  getAllDelineations() : Observable<Array<DelineationSimpleDto>> {
+    let route = `projects/delineations`;
+    return this.apiService.getFromApi(route);
   }
 }

@@ -285,10 +285,22 @@ namespace Hippocamp.EFModels.Entities
 
         public static IEnumerable<Project> ListOCTAM2Tier2Projects(HippocampDbContext dbContext)
         {
-            var projects = GetProjectsImpl(dbContext).Include(x => x.ProjectHRUCharacteristics)
+            var projects = dbContext.Projects
+                .Include(x => x.Organization)
+                .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+                .Include(x => x.ProjectStatus)
+                .Include(x => x.CreatePerson)
+                .Include(x => x.PrimaryContactPerson)
+                .Include(x => x.ProjectHRUCharacteristics)
+                .AsNoTracking()
                 .Where(x => x.ShareOCTAM2Tier2Scores);
 
             return projects.ToList();
+        }
+
+        public static List<int> ListOCTAM2Tier2ProjectIDs(HippocampDbContext dbContext)
+        {
+            return dbContext.Projects.AsNoTracking().Where(x => x.ShareOCTAM2Tier2Scores).Select(x => x.ProjectID).ToList();
         }
 
         public static List<ProjectModeledResultSummaryDto> ListByIDsAsModeledResultSummaryDtos(HippocampDbContext dbContext, List<int> projectIDs)
