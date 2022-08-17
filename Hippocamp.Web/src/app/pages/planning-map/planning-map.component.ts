@@ -70,6 +70,7 @@ export class PlanningMapComponent implements OnInit {
     fillOpacity: 0.2,
     opacity: 1
   }
+  private treatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs";
 
   private viewInitialized: boolean = false;
 
@@ -214,6 +215,19 @@ export class PlanningMapComponent implements OnInit {
     this.setControl();
     this.registerClickEvents();
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
+  
+    this.map.on('overlayadd overlayremove', e => {
+      if (e.name != this.treatmentBMPOverlayName) {
+        return;
+      }
+      this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
+        if (e.type == 'overlayremove') {
+          layer.disablePermanentHighlight();
+        } else {
+          layer.enablePermanentHighlight();
+        }
+      });
+    });
   }
 
   public initializePanes(): void {
@@ -289,7 +303,7 @@ export class PlanningMapComponent implements OnInit {
     });
 
     this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
-    this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs")
+    this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.treatmentBMPOverlayName)
     this.map.fireEvent('dataload');
   }
 
@@ -336,6 +350,11 @@ export class PlanningMapComponent implements OnInit {
   }
 
   public selectTreatmentBMPImpl(treatmentBMPID: number) {
+    if (!this.map.hasLayer(this.plannedProjectTreatmentBMPsLayer)) {
+      this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => layer.disablePermanentHighlight())
+      this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
+    }
+
     let selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.selectedTreatmentBMP = selectedTreatmentBMP;
@@ -364,10 +383,6 @@ export class PlanningMapComponent implements OnInit {
     });
 
     this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-
-    if (!this.map.hasLayer(this.plannedProjectTreatmentBMPsLayer)) {
-      this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
-    }
   }
 
   public selectProjectImpl(projectID: number) {
