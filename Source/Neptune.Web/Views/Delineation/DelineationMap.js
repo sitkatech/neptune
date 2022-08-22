@@ -114,7 +114,7 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
         true);
 
     var WQMPIconUrl = '/Content/img/legendImages/wqmp.png' ;
-    var WQMPLabel = "<img src=" + WQMPIconUrl + " height='15'/> WQMPs";
+    var WQMPLabel = "<img src=" + WQMPIconUrl + " height='15px'/> WQMPs";
     this.WQMPsLayer = this.addWmsLayer("OCStormwater:WaterQualityManagementPlans",
         WQMPLabel,
         {
