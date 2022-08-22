@@ -24,19 +24,3 @@ from
 	left join dbo.StormwaterJurisdiction sj on t.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 	left join dbo.Organization o on sj.OrganizationID = o.OrganizationID
 	where t.ProjectID is null
-
-union all
-
-select 
-	2 * WaterQualityManagementPlanID as PrimaryKey,
-	Null as DelineationID,
-	WaterQualityManagementPlanID,
-	WaterQualityManagementPlanGeometry as DelineationGeometry,
-	'WQMP' as DelineationType,
-	Null as TreatmentBMPID,
-	StormwaterJurisdictionID,
-	Null as TreatmentBMPName,
-	OrganizationName,
-	'Provisional' as DelineationStatus,
-    cast(1 as bit) as IsAnalyzedInModelingModule
-from dbo.vGeoServerWaterQualityManagementPlan
