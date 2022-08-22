@@ -112,6 +112,15 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
             maxZoom: 22
         },
         true);
+
+    var WQMPIconUrl = '/Content/img/legendImages/wqmp.png';
+    var WQMPLabel = "<img src=" + WQMPIconUrl + "/> WQMPs";
+    this.WQMPsLayer = this.addWmsLayer("OCStormwater:WaterQualityManagementPlans",
+        WQMPLabel,
+        {
+            maxZoom: 22
+        },
+        true);
 };
 
 NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
