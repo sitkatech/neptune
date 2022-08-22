@@ -1,0 +1,20 @@
+<layer>
+  <name>WaterQualityManagementPlans</name>
+  <id>LayerInfoImpl--2d826624:182adfc5c27:-7ff7</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--6b7ad7f0:182b8a08d08:-7fff</id>
+  </defaultStyle>
+  <styles class="linked-hash-set">
+    <style>
+      <id>StyleInfoImpl--6b7ad7f0:182b8a08d08:-7fff</id>
+    </style>
+  </styles>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--2d826624:182adfc5c27:-7ff8</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
