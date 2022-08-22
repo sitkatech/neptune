@@ -72,7 +72,7 @@ export class PlanningMapComponent implements OnInit {
     opacity: 1
   }
   private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs";
-  private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs";
+  private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs";
 
   private viewInitialized: boolean = false;
 
@@ -325,7 +325,7 @@ export class PlanningMapComponent implements OnInit {
     const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null));
     this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: MarkerHelper.iconDefault })
+        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker })
       },
       onEachFeature: (feature, layer) => {
         layer.bindPopup(

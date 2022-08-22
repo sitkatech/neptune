@@ -7,6 +7,7 @@ export class MarkerHelper {
     static iconDefault = MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath('/assets/marker-icon.png');
     static selectedMarker = MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath('/assets/main/map-icons/marker-icon-selected.png');
     static treatmentBMPMarker = MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath('/assets/main/map-icons/marker-icon-violet.png');
+    static inventoriedTreatmentBMPMarker = MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath('/assets/main/map-icons/marker-icon-orange.png')
     
     public static fixMarkerPath() {
         delete L.Icon.Default.prototype._getIconUrl;
