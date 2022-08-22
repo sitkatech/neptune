@@ -54,6 +54,7 @@ export class PlanningMapComponent implements OnInit {
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
   public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
+  public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
   public selectedProjectDelineationsLayer: L.GeoJSON<any>;
   private boundingBox: BoundingBoxDto;
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
@@ -70,7 +71,8 @@ export class PlanningMapComponent implements OnInit {
     fillOpacity: 0.2,
     opacity: 1
   }
-  private treatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs";
+  private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs";
+  private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs";
 
   private viewInitialized: boolean = false;
 
@@ -102,8 +104,10 @@ export class PlanningMapComponent implements OnInit {
           delineations: this.delineationService.getDelineations()
         }).subscribe(({ projects, treatmentBMPs, delineations }) => {
           this.projects = projects;
+
           this.treatmentBMPs = treatmentBMPs;
-          this.addPlannedProjectTreatmentBMPLayerToMap();
+          this.addTreatmentBMPLayersToMap();
+
           this.delineations = delineations;
         });
         this.initMap();
@@ -225,7 +229,7 @@ export class PlanningMapComponent implements OnInit {
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
   
     this.map.on('overlayadd overlayremove', e => {
-      if (e.name != this.treatmentBMPOverlayName) {
+      if (e.name != this.plannedTreatmentBMPOverlayName) {
         return;
       }
       this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
@@ -287,19 +291,24 @@ export class PlanningMapComponent implements OnInit {
     });
   }
 
-  public addPlannedProjectTreatmentBMPLayerToMap(): void {
+  public addTreatmentBMPLayersToMap(): void {
     //If you were called and there is no map, try again in a little bit
     if (!this.map) {
-      setTimeout(() => { this.addPlannedProjectTreatmentBMPLayerToMap() }, 500);
+      setTimeout(() => { this.addTreatmentBMPLayersToMap() }, 500);
     }
 
     if (this.plannedProjectTreatmentBMPsLayer) {
       this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
       this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
     }
+    if (this.inventoriedTreatmentBMPsLayer) {
+      this.map.removeLayer(this.inventoriedTreatmentBMPsLayer);
+      this.layerControl.removeLayer(this.inventoriedTreatmentBMPsLayer);
+    }
 
-    const treatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
-    this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPGeoJSON, {
+    // add planned project BMPs layer
+    const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
+    this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
       },
@@ -309,9 +318,25 @@ export class PlanningMapComponent implements OnInit {
         })
       },
     });
-
     this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
-    this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.treatmentBMPOverlayName)
+    this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName)
+    
+    // add inventoried BMPs layer
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null));
+    this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
+      pointToLayer: (feature, latlng) => {
+        return L.marker(latlng, { icon: MarkerHelper.iconDefault })
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(
+          `<b>Name:</b> ${feature.properties.TreatmentBMPName} <br>`
+          + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+        );
+      },
+    });
+
+    this.layerControl.addOverlay(this.inventoriedTreatmentBMPsLayer, this.inventoriedTreatmentBMPOverlayName);
+    
     this.map.fireEvent('dataload');
   }
 
@@ -334,7 +359,9 @@ export class PlanningMapComponent implements OnInit {
         "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
       },
       "properties": {
-        TreatmentBMPID: x.TreatmentBMPID
+        TreatmentBMPID: x.TreatmentBMPID,
+        TreatmentBMPName: x.TreatmentBMPName,
+        TreatmentBMPTypeName: x.TreatmentBMPTypeName
       }
     };
   }
