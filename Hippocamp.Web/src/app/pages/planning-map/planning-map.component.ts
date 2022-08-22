@@ -9,7 +9,7 @@ import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DelineationService } from 'src/app/services/delineation.service';
 import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
-import { BoundingBoxDto, DelineationSimpleDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationSimpleDto, TreatmentBMPDisplayDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/models';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
@@ -70,6 +70,7 @@ export class PlanningMapComponent implements OnInit {
     fillOpacity: 0.2,
     opacity: 1
   }
+  private treatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs";
 
   private viewInitialized: boolean = false;
 
@@ -222,6 +223,19 @@ export class PlanningMapComponent implements OnInit {
     this.setControl();
     this.registerClickEvents();
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
+  
+    this.map.on('overlayadd overlayremove', e => {
+      if (e.name != this.treatmentBMPOverlayName) {
+        return;
+      }
+      this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
+        if (e.type == 'overlayremove') {
+          layer.disablePermanentHighlight();
+        } else {
+          layer.enablePermanentHighlight();
+        }
+      });
+    });
   }
 
   public initializePanes(): void {
@@ -281,6 +295,7 @@ export class PlanningMapComponent implements OnInit {
 
     if (this.plannedProjectTreatmentBMPsLayer) {
       this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
+      this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
     }
 
     const treatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
@@ -296,6 +311,7 @@ export class PlanningMapComponent implements OnInit {
     });
 
     this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
+    this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.treatmentBMPOverlayName)
     this.map.fireEvent('dataload');
   }
 
@@ -342,6 +358,11 @@ export class PlanningMapComponent implements OnInit {
   }
 
   public selectTreatmentBMPImpl(treatmentBMPID: number) {
+    if (!this.map.hasLayer(this.plannedProjectTreatmentBMPsLayer)) {
+      this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => layer.disablePermanentHighlight())
+      this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
+    }
+
     let selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
     this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.selectedTreatmentBMP = selectedTreatmentBMP;
@@ -367,7 +388,8 @@ export class PlanningMapComponent implements OnInit {
       // if (!this.map.getBounds().contains(layer.getLatLng())) {
       //   this.map.flyTo(layer.getLatLng());
       // }
-    })
+    });
+
     this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
   }
 
