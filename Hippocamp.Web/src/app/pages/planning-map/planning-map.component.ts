@@ -71,7 +71,7 @@ export class PlanningMapComponent implements OnInit {
     fillOpacity: 0.2,
     opacity: 1
   }
-  private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Treatment BMPs";
+  private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Project BMPs";
   private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs (Verified)";
 
   private viewInitialized: boolean = false;
@@ -183,7 +183,7 @@ export class PlanningMapComponent implements OnInit {
       styles: "jurisdiction_orange"
     } as L.WMSOptions);
 
-    let verifiedWQMPsWMSOptions = ({
+    let WQMPsWMSOptions = ({
       layers: "OCStormwater:WaterQualityManagementPlans",
       transparent: true,
       format: "image/png",
@@ -202,7 +202,7 @@ export class PlanningMapComponent implements OnInit {
       "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
       "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
-      "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedWQMPsWMSOptions),
+      "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", WQMPsWMSOptions),
       "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
 
@@ -232,13 +232,11 @@ export class PlanningMapComponent implements OnInit {
       if (e.name != this.plannedTreatmentBMPOverlayName) {
         return;
       }
-      this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
-        if (e.type == 'overlayremove') {
+      if (e.type == 'overlayremove') {
+        this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
           layer.disablePermanentHighlight();
-        } else {
-          layer.enablePermanentHighlight();
-        }
-      });
+        });
+      }
     });
   }
 
@@ -445,6 +443,7 @@ export class PlanningMapComponent implements OnInit {
       this.selectedProjectDelineationsLayer.addTo(featureGroupForZoom);
     }
 
+    this.map.fitBounds(featureGroupForZoom.getBounds(), {padding: new L.Point(50,50)});
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
       layer.disablePermanentHighlight();
       layer.setIcon(MarkerHelper.treatmentBMPMarker);
@@ -453,7 +452,6 @@ export class PlanningMapComponent implements OnInit {
           layer.enablePermanentHighlight();
         }
       });
-    this.map.fitBounds(featureGroupForZoom.getBounds(), {padding: new L.Point(50,50)});
 
     this.projectsGrid.api.forEachNode(node => {
       if (node.data.ProjectID === projectID) {
