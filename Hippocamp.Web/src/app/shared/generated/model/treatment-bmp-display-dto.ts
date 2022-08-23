@@ -17,6 +17,7 @@ export class TreatmentBMPDisplayDto {
     Longitude?: number;
     Latitude?: number;
     ProjectID?: number;
+    InventoryIsVerified?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

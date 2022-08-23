@@ -5,6 +5,7 @@ import 'leaflet-gesture-handling';
 import 'leaflet.fullscreen';
 import 'leaflet.marker.highlight';
 import 'leaflet-loading';
+import 'leaflet.markercluster';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DelineationService } from 'src/app/services/delineation.service';
@@ -320,7 +321,7 @@ export class PlanningMapComponent implements OnInit {
     this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName)
     
     // add inventoried BMPs layer
-    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null));
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null && x.InventoryIsVerified));
     this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker })
@@ -333,7 +334,16 @@ export class PlanningMapComponent implements OnInit {
       },
     });
 
-    this.layerControl.addOverlay(this.inventoriedTreatmentBMPsLayer, this.inventoriedTreatmentBMPOverlayName);
+    var clusteredInventoriedBMPLayer = L.markerClusterGroup({
+      iconCreateFunction: function(cluster) {
+        var childCount = cluster.getChildCount();
+
+          return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', 
+            className: 'marker-cluster', iconSize: new L.Point(40, 40) });
+      }
+    });
+    clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+    this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     
     this.map.fireEvent('dataload');
   }

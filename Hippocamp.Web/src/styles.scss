@@ -7,6 +7,8 @@
 @import "scss/_grids.scss";
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet-draw/dist/leaflet.draw.css";
+@import '~leaflet.markercluster/dist/MarkerCluster.css';
+@import '~leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 @import "scss/_sticky_footer.scss";
 @import "scss/_forms.scss";
@@ -221,6 +223,14 @@ img:hover+.light.temporary .glow {
     left: 50%;
     transform: translate(-50%, -50%);
     transition: all 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.marker-cluster {
+	background-color: #9996
+}
+
+.marker-cluster div {
+	background-color: #999b
 }
 
 img:hover+.light.temporary .flare {

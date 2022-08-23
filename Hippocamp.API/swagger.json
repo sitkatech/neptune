@@ -3574,6 +3574,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "InventoryIsVerified": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
