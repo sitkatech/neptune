@@ -77,10 +77,10 @@ namespace Neptune.Web.ScheduledJobs
             Models.Project project, bool successful, string errorMessage)
         {
             var projectName = project.ProjectName;
-            var subject = successful ? $"Modeled Results calculated for Project:{projectName}" : $"Model Results calculation failed for Project:{projectName}";
+            var subject = successful ? $"Modeled Results calculated for Project: {projectName}" : $"Model Results calculation failed for Project: {projectName}";
             var requestPersonEmail = requestPerson.Email;
             var errorContext = $"<br /><br/>See the provided error message for more details:\n {errorMessage}";
-            var planningURL = $"{NeptuneWebConfiguration.CanonicalHostNamePlanning}/projects/edit/{project.ProjectID}/stormwater-treatments/modeled-performance";
+            var planningURL = $"{NeptuneWebConfiguration.CanonicalHostNamePlanning}/projects/edit/{project.ProjectID}/stormwater-treatments/modeled-performance-and-metrics";
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
 <strong>{subject}</strong><br />
