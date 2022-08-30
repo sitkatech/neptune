@@ -26,6 +26,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
+import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 
 declare var $: any;
 
@@ -42,6 +43,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
   public projects: Array<ProjectHRUCharacteristicsSummaryDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
+  private verifiedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationSimpleDto>;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
@@ -55,6 +57,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
   public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
+  public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
   public selectedProjectDelineationsLayer: L.GeoJSON<any>;
   private boundingBox: BoundingBoxDto;
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
@@ -66,6 +69,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   public selectedPrioritizationMetric = PrioritizationMetric.NoMetric;
   public prioritizationMetricOverlayLayer: L.Layers;
 
+  private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Project BMPs";
+  private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs (Verified)";
   private delineationDefaultStyle = {
     color: '#51F6F8',
     fillOpacity: 0.2,
@@ -85,6 +90,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
     private cdr: ChangeDetectorRef,
     private projectService: ProjectService,
+    private treatmentBMPService: TreatmentBMPService,
     private wfsService: WfsService,
     private utilityFunctionsService: UtilityFunctionsService,
     private alertService: AlertService
@@ -98,12 +104,13 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         forkJoin({
           projects: this.projectService.getProjectsSharedWithOCTAM2Tier2GrantProgram(),
           treatmentBMPs: this.projectService.getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(),
+          verifiedTreatmentBMPs: this.treatmentBMPService.getVerifiedTreatmentBMPs(),
           delineations: this.projectService.getAllDelineations(),
-        }).subscribe(({ projects, treatmentBMPs, delineations}) => {
+        }).subscribe(({ projects, treatmentBMPs, verifiedTreatmentBMPs, delineations}) => {
           this.projects = projects;
-          console.log(projects);
           this.treatmentBMPs = treatmentBMPs;
-          this.addPlannedProjectTreatmentBMPLayerToMap();
+          this.verifiedTreatmentBMPs = treatmentBMPs;
+          this.addTreatmentBMPLayersToMap();
           this.delineations = delineations;
         });
         this.initMap();
@@ -270,18 +277,24 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     });
   }
 
-  public addPlannedProjectTreatmentBMPLayerToMap(): void {
+  public addTreatmentBMPLayersToMap(): void {
     //If you were called and there is no map, try again in a little bit
     if (!this.map) {
-      setTimeout(() => { this.addPlannedProjectTreatmentBMPLayerToMap() }, 500);
+      setTimeout(() => { this.addTreatmentBMPLayersToMap() }, 500);
     }
 
     if (this.plannedProjectTreatmentBMPsLayer) {
       this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
+      this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
+    }
+    if (this.inventoriedTreatmentBMPsLayer) {
+      this.map.removeLayer(this.inventoriedTreatmentBMPsLayer);
+      this.layerControl.removeLayer(this.inventoriedTreatmentBMPsLayer);
     }
 
-    const treatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
-    this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPGeoJSON, {
+    // add planned project BMPs layer
+    const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
+    this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
       },
@@ -291,8 +304,34 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         })
       },
     });
-
     this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
+    this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName)
+    
+    // add inventoried BMPs layer
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.verifiedTreatmentBMPs);
+    this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
+      pointToLayer: (feature, latlng) => {
+        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker })
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(
+          `<b>Name:</b> ${feature.properties.TreatmentBMPName} <br>`
+          + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+        );
+      },
+    });
+
+    var clusteredInventoriedBMPLayer = L.markerClusterGroup({
+      iconCreateFunction: function(cluster) {
+        var childCount = cluster.getChildCount();
+
+          return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', 
+            className: 'marker-cluster', iconSize: new L.Point(40, 40) });
+      }
+    });
+    clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+    this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
+    
     this.map.fireEvent('dataload');
   }
 
@@ -315,7 +354,9 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
       },
       "properties": {
-        TreatmentBMPID: x.TreatmentBMPID
+        TreatmentBMPID: x.TreatmentBMPID,
+        TreatmentBMPName: x.TreatmentBMPName,
+        TreatmentBMPTypeName: x.TreatmentBMPTypeName
       }
     };
   }

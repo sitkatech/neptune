@@ -46,4 +46,9 @@ export class TreatmentBMPService {
     let route = `treatmentBMPs`;
     return this.apiService.getFromApi(route);
   }
+
+  getVerifiedTreatmentBMPs(): Observable<Array<TreatmentBMPDisplayDto>> {
+    let route = `treatmentBMPs/verified`;
+    return this.apiService.getFromApi(route);
+  }
 }

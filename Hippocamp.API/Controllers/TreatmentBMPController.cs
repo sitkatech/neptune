@@ -100,5 +100,13 @@ namespace Hippocamp.API.Controllers
 
             return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(_dbContext, regionalSubbasin.RegionalSubbasinID));
         }
+
+        [HttpGet("treatmentBMPs/verified")]
+        [UserViewFeature]
+        public ActionResult<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs()
+        {
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListVerifiedTreatmentBMPs(_dbContext);
+            return Ok(treatmentBMPDisplayDtos);
+        }
     }
 }

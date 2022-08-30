@@ -124,6 +124,12 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPModelingAttributeDropdownItemDtos;
         }
 
+        public static List<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs(HippocampDbContext dbContext)
+        {
+            return GetTreatmentBMPsImpl(dbContext).Where(x => x.ProjectID == null && x.InventoryIsVerified)
+                .Select(x => x.AsDisplayDto()).ToList();
+        }
+
         public static void MergeProjectTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingTreatmentBMPs, Project project)
         {
             var existingProjectTreatmentBMPs = existingTreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
