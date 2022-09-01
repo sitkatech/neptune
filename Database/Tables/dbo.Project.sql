@@ -17,6 +17,7 @@ CREATE TABLE [dbo].[Project](
 	[CalculateOCTAM2Tier2Scores] [bit] NOT NULL,
 	[ShareOCTAM2Tier2Scores] [bit] NOT NULL,
 	[OCTAM2Tier2ScoresLastSharedDate] [datetime] NULL,
+	[OCTAWatersheds] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[PollutantVolume] [float] NULL,
 	[PollutantMetals] [float] NULL,
 	[PollutantBacteria] [float] NULL,
@@ -26,7 +27,6 @@ CREATE TABLE [dbo].[Project](
 	[SEA] [float] NULL,
 	[DryWeatherWQLRI] [float] NULL,
 	[WetWeatherWQLRI] [float] NULL,
-	[OCTAWatersheds] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_Project_ProjectID] PRIMARY KEY CLUSTERED 
 (
 	[ProjectID] ASC
