@@ -75,13 +75,7 @@ namespace Neptune.Web.ScheduledJobs
                     parcel.ParcelGeometry4326 =
                         CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
                     
-                    parcel.OwnerName = parcelStaging.OwnerName;
-                    parcel.ParcelStreetNumber = parcelStaging.ParcelStreetNumber;
                     parcel.ParcelAddress = parcelStaging.ParcelAddress;
-                    parcel.ParcelZipCode = parcelStaging.ParcelZipCode;
-                    parcel.LandUse = parcelStaging.LandUse;
-                    parcel.SquareFeetHome = parcelStaging.SquareFeetHome;
-                    parcel.SquareFeetLot = parcelStaging.SquareFeetLot;
 
                     parcelsToUpload.Add(parcel);
                     count++;
@@ -106,7 +100,7 @@ namespace Neptune.Web.ScheduledJobs
                         From = DoNotReplyMailAddress()
                     };
 
-                    mailMessage.To.Add(person.Email);
+                    mailMessage.To.Add("jquishenberry@esassoc.com");
                     SitkaSmtpClient.Send(mailMessage);
                 }
                 else

@@ -73,22 +73,18 @@ namespace Neptune.Web.Views.ParcelLayerUpload
                     {
                         var columns = new List<string>
                         {
-                            "ASSESSMENT_NO as ParcelNumber",
-                            "OWNER_NAMES as OwnerName",
-                            "SITE_ADDR_NO as ParcelStreetNumber",
-                            "SITE_ADDRESS as ParcelAddress",
-                            "SITE_ZIP5 as ParcelZipCode",
-                            "USE_DQ_LANDUSE as LandUse",
-                            "SQFT_HOME as SquareFeetHome",
-                            "SQFT_LOT as SquareFeetLot",
-                            "SHAPE_Area as ParcelStagingAreaSquareFeet",
-//                            "SHAPE as ParcelStagingGeometry", // only needed if in local dev since we are using gdal 3 but qa and prod use gdal 2
+                            "AssessmentNo as ParcelNumber",
+                            "SiteAddress as ParcelAddress",
+                            "Shape_Area as ParcelStagingAreaSquareFeet",
+                            "Shape as ParcelStagingGeometry",
                             $"{currentPerson.PersonID} as UploadedByPersonID"
                         };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
                             "ParcelStaging", columns,
-                            NeptuneWebConfiguration.DatabaseConnectionString, true,
-                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_MULTIPOLYGON);
+                            NeptuneWebConfiguration.DatabaseConnectionString, 
+                            true,
+                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_MULTIPOLYGON, 
+                            "WHERE AssessmentNo is not null");
                     }
                     catch (Ogr2OgrCommandLineException e)
                     {

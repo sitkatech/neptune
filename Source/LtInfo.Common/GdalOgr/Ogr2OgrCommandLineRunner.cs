@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace LtInfo.Common.GdalOgr
 {
@@ -61,14 +62,14 @@ namespace LtInfo.Common.GdalOgr
         /// </summary>
         public void ImportFileGdbToMsSql(FileInfo inputGdbFile, string sourceLayerName, string destinationTableName,
             List<string> columnNameList, string connectionString, bool enforceGeometryType,
-            string geometryTypeToEnforce)
+            string geometryTypeToEnforce, string whereClause)
         {
             Check.Require(inputGdbFile.FullName.ToLower().EndsWith(".gdb.zip"),
                 $"Input filename for GDB input must end with .gdb.zip. Filename passed is {inputGdbFile.FullName}");
             Check.RequireFileExists(inputGdbFile, "Can't find input File GDB for import with ogr2ogr");
 
             var databaseConnectionString = $"MSSQL:{connectionString}";
-            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce);
+            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce, whereClause);
             ExecuteOgr2OgrCommand(commandLineArguments);
         }
         
@@ -174,7 +175,7 @@ namespace LtInfo.Common.GdalOgr
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -progress -append --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs "EPSG:4326" -f MSSQLSpatial "MSSQL:server=(local);database=Scratch;trusted_connection=yes" "C:\temp\GdalScratch\Sub_Actions_20131219.gdb" "Sub_Actions_Polygon_20131219" -nln MyTable</example>
         /// </summary>
-        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce)
+        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce, string whereClause)
         {
             var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
             var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
@@ -183,7 +184,7 @@ namespace LtInfo.Common.GdalOgr
                 $"Found column names with separator character \"{ogr2OgrColumnListSeparator}\", can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
 
             var selectStatement =
-                $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName}";
+                $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName} {whereClause}";
             var commandLineArguments = new List<string>
             {
                 "-append",
