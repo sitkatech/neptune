@@ -100,7 +100,7 @@ namespace Neptune.Web.ScheduledJobs
                         From = DoNotReplyMailAddress()
                     };
 
-                    mailMessage.To.Add("jquishenberry@esassoc.com");
+                    mailMessage.To.Add(person.Email);
                     SitkaSmtpClient.Send(mailMessage);
                 }
                 else
