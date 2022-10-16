@@ -12,7 +12,6 @@ namespace Hippocamp.EFModels.Entities
         public int PrimaryKey { get; set; }
         public int ProjectID { get; set; }
         public double? ProjectArea { get; set; }
-        public double? TotalProjectArea { get; set; }
         public double? ImperviousAreaTreatedAcres { get; set; }
         [StringLength(8000)]
         [Unicode(false)]

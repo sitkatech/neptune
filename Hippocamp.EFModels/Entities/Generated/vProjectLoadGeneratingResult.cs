@@ -48,5 +48,6 @@ namespace Hippocamp.EFModels.Entities
         public double? WinterDryWeatherTCuGenerated { get; set; }
         public double? WinterDryWeatherTPbGenerated { get; set; }
         public double? WinterDryWeatherTZnGenerated { get; set; }
+        public double? ImperviousAreaTreatedAcres { get; set; }
     }
 }

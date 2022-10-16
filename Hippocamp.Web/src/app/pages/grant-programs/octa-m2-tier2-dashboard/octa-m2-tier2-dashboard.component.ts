@@ -140,8 +140,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },
         this.utilityFunctionsService.createDateColumnDef('Last Shared On', 'OCTAM2Tier2ScoresLastSharedDate', 'short', 140),
-        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('AreaTreatedAcres', 'Area', 'Area', 'Area Treated (ac)', null, 2),
-        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('ImperviousAreaTreatedAcres', 'ImperviousAcres', 'ImperviousArea', 'Impervious Area Treated (ac)', 220, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('AreaTreatedAcres', 'AreaTreatedAcres', 'Area', 'Area Treated (ac)', null, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('ImperviousAreaTreatedAcres', 'ImperviousAreaTreatedAcres', 'ImperviousArea', 'Impervious Area Treated (ac)', 220, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('SEAScore', 'SEA', 'SEAScore', 'SEA Score', 90, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('TPIScore', 'TPI', 'TPIScore', 'TPI Score', 90, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('WQLRI', 'DryWeatherWQLRI', 'WQLRI', 'Dry Weather WQLRI', null, 2),
