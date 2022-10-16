@@ -18,7 +18,7 @@ set p.OCTAWatersheds  = pgs.Watersheds,
     p.SEA = pgs.SEA,
     p.DryWeatherWQLRI = pgs.DryWeatherWQLRI,
     p.WetWeatherWQLRI = pgs.WetWeatherWQLRI,
-    p.AreaTreatedAcres = pgs.TotalProjectArea,
+    p.AreaTreatedAcres = pgs.ProjectArea,
     p.ImperviousAreaTreatedAcres = pgs.ImperviousAreaTreatedAcres
 from dbo.Project p
 join dbo.fProjectGrantScore(@projectID) pgs on p.ProjectID = pgs.ProjectID

@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vProjectLoadGeneratingResult(int primaryKey, int projectNereidResultID, int projectID, string projectName, bool isBaselineCondition, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, DateTime? lastUpdate, double? wetWeatherVolumeGenerated, double? wetWeatherTSSGenerated, double? wetWeatherTNGenerated, double? wetWeatherTPGenerated, double? wetWeatherFCGenerated, double? wetWeatherTCuGenerated, double? wetWeatherTPbGenerated, double? wetWeatherTZnGenerated, double? summerDryWeatherVolumeGenerated, double? summerDryWeatherTSSGenerated, double? summerDryWeatherTNGenerated, double? summerDryWeatherTPGenerated, double? summerDryWeatherFCGenerated, double? summerDryWeatherTCuGenerated, double? summerDryWeatherTPbGenerated, double? summerDryWeatherTZnGenerated, double? winterDryWeatherVolumeGenerated, double? winterDryWeatherTSSGenerated, double? winterDryWeatherTNGenerated, double? winterDryWeatherTPGenerated, double? winterDryWeatherFCGenerated, double? winterDryWeatherTCuGenerated, double? winterDryWeatherTPbGenerated, double? winterDryWeatherTZnGenerated) : this()
+        public vProjectLoadGeneratingResult(int primaryKey, int projectNereidResultID, int projectID, string projectName, bool isBaselineCondition, int? waterQualityManagementPlanID, int? regionalSubbasinID, int? delineationID, string nodeID, DateTime? lastUpdate, double? wetWeatherVolumeGenerated, double? wetWeatherTSSGenerated, double? wetWeatherTNGenerated, double? wetWeatherTPGenerated, double? wetWeatherFCGenerated, double? wetWeatherTCuGenerated, double? wetWeatherTPbGenerated, double? wetWeatherTZnGenerated, double? summerDryWeatherVolumeGenerated, double? summerDryWeatherTSSGenerated, double? summerDryWeatherTNGenerated, double? summerDryWeatherTPGenerated, double? summerDryWeatherFCGenerated, double? summerDryWeatherTCuGenerated, double? summerDryWeatherTPbGenerated, double? summerDryWeatherTZnGenerated, double? winterDryWeatherVolumeGenerated, double? winterDryWeatherTSSGenerated, double? winterDryWeatherTNGenerated, double? winterDryWeatherTPGenerated, double? winterDryWeatherFCGenerated, double? winterDryWeatherTCuGenerated, double? winterDryWeatherTPbGenerated, double? winterDryWeatherTZnGenerated, double? imperviousAreaTreatedAcres) : this()
         {
             this.PrimaryKey = primaryKey;
             this.ProjectNereidResultID = projectNereidResultID;
@@ -61,6 +61,7 @@ namespace Neptune.Web.Models
             this.WinterDryWeatherTCuGenerated = winterDryWeatherTCuGenerated;
             this.WinterDryWeatherTPbGenerated = winterDryWeatherTPbGenerated;
             this.WinterDryWeatherTZnGenerated = winterDryWeatherTZnGenerated;
+            this.ImperviousAreaTreatedAcres = imperviousAreaTreatedAcres;
         }
 
         /// <summary>
@@ -102,6 +103,7 @@ namespace Neptune.Web.Models
             this.WinterDryWeatherTCuGenerated = vProjectLoadGeneratingResult.WinterDryWeatherTCuGenerated;
             this.WinterDryWeatherTPbGenerated = vProjectLoadGeneratingResult.WinterDryWeatherTPbGenerated;
             this.WinterDryWeatherTZnGenerated = vProjectLoadGeneratingResult.WinterDryWeatherTZnGenerated;
+            this.ImperviousAreaTreatedAcres = vProjectLoadGeneratingResult.ImperviousAreaTreatedAcres;
             CallAfterConstructor(vProjectLoadGeneratingResult);
         }
 
@@ -141,5 +143,6 @@ namespace Neptune.Web.Models
         public double? WinterDryWeatherTCuGenerated { get; set; }
         public double? WinterDryWeatherTPbGenerated { get; set; }
         public double? WinterDryWeatherTZnGenerated { get; set; }
+        public double? ImperviousAreaTreatedAcres { get; set; }
     }
 }

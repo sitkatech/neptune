@@ -25,12 +25,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vProjectGrantScore(int primaryKey, int projectID, double? projectArea, double? totalProjectArea, double? imperviousAreaTreatedAcres, string watersheds, double? pollutantVolume, double? pollutantMetals, double? pollutantBacteria, double? pollutantNutrients, double? pollutantTSS, double? tPI, double? sEA, double? dryWeatherWeightedReductionVolume, double? dryWeatherWeightedReductionMetals, double? dryWeatherWeightedReductionBacteria, double? dryWeatherWeightedReductionNutrients, double? dryWeatherWeightedReductionTSS, double? dryWeatherWQLRI, double? wetWeatherWeightedReductionVolume, double? wetWeatherWeightedReductionMetals, double? wetWeatherWeightedReductionBacteria, double? wetWeatherWeightedReductionNutrients, double? wetWeatherWeightedReductionTSS, double? wetWeatherWQLRI) : this()
+        public vProjectGrantScore(int primaryKey, int projectID, double? projectArea, double? imperviousAreaTreatedAcres, string watersheds, double? pollutantVolume, double? pollutantMetals, double? pollutantBacteria, double? pollutantNutrients, double? pollutantTSS, double? tPI, double? sEA, double? dryWeatherWeightedReductionVolume, double? dryWeatherWeightedReductionMetals, double? dryWeatherWeightedReductionBacteria, double? dryWeatherWeightedReductionNutrients, double? dryWeatherWeightedReductionTSS, double? dryWeatherWQLRI, double? wetWeatherWeightedReductionVolume, double? wetWeatherWeightedReductionMetals, double? wetWeatherWeightedReductionBacteria, double? wetWeatherWeightedReductionNutrients, double? wetWeatherWeightedReductionTSS, double? wetWeatherWQLRI) : this()
         {
             this.PrimaryKey = primaryKey;
             this.ProjectID = projectID;
             this.ProjectArea = projectArea;
-            this.TotalProjectArea = totalProjectArea;
             this.ImperviousAreaTreatedAcres = imperviousAreaTreatedAcres;
             this.Watersheds = watersheds;
             this.PollutantVolume = pollutantVolume;
@@ -62,7 +61,6 @@ namespace Neptune.Web.Models
             this.PrimaryKey = vProjectGrantScore.PrimaryKey;
             this.ProjectID = vProjectGrantScore.ProjectID;
             this.ProjectArea = vProjectGrantScore.ProjectArea;
-            this.TotalProjectArea = vProjectGrantScore.TotalProjectArea;
             this.ImperviousAreaTreatedAcres = vProjectGrantScore.ImperviousAreaTreatedAcres;
             this.Watersheds = vProjectGrantScore.Watersheds;
             this.PollutantVolume = vProjectGrantScore.PollutantVolume;
@@ -92,7 +90,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get; set; }
         public int ProjectID { get; set; }
         public double? ProjectArea { get; set; }
-        public double? TotalProjectArea { get; set; }
         public double? ImperviousAreaTreatedAcres { get; set; }
         public string Watersheds { get; set; }
         public double? PollutantVolume { get; set; }

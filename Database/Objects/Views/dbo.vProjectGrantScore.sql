@@ -111,7 +111,7 @@ as
     from dbo.ProjectNereidResult pnr
     join projectDelineations pd on pnr.ProjectID = pd.ProjectID and pnr.TreatmentBMPID = pd.TreatmentBMPID
 ),
-projectLoadGenerated(ProjectID, DryWeatherVolumeGenerated, DryWeatherTSSGenerated, DryWeatherTNGenerated, DryWeatherTPGenerated, DryWeatherFCGenerated, DryWeatherTCuGenerated, DryWeatherTPbGenerated, DryWeatherTZnGenerated, WetWeatherVolumeGenerated, WetWeatherTSSGenerated, WetWeatherTNGenerated, WetWeatherTPGenerated, WetWeatherFCGenerated, WetWeatherTCuGenerated, WetWeatherTPbGenerated, WetWeatherTZnGenerated)
+projectLoadGenerated(ProjectID, DryWeatherVolumeGenerated, DryWeatherTSSGenerated, DryWeatherTNGenerated, DryWeatherTPGenerated, DryWeatherFCGenerated, DryWeatherTCuGenerated, DryWeatherTPbGenerated, DryWeatherTZnGenerated, WetWeatherVolumeGenerated, WetWeatherTSSGenerated, WetWeatherTNGenerated, WetWeatherTPGenerated, WetWeatherFCGenerated, WetWeatherTCuGenerated, WetWeatherTPbGenerated, WetWeatherTZnGenerated, ImperviousAreaTreatedAcres)
 as
 (
     select p.ProjectID,
@@ -130,12 +130,15 @@ as
         sum(WetWeatherFCGenerated) as WetWeatherFCGenerated,
         sum(WetWeatherTCuGenerated) as WetWeatherTCuGenerated,
         sum(WetWeatherTPbGenerated) as WetWeatherTPbGenerated,
-        sum(WetWeatherTZnGenerated) as WetWeatherTZnGenerated
+        sum(WetWeatherTZnGenerated) as WetWeatherTZnGenerated,
+
+        sum(isnull(p.ImperviousAreaTreatedAcres, 0)) as ImperviousAreaTreatedAcres
+
     from dbo.vProjectLoadGeneratingResult p
     join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
     group by p.ProjectID
 ),
-projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, ImperviousAreaTreatedAcres, IsPartOfProject)
+projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, IsPartOfProject)
 as
 (
     select p.ProjectID,
@@ -157,8 +160,6 @@ as
         isnull(p.WetWeatherTPReduced, 0) as WetWeatherTPReduced,
         isnull(p.WetWeatherTZnReduced, 0) as WetWeatherTZnReduced,
 
-        isnull(p.ImperviousAreaTreatedAcres, 0) as ImperviousAreaTreatedAcres,
-
         p.IsPartOfProject
     from dbo.vProjectLoadReducingResult p
     join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
@@ -167,9 +168,8 @@ as
 
 select o.ProjectID as PrimaryKey,
        o.ProjectID,
-       o.ProjectArea,
-       o.TotalProjectArea,
-       impAcres.ImperviousAreaTreatedAcres,
+       o.ProjectArea * 0.000247105 as ProjectArea,
+       impAcres.ImperviousAreaTreatedAcres as ImperviousAreaTreatedAcres,
        o2.Watersheds,
        o.PollutantVolume,
        o.PollutantMetals,
@@ -209,7 +209,7 @@ join
 (
     select  ProjectID,
             Sum(ImperviousAreaTreatedAcres) as ImperviousAreaTreatedAcres
-    from projectLoadReduced
+    from projectLoadGenerated
     group by ProjectID
 ) impAcres  on o.ProjectID = impAcres.ProjectID
 join (
