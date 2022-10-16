@@ -29,6 +29,7 @@ namespace Neptune.Web.Models
             Property(x => x.CalculateOCTAM2Tier2Scores).HasColumnName(@"CalculateOCTAM2Tier2Scores").HasColumnType("bit").IsRequired();
             Property(x => x.ShareOCTAM2Tier2Scores).HasColumnName(@"ShareOCTAM2Tier2Scores").HasColumnType("bit").IsRequired();
             Property(x => x.OCTAM2Tier2ScoresLastSharedDate).HasColumnName(@"OCTAM2Tier2ScoresLastSharedDate").HasColumnType("datetime").IsOptional();
+            Property(x => x.OCTAWatersheds).HasColumnName(@"OCTAWatersheds").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.PollutantVolume).HasColumnName(@"PollutantVolume").HasColumnType("float").IsOptional();
             Property(x => x.PollutantMetals).HasColumnName(@"PollutantMetals").HasColumnType("float").IsOptional();
             Property(x => x.PollutantBacteria).HasColumnName(@"PollutantBacteria").HasColumnType("float").IsOptional();
@@ -38,7 +39,8 @@ namespace Neptune.Web.Models
             Property(x => x.SEA).HasColumnName(@"SEA").HasColumnType("float").IsOptional();
             Property(x => x.DryWeatherWQLRI).HasColumnName(@"DryWeatherWQLRI").HasColumnType("float").IsOptional();
             Property(x => x.WetWeatherWQLRI).HasColumnName(@"WetWeatherWQLRI").HasColumnType("float").IsOptional();
-            Property(x => x.OCTAWatersheds).HasColumnName(@"OCTAWatersheds").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
+            Property(x => x.AreaTreatedAcres).HasColumnName(@"AreaTreatedAcres").HasColumnType("float").IsOptional();
+            Property(x => x.ImperviousAreaTreatedAcres).HasColumnName(@"ImperviousAreaTreatedAcres").HasColumnType("float").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.Projects).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Project_Organization_OrganizationID

@@ -135,7 +135,7 @@ as
     join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
     group by p.ProjectID
 ),
-projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, IsPartOfProject)
+projectLoadReduced(ProjectID, DryWeatherRetained, DryWeatherTSSReduced, DryWeatherTPbReduced, DryWeatherTCuReduced, DryWeatherTNReduced, DryWeatherFCReduced, DryWeatherTPReduced, DryWeatherTZnReduced, WetWeatherRetained, WetWeatherTSSReduced, WetWeatherTPbReduced, WetWeatherTCuReduced, WetWeatherTNReduced, WetWeatherFCReduced, WetWeatherTPReduced, WetWeatherTZnReduced, ImperviousAreaTreatedAcres, IsPartOfProject)
 as
 (
     select p.ProjectID,
@@ -157,6 +157,8 @@ as
         isnull(p.WetWeatherTPReduced, 0) as WetWeatherTPReduced,
         isnull(p.WetWeatherTZnReduced, 0) as WetWeatherTZnReduced,
 
+        isnull(p.ImperviousAreaTreatedAcres, 0) as ImperviousAreaTreatedAcres,
+
         p.IsPartOfProject
     from dbo.vProjectLoadReducingResult p
     join relevantProjectNeriedResults pnr on p.ProjectNereidResultID = p.ProjectNereidResultID
@@ -166,6 +168,8 @@ as
 select o.ProjectID as PrimaryKey,
        o.ProjectID,
        o.ProjectArea,
+       o.TotalProjectArea,
+       impAcres.ImperviousAreaTreatedAcres,
        o2.Watersheds,
        o.PollutantVolume,
        o.PollutantMetals,
@@ -190,6 +194,7 @@ from
 (
     select  ProjectID,
             Sum(OverlapArea) as ProjectArea
+            , Sum(TotalProjectArea) as TotalProjectArea
             , Sum(OverlapArea / TotalProjectArea * PC_VOL_PCT) / 100 as PollutantVolume
             , Sum(OverlapArea / TotalProjectArea * PC_MET_PCT) / 100 as PollutantMetals
             , Sum(OverlapArea / TotalProjectArea * PC_BAC_PCT) / 100 as PollutantBacteria
@@ -200,6 +205,13 @@ from
     from octaProject
     group by ProjectID
 ) o
+join 
+(
+    select  ProjectID,
+            Sum(ImperviousAreaTreatedAcres) as ImperviousAreaTreatedAcres
+    from projectLoadReduced
+    group by ProjectID
+) impAcres  on o.ProjectID = impAcres.ProjectID
 join (
     select ProjectID, STRING_AGG(Watershed, ', ') as Watersheds
     from (
