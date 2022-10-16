@@ -7,7 +7,7 @@ import 'leaflet.marker.highlight';
 import 'leaflet-loading';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { BoundingBoxDto, DelineationSimpleDto, ProjectHRUCharacteristicsSummaryDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationSimpleDto, ProjectSimpleDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
@@ -41,7 +41,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   private currentUser: PersonDto;
   public richTextTypeID = CustomRichTextType.OCTAM2Tier2GrantProgramDashboard;
 
-  public projects: Array<ProjectHRUCharacteristicsSummaryDto>;
+  public projects: Array<ProjectSimpleDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private verifiedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationSimpleDto>;
@@ -49,7 +49,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public relateedTreatmentBMPsToDisplay: Array<TreatmentBMPDisplayDto>;
   public selectedDelineation: DelineationSimpleDto;
-  public selectedProject: ProjectHRUCharacteristicsSummaryDto;
+  public selectedProject: ProjectSimpleDto;
 
   public mapID: string = 'planningMap';
   public mapHeight = (window.innerHeight - (window.innerHeight * 0.2)) + "px";
@@ -140,8 +140,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },
         this.utilityFunctionsService.createDateColumnDef('Last Shared On', 'OCTAM2Tier2ScoresLastSharedDate', 'short', 140),
-        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('Area', 'Area', 'Area', 'Area Treated (ac)', null, 2),
-        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('ImperviousAcres', 'ImperviousAcres', 'ImperviousArea', 'Impervious Area Treated (ac)', 220, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('AreaTreatedAcres', 'Area', 'Area', 'Area Treated (ac)', null, 2),
+        this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('ImperviousAreaTreatedAcres', 'ImperviousAcres', 'ImperviousArea', 'Impervious Area Treated (ac)', 220, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('SEAScore', 'SEA', 'SEAScore', 'SEA Score', 90, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('TPIScore', 'TPI', 'TPIScore', 'TPI Score', 90, 2),
         this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition('WQLRI', 'DryWeatherWQLRI', 'WQLRI', 'Dry Weather WQLRI', null, 2),

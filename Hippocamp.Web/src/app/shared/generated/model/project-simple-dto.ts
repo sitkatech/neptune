@@ -29,6 +29,7 @@ export class ProjectSimpleDto {
     CalculateOCTAM2Tier2Scores?: boolean;
     ShareOCTAM2Tier2Scores?: boolean;
     OCTAM2Tier2ScoresLastSharedDate?: string;
+    OCTAWatersheds?: string;
     PollutantVolume?: number;
     PollutantMetals?: number;
     PollutantBacteria?: number;
@@ -38,7 +39,8 @@ export class ProjectSimpleDto {
     SEA?: number;
     DryWeatherWQLRI?: number;
     WetWeatherWQLRI?: number;
-    OCTAWatersheds?: string;
+    AreaTreatedAcres?: number;
+    ImperviousAreaTreatedAcres?: number;
     Organization?: OrganizationSimpleDto;
     StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
     ProjectStatus?: ProjectStatusSimpleDto;

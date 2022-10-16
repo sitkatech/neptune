@@ -1191,7 +1191,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectHRUCharacteristicsSummaryDto"
+                    "$ref": "#/components/schemas/ProjectSimpleDto"
                   }
                 }
               },
@@ -1199,7 +1199,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectHRUCharacteristicsSummaryDto"
+                    "$ref": "#/components/schemas/ProjectSimpleDto"
                   }
                 }
               },
@@ -1207,7 +1207,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectHRUCharacteristicsSummaryDto"
+                    "$ref": "#/components/schemas/ProjectSimpleDto"
                   }
                 }
               }
@@ -2581,141 +2581,6 @@
         },
         "additionalProperties": false
       },
-      "ProjectHRUCharacteristicsSummaryDto": {
-        "type": "object",
-        "properties": {
-          "Area": {
-            "type": "number",
-            "format": "double"
-          },
-          "ImperviousAcres": {
-            "type": "number",
-            "format": "double"
-          },
-          "ProjectID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectName": {
-            "type": "string",
-            "nullable": true
-          },
-          "OrganizationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "StormwaterJurisdictionID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectStatusID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PrimaryContactPersonID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CreatePersonID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "DateCreated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "ProjectDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "AdditionalContactInformation": {
-            "type": "string",
-            "nullable": true
-          },
-          "DoesNotIncludeTreatmentBMPs": {
-            "type": "boolean"
-          },
-          "CalculateOCTAM2Tier2Scores": {
-            "type": "boolean"
-          },
-          "ShareOCTAM2Tier2Scores": {
-            "type": "boolean"
-          },
-          "OCTAM2Tier2ScoresLastSharedDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "PollutantVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantMetals": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantBacteria": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantNutrients": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantTSS": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "TPI": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "SEA": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DryWeatherWQLRI": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "WetWeatherWQLRI": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "OCTAWatersheds": {
-            "type": "string",
-            "nullable": true
-          },
-          "Organization": {
-            "$ref": "#/components/schemas/OrganizationSimpleDto"
-          },
-          "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionSimpleDto"
-          },
-          "ProjectStatus": {
-            "$ref": "#/components/schemas/ProjectStatusSimpleDto"
-          },
-          "PrimaryContactPerson": {
-            "$ref": "#/components/schemas/PersonSimpleDto"
-          },
-          "CreatePerson": {
-            "$ref": "#/components/schemas/PersonSimpleDto"
-          },
-          "HasModeledResults": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
       "ProjectLoadGeneratingResultDto": {
         "type": "object",
         "properties": {
@@ -3383,6 +3248,10 @@
             "format": "date-time",
             "nullable": true
           },
+          "OCTAWatersheds": {
+            "type": "string",
+            "nullable": true
+          },
           "PollutantVolume": {
             "type": "number",
             "format": "double",
@@ -3428,8 +3297,14 @@
             "format": "double",
             "nullable": true
           },
-          "OCTAWatersheds": {
-            "type": "string",
+          "AreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ImperviousAreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
             "nullable": true
           },
           "Organization": {

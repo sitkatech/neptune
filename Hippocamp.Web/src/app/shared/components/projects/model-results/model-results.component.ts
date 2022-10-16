@@ -28,6 +28,7 @@ export class ModelResultsComponent implements OnInit {
     ImperviousCover: 0
   };
   public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
+  public showFullUpstreamLandUse: boolean = false;
 
   @Input('projectNetworkSolveHistories') projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
   @Input('treatmentBMPs') treatmentBMPs: Array<TreatmentBMPUpsertDto> = [];

@@ -25,6 +25,12 @@
             bindValue="TreatmentBMPID">
         </ng-select>
     </div>
+    <div class="col-12 col-md-6 col-lg-4 ml-auto">
+        <div class="custom-switch">
+            <input type="checkbox" class="custom-control-input" id="showFullUpstreamLandUse" [(ngModel)]="showFullUpstreamLandUse" (change)="toggleLandUse(distributionList)" />
+            <label class="custom-control-label" for="showFullUpstreamLandUse">Include Full Upstream Land Use</label>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-12 col-lg-6">
@@ -415,6 +421,9 @@
         </div>
     </div>
     <div class="col-12 col-lg-6">
+        <p class="font-italic" *ngIf="!showFullUpstreamLandUse">
+            The area treated by existing verified BMPs and WQMPs is subtracted from the Project Area in the Land Use table above.
+        </p>
         <table id="landUseTable" class="table table-striped" style="text-align:center">
             <thead>
                 <tr>
@@ -447,9 +456,6 @@
                 </tr>
             </tbody>
         </table>
-        <p class="font-italic">
-            The area treated by existing verified BMPs and WQMPs is subtracted from the Project Area in the Land Use table above.
-        </p>
 
         <table id="designSizingInfoPanel" class="table table-striped mt-4" *ngIf="treatmentBMPIDForSelectedProjectLoadReducingResult > 0">
             <thead>

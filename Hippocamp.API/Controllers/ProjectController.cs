@@ -383,7 +383,7 @@ namespace Hippocamp.API.Controllers
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram")]
         [UserViewFeature]
-        public ActionResult<List<ProjectHRUCharacteristicsSummaryDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public ActionResult<List<ProjectSimpleDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!currentUser.IsOCTAGrantReviewer)
@@ -392,7 +392,7 @@ namespace Hippocamp.API.Controllers
             }
 
             var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
-                .Select(x => x.AsProjectHRUCharacteristicsSummaryDto()).ToList();
+                .Select(x => x.AsSimpleDto()).ToList();
             return Ok(projectHruCharacteristicsSummaryDtos);
         }
 

@@ -16,7 +16,6 @@ namespace Hippocamp.EFModels.Entities
             return dbContext.TreatmentBMPs
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
                 .Include(x => x.TreatmentBMPType)
-                .Include(x => x.Watershed)
                 .Include(x => x.OwnerOrganization)
                 .AsNoTracking();
         }
@@ -35,8 +34,13 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
         {
-            var treatmentBMPs = GetTreatmentBMPsImpl(dbContext)
+            var treatmentBMPs = dbContext.TreatmentBMPs
+                .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.Watershed)
+                .Include(x => x.OwnerOrganization)
                 .Include(x => x.Delineation)
+                .AsNoTracking()
                 .Where(x => x.ProjectID == projectID).ToList();
 
             var treatmentBMPIDs = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();

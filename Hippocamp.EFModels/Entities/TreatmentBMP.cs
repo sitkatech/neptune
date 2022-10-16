@@ -38,9 +38,9 @@ namespace Hippocamp.EFModels.Entities
             else
             {
                 return dbContext.ProjectHRUCharacteristics
-                    .Include(x => x.HRUCharacteristicLandUseCode)
                     .Include(x => x.ProjectLoadGeneratingUnit)
                     .ThenInclude(x => x.Delineation)
+                    .Include(x => x.HRUCharacteristicLandUseCode)
                     .Where(x =>
                     x.ProjectID == ProjectID &&
                     x.ProjectLoadGeneratingUnit.Delineation != null && 

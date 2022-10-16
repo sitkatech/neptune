@@ -27,6 +27,7 @@ namespace Hippocamp.EFModels.Entities
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
                 ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
                 OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate,
+                OCTAWatersheds = project.OCTAWatersheds,
                 PollutantVolume = project.PollutantVolume,
                 PollutantMetals = project.PollutantMetals,
                 PollutantBacteria = project.PollutantBacteria,
@@ -36,7 +37,8 @@ namespace Hippocamp.EFModels.Entities
                 SEA = project.SEA,
                 DryWeatherWQLRI = project.DryWeatherWQLRI,
                 WetWeatherWQLRI = project.WetWeatherWQLRI,
-                OCTAWatersheds = project.OCTAWatersheds
+                AreaTreatedAcres = project.AreaTreatedAcres,
+                ImperviousAreaTreatedAcres = project.ImperviousAreaTreatedAcres
             };
             DoCustomMappings(project, projectDto);
             return projectDto;
@@ -62,6 +64,7 @@ namespace Hippocamp.EFModels.Entities
                 CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores,
                 ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores,
                 OCTAM2Tier2ScoresLastSharedDate = project.OCTAM2Tier2ScoresLastSharedDate,
+                OCTAWatersheds = project.OCTAWatersheds,
                 PollutantVolume = project.PollutantVolume,
                 PollutantMetals = project.PollutantMetals,
                 PollutantBacteria = project.PollutantBacteria,
@@ -71,7 +74,8 @@ namespace Hippocamp.EFModels.Entities
                 SEA = project.SEA,
                 DryWeatherWQLRI = project.DryWeatherWQLRI,
                 WetWeatherWQLRI = project.WetWeatherWQLRI,
-                OCTAWatersheds = project.OCTAWatersheds
+                AreaTreatedAcres = project.AreaTreatedAcres,
+                ImperviousAreaTreatedAcres = project.ImperviousAreaTreatedAcres
             };
             DoCustomSimpleDtoMappings(project, projectSimpleDto);
             return projectSimpleDto;

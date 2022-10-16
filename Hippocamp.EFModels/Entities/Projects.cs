@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Hippocamp.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,6 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.ProjectStatus)
                 .Include(x => x.CreatePerson)
                 .Include(x => x.PrimaryContactPerson)
-                .Include(x => x.ProjectNereidResults)
                 .AsNoTracking();
         }
 
@@ -261,7 +259,7 @@ namespace Hippocamp.EFModels.Entities
                 .ThenInclude(x => x.TreatmentBMPType)
                 .Where(x => x.ProjectID == projectID).SelectMany(x => x.TreatmentBMPs).ToList();
 
-            if (projectTreatmentBMPs == null || projectTreatmentBMPs.Count == 0)
+            if (!projectTreatmentBMPs.Any())
             {
                 return new List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>();
             }
@@ -285,17 +283,7 @@ namespace Hippocamp.EFModels.Entities
 
         public static IEnumerable<Project> ListOCTAM2Tier2Projects(HippocampDbContext dbContext)
         {
-            var projects = dbContext.Projects
-                .Include(x => x.Organization)
-                .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
-                .Include(x => x.ProjectStatus)
-                .Include(x => x.CreatePerson)
-                .Include(x => x.PrimaryContactPerson)
-                .Include(x => x.ProjectHRUCharacteristics)
-                .AsNoTracking()
-                .Where(x => x.ShareOCTAM2Tier2Scores);
-
-            return projects.ToList();
+            return GetProjectsImpl(dbContext).Where(x => x.ShareOCTAM2Tier2Scores).ToList();
         }
 
         public static List<int> ListOCTAM2Tier2ProjectIDs(HippocampDbContext dbContext)
