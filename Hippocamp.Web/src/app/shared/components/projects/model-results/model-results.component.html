@@ -7,8 +7,8 @@
         </ul>
     </ngb-alert>
     <ngb-alert *ngIf="getBMPNamesForDelineationsWithDiscrepancies().length > 0" [type]="'warning'" [dismissible]="false">
-        Some of the proposed BMPs (see list below) have delineations that overlap an existing BMP delineation or another
-        delineation within this project, so these results may be incomplete or inaccurate.
+        Some of the proposed BMPs (see list below) have delineations that overlap an existing BMP delineation, another delineation within this project, 
+        or more than one regional sub-basin. Results for these BMPs will be inaccurate for the overlapping area.
         <ul>
             <li *ngFor="let name of getBMPNamesForDelineationsWithDiscrepancies()">{{name}}</li>
         </ul>
