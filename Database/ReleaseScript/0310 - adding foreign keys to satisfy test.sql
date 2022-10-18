@@ -1,10 +1,10 @@
 
 
-ALTER TABLE dbo.[DirtyModelNode]  WITH CHECK ADD  CONSTRAINT [FK_DirtyModelNode_Dileneation_DelineationID] FOREIGN KEY(DelineationID)
+ALTER TABLE dbo.[DirtyModelNode]  WITH CHECK ADD  CONSTRAINT FK_DirtyModelNode_Delineation_DelineationID FOREIGN KEY(DelineationID)
 REFERENCES [dbo].[Delineation] (DelineationID)
 GO
 
-ALTER TABLE [dbo].[DirtyModelNode] CHECK CONSTRAINT [FK_DirtyModelNode_Dileneation_DelineationID]
+ALTER TABLE [dbo].[DirtyModelNode] CHECK CONSTRAINT FK_DirtyModelNode_Delineation_DelineationID
 GO
 
 ALTER TABLE dbo.[DirtyModelNode]  WITH CHECK ADD  CONSTRAINT [FK_DirtyModelNode_RegionalSubbasin_RegionalSubbasinID] FOREIGN KEY(RegionalSubbasinID)
@@ -117,3 +117,14 @@ GO
 ALTER TABLE [dbo].TrashGeneratingUnit4326 CHECK CONSTRAINT [FK_TrashGeneratingUnit4326_WaterQualityManagementPlan_WaterQualityManagementPlanID]
 GO
 
+
+
+-- foreign key naming
+
+exec sp_rename 'FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID', 'FK_TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID', 'OBJECT'
+
+go
+
+exec sp_rename 'PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID', 'FK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID', 'OBJECT'
+
+go

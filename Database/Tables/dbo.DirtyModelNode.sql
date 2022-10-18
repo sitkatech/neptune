@@ -16,10 +16,10 @@ CREATE TABLE [dbo].[DirtyModelNode](
 ) ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[DirtyModelNode]  WITH CHECK ADD  CONSTRAINT [FK_DirtyModelNode_Dileneation_DelineationID] FOREIGN KEY([DelineationID])
+ALTER TABLE [dbo].[DirtyModelNode]  WITH CHECK ADD  CONSTRAINT [FK_DirtyModelNode_Delineation_DelineationID] FOREIGN KEY([DelineationID])
 REFERENCES [dbo].[Delineation] ([DelineationID])
 GO
-ALTER TABLE [dbo].[DirtyModelNode] CHECK CONSTRAINT [FK_DirtyModelNode_Dileneation_DelineationID]
+ALTER TABLE [dbo].[DirtyModelNode] CHECK CONSTRAINT [FK_DirtyModelNode_Delineation_DelineationID]
 GO
 ALTER TABLE [dbo].[DirtyModelNode]  WITH CHECK ADD  CONSTRAINT [FK_DirtyModelNode_RegionalSubbasin_RegionalSubbasinID] FOREIGN KEY([RegionalSubbasinID])
 REFERENCES [dbo].[RegionalSubbasin] ([RegionalSubbasinID])
