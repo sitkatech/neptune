@@ -101,7 +101,7 @@ namespace Neptune.Web.ScheduledJobs
                     };
 
                     mailMessage.To.Add(person.Email);
-                    //SitkaSmtpClient.Send(mailMessage);
+                    SitkaSmtpClient.Send(mailMessage);
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace Neptune.Web.ScheduledJobs
                     };
 
                     mailMessage.To.Add(person.Email);
-                    //SitkaSmtpClient.Send(mailMessage);
+                    SitkaSmtpClient.Send(mailMessage);
                 }
 
                 DbContext.pParcelStagingDeleteByPersonID(PersonID);
@@ -135,7 +135,7 @@ namespace Neptune.Web.ScheduledJobs
                 };
 
                 mailMessage.To.Add(person.Email);
-                //SitkaSmtpClient.Send(mailMessage);
+                SitkaSmtpClient.Send(mailMessage);
 
                 throw;
             }
