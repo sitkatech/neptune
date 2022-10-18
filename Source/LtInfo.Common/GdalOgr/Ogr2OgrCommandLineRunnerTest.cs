@@ -81,8 +81,6 @@ namespace LtInfo.Common.GdalOgr
         [Test]
         public void CanProperlyCreateCommandLineOptionsForOgr2OgrUsingGeoJSON()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             // Arrange
             // -------
 
