@@ -353,7 +353,6 @@ namespace LtInfo.Common.GdalOgr
         {
             var commandLineArguments = new List<string>
             {
-                "-preserve_fid",
                 update ? "-update" : null,
                 "--config",
                 "GDAL_DATA",

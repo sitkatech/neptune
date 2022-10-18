@@ -85,7 +85,7 @@ namespace Neptune.Web.ScheduledJobs
                 {
                     // first wipe the dependent WQMPParcel table, then wipe the old parcels
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
-                    DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
+                    DbContext.Database.ExecuteSqlCommand("DELETE FROM dbo.Parcel");
                     DbContext.Parcels.AddRange(parcelsToUpload);
                     DbContext.SaveChanges(person);
                     DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pRebuildWaterQualityManagementPlanParcel");
@@ -101,7 +101,7 @@ namespace Neptune.Web.ScheduledJobs
                     };
 
                     mailMessage.To.Add(person.Email);
-                    SitkaSmtpClient.Send(mailMessage);
+                    //SitkaSmtpClient.Send(mailMessage);
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace Neptune.Web.ScheduledJobs
                     };
 
                     mailMessage.To.Add(person.Email);
-                    SitkaSmtpClient.Send(mailMessage);
+                    //SitkaSmtpClient.Send(mailMessage);
                 }
 
                 DbContext.pParcelStagingDeleteByPersonID(PersonID);
@@ -135,7 +135,7 @@ namespace Neptune.Web.ScheduledJobs
                 };
 
                 mailMessage.To.Add(person.Email);
-                SitkaSmtpClient.Send(mailMessage);
+                //SitkaSmtpClient.Send(mailMessage);
 
                 throw;
             }
