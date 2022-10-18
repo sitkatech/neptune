@@ -207,12 +207,14 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [DelineationDeleteFeature]
         public ContentResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey)
         {
             return new ContentResult();
         }
 
         [HttpPost]
+        [DelineationDeleteFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey,
             ChangeDelineationStatusViewModel viewModel)

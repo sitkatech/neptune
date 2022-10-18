@@ -46,13 +46,17 @@ namespace Neptune.Web.Security
         [Description("Each controller action should have exactly one feature on it. Less means it's not secure, more means that there is confusion over which feature wins out.")]
         public void EachControllerActionShouldHaveOneFeature()
         {
-            AssertCustom.IgnoreOnBuildServer();
             var allControllerActionMethods = NeptuneBaseController.AllControllerActionMethods;
 
             var info = allControllerActionMethods.Select(method => new { Name = MethodName(method), FeatureCount = NumberOfNeptuneFeatureAttributesOnMethod(method) }).ToList();
 
             // Remove exceptions
-            info = info.Where(x => x.Name != "JasmineController.Run").ToList();
+            var exceptionsList = new List<string>()
+            {
+                "JasmineController.Run",
+            };
+
+            info = info.Where(x => !exceptionsList.Contains(x.Name)).ToList();
 
             Assert.That(info.Where(x => x.FeatureCount == 0).ToList(), Is.Empty, string.Format("All should have at least one {0}", _typeOfNeptuneBaseFeature.Name));
             Assert.That(info.Where(x => x.FeatureCount > 1).ToList(), Is.Empty, string.Format("Should have no more than one{0}", _typeOfNeptuneBaseFeature.Name));
@@ -76,8 +80,6 @@ namespace Neptune.Web.Security
         [Description("All security features must be decorated with SecurityFeatureDescription")]
         public void SecurityFeaturesMustHaveDescription()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             var baseFeatureClass = typeof(NeptuneBaseFeature);
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => baseFeatureClass.IsAssignableFrom(p) && p.Name != baseFeatureClass.Name && !p.IsAbstract);
 
@@ -226,7 +228,6 @@ namespace Neptune.Web.Security
         [Test]
         public void NotUsingAllowAnonymousAttribute()
         {
-            AssertCustom.IgnoreOnBuildServer();
             var allControllerActionMethods = NeptuneBaseController.AllControllerActionMethods;
             var usingAllowAnonymous = allControllerActionMethods.Where(m => m.GetCustomAttributes().Any(a => a.GetType() == _typeOfAllowAnonymousAttribute || a.GetType().IsSubclassOf(_typeOfAllowAnonymousAttribute))).ToList();
 

@@ -7,6 +7,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
+    [SecurityFeatureDescription("Requires Jurisdiction Editor or Jurisdiction Manager role")]
     public class NeptuneViewAndRequiresJurisdictionsFeature : NeptuneFeature
     {
         public NeptuneViewAndRequiresJurisdictionsFeature()
