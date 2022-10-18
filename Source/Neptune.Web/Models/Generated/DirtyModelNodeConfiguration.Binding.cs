@@ -22,6 +22,11 @@ namespace Neptune.Web.Models
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsOptional();
             Property(x => x.CreateDate).HasColumnName(@"CreateDate").HasColumnType("datetime").IsRequired();
 
+            // Foreign keys
+            HasOptional(a => a.TreatmentBMP).WithMany(b => b.DirtyModelNodes).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_DirtyModelNode_TreatmentBMP_TreatmentBMPID
+            HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.DirtyModelNodes).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_DirtyModelNode_WaterQualityManagementPlan_WaterQualityManagementPlanID
+            HasOptional(a => a.RegionalSubbasin).WithMany(b => b.DirtyModelNodes).HasForeignKey(c => c.RegionalSubbasinID).WillCascadeOnDelete(false); // FK_DirtyModelNode_RegionalSubbasin_RegionalSubbasinID
+            HasOptional(a => a.Delineation).WithMany(b => b.DirtyModelNodes).HasForeignKey(c => c.DelineationID).WillCascadeOnDelete(false); // FK_DirtyModelNode_Delineation_DelineationID
         }
     }
 }

@@ -47,7 +47,6 @@ namespace Neptune.Web.Models
         [UseReporter(typeof(DiffReporter))]
         public void AssureNoMissingForeignKeys()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             const string sql = @"      select *
                         from

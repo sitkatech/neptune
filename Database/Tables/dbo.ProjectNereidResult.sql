@@ -20,7 +20,27 @@ CREATE TABLE [dbo].[ProjectNereidResult](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
+ALTER TABLE [dbo].[ProjectNereidResult]  WITH CHECK ADD  CONSTRAINT [FK_ProjectNereidResult_Delineation_DelineationID] FOREIGN KEY([DelineationID])
+REFERENCES [dbo].[Delineation] ([DelineationID])
+GO
+ALTER TABLE [dbo].[ProjectNereidResult] CHECK CONSTRAINT [FK_ProjectNereidResult_Delineation_DelineationID]
+GO
 ALTER TABLE [dbo].[ProjectNereidResult]  WITH CHECK ADD  CONSTRAINT [FK_ProjectNereidResult_Project_ProjectID] FOREIGN KEY([ProjectID])
 REFERENCES [dbo].[Project] ([ProjectID])
 GO
 ALTER TABLE [dbo].[ProjectNereidResult] CHECK CONSTRAINT [FK_ProjectNereidResult_Project_ProjectID]
+GO
+ALTER TABLE [dbo].[ProjectNereidResult]  WITH CHECK ADD  CONSTRAINT [FK_ProjectNereidResult_RegionalSubbasin_RegionalSubbasinID] FOREIGN KEY([RegionalSubbasinID])
+REFERENCES [dbo].[RegionalSubbasin] ([RegionalSubbasinID])
+GO
+ALTER TABLE [dbo].[ProjectNereidResult] CHECK CONSTRAINT [FK_ProjectNereidResult_RegionalSubbasin_RegionalSubbasinID]
+GO
+ALTER TABLE [dbo].[ProjectNereidResult]  WITH CHECK ADD  CONSTRAINT [FK_ProjectNereidResult_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[ProjectNereidResult] CHECK CONSTRAINT [FK_ProjectNereidResult_TreatmentBMP_TreatmentBMPID]
+GO
+ALTER TABLE [dbo].[ProjectNereidResult]  WITH CHECK ADD  CONSTRAINT [FK_ProjectNereidResult_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
+REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
+GO
+ALTER TABLE [dbo].[ProjectNereidResult] CHECK CONSTRAINT [FK_ProjectNereidResult_WaterQualityManagementPlan_WaterQualityManagementPlanID]

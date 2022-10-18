@@ -24,10 +24,14 @@ namespace Neptune.Web.Models
         /// </summary>
         protected WaterQualityManagementPlan()
         {
+            this.DirtyModelNodes = new HashSet<DirtyModelNode>();
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.NereidResults = new HashSet<NereidResult>();
             this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            this.ProjectNereidResults = new HashSet<ProjectNereidResult>();
             this.QuickBMPs = new HashSet<QuickBMP>();
             this.SourceControlBMPs = new HashSet<SourceControlBMP>();
+            this.TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
@@ -112,7 +116,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return LoadGeneratingUnits.Any() || ProjectLoadGeneratingUnits.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
+            return DirtyModelNodes.Any() || LoadGeneratingUnits.Any() || NereidResults.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
@@ -122,14 +126,29 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(DirtyModelNodes.Any())
+            {
+                dependentObjects.Add(typeof(DirtyModelNode).Name);
+            }
+
             if(LoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
             }
 
+            if(NereidResults.Any())
+            {
+                dependentObjects.Add(typeof(NereidResult).Name);
+            }
+
             if(ProjectLoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
+            }
+
+            if(ProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNereidResult).Name);
             }
 
             if(QuickBMPs.Any())
@@ -140,6 +159,11 @@ namespace Neptune.Web.Models
             if(SourceControlBMPs.Any())
             {
                 dependentObjects.Add(typeof(SourceControlBMP).Name);
+            }
+
+            if(TrashGeneratingUnit4326s.Any())
+            {
+                dependentObjects.Add(typeof(TrashGeneratingUnit4326).Name);
             }
 
             if(TreatmentBMPs.Any())
@@ -167,7 +191,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(LoadGeneratingUnit).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(DirtyModelNode).Name, typeof(LoadGeneratingUnit).Name, typeof(NereidResult).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -192,12 +216,27 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
+            foreach(var x in DirtyModelNodes.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in LoadGeneratingUnits.ToList())
             {
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in NereidResults.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNereidResults.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -208,6 +247,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in SourceControlBMPs.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in TrashGeneratingUnit4326s.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -265,10 +309,14 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
+        public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }

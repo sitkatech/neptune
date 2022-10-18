@@ -130,7 +130,10 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return TrashGeneratingUnit4326ID; } set { TrashGeneratingUnit4326ID = value; } }
 
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
         public virtual LandUseBlock LandUseBlock { get; set; }
+        public virtual Delineation Delineation { get; set; }
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
 
         public static class FieldLengths
         {
