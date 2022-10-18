@@ -109,7 +109,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         }).subscribe(({ projects, treatmentBMPs, verifiedTreatmentBMPs, delineations}) => {
           this.projects = projects;
           this.treatmentBMPs = treatmentBMPs;
-          this.verifiedTreatmentBMPs = treatmentBMPs;
+          this.verifiedTreatmentBMPs = verifiedTreatmentBMPs;
           this.addTreatmentBMPLayersToMap();
           this.delineations = delineations;
         });
