@@ -61,8 +61,11 @@ namespace Neptune.Web.ScheduledJobs
 
                     if (parcelStaging.ParcelStagingGeometry == null)
                     {
-                        errorList.Add(
-                            $"The Parcel Geometry at row {count} is null. A value must be provided");
+                        errorList.Add($"The Parcel Geometry at row {count} is null. A value must be provided");
+                    } 
+                    else if (!parcelStaging.ParcelStagingGeometry.IsValid)
+                    {
+                        errorList.Add($"The Parcel Geometry at row {count} is invalid.");
                     }
                     else
                     {
