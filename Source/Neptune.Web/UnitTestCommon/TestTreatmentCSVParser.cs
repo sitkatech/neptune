@@ -13,18 +13,6 @@ namespace Neptune.Web.UnitTestCommon
         [TestFixture]
         public class TreatmentBMPCsvParserHelperTest
         {
-
-            [SetUp]
-            public void Setup()
-            {
-                /***
-                 * 2022-10-19 SMG: The RouteTableBuilderTest was clobbering the route table, so if all tests were run
-                 * this class was getting various routing errors. Figured it doesn't hurt to just rebuild them here.
-                 */
-                RouteTableBuilder.ClearRoutes(); // required because you can't just build over an already build route table
-                RouteTableBuilder.Build(NeptuneBaseController.AllControllerActionMethods, null, Global.AreasDictionary);
-            }
-
             [Test]
             public void TestInvalidColumns()
             {

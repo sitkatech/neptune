@@ -37,18 +37,26 @@ namespace Neptune.Web.Models
     [TestFixture]
     public class FileResourceTest
     {
-        //[TestFixtureSetUp]
-        //public void TestFixtureSetup()
-        //{
-        //    AssertCustom.IgnoreOnBuildServer();
-        //    //_db = new NeptuneSqlDatabase();
-        //}
+        private NeptuneSqlDatabase _db;
+        private bool _databaseIsSetUp = false;
+        private readonly object _setupLockObject = new Object();
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            lock (_setupLockObject)
+            {
+                if (!_databaseIsSetUp)
+                {
+                    _db = new NeptuneSqlDatabase();
+                    _databaseIsSetUp = true;
+                }
+            }
+        }
 
         [Test]
         public void CreateNewFromHttpPostedFileTest()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             // Arrange
             var testImageFile = new TestImageFile();
             var person = TestFramework.TestPerson.Create();
@@ -66,8 +74,6 @@ namespace Neptune.Web.Models
         [Test]
         public void GuidRegexWorksTest()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             var a = TestFramework.TestFileResource.Create();
             var results = FileResource.FindAllFileResourceGuidsFromStringContainingFileResourceUrls(a.GetFileResourceUrl());
 
@@ -106,7 +112,6 @@ namespace Neptune.Web.Models
 
         private static void AssertThatAllUrlsAreServerRootRelative(IEnumerable<ResultRow> dataFromRowsAndColumnsWithUrls)
         {
-            AssertCustom.IgnoreOnBuildServer();
             var htmlWithMalformedUrls = dataFromRowsAndColumnsWithUrls.Where(x => DoesHtmlStringContainNonServerRootRelativeUrl(x.ColumnValue)).ToList();
             var errorString = string.Join("\r\n",
                 htmlWithMalformedUrls.Select(
@@ -122,7 +127,6 @@ namespace Neptune.Web.Models
 
         private static void AssertThatAllUrlsDoNotContainAbsoluteUrlsToProdOrQa(IEnumerable<ResultRow> dataFromRowsAndColumnsWithUrls)
         {
-            AssertCustom.IgnoreOnBuildServer();
             var htmlWithMalformedUrls = dataFromRowsAndColumnsWithUrls.Where(x => x.ColumnValue.DoesHtmlStringContainAbsoluteUrlWithApplicationDomainReference()).ToList();
             var errorString = string.Join("\r\n",
                 htmlWithMalformedUrls.Select(
@@ -149,7 +153,6 @@ namespace Neptune.Web.Models
 
         private void AssertThatAllReferencedFileResourceGuidsExist(IEnumerable<ResultRow> dataFromRowsAndColumnsWithUrls)
         {
-            AssertCustom.IgnoreOnBuildServer();
             var fileResourceGuidsInUrls = new List<Guid>();
             foreach (var resultRow in dataFromRowsAndColumnsWithUrls)
             {
@@ -160,15 +163,12 @@ namespace Neptune.Web.Models
             Assert.That(missing, Is.Empty, "Found at least one URL in text columns in the database referring to a FileResourceGuid that is not in the FileResource table.");
         }
 
-        private NeptuneSqlDatabase _db { get;  }
-
         /// <summary>
         /// Based on a string that has embedded file resource URLs in it, parse out the URLs and look up the corresponding FileResource stuff
         /// Made public for testing purposes.
         /// </summary>
         public static List<Guid> FindAllFileResourceGuidsFromStringContainingFileResourceUrls(string textWithReferences)
         {
-            AssertCustom.IgnoreOnBuildServer();
             var guidCaptures = FileResource.FileResourceUrlRegEx.Matches(textWithReferences).Cast<Match>().Select(x => x.Groups["fileResourceGuidCapture"].Value).ToList();
             var theseGuids = guidCaptures.Select(x => new Guid(x)).Distinct().ToList();
             return theseGuids;
@@ -177,7 +177,6 @@ namespace Neptune.Web.Models
         [Test]
         public void IsRegexToFindNonServerRootRelativeUrlsWorking()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             Trace.WriteLine(string.Format("Non-server root relative Regex string: {0}", NonServerRootRelativeUrlRegex));
             Assert.That(DoesHtmlStringContainNonServerRootRelativeUrl(""), Is.False, "Empty string - can't be bad");
@@ -190,7 +189,6 @@ namespace Neptune.Web.Models
         [Test]
         public void UrlsInTextColumnsInDatabaseMatchDatabaseRecords()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             //TODO: Not sure if ProjectUpdateBatch should be in the exception list, but not clear how to correct data that has already posted that is breaking this test.
             const string findAnyColumnsThatCouldContainUrls = @"
