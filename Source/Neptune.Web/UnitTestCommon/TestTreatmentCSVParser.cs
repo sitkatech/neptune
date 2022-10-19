@@ -220,14 +220,13 @@ Frank,30,10,City of Orange,Sitka Technology Grou,2008,ABCD,Perpetuity/Life of Pr
             [Test]
             public void TestOrganizationOwnerExistsGood()
             {
-                LtInfo.Common.AssertCustom.IgnoreOnBuildServer();
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Orange,City of Orange,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _);
                 Assert.That(errorList.Any(x => !x.Contains("Owner is null, empty, or just whitespaces for row:")), Is.True, "Expected an error message");
                 Assert.That(errorList.Any(x => !x.Contains("No Owner with the name '")), Is.True, "Expected an error message");
-                Assert.That(treatmentBmpUploadSimples[0].OwnerOrganizationID, Is.EqualTo(1));
+                Assert.That(treatmentBmpUploadSimples[0].OwnerOrganizationID, Is.EqualTo(25)); // 25 is the City of Orange organizationID as of 2022-10-19
             }
 
             //Begin Optional Field Tests
@@ -634,10 +633,9 @@ Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of P
             [Test]
             public void UploadListPopulatesGood()
             {
-                LtInfo.Common.AssertCustom.IgnoreOnBuildServer();
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided
-John,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Brea,City of Brea,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided
+John,30,10,City of Brea,City of Brea,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided";
                 const int bmpType = 17;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _);
                 Assert.That(!errorList.Any(), Is.True, "Expected no error messages");
