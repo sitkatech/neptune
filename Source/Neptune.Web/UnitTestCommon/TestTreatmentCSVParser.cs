@@ -60,10 +60,9 @@ namespace Neptune.Web.UnitTestCommon
             [Test]
             public void TestBMPNameExistsAndMatchingJurisdictionAndType()
             {
-                LtInfo.Common.AssertCustom.IgnoreOnBuildServer();
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Test,30,10,County of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided,";
-                const int bmpType = 35;
+Test Cook Park,30,10,City of San Juan Capistrano,City of San Juan Capistrano,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided,";
+                const int bmpType = 14;
                 var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _);
                 Assert.That(!errorList.Any(), Is.True, "Expected an error message");
                 Assert.That(treatmentBmps.Count, Is.EqualTo(1), "Expected only one treatment BMP");
@@ -73,10 +72,9 @@ Test,30,10,County of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of 
             [Test]
             public void TestBMPNameExistsAndNonMatchingType()
             {
-                LtInfo.Common.AssertCustom.IgnoreOnBuildServer();
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
-Test,30,10,County of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided,";
-                const int bmpType = 17;
+Test Cook Park,30,10,City of San Juan Capistrano,City of San Juan Capistrano,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided,";
+                const int bmpType = 17; // this is the type that shouldn't match
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains(", which does not match the uploaded Type ")), Is.True, "Expected an error message");
             }
