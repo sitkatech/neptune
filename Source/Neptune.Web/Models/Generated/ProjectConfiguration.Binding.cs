@@ -39,6 +39,8 @@ namespace Neptune.Web.Models
             Property(x => x.SEA).HasColumnName(@"SEA").HasColumnType("float").IsOptional();
             Property(x => x.DryWeatherWQLRI).HasColumnName(@"DryWeatherWQLRI").HasColumnType("float").IsOptional();
             Property(x => x.WetWeatherWQLRI).HasColumnName(@"WetWeatherWQLRI").HasColumnType("float").IsOptional();
+            Property(x => x.AreaTreatedAcres).HasColumnName(@"AreaTreatedAcres").HasColumnType("float").IsOptional();
+            Property(x => x.ImperviousAreaTreatedAcres).HasColumnName(@"ImperviousAreaTreatedAcres").HasColumnType("float").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.Projects).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Project_Organization_OrganizationID

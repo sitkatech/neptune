@@ -95,14 +95,6 @@ ALTER TABLE [dbo].ProjectNereidResult CHECK CONSTRAINT [FK_ProjectNereidResult_W
 GO
 
 
-
-ALTER TABLE dbo.TrashGeneratingUnit4326  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit4326_Delineation_DelineationID] FOREIGN KEY(DelineationID)
-REFERENCES [dbo].Delineation (DelineationID)
-GO
-
-ALTER TABLE [dbo].TrashGeneratingUnit4326 CHECK CONSTRAINT [FK_TrashGeneratingUnit4326_Delineation_DelineationID]
-GO
-
 ALTER TABLE dbo.TrashGeneratingUnit4326  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit4326_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] FOREIGN KEY(OnlandVisualTrashAssessmentAreaID)
 REFERENCES [dbo].OnlandVisualTrashAssessmentArea (OnlandVisualTrashAssessmentAreaID)
 GO

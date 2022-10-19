@@ -39,7 +39,9 @@ select  ProjectNereidResultID as PrimaryKey,
         WinterDryWeatherFCGenerated / uc.BillionsFactor as WinterDryWeatherFCGenerated,
         WinterDryWeatherTCuGenerated * uc.PoundsToGramsFactor as WinterDryWeatherTCuGenerated,
         WinterDryWeatherTPbGenerated * uc.PoundsToGramsFactor as WinterDryWeatherTPbGenerated,
-        WinterDryWeatherTZnGenerated * uc.PoundsToGramsFactor as WinterDryWeatherTZnGenerated
+        WinterDryWeatherTZnGenerated * uc.PoundsToGramsFactor as WinterDryWeatherTZnGenerated,
+
+        ModelResults.ImperviousAreaTreatedAcres
 
         from dbo.ProjectNereidResult pnr
         join dbo.Project p on pnr.ProjectID = p.ProjectID
@@ -68,7 +70,8 @@ select  ProjectNereidResultID as PrimaryKey,
             WinterDryWeatherFCGenerated float '$.winter_dwFC_load_mpn',
             WinterDryWeatherTCuGenerated float '$.winter_dwTCu_load_lbs',
             WinterDryWeatherTPbGenerated float '$.winter_dwTPb_load_lbs',
-            WinterDryWeatherTZnGenerated float '$.winter_dwTZn_load_lbs'
+            WinterDryWeatherTZnGenerated float '$.winter_dwTZn_load_lbs',
+            ImperviousAreaTreatedAcres float '$.imp_area_acres'
             ) as ModelResults
         cross join dbo.vModelingResultUnitConversion uc
 GO
