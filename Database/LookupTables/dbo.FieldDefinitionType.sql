@@ -104,7 +104,7 @@ VALUES
 (100, 'UnderlyingHydrologicSoilGroupHSG', 'Underlying Hydrologic Soil Group (HSG)'),
 (101, 'UnderlyingInfiltrationRate', 'Underlying Infiltration Rate'),
 (102, 'UpstreamBMP', 'Upstream BMP'),
-(103, 'WaterQualityDetentionVolume', 'Water Quality Detention Volume'),
+(103, 'WaterQualityDetentionVolume', 'Extended Detention Surcharge Volume'),
 (104, 'WettedFootprint', 'Wetted Footprint'),
 (105, 'WinterHarvestedWaterDemand', 'Winter Harvested Water Demand'),
 (106, 'PercentOfSiteTreated', '% of Site Treated'),
