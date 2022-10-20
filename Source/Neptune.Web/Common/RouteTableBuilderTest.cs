@@ -29,6 +29,7 @@ using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.RouteTableBuilderTestFolder.Areas.MyTestArea1.Controllers;
 using LtInfo.Common.RouteTableBuilderTestFolder.Controllers;
+using Neptune.Web.Controllers;
 using NUnit.Framework;
 
 namespace Neptune.Web.Common
@@ -36,6 +37,14 @@ namespace Neptune.Web.Common
     [TestFixture]
     public class RouteTableBuilderTest
     {
+        [TestFixtureTearDown]
+        public void TestFixtureTeardown()
+        {
+            // after all of these tests are done, rebuild route table for rest of tests
+            RouteTableBuilder.ClearRoutes(); // required because you can't just build over an already build route table
+            RouteTableBuilder.Build(NeptuneBaseController.AllControllerActionMethods, null, Global.AreasDictionary);
+        }
+
         [Test]
         public void TestThatNullStringAsFirstParameterThrows()
         {

@@ -35,10 +35,10 @@ REFERENCES [dbo].[RegionalSubbasinRevisionRequestStatus] ([RegionalSubbasinRevis
 GO
 ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [FK_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestStatus_RegionalSubbasinRevisionRequestStatusID]
 GO
-ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT [PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
+ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT [FK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
 GO
-ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID]
+ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest] CHECK CONSTRAINT [FK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID]
 GO
 ALTER TABLE [dbo].[RegionalSubbasinRevisionRequest]  WITH CHECK ADD  CONSTRAINT [CK_RegionalSubbasinRevisionRequest_ClosedReqMustHaveCloseDate] CHECK  ((NOT ([RegionalSubbasinRevisionRequestStatusID]=(2) AND [ClosedDate] IS NULL)))
 GO

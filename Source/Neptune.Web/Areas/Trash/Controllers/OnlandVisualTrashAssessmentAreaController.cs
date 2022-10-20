@@ -20,7 +20,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class OnlandVisualTrashAssessmentAreaController : NeptuneBaseController
     {
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         [OnlandVisualTrashAssessmentAreaViewFeature]
         public ViewResult Detail(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {

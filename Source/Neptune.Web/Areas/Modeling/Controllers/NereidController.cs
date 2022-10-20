@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Web.Http.Cors;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Neptune.Web.Security.Shared;
 using Node = Neptune.Web.Areas.Modeling.Models.Nereid.Node;
 using SolutionResponseObject = Neptune.Web.Areas.Modeling.Models.Nereid.SolutionResponseObject;
 
@@ -581,6 +582,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
                 }, JsonRequestBehavior.AllowGet);
         }
 
+        [AnonymousUnclassifiedFeature]
         public ActionResult DeltaSolve()
         {
             BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
@@ -588,7 +590,7 @@ namespace Neptune.Web.Areas.Modeling.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [EnableCors(origins: "*", headers: "*", methods: "*")] 
         public ActionResult NetworkSolveForProject(ProjectPrimaryKey projectPrimaryKey, [System.Web.Http.FromBody] string webServiceAccessTokenGuidAsString)
         {

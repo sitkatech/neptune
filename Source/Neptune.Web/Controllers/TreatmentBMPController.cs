@@ -157,7 +157,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -752,6 +751,7 @@ namespace Neptune.Web.Controllers
             return RazorView<ViewTreatmentBMPModelingAttributes, ViewTreatmentBMPModelingAttributesViewData>(viewData);
         }
 
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttributes> ViewTreatmentBMPModelingAttributesGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
