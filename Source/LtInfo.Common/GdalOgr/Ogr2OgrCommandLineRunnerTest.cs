@@ -67,7 +67,7 @@ namespace LtInfo.Common.GdalOgr
 
             var expectedCommandLineArguments = new[]
             {
-                "-append", "-sql", string.Format("SELECT {0} AS {1} FROM {2}", sourceColumnName, destinationColumnName, Ogr2OgrCommandLineRunner.OgrGeoJsonTableName), "--config", "GDAL_DATA", gdalDataDirectoryInfo.FullName, "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId),
+                "-append", "-sql", string.Format("SELECT {0} AS {1} FROM {2}", sourceColumnName, destinationColumnName, Ogr2OgrCommandLineRunner.OgrGeoJsonTableName), "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId),
                 "-f", "MSSQLSpatial", TempDbSqlDatabase.DatabaseConnectionStringToTempDb, string.Format("\"{0}\"", arcGisQuery), "-nln", destinationTableName
             };
             Assert.That(actualCommandLineArguments, Is.EquivalentTo(expectedCommandLineArguments), "Should produce expected arguments");
@@ -100,7 +100,7 @@ namespace LtInfo.Common.GdalOgr
             // Expecting a command line something like this:
             //"C:\Program Files\GDAL\ogr2ogr.exe" --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -explodecollections -f GeoJSON /dev/stdout "C:\\svn\\sitkatech\\trunk\\Corral\\Source\\Neptune.Web\\Models\\GdalOgr\\SampleFileGeodatabase.gdb.zip"
 
-            var expectedCommandLineArguments = new[] { "--config", "GDAL_DATA", gdalDataDirectoryInfo.FullName, "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId), "-explodecollections", "-f", "GeoJSON", "/dev/stdout", inputGdbFile.FullName, string.Format("\"{0}\"", sourceLayerName), "-dim", "2" };
+            var expectedCommandLineArguments = new[] { "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId), "-explodecollections", "-f", "GeoJSON", "/dev/stdout", inputGdbFile.FullName, string.Format("\"{0}\"", sourceLayerName), "-dim", "2" };
 
             Assert.That(actualCommandLineArguments, Is.EquivalentTo(expectedCommandLineArguments), "Should produce expected arguments");
 
