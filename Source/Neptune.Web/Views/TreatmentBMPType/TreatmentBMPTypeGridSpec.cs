@@ -242,16 +242,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                     Add(FieldDefinitionType.PermanentPoolOrWetlandVolume.ToGridHeaderString("Permanent Pool Or Wetland Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.PermanentPoolorWetlandVolume, 100);
-                    Add(FieldDefinitionType.DesignResidenceTimeForPermanentPool.ToGridHeaderString("Design Residence Time for Permanent Pool (days)"),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DesignResidenceTimeforPermanentPool, 100);
-                    Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Water Quality Detention Volume (cu ft)"),
+                    Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Extended Detention Surcharge Volume (cu ft)"),
                         x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WaterQualityDetentionVolume, 100);
-                    Add(FieldDefinitionType.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume, 100);
-                    Add(FieldDefinitionType.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.WinterHarvestedWaterDemand, 100);
-                    Add(FieldDefinitionType.SummerHarvestedWaterDemand.ToGridHeaderString("Summer Harvested Water Demand (gpd)"),
-                        x => x.TreatmentBMP.TreatmentBMPModelingAttribute?.SummerHarvestedWaterDemand, 100);
                     break;
                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
