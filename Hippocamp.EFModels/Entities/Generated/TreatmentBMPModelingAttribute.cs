@@ -19,7 +19,6 @@ namespace Hippocamp.EFModels.Entities
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
-        public double? DesignResidenceTimeforPermanentPool { get; set; }
         public double? DiversionRate { get; set; }
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }
