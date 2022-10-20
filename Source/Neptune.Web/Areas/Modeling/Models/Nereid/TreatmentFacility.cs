@@ -24,9 +24,6 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
         [JsonProperty("media_filtration_rate_inhr")]
         public double? DesignMediaFiltrationRate { get; set; }
 
-        [JsonProperty("pool_drawdown_time_hr")]
-        public double? DesignResidenceTimeforPermanentPool { get; set; }
-
         [JsonProperty("offline_diversion_rate_cfs")]
         public double? DiversionRate { get; set; }
 
@@ -188,7 +185,6 @@ namespace Neptune.Web.Areas.Modeling.Models.Nereid
                 DesignCapacity = designCapacity,
                 DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
                 //convert Days to Hours for this field.
-                DesignResidenceTimeforPermanentPool = modelingAttribute.DesignResidenceTimeforPermanentPool * 24 ?? double.PositiveInfinity,
                 DiversionRate = modelingAttribute.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeforWQDetentionVolume,
                 Area = area,
