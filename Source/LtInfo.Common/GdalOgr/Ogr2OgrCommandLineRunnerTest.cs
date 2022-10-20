@@ -57,7 +57,7 @@ namespace LtInfo.Common.GdalOgr
             // ---
             const string sourceColumnName = "areasqkm";
             const string destinationColumnName = "SquareKm";
-            var actualCommandLineArguments = Ogr2OgrCommandLineRunner.BuildCommandLineArgumentsForArgGisQueryToMsSql(arcGisQuery, gdalDataDirectoryInfo, TempDbSqlDatabase.DatabaseConnectionStringToTempDb, destinationTableName, sourceColumnName, destinationColumnName, CoordinateSystemId);
+            var actualCommandLineArguments = Ogr2OgrCommandLineRunner.BuildCommandLineArgumentsForArgGisQueryToMsSql(arcGisQuery, TempDbSqlDatabase.DatabaseConnectionStringToTempDb, destinationTableName, sourceColumnName, destinationColumnName, CoordinateSystemId);
 
             // Assert
             // ------
@@ -92,7 +92,6 @@ namespace LtInfo.Common.GdalOgr
             // ---
             var actualCommandLineArguments = Ogr2OgrCommandLineRunner.BuildCommandLineArgumentsForFileGdbToGeoJson(
                 inputGdbFile,
-                gdalDataDirectoryInfo,
                 sourceLayerName, CoordinateSystemId, true);
 
             // Assert

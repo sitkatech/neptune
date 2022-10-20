@@ -42,8 +42,7 @@ namespace LtInfo.Common.GdalOgr
 
             // Act
             // ---
-            var actualCommandLineArguments = OgrInfoCommandLineRunner.BuildOgrInfoCommandLineArgumentsToListFeatureClasses(inputGdbFile,
-                gdalDataDirectoryInfo);
+            var actualCommandLineArguments = OgrInfoCommandLineRunner.BuildOgrInfoCommandLineArgumentsToListFeatureClasses(inputGdbFile);
 
             // Assert
             // ------

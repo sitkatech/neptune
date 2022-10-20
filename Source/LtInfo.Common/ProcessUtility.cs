@@ -40,14 +40,28 @@ namespace LtInfo.Common
             return string.Join(" ", commandLineArguments.Select(EncodeArgumentForCommandLine).ToList());
         }
 
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs)
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName,
+            List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs)
+        {
+            return ShellAndWaitImpl(workingDirectory, exeFileName, commandLineArguments, redirectStdErrAndStdOut, maxTimeoutMs, null);
+        }
+
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables)
         {
             var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments);
             var stdErrAndStdOut = string.Empty;
 
             // Start the indicated program and wait for it
             // to finish, hiding while we wait.
-            var objProc = new Process { StartInfo = new ProcessStartInfo(exeFileName, argumentsAsString) };
+            var processStartInfo = new ProcessStartInfo(exeFileName, argumentsAsString);
+            if (environmentVariables != null && environmentVariables.Any())
+            {
+                foreach (var environmentVariable in environmentVariables)
+                {
+                    processStartInfo.EnvironmentVariables[environmentVariable.Key] = environmentVariable.Value;
+                }
+            }
+            var objProc = new Process { StartInfo = processStartInfo };
 
             if (!string.IsNullOrEmpty(workingDirectory))
             {

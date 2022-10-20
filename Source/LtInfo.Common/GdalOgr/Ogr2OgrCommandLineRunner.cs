@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace LtInfo.Common.GdalOgr
 {
@@ -43,6 +42,8 @@ namespace LtInfo.Common.GdalOgr
         private readonly int _coordinateSystemId;
         private readonly double _totalMilliseconds;
         protected readonly DirectoryInfo _gdalDataPath;
+        protected readonly DirectoryInfo _gdalProjLibPath;
+        protected readonly DirectoryInfo _gdalDriversPath;
 
         public Ogr2OgrCommandLineRunner(string pathToOgr2OgrExecutable, int coordinateSystemId, double totalMilliseconds)
         {
@@ -55,6 +56,10 @@ namespace LtInfo.Common.GdalOgr
             // ReSharper disable once PossibleNullReferenceException
             _gdalDataPath = new DirectoryInfo(Path.Combine(_ogr2OgrExecutable.Directory.FullName, "gdal-data"));
             Check.RequireDirectoryExists(_gdalDataPath.FullName, "Can't find gdal-data directory needed for import with ogr2ogr");
+            _gdalProjLibPath = new DirectoryInfo(Path.Combine(_ogr2OgrExecutable.Directory.FullName, "projlib"));
+            Check.RequireDirectoryExists(_gdalProjLibPath.FullName, "Can't find projlib directory needed for import with ogr2ogr");
+            _gdalDriversPath = new DirectoryInfo(Path.Combine(_ogr2OgrExecutable.Directory.FullName, "gdalplugins"));
+            Check.RequireDirectoryExists(_gdalDriversPath.FullName, "Can't find gdalplugins directory needed for import with ogr2ogr");
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace LtInfo.Common.GdalOgr
             Check.RequireFileExists(inputGdbFile, "Can't find input File GDB for import with ogr2ogr");
 
             var databaseConnectionString = $"MSSQL:{connectionString}";
-            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, _gdalDataPath, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce, whereClause);
+            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToMsSql(inputGdbFile, databaseConnectionString, sourceLayerName, destinationTableName, columnNameList, _coordinateSystemId, enforceGeometryType, geometryTypeToEnforce, whereClause);
             ExecuteOgr2OgrCommand(commandLineArguments);
         }
         
@@ -79,21 +84,9 @@ namespace LtInfo.Common.GdalOgr
                 $"Input filename for GDB input must end with .gdb.zip. Filename passed is {inputGdbFile.FullName}");
             Check.RequireFileExists(inputGdbFile, "Can't find input File GDB for import with ogr2ogr");
 
-            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToGeoJson(inputGdbFile, _gdalDataPath, sourceLayerName, _coordinateSystemId, explodeCollections);
+            var commandLineArguments = BuildCommandLineArgumentsForFileGdbToGeoJson(inputGdbFile, sourceLayerName, _coordinateSystemId, explodeCollections);
             var processUtilityResult = ExecuteOgr2OgrCommand(commandLineArguments);
             return processUtilityResult.StdOut;
-        }
-
-        public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string sqlSelectClause)
-        {
-            var databaseConnectionString = $"MSSQL:{connectionString}";
-            using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
-            {
-                File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
-                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToMsSql(geoJsonFile.FileInfo,
-                     destinationTableName,  _gdalDataPath, databaseConnectionString, _coordinateSystemId, sqlSelectClause);
-                ExecuteOgr2OgrCommand(commandLineArguments);
-            }
         }
 
         public void ImportGeoJsonToMsSql(string geoJson, string connectionString, string destinationTableName, string sqlSelectClause, int sourceCrsId, int targetCrsId)
@@ -103,7 +96,7 @@ namespace LtInfo.Common.GdalOgr
             {
                 File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
                 var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToMsSql(geoJsonFile.FileInfo,
-                     destinationTableName,  _gdalDataPath, databaseConnectionString, sqlSelectClause, sourceCrsId, targetCrsId);
+                     destinationTableName, databaseConnectionString, sqlSelectClause, sourceCrsId, targetCrsId);
                 ExecuteOgr2OgrCommand(commandLineArguments);
             }
         }
@@ -114,7 +107,7 @@ namespace LtInfo.Common.GdalOgr
             using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
             {
                 File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
-                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToEsriShapefile(geoJsonFile.FileInfo, _gdalDataPath, _coordinateSystemId, outputFilePath, outputFileName);
+                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToEsriShapefile(geoJsonFile.FileInfo, _coordinateSystemId, outputFilePath, outputFileName);
                 ExecuteOgr2OgrCommand(commandLineArguments);
             }
         }
@@ -124,24 +117,19 @@ namespace LtInfo.Common.GdalOgr
             using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
             {
                 File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
-                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToFileGdb(geoJsonFile.FileInfo, _gdalDataPath, _coordinateSystemId, outputFilePath, outputLayerName, update, assignSrs);
+                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToFileGdb(geoJsonFile.FileInfo, _coordinateSystemId, outputFilePath, outputLayerName, update, assignSrs);
                 ExecuteOgr2OgrCommandForFileGdbWrite(commandLineArguments);
             }
         }
 
-        /// <summary>
-        /// Import GDB to SQL using GDAL Ogr2Ogr command line tool
-        /// </summary>
-        public void ImportArcGisQueryToMsSql(string arcGisQuery, string destinationTableName, string sourceColumnName, string destinationColumnName, string connectionString)
-        {
-            var databaseConnectionString = $"MSSQL:{connectionString}";
-            var commandLineArguments = BuildCommandLineArgumentsForArgGisQueryToMsSql(arcGisQuery, _gdalDataPath, databaseConnectionString, destinationTableName, sourceColumnName, destinationColumnName, _coordinateSystemId);
-            ExecuteOgr2OgrCommand(commandLineArguments);
-        }
-
         protected ProcessUtilityResult ExecuteOgr2OgrCommand(List<string> commandLineArguments)
         {
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
+            var environmentVariables = new Dictionary<string, string>{
+            {"GDAL_DATA", $"{_gdalDataPath.FullName}"},
+            {"GDAL_DRIVER_PATH", $"{_gdalDriversPath.FullName}"},
+            {"PROJ_LIB", $"{_gdalProjLibPath.FullName}"},
+            };
+            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds), environmentVariables);
             if (processUtilityResult.ReturnCode != 0 && processUtilityResult.ReturnCode != -1073741819) // RL 7/22/02 Ignore Warning 1: Ring Self-intersection
             {
                 var argumentsAsString = String.Join(" ", commandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
@@ -158,7 +146,7 @@ namespace LtInfo.Common.GdalOgr
         // ReSharper disable once UnusedMethodReturnValue.Local
         private ProcessUtilityResult ExecuteOgr2OgrCommandForFileGdbWrite(List<string> commandLineArguments)
         {
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
+            var processUtilityResult = ExecuteOgr2OgrCommand(commandLineArguments);
             if (processUtilityResult.ReturnCode != 0 && !(processUtilityResult.StdOutAndStdErr.Equals("[stdout] \r\n[stderr] \r\n") || processUtilityResult.StdOutAndStdErr.Equals("[stderr] \r\n[stdout] \r\n")))
             {
                 var argumentsAsString = String.Join(" ", commandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
@@ -175,7 +163,7 @@ namespace LtInfo.Common.GdalOgr
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -progress -append --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs "EPSG:4326" -f MSSQLSpatial "MSSQL:server=(local);database=Scratch;trusted_connection=yes" "C:\temp\GdalScratch\Sub_Actions_20131219.gdb" "Sub_Actions_Polygon_20131219" -nln MyTable</example>
         /// </summary>
-        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce, string whereClause)
+        internal static List<string> BuildCommandLineArgumentsForFileGdbToMsSql(FileInfo inputGdbFile, string databaseConnectionString, string sourceLayerName, string targetTableName, List<string> columnNameList, int coordinateSystemId, bool enforceGeometryType, string geometryTypeToEnforce, string whereClause)
         {
             var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
             var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
@@ -190,9 +178,6 @@ namespace LtInfo.Common.GdalOgr
                 "-append",
                 "-sql",
                 selectStatement,
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
                 "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 "-f",
@@ -212,16 +197,13 @@ namespace LtInfo.Common.GdalOgr
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -progress -append --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs "EPSG:4326" -f MSSQLSpatial "MSSQL:server=(local);database=Scratch;trusted_connection=yes" "C:\temp\GdalScratch\Sub_Actions_20131219.gdb" "Sub_Actions_Polygon_20131219" -nln MyTable</example>
         /// </summary>
-        internal static List<string> BuildCommandLineArgumentsForArgGisQueryToMsSql(string arcGisQuery, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string targetTableName, string sourceColumnName, string destinationColumnName, int coordinateSystemId)
+        internal static List<string> BuildCommandLineArgumentsForArgGisQueryToMsSql(string arcGisQuery, string databaseConnectionString, string targetTableName, string sourceColumnName, string destinationColumnName, int coordinateSystemId)
         {
             var commandLineArguments = new List<string>
             {
                 "-append",
                 "-sql",
                 $"SELECT {sourceColumnName} AS {destinationColumnName} FROM {OgrGeoJsonTableName}",
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
                 "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 "-f",
@@ -235,43 +217,15 @@ namespace LtInfo.Common.GdalOgr
             return commandLineArguments;
         }
 
-        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string destinationTableName, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, int coordinateSystemId, string sqlSelectClause)
+        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string destinationTableName, string databaseConnectionString, string sqlSelectClause, int sourceCrsId, int targetCrsId )
         {
-            //c:\SVN\sitkatech\trunk\Corral\Build>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f MSSQLSpatial "MSSQL:server=localhost;database=tempdb;trusted_connection=yes" "C:\temp\geojson.json" -nln "TestTable"            
+            //c:\SVN\sitkatech\trunk\Corral\Build>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid -t_srs EPSG:4326 -f MSSQLSpatial "MSSQL:server=localhost;database=tempdb;trusted_connection=yes" "C:\temp\geojson.json" -nln "TestTable"            
 
             var commandLineArguments = new List<string>
             {
                 "-append",
                 "-sql",
                 $"SELECT {sqlSelectClause} FROM {OgrGeoJsonTableName}",
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
-                "-t_srs",
-                GetMapProjection(coordinateSystemId),
-                "-f",
-                "MSSQLSpatial",
-                databaseConnectionString,
-                sourceGeoJsonFile.FullName,
-                "-nln",
-                destinationTableName
-            };
-
-            return commandLineArguments;
-        }
-
-        internal static List<string> BuildCommandLineArgumentsForGeoJsonToMsSql(FileInfo sourceGeoJsonFile, string destinationTableName, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string sqlSelectClause, int sourceCrsId, int targetCrsId )
-        {
-            //c:\SVN\sitkatech\trunk\Corral\Build>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f MSSQLSpatial "MSSQL:server=localhost;database=tempdb;trusted_connection=yes" "C:\temp\geojson.json" -nln "TestTable"            
-
-            var commandLineArguments = new List<string>
-            {
-                "-append",
-                "-sql",
-                $"SELECT {sqlSelectClause} FROM {OgrGeoJsonTableName}",
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
                 "-s_srs",
                 GetMapProjection(sourceCrsId),
                 "-t_srs",
@@ -289,15 +243,12 @@ namespace LtInfo.Common.GdalOgr
 
         /// <summary>
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
-        /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f GeoJSON /dev/stdout "C:\\svn\\sitkatech\\trunk\\Corral\\Source\\Neptune.Web\\Models\\GdalOgr\\SampleFileGeodatabase.gdb.zip" "somelayername"</example>
+        /// <example>"C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid -t_srs EPSG:4326 -f GeoJSON /dev/stdout "C:\\svn\\sitkatech\\trunk\\Corral\\Source\\Neptune.Web\\Models\\GdalOgr\\SampleFileGeodatabase.gdb.zip" "somelayername"</example>
         /// </summary>
-        internal static List<string> BuildCommandLineArgumentsForFileGdbToGeoJson(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string sourceLayerName, int coordinateSystemId, bool explodeCollections)
+        internal static List<string> BuildCommandLineArgumentsForFileGdbToGeoJson(FileInfo inputGdbFile, string sourceLayerName, int coordinateSystemId, bool explodeCollections)
         {
             var commandLineArguments = new List<string>
             {
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
                 "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 explodeCollections ? "-explodecollections" : null,
@@ -316,18 +267,14 @@ namespace LtInfo.Common.GdalOgr
         /// <summary>
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>
-        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f "ESRI Shapefile" "c:\temp\gestalten" "C:\temp\geoJay" -nln gestalten
+        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid -t_srs EPSG:4326 -f "ESRI Shapefile" "c:\temp\gestalten" "C:\temp\geoJay" -nln gestalten
         /// </example>
         /// </summary>
-        private List<string> BuildCommandLineArgumentsForGeoJsonToEsriShapefile(FileInfo sourceGeoJsonFile,
-            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputName)
+        private List<string> BuildCommandLineArgumentsForGeoJsonToEsriShapefile(FileInfo sourceGeoJsonFile, int coordinateSystemId, string outputPath, string outputName)
         {
             var commandLineArguments = new List<string>
             {
                 "-preserve_fid",
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
                 "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 "-f",
@@ -344,24 +291,20 @@ namespace LtInfo.Common.GdalOgr
         /// <summary>
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>
-        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs EPSG:4326 -f FileGDB "C:\temp\gestalten" "C:\temp\geoJay.txt" -nln gestalten
+        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid -t_srs EPSG:4326 -f FileGDB "C:\temp\gestalten" "C:\temp\geoJay.txt" -nln gestalten
         /// </example>
         /// </summary>
-        private List<string> BuildCommandLineArgumentsForGeoJsonToFileGdb(FileInfo sourceGeoJsonFile,
-            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputLayerName,
+        private List<string> BuildCommandLineArgumentsForGeoJsonToFileGdb(FileInfo sourceGeoJsonFile, int coordinateSystemId, string outputPath, string outputLayerName,
             bool update, bool assignSrs)
         {
             var commandLineArguments = new List<string>
             {
                 update ? "-update" : null,
-                "--config",
-                "GDAL_DATA",
-                gdalDataDirectoryInfo.FullName,
                 assignSrs ? "-a_srs" : "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 "-f",
                 "FileGDB",
-                outputPath  + ".gdb",
+                $"{outputPath}.gdb",
                 sourceGeoJsonFile.FullName,
                 "-nln",
                 outputLayerName
