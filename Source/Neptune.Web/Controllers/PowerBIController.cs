@@ -75,7 +75,6 @@ namespace Neptune.Web.Controllers
                 DesignDryWeatherTreatmentCapacity = x.DesignDryWeatherTreatmentCapacity,
                 DesignLowFlowDiversionCapacity = x.DesignLowFlowDiversionCapacity,
                 DesignMediaFiltrationRate = x.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = x.DesignResidenceTimeforPermanentPool,
                 DiversionRate = x.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = x.DrawdownTimeforWQDetentionVolume,
                 EffectiveFootprint = x.EffectiveFootprint,
@@ -276,7 +275,6 @@ namespace Neptune.Web.Controllers
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
-        public double? DesignResidenceTimeforPermanentPool { get; set; }
         public double? DiversionRate { get; set; }
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }
