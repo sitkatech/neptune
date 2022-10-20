@@ -118,8 +118,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       ],
     [TreatmentBMPModelingType.ConstructedWetland]:
       [
-        'PermanentPoolorWetlandVolume', 'DesignResidenceTimeforPermanentPool',
-        'WaterQualityDetentionVolume', 'DrawdownTimeforWQDetentionVolume', 'WinterHarvestedWaterDemand', 'SummerHarvestedWaterDemand'
+        'PermanentPoolorWetlandVolume', 'WaterQualityDetentionVolume'
       ],
     [TreatmentBMPModelingType.DryExtendedDetentionBasin]:
       [
@@ -181,8 +180,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       ],
     [TreatmentBMPModelingType.WetDetentionBasin]:
       [
-        'PermanentPoolorWetlandVolume', 'DesignResidenceTimeforPermanentPool',
-        'WaterQualityDetentionVolume', 'DrawdownTimeforWQDetentionVolume', 'WinterHarvestedWaterDemand', 'SummerHarvestedWaterDemand'
+        'PermanentPoolorWetlandVolume', 'WaterQualityDetentionVolume'
       ]
   };
 
@@ -192,7 +190,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     DesignDryWeatherTreatmentCapacity: 'cfs',
     DesignLowFlowDiversionCapacity: 'gpd',
     DesignMediaFiltrationRate: 'in/hr',
-    DesignResidenceTimeforPermanentPool: 'days',
     DiversionRate: 'cfs',
     DrawdownTimeForDetentionVolume: 'hrs',
     DrawdownTimeforWQDetentionVolume: 'hrs',

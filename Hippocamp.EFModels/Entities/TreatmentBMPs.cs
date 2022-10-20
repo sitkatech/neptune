@@ -194,7 +194,6 @@ namespace Hippocamp.EFModels.Entities
                     x.DesignDryWeatherTreatmentCapacity = y.DesignDryWeatherTreatmentCapacity;
                     x.DesignLowFlowDiversionCapacity = y.DesignLowFlowDiversionCapacity;
                     x.DesignMediaFiltrationRate = y.DesignMediaFiltrationRate;
-                    x.DesignResidenceTimeforPermanentPool = y.DesignResidenceTimeforPermanentPool;
                     x.DiversionRate = y.DiversionRate;
                     x.DrawdownTimeforWQDetentionVolume = y.DrawdownTimeforWQDetentionVolume;
                     x.EffectiveFootprint = y.EffectiveFootprint;
@@ -302,7 +301,6 @@ namespace Hippocamp.EFModels.Entities
                 DesignDryWeatherTreatmentCapacity = treatmentBMPUpsertDto.DesignDryWeatherTreatmentCapacity,
                 DesignLowFlowDiversionCapacity = treatmentBMPUpsertDto.DesignLowFlowDiversionCapacity,
                 DesignMediaFiltrationRate = treatmentBMPUpsertDto.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = treatmentBMPUpsertDto.DesignResidenceTimeforPermanentPool,
                 DiversionRate = treatmentBMPUpsertDto.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = treatmentBMPUpsertDto.DrawdownTimeforWQDetentionVolume,
                 EffectiveFootprint = treatmentBMPUpsertDto.EffectiveFootprint,

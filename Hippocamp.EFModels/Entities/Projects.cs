@@ -201,7 +201,6 @@ namespace Hippocamp.EFModels.Entities
                     DesignDryWeatherTreatmentCapacity = x.DesignDryWeatherTreatmentCapacity,
                     DesignLowFlowDiversionCapacity = x.DesignLowFlowDiversionCapacity,
                     DesignMediaFiltrationRate = x.DesignMediaFiltrationRate,
-                    DesignResidenceTimeforPermanentPool = x.DesignResidenceTimeforPermanentPool,
                     DiversionRate = x.DiversionRate,
                     DrawdownTimeforWQDetentionVolume = x.DrawdownTimeforWQDetentionVolume,
                     EffectiveFootprint = x.EffectiveFootprint,

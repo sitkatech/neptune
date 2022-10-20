@@ -17,7 +17,6 @@ namespace Hippocamp.Models.DataTransferObjects
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
-        public double? DesignResidenceTimeforPermanentPool { get; set; }
         public double? DiversionRate { get; set; }
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }
@@ -53,7 +52,6 @@ namespace Hippocamp.Models.DataTransferObjects
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
-        public double? DesignResidenceTimeforPermanentPool { get; set; }
         public double? DiversionRate { get; set; }
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }

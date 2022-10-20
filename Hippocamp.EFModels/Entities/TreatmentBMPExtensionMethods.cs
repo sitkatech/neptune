@@ -41,7 +41,6 @@ namespace Hippocamp.EFModels.Entities
                 DesignDryWeatherTreatmentCapacity = treatmentBMPModelingAttribute?.DesignDryWeatherTreatmentCapacity,
                 DesignLowFlowDiversionCapacity = treatmentBMPModelingAttribute?.DesignLowFlowDiversionCapacity,
                 DesignMediaFiltrationRate = treatmentBMPModelingAttribute?.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = treatmentBMPModelingAttribute?.DesignResidenceTimeforPermanentPool,
                 DiversionRate = treatmentBMPModelingAttribute?.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume,
                 EffectiveFootprint = treatmentBMPModelingAttribute?.EffectiveFootprint,
