@@ -47,41 +47,32 @@ namespace Neptune.Web.ScheduledJobs
 
                 foreach (var parcelStaging in parcelStagings)
                 {
-                    var parcel = new Parcel(string.Empty, default, default);
-
+                    var okayToAddParcel = true;
                     if (string.IsNullOrEmpty(parcelStaging.ParcelNumber))
                     {
-                        errorList.Add(
-                            $"Parcel Number (APN) at row {count} is null, empty, or whitespace. A value must be provided");
-                    }
-                    else
-                    {
-                        parcel.ParcelNumber = parcelStaging.ParcelNumber;
+                        okayToAddParcel = false;
+                        errorList.Add($"Parcel Number (APN) at row {count} is null, empty, or whitespace. A value must be provided");
                     }
 
                     if (parcelStaging.ParcelStagingGeometry == null)
                     {
+                        okayToAddParcel = false;
                         errorList.Add($"The Parcel Geometry at row {count} is null. A value must be provided");
-                    } 
+                    }
                     else if (!parcelStaging.ParcelStagingGeometry.IsValid)
                     {
+                        okayToAddParcel = false;
                         errorList.Add($"The Parcel Geometry at row {count} is invalid.");
                     }
-                    else
-                    {
-                        parcel.ParcelGeometry = parcelStaging.ParcelStagingGeometry;
-                        parcel.ParcelGeometry4326 =
-                            CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
-                    }
-                    
-                    parcel.ParcelAreaInAcres = parcelStaging.ParcelStagingAreaSquareFeet / CoordinateSystemHelper.SquareFeetToAcresDivisor;
-                    parcel.ParcelGeometry4326 =
-                        CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
-                    
-                    parcel.ParcelAddress = parcelStaging.ParcelAddress;
 
-                    parcelsToUpload.Add(parcel);
-                    count++;
+                    if (okayToAddParcel)
+                    {
+                        var parcel = new Parcel(parcelStaging.ParcelNumber, parcelStaging.ParcelStagingGeometry, parcelStaging.ParcelStagingAreaSquareFeet / CoordinateSystemHelper.SquareFeetToAcresDivisor);
+                        parcel.ParcelGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
+                        parcel.ParcelAddress = parcelStaging.ParcelAddress;
+                        parcelsToUpload.Add(parcel);
+                        count++;
+                    }
                 }
 
                 if (!errorList.Any())
