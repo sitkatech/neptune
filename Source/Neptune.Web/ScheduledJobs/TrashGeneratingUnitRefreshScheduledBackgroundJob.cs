@@ -26,7 +26,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var layerName = Guid.NewGuid().ToString().Replace("-", "");
+            var layerName = $"TGU{DateTime.Now.Ticks}";
             var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
 
             // a PyQGIS script computes the TGU layer and saves it as a shapefile

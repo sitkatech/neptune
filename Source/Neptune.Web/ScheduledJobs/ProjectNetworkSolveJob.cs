@@ -117,8 +117,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)
         {
             Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {ProjectID}");
-
-            var outputLayerName = Guid.NewGuid().ToString().Replace("-", "");
+            var outputLayerName = $"LGU{DateTime.Now.Ticks}";
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
             var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 

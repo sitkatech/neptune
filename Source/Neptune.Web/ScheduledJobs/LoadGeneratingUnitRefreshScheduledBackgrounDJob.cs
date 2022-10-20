@@ -43,7 +43,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var outputLayerName = Guid.NewGuid().ToString();
+            var outputLayerName = $"LGU{DateTime.Now.Ticks}";
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
 
             var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
