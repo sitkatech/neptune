@@ -47,7 +47,6 @@ namespace Neptune.Web.Models
         [UseReporter(typeof(DiffReporter))]
         public void AssureNoMissingForeignKeys()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             const string sql = @"      select *
                         from
@@ -99,7 +98,6 @@ namespace Neptune.Web.Models
         [UseReporter(typeof(DiffReporter))]
         public void AssureThatForeignKeyNamesMatchNamingStandard()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             const string sql = @"
                     declare @maxNameLength int
@@ -171,7 +169,6 @@ namespace Neptune.Web.Models
         [UseReporter(typeof(DiffReporter))]
         public void AssureThatPrimaryKeyColumnMatchNamingStandard()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             const string sql = @"
                 select a.TableName, a.PrimaryKeyName, 'exec sp_rename ''' + a.TableName + '.' + a.PrimaryKeyName + ''', ''' + NewPrimaryKeyName + '''' AS QueryToRenameConstraint
@@ -202,7 +199,6 @@ namespace Neptune.Web.Models
         [UseReporter(typeof(DiffReporter))]
         public void AssureThatPrimaryAndAlternateKeyNamesMatchNamingStandard()
         {
-            AssertCustom.IgnoreOnBuildServer();
 
             const string sql = @"
                 select a.TableName, a.ConstraintName, 'exec sp_rename ''' + a.ConstraintName + ''', ''' + NewConstraintName + ''', ''OBJECT''' AS QueryToRenameConstraint

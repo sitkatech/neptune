@@ -716,7 +716,7 @@ namespace Neptune.Web.Common
             else
             {
                 returnVal = FieldDefinitionType.All.Single(x => x.FieldDefinitionTypeDisplayName == fieldDefinition)
-                    .FieldDefinitionTypeDisplayName;
+                    .FieldDefinitionTypeName;
             }
 
             return returnVal;

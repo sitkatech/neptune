@@ -119,7 +119,10 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return NereidResultID; } set { NereidResultID = value; } }
 
-
+        public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
+        public virtual RegionalSubbasin RegionalSubbasin { get; set; }
+        public virtual Delineation Delineation { get; set; }
 
         public static class FieldLengths
         {

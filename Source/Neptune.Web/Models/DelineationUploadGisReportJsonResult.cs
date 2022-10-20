@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
         {
             var stormwaterJurisdictions = delineationStagings.Select(x => x.StormwaterJurisdiction).Distinct().ToList();
 
+            Check.Assert(stormwaterJurisdictions.Count != 0, "No Delineations were successfully staged from selected file.");
             Check.Assert(stormwaterJurisdictions.Count == 1, $"Multiple Stormwater Jurisdictions staged for user {person.PersonID}");
 
             var stormwaterJurisdiction = stormwaterJurisdictions.Single();

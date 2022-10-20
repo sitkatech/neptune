@@ -24,8 +24,11 @@ namespace Neptune.Web.Models
         /// </summary>
         protected RegionalSubbasin()
         {
+            this.DirtyModelNodes = new HashSet<DirtyModelNode>();
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.NereidResults = new HashSet<NereidResult>();
             this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            this.ProjectNereidResults = new HashSet<ProjectNereidResult>();
             this.RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<RegionalSubbasin>();
         }
 
@@ -74,7 +77,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return LoadGeneratingUnits.Any() || ProjectLoadGeneratingUnits.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
+            return DirtyModelNodes.Any() || LoadGeneratingUnits.Any() || NereidResults.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any() || RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
         }
 
         /// <summary>
@@ -84,14 +87,29 @@ namespace Neptune.Web.Models
         {
             var dependentObjects = new List<string>();
             
+            if(DirtyModelNodes.Any())
+            {
+                dependentObjects.Add(typeof(DirtyModelNode).Name);
+            }
+
             if(LoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
             }
 
+            if(NereidResults.Any())
+            {
+                dependentObjects.Add(typeof(NereidResult).Name);
+            }
+
             if(ProjectLoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
+            }
+
+            if(ProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNereidResult).Name);
             }
 
             if(RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment.Any())
@@ -104,7 +122,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(LoadGeneratingUnit).Name, typeof(ProjectLoadGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(RegionalSubbasin).Name, typeof(DirtyModelNode).Name, typeof(LoadGeneratingUnit).Name, typeof(NereidResult).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name};
 
 
         /// <summary>
@@ -129,12 +147,27 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
+            foreach(var x in DirtyModelNodes.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in LoadGeneratingUnits.ToList())
             {
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in NereidResults.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNereidResults.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -160,8 +193,11 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return RegionalSubbasinID; } set { RegionalSubbasinID = value; } }
 
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         public virtual ICollection<RegionalSubbasin> RegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
         public virtual ModelBasin ModelBasin { get; set; }

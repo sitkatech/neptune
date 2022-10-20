@@ -554,6 +554,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
+        [NeptuneViewFeature]
         public PartialViewResult ScoreDescriptions()
         {
             var viewData = new TrashModuleViewData(CurrentPerson);

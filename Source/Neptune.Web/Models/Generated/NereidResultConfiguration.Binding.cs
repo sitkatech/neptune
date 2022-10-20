@@ -25,6 +25,11 @@ namespace Neptune.Web.Models
             Property(x => x.LastUpdate).HasColumnName(@"LastUpdate").HasColumnType("datetime").IsOptional();
             Property(x => x.IsBaselineCondition).HasColumnName(@"IsBaselineCondition").HasColumnType("bit").IsRequired();
 
+            // Foreign keys
+            HasOptional(a => a.TreatmentBMP).WithMany(b => b.NereidResults).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_NereidResult_TreatmentBMP_TreatmentBMPID
+            HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.NereidResults).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_NereidResult_WaterQualityManagementPlan_WaterQualityManagementPlanID
+            HasOptional(a => a.RegionalSubbasin).WithMany(b => b.NereidResults).HasForeignKey(c => c.RegionalSubbasinID).WillCascadeOnDelete(false); // FK_NereidResult_RegionalSubbasin_RegionalSubbasinID
+            HasOptional(a => a.Delineation).WithMany(b => b.NereidResults).HasForeignKey(c => c.DelineationID).WillCascadeOnDelete(false); // FK_NereidResult_Delineation_DelineationID
         }
     }
 }

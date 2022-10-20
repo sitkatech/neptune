@@ -45,15 +45,15 @@ CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
 ) ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID] FOREIGN KEY([MonthsOfOperationID])
-REFERENCES [dbo].[MonthsOfOperation] ([MonthsOfOperationID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID]
-GO
 ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_DryWeatherFlowOverride_DryWeatherFlowOverrideID] FOREIGN KEY([DryWeatherFlowOverrideID])
 REFERENCES [dbo].[DryWeatherFlowOverride] ([DryWeatherFlowOverrideID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_DryWeatherFlowOverride_DryWeatherFlowOverrideID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID] FOREIGN KEY([MonthsOfOperationID])
+REFERENCES [dbo].[MonthsOfOperation] ([MonthsOfOperationID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_RoutingConfiguration_RoutingConfigurationID] FOREIGN KEY([RoutingConfigurationID])
 REFERENCES [dbo].[RoutingConfiguration] ([RoutingConfigurationID])

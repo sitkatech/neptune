@@ -40,8 +40,6 @@ namespace Neptune.Web.Models
         [Test]
         public void TestOrganizationAuditLogging()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             // Get an arbitrary real-word person to do these actions
             var neptuneUser = HttpRequestStorage.DatabaseEntities.People.First();
 
@@ -71,9 +69,12 @@ namespace Neptune.Web.Models
 
             // Delete audit logging
             // --------------------
-
-            HttpRequestStorage.DatabaseEntities.Organizations.DeleteOrganization(testOrganization);
+            HttpRequestStorage.DatabaseEntities.Organizations.Remove(testOrganization);
             HttpRequestStorage.DatabaseEntities.SaveChanges(neptuneUser);
+
+            // 2022-10-13 SMG - deleting in the following commented out way DOES NOT create an audit log entry. Some additional notes on https://sitkatech.atlassian.net/browse/NPT-623
+            //HttpRequestStorage.DatabaseEntities.Organizations.DeleteOrganization(testOrganization);
+
             // Check that the audit log mentions this Organization name as deleted
             Check.Assert(
                 HttpRequestStorage.DatabaseEntities.AuditLogs.SingleOrDefault(

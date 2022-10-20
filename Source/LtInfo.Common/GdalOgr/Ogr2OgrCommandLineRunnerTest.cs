@@ -81,8 +81,6 @@ namespace LtInfo.Common.GdalOgr
         [Test]
         public void CanProperlyCreateCommandLineOptionsForOgr2OgrUsingGeoJSON()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             // Arrange
             // -------
 
@@ -103,7 +101,7 @@ namespace LtInfo.Common.GdalOgr
             // Expecting a command line something like this:
             //"C:\Program Files\GDAL\ogr2ogr.exe" --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -explodecollections -f GeoJSON /dev/stdout "C:\\svn\\sitkatech\\trunk\\Corral\\Source\\Neptune.Web\\Models\\GdalOgr\\SampleFileGeodatabase.gdb.zip"
 
-            var expectedCommandLineArguments = new[] { "--config", "GDAL_DATA", gdalDataDirectoryInfo.FullName, "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId), "-explodecollections", "-f", "GeoJSON", "/dev/stdout", inputGdbFile.FullName, string.Format("\"{0}\"", sourceLayerName) };
+            var expectedCommandLineArguments = new[] { "--config", "GDAL_DATA", gdalDataDirectoryInfo.FullName, "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId), "-explodecollections", "-f", "GeoJSON", "/dev/stdout", inputGdbFile.FullName, string.Format("\"{0}\"", sourceLayerName), "-dim", "2" };
 
             Assert.That(actualCommandLineArguments, Is.EquivalentTo(expectedCommandLineArguments), "Should produce expected arguments");
 
@@ -111,75 +109,6 @@ namespace LtInfo.Common.GdalOgr
             var actualCommandLineArgumentsEncodedString = string.Join(" ", actualCommandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
 
             Assert.That(actualCommandLineArgumentsEncodedString, Is.EqualTo(expectedCommandLineArgumentsEncodedString), "Should produce the expected command line argument string in the correct order");
-        }
-
-        [Test]
-        [Ignore]
-        public void CanExecuteOgr2OgrForArcGisQueryToMsSQL()
-        {
-            // Arrange
-            // -------
-            const string arcGisQuery = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid%20IN%20%281%2C2%2C3%2C4%29&outfields=*&f=json";
-
-            const string destinationTableName = "test_table";
-            const string sourceColumnName = "areasqkm";
-            const string destinationColumnName = "attribute";
-
-            // Act
-            // ---
-            const int totalMilliseconds = 110000;
-            const string pathToOgr2OgrExecutable = @"C:\Program Files\GDAL\ogr2ogr.exe";
-            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(pathToOgr2OgrExecutable, CoordinateSystemId, totalMilliseconds);
-
-            try
-            {
-                CreateOgrRequiredTables(null, destinationTableName);
-
-                // Act
-                // ---
-                ogr2OgrCommandLineRunner.ImportArcGisQueryToMsSql(arcGisQuery, destinationTableName, sourceColumnName, destinationColumnName, TempDbSqlDatabase.DatabaseConnectionStringToTempDb);
-                var result = ExecAdHocSql(string.Format("select * from {0}", destinationTableName));
-
-                // Assert
-                // ------
-
-                Assert.That(result, Is.Not.Null, "Should have found the table imported");
-                Assert.That(result.Rows.Count, Is.EqualTo(4), "Should have gotten 4 rows");
-
-                var myStringColumns = result.Rows.Cast<DataRow>().Select(x => x.IsNull(destinationColumnName) ? null : (string)x[destinationColumnName]).ToList();
-                Assert.That(myStringColumns, Is.EquivalentTo(new[] { "0.043", "0.012", "0.013", "0.008" }), "Should have gotten these values for areasquarekm");
-
-            }
-            finally
-            {
-                // Cleanup
-                // -------
-                try
-                {
-                    ExecAdHocSql("drop table " + destinationTableName);
-                }
-                catch
-                {
-                    // ignored
-                }
-                try
-                {
-                    ExecAdHocSql("drop table spatial_ref_sys");
-                }
-                catch
-                {
-                    // ignored
-                }
-                try
-                {
-                    ExecAdHocSql("drop table geometry_columns");
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-
         }
 
         [Test]
@@ -203,70 +132,7 @@ namespace LtInfo.Common.GdalOgr
             Assert.That(geoJson, Contains.Substring("\"properties\":"), "Should have properties");
         }
 
-        [Test]
-        public void CanExecuteOgr2OgrFromGeoJsonSingleColumnToExistingMsSql()
-        {
-            AssertCustom.IgnoreOnBuildServer();
-
-            var gdbFileInfo = FileUtility.FirstMatchingFileUpDirectoryTree(@"LTInfo.Common\GdalOgr\SampleFileGeodatabase.gdb.zip");
-            const string sourceLayerName = "MySampleFeatureClass";
-            // Act
-            // ---
-            const int totalMilliseconds = 110000;
-            const string pathToOgr2OgrExecutable = @"C:\Program Files\GDAL\ogr2ogr.exe";
-            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(pathToOgr2OgrExecutable, CoordinateSystemId, totalMilliseconds);
-            var geoJson = ogr2OgrCommandLineRunner.ImportFileGdbToGeoJson(gdbFileInfo, sourceLayerName, true);
-
-            var destinationTableName = "test_table";
-
-            var sqlSelectClause = string.Format("mystringcolumn as attribute, {0} as ProjectID", 77);
-
-            try
-            {                
-                CreateOgrRequiredTables(destinationTableName, null);
-                
-                // Act
-                // ---
-                ogr2OgrCommandLineRunner.ImportGeoJsonToMsSql(geoJson, TempDbSqlDatabase.DatabaseConnectionStringToTempDb, destinationTableName, sqlSelectClause);
-                var result = ExecAdHocSql(string.Format("select * from {0}", destinationTableName));
-
-                // Assert
-                // ------
-                          
-                Assert.That(result, Is.Not.Null, "Should have found the table imported");
-                Assert.That(result.Rows.Count, Is.EqualTo(6), "Should have gotten 6 rows");
-                
-            }
-            finally
-            {
-                // Cleanup
-                // -------
-                try
-                {
-                    ExecAdHocSql("drop table " + destinationTableName);
-                }
-                catch
-                {
-                    // ignored
-                }
-                try
-                {
-                    ExecAdHocSql("drop table spatial_ref_sys");
-                }
-                catch
-                {
-                    // ignored
-                }
-                try
-                {
-                    ExecAdHocSql("drop table geometry_columns");
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-        }
+        
 
         private void CreateOgrRequiredTables(string tableWithGeometryField, string tableWithGeometryField2)
         {
