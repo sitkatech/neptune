@@ -1254,7 +1254,7 @@ Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of P
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Winter Harvested Water Demand,  
 Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
-                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.CisternsForHarvestAndUse.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes);
                 Assert.That(errorList.Any(x => !x.Contains("Winter Harvested Water Demand")), Is.True);
                 Assert.That(modelingAttributes[0].WinterHarvestedWaterDemand, Is.EqualTo(1.0));
@@ -1265,7 +1265,7 @@ Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of P
             {
                 const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Winter Harvested Water Demand,  
 Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
-                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.WetDetentionBasin.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.CisternsForHarvestAndUse.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
                 TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _);
                 Assert.That(errorList.Any(x => x.Contains("Winter Harvested Water Demand")), Is.True);
             }
