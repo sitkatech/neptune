@@ -37,7 +37,6 @@ namespace LtInfo.Common.GdalOgr
             // Arrange
             // -------
 
-            var gdalDataDirectoryInfo = new DirectoryInfo(@"C:\Program Files\GDAL\gdal-data");
             var inputGdbFile = new FileInfo(@"C:\temp\MyZippedGdbFile.gdb.zip");
 
             // Act
