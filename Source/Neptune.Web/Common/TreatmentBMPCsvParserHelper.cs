@@ -693,10 +693,6 @@ namespace Neptune.Web.Common
             {
                 returnVal = "UnderlyingHydrologicSoilGroupID";
             }
-            else if (fieldDefinition == FieldDefinitionType.DesignResidenceTimeForPermanentPool.FieldDefinitionTypeDisplayName)
-            {
-                returnVal = "DesignResidenceTimeforPermanentPool";
-            }
             else if (fieldDefinition == FieldDefinitionType.DrawdownTimeForWQDetentionVolume.FieldDefinitionTypeDisplayName)
             {
                 returnVal = "DrawdownTimeforWQDetentionVolume";
@@ -790,11 +786,7 @@ namespace Neptune.Web.Common
                             FieldDefinitionType.RoutingConfiguration.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.DiversionRate.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.PermanentPoolOrWetlandVolume.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.DesignResidenceTimeForPermanentPool.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.WaterQualityDetentionVolume.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.DrawdownTimeForWQDetentionVolume.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.WinterHarvestedWaterDemand.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.SummerHarvestedWaterDemand.FieldDefinitionTypeDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
