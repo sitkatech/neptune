@@ -61,8 +61,11 @@ namespace Neptune.Web.ScheduledJobs
 
                     if (parcelStaging.ParcelStagingGeometry == null)
                     {
-                        errorList.Add(
-                            $"The Parcel Geometry at row {count} is null. A value must be provided");
+                        errorList.Add($"The Parcel Geometry at row {count} is null. A value must be provided");
+                    } 
+                    else if (!parcelStaging.ParcelStagingGeometry.IsValid)
+                    {
+                        errorList.Add($"The Parcel Geometry at row {count} is invalid.");
                     }
                     else
                     {
@@ -85,7 +88,7 @@ namespace Neptune.Web.ScheduledJobs
                 {
                     // first wipe the dependent WQMPParcel table, then wipe the old parcels
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
-                    DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
+                    DbContext.Database.ExecuteSqlCommand("DELETE FROM dbo.Parcel");
                     DbContext.Parcels.AddRange(parcelsToUpload);
                     DbContext.SaveChanges(person);
                     DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pRebuildWaterQualityManagementPlanParcel");

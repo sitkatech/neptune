@@ -75,6 +75,7 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
                         {
                             "PLU_Cat as PriorityLandUseType",
                             "LU_Descr as LandUseDescription",
+                            "shape as LandUseBlockGeometry",
                             "TGR as TrashGenerationRate",
                             "LU_for_TGR as LandUseForTGR",
                             "MHI as MedianHouseHoldIncome",
