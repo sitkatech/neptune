@@ -1,5 +1,3 @@
--- script to re-add WQMP-Parcel relationships after uploading new parcel layer
-
 IF EXISTS(SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.pRebuildWaterQualityManagementPlanParcel'))
     drop procedure dbo.pRebuildWaterQualityManagementPlanParcel
 go
