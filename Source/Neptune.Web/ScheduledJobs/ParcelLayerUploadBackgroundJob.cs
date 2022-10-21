@@ -78,8 +78,10 @@ namespace Neptune.Web.ScheduledJobs
                 if (!errorList.Any())
                 {
                     // first wipe the dependent WQMPParcel table, then wipe the old parcels
+                    DbContext.Database.ExecuteSqlCommand("ALTER TABLE dbo.WaterQualityManagementPlanParcel drop constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID");
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
-                    DbContext.Database.ExecuteSqlCommand("DELETE FROM dbo.Parcel");
+                    DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
+                    DbContext.Database.ExecuteSqlCommand("ALTER TABLE dbo.WaterQualityManagementPlanParcel add constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID foreign key (ParcelID) references dbo.Parcel(ParcelID)");
                     DbContext.Parcels.AddRange(parcelsToUpload);
                     DbContext.SaveChanges(person);
                     DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pRebuildWaterQualityManagementPlanParcel");
