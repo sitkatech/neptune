@@ -67,7 +67,7 @@ namespace LtInfo.Common.GdalOgr
 
             var expectedCommandLineArguments = new[]
             {
-                "-append", "-sql", string.Format("SELECT {0} AS {1} FROM {2}", sourceColumnName, destinationColumnName, Ogr2OgrCommandLineRunner.OgrGeoJsonTableName), "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId),
+                "-append", "-sql", string.Format("SELECT {0} AS {1} FROM {2}", sourceColumnName, destinationColumnName, Ogr2OgrCommandLineRunner.OgrGeoJsonTableName), "-a_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId),
                 "-f", "MSSQLSpatial", TempDbSqlDatabase.DatabaseConnectionStringToTempDb, string.Format("\"{0}\"", arcGisQuery), "-nln", destinationTableName
             };
             Assert.That(actualCommandLineArguments, Is.EquivalentTo(expectedCommandLineArguments), "Should produce expected arguments");
