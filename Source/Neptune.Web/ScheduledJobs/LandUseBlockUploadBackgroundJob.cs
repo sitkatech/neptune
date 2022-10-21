@@ -143,6 +143,7 @@ namespace Neptune.Web.ScheduledJobs
                                 }
                                 else
                                 {
+                                    landUseBlock.LandUseBlockGeometry = clippedGeometry;
                                     landUseBlock.LandUseBlockGeometry4326 =
                                         CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(clippedGeometry);
                                 }
