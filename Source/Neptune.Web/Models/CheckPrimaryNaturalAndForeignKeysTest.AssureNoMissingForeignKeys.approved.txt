@@ -23,6 +23,7 @@ State	Id
 TrashGeneratingUnit	DelineationID					
 TrashGeneratingUnit	OnlandVisualTrashAssessmentAreaID					
 TrashGeneratingUnit	WaterQualityManagementPlanID					
+TrashGeneratingUnit4326	DelineationID					
 TrashGeneratingUnitAdjustment	AdjustedDelineationID					
 TrashGeneratingUnitAdjustment	AdjustedOnlandVisualTrashAssessmentAreaID					
 TreatmentBMP	RegionalSubbasinID					
