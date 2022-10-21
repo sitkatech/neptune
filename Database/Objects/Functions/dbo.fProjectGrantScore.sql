@@ -224,7 +224,7 @@ as return
         from octaProject
         group by ProjectID
     ) o
-    join 
+    left join 
     (
         select  ProjectID,
                 Sum(ImperviousAreaTreatedAcres) as ImperviousAreaTreatedAcres
