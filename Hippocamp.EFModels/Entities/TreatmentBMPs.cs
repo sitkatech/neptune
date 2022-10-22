@@ -130,7 +130,8 @@ namespace Hippocamp.EFModels.Entities
 
         public static List<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs(HippocampDbContext dbContext)
         {
-            return GetTreatmentBMPsImpl(dbContext).Where(x => x.ProjectID == null && x.InventoryIsVerified)
+            return GetTreatmentBMPsImpl(dbContext)
+                .Where(x => x.ProjectID == null && x.InventoryIsVerified && x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .Select(x => x.AsDisplayDto()).ToList();
         }
 
