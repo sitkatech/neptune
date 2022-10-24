@@ -31,7 +31,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger = LogManager.GetLogger(GetType());
             var databaseEntities = new DatabaseEntities(); // default to Sitka
-            databaseEntities.Database.CommandTimeout = 1200;
+            databaseEntities.Database.CommandTimeout = 1800;
             databaseEntities.Configuration.AutoDetectChangesEnabled = false;
             DbContext = databaseEntities;
         }
