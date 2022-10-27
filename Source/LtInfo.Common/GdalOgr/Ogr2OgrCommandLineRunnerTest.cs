@@ -18,9 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Data;
-using System.Diagnostics;
+
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -45,46 +43,11 @@ namespace LtInfo.Common.GdalOgr
         }
 
         [Test]
-        public void CanProperlyCreateCommandLineOptionsForArcGisQueryToMsSQL()
-        {
-            // Arrange
-            // -------
-
-            var gdalDataDirectoryInfo = new DirectoryInfo(@"C:\Program Files\GDAL\gdal-data");
-            const string destinationTableName = "MyTableWithGeometry";
-            const string arcGisQuery = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid+%3D+objectid&outfields=*&f=json";
-            // Act
-            // ---
-            const string sourceColumnName = "areasqkm";
-            const string destinationColumnName = "SquareKm";
-            var actualCommandLineArguments = Ogr2OgrCommandLineRunner.BuildCommandLineArgumentsForArgGisQueryToMsSql(arcGisQuery, TempDbSqlDatabase.DatabaseConnectionStringToTempDb, destinationTableName, sourceColumnName, destinationColumnName, CoordinateSystemId);
-
-            // Assert
-            // ------
-
-            // Expecting a command line something like this:
-            //"C:\Program Files\GDAL\ogr2ogr.exe" -append -sql "select areasqkm as SquareKm from OGRGeoJSON --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -f MSSQLSpatial dbconnectionstring test.json "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid+%3D+objectid&outfields=*&f=json" -nln SomeTableName"
-
-            var expectedCommandLineArguments = new[]
-            {
-                "-append", "-sql", string.Format("SELECT {0} AS {1} FROM {2}", sourceColumnName, destinationColumnName, Ogr2OgrCommandLineRunner.OgrGeoJsonTableName), "-t_srs", Ogr2OgrCommandLineRunner.GetMapProjection(CoordinateSystemId),
-                "-f", "MSSQLSpatial", TempDbSqlDatabase.DatabaseConnectionStringToTempDb, string.Format("\"{0}\"", arcGisQuery), "-nln", destinationTableName
-            };
-            Assert.That(actualCommandLineArguments, Is.EquivalentTo(expectedCommandLineArguments), "Should produce expected arguments");
-
-            var expectedCommandLineArgumentsEncodedString = string.Join(" ", expectedCommandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
-            var actualCommandLineArgumentsEncodedString = string.Join(" ", actualCommandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
-
-            Assert.That(actualCommandLineArgumentsEncodedString, Is.EqualTo(expectedCommandLineArgumentsEncodedString), "Should produce the expected command line argument string in the correct order");
-        }
-
-        [Test]
         public void CanProperlyCreateCommandLineOptionsForOgr2OgrUsingGeoJSON()
         {
             // Arrange
             // -------
 
-            var gdalDataDirectoryInfo = new DirectoryInfo(@"C:\Program Files\GDAL\gdal-data");
             const string sourceLayerName = "MySourceLayerName";
             var inputGdbFile = new FileInfo(@"C:\temp\MyZippedGdbFile.gdb.zip");
 
