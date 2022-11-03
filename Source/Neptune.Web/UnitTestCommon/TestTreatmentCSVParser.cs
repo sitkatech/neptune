@@ -761,6 +761,29 @@ Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of P
             }
 
             [Test]
+            public void TestBMPModelingAttributeDesignResidenceTimeforPermanentPoolGood()
+            {
+                LtInfo.Common.AssertCustom.IgnoreOnBuildServer();
+                const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Residence Time for Permanent Pool,  
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,1";
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out var modelingAttributes);
+                Assert.That(errorList.Any(x => !x.Contains("Design Residence Time for Permanent Pool")), Is.True);
+                Assert.That(modelingAttributes[0].DesignResidenceTimeforPermanentPool, Is.EqualTo(1.0));
+            }
+
+            [Test]
+            public void TestBMPModelingAttributeDesignResidenceTimeforPermanentPoolBad()
+            {
+                LtInfo.Common.AssertCustom.IgnoreOnBuildServer();
+                const string csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis,Design Residence Time for Permanent Pool,  
+Frank,30,10,City of Orange,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,blah";
+                var bmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x => x.TreatmentBMPModelingTypeID == TreatmentBMPModelingType.ConstructedWetland.TreatmentBMPModelingTypeID).TreatmentBMPTypeID;
+                TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out var errorList, out _, out _, out _);
+                Assert.That(errorList.Any(x => x.Contains("Design Residence Time for Permanent Pool")), Is.True);
+            }
+
+            [Test]
             public void TestBMPModelingAttributeDiversionRateGood()
             {
                 LtInfo.Common.AssertCustom.IgnoreOnBuildServer();

@@ -84,6 +84,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.FieldDefinitionType FieldDefinitionForDesignDryWeatherTreatmentCapacity { get; }
         public Models.FieldDefinitionType FieldDefinitionForDesignLowFlowDiversionCapacity { get; }
         public Models.FieldDefinitionType FieldDefinitionForDesignMediaFiltrationRate { get; }
+        public Models.FieldDefinitionType FieldDefinitionForDesignResidenceTimeforPermanentPool { get; }
         public Models.FieldDefinitionType FieldDefinitionForDiversionRate { get; }
         public Models.FieldDefinitionType FieldDefinitionForDrawdownTimeforWQDetentionVolume { get; }
         public Models.FieldDefinitionType FieldDefinitionForEffectiveFootprint { get; }
@@ -188,6 +189,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForDesignDryWeatherTreatmentCapacity = FieldDefinitionType.DesignDryWeatherTreatmentCapacity;
             FieldDefinitionForDesignLowFlowDiversionCapacity = FieldDefinitionType.DesignLowFlowDiversionCapacity;
             FieldDefinitionForDesignMediaFiltrationRate = FieldDefinitionType.DesignMediaFiltrationRate;
+            FieldDefinitionForDesignResidenceTimeforPermanentPool = FieldDefinitionType.DesignResidenceTimeForPermanentPool;
             FieldDefinitionForDiversionRate = FieldDefinitionType.DiversionRate;
             FieldDefinitionForDrawdownTimeforWQDetentionVolume = FieldDefinitionType.DrawdownTimeForWQDetentionVolume;
             FieldDefinitionForEffectiveFootprint = FieldDefinitionType.EffectiveFootprint;
@@ -359,7 +361,10 @@ namespace Neptune.Web.Views.TreatmentBMP
                       (int) RoutingConfigurationEnum.Offline &&
                       !bmpModelingAttributes.DiversionRate.HasValue) ||
                      !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
-                     !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue))
+                     !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
+                     !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue ||
+                     !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
+                     !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue))
                 {
                     return true;
                 }

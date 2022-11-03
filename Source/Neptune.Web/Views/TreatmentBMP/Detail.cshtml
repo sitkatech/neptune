@@ -396,9 +396,33 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                         </tr>
                                         <tr>
                                             <td>
+                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignResidenceTimeforPermanentPool)
+                                            </td>
+                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignResidenceTimeforPermanentPool, "days")</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
                                                 @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWaterQualityDetentionVolume)
                                             </td>
                                             <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WaterQualityDetentionVolume, "cu ft")</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDrawdownTimeforWQDetentionVolume)
+                                            </td>
+                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DrawdownTimeforWQDetentionVolume, "hours")</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWinterHarvestedWaterDemand)
+                                            </td>
+                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WinterHarvestedWaterDemand, "gpd")</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForSummerHarvestedWaterDemand)
+                                            </td>
+                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.SummerHarvestedWaterDemand, "gpd")</td>
                                         </tr>
                                         break;
                                     case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:

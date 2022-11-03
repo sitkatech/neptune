@@ -10,7 +10,7 @@ select tb.TreatmentBMPID as PrimaryKey, tb.TreatmentBMPName, tb.UpstreamBMPID,
 			else ''
 		end as UpstreamBMPName, tbt.TreatmentBMPTypeID, tbt.TreatmentBMPTypeName, sj.StormwaterJurisdictionID, o.OrganizationName,
 	   tma.UpstreamTreatmentBMPID, tma.AverageDivertedFlowrate, tma.AverageTreatmentFlowrate, tma.DesignDryWeatherTreatmentCapacity, tma.DesignLowFlowDiversionCapacity,
-	   tma.DesignMediaFiltrationRate, tma.DiversionRate, tma.DrawdownTimeforWQDetentionVolume, tma.EffectiveFootprint,
+	   tma.DesignMediaFiltrationRate, tma.DesignResidenceTimeforPermanentPool, tma.DiversionRate, tma.DrawdownTimeforWQDetentionVolume, tma.EffectiveFootprint,
 	   tma.EffectiveRetentionDepth, tma.InfiltrationDischargeRate, tma.InfiltrationSurfaceArea, tma.MediaBedFootprint, tma.PermanentPoolorWetlandVolume,
 	   tma.RoutingConfigurationID, tma.StorageVolumeBelowLowestOutletElevation, tma.SummerHarvestedWaterDemand, tma.TimeOfConcentrationID, tma.DrawdownTimeForDetentionVolume,
 	   tma.TotalEffectiveBMPVolume, tma.TotalEffectiveDrywellBMPVolume, tma.TreatmentRate, tma.UnderlyingHydrologicSoilGroupID, tma.UnderlyingInfiltrationRate,

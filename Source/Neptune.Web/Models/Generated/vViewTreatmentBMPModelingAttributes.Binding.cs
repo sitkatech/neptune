@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName, string delineationType, string delineationStatus, int? dryWeatherFlowOverrideID) : this()
+        public vViewTreatmentBMPModelingAttributes(int primaryKey, string treatmentBMPName, int? upstreamBMPID, string upstreamBMPName, int treatmentBMPTypeID, string treatmentBMPTypeName, int stormwaterJurisdictionID, string organizationName, int? upstreamTreatmentBMPID, double? averageDivertedFlowrate, double? averageTreatmentFlowrate, double? designDryWeatherTreatmentCapacity, double? designLowFlowDiversionCapacity, double? designMediaFiltrationRate, double? designResidenceTimeforPermanentPool, double? diversionRate, double? drawdownTimeforWQDetentionVolume, double? effectiveFootprint, double? effectiveRetentionDepth, double? infiltrationDischargeRate, double? infiltrationSurfaceArea, double? mediaBedFootprint, double? permanentPoolorWetlandVolume, int? routingConfigurationID, double? storageVolumeBelowLowestOutletElevation, double? summerHarvestedWaterDemand, int? timeOfConcentrationID, double? drawdownTimeForDetentionVolume, double? totalEffectiveBMPVolume, double? totalEffectiveDrywellBMPVolume, double? treatmentRate, int? underlyingHydrologicSoilGroupID, double? underlyingInfiltrationRate, double? waterQualityDetentionVolume, double? wettedFootprint, double? winterHarvestedWaterDemand, string operationMonths, double? designStormwaterDepthInInches, string watershedName, string delineationType, string delineationStatus, int? dryWeatherFlowOverrideID) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPName = treatmentBMPName;
@@ -41,6 +41,7 @@ namespace Neptune.Web.Models
             this.DesignDryWeatherTreatmentCapacity = designDryWeatherTreatmentCapacity;
             this.DesignLowFlowDiversionCapacity = designLowFlowDiversionCapacity;
             this.DesignMediaFiltrationRate = designMediaFiltrationRate;
+            this.DesignResidenceTimeforPermanentPool = designResidenceTimeforPermanentPool;
             this.DiversionRate = diversionRate;
             this.DrawdownTimeforWQDetentionVolume = drawdownTimeforWQDetentionVolume;
             this.EffectiveFootprint = effectiveFootprint;
@@ -89,6 +90,7 @@ namespace Neptune.Web.Models
             this.DesignDryWeatherTreatmentCapacity = vViewTreatmentBMPModelingAttributes.DesignDryWeatherTreatmentCapacity;
             this.DesignLowFlowDiversionCapacity = vViewTreatmentBMPModelingAttributes.DesignLowFlowDiversionCapacity;
             this.DesignMediaFiltrationRate = vViewTreatmentBMPModelingAttributes.DesignMediaFiltrationRate;
+            this.DesignResidenceTimeforPermanentPool = vViewTreatmentBMPModelingAttributes.DesignResidenceTimeforPermanentPool;
             this.DiversionRate = vViewTreatmentBMPModelingAttributes.DiversionRate;
             this.DrawdownTimeforWQDetentionVolume = vViewTreatmentBMPModelingAttributes.DrawdownTimeforWQDetentionVolume;
             this.EffectiveFootprint = vViewTreatmentBMPModelingAttributes.EffectiveFootprint;
@@ -135,6 +137,7 @@ namespace Neptune.Web.Models
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
+        public double? DesignResidenceTimeforPermanentPool { get; set; }
         public double? DiversionRate { get; set; }
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }

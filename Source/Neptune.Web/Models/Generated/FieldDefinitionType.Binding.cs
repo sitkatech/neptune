@@ -1264,7 +1264,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionTypeWaterQualityDetentionVolume : FieldDefinitionType
     {
         private FieldDefinitionTypeWaterQualityDetentionVolume(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeWaterQualityDetentionVolume Instance = new FieldDefinitionTypeWaterQualityDetentionVolume(103, @"WaterQualityDetentionVolume", @"Extended Detention Surcharge Volume");
+        public static readonly FieldDefinitionTypeWaterQualityDetentionVolume Instance = new FieldDefinitionTypeWaterQualityDetentionVolume(103, @"WaterQualityDetentionVolume", @"Water Quality Detention Volume");
     }
 
     public partial class FieldDefinitionTypeWettedFootprint : FieldDefinitionType

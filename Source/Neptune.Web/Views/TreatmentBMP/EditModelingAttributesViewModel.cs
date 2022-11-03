@@ -44,6 +44,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DesignMediaFiltrationRate)]
         public double? DesignMediaFiltrationRate { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DesignResidenceTimeForPermanentPool)]
+        public double? DesignResidenceTimeforPermanentPool { get; set; }
+
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DiversionRate)]
         public double? DiversionRate { get; set; }
 
@@ -133,6 +136,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 DesignDryWeatherTreatmentCapacity = treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity;
                 DesignLowFlowDiversionCapacity = treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity;
                 DesignMediaFiltrationRate = treatmentBMPModelingAttribute.DesignMediaFiltrationRate;
+                DesignResidenceTimeforPermanentPool = treatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool;
                 DiversionRate = treatmentBMPModelingAttribute.DiversionRate;
                 DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume;
                 EffectiveFootprint = treatmentBMPModelingAttribute.EffectiveFootprint;
@@ -169,6 +173,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity = DesignDryWeatherTreatmentCapacity;
             treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity = DesignLowFlowDiversionCapacity;
             treatmentBMPModelingAttribute.DesignMediaFiltrationRate = DesignMediaFiltrationRate;
+            treatmentBMPModelingAttribute.DesignResidenceTimeforPermanentPool = DesignResidenceTimeforPermanentPool;
             treatmentBMPModelingAttribute.DiversionRate = null;
             treatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume = DrawdownTimeforWQDetentionVolume;
             treatmentBMPModelingAttribute.EffectiveFootprint = EffectiveFootprint;
@@ -246,8 +251,14 @@ namespace Neptune.Web.Views.TreatmentBMP
                     case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                         ValidateFieldIsRequired(validationResults, "Permanent Pool or Wetland Volume",
                             PermanentPoolorWetlandVolume);
-                        ValidateFieldIsRequired(validationResults, "Extended Detention Surcharge Volume",
+                        ValidateFieldIsRequired(validationResults, "Water Quality Detention Volume",
                             WaterQualityDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Drawdown Time for Water Quality Detention Volume",
+                            DrawdownTimeforWQDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Winter Harvested Water Demand",
+                            WinterHarvestedWaterDemand);
+                        ValidateFieldIsRequired(validationResults, "Summer Harvested Water Demand",
+                            SummerHarvestedWaterDemand);
                         break;
                     case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                     case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
@@ -257,7 +268,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                         ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
                             StorageVolumeBelowLowestOutletElevation);
                         ValidateFieldIsRequired(validationResults, "Effective Footprint", EffectiveFootprint);
-                        ValidateFieldIsRequired(validationResults, "Extended Detention Surcharge Volume", DrawdownTimeforWQDetentionVolume);
+                        ValidateFieldIsRequired(validationResults, "Drawdown Time For Water Quality Detention Volume", DrawdownTimeforWQDetentionVolume);
                         break;
                     case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                         if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)

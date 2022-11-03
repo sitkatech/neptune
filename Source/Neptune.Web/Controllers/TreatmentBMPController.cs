@@ -775,6 +775,7 @@ namespace Neptune.Web.Controllers
                 UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupID,
                 RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID,
                 TimeOfConcentrationID = TimeOfConcentration.FiveMinutes.TimeOfConcentrationID,
+                DesignResidenceTimeforPermanentPool = 720,
                 DryWeatherFlowOverrideID = DryWeatherFlowOverride.No.DryWeatherFlowOverrideID
             };
 
