@@ -468,10 +468,7 @@ namespace Neptune.Web.Models
                           (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
                            !bmpModelingAttributes.DiversionRate.HasValue) ||
                           !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
-                          !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
-                          !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue ||
-                          !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
-                          !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue))
+                          !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue))
                 {
                     return false;
                 }

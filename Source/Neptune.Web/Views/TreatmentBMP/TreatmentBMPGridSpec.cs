@@ -115,7 +115,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(FieldDefinitionType.DesignDryWeatherTreatmentCapacity.ToGridHeaderString("Design Dry Weather Treatment Capacity (cfs)"), x => x.DesignDryWeatherTreatmentCapacity, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.DesignLowFlowDiversionCapacity.ToGridHeaderString("Design Low Flow Diversion Capacity (gpd)"), x => x.DesignLowFlowDiversionCapacity, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.DesignMediaFiltrationRate.ToGridHeaderString("Design Media Filtration Rate (in/hr)"), x => x.DesignMediaFiltrationRate, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(FieldDefinitionType.DesignResidenceTimeForPermanentPool.ToGridHeaderString("Design Residence Time for Permanent Pool (days)"), x => x.DesignResidenceTimeforPermanentPool, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"), x => x.DrawdownTimeforWQDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.EffectiveFootprint.ToGridHeaderString("Effective Footprint (sq ft)"), x => x.EffectiveFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.EffectiveRetentionDepth.ToGridHeaderString("Effective Retention Depth (ft)"), x => x.EffectiveRetentionDepth, 100, DhtmlxGridColumnFormatType.Decimal);
@@ -132,7 +131,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(FieldDefinitionType.TreatmentRate.ToGridHeaderString("Treatment Rate (cfs)"), x => x.TreatmentRate, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"), x => x.UnderlyingHydrologicSoilGroupID != null ? UnderlyingHydrologicSoilGroup.AllLookupDictionary[x.UnderlyingHydrologicSoilGroupID.Value].UnderlyingHydrologicSoilGroupDisplayName : String.Empty, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.UnderlyingInfiltrationRate.ToGridHeaderString("Underlying Infiltration Rate (in/hr)"), x => x.UnderlyingInfiltrationRate, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Water Quality Detention Volume (cu ft)"), x => x.WaterQualityDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
+            Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Extended Detention Surcharge Volume (cu ft)"), x => x.WaterQualityDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.WettedFootprint.ToGridHeaderString("Wetted Footprint (sq ft)"), x => x.WettedFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"), x => x.WinterHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => x.UpstreamBMPID != null ? UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace((int)x.UpstreamBMPID), x.UpstreamBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);

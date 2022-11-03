@@ -23,7 +23,6 @@ namespace Neptune.Web.Models
             Property(x => x.DesignDryWeatherTreatmentCapacity).HasColumnName(@"DesignDryWeatherTreatmentCapacity").HasColumnType("float").IsOptional();
             Property(x => x.DesignLowFlowDiversionCapacity).HasColumnName(@"DesignLowFlowDiversionCapacity").HasColumnType("float").IsOptional();
             Property(x => x.DesignMediaFiltrationRate).HasColumnName(@"DesignMediaFiltrationRate").HasColumnType("float").IsOptional();
-            Property(x => x.DesignResidenceTimeforPermanentPool).HasColumnName(@"DesignResidenceTimeforPermanentPool").HasColumnType("float").IsOptional();
             Property(x => x.DiversionRate).HasColumnName(@"DiversionRate").HasColumnType("float").IsOptional();
             Property(x => x.DrawdownTimeforWQDetentionVolume).HasColumnName(@"DrawdownTimeforWQDetentionVolume").HasColumnType("float").IsOptional();
             Property(x => x.EffectiveFootprint).HasColumnName(@"EffectiveFootprint").HasColumnType("float").IsOptional();

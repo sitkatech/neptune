@@ -11,7 +11,6 @@ CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
 	[DesignDryWeatherTreatmentCapacity] [float] NULL,
 	[DesignLowFlowDiversionCapacity] [float] NULL,
 	[DesignMediaFiltrationRate] [float] NULL,
-	[DesignResidenceTimeforPermanentPool] [float] NULL,
 	[DiversionRate] [float] NULL,
 	[DrawdownTimeforWQDetentionVolume] [float] NULL,
 	[EffectiveFootprint] [float] NULL,
