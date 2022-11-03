@@ -49,7 +49,6 @@ namespace Neptune.Web.ScheduledJobs
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
                     DbContext.Database.ExecuteSqlCommand("ALTER TABLE dbo.WaterQualityManagementPlanParcel add constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID foreign key (ParcelID) references dbo.Parcel(ParcelID)");
                     DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pParcelUpdateFromStaging");
-                    DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pRebuildWaterQualityManagementPlanParcel");
 
                     // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
                     var parcels = DbContext.Parcels.ToList();
@@ -60,12 +59,26 @@ namespace Neptune.Web.ScheduledJobs
 
                     DbContext.SaveChangesWithNoAuditing();
 
+                    // calculate wqmp parcel intersections
+                    foreach (var wqmp in DbContext.WaterQualityManagementPlans)
+                    {
+                        var waterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
+                            .Where(x => x.ParcelGeometry4326.Intersects(wqmp.WaterQualityManagementPlanBoundary4326))
+                            .ToList()
+                            .Select(x =>
+                                new WaterQualityManagementPlanParcel(
+                                    wqmp.WaterQualityManagementPlanID, x.ParcelID))
+                            .ToList();
+                        DbContext.WaterQualityManagementPlanParcels.AddRange(waterQualityManagementPlanParcels);
+                    }
+                    DbContext.SaveChangesWithNoAuditing();
+
                     var errorCount = parcelStagingsCount - parcels.Count;
                     var errorMessage = errorCount > 0
                         ? $"{errorCount} Parcels were not imported because they either had an invalid geometry or no APN. "
                         : "";
                     var body =
-                        $"Your Parcel Upload has been processed. {parcels.Count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. {errorMessage}It may take up to 24 hours for updated Trash Results to appear in the system.";
+                        $"Your Parcel Upload has been processed. {parcels.Count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. {errorMessage}";
 
                     var mailMessage = new MailMessage
                     {
