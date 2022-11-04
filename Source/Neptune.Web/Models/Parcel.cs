@@ -6,12 +6,12 @@ namespace Neptune.Web.Models
     {
         public bool HasValidAddress()
         {
-            return !(string.IsNullOrWhiteSpace(ParcelAddress) || string.IsNullOrWhiteSpace(ParcelZipCode));
+            return !string.IsNullOrWhiteSpace(ParcelAddress);
         }
 
         public string GetParcelAddress()
         {
-            return $"{ParcelAddress}, {ParcelZipCode}";
+            return $"{ParcelAddress}{(!string.IsNullOrWhiteSpace(ParcelZipCode) ? ", " + ParcelZipCode : "")}";
         }
 
         public string GetAuditDescriptionString()
