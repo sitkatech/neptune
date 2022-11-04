@@ -106,6 +106,9 @@ namespace Neptune.Web.ScheduledJobs
                 ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
 
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pLoadGeneratingUnitsMakeValid");
+
                 if (loadGeneratingUnitRefreshArea != null)
                 {
                     loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;

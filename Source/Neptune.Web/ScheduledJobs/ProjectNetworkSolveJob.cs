@@ -141,6 +141,9 @@ You can view the results or trigger another network solve <a href='{planningURL}
 
                 ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
                     NeptuneWebConfiguration.DatabaseConnectionString, ProjectID);
+
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
             }
             catch (Ogr2OgrCommandLineException e)
             {
