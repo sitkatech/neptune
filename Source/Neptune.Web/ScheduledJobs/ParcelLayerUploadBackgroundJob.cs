@@ -65,7 +65,7 @@ namespace Neptune.Web.ScheduledJobs
                     {
                         var waterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
                             .Where(x => x.ParcelGeometry4326.Intersects(wqmp.WaterQualityManagementPlanBoundary4326))
-                            .ToList().Where(x => x.ParcelGeometry4326.Intersection(wqmp.WaterQualityManagementPlanBoundary4326) > ToleranceInSquareMeters)
+                            .ToList().Where(x => x.ParcelGeometry4326.Intersection(wqmp.WaterQualityManagementPlanBoundary4326).Area > ToleranceInSquareMeters)
                             .Select(x =>
                                 new WaterQualityManagementPlanParcel(
                                     wqmp.WaterQualityManagementPlanID, x.ParcelID))
