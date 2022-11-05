@@ -369,7 +369,13 @@ namespace Neptune.Web.Common
                     var edgeToDownstreamNode = existingEdges.Single(x=>x.SourceID == newCentralizedBMPNodeID);
                     while (edgeToDownstreamNode.TargetID != existingRSBNodeID)
                     {
-                        edgeToDownstreamNode = existingEdges.Single(x => x.SourceID == edgeToDownstreamNode.TargetID);
+                        var currentTargetID = edgeToDownstreamNode.TargetID;
+                        edgeToDownstreamNode = existingEdges.SingleOrDefault(x => x.SourceID == currentTargetID);
+                        if (edgeToDownstreamNode == null)
+                        {
+                            _logger.Info($"No existingEdges found with SourceID {currentTargetID}");
+                            break;
+                        }
                     }
 
                     if (downstreamRegionalSubbasinID != null)
