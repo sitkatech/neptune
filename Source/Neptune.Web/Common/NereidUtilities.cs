@@ -378,13 +378,16 @@ namespace Neptune.Web.Common
                         }
                     }
 
-                    if (downstreamRegionalSubbasinID != null)
+                    if (edgeToDownstreamNode != null)
                     {
-                        edgeToDownstreamNode.TargetID = downstreamRegionalSubbasinID;
-                    }
-                    else
-                    {
-                        existingEdges.Remove(edgeToDownstreamNode);
+                        if (downstreamRegionalSubbasinID != null)
+                        {
+                            edgeToDownstreamNode.TargetID = downstreamRegionalSubbasinID;
+                        }
+                        else
+                        {
+                            existingEdges.Remove(edgeToDownstreamNode);
+                        }
                     }
                 }
 
