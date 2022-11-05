@@ -13,7 +13,7 @@ namespace Neptune.Web.ScheduledJobs
 {
     public class ParcelLayerUploadBackgroundJob : ScheduledBackgroundJobBase
     {
-        private const int intersectionToleranceInSquareMeteres = 200;
+        private const int ToleranceInSquareMeters = 200;
         public int PersonID { get; }
 
         public ParcelLayerUploadBackgroundJob(int personID)
@@ -64,8 +64,8 @@ namespace Neptune.Web.ScheduledJobs
                     foreach (var wqmp in DbContext.WaterQualityManagementPlans)
                     {
                         var waterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
-                            .Where(x => x.ParcelGeometry4326.Intersection(wqmp.WaterQualityManagementPlanBoundary4326).Area > intersectionToleranceInSquareMeteres)
-                            .ToList()
+                            .Where(x => x.ParcelGeometry4326.Intersects(wqmp.WaterQualityManagementPlanBoundary4326))
+                            .ToList().Where(x => x.ParcelGeometry4326.Intersection(wqmp.WaterQualityManagementPlanBoundary4326) > ToleranceInSquareMeters)
                             .Select(x =>
                                 new WaterQualityManagementPlanParcel(
                                     wqmp.WaterQualityManagementPlanID, x.ParcelID))
