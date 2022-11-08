@@ -134,6 +134,10 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return ProjectNereidResultID; } set { ProjectNereidResultID = value; } }
 
         public virtual Project Project { get; set; }
+        public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
+        public virtual RegionalSubbasin RegionalSubbasin { get; set; }
+        public virtual Delineation Delineation { get; set; }
 
         public static class FieldLengths
         {

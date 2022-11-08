@@ -6,6 +6,7 @@ using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Mail;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Email;
 
 namespace Neptune.Web.ScheduledJobs
@@ -118,28 +119,34 @@ namespace Neptune.Web.ScheduledJobs
                         if (stormwaterJurisdictionsPersonCanEdit.Select(x => x.StormwaterJurisdictionID)
                             .Contains(stormwaterJurisdictionToAssign.StormwaterJurisdictionID))
                         {
-                            landUseBlock.StormwaterJurisdictionID =
-                                stormwaterJurisdictionToAssign.StormwaterJurisdictionID;
+                            landUseBlock.StormwaterJurisdictionID = stormwaterJurisdictionToAssign.StormwaterJurisdictionID;
+
                             if (landUseBlockStaging.LandUseBlockStagingGeometry == null)
                             {
                                 errorList.Add(
                                     $"The Land Use Block Geometry at row {count} is null. A value must be provided");
+                            } else if (!landUseBlockStaging.LandUseBlockStagingGeometry.IsValid)
+                            {
+                                errorList.Add(
+                                    $"The Land Use Block Geometry at row {count} is invalid.");
                             }
                             else
                             {
-                                var clippedGeometry = landUseBlockStaging.LandUseBlockStagingGeometry.Intersection(
-                                    stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry.GeometryNative);
 
-                                landUseBlock.LandUseBlockGeometry = clippedGeometry;
-                                landUseBlock.LandUseBlockGeometry4326 =
-                                    CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(clippedGeometry);
+                                var clippedGeometry = landUseBlockStaging.LandUseBlockStagingGeometry
+                                    .Intersection(stormwaterJurisdictionToAssign.StormwaterJurisdictionGeometry.GeometryNative);
 
-                                if (clippedGeometry.IsEmpty)
+                                if (clippedGeometry == null || clippedGeometry.IsEmpty)
                                 {
                                     errorList.Add(
                                         $"The Land Use Block Geometry at row {count} is not in the assigned Stormwater Jurisdiction. Please make sure Land Use Block is in {stormwaterJurisdictionToAssign.Organization.OrganizationName}.");
                                 }
-
+                                else
+                                {
+                                    landUseBlock.LandUseBlockGeometry = clippedGeometry;
+                                    landUseBlock.LandUseBlockGeometry4326 =
+                                        CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(clippedGeometry);
+                                }
                             }
                         }
                         else

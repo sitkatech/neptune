@@ -117,8 +117,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)
         {
             Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {ProjectID}");
-
-            var outputLayerName = Guid.NewGuid().ToString();
+            var outputLayerName = $"LGU{DateTime.Now.Ticks}";
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
             var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 
@@ -142,6 +141,9 @@ You can view the results or trigger another network solve <a href='{planningURL}
 
                 ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
                     NeptuneWebConfiguration.DatabaseConnectionString, ProjectID);
+
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
             }
             catch (Ogr2OgrCommandLineException e)
             {

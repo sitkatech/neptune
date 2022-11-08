@@ -73,19 +73,20 @@ namespace Neptune.Web.Areas.Trash.Views.LandUseBlockUpload
                     {
                         var columns = new List<string>
                         {
+                            $"{PersonID} as UploadedByPersonID",
                             "PLU_Cat as PriorityLandUseType",
                             "LU_Descr as LandUseDescription",
+                            "shape as LandUseBlockGeometry",
                             "TGR as TrashGenerationRate",
                             "LU_for_TGR as LandUseForTGR",
                             "MHI as MedianHouseHoldIncome",
                             "Jurisdic as StormwaterJurisdiction",
                             "Permit as PermitType",
-                            $"{PersonID} as UploadedByPersonID"
                         };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0],
-                            "LandUseBlockStaging", columns,
+                            "dbo.LandUseBlockStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString, true,
-                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
+                            Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON, "");
                     }
                     catch (Ogr2OgrCommandLineException e)
                     {

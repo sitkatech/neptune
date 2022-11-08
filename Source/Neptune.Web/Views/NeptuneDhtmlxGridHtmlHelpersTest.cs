@@ -85,8 +85,6 @@ namespace Neptune.Web.Views
         [UseReporter(typeof(DiffReporter))]
         public void BuildDhtmlxGridHeaderTest()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             var gridSpec = new TestGridSpec();
             var result = DhtmlxGridHtmlHelpers.BuildDhtmlxGridHeader(gridSpec, GridName, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithFooterUrl, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithoutFooterUrl);
             Approvals.Verify(result);
@@ -122,8 +120,6 @@ namespace Neptune.Web.Views
         [UseReporter(typeof(DiffReporter))]
         public void CreateFilteredExcelDownloadIconHtmlTest()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             const string gridName = "testGridName";
             var result = DhtmlxGridHtmlHelpers.CreateFilteredExcelDownloadIconHtml(gridName, true, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithFooterUrl, NeptuneDhtmlxGridHtmlHelpers.ExcelDownloadWithoutFooterUrl);
             Approvals.Verify(result);

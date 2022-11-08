@@ -13,6 +13,7 @@ namespace Neptune.Web.ScheduledJobs
 {
     public class ParcelLayerUploadBackgroundJob : ScheduledBackgroundJobBase
     {
+        private const int ToleranceInSquareMeters = 200;
         public int PersonID { get; }
 
         public ParcelLayerUploadBackgroundJob(int personID)
@@ -39,85 +40,50 @@ namespace Neptune.Web.ScheduledJobs
             }
             try
             {
-                var parcelStagings = person.ParcelStagingsWhereYouAreTheUploadedByPerson;
+                var parcelStagingsCount = DbContext.ParcelStagings.Count();
 
-                var count = 0;
-                var errorList = new List<string>();
-                var parcelsToUpload = new List<Parcel>();
-
-                foreach (var parcelStaging in parcelStagings)
-                {
-                    var parcel = new Parcel(string.Empty, default, default);
-
-                    if (string.IsNullOrEmpty(parcelStaging.ParcelNumber))
-                    {
-                        errorList.Add(
-                            $"Parcel Number (APN) at row {count} is null, empty, or whitespace. A value must be provided");
-                    }
-                    else
-                    {
-                        parcel.ParcelNumber = parcelStaging.ParcelNumber;
-                    }
-
-                    if (parcelStaging.ParcelStagingGeometry == null)
-                    {
-                        errorList.Add(
-                            $"The Parcel Geometry at row {count} is null. A value must be provided");
-                    }
-                    else
-                    {
-                        parcel.ParcelGeometry = parcelStaging.ParcelStagingGeometry;
-                        parcel.ParcelGeometry4326 =
-                            CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
-                    }
-                    
-                    parcel.ParcelAreaInAcres = parcelStaging.ParcelStagingAreaSquareFeet / CoordinateSystemHelper.SquareFeetToAcresDivisor;
-                    parcel.ParcelGeometry4326 =
-                        CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
-                    
-                    parcel.OwnerName = parcelStaging.OwnerName;
-                    parcel.ParcelStreetNumber = parcelStaging.ParcelStreetNumber;
-                    parcel.ParcelAddress = parcelStaging.ParcelAddress;
-                    parcel.ParcelZipCode = parcelStaging.ParcelZipCode;
-                    parcel.LandUse = parcelStaging.LandUse;
-                    parcel.SquareFeetHome = parcelStaging.SquareFeetHome;
-                    parcel.SquareFeetLot = parcelStaging.SquareFeetLot;
-
-                    parcelsToUpload.Add(parcel);
-                    count++;
-                }
-
-                if (!errorList.Any())
+                if (parcelStagingsCount > 0)
                 {
                     // first wipe the dependent WQMPParcel table, then wipe the old parcels
+                    DbContext.Database.ExecuteSqlCommand("ALTER TABLE dbo.WaterQualityManagementPlanParcel drop constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID");
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
                     DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.Parcel");
-                    DbContext.Parcels.AddRange(parcelsToUpload);
-                    DbContext.SaveChanges(person);
-                    DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pRebuildWaterQualityManagementPlanParcel");
+                    DbContext.Database.ExecuteSqlCommand("ALTER TABLE dbo.WaterQualityManagementPlanParcel add constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID foreign key (ParcelID) references dbo.Parcel(ParcelID)");
+                    DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pParcelUpdateFromStaging");
 
+                    // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
+                    var parcels = DbContext.Parcels.ToList();
+                    foreach (var parcel in parcels)
+                    {
+                        parcel.ParcelGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
+                    }
+
+                    DbContext.SaveChangesWithNoAuditing();
+
+                    // calculate wqmp parcel intersections
+                    foreach (var wqmp in DbContext.WaterQualityManagementPlans)
+                    {
+                        var waterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
+                            .Where(x => x.ParcelGeometry.Intersects(wqmp.WaterQualityManagementPlanBoundary))
+                            .ToList().Where(x => x.ParcelGeometry.Intersection(wqmp.WaterQualityManagementPlanBoundary).Area > ToleranceInSquareMeters)
+                            .Select(x =>
+                                new WaterQualityManagementPlanParcel(
+                                    wqmp.WaterQualityManagementPlanID, x.ParcelID))
+                            .ToList();
+                        DbContext.WaterQualityManagementPlanParcels.AddRange(waterQualityManagementPlanParcels);
+                    }
+                    DbContext.SaveChangesWithNoAuditing();
+
+                    var errorCount = parcelStagingsCount - parcels.Count;
+                    var errorMessage = errorCount > 0
+                        ? $"{errorCount} Parcels were not imported because they either had an invalid geometry or no APN. "
+                        : "";
                     var body =
-                        $"Your Parcel Upload has been processed. {count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
+                        $"Your Parcel Upload has been processed. {parcels.Count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. {errorMessage}";
 
                     var mailMessage = new MailMessage
                     {
                         Subject = "Parcel Upload Results",
-                        Body = body,
-                        From = DoNotReplyMailAddress()
-                    };
-
-                    mailMessage.To.Add(person.Email);
-                    SitkaSmtpClient.Send(mailMessage);
-                }
-                else
-                {
-                    var body =
-                        "Your Parcel upload had errors. Please review the following report, correct the errors, and try again: \n" +
-                        string.Join("\n", errorList);
-
-                    var mailMessage = new MailMessage
-                    {
-                        Subject = "Parcel Upload Error",
                         Body = body,
                         From = DoNotReplyMailAddress()
                     };

@@ -43,7 +43,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var outputLayerName = Guid.NewGuid().ToString();
+            var outputLayerName = $"LGU{DateTime.Now.Ticks}";
             var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
 
             var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
@@ -105,6 +105,9 @@ namespace Neptune.Web.ScheduledJobs
 
                 ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
                     NeptuneWebConfiguration.DatabaseConnectionString);
+
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pLoadGeneratingUnitsMakeValid");
 
                 if (loadGeneratingUnitRefreshArea != null)
                 {
@@ -170,7 +173,7 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
         var destinationTable = projectID != null ? "dbo.ProjectLoadGeneratingUnit" : "dbo.LoadGeneratingUnit";
         // todo: fix this
         var selectStatement =
-            $"Select {(projectID != null ? projectID.ToString() + " as ProjectID, " : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from '{outputLayerName}'";
+            $"Select {(projectID != null ? $"{projectID} as ProjectID," : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from {outputLayerName}";
 
         var commandLineArguments = new List<string>
         {
@@ -178,14 +181,11 @@ public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
             "-append",
             "-sql",
             selectStatement,
-            "--config",
-            "GDAL_DATA",
-            _gdalDataPath.FullName,
             "-f",
             "MSSQLSpatial",
             databaseConnectionString,
             outputPath,
-            "-a_srs",
+            "-t_srs",
             GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
             "-nln",
             destinationTable

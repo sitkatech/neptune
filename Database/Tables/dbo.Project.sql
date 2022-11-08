@@ -27,6 +27,8 @@ CREATE TABLE [dbo].[Project](
 	[SEA] [float] NULL,
 	[DryWeatherWQLRI] [float] NULL,
 	[WetWeatherWQLRI] [float] NULL,
+	[AreaTreatedAcres] [float] NULL,
+	[ImperviousAreaTreatedAcres] [float] NULL,
  CONSTRAINT [PK_Project_ProjectID] PRIMARY KEY CLUSTERED 
 (
 	[ProjectID] ASC

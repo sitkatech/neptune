@@ -26,8 +26,11 @@ namespace Neptune.Web.Models
         {
             this.DelineationOverlaps = new HashSet<DelineationOverlap>();
             this.DelineationOverlapsWhereYouAreTheOverlappingDelineation = new HashSet<DelineationOverlap>();
+            this.DirtyModelNodes = new HashSet<DirtyModelNode>();
             this.LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            this.NereidResults = new HashSet<NereidResult>();
             this.ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            this.ProjectNereidResults = new HashSet<ProjectNereidResult>();
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any() || LoadGeneratingUnits.Any() || ProjectLoadGeneratingUnits.Any();
+            return DelineationOverlaps.Any() || DelineationOverlapsWhereYouAreTheOverlappingDelineation.Any() || DirtyModelNodes.Any() || LoadGeneratingUnits.Any() || NereidResults.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any();
         }
 
         /// <summary>
@@ -113,14 +116,29 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(DelineationOverlap).Name);
             }
 
+            if(DirtyModelNodes.Any())
+            {
+                dependentObjects.Add(typeof(DirtyModelNode).Name);
+            }
+
             if(LoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(LoadGeneratingUnit).Name);
             }
 
+            if(NereidResults.Any())
+            {
+                dependentObjects.Add(typeof(NereidResult).Name);
+            }
+
             if(ProjectLoadGeneratingUnits.Any())
             {
                 dependentObjects.Add(typeof(ProjectLoadGeneratingUnit).Name);
+            }
+
+            if(ProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNereidResult).Name);
             }
             return dependentObjects.Distinct().ToList();
         }
@@ -128,7 +146,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name, typeof(LoadGeneratingUnit).Name, typeof(ProjectLoadGeneratingUnit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Delineation).Name, typeof(DelineationOverlap).Name, typeof(DirtyModelNode).Name, typeof(LoadGeneratingUnit).Name, typeof(NereidResult).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name};
 
 
         /// <summary>
@@ -163,12 +181,27 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in DirtyModelNodes.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in LoadGeneratingUnits.ToList())
             {
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in NereidResults.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in ProjectLoadGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNereidResults.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -190,8 +223,11 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<DelineationOverlap> DelineationOverlaps { get; set; }
         public virtual ICollection<DelineationOverlap> DelineationOverlapsWhereYouAreTheOverlappingDelineation { get; set; }
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
         public virtual Person VerifiedByPerson { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

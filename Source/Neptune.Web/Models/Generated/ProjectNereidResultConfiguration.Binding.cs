@@ -28,6 +28,10 @@ namespace Neptune.Web.Models
 
             // Foreign keys
             HasRequired(a => a.Project).WithMany(b => b.ProjectNereidResults).HasForeignKey(c => c.ProjectID).WillCascadeOnDelete(false); // FK_ProjectNereidResult_Project_ProjectID
+            HasOptional(a => a.TreatmentBMP).WithMany(b => b.ProjectNereidResults).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_ProjectNereidResult_TreatmentBMP_TreatmentBMPID
+            HasOptional(a => a.WaterQualityManagementPlan).WithMany(b => b.ProjectNereidResults).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_ProjectNereidResult_WaterQualityManagementPlan_WaterQualityManagementPlanID
+            HasOptional(a => a.RegionalSubbasin).WithMany(b => b.ProjectNereidResults).HasForeignKey(c => c.RegionalSubbasinID).WillCascadeOnDelete(false); // FK_ProjectNereidResult_RegionalSubbasin_RegionalSubbasinID
+            HasOptional(a => a.Delineation).WithMany(b => b.ProjectNereidResults).HasForeignKey(c => c.DelineationID).WillCascadeOnDelete(false); // FK_ProjectNereidResult_Delineation_DelineationID
         }
     }
 }

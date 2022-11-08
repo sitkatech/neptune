@@ -4,6 +4,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
+    [SecurityFeatureDescription("Requires JurisdictionManager role")]
     public class RegionalSubbasinRevisionRequestDownloadFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<RegionalSubbasinRevisionRequest>
     {
         private readonly NeptuneFeatureWithContextImpl<RegionalSubbasinRevisionRequest> _lakeTahoeInfoFeatureWithContextImpl;
@@ -30,6 +31,8 @@ namespace Neptune.Web.Security
             _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
         }
     }
+
+    [SecurityFeatureDescription("Can close revision requests with manager or editor role")]
     public class RegionalSubbasinRevisionRequestCloseFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<RegionalSubbasinRevisionRequest>
     {
         private readonly NeptuneFeatureWithContextImpl<RegionalSubbasinRevisionRequest> _lakeTahoeInfoFeatureWithContextImpl;

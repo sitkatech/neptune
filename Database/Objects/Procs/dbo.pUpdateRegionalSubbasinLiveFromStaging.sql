@@ -4,6 +4,9 @@ GO
 Create Procedure dbo.pUpdateRegionalSubbasinLiveFromStaging
 As
 
+-- make the rsb geometries valid
+update dbo.RegionalSubbasinStaging set CatchmentGeometry = CatchmentGeometry.MakeValid() where CatchmentGeometry.STIsValid() = 0
+
 Merge dbo.RegionalSubbasin t Using dbo.RegionalSubbasinStaging s
 	on (t.OCSurveyCatchmentID = s.OCSurveyCatchmentID)
 When Matched

@@ -7,6 +7,6 @@ Create Procedure dbo.pParcelStagingDeleteByPersonID
 )
 As
 
-delete from dbo.ParcelStaging where UploadedByPersonID = @personID
+truncate table dbo.ParcelStaging
 
 GO

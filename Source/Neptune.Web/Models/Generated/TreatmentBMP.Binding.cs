@@ -26,9 +26,12 @@ namespace Neptune.Web.Models
         {
             this.CustomAttributes = new HashSet<CustomAttribute>();
             this.Delineations = new HashSet<Delineation>();
+            this.DirtyModelNodes = new HashSet<DirtyModelNode>();
             this.FieldVisits = new HashSet<FieldVisit>();
             this.FundingEvents = new HashSet<FundingEvent>();
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
+            this.NereidResults = new HashSet<NereidResult>();
+            this.ProjectNereidResults = new HashSet<ProjectNereidResult>();
             this.RegionalSubbasinRevisionRequests = new HashSet<RegionalSubbasinRevisionRequest>();
             this.TreatmentBMPsWhereYouAreTheUpstreamBMP = new HashSet<TreatmentBMP>();
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
@@ -128,7 +131,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || (Delineation != null) || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || RegionalSubbasinRevisionRequests.Any() || TreatmentBMPsWhereYouAreTheUpstreamBMP.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || (TreatmentBMPModelingAttribute != null) || TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
+            return CustomAttributes.Any() || (Delineation != null) || DirtyModelNodes.Any() || FieldVisits.Any() || FundingEvents.Any() || MaintenanceRecords.Any() || NereidResults.Any() || ProjectNereidResults.Any() || RegionalSubbasinRevisionRequests.Any() || TreatmentBMPsWhereYouAreTheUpstreamBMP.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || (TreatmentBMPModelingAttribute != null) || TreatmentBMPModelingAttributesWhereYouAreTheUpstreamTreatmentBMP.Any() || WaterQualityManagementPlanVerifyTreatmentBMPs.Any();
         }
 
         /// <summary>
@@ -148,6 +151,11 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(Delineation).Name);
             }
 
+            if(DirtyModelNodes.Any())
+            {
+                dependentObjects.Add(typeof(DirtyModelNode).Name);
+            }
+
             if(FieldVisits.Any())
             {
                 dependentObjects.Add(typeof(FieldVisit).Name);
@@ -161,6 +169,16 @@ namespace Neptune.Web.Models
             if(MaintenanceRecords.Any())
             {
                 dependentObjects.Add(typeof(MaintenanceRecord).Name);
+            }
+
+            if(NereidResults.Any())
+            {
+                dependentObjects.Add(typeof(NereidResult).Name);
+            }
+
+            if(ProjectNereidResults.Any())
+            {
+                dependentObjects.Add(typeof(ProjectNereidResult).Name);
             }
 
             if(RegionalSubbasinRevisionRequests.Any())
@@ -213,7 +231,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(TreatmentBMPModelingAttribute).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(CustomAttribute).Name, typeof(Delineation).Name, typeof(DirtyModelNode).Name, typeof(FieldVisit).Name, typeof(FundingEvent).Name, typeof(MaintenanceRecord).Name, typeof(NereidResult).Name, typeof(ProjectNereidResult).Name, typeof(RegionalSubbasinRevisionRequest).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(TreatmentBMPModelingAttribute).Name, typeof(WaterQualityManagementPlanVerifyTreatmentBMP).Name};
 
 
         /// <summary>
@@ -248,6 +266,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in DirtyModelNodes.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in FieldVisits.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -259,6 +282,16 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in MaintenanceRecords.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in NereidResults.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in ProjectNereidResults.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -345,9 +378,12 @@ namespace Neptune.Web.Models
         public virtual ICollection<Delineation> Delineations { get; set; }
         [NotMapped]
         public Delineation Delineation { get { return Delineations.SingleOrDefault(); } set { Delineations = new List<Delineation>{value};} }
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
         public virtual ICollection<FieldVisit> FieldVisits { get; set; }
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheUpstreamBMP { get; set; }
         public virtual TreatmentBMP UpstreamBMP { get; set; }

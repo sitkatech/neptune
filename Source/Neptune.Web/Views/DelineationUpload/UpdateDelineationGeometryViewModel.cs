@@ -105,11 +105,11 @@ namespace Neptune.Web.Views.DelineationUpload
                         var columns = new List<string>
                             {
                                 $"{currentPerson.PersonID} as UploadedByPersonID",
-                                $"{TreatmentBMPNameField} as TreatmentBMPName",
-                                $"{StormwaterJurisdictionID} as StormwaterJurisdictionID"
+                                $"{StormwaterJurisdictionID} as StormwaterJurisdictionID",
+                                $"{TreatmentBMPNameField} as TreatmentBMPName"
                             };
-                        ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "DelineationStaging", columns,
-                            NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON);
+                        ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "dbo.DelineationStaging", columns,
+                            NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON, "");
 
                     }
                 }

@@ -86,8 +86,6 @@ namespace LtInfo.Common.GeoJson
         [UseReporter(typeof(DiffReporter))]
         public void CanSerializeAFeatureCollectionTest()
         {
-            AssertCustom.IgnoreOnBuildServer();
-
             var fc = GetTestFeatureCollection();
             var json = JsonConvert.SerializeObject(fc, Formatting.Indented,
                 new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
@@ -97,8 +95,15 @@ namespace LtInfo.Common.GeoJson
         [Test]
         public void CanSerializeAFeatureCollectionAndEnsureItIsValidTest()
         {
+            /***
+             * It looks like the previous owner of http://geojsonlint.com/validate let the domain expire and someone
+             * else picked it up that doesn't support the POST request that we are trying to do. We should think about finding another
+             * way to validate the GeoJSON.
+             *
+             * Leaving this test ignored on the build server for now.
+             */
             AssertCustom.IgnoreOnBuildServer();
-
+            
             var fc = GetTestFeatureCollection();
             var json = JsonConvert.SerializeObject(fc, Formatting.Indented,
     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });

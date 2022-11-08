@@ -3,6 +3,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
+    [SecurityFeatureDescription("Edit Onland Visual Trash Assessment Areas")]
     public class OnlandVisualTrashAssessmentAreaEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<OnlandVisualTrashAssessmentArea>
     {
         private readonly NeptuneFeatureWithContextImpl<OnlandVisualTrashAssessmentArea> _lakeTahoeInfoFeatureWithContextImpl;

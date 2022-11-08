@@ -4,6 +4,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Security.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,7 +14,7 @@ namespace Neptune.Web.Controllers
     {
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Treatment Facility Parameterization",
                                             "This table can be joined to the ‘Treatment Facility Attributes’ table to indicate " +
                                             "if a facility is fully parameterized and ready to be computed in the Modeling Module. The BMP " +
@@ -41,7 +42,7 @@ namespace Neptune.Web.Controllers
 
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Treatment Facility Attributes, Centralized BMP Attributes",
                                 "This table contains the Modeling Attributes that have been entered for each Facility. Each row is a single facility and" +
                                           " its physical attributes. Null values for a modeling parameter in this table does not necessarily indicate that the BMP is missing data. " +
@@ -74,7 +75,6 @@ namespace Neptune.Web.Controllers
                 DesignDryWeatherTreatmentCapacity = x.DesignDryWeatherTreatmentCapacity,
                 DesignLowFlowDiversionCapacity = x.DesignLowFlowDiversionCapacity,
                 DesignMediaFiltrationRate = x.DesignMediaFiltrationRate,
-                DesignResidenceTimeforPermanentPool = x.DesignResidenceTimeforPermanentPool,
                 DiversionRate = x.DiversionRate,
                 DrawdownTimeforWQDetentionVolume = x.DrawdownTimeforWQDetentionVolume,
                 EffectiveFootprint = x.EffectiveFootprint,
@@ -107,7 +107,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("WQMP Attributes",
                                                 "This table includes summary attributes of WQMP sites helpful for filtering and " +
                                                 "reporting, and each row is a single WQMP project site. Additional summary attributes may " +
@@ -141,7 +141,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Water Quality Management Plan O&M Verifications", "An inventory of O&M Verification visits for Water Quality Management Plans (WQMPs)")]
         public ActionResult WaterQualityManagementPlanOAndMVerifications([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
@@ -169,7 +169,7 @@ namespace Neptune.Web.Controllers
 
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Land Use",
                                                 "This table is the result of a spatial overlay analysis (union) between the Regional " +
                                                 "Subbasins managed by OC Survey, WQMP project boundaries entered into OCST, and distributed " +
@@ -196,7 +196,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Centralized BMP Land Use Relationship",
                                                 "This table is a utility table to enable upstream summary reporting of " +
                                                 "centralized facilities. Centralized facilities are a special case, since the area " +
@@ -223,7 +223,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
         public ContentResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
@@ -241,7 +241,7 @@ namespace Neptune.Web.Controllers
             return Content(new JArray(jobjects).ToString());
         }
         [HttpGet]
-        [AllowAnonymous]
+        [AnonymousUnclassifiedFeature]
         [WebServiceNameAndDescriptionAttribute("Baseline Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County in the Baseline Condition.")]
         public ContentResult BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
@@ -275,7 +275,6 @@ namespace Neptune.Web.Controllers
         public double? DesignDryWeatherTreatmentCapacity { get; set; }
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
-        public double? DesignResidenceTimeforPermanentPool { get; set; }
         public double? DiversionRate { get; set; }
         public double? DrawdownTimeforWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }

@@ -37,13 +37,11 @@ namespace LtInfo.Common.GdalOgr
             // Arrange
             // -------
 
-            var gdalDataDirectoryInfo = new DirectoryInfo(@"C:\Program Files\GDAL\gdal-data");
             var inputGdbFile = new FileInfo(@"C:\temp\MyZippedGdbFile.gdb.zip");
 
             // Act
             // ---
-            var actualCommandLineArguments = OgrInfoCommandLineRunner.BuildOgrInfoCommandLineArgumentsToListFeatureClasses(inputGdbFile,
-                gdalDataDirectoryInfo);
+            var actualCommandLineArguments = OgrInfoCommandLineRunner.BuildOgrInfoCommandLineArgumentsToListFeatureClasses(inputGdbFile);
 
             // Assert
             // ------
@@ -51,7 +49,7 @@ namespace LtInfo.Common.GdalOgr
             // Expecting a command line something like this:
             //"C:\Program Files\GDAL\ogrinfo.exe" --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -ro -so -q "C:\\temp\\SampleFileGeodatabase.gdb.zip"
 
-            var expectedCommandLineArguments = new[] { "--config", "GDAL_DATA", gdalDataDirectoryInfo.FullName, "-ro", "-so", "-q", inputGdbFile.FullName };
+            var expectedCommandLineArguments = new[] { "-ro", "-so", "-q", inputGdbFile.FullName };
 
             Assert.That(actualCommandLineArguments, Is.EquivalentTo(expectedCommandLineArguments), "Should produce expected arguments");
 

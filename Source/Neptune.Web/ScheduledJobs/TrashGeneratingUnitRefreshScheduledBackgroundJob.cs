@@ -26,7 +26,7 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var layerName = Guid.NewGuid().ToString();
+            var layerName = $"TGU{DateTime.Now.Ticks}";
             var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
 
             // a PyQGIS script computes the TGU layer and saves it as a shapefile
@@ -102,10 +102,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "-skipfailures",
             "-append",
             "-sql",
-            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from '{outputLayerName}' where LandUseBlo is not null",
-            "--config",
-            "GDAL_DATA",
-            _gdalDataPath.FullName,
+            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from {outputLayerName} where LandUseBlo is not null",
             "-f",
             "MSSQLSpatial",
             databaseConnectionString,
@@ -131,9 +128,6 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "-append",
             "-sql",
             $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from '{outputLayerName}' where LandUseBlo is not null",
-            "--config",
-            "GDAL_DATA",
-            _gdalDataPath.FullName,
             "-f",
             "MSSQLSpatial",
             databaseConnectionString,

@@ -25,7 +25,17 @@ REFERENCES [dbo].[LandUseBlock] ([LandUseBlockID])
 GO
 ALTER TABLE [dbo].[TrashGeneratingUnit4326] CHECK CONSTRAINT [FK_TrashGeneratingUnit4326_LandUseBlock_LandUseBlockID]
 GO
+ALTER TABLE [dbo].[TrashGeneratingUnit4326]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit4326_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] FOREIGN KEY([OnlandVisualTrashAssessmentAreaID])
+REFERENCES [dbo].[OnlandVisualTrashAssessmentArea] ([OnlandVisualTrashAssessmentAreaID])
+GO
+ALTER TABLE [dbo].[TrashGeneratingUnit4326] CHECK CONSTRAINT [FK_TrashGeneratingUnit4326_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID]
+GO
 ALTER TABLE [dbo].[TrashGeneratingUnit4326]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit4326_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[TrashGeneratingUnit4326] CHECK CONSTRAINT [FK_TrashGeneratingUnit4326_StormwaterJurisdiction_StormwaterJurisdictionID]
+GO
+ALTER TABLE [dbo].[TrashGeneratingUnit4326]  WITH CHECK ADD  CONSTRAINT [FK_TrashGeneratingUnit4326_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
+REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
+GO
+ALTER TABLE [dbo].[TrashGeneratingUnit4326] CHECK CONSTRAINT [FK_TrashGeneratingUnit4326_WaterQualityManagementPlan_WaterQualityManagementPlanID]

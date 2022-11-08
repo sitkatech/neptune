@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs, bool calculateOCTAM2Tier2Scores, bool shareOCTAM2Tier2Scores, DateTime? oCTAM2Tier2ScoresLastSharedDate, double? pollutantVolume, double? pollutantMetals, double? pollutantBacteria, double? pollutantNutrients, double? pollutantTSS, double? tPI, double? sEA, double? dryWeatherWQLRI, double? wetWeatherWQLRI, string oCTAWatersheds) : this()
+        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs, bool calculateOCTAM2Tier2Scores, bool shareOCTAM2Tier2Scores, DateTime? oCTAM2Tier2ScoresLastSharedDate, string oCTAWatersheds, double? pollutantVolume, double? pollutantMetals, double? pollutantBacteria, double? pollutantNutrients, double? pollutantTSS, double? tPI, double? sEA, double? dryWeatherWQLRI, double? wetWeatherWQLRI, double? areaTreatedAcres, double? imperviousAreaTreatedAcres) : this()
         {
             this.ProjectID = projectID;
             this.ProjectName = projectName;
@@ -51,6 +51,7 @@ namespace Neptune.Web.Models
             this.CalculateOCTAM2Tier2Scores = calculateOCTAM2Tier2Scores;
             this.ShareOCTAM2Tier2Scores = shareOCTAM2Tier2Scores;
             this.OCTAM2Tier2ScoresLastSharedDate = oCTAM2Tier2ScoresLastSharedDate;
+            this.OCTAWatersheds = oCTAWatersheds;
             this.PollutantVolume = pollutantVolume;
             this.PollutantMetals = pollutantMetals;
             this.PollutantBacteria = pollutantBacteria;
@@ -60,7 +61,8 @@ namespace Neptune.Web.Models
             this.SEA = sEA;
             this.DryWeatherWQLRI = dryWeatherWQLRI;
             this.WetWeatherWQLRI = wetWeatherWQLRI;
-            this.OCTAWatersheds = oCTAWatersheds;
+            this.AreaTreatedAcres = areaTreatedAcres;
+            this.ImperviousAreaTreatedAcres = imperviousAreaTreatedAcres;
         }
 
         /// <summary>
@@ -242,6 +244,7 @@ namespace Neptune.Web.Models
         public bool CalculateOCTAM2Tier2Scores { get; set; }
         public bool ShareOCTAM2Tier2Scores { get; set; }
         public DateTime? OCTAM2Tier2ScoresLastSharedDate { get; set; }
+        public string OCTAWatersheds { get; set; }
         public double? PollutantVolume { get; set; }
         public double? PollutantMetals { get; set; }
         public double? PollutantBacteria { get; set; }
@@ -251,7 +254,8 @@ namespace Neptune.Web.Models
         public double? SEA { get; set; }
         public double? DryWeatherWQLRI { get; set; }
         public double? WetWeatherWQLRI { get; set; }
-        public string OCTAWatersheds { get; set; }
+        public double? AreaTreatedAcres { get; set; }
+        public double? ImperviousAreaTreatedAcres { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 

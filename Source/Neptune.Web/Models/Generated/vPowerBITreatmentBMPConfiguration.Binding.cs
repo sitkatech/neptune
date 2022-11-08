@@ -56,7 +56,6 @@ namespace Neptune.Web.Models
             
             
             
-            
         }
     }
 }
