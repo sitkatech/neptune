@@ -14,10 +14,10 @@ namespace Hippocamp.EFModels.Entities
             var dirtyModelNodeDto = new DirtyModelNodeDto()
             {
                 DirtyModelNodeID = dirtyModelNode.DirtyModelNodeID,
-                TreatmentBMPID = dirtyModelNode.TreatmentBMPID,
-                WaterQualityManagementPlanID = dirtyModelNode.WaterQualityManagementPlanID,
-                RegionalSubbasinID = dirtyModelNode.RegionalSubbasinID,
-                DelineationID = dirtyModelNode.DelineationID,
+                TreatmentBMP = dirtyModelNode.TreatmentBMP?.AsDto(),
+                WaterQualityManagementPlan = dirtyModelNode.WaterQualityManagementPlan?.AsDto(),
+                RegionalSubbasin = dirtyModelNode.RegionalSubbasin?.AsDto(),
+                Delineation = dirtyModelNode.Delineation?.AsDto(),
                 CreateDate = dirtyModelNode.CreateDate
             };
             DoCustomMappings(dirtyModelNode, dirtyModelNodeDto);

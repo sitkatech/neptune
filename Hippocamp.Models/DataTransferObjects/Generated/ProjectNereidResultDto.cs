@@ -12,10 +12,10 @@ namespace Hippocamp.Models.DataTransferObjects
         public int ProjectNereidResultID { get; set; }
         public ProjectDto Project { get; set; }
         public bool IsBaselineCondition { get; set; }
-        public int? TreatmentBMPID { get; set; }
-        public int? WaterQualityManagementPlanID { get; set; }
-        public int? RegionalSubbasinID { get; set; }
-        public int? DelineationID { get; set; }
+        public TreatmentBMPDto TreatmentBMP { get; set; }
+        public WaterQualityManagementPlanDto WaterQualityManagementPlan { get; set; }
+        public RegionalSubbasinDto RegionalSubbasin { get; set; }
+        public DelineationDto Delineation { get; set; }
         public string NodeID { get; set; }
         public string FullResponse { get; set; }
         public DateTime? LastUpdate { get; set; }

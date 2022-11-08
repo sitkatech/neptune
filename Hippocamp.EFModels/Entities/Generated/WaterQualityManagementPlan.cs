@@ -15,10 +15,14 @@ namespace Hippocamp.EFModels.Entities
     {
         public WaterQualityManagementPlan()
         {
+            DirtyModelNodes = new HashSet<DirtyModelNode>();
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            NereidResults = new HashSet<NereidResult>();
             ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            ProjectNereidResults = new HashSet<ProjectNereidResult>();
             QuickBMPs = new HashSet<QuickBMP>();
             SourceControlBMPs = new HashSet<SourceControlBMP>();
+            TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
             TreatmentBMPs = new HashSet<TreatmentBMP>();
             WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
@@ -112,13 +116,21 @@ namespace Hippocamp.EFModels.Entities
         [InverseProperty("WaterQualityManagementPlans")]
         public virtual WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
+        [InverseProperty("WaterQualityManagementPlan")]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
+        [InverseProperty("WaterQualityManagementPlan")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        [InverseProperty("WaterQualityManagementPlan")]
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
+        [InverseProperty("WaterQualityManagementPlan")]
+        public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]

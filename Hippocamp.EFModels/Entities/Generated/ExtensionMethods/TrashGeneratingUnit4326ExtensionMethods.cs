@@ -15,11 +15,11 @@ namespace Hippocamp.EFModels.Entities
             {
                 TrashGeneratingUnit4326ID = trashGeneratingUnit4326.TrashGeneratingUnit4326ID,
                 StormwaterJurisdiction = trashGeneratingUnit4326.StormwaterJurisdiction.AsDto(),
-                OnlandVisualTrashAssessmentAreaID = trashGeneratingUnit4326.OnlandVisualTrashAssessmentAreaID,
+                OnlandVisualTrashAssessmentArea = trashGeneratingUnit4326.OnlandVisualTrashAssessmentArea?.AsDto(),
                 LandUseBlock = trashGeneratingUnit4326.LandUseBlock?.AsDto(),
                 LastUpdateDate = trashGeneratingUnit4326.LastUpdateDate,
                 DelineationID = trashGeneratingUnit4326.DelineationID,
-                WaterQualityManagementPlanID = trashGeneratingUnit4326.WaterQualityManagementPlanID
+                WaterQualityManagementPlan = trashGeneratingUnit4326.WaterQualityManagementPlan?.AsDto()
             };
             DoCustomMappings(trashGeneratingUnit4326, trashGeneratingUnit4326Dto);
             return trashGeneratingUnit4326Dto;

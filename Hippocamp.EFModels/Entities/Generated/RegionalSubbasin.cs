@@ -15,9 +15,12 @@ namespace Hippocamp.EFModels.Entities
     {
         public RegionalSubbasin()
         {
+            DirtyModelNodes = new HashSet<DirtyModelNode>();
             InverseOCSurveyDownstreamCatchment = new HashSet<RegionalSubbasin>();
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            NereidResults = new HashSet<NereidResult>();
             ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            ProjectNereidResults = new HashSet<ProjectNereidResult>();
         }
 
         [Key]
@@ -45,10 +48,16 @@ namespace Hippocamp.EFModels.Entities
         [InverseProperty("RegionalSubbasins")]
         public virtual ModelBasin ModelBasin { get; set; }
         public virtual RegionalSubbasin OCSurveyDownstreamCatchment { get; set; }
+        [InverseProperty("RegionalSubbasin")]
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
         public virtual ICollection<RegionalSubbasin> InverseOCSurveyDownstreamCatchment { get; set; }
         [InverseProperty("RegionalSubbasin")]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         [InverseProperty("RegionalSubbasin")]
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
+        [InverseProperty("RegionalSubbasin")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        [InverseProperty("RegionalSubbasin")]
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
     }
 }

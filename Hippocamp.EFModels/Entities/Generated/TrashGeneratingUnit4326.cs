@@ -26,8 +26,14 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey("LandUseBlockID")]
         [InverseProperty("TrashGeneratingUnit4326s")]
         public virtual LandUseBlock LandUseBlock { get; set; }
+        [ForeignKey("OnlandVisualTrashAssessmentAreaID")]
+        [InverseProperty("TrashGeneratingUnit4326s")]
+        public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
         [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("TrashGeneratingUnit4326s")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        [ForeignKey("WaterQualityManagementPlanID")]
+        [InverseProperty("TrashGeneratingUnit4326s")]
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
     }
 }

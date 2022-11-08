@@ -17,10 +17,13 @@ namespace Hippocamp.EFModels.Entities
         {
             CustomAttributeTreatmentBMPNavigations = new HashSet<CustomAttribute>();
             CustomAttributeTreatmentBMPs = new HashSet<CustomAttribute>();
+            DirtyModelNodes = new HashSet<DirtyModelNode>();
             FundingEvents = new HashSet<FundingEvent>();
             InverseUpstreamBMP = new HashSet<TreatmentBMP>();
             MaintenanceRecordTreatmentBMPNavigations = new HashSet<MaintenanceRecord>();
             MaintenanceRecordTreatmentBMPs = new HashSet<MaintenanceRecord>();
+            NereidResults = new HashSet<NereidResult>();
+            ProjectNereidResults = new HashSet<ProjectNereidResult>();
             RegionalSubbasinRevisionRequests = new HashSet<RegionalSubbasinRevisionRequest>();
             TreatmentBMPAssessmentTreatmentBMPNavigations = new HashSet<TreatmentBMPAssessment>();
             TreatmentBMPAssessmentTreatmentBMPs = new HashSet<TreatmentBMPAssessment>();
@@ -123,12 +126,18 @@ namespace Hippocamp.EFModels.Entities
         [InverseProperty("TreatmentBMP")]
         public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPs { get; set; }
         [InverseProperty("TreatmentBMP")]
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
+        [InverseProperty("TreatmentBMP")]
         public virtual ICollection<FundingEvent> FundingEvents { get; set; }
         [InverseProperty("UpstreamBMP")]
         public virtual ICollection<TreatmentBMP> InverseUpstreamBMP { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPNavigations { get; set; }
         [InverseProperty("TreatmentBMP")]
         public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPs { get; set; }
+        [InverseProperty("TreatmentBMP")]
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
+        [InverseProperty("TreatmentBMP")]
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
         [InverseProperty("TreatmentBMP")]
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequests { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentTreatmentBMPNavigations { get; set; }

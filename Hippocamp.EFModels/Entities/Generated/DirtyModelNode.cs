@@ -17,5 +17,18 @@ namespace Hippocamp.EFModels.Entities
         public int? DelineationID { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreateDate { get; set; }
+
+        [ForeignKey("DelineationID")]
+        [InverseProperty("DirtyModelNodes")]
+        public virtual Delineation Delineation { get; set; }
+        [ForeignKey("RegionalSubbasinID")]
+        [InverseProperty("DirtyModelNodes")]
+        public virtual RegionalSubbasin RegionalSubbasin { get; set; }
+        [ForeignKey("TreatmentBMPID")]
+        [InverseProperty("DirtyModelNodes")]
+        public virtual TreatmentBMP TreatmentBMP { get; set; }
+        [ForeignKey("WaterQualityManagementPlanID")]
+        [InverseProperty("DirtyModelNodes")]
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
     }
 }

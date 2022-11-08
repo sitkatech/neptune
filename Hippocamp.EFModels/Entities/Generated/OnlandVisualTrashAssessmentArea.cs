@@ -17,6 +17,7 @@ namespace Hippocamp.EFModels.Entities
         public OnlandVisualTrashAssessmentArea()
         {
             OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentAreaNavigations = new HashSet<OnlandVisualTrashAssessment>();
+            TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
         }
 
         [Key]
@@ -53,5 +54,7 @@ namespace Hippocamp.EFModels.Entities
         [InverseProperty("OnlandVisualTrashAssessmentArea")]
         public virtual OnlandVisualTrashAssessment OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentArea { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentAreaNavigations { get; set; }
+        [InverseProperty("OnlandVisualTrashAssessmentArea")]
+        public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
     }
 }

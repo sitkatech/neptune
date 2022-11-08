@@ -1072,8 +1072,7 @@ namespace Hippocamp.EFModels.Entities
                 entity.HasOne(d => d.TreatmentBMP)
                     .WithMany(p => p.RegionalSubbasinRevisionRequests)
                     .HasForeignKey(d => d.TreatmentBMPID)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PK_RegionalSubbasinRevisionRequest_TreatmentBMP_TreatmentBMPID");
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<RegionalSubbasinRevisionRequestStatus>(entity =>
@@ -1416,11 +1415,6 @@ namespace Hippocamp.EFModels.Entities
 
             modelBuilder.Entity<TreatmentBMPModelingAttribute>(entity =>
             {
-                entity.HasOne(d => d.MonthsOfOperation)
-                    .WithMany(p => p.TreatmentBMPModelingAttributes)
-                    .HasForeignKey(d => d.MonthsOfOperationID)
-                    .HasConstraintName("FK__TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID");
-
                 entity.HasOne(d => d.TreatmentBMP)
                     .WithOne(p => p.TreatmentBMPModelingAttributeTreatmentBMP)
                     .HasForeignKey<TreatmentBMPModelingAttribute>(d => d.TreatmentBMPID)

@@ -23,5 +23,18 @@ namespace Hippocamp.EFModels.Entities
         [Column(TypeName = "datetime")]
         public DateTime? LastUpdate { get; set; }
         public bool IsBaselineCondition { get; set; }
+
+        [ForeignKey("DelineationID")]
+        [InverseProperty("NereidResults")]
+        public virtual Delineation Delineation { get; set; }
+        [ForeignKey("RegionalSubbasinID")]
+        [InverseProperty("NereidResults")]
+        public virtual RegionalSubbasin RegionalSubbasin { get; set; }
+        [ForeignKey("TreatmentBMPID")]
+        [InverseProperty("NereidResults")]
+        public virtual TreatmentBMP TreatmentBMP { get; set; }
+        [ForeignKey("WaterQualityManagementPlanID")]
+        [InverseProperty("NereidResults")]
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
     }
 }

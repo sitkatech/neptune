@@ -8,6 +8,8 @@ using NetTopologySuite.Geometries;
 namespace Hippocamp.EFModels.Entities
 {
     [Table("ParcelStaging")]
+    [Index("ParcelStagingGeometry", Name = "SPATIAL_ParcelStaging_ParcelStagingGeometry")]
+    [Index("ParcelStagingGeometry", Name = "ogr_dbo_parcelstaging_ParcelStagingGeometry_sidx")]
     public partial class ParcelStaging
     {
         [Key]

@@ -11,11 +11,11 @@ namespace Hippocamp.Models.DataTransferObjects
     {
         public int TrashGeneratingUnit4326ID { get; set; }
         public StormwaterJurisdictionDto StormwaterJurisdiction { get; set; }
-        public int? OnlandVisualTrashAssessmentAreaID { get; set; }
+        public OnlandVisualTrashAssessmentAreaDto OnlandVisualTrashAssessmentArea { get; set; }
         public LandUseBlockDto LandUseBlock { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public int? DelineationID { get; set; }
-        public int? WaterQualityManagementPlanID { get; set; }
+        public WaterQualityManagementPlanDto WaterQualityManagementPlan { get; set; }
     }
 
     public partial class TrashGeneratingUnit4326SimpleDto

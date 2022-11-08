@@ -14,10 +14,10 @@ namespace Hippocamp.EFModels.Entities
             var nereidResultDto = new NereidResultDto()
             {
                 NereidResultID = nereidResult.NereidResultID,
-                TreatmentBMPID = nereidResult.TreatmentBMPID,
-                WaterQualityManagementPlanID = nereidResult.WaterQualityManagementPlanID,
-                RegionalSubbasinID = nereidResult.RegionalSubbasinID,
-                DelineationID = nereidResult.DelineationID,
+                TreatmentBMP = nereidResult.TreatmentBMP?.AsDto(),
+                WaterQualityManagementPlan = nereidResult.WaterQualityManagementPlan?.AsDto(),
+                RegionalSubbasin = nereidResult.RegionalSubbasin?.AsDto(),
+                Delineation = nereidResult.Delineation?.AsDto(),
                 NodeID = nereidResult.NodeID,
                 FullResponse = nereidResult.FullResponse,
                 LastUpdate = nereidResult.LastUpdate,

@@ -16,8 +16,11 @@ namespace Hippocamp.EFModels.Entities
         {
             DelineationOverlapDelineations = new HashSet<DelineationOverlap>();
             DelineationOverlapOverlappingDelineations = new HashSet<DelineationOverlap>();
+            DirtyModelNodes = new HashSet<DirtyModelNode>();
             LoadGeneratingUnits = new HashSet<LoadGeneratingUnit>();
+            NereidResults = new HashSet<NereidResult>();
             ProjectLoadGeneratingUnits = new HashSet<ProjectLoadGeneratingUnit>();
+            ProjectNereidResults = new HashSet<ProjectNereidResult>();
         }
 
         [Key]
@@ -51,8 +54,14 @@ namespace Hippocamp.EFModels.Entities
         [InverseProperty("OverlappingDelineation")]
         public virtual ICollection<DelineationOverlap> DelineationOverlapOverlappingDelineations { get; set; }
         [InverseProperty("Delineation")]
+        public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
+        [InverseProperty("Delineation")]
         public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
         [InverseProperty("Delineation")]
+        public virtual ICollection<NereidResult> NereidResults { get; set; }
+        [InverseProperty("Delineation")]
         public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; }
+        [InverseProperty("Delineation")]
+        public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; }
     }
 }
