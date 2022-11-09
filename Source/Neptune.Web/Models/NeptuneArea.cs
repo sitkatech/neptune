@@ -118,7 +118,7 @@ namespace Neptune.Web.Models
 
         public override bool IsAreaVisibleToPerson(Person person)
         {
-            return NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType != NeptuneEnvironmentType.Prod;
+            return true;
         }
 
         public override string GetIconUrl()
