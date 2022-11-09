@@ -1,2 +1,2 @@
-update dbo.WaterQualityManagementPlanPermitTerm
-set WaterQualityManagementPlanPermitTermDisplayName = replace(WaterQualityManagementPlanPermitTermDisplayName, '�', '-')
+﻿update dbo.WaterQualityManagementPlanPermitTerm
+set WaterQualityManagementPlanPermitTermDisplayName = replace(WaterQualityManagementPlanPermitTermDisplayName, '–', '-')
