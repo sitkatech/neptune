@@ -603,6 +603,7 @@
     <Compile Include="Areas\Modeling\Models\Nereid\SubgraphResult.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentFacility.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\TreatmentSite.cs" />
+    <Compile Include="Models\NereidResult.cs" />
     <Compile Include="Models\ParcelStaging.DatabaseContextExtensions.cs" />
     <Compile Include="Models\ModeledPerformanceResultSimple.cs" />
     <Compile Include="Models\ModelResultsDisplayHelper.cs" />
