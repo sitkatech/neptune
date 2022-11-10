@@ -160,7 +160,7 @@ namespace Neptune.Web.Models
     public partial class WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002 : WaterQualityManagementPlanPermitTerm
     {
         private WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002(int waterQualityManagementPlanPermitTermID, string waterQualityManagementPlanPermitTermName, string waterQualityManagementPlanPermitTermDisplayName, int sortOrder) : base(waterQualityManagementPlanPermitTermID, waterQualityManagementPlanPermitTermName, waterQualityManagementPlanPermitTermDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002 Instance = new WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002(3, @"NorthOCThirdTerm2002", @"North OC 3rd Term – 2002 (2003 Model WQMP)", 30);
+        public static readonly WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002 Instance = new WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002(3, @"NorthOCThirdTerm2002", @"North OC 3rd Term - 2002 (2003 Model WQMP)", 30);
     }
 
     public partial class WaterQualityManagementPlanPermitTermNorthOCFourthTerm2009 : WaterQualityManagementPlanPermitTerm
@@ -184,18 +184,18 @@ namespace Neptune.Web.Models
     public partial class WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002 : WaterQualityManagementPlanPermitTerm
     {
         private WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002(int waterQualityManagementPlanPermitTermID, string waterQualityManagementPlanPermitTermName, string waterQualityManagementPlanPermitTermDisplayName, int sortOrder) : base(waterQualityManagementPlanPermitTermID, waterQualityManagementPlanPermitTermName, waterQualityManagementPlanPermitTermDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002 Instance = new WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002(7, @"SouthOCThirdTerm2002", @"South OC 3rd Term – 2002 (2003 Model WQMP)", 70);
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002 Instance = new WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002(7, @"SouthOCThirdTerm2002", @"South OC 3rd Term - 2002 (2003 Model WQMP)", 70);
     }
 
     public partial class WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009 : WaterQualityManagementPlanPermitTerm
     {
         private WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009(int waterQualityManagementPlanPermitTermID, string waterQualityManagementPlanPermitTermName, string waterQualityManagementPlanPermitTermDisplayName, int sortOrder) : base(waterQualityManagementPlanPermitTermID, waterQualityManagementPlanPermitTermName, waterQualityManagementPlanPermitTermDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009 Instance = new WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009(8, @"SouthOCFourthTerm2009", @"South OC 4th Term – 2009 (2013 Model WQMP, TGD, and 2012 HMP)", 80);
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009 Instance = new WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009(8, @"SouthOCFourthTerm2009", @"South OC 4th Term - 2009 (2013 Model WQMP, TGD, and 2012 HMP)", 80);
     }
 
     public partial class WaterQualityManagementPlanPermitTermSouthOCFithTerm2015 : WaterQualityManagementPlanPermitTerm
     {
         private WaterQualityManagementPlanPermitTermSouthOCFithTerm2015(int waterQualityManagementPlanPermitTermID, string waterQualityManagementPlanPermitTermName, string waterQualityManagementPlanPermitTermDisplayName, int sortOrder) : base(waterQualityManagementPlanPermitTermID, waterQualityManagementPlanPermitTermName, waterQualityManagementPlanPermitTermDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCFithTerm2015 Instance = new WaterQualityManagementPlanPermitTermSouthOCFithTerm2015(9, @"SouthOCFithTerm2015", @"South OC 5th Term – 2015 (2017 Model WQMP, TGD, and HMP)", 90);
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCFithTerm2015 Instance = new WaterQualityManagementPlanPermitTermSouthOCFithTerm2015(9, @"SouthOCFithTerm2015", @"South OC 5th Term - 2015 (2017 Model WQMP, TGD, and HMP)", 90);
     }
 }
