@@ -14,7 +14,7 @@ namespace Neptune.Web.ScheduledJobs
         // only run in PROD--job takes a relatively long time to run, and QA and local can just refresh their data from PROD backups.
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Prod,
+            NeptuneEnvironmentType.Prod, NeptuneEnvironmentType.Local
         };
 
         protected override void RunJobImplementation()
@@ -27,10 +27,12 @@ namespace Neptune.Web.ScheduledJobs
             Logger.Info($"Processing '{JobName}'");
 
             var layerName = $"TGU{DateTime.Now.Ticks}";
-            var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
+            var outputFolder = Path.GetTempPath();
+            var outputPath = $"{Path.Combine(outputFolder, layerName)}.shp";
 
             // a PyQGIS script computes the TGU layer and saves it as a shapefile
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputPath);
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputFolder,
+                $"{layerName}.shp");
 
             if (processUtilityResult.ReturnCode != 0)
             {
@@ -102,7 +104,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "-skipfailures",
             "-append",
             "-sql",
-            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from {outputLayerName} where LandUseBlo is not null",
+            $"SELECT SJID as StormwaterJurisdictionID, OVTAID as OnlandVisualTrashAssessmentAreaID, LUBID as LandUseBlockID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from {outputLayerName} where LUBID is not null",
             "-f",
             "MSSQLSpatial",
             databaseConnectionString,
@@ -127,7 +129,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
             "-skipfailures",
             "-append",
             "-sql",
-            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from '{outputLayerName}' where LandUseBlo is not null",
+            $"SELECT SJID as StormwaterJurisdictionID, OVTAID as OnlandVisualTrashAssessmentAreaID, LUBID as LandUseBlockID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from {outputLayerName} where LUBID is not null",
             "-f",
             "MSSQLSpatial",
             databaseConnectionString,

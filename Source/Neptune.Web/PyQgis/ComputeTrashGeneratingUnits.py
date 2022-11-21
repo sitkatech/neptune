@@ -18,7 +18,8 @@ from qgis.core import (
      QgsDataSourceUri,
      QgsFeature,
      QgsVectorFileWriter,
-     QgsCoordinateReferenceSystem
+     QgsCoordinateReferenceSystem,
+     QgsProject
 )
 from qgis.analysis import QgsNativeAlgorithms
 
@@ -37,28 +38,32 @@ import argparse
 
 from pyqgis_utils import (
     duplicateLayer,
+    fetchLayerFromDatabase,
     raiseIfLayerInvalid,
     QgisError
 )
 
 JOIN_PREFIX = "Joined_"
 CONNSTRING_BASE = "CONNSTRING ERROR"
-OUTPUT_PATH = "OUTPUT PATH ERROR"
+OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
+OUTPUT_FILE = "OUTPUT FILE ERROR"
 
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
     parser.add_argument('connstring', metavar='s', type=str, help='The connection string. Do not specify tables; the script will specify which table(s) it wants to look at.')
-    parser.add_argument('output_path', metavar='d', type=str, help='The path to write the final output to.')
-
+    parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
+    parser.add_argument('output_file', metavar='d', type=str, help='The filename to write the final output to.')
 
     args = parser.parse_args()
 
     # this is easier to write than anything sane
     global CONNSTRING_BASE
-    global OUTPUT_PATH
+    global OUTPUT_FOLDER
+    global OUTPUT_FILE
     CONNSTRING_BASE = "MSSQL:" + args.connstring
-    OUTPUT_PATH = args.output_path
+    OUTPUT_FOLDER = args.output_folder
+    OUTPUT_FILE = args.output_file
 
     if not CONNSTRING_BASE.endswith(";"):
             CONNSTRING_BASE = CONNSTRING_BASE + ";"
@@ -73,9 +78,144 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data.addAttributes(attr)
     target.updateFields()
 
+def unionAndFix(inputLayer, overlayLayer, inputLayerOutputPath, overlayLayerOutputPath, unionResultOutputPath, context=None):
+    inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, PROCESSING_CONTEXT)
+    inputLayer = removeSlivers(inputLayer, 'noslivers', None, PROCESSING_CONTEXT)
+    inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
+    inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
+    inputLayer = fixGeometriesWithinLayer(inputLayer, None, inputLayerOutputPath, PROCESSING_CONTEXT)
+    createSpatialIndex(inputLayer, PROCESSING_CONTEXT)
+    overlayLayer = removeNullGeometries(overlayLayer, 'nonnull', None, PROCESSING_CONTEXT)    
+    overlayLayer = removeSlivers(overlayLayer, 'noslivers', None, PROCESSING_CONTEXT)
+    overlayLayer = bufferZero(overlayLayer, 'buffer', None, PROCESSING_CONTEXT)
+    overlayLayer = snapGeometriesWithinLayer(overlayLayer, 'snapped', None, PROCESSING_CONTEXT)
+    overlayLayer = fixGeometriesWithinLayer(overlayLayer, None, overlayLayerOutputPath, PROCESSING_CONTEXT)
+    createSpatialIndex(overlayLayer, PROCESSING_CONTEXT)
+    result = union(inputLayerOutputPath, overlayLayerOutputPath, 'unioned', None, PROCESSING_CONTEXT)
+    selectPolygonFeatures(result, PROCESSING_CONTEXT)
+    saveSelectedFeatures(result, None, unionResultOutputPath, PROCESSING_CONTEXT)
+    print('Union result saved to ' + unionResultOutputPath)
+
+def selectPolygonFeatures(inputLayer, context = None):
+    params = {
+        'INPUT':inputLayer,
+        'EXPRESSION':"geometry_type($geometry) = 'Polygon'"
+    }
+    print('Running qgis:selectbyexpression')
+    if context is not None:
+        result = processing.run("qgis:selectbyexpression", params ,context = context)
+    else:
+        result = processing.run("qgis:selectbyexpression", params)
+    return result
+
+def removeNullGeometries(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
+    params = {
+        'INPUT':inputLayer,
+        'REMOVE_EMPTY':True
+    }
+    result = runNativeAlgorithm("native:removenullgeometries", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def removeSlivers(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
+    params = {
+        'INPUT':inputLayer,
+        'MODE':2,
+    }
+    result = runNativeAlgorithm("qgis:eliminateselectedpolygons", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def saveSelectedFeatures(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
+    params = {
+        'INPUT':inputLayer
+    }
+    result = runNativeAlgorithm("native:saveselectedfeatures", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+
+def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
+    params = {
+        'INPUT':inputLayer,
+        'OVERLAY':overlayLayer,
+        'OVERLAY_FIELDS_PREFIX':''
+    }
+    
+    result = runNativeAlgorithm("native:union", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def createSpatialIndex(inputLayer, context = None):
+    params = {
+        'INPUT':inputLayer
+    }
+    print('Running native:createspatialindex')
+    if context is not None:
+        result = processing.run("native:createspatialindex", params ,context = context)
+    else:
+        result = processing.run("native:createspatialindex", params)
+
+def bufferZero(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
+    params = {
+        'INPUT':inputLayer,
+        'DISTANCE':0,
+        'SEGMENTS':5,
+        'END_CAP_STYLE':1,
+        'JOIN_STYLE':1,
+        'MITER_LIMIT':2,
+        'DISSOLVE':False
+    }
+    
+    result = runNativeAlgorithm("native:buffer", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def fixGeometriesWithinLayer(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
+    params = {
+        'INPUT':inputLayer
+    }
+    
+    result = runNativeAlgorithm("native:fixgeometries", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def snapGeometriesWithinLayer(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
+    params = {
+        'INPUT':inputLayer,
+        'REFERENCE_LAYER':inputLayer,
+        'TOLERANCE':1,
+        'BEHAVIOR':1
+    }
+    
+    result = runNativeAlgorithm("qgis:snapgeometries", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def runNativeAlgorithm(algorithm, params, memoryOutputName=None, filesystemOutputPath=None, context=None):
+    if memoryOutputName is not None:
+        params['OUTPUT'] = 'memory:' + memoryOutputName
+    elif filesystemOutputPath is not None:
+        params['OUTPUT'] = filesystemOutputPath
+    else:
+        raise QgisError("No output provided for " + algorithm + " operation")
+
+    print('Running ' + algorithm)
+    if context is not None:
+        result = processing.run(algorithm, params ,context = context)
+    else:
+        result = processing.run(algorithm, params)
+
+    return result['OUTPUT']
+
+def writeVectorLayerToDisk(layer, output_path):
+    # Write to an ESRI Shapefile format dataset using UTF-8 text encoding
+    save_options = QgsVectorFileWriter.SaveVectorOptions()
+    save_options.driverName = "ESRI Shapefile"
+    save_options.fileEncoding = "UTF-8"
+    transform_context = QgsProject.instance().transformContext()
+    error = QgsVectorFileWriter.writeAsVectorFormatV3(layer, output_path, transform_context, save_options)
+    if error[0] == QgsVectorFileWriter.NoError:
+        print("Saved to " + output_path)
+    else:
+      print(error)
+
 class Flatten:
     
-    def __init__(self, working_layer, layer_identifier, compareFeaturesViaJoinedLayer, compareFeaturesViaSeparateLayers):
+    def __init__(self, working_layer, layer_identifier, compareFeaturesViaJoinedLayer, compareFeaturesViaSeparateLayers, fieldToRemove):
         
         # don't use the DB as the datasource
         self.working_layer = duplicateLayer(working_layer, "Candidate Layer")
@@ -85,6 +225,7 @@ class Flatten:
         self.layer_identifier = layer_identifier
         self.compareFeaturesViaJoinedLayer = compareFeaturesViaJoinedLayer
         self.compareFeaturesViaSeparateLayers = compareFeaturesViaSeparateLayers
+        self.fieldToRemove = fieldToRemove
         
     def run(self):
         # (2)(a) Collapse equality chains
@@ -93,7 +234,14 @@ class Flatten:
         self.handleInclusionsInCandidateLayer()
         # (2)(c) Deal with ordinary overlaps
         self.handleOverlapsInCandidateLayer()
+        # remove fieldToRemove
+        self.removeFieldFromLayer()
 
+    def removeFieldFromLayer(self):
+        fieldIndex = self.fields.indexFromName(self.fieldToRemove)
+        print("Removing field '" + self.fieldToRemove + "'")
+        self.working_layer.dataProvider().deleteAttributes([fieldIndex])
+        self.working_layer.updateFields()
 
     def removeEqualitiesFromCandidateLayer(self):
         print("Start collapse equality chains")
@@ -110,7 +258,7 @@ class Flatten:
 	        'METHOD':'0',
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
-	        'OUTPUT':r'memory:equalities'
+	        'OUTPUT':'memory:equalities'
         }, context=PROCESSING_CONTEXT)
 
         equalities_layer = res['OUTPUT']
@@ -146,7 +294,7 @@ class Flatten:
 	        'METHOD':'0',
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
-	        'OUTPUT':r'memory:inclusions'
+	        'OUTPUT':'memory:inclusions'
         }, context=PROCESSING_CONTEXT)
 
         inclusions_layer = res['OUTPUT']
@@ -203,7 +351,7 @@ class Flatten:
 	        'METHOD':'0',
 	        'DISCARD_NONMATCHING':False,
 	        'PREFIX': join_prefix,
-	        'OUTPUT':r'memory:overlaps'
+	        'OUTPUT':'memory:overlaps'
         }, context=PROCESSING_CONTEXT)
 
         intersect_contrib_layer = res['OUTPUT']
@@ -282,7 +430,7 @@ class Flatten:
             return self.compareFeaturesViaSeparateLayers(left_feat,right_feat)
 
     def removeFromCandidateLayer(self, feature_id):
-        print("Deleteing " + str(feature_id))
+        print("Deleting " + str(feature_id))
         for featToDelete in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
             self.working_layer.deleteFeature(featToDelete.id())
 
@@ -306,102 +454,64 @@ if __name__ == '__main__':
     PROCESSING_CONTEXT = dataobjects.createContext()
     PROCESSING_CONTEXT.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
 
+    def fetchLayer(spatialTableName):
+        return fetchLayerFromDatabase(CONNSTRING_BASE, spatialTableName)
+
     # Set the decision functions for delineations
     def compareDelineationsViaJoinedLayer(feat):
-        return feat["TrashCaptureEffectiveness"] <= feat["{jp}TrashCaptureEffectiveness".format(jp=JOIN_PREFIX)]
+        return feat["TCEffect"] <= feat["{jp}TCEffect".format(jp=JOIN_PREFIX)]
     def compareDelineationsViaSeparateLayers(left_feat, right_feat):
-        return left_feat["TrashCaptureEffectiveness"] <= right_feat["TrashCaptureEffectiveness"]
+        return left_feat["TCEffect"] <= right_feat["TCEffect"]
 
     # Set the decision functions for OVTAs
     def compareAssessmentAreasViaJoinedLayer(feat):
-        return feat["MostRecentAssessmentDate"] <= feat["{jp}MostRecentAssessmentDate".format(jp=JOIN_PREFIX)]
+        return feat["AssessDate"] <= feat["{jp}AssessDate".format(jp=JOIN_PREFIX)]
     def compareAssessmentAreasViaSeparateLayers(left_feat, right_feat):
-        return left_feat["MostRecentAssessmentDate"] <= right_feat["MostRecentAssessmentDate"]
+        return left_feat["AssessDate"] <= right_feat["AssessDate"]
     
     #Do note that the views here have all input filters built into them
-
-    connstring_delineation = CONNSTRING_BASE + "tables=dbo.vDelineationTGUInput"
-    delineation_layer = QgsVectorLayer(connstring_delineation, "Delineations", "ogr")
-    
-    raiseIfLayerInvalid(delineation_layer)
-
+    delineation_layer = fetchLayer("vPyQgisDelineationTGUInput")    
     # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we use the buffer-0 trick to smooth those out.
-    debuffer = processing.run("native:buffer", {
-        'INPUT':delineation_layer,
-        'DISTANCE':0,
-        'SEGMENTS':5,
-        'END_CAP_STYLE':1,
-        'JOIN_STYLE':1,
-        'MITER_LIMIT':2,
-        'DISSOLVE':False,
-        'OUTPUT':'memory:debuffered_delineations'},
-        context = PROCESSING_CONTEXT)
-
-    debuffered_delineation_layer = debuffer['OUTPUT']
-
+    delineation_layer = bufferZero(delineation_layer, 'debuffered_delineations', context = PROCESSING_CONTEXT)
     print("Flattening Delineations...\n")
-    flatten_delineations = Flatten(delineation_layer, "DelineationID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
+    flatten_delineations = Flatten(delineation_layer, "DelinID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
     flatten_delineations.run()
-    delineation_flattened_layer = flatten_delineations.working_layer
     print("\n\n")
 
-    connstring_ovta = CONNSTRING_BASE + "tables=dbo.vOnlandVisualTrashAssessmentAreaDated"
-    ovta_layer = QgsVectorLayer(connstring_ovta, "OVTAs", "ogr")
-
-    raiseIfLayerInvalid(ovta_layer)
-
+    ovta_layer = fetchLayer("vPyQgisOnlandVisualTrashAssessmentAreaDated")
     print("Flattening OVTAs...\n")
-    flatten_ovtas = Flatten(ovta_layer, "OnlandVisualTrashAssessmentAreaID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers)
+    flatten_ovtas = Flatten(ovta_layer, "OVTAID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers, "AssessDate")
     flatten_ovtas.run()
-    ovta_flattened_layer = flatten_ovtas.working_layer
-    
-    connstring_wqmp = CONNSTRING_BASE + "tables=dbo.vWaterQualityManagementPlanTGUInput"
-    wqmp_layer = QgsVectorLayer(connstring_wqmp, "WQMPs", "ogr")
-
-    raiseIfLayerInvalid(wqmp_layer)
-
-    print("Flattening WQMPs...\n")
-    flatten_wqmps = Flatten(wqmp_layer, "WaterQualityManagementPlanID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers)
-    flatten_wqmps.run()
-    wqmp_flattened_layer = flatten_wqmps.working_layer
-        
+            
     print("Union OVTA with Delineation\n")
+    delineation_flattened_layer_path = OUTPUT_FOLDER + '\\delineation_flattened_layer.shp'
+    ovta_flattened_layer_path = OUTPUT_FOLDER + '\\ovta_flattened_layer.shp'
+    ovta_delineation_layer_path = OUTPUT_FOLDER + '\\ovta_delineation_layer.shp'
+    ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, delineation_flattened_layer_path, ovta_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
-    ovta_delineation_res = processing.run("native:union", {
-        'INPUT': ovta_flattened_layer,
-        'OVERLAY': delineation_flattened_layer,
-        'OVERLAY_FIELDS_PREFIX':'',
-        'OUTPUT':'memory:ovta_delineation_layer'
-        }, context=PROCESSING_CONTEXT)
-
-    ovta_delineation_layer = ovta_delineation_res['OUTPUT']
+    wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput")
+    print("Flattening WQMPs...\n")
+    flatten_wqmps = Flatten(wqmp_layer, "WQMPID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
+    flatten_wqmps.run()
 
     print("Union OVTA-Delineation with WQMP\n")
+    wqmp_flattened_layer_path = OUTPUT_FOLDER + '\\wqmp_flattened_layer.shp'
+    ovta_delineation_layer_unionedandfixed_path = OUTPUT_FOLDER + '\\ovta_delineation_layer_unionedandfixed.shp'
+    odw_layer_path = OUTPUT_FOLDER + '\\odw_layer.shp'
+    odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
-    odw_res = processing.run("native:union", {
-        'INPUT': ovta_delineation_layer,
-        'OVERLAY': wqmp_flattened_layer,
-        'OVERLAY_FIELDS_PREFIX':'',
-        'OUTPUT':'memory:odw_layer'
-        }, context=PROCESSING_CONTEXT)
+    land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput")
+    land_use_block_layer_path = OUTPUT_FOLDER + '\\land_use_block_layer'
+    writeVectorLayerToDisk(land_use_block_layer, land_use_block_layer_path)
 
-    odw_layer = odw_res['OUTPUT']
-
-    connstring_land_use_block = CONNSTRING_BASE + "tables=dbo.vLandUseBlockTGUInput"
-    land_use_block_layer = QgsVectorLayer(connstring_land_use_block, "Land Use Blocks", "ogr")
-
-    raiseIfLayerInvalid(land_use_block_layer)
-
-    print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + OUTPUT_PATH)
+    finalOutputPath = OUTPUT_FOLDER + '\\' + OUTPUT_FILE
+    print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
 
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
-    tgu_res = processing.run("native:union", {
-        'INPUT': land_use_block_layer,
-        'OVERLAY': odw_layer,
-        'OVERLAY_FIELDS_PREFIX':'',
-        'OUTPUT':OUTPUT_PATH
-        }, context=PROCESSING_CONTEXT)
+    land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER + '\\land_use_block_layer_unionedandfixed.shp'
+    odw_layer_unionandfixed_path = OUTPUT_FOLDER + '\\odw_layer_unionedandfixed.shp'
+    tgu_layer = unionAndFix(land_use_block_layer_path + ".shp", odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
-    print("Successed!")
+    print("Succeeded!")
 
     qgs.exitQgis()

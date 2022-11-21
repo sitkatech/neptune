@@ -630,33 +630,3 @@
 
     })
 </script>
-
-
-<script>
-    function createTguDialog()
-    {
-        var alertHtml =
-            "<div class='modal neptune-modal' style='width: 500px; margin:auto;'>" +
-                "<div class='modal-dialog neptune-modal-dialog'>" +
-                "<div class='modal-content'>" +
-                "<div class='modal-header'>" +
-                "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
-                "<span class='modal-title'>Refresh TGUs</span>" +
-                "</div>" +
-                "<div class='modal-body'><p>The application will now recreate the Trash Generating Unit table. This operation will take several minutes to run. Updated data will not be available until the operation is complete. The operation will run in the background and you can continue your work while it runs, but you wil not be notified when it has completed." +
-                "<div class='modal-footer'>" +
-                "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
-                "<button type='button' class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='postRefresh()' data-dismiss='modal'>Continue</a>" +
-                "</div>" +
-                "</div>" +
-                "</div>" +
-                "</div>";
-        var alertDiv = jQuery(alertHtml);
-        alertDiv.modal({ keyboard: true });
-        alertDiv.draggable({ handle: ".modal-header" });
-    }
-
-    function postRefresh() {
-        jQuery.ajax({ url: "@ViewDataTyped.RefreshTguUrl", method: "POST" });
-    }
-</script>

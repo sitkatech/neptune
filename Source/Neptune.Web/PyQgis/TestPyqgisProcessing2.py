@@ -73,10 +73,10 @@ if __name__ == '__main__':
     #Get the delineation Layer
 
     uri = QgsDataSourceUri()
-    connstring_delineation = connstring_base + "tables=dbo.vDelineationTGUInput"
+    connstring_delineation = connstring_base + "tables=dbo.vPyQgisDelineationTGUInput"
 
-    delineation_layer = QgsVectorLayer(connstring_delineation, "vDelineationTGUInput1", "ogr")
-    delineation_layer_dupe = QgsVectorLayer("Polygon?crs=epsg:2771", "vDelineationTGUInput2", "memory")
+    delineation_layer = QgsVectorLayer(connstring_delineation, "vPyQgisDelineationTGUInput1", "ogr")
+    delineation_layer_dupe = QgsVectorLayer("Polygon?crs=epsg:2771", "vPyQgisDelineationTGUInput2", "memory")
 
     feats = [feat for feat in delineation_layer.getFeatures()]
 

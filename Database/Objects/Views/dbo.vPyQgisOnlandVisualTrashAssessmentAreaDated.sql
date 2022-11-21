@@ -1,13 +1,12 @@
-DROP VIEW IF EXISTS dbo.vOnlandVisualTrashAssessmentAreaDated
+DROP VIEW IF EXISTS dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated
 GO
 
-Create View dbo.vOnlandVisualTrashAssessmentAreaDated as
+Create View dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated as
 
 Select
-	a.OnlandVisualTrashAssessmentAreaID,
+	a.OnlandVisualTrashAssessmentAreaID as OVTAID,
 	a.OnlandVisualTrashAssessmentAreaGeometry,
-	q.CompletedDate as MostRecentAssessmentDate,
-	Score.OnlandVisualTrashAssessmentScoreDisplayName as MostRecentAssessmentScore
+	q.CompletedDate as AssessDate
 from dbo.OnlandVisualTrashAssessmentArea a
 	inner join (
 		Select
@@ -20,7 +19,5 @@ from dbo.OnlandVisualTrashAssessmentArea a
 		where CompletedDate is not null
 	) q 
 		on a.OnlandVisualTrashAssessmentAreaID = q.OnlandVisualTrashAssessmentAreaID
-	join  dbo.OnlandVisualTrashAssessmentScore score
-		on score.OnlandVisualTrashAssessmentScoreID = q.OnlandVisualTrashAssessmentScoreID
 	where rownumber = 1
 GO

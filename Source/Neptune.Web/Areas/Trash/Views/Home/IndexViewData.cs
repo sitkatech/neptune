@@ -76,7 +76,6 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             AddBMPUrl = SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.New(),
                 NeptuneWebConfiguration.CanonicalHostName);
 
-            RefreshTguUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.RefreshTrashGeneratingUnits());
             ScoreDescriptionsUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.ScoreDescriptions());
 

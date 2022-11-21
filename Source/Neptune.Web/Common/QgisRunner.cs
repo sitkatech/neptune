@@ -7,7 +7,8 @@ namespace Neptune.Web.Common
 {
     public class QgisRunner
     {
-        public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory, string outputPath)
+        public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory,
+            string outputFolder, string outputFilename)
         {
             var commandLineArguments = new List<string>
             {
@@ -16,7 +17,8 @@ namespace Neptune.Web.Common
                 NeptuneWebConfiguration.PathToPyqgisLauncher,
                 pathToPyqgisScript,       
                 NeptuneWebConfiguration.DatabaseConnectionString,
-                outputPath
+                outputFolder,
+                outputFilename
             };
 
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
