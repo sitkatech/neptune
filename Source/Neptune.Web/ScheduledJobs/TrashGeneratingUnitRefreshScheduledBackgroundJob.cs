@@ -14,7 +14,7 @@ namespace Neptune.Web.ScheduledJobs
         // only run in PROD--job takes a relatively long time to run, and QA and local can just refresh their data from PROD backups.
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Prod, NeptuneEnvironmentType.Local
+            NeptuneEnvironmentType.Prod, NeptuneEnvironmentType.Qa, NeptuneEnvironmentType.Local
         };
 
         protected override void RunJobImplementation()
