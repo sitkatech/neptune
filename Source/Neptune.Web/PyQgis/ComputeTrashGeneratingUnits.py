@@ -84,22 +84,18 @@ def unionAndFix(inputLayer, overlayLayer, inputLayerOutputPath, overlayLayerOutp
     inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
     inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
     inputLayer = fixGeometriesWithinLayer(inputLayer, None, inputLayerOutputPath, PROCESSING_CONTEXT)
-    createSpatialIndex(inputLayer, PROCESSING_CONTEXT)
     overlayLayer = removeNullGeometries(overlayLayer, 'nonnull', None, PROCESSING_CONTEXT)    
     overlayLayer = removeSlivers(overlayLayer, 'noslivers', None, PROCESSING_CONTEXT)
     overlayLayer = bufferZero(overlayLayer, 'buffer', None, PROCESSING_CONTEXT)
     overlayLayer = snapGeometriesWithinLayer(overlayLayer, 'snapped', None, PROCESSING_CONTEXT)
     overlayLayer = fixGeometriesWithinLayer(overlayLayer, None, overlayLayerOutputPath, PROCESSING_CONTEXT)
-    createSpatialIndex(overlayLayer, PROCESSING_CONTEXT)
-    result = union(inputLayerOutputPath, overlayLayerOutputPath, 'unioned', None, PROCESSING_CONTEXT)
-    selectPolygonFeatures(result, PROCESSING_CONTEXT)
-    saveSelectedFeatures(result, None, unionResultOutputPath, PROCESSING_CONTEXT)
+    result = union(inputLayerOutputPath, overlayLayerOutputPath, None, unionResultOutputPath, PROCESSING_CONTEXT)
     print('Union result saved to ' + unionResultOutputPath)
 
 def selectPolygonFeatures(inputLayer, context = None):
     params = {
         'INPUT':inputLayer,
-        'EXPRESSION':"geometry_type($geometry) = 'Polygon'"
+        'EXPRESSION':"geometry_type($geometry) = 'Polygon' and $area >= 100"
     }
     print('Running qgis:selectbyexpression')
     if context is not None:
@@ -484,9 +480,9 @@ if __name__ == '__main__':
     flatten_ovtas.run()
             
     print("Union OVTA with Delineation\n")
-    delineation_flattened_layer_path = OUTPUT_FOLDER + '\\delineation_flattened_layer.shp'
-    ovta_flattened_layer_path = OUTPUT_FOLDER + '\\ovta_flattened_layer.shp'
-    ovta_delineation_layer_path = OUTPUT_FOLDER + '\\ovta_delineation_layer.shp'
+    delineation_flattened_layer_path = OUTPUT_FOLDER + '\\delineation_flattened_layer.geojson'
+    ovta_flattened_layer_path = OUTPUT_FOLDER + '\\ovta_flattened_layer.geojson'
+    ovta_delineation_layer_path = OUTPUT_FOLDER + '\\ovta_delineation_layer.geojson'
     ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, delineation_flattened_layer_path, ovta_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
     wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput")
@@ -495,9 +491,9 @@ if __name__ == '__main__':
     flatten_wqmps.run()
 
     print("Union OVTA-Delineation with WQMP\n")
-    wqmp_flattened_layer_path = OUTPUT_FOLDER + '\\wqmp_flattened_layer.shp'
-    ovta_delineation_layer_unionedandfixed_path = OUTPUT_FOLDER + '\\ovta_delineation_layer_unionedandfixed.shp'
-    odw_layer_path = OUTPUT_FOLDER + '\\odw_layer.shp'
+    wqmp_flattened_layer_path = OUTPUT_FOLDER + '\\wqmp_flattened_layer.geojson'
+    ovta_delineation_layer_unionedandfixed_path = OUTPUT_FOLDER + '\\ovta_delineation_layer_unionedandfixed.geojson'
+    odw_layer_path = OUTPUT_FOLDER + '\\odw_layer.geojson'
     odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
     land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput")
@@ -508,8 +504,8 @@ if __name__ == '__main__':
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
 
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
-    land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER + '\\land_use_block_layer_unionedandfixed.shp'
-    odw_layer_unionandfixed_path = OUTPUT_FOLDER + '\\odw_layer_unionedandfixed.shp'
+    land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER + '\\land_use_block_layer_unionedandfixed.geojson'
+    odw_layer_unionandfixed_path = OUTPUT_FOLDER + '\\odw_layer_unionedandfixed.geojson'
     tgu_layer = unionAndFix(land_use_block_layer_path + ".shp", odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
     print("Succeeded!")

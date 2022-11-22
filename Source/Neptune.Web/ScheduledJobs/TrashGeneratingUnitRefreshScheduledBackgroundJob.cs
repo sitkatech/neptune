@@ -28,13 +28,14 @@ namespace Neptune.Web.ScheduledJobs
 
             var layerName = $"TGU{DateTime.Now.Ticks}";
             var outputFolder = Path.GetTempPath();
-            var outputPath = $"{Path.Combine(outputFolder, layerName)}.shp";
+            var outputFilename = $"{layerName}.geojson";
+            var outputPath = $"{Path.Combine(outputFolder, outputFilename)}";
 
             // a PyQGIS script computes the TGU layer and saves it as a shapefile
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputFolder,
-                $"{layerName}.shp");
+var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputFolder,
+                outputFilename);
 
-            if (processUtilityResult.ReturnCode != 0)
+            if (processUtilityResult.ReturnCode > 0)
             {
                 Logger.Error("TGU Geoprocessing failed. Output:");
                 Logger.Error(processUtilityResult.StdOutAndStdErr);
@@ -117,6 +118,7 @@ public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
 
         ExecuteOgr2OgrCommand(commandLineArguments);
     }
+
 
     // same as above but it uses 4326 instead
     public void ImportTrashGeneratingUnitsFromShapefile4326(string outputLayerName,
