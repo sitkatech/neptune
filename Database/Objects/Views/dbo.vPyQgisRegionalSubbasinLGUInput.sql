@@ -1,7 +1,7 @@
-Drop View If Exists dbo.vRegionalSubbasinLGUInput
+Drop View If Exists dbo.vPyQgisRegionalSubbasinLGUInput
 GO
 
-Create view dbo.vRegionalSubbasinLGUInput
+Create view dbo.vPyQgisRegionalSubbasinLGUInput
 as
 Select
 	RegionalSubbasinID as RSBID,

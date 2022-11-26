@@ -622,10 +622,12 @@
     <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
+    <Compile Include="ScheduledJobs\LoadGeneratingUnitResult.cs" />
     <Compile Include="ScheduledJobs\ParcelLayerUploadBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\OCTAPrioritizationRefreshScheduledBackgroundJob.cs" />
     <Compile Include="ScheduledJobs\ProjectNetworkSolveJob.cs" />
     <Compile Include="ScheduledJobs\TotalNetworkSolveJob.cs" />
+    <Compile Include="ScheduledJobs\TrashGeneratingUnitResult.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaEditFeature.cs" />
     <Compile Include="Security\StormwaterJurisdictionViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanVerifyViewFeature.cs" />

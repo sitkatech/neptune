@@ -14,6 +14,8 @@ using Neptune.Web.Models;
 using System.Net.Mail;
 using DotSpatial.Projections.Transforms;
 using LtInfo.Common.Email;
+using System.Data.Entity.Spatial;
+using System.Text.Json;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -118,7 +120,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
         {
             Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {ProjectID}");
             var outputLayerName = $"LGU{DateTime.Now.Ticks}";
-            var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
+            var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.geojson";
             var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
@@ -131,25 +133,37 @@ You can view the results or trigger another network solve <a href='{planningURL}
                 throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             }
 
-            try
+            DbContext.Database.ExecuteSqlCommand(
+                $"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {ProjectID}");
+
+            var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
+            using var openStream = File.OpenRead(outputLayerPath);
+            var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
+            var features = featureCollection.Where(x => x.Geometry != null).ToList();
+            var projectLoadGeneratingUnits = new List<ProjectLoadGeneratingUnit>();
+
+            foreach (var feature in features)
             {
-                DbContext.Database.ExecuteSqlCommand(
-                    $"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {ProjectID}");
+                var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
+                var trashGeneratingUnit = new ProjectLoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID), ProjectID)
+                {
+                    DelineationID = loadGeneratingUnitResult.DelineationID,
+                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                };
 
-                var ogr2OgrCommandLineRunner =
-                    new Ogr2OgrCommandLineRunnerForLGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
-
-                ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
-                    NeptuneWebConfiguration.DatabaseConnectionString, ProjectID);
-
-                // we get invalid geometries from qgis so we need to make them valid
-                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
+                projectLoadGeneratingUnits.Add(trashGeneratingUnit);
             }
-            catch (Ogr2OgrCommandLineException e)
+
+            if (projectLoadGeneratingUnits.Any())
             {
-                Logger.Error("LGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
-                throw;
+                DbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
+                DbContext.SaveChangesWithNoAuditing();
             }
+
+            // we get invalid geometries from qgis so we need to make them valid
+            DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
 
             // clean up temp files if not running in a local environment
             if (NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType != NeptuneEnvironmentType.Local)

@@ -45,24 +45,9 @@ namespace Neptune.Web.Common
             };
 
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
-                NeptuneWebConfiguration.PathToPyqgisLauncher, commandLineArguments, true, null, environmentVariables);
+                NeptuneWebConfiguration.PathToPyqgisLauncher, commandLineArguments, true, 3600000, environmentVariables);
 
             return processUtilityResult;
-        }
-
-
-        public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory)
-        {
-            var commandLineArguments = new List<string>
-            {
-                pathToPyqgisScript,
-                NeptuneWebConfiguration.DatabaseServerName,
-                NeptuneWebConfiguration.DatabaseName,
-                NeptuneWebConfiguration.PyqgisUsername,
-                NeptuneWebConfiguration.PyqgisPassword
-            };
-
-            return ExecutePyqgisScriptImpl(workingDirectory, commandLineArguments);
         }
     }
 }

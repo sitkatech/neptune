@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
-using System.Text.Json.Serialization;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
-using NUnit.Framework;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Neptune.Web.ScheduledJobs
@@ -105,38 +102,6 @@ namespace Neptune.Web.ScheduledJobs
                 DbContext.TrashGeneratingUnit4326s.AddRange(trashGeneratingUnit4326s);
                 DbContext.SaveChangesWithNoAuditing();
             }
-        }
-    }
-}
-
-public class TrashGeneratingUnitResult : IHasGeometry
-{
-    [JsonPropertyName("LUBID")]
-    public int LandUseBlockID { get; set; }
-    [JsonPropertyName("SJID")]
-    public int StormwaterJurisdictionID { get; set; }
-    [JsonPropertyName("DelinID")]
-    public int? DelineationID { get; set; }
-    [JsonPropertyName("WQMPID")]
-    public int? WaterQualityManagementPlanID { get; set; }
-    [JsonPropertyName("OVTAID")]
-    public int? OnlandVisualTrashAssessmentAreaID { get; set; }
-    public Geometry Geometry { get; set; }
-}
-
-[TestFixture]
-public class GeoJsonTest
-{
-    [Test]
-    public void CanDeserailizeGeojson()
-    {
-        var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
-        var outputPath = $"c:/temp/test7.geojson";
-        using (var openStream = File.OpenRead(outputPath))
-        {
-            var featureCollection = JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions).Result;
-            var features = featureCollection.Where(x => x.Geometry != null && x.Attributes["LUBID"] != null && x.Attributes["SJID"] != null).ToList();
-            Assert.That(features.Count, Is.GreaterThan(0));
         }
     }
 }

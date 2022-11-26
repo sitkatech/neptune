@@ -19,7 +19,7 @@ from qgis.analysis import QgsNativeAlgorithms
 print ("imported Qgis")
 
 # Append the path where processing plugin can be found
-sys.path.append(r'C:\OSGeo4W64\apps\qgis\python\plugins')
+sys.path.append('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr\\python\\plugins')
 
 import processing
 from processing.tools import dataobjects
@@ -36,15 +36,22 @@ from pyqgis_utils import (
 )
 
 JOIN_PREFIX = "Joined_"
-CONNSTRING_BASE = "CONNSTRING ERROR"
-OUTPUT_PATH = "OUTPUT PATH ERROR"
+DATABASE_SERVER_NAME = "DATABASE SERVER NAME ERROR"
+DATABASE_NAME = "DATABASE NAME ERROR"
+DATABASE_USER_NAME = "DATABASE USER NAME ERROR"
+DATABASE_PASSWORD = "DATABASE PASSWORD ERROR"
+OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
+OUTPUT_FILE = "OUTPUT FILE ERROR"
 CLIP_PATH = None
 RSB_IDs = None
 PLANNED_PROJECT_ID = None
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
-    parser.add_argument('connstring', metavar='s', type=str, help='The connection string. Do not specify tables; the script will specify which table(s) it wants to look at.')
+    parser.add_argument('database_server_name', metavar='s', type=str, help='The name of the server where the database is located.')
+    parser.add_argument('database_name', metavar='s', type=str, help='The name of the database to connect to.')
+    parser.add_argument('database_username', metavar='s', type=str, help='The user name to use to connect to the database.')
+    parser.add_argument('database_password', metavar='s', type=str, help='The password to use to connect to the database.')
     parser.add_argument('output_path', metavar='d', type=str, help='The path to write the final output to.')
     parser.add_argument('--planned_project_id', type=int, help='If running the overlay for a particular Project, this will add delineations for any Treatment BMPs who belong to this project')
     parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
@@ -52,19 +59,19 @@ def parseArguments():
     args = parser.parse_args()
 
     # this is easier to write than anything sane
-    global CONNSTRING_BASE
+    global DATABASE_SERVER_NAME
+    global DATABASE_NAME
+    global DATABASE_USER_NAME
+    global DATABASE_PASSWORD
     global OUTPUT_PATH
     global CLIP_PATH
     global PLANNED_PROJECT_ID
     global RSB_IDs
-    CONNSTRING_BASE = "MSSQL:" + args.connstring
+    DATABASE_SERVER_NAME = args.database_server_name
+    DATABASE_NAME = args.database_name
+    DATABASE_USER_NAME = args.database_username
+    DATABASE_PASSWORD = args.database_password
     OUTPUT_PATH = args.output_path
-    print(OUTPUT_PATH)
-
-    if not CONNSTRING_BASE.endswith(";"):
-            CONNSTRING_BASE = CONNSTRING_BASE + ";"
-    if "True" in CONNSTRING_BASE:
-            CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
 
     if args.clip:
         CLIP_PATH = args.clip
@@ -84,20 +91,9 @@ def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=
         'OVERLAY': overlayLayer,
         'OVERLAY_FIELDS_PREFIX':''
     }
-
-    if memoryOutputName is not None:
-        params['OUTPUT'] = 'memory:' + memoryOutputName
-    elif filesystemOutputPath is not None:
-        params['OUTPUT'] = filesystemOutputPath
-    else:
-        raise QgisError("No output provided for union operation")
-
-    if context is not None:
-        unionResult = processing.run("native:union", params, context = context)
-    else: 
-        unionResult = processing.run("native:union", params)
     
-    return unionResult['OUTPUT']
+    result = runNativeAlgorithm("native:union", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
 def intersection(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
     params = {
@@ -107,42 +103,20 @@ def intersection(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutp
         'OVERLAY_FIELDS':[],
         'OVERLAY_FIELDS_PREFIX':''
     }
-
-    if memoryOutputName is not None:
-        params['OUTPUT'] = 'memory:' + memoryOutputName
-    elif filesystemOutputPath is not None:
-        params['OUTPUT'] = filesystemOutputPath
-    else:
-        raise QgisError("No output provided for intersection operation")
-
-    if context is not None:
-        intersectionResult = processing.run("native:intersection", params, context = context)
-    else: 
-        intersectionResult = processing.run("native:intersection", params)
     
-    return intersectionResult['OUTPUT']
+    result = runNativeAlgorithm("native:intersection", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
 def clip(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
     params = {
         'INPUT': inputLayer,
         'OVERLAY': overlayLayer
     }
-
-    if memoryOutputName is not None:
-        params['OUTPUT'] = 'memory:' + memoryOutputName
-    elif filesystemOutputPath is not None:
-        params['OUTPUT'] = filesystemOutputPath
-    else:
-        raise QgisError("No output provided for union operation")
-
-    if context is not None:
-        clipResult = processing.run("native:clip", params, context = context)
-    else: 
-        clipResult = processing.run("native:clip", params)
     
-    return clipResult['OUTPUT']
+    result = runNativeAlgorithm("native:clip", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
-def bufferZero(inputLayer, memoryOutputName, context=None):
+def bufferZero(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
     params = {
         'INPUT':inputLayer,
         'DISTANCE':0,
@@ -150,78 +124,71 @@ def bufferZero(inputLayer, memoryOutputName, context=None):
         'END_CAP_STYLE':1,
         'JOIN_STYLE':1,
         'MITER_LIMIT':2,
-        'DISSOLVE':False,
-        'OUTPUT':'memory:' + memoryOutputName
+        'DISSOLVE':False
     }
     
-    if context is not None:
-        bufferZeroResult = processing.run("native:buffer", params ,context = context)
-    else:
-        bufferZeroResult = processing.run("native:buffer", params)
-    
-    return bufferZeroResult['OUTPUT']
+    result = runNativeAlgorithm("native:buffer", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
-def fixGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
+def fixGeometriesWithinLayer(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
     params = {
-        'INPUT':inputLayer,
-        'OUTPUT':'memory:'+memoryOutputName}
-    if context is not None:
-        fixResult = processing.run("native:fixgeometries", params)
-    else:
-        fixResult = processing.run("native:fixgeometries", params, context= context)
+        'INPUT':inputLayer
+    }
 
-    return fixResult['OUTPUT']
+    result = runNativeAlgorithm("native:fixgeometries", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
-def snapGeometriesWithinLayer(inputLayer, memoryOutputName, context=None):
+def snapGeometriesWithinLayer(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
     params = {
         'INPUT':inputLayer,
         'REFERENCE_LAYER':inputLayer,
         'TOLERANCE':1,
-        'BEHAVIOR':1,
-        'OUTPUT':'TEMPORARY_OUTPUT'
+        'BEHAVIOR':1
     }
-    
-    if context is not None:
-        snapResult = processing.run("qgis:snapgeometries", params, context = context)
-    else:
-        snapResult = processing.run("qgis:snapgeometries", params)
 
-    return snapResult['OUTPUT']
+    result = runNativeAlgorithm("qgis:snapgeometries", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
-def snapGeometriesToLayer(inputLayer, referenceLayer, memoryOutputName, context=None):
+def snapGeometriesToLayer(inputLayer, referenceLayer, memoryOutputName, filesystemOutputPath, context=None):
     params = {
         'INPUT':inputLayer,
         'REFERENCE_LAYER':referenceLayer,
         'TOLERANCE':10,
-        'BEHAVIOR':1,
-        'OUTPUT':'memory:'+memoryOutputName
+        'BEHAVIOR':1
     }
-    
-    if context is not None:
-        snapResult = processing.run("qgis:snapgeometries", params, context = context)
-    else:
-        snapResult = processing.run("qgis:snapgeometries", params)
 
-    return snapResult['OUTPUT']
+    result = runNativeAlgorithm("qgis:snapgeometries", params, memoryOutputName, filesystemOutputPath, context)
+    return result
 
-def multipartToSinglePart(inputLayer, memoryOutputName, context=None):
+def multipartToSinglePart(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
     params = {
-        'INPUT':inputLayer,
-        'OUTPUT':'memory:'+memoryOutputName
+        'INPUT':inputLayer
     }
 
-    if context is not None:
-        mtsResult =  processing.run("native:multiparttosingleparts", params, context=context)
+    result = runNativeAlgorithm("native:multiparttosingleparts", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
+def runNativeAlgorithm(algorithm, params, memoryOutputName=None, filesystemOutputPath=None, context=None):
+    if memoryOutputName is not None:
+        params['OUTPUT'] = 'memory:' + memoryOutputName
+    elif filesystemOutputPath is not None:
+        params['OUTPUT'] = filesystemOutputPath
     else:
-        mtsResult = processing.run("native:multiparttosingleparts", params)
-    
-    return mtsResult['OUTPUT']
+        raise QgisError("No output provided for " + algorithm + " operation")
+
+    print('Running ' + algorithm)
+    if context is not None:
+        result = processing.run(algorithm, params ,context = context)
+    else:
+        result = processing.run(algorithm, params)
+
+    return result['OUTPUT']
 
 if __name__ == '__main__':
     parseArguments()
     
     # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-    QgsApplication.setPrefixPath(r'C:\OSGEO4W64\apps\qgis', True)
+    QgsApplication.setPrefixPath('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr', True)
     #qgs = QgsApplication([], False, "")
     qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "server")
 
@@ -234,62 +201,65 @@ if __name__ == '__main__':
     PROCESSING_CONTEXT = dataobjects.createContext()
     PROCESSING_CONTEXT.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
 
-    def fetchLayer(spatialTableName):
-        return fetchLayerFromDatabase(CONNSTRING_BASE, spatialTableName)
+    neptuneDataSource = QgsDataSourceUri()
+    neptuneDataSource.setConnection(DATABASE_SERVER_NAME, "1433", DATABASE_NAME, DATABASE_USER_NAME, DATABASE_PASSWORD)
+
+    def fetchLayer(spatialTableName, geometryColumnName):
+        return fetchLayerFromDatabase(neptuneDataSource, spatialTableName, geometryColumnName)
 
     clip_layer = None
     delineationLayer = None
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
         
-    modelBasinLayer = fetchLayer("vModelBasinLGUInput")
-    regionalSubbasinLayer = fetchLayer("vRegionalSubbasinLGUInput")
+    modelBasinLayer = fetchLayer("vPyQgisModelBasinLGUInput", "ModelBasinGeometry")
+    regionalSubbasinLayer = fetchLayer("vPyQgisRegionalSubbasinLGUInput", "CatchmentGeometry")
     if RSB_IDs is not None:
         regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
     if PLANNED_PROJECT_ID is not None:
-        delineationLayer = fetchLayer("vProjectDelineationLGUInput")
+        delineationLayer = fetchLayer("vPyQgisProjectDelineationLGUInput", "DelineationGeometry")
         delineationLayer.setSubsetString("ProjectID is null or ProjectID=" + str(PLANNED_PROJECT_ID))
     else:
-        delineationLayer = fetchLayer("vDelineationLGUInput")
-    wqmpLayer = fetchLayer("vWaterQualityManagementPlanLGUInput")
+        delineationLayer = fetchLayer("vPyQgisDelineationLGUInput", "DelineationGeometry")
+    wqmpLayer = fetchLayer("vPyQgisWaterQualityManagementPlanLGUInput", "WaterQualityManagementPlanBoundary")
 
     # perhaps overly-aggressive application of the buffer-zero and 
-    modelBasinLayer = bufferZero(modelBasinLayer, "ModelBasins", context=PROCESSING_CONTEXT)
-    regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", context=PROCESSING_CONTEXT)
+    modelBasinLayer = bufferZero(modelBasinLayer, "ModelBasins", None, context=PROCESSING_CONTEXT)
+    regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", None, context=PROCESSING_CONTEXT)
 
-    delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", context=PROCESSING_CONTEXT)
-    delineationLayer = bufferZero(delineationLayer, "Delineations", context=PROCESSING_CONTEXT)
+    delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", None, context=PROCESSING_CONTEXT)
+    delineationLayer = bufferZero(delineationLayer, "Delineations", None, context=PROCESSING_CONTEXT)
 
-    wqmpLayer = fixGeometriesWithinLayer(wqmpLayer, "WQMPFixed", context=PROCESSING_CONTEXT)
-    wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", context=PROCESSING_CONTEXT)
-    wqmpLayer = bufferZero(wqmpLayer, "WQMP", context=PROCESSING_CONTEXT)
+    wqmpLayer = fixGeometriesWithinLayer(wqmpLayer, "WQMPFixed", None, context=PROCESSING_CONTEXT)
+    wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", None, context=PROCESSING_CONTEXT)
+    wqmpLayer = bufferZero(wqmpLayer, "WQMP", None, context=PROCESSING_CONTEXT)
 
     if RSB_IDs is not None:
         #If we've got set RSBs we want only what's within those RSBs'
-        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, regionalSubbasinLayer, "RSBClipped")
-        delineationLayerClipped = clip(delineationLayer, regionalSubbasinLayer, "DelineationClipped")
-        wqmpLayerClipped = clip(wqmpLayer, regionalSubbasinLayer, "WQMPClipped")
+        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, regionalSubbasinLayer, "RSBClipped", None)
+        delineationLayerClipped = clip(delineationLayer, regionalSubbasinLayer, "DelineationClipped", None)
+        wqmpLayerClipped = clip(wqmpLayer, regionalSubbasinLayer, "WQMPClipped", None)
     else:
         # At present time, we're only concerned with the area covered by Model basins. 
-        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, modelBasinLayer, "RSBClipped")
-        delineationLayerClipped = clip(delineationLayer, modelBasinLayer, "DelineationClipped")
-        wqmpLayerClipped = clip(wqmpLayer, modelBasinLayer, "WQMPClipped")
+        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, modelBasinLayer, "RSBClipped", None)
+        delineationLayerClipped = clip(delineationLayer, modelBasinLayer, "DelineationClipped", None)
+        wqmpLayerClipped = clip(wqmpLayer, modelBasinLayer, "WQMPClipped", None)
 
-    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", context=PROCESSING_CONTEXT)
+    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", None, context=PROCESSING_CONTEXT)
 
-    rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, memoryOutputName="rsb_wqmp", context=PROCESSING_CONTEXT)
+    rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, memoryOutputName="rsb_wqmp", None, context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb_delineation)
-    rsb_wqmp = bufferZero(rsb_wqmp, "ModelBasin-RSB-D", context=PROCESSING_CONTEXT)
+    rsb_wqmp = bufferZero(rsb_wqmp, "ModelBasin-RSB-D", None, context=PROCESSING_CONTEXT)
 
 
     # clip the model basin layer to the input boundary so that all further datasets will be clipped as well
     if clip_layer is not None:
-        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
-        masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", None, context=PROCESSING_CONTEXT)
+        masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", None, context=PROCESSING_CONTEXT)
     else: 
-        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", context=PROCESSING_CONTEXT)
+        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", None, context=PROCESSING_CONTEXT)
 
-    masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", context=PROCESSING_CONTEXT)
+    masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", None, context=PROCESSING_CONTEXT)
 
     masterOverlay.startEditing()
 
