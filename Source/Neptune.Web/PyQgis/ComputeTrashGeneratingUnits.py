@@ -6,6 +6,7 @@
 ### based on a domain-specific rule.
 ### Consult the diagram for a conceptual overview of the process
 
+import os
 import sys
 
 print ("starting")
@@ -14,21 +15,23 @@ from qgis.core import (
      QgsApplication, 
      QgsProcessingFeedback, 
      QgsVectorLayer,
+     QgsVectorLayerExporter,
      QgsFeatureRequest,
      QgsDataSourceUri,
      QgsFeature,
      QgsVectorFileWriter,
      QgsCoordinateReferenceSystem,
-     QgsProject
+     QgsProject,
+     QgsWkbTypes
 )
 from qgis.analysis import QgsNativeAlgorithms
 
 print ("imported Qgis")
 # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-QgsApplication.setPrefixPath('C:\\OSGEO4W64\\apps\\qgis', True)
+QgsApplication.setPrefixPath('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr', True)
 
 # Append the path where processing plugin can be found
-sys.path.append('C:\\OSGeo4W64\\apps\\qgis\\python\\plugins')
+sys.path.append('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr\\python\\plugins')
 
 import processing
 from processing.tools import dataobjects
@@ -44,31 +47,38 @@ from pyqgis_utils import (
 )
 
 JOIN_PREFIX = "Joined_"
-CONNSTRING_BASE = "CONNSTRING ERROR"
+DATABASE_SERVER_NAME = "DATABASE SERVER NAME ERROR"
+DATABASE_NAME = "DATABASE NAME ERROR"
+DATABASE_USER_NAME = "DATABASE USER NAME ERROR"
+DATABASE_PASSWORD = "DATABASE PASSWORD ERROR"
 OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
 OUTPUT_FILE = "OUTPUT FILE ERROR"
 
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
-    parser.add_argument('connstring', metavar='s', type=str, help='The connection string. Do not specify tables; the script will specify which table(s) it wants to look at.')
+    parser.add_argument('database_server_name', metavar='s', type=str, help='The name of the server where the database is located.')
+    parser.add_argument('database_name', metavar='s', type=str, help='The name of the database to connect to.')
+    parser.add_argument('database_username', metavar='s', type=str, help='The user name to use to connect to the database.')
+    parser.add_argument('database_password', metavar='s', type=str, help='The password to use to connect to the database.')
     parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
     parser.add_argument('output_file', metavar='d', type=str, help='The filename to write the final output to.')
 
     args = parser.parse_args()
 
     # this is easier to write than anything sane
-    global CONNSTRING_BASE
+    global DATABASE_SERVER_NAME
+    global DATABASE_NAME
+    global DATABASE_USER_NAME
+    global DATABASE_PASSWORD
     global OUTPUT_FOLDER
     global OUTPUT_FILE
-    CONNSTRING_BASE = "MSSQL:" + args.connstring
+    DATABASE_SERVER_NAME = args.database_server_name
+    DATABASE_NAME = args.database_name
+    DATABASE_USER_NAME = args.database_username
+    DATABASE_PASSWORD = args.database_password
     OUTPUT_FOLDER = args.output_folder
     OUTPUT_FILE = args.output_file
-
-    if not CONNSTRING_BASE.endswith(";"):
-            CONNSTRING_BASE = CONNSTRING_BASE + ";"
-    if "True" in CONNSTRING_BASE:
-            CONNSTRING_BASE = CONNSTRING_BASE.replace("True", "Yes")
 
 def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data = target.dataProvider()
@@ -89,8 +99,14 @@ def unionAndFix(inputLayer, overlayLayer, inputLayerOutputPath, overlayLayerOutp
     overlayLayer = bufferZero(overlayLayer, 'buffer', None, PROCESSING_CONTEXT)
     overlayLayer = snapGeometriesWithinLayer(overlayLayer, 'snapped', None, PROCESSING_CONTEXT)
     overlayLayer = fixGeometriesWithinLayer(overlayLayer, None, overlayLayerOutputPath, PROCESSING_CONTEXT)
-    result = union(inputLayerOutputPath, overlayLayerOutputPath, None, unionResultOutputPath, PROCESSING_CONTEXT)
-    print('Union result saved to ' + unionResultOutputPath)
+    if unionResultOutputPath is not None:
+        result = union(inputLayerOutputPath, overlayLayerOutputPath, None, unionResultOutputPath, PROCESSING_CONTEXT)
+    else:
+        result = union(inputLayerOutputPath, overlayLayerOutputPath, 'unioned', None, PROCESSING_CONTEXT)
+    #selectPolygonFeatures(result, PROCESSING_CONTEXT)
+    #saveSelectedFeatures(result, None, unionResultOutputPath, PROCESSING_CONTEXT)
+    print('Union succeeded')
+    return result
 
 def selectPolygonFeatures(inputLayer, context = None):
     params = {
@@ -450,8 +466,11 @@ if __name__ == '__main__':
     PROCESSING_CONTEXT = dataobjects.createContext()
     PROCESSING_CONTEXT.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
 
-    def fetchLayer(spatialTableName):
-        return fetchLayerFromDatabase(CONNSTRING_BASE, spatialTableName)
+    neptuneDataSource = QgsDataSourceUri()
+    neptuneDataSource.setConnection(DATABASE_SERVER_NAME, "1433", DATABASE_NAME, DATABASE_USER_NAME, DATABASE_PASSWORD)
+
+    def fetchLayer(spatialTableName, geometryColumnName):
+        return fetchLayerFromDatabase(neptuneDataSource, spatialTableName, geometryColumnName)
 
     # Set the decision functions for delineations
     def compareDelineationsViaJoinedLayer(feat):
@@ -466,7 +485,7 @@ if __name__ == '__main__':
         return left_feat["AssessDate"] <= right_feat["AssessDate"]
     
     #Do note that the views here have all input filters built into them
-    delineation_layer = fetchLayer("vPyQgisDelineationTGUInput")    
+    delineation_layer = fetchLayer("vPyQgisDelineationTGUInput", "DelineationGeometry")    
     # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we use the buffer-0 trick to smooth those out.
     delineation_layer = bufferZero(delineation_layer, 'debuffered_delineations', context = PROCESSING_CONTEXT)
     print("Flattening Delineations...\n")
@@ -474,7 +493,7 @@ if __name__ == '__main__':
     flatten_delineations.run()
     print("\n\n")
 
-    ovta_layer = fetchLayer("vPyQgisOnlandVisualTrashAssessmentAreaDated")
+    ovta_layer = fetchLayer("vPyQgisOnlandVisualTrashAssessmentAreaDated", "OnlandVisualTrashAssessmentAreaGeometry")
     print("Flattening OVTAs...\n")
     flatten_ovtas = Flatten(ovta_layer, "OVTAID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers, "AssessDate")
     flatten_ovtas.run()
@@ -485,7 +504,7 @@ if __name__ == '__main__':
     ovta_delineation_layer_path = OUTPUT_FOLDER + '\\ovta_delineation_layer.geojson'
     ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, delineation_flattened_layer_path, ovta_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
-    wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput")
+    wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput", "WaterQualityManagementPlanBoundary")
     print("Flattening WQMPs...\n")
     flatten_wqmps = Flatten(wqmp_layer, "WQMPID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
     flatten_wqmps.run()
@@ -496,7 +515,7 @@ if __name__ == '__main__':
     odw_layer_path = OUTPUT_FOLDER + '\\odw_layer.geojson'
     odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
-    land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput")
+    land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput", "LandUseBlockGeometry")
     land_use_block_layer_path = OUTPUT_FOLDER + '\\land_use_block_layer'
     writeVectorLayerToDisk(land_use_block_layer, land_use_block_layer_path)
 
@@ -508,6 +527,23 @@ if __name__ == '__main__':
     odw_layer_unionandfixed_path = OUTPUT_FOLDER + '\\odw_layer_unionedandfixed.geojson'
     tgu_layer = unionAndFix(land_use_block_layer_path + ".shp", odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
-    print("Succeeded!")
+#    neptuneDataSource.setDataSource("dbo", "TrashGeneratingUnitStaging", "TrashGeneratingUnitStagingGeometry")
+#    crs = QgsCoordinateReferenceSystem("EPSG:2771")
 
+#    layerFields = tgu_layer.fields()
+#    fieldIndex = layerFields.indexFromName("fid")
+#    print("Removing field '" + self.fieldToRemove + "'")
+#    self.working_layer.dataProvider().deleteAttributes([fieldIndex])
+
+    #wkbType = tgu_layer.wkbType()
+#    wkbType = QgsWkbTypes.Type.MultiPolygon
+#    exporter = QgsVectorLayerExporter(neptuneDataSource.uri(), "mssql", layerFields, wkbType, crs, True)
+#    featuresToExport = tgu_layer.selectByExpression("\"SJID\" is not null and \"LUBID\" is not null and $area >= 100")
+    #.selectedFeatures()
+    #featuresToExport = [feat for feat in tgu_layer.selectByExpression().getFeatures()]
+#    exportResult = exporter.addFeatures(featuresToExport)
+#    exportResult = QgsVectorLayerExporter.exportLayer(tgu_layer.selectByExpression("\"SJID\" is not null and \"LUBID\" is not null and $area >= 100"), neptuneDataSource.uri(), "mssql", crs, True)
+#    print(exportResult)
+
+    print("Succeeded!")
     qgs.exitQgis()
