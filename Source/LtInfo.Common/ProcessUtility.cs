@@ -40,15 +40,26 @@ namespace LtInfo.Common
             return string.Join(" ", commandLineArguments.Select(EncodeArgumentForCommandLine).ToList());
         }
 
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName,
-            List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs)
+        public static string ConjoinAndMaskCommandLineArguments(Dictionary<string, bool> commandLineArguments)
         {
-            return ShellAndWaitImpl(workingDirectory, exeFileName, commandLineArguments, redirectStdErrAndStdOut, maxTimeoutMs, null);
+            return string.Join(" ", commandLineArguments.Select(x => x.Value ? "*hidden*" : EncodeArgumentForCommandLine(x.Key)).ToList());
         }
 
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables)
+        public static string ConjoinEnvironmentVariables(Dictionary<string, string> environmentVariables)
         {
-            var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments);
+            return string.Join("\r\n\t", environmentVariables.Select(x => x.Key + ": " + x.Value).ToList());
+        }
+
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName,
+            List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs,
+            Dictionary<string, string> environmentVariables)
+        {
+            return ShellAndWaitImpl(workingDirectory, exeFileName, commandLineArguments.ToDictionary(x => x, x => false), redirectStdErrAndStdOut, maxTimeoutMs, environmentVariables);
+        }
+
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, Dictionary<string, bool> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables)
+        {
+            var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments.Select(x => x.Key).ToList());
             var stdErrAndStdOut = string.Empty;
 
             // Start the indicated program and wait for it
@@ -78,7 +89,7 @@ namespace LtInfo.Common
                 objProc.ErrorDataReceived += streamReader.ReceiveStdErr;
             }
 
-            var processDebugInfo = $"Process Details:\r\n\"{exeFileName}\" {argumentsAsString}\r\nWorking Directory: {workingDirectory}";
+            var processDebugInfo = $"Process Details:\r\n\"{exeFileName}\" {ConjoinAndMaskCommandLineArguments(commandLineArguments)}\r\nWorking Directory: {workingDirectory}\r\nEnvironment Variables: {ConjoinEnvironmentVariables(environmentVariables)}";
             Logger.Info($"Starting Process: {processDebugInfo}");
             try
             {

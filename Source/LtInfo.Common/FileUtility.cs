@@ -245,7 +245,7 @@ namespace LtInfo.Common
                 ProcessUtility.EncodeArgumentForCommandLine(sourceDir.FullName),
                 ProcessUtility.EncodeArgumentForCommandLine(targetDir.FullName)
             };
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(sourceDir.Parent.FullName, "robocopy.exe", arguments, true, null);
+            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(sourceDir.Parent.FullName, "robocopy.exe", arguments, true, null, null);
 
             var robocopySucceeded = (processUtilityResult.ReturnCode < 4);
             var exitCodeEvaluation = robocopySucceeded ? "Robocopy OK" : "Robocopy ERROR";

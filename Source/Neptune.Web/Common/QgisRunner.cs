@@ -5,40 +5,27 @@ namespace Neptune.Web.Common
 {
     public class QgisRunner
     {
-        public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory,
-            string outputFolder, string outputFilename)
-        {
-            var commandLineArguments = new List<string>
-            {
-                pathToPyqgisScript,
-                NeptuneWebConfiguration.DatabaseServerName,
-                NeptuneWebConfiguration.DatabaseName,
-                NeptuneWebConfiguration.PyqgisUsername,
-                NeptuneWebConfiguration.PyqgisPassword,
-                outputFolder,
-                outputFilename
-            };
-            return ExecutePyqgisScriptImpl(workingDirectory, commandLineArguments);
-        }
-
         public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory, 
             List<string> additionalArguments)
         {
-            var commandLineArguments = new List<string>
+            var commandLineArguments = new Dictionary<string, bool>
             {
-                pathToPyqgisScript,       
-                NeptuneWebConfiguration.DatabaseServerName,
-                NeptuneWebConfiguration.DatabaseName,
-                NeptuneWebConfiguration.PyqgisUsername,
-                NeptuneWebConfiguration.PyqgisPassword
+                {pathToPyqgisScript, false},
+                {NeptuneWebConfiguration.DatabaseServerName, false},
+                {NeptuneWebConfiguration.DatabaseName, false},
+                {NeptuneWebConfiguration.PyqgisUsername, false},
+                {NeptuneWebConfiguration.PyqgisPassword, true}
             };
 
-            commandLineArguments.AddRange(additionalArguments);
+            foreach (var additionalArgument in additionalArguments)
+            {
+                commandLineArguments.Add(additionalArgument, false);
+            }
 
             return ExecutePyqgisScriptImpl(workingDirectory, commandLineArguments);
         }
 
-        private static ProcessUtilityResult ExecutePyqgisScriptImpl(string workingDirectory, List<string> commandLineArguments)
+        private static ProcessUtilityResult ExecutePyqgisScriptImpl(string workingDirectory, Dictionary<string, bool> commandLineArguments)
         {
             var environmentVariables = new Dictionary<string, string>{
                 {"PROJ_DATA", $"{NeptuneWebConfiguration.PathToPyqgisProjData}"},

@@ -36,8 +36,8 @@ namespace Neptune.Web.ScheduledJobs
             var outputPath = $"{Path.Combine(outputFolder, outputFilename)}";
 
             // a PyQGIS script computes the TGU layer and saves it as a geojson
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputFolder,
-                outputFilename);
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, new List<string>{outputFolder,
+                outputFilename});
 
             if (processUtilityResult.ReturnCode > 0)
             {
