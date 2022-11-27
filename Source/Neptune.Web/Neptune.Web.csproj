@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -50,11 +50,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Common\GeoJsonSerializer.cs" />
-    <Compile Include="Common\IHasGeometry.cs" />
-    <Compile Include="Common\IntConverter.cs" />
-    <Compile Include="Common\NullableConverterFactory.cs" />
-    <Compile Include="Common\Proj4NetHelpers.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -594,6 +589,11 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Common\GeoJsonSerializer.cs" />
+    <Compile Include="Common\IHasGeometry.cs" />
+    <Compile Include="Common\IntConverter.cs" />
+    <Compile Include="Common\NullableConverterFactory.cs" />
+    <Compile Include="Common\Proj4NetHelpers.cs" />
     <Compile Include="Controllers\ParcelLayerUploadController.cs" />
     <Compile Include="Common\WQMPCsvParserHelper.cs" />
     <Compile Include="Areas\Modeling\Models\Nereid\SolutionSequenceResult.cs" />

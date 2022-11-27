@@ -102,6 +102,9 @@ namespace Neptune.Web.ScheduledJobs
                 DbContext.TrashGeneratingUnit4326s.AddRange(trashGeneratingUnit4326s);
                 DbContext.SaveChangesWithNoAuditing();
             }
+
+            // we get invalid geometries from qgis so we need to make them valid
+            DbContext.Database.ExecuteSqlCommand("EXEC dbo.pTrashGeneratingUnitsMakeValid");
         }
     }
 }
