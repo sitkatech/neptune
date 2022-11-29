@@ -30,14 +30,13 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var layerName = $"TGU{DateTime.Now.Ticks}";
-            var outputFolder = $"{Path.Combine(Path.GetTempPath(), layerName)}";
-            var outputFilename = "tgu.geojson";
-            var outputPath = $"{Path.Combine(outputFolder, outputFilename)}";
+            var outputLayerName = $"TGU{DateTime.Now.Ticks}";
+            var outputFolder = Path.GetTempPath();
+            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}.geojson";
 
             // a PyQGIS script computes the TGU layer and saves it as a geojson
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, new List<string>{outputFolder,
-                outputFilename});
+                outputLayerName});
 
             if (processUtilityResult.ReturnCode > 0)
             {
@@ -52,7 +51,7 @@ namespace Neptune.Web.ScheduledJobs
             // kill the old TGUs
             DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
             var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
-            using var openStream = File.OpenRead(outputPath);
+            using var openStream = File.OpenRead(outputLayerPath);
             var featureCollection =
                 JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions).Result;
             var features = featureCollection.Where(x =>

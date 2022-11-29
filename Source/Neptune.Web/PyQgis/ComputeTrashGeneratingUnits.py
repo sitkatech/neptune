@@ -55,7 +55,7 @@ DATABASE_NAME = "DATABASE NAME ERROR"
 DATABASE_USER_NAME = "DATABASE USER NAME ERROR"
 DATABASE_PASSWORD = "DATABASE PASSWORD ERROR"
 OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
-OUTPUT_FILE = "OUTPUT FILE ERROR"
+OUTPUT_FILE_PREFIX = "OUTPUT FILE PREFIX ERROR"
 
 
 def parseArguments():
@@ -65,7 +65,7 @@ def parseArguments():
     parser.add_argument('database_username', metavar='s', type=str, help='The user name to use to connect to the database.')
     parser.add_argument('database_password', metavar='s', type=str, help='The password to use to connect to the database.')
     parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
-    parser.add_argument('output_file', metavar='d', type=str, help='The filename to write the final output to.')
+    parser.add_argument('output_file_prefix', metavar='d', type=str, help='The filename prefix to write the final output to.')
 
     args = parser.parse_args()
 
@@ -75,13 +75,14 @@ def parseArguments():
     global DATABASE_USER_NAME
     global DATABASE_PASSWORD
     global OUTPUT_FOLDER
-    global OUTPUT_FILE
+    global OUTPUT_FILE_PREFIX
     DATABASE_SERVER_NAME = args.database_server_name
     DATABASE_NAME = args.database_name
     DATABASE_USER_NAME = args.database_username
     DATABASE_PASSWORD = args.database_password
     OUTPUT_FOLDER = args.output_folder
-    OUTPUT_FILE = args.output_file
+    OUTPUT_FILE_PREFIX = args.output_file_prefix
+    OUTPUT_FOLDER_AND_FILE_PREFIX = OUTPUT_FOLDER + '\\' + OUTPUT_FILE_PREFIX
 
 def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data = target.dataProvider()
@@ -389,9 +390,9 @@ if __name__ == '__main__':
     flatten_ovtas.run()
             
     print("Union OVTA with Delineation\n")
-    delineation_flattened_layer_path = OUTPUT_FOLDER + '\\delineation_flattened_layer.geojson'
-    ovta_flattened_layer_path = OUTPUT_FOLDER + '\\ovta_flattened_layer.geojson'
-    ovta_delineation_layer_path = OUTPUT_FOLDER + '\\ovta_delineation_layer.geojson'
+    delineation_flattened_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'delineation_flattened_layer.geojson'
+    ovta_flattened_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'ovta_flattened_layer.geojson'
+    ovta_delineation_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'ovta_delineation_layer.geojson'
     ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, delineation_flattened_layer_path, ovta_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
     wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput", "WaterQualityManagementPlanBoundary")
@@ -400,21 +401,21 @@ if __name__ == '__main__':
     flatten_wqmps.run()
 
     print("Union OVTA-Delineation with WQMP\n")
-    wqmp_flattened_layer_path = OUTPUT_FOLDER + '\\wqmp_flattened_layer.geojson'
-    ovta_delineation_layer_unionedandfixed_path = OUTPUT_FOLDER + '\\ovta_delineation_layer_unionedandfixed.geojson'
-    odw_layer_path = OUTPUT_FOLDER + '\\odw_layer.geojson'
+    wqmp_flattened_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'wqmp_flattened_layer.geojson'
+    ovta_delineation_layer_unionedandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'ovta_delineation_layer_unionedandfixed.geojson'
+    odw_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer.geojson'
     odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
     land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput", "LandUseBlockGeometry")
-    land_use_block_layer_path = OUTPUT_FOLDER + '\\land_use_block_layer.geojson'
+    land_use_block_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer.geojson'
     writeVectorLayerToDisk(land_use_block_layer, land_use_block_layer_path, "GeoJSON")
 
-    finalOutputPath = OUTPUT_FOLDER + '\\' + OUTPUT_FILE
+    finalOutputPath = OUTPUT_FOLDER_AND_FILE_PREFIX + '.geojson'
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
 
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
-    land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER + '\\land_use_block_layer_unionedandfixed.geojson'
-    odw_layer_unionandfixed_path = OUTPUT_FOLDER + '\\odw_layer_unionedandfixed.geojson'
+    land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer_unionedandfixed.geojson'
+    odw_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer_unionedandfixed.geojson'
     tgu_layer = unionAndFix(land_use_block_layer_path, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
     print("Succeeded!")

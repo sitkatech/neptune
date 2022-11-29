@@ -118,11 +118,10 @@ You can view the results or trigger another network solve <a href='{planningURL}
         {
             Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {ProjectID}");
             var outputLayerName = $"PLGU{DateTime.Now.Ticks}";
-            var outputFolder = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}";
-            var outputLayerFilename = "plgu.geojson";
-            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerFilename)}";
+            var outputFolder = Path.GetTempPath();
+            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}.geojson";
 
-            var additionalCommandLineArguments = new List<string> { outputFolder, outputLayerFilename, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
+            var additionalCommandLineArguments = new List<string> { outputFolder, outputLayerName, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);

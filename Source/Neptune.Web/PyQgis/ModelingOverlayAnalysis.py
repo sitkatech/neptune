@@ -50,7 +50,7 @@ DATABASE_NAME = "DATABASE NAME ERROR"
 DATABASE_USER_NAME = "DATABASE USER NAME ERROR"
 DATABASE_PASSWORD = "DATABASE PASSWORD ERROR"
 OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
-OUTPUT_FILE = "OUTPUT FILE ERROR"
+OUTPUT_FILE_PREFIX = "OUTPUT FILE PREFIX ERROR"
 CLIP_PATH = None
 RSB_IDs = None
 PLANNED_PROJECT_ID = None
@@ -62,7 +62,7 @@ def parseArguments():
     parser.add_argument('database_username', metavar='s', type=str, help='The user name to use to connect to the database.')
     parser.add_argument('database_password', metavar='s', type=str, help='The password to use to connect to the database.')
     parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
-    parser.add_argument('output_file', metavar='d', type=str, help='The filename to write the final output to.')
+    parser.add_argument('output_file_prefix', metavar='d', type=str, help='The filename prefix to write the final output to.')
     parser.add_argument('--planned_project_id', type=int, help='If running the overlay for a particular Project, this will add delineations for any Treatment BMPs who belong to this project')
     parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
     parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
@@ -74,7 +74,7 @@ def parseArguments():
     global DATABASE_USER_NAME
     global DATABASE_PASSWORD
     global OUTPUT_FOLDER
-    global OUTPUT_FILE
+    global OUTPUT_FILE_PREFIX
     global CLIP_PATH
     global PLANNED_PROJECT_ID
     global RSB_IDs
@@ -83,7 +83,8 @@ def parseArguments():
     DATABASE_USER_NAME = args.database_username
     DATABASE_PASSWORD = args.database_password
     OUTPUT_FOLDER = args.output_folder
-    OUTPUT_FILE = args.output_file
+    OUTPUT_FILE_PREFIX = args.output_file_prefix
+    OUTPUT_FOLDER_AND_FILE_PREFIX = OUTPUT_FOLDER + '\\' + OUTPUT_FILE_PREFIX
 
     if args.clip:
         CLIP_PATH = args.clip
@@ -140,27 +141,27 @@ if __name__ == '__main__':
     else:
         delineationLayer = fetchLayer("vPyQgisDelineationLGUInput", "DelineationGeometry")
 
-    delineationLayer_path = OUTPUT_FOLDER + '\\delineationLayer.geojson'
+    delineationLayer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'delineationLayer.geojson'
     writeVectorLayerToDisk(delineationLayer, delineationLayer_path, "GeoJSON")
-    delineationLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\delineationLayer_buffersnapfix.geojson'
+    delineationLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'delineationLayer_buffersnapfix.geojson'
     delineationLayerResult = bufferSnapFix(delineationLayer_path, delineationLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     modelBasinLayer = fetchLayer("vPyQgisModelBasinLGUInput", "ModelBasinGeometry")
-    modelBasinLayer_path = OUTPUT_FOLDER + '\\modelBasinLayer.geojson'
+    modelBasinLayer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'modelBasinLayer.geojson'
     writeVectorLayerToDisk(modelBasinLayer, modelBasinLayer_path, "GeoJSON")
-    modelBasinLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\modelBasinLayer_buffersnapfix.geojson'
+    modelBasinLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'modelBasinLayer_buffersnapfix.geojson'
     modelBasinLayerResult = bufferSnapFix(modelBasinLayer_path, modelBasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     regionalSubbasinLayer = fetchLayer("vPyQgisRegionalSubbasinLGUInput", "CatchmentGeometry")
-    regionalSubbasinLayer_path = OUTPUT_FOLDER + '\\regionalSubbasinLayer.geojson'
+    regionalSubbasinLayer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'regionalSubbasinLayer.geojson'
     writeVectorLayerToDisk(regionalSubbasinLayer, regionalSubbasinLayer_path, "GeoJSON")
-    regionalSubbasinLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\regionalSubbasinLayer_buffersnapfix.geojson'
+    regionalSubbasinLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'regionalSubbasinLayer_buffersnapfix.geojson'
     regionalSubbasinLayerResult = bufferSnapFix(regionalSubbasinLayer_path, regionalSubbasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     wqmpLayer = fetchLayer("vPyQgisWaterQualityManagementPlanLGUInput", "WaterQualityManagementPlanBoundary")
-    wqmpLayer_path = OUTPUT_FOLDER + '\\wqmpLayer.geojson'
+    wqmpLayer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'wqmpLayer.geojson'
     writeVectorLayerToDisk(wqmpLayer, wqmpLayer_path, "GeoJSON")
-    wqmpLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\wqmpLayer_buffersnapfix.geojson'
+    wqmpLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'wqmpLayer_buffersnapfix.geojson'
     wqmpLayerResult = bufferSnapFix(wqmpLayer_path, wqmpLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     if RSB_IDs is not None:
@@ -199,7 +200,7 @@ if __name__ == '__main__':
     
     masterOverlay.commitChanges()
 
-    finalOutputPath = OUTPUT_FOLDER + '\\' + OUTPUT_FILE
+    finalOutputPath = OUTPUT_FOLDER_AND_FILE_PREFIX + '.geojson'
     writeVectorLayerToDisk(masterOverlay, finalOutputPath, "GeoJSON")
 
     #raiseIfLayerInvalid(masterOverlay)
