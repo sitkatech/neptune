@@ -15,11 +15,9 @@ from qgis.core import (
      QgsApplication, 
      QgsProcessingFeedback, 
      QgsVectorLayer,
-     QgsVectorLayerExporter,
      QgsFeatureRequest,
      QgsDataSourceUri,
      QgsFeature,
-     QgsVectorFileWriter,
      QgsCoordinateReferenceSystem,
      QgsProject,
      QgsWkbTypes
@@ -43,7 +41,12 @@ from pyqgis_utils import (
     duplicateLayer,
     fetchLayerFromDatabase,
     raiseIfLayerInvalid,
-    QgisError
+    bufferZero,
+    fixGeometriesWithinLayer,
+    snapGeometriesWithinLayer,
+    union,
+    QgisError,
+    writeVectorLayerToDisk
 )
 
 JOIN_PREFIX = "Joined_"
@@ -89,13 +92,13 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     target.updateFields()
 
 def unionAndFix(inputLayer, overlayLayer, inputLayerOutputPath, overlayLayerOutputPath, unionResultOutputPath, context=None):
-    inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, PROCESSING_CONTEXT)
-    inputLayer = removeSlivers(inputLayer, 'noslivers', None, PROCESSING_CONTEXT)
+    #inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, PROCESSING_CONTEXT)
+    #inputLayer = removeSlivers(inputLayer, 'noslivers', None, PROCESSING_CONTEXT)
     inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
     inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
     inputLayer = fixGeometriesWithinLayer(inputLayer, None, inputLayerOutputPath, PROCESSING_CONTEXT)
-    overlayLayer = removeNullGeometries(overlayLayer, 'nonnull', None, PROCESSING_CONTEXT)    
-    overlayLayer = removeSlivers(overlayLayer, 'noslivers', None, PROCESSING_CONTEXT)
+    #overlayLayer = removeNullGeometries(overlayLayer, 'nonnull', None, PROCESSING_CONTEXT)    
+    #overlayLayer = removeSlivers(overlayLayer, 'noslivers', None, PROCESSING_CONTEXT)
     overlayLayer = bufferZero(overlayLayer, 'buffer', None, PROCESSING_CONTEXT)
     overlayLayer = snapGeometriesWithinLayer(overlayLayer, 'snapped', None, PROCESSING_CONTEXT)
     overlayLayer = fixGeometriesWithinLayer(overlayLayer, None, overlayLayerOutputPath, PROCESSING_CONTEXT)
@@ -107,123 +110,6 @@ def unionAndFix(inputLayer, overlayLayer, inputLayerOutputPath, overlayLayerOutp
     #saveSelectedFeatures(result, None, unionResultOutputPath, PROCESSING_CONTEXT)
     print('Union succeeded')
     return result
-
-def selectPolygonFeatures(inputLayer, context = None):
-    params = {
-        'INPUT':inputLayer,
-        'EXPRESSION':"geometry_type($geometry) = 'Polygon' and $area >= 100"
-    }
-    print('Running qgis:selectbyexpression')
-    if context is not None:
-        result = processing.run("qgis:selectbyexpression", params ,context = context)
-    else:
-        result = processing.run("qgis:selectbyexpression", params)
-    return result
-
-def removeNullGeometries(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
-    params = {
-        'INPUT':inputLayer,
-        'REMOVE_EMPTY':True
-    }
-    result = runNativeAlgorithm("native:removenullgeometries", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def removeSlivers(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
-    params = {
-        'INPUT':inputLayer,
-        'MODE':2,
-    }
-    result = runNativeAlgorithm("qgis:eliminateselectedpolygons", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def saveSelectedFeatures(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
-    params = {
-        'INPUT':inputLayer
-    }
-    result = runNativeAlgorithm("native:saveselectedfeatures", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-
-def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
-    params = {
-        'INPUT':inputLayer,
-        'OVERLAY':overlayLayer,
-        'OVERLAY_FIELDS_PREFIX':''
-    }
-    
-    result = runNativeAlgorithm("native:union", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def createSpatialIndex(inputLayer, context = None):
-    params = {
-        'INPUT':inputLayer
-    }
-    print('Running native:createspatialindex')
-    if context is not None:
-        result = processing.run("native:createspatialindex", params ,context = context)
-    else:
-        result = processing.run("native:createspatialindex", params)
-
-def bufferZero(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    params = {
-        'INPUT':inputLayer,
-        'DISTANCE':0,
-        'SEGMENTS':5,
-        'END_CAP_STYLE':1,
-        'JOIN_STYLE':1,
-        'MITER_LIMIT':2,
-        'DISSOLVE':False
-    }
-    
-    result = runNativeAlgorithm("native:buffer", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def fixGeometriesWithinLayer(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    params = {
-        'INPUT':inputLayer
-    }
-    
-    result = runNativeAlgorithm("native:fixgeometries", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def snapGeometriesWithinLayer(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    params = {
-        'INPUT':inputLayer,
-        'REFERENCE_LAYER':inputLayer,
-        'TOLERANCE':1,
-        'BEHAVIOR':1
-    }
-    
-    result = runNativeAlgorithm("qgis:snapgeometries", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def runNativeAlgorithm(algorithm, params, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    if memoryOutputName is not None:
-        params['OUTPUT'] = 'memory:' + memoryOutputName
-    elif filesystemOutputPath is not None:
-        params['OUTPUT'] = filesystemOutputPath
-    else:
-        raise QgisError("No output provided for " + algorithm + " operation")
-
-    print('Running ' + algorithm)
-    if context is not None:
-        result = processing.run(algorithm, params ,context = context)
-    else:
-        result = processing.run(algorithm, params)
-
-    return result['OUTPUT']
-
-def writeVectorLayerToDisk(layer, output_path):
-    # Write to an ESRI Shapefile format dataset using UTF-8 text encoding
-    save_options = QgsVectorFileWriter.SaveVectorOptions()
-    save_options.driverName = "ESRI Shapefile"
-    save_options.fileEncoding = "UTF-8"
-    transform_context = QgsProject.instance().transformContext()
-    error = QgsVectorFileWriter.writeAsVectorFormatV3(layer, output_path, transform_context, save_options)
-    if error[0] == QgsVectorFileWriter.NoError:
-        print("Saved to " + output_path)
-    else:
-      print(error)
 
 class Flatten:
     
@@ -350,6 +236,7 @@ class Flatten:
 
     def handleOverlapsInCandidateLayer(self):
         print("Starting handle overlaps")
+        print("Starting with {count} features".format(count = str(self.working_layer.featureCount())))
 
         dupe = duplicateLayer(self.working_layer, "Duplicate")
 
@@ -382,8 +269,6 @@ class Flatten:
 
             for rf in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feat[self.getLayerIdentifier(True)])):
                 right_feat = rf
-
-            retained_intersection = left_feat.geometry().intersection(right_feat.geometry())
             
             if left_feat.isValid() and right_feat.isValid():
                 if self.compareFeatures(left_feat, right_feat):   # Left side loses. Assign Left = Left - Right
@@ -395,6 +280,8 @@ class Flatten:
                     new_feat = QgsFeature(left_feat)
                     new_feat.setGeometry(new_left_feat_geom)
 
+#                    if(new_feat.geometry().type() != self.working_layer.geometryType()):
+#                        print("Left won: " + str(left_feat[self.layer_identifier]) + " - " + QgsWkbTypes.geometryDisplayString(new_feat.geometry().type()) + str(new_feat.geometry().type()))
                     # delete the old feature and add the new
                     self.working_layer.deleteFeature(left_feat.id())
                     self.working_layer.addFeature(new_feat)
@@ -406,6 +293,8 @@ class Flatten:
                     new_feat = QgsFeature(right_feat)
                     new_feat.setGeometry(new_right_feat_geom)
 
+#                   if(new_feat.geometry().type() != self.working_layer.geometryType()):
+#                        print("Right won: " + str(right_feat[self.layer_identifier]) + " - " + QgsWkbTypes.geometryDisplayString(new_feat.geometry().type()) + str(new_feat.geometry().type()))
                     # delete the old feature and add the new
                     self.working_layer.deleteFeature(right_feat.id())
                     self.working_layer.addFeature(new_feat)
@@ -417,6 +306,7 @@ class Flatten:
                 print(self.working_layer.commitErrors())
 
         print("Ending handle overlaps. Found " + str(self.overlap_count_this_iteration))
+        print("Ending with {count} features".format(count = str(self.working_layer.featureCount())))
 
     # utility methods
     
@@ -516,8 +406,8 @@ if __name__ == '__main__':
     odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
     land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput", "LandUseBlockGeometry")
-    land_use_block_layer_path = OUTPUT_FOLDER + '\\land_use_block_layer'
-    writeVectorLayerToDisk(land_use_block_layer, land_use_block_layer_path)
+    land_use_block_layer_path = OUTPUT_FOLDER + '\\land_use_block_layer.geojson'
+    writeVectorLayerToDisk(land_use_block_layer, land_use_block_layer_path, "GeoJSON")
 
     finalOutputPath = OUTPUT_FOLDER + '\\' + OUTPUT_FILE
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
@@ -525,25 +415,7 @@ if __name__ == '__main__':
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER + '\\land_use_block_layer_unionedandfixed.geojson'
     odw_layer_unionandfixed_path = OUTPUT_FOLDER + '\\odw_layer_unionedandfixed.geojson'
-    tgu_layer = unionAndFix(land_use_block_layer_path + ".shp", odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
-
-#    neptuneDataSource.setDataSource("dbo", "TrashGeneratingUnitStaging", "TrashGeneratingUnitStagingGeometry")
-#    crs = QgsCoordinateReferenceSystem("EPSG:2771")
-
-#    layerFields = tgu_layer.fields()
-#    fieldIndex = layerFields.indexFromName("fid")
-#    print("Removing field '" + self.fieldToRemove + "'")
-#    self.working_layer.dataProvider().deleteAttributes([fieldIndex])
-
-    #wkbType = tgu_layer.wkbType()
-#    wkbType = QgsWkbTypes.Type.MultiPolygon
-#    exporter = QgsVectorLayerExporter(neptuneDataSource.uri(), "mssql", layerFields, wkbType, crs, True)
-#    featuresToExport = tgu_layer.selectByExpression("\"SJID\" is not null and \"LUBID\" is not null and $area >= 100")
-    #.selectedFeatures()
-    #featuresToExport = [feat for feat in tgu_layer.selectByExpression().getFeatures()]
-#    exportResult = exporter.addFeatures(featuresToExport)
-#    exportResult = QgsVectorLayerExporter.exportLayer(tgu_layer.selectByExpression("\"SJID\" is not null and \"LUBID\" is not null and $area >= 100"), neptuneDataSource.uri(), "mssql", crs, True)
-#    print(exportResult)
+    tgu_layer = unionAndFix(land_use_block_layer_path, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
     print("Succeeded!")
     qgs.exitQgis()

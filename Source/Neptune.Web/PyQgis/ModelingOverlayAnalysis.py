@@ -31,8 +31,17 @@ from pyqgis_utils import (
     duplicateLayer,
     fetchLayerFromDatabase,
     raiseIfLayerInvalid,
+    bufferZero,
+    fixGeometriesWithinLayer,
+    snapGeometriesWithinLayer,
+    union,
     QgisError,
-    fetchLayerFromGeoJson
+    fetchLayerFromGeoJson,
+    intersection,
+    clip,
+    snapGeometriesToLayer,
+    multipartToSinglePart,
+    writeVectorLayerToDisk
 )
 
 JOIN_PREFIX = "Joined_"
@@ -84,105 +93,6 @@ def parseArguments():
     if args.rsb_ids:
         RSB_IDs = args.rsb_ids
         print(RSB_IDs)
-
-def union(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
-    params = {
-        'INPUT': inputLayer,
-        'OVERLAY': overlayLayer,
-        'OVERLAY_FIELDS_PREFIX':''
-    }
-    
-    result = runNativeAlgorithm("native:union", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def intersection(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
-    params = {
-        'INPUT': inputLayer,
-        'OVERLAY': overlayLayer,
-        'INPUT_FIELDS':[],
-        'OVERLAY_FIELDS':[],
-        'OVERLAY_FIELDS_PREFIX':''
-    }
-    
-    result = runNativeAlgorithm("native:intersection", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def clip(inputLayer, overlayLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    params = {
-        'INPUT': inputLayer,
-        'OVERLAY': overlayLayer
-    }
-    
-    result = runNativeAlgorithm("native:clip", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def bufferZero(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
-    params = {
-        'INPUT':inputLayer,
-        'DISTANCE':0,
-        'SEGMENTS':5,
-        'END_CAP_STYLE':1,
-        'JOIN_STYLE':1,
-        'MITER_LIMIT':2,
-        'DISSOLVE':False
-    }
-    
-    result = runNativeAlgorithm("native:buffer", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def fixGeometriesWithinLayer(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
-    params = {
-        'INPUT':inputLayer
-    }
-
-    result = runNativeAlgorithm("native:fixgeometries", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def snapGeometriesWithinLayer(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
-    params = {
-        'INPUT':inputLayer,
-        'REFERENCE_LAYER':inputLayer,
-        'TOLERANCE':1,
-        'BEHAVIOR':1
-    }
-
-    result = runNativeAlgorithm("qgis:snapgeometries", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def snapGeometriesToLayer(inputLayer, referenceLayer, memoryOutputName, filesystemOutputPath, context=None):
-    params = {
-        'INPUT':inputLayer,
-        'REFERENCE_LAYER':referenceLayer,
-        'TOLERANCE':10,
-        'BEHAVIOR':1
-    }
-
-    result = runNativeAlgorithm("qgis:snapgeometries", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def multipartToSinglePart(inputLayer, memoryOutputName, filesystemOutputPath, context=None):
-    params = {
-        'INPUT':inputLayer
-    }
-
-    result = runNativeAlgorithm("native:multiparttosingleparts", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
-def runNativeAlgorithm(algorithm, params, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    if memoryOutputName is not None:
-        params['OUTPUT'] = 'memory:' + memoryOutputName
-    elif filesystemOutputPath is not None:
-        params['OUTPUT'] = filesystemOutputPath
-    else:
-        raise QgisError("No output provided for " + algorithm + " operation")
-
-    print('Running ' + algorithm)
-    if context is not None:
-        result = processing.run(algorithm, params ,context = context)
-    else:
-        result = processing.run(algorithm, params)
-
-    return result['OUTPUT']
 
 if __name__ == '__main__':
     parseArguments()
@@ -270,7 +180,6 @@ if __name__ == '__main__':
     
     masterOverlay.commitChanges()
 
-    QgsVectorFileWriter.writeAsVectorFormat(masterOverlay, OUTPUT_PATH, "utf-8", delineationLayer.crs(), "ESRI Shapefile")
-
+    writeVectorLayerToDisk(masterOverlay, OUTPUT_PATH, "GeoJSON")
 
     #raiseIfLayerInvalid(masterOverlay)
