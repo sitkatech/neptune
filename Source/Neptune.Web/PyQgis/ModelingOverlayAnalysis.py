@@ -168,12 +168,12 @@ if __name__ == '__main__':
     if RSB_IDs is not None:
         #If we've got set RSBs we want only what's within those RSBs'
         regionalSubbasinLayerClipped = clip(regionalSubbasinLayer_buffersnapfixpath, regionalSubbasinLayer_buffersnapfixpath, "RSBClipped", None)
-        delineationLayerClipped = clip(delineationLayer_path, regionalSubbasinLayer_buffersnapfixpath, "DelineationClipped", None)
+        delineationLayerClipped = clip(delineationLayer_buffersnapfixpath, regionalSubbasinLayer_buffersnapfixpath, "DelineationClipped", None)
         wqmpLayerClipped = clip(wqmpLayer_buffersnapfixpath, regionalSubbasinLayer_buffersnapfixpath, "WQMPClipped", None)
     else:
         # At present time, we're only concerned with the area covered by Model basins. 
         regionalSubbasinLayerClipped = clip(regionalSubbasinLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "RSBClipped", None)
-        delineationLayerClipped = clip(delineationLayer_path, modelBasinLayer_buffersnapfixpath, "DelineationClipped", None)
+        delineationLayerClipped = clip(delineationLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "DelineationClipped", None)
         wqmpLayerClipped = clip(wqmpLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "WQMPClipped", None)
 
     wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", None, PROCESSING_CONTEXT)
