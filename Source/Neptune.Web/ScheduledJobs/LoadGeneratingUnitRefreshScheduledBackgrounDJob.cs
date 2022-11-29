@@ -45,11 +45,12 @@ namespace Neptune.Web.ScheduledJobs
             Logger.Info($"Processing '{JobName}'");
 
             var outputLayerName = $"LGU{DateTime.Now.Ticks}";
-            var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.geojson";
+            var outputFolder = Path.GetTempPath();
+            var outputLayerFilename = $"{outputLayerName}.geojson";
+            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerFilename)}";
+            var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}_inputClip.json";
 
-            var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
-
-            var additionalCommandLineArguments = new List<string> { outputLayerPath };
+            var additionalCommandLineArguments = new List<string> { outputFolder, outputLayerPath };
 
             LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea = null;
 

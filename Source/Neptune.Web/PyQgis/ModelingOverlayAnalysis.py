@@ -61,7 +61,8 @@ def parseArguments():
     parser.add_argument('database_name', metavar='s', type=str, help='The name of the database to connect to.')
     parser.add_argument('database_username', metavar='s', type=str, help='The user name to use to connect to the database.')
     parser.add_argument('database_password', metavar='s', type=str, help='The password to use to connect to the database.')
-    parser.add_argument('output_path', metavar='d', type=str, help='The path to write the final output to.')
+    parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
+    parser.add_argument('output_file', metavar='d', type=str, help='The filename to write the final output to.')
     parser.add_argument('--planned_project_id', type=int, help='If running the overlay for a particular Project, this will add delineations for any Treatment BMPs who belong to this project')
     parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
     parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
@@ -72,7 +73,8 @@ def parseArguments():
     global DATABASE_NAME
     global DATABASE_USER_NAME
     global DATABASE_PASSWORD
-    global OUTPUT_PATH
+    global OUTPUT_FOLDER
+    global OUTPUT_FILE
     global CLIP_PATH
     global PLANNED_PROJECT_ID
     global RSB_IDs
@@ -80,7 +82,8 @@ def parseArguments():
     DATABASE_NAME = args.database_name
     DATABASE_USER_NAME = args.database_username
     DATABASE_PASSWORD = args.database_password
-    OUTPUT_PATH = args.output_path
+    OUTPUT_FOLDER = args.output_folder
+    OUTPUT_FILE = args.output_file
 
     if args.clip:
         CLIP_PATH = args.clip
@@ -93,6 +96,13 @@ def parseArguments():
     if args.rsb_ids:
         RSB_IDs = args.rsb_ids
         print(RSB_IDs)
+
+def bufferSnapFix(inputLayer, inputLayerOutputPath, context=None):
+    inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
+    inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
+    inputLayer = fixGeometriesWithinLayer(inputLayer, None, inputLayerOutputPath, PROCESSING_CONTEXT)
+    print('Buffer snap fix succeeded')
+    return inputLayer
 
 if __name__ == '__main__':
     parseArguments()
@@ -122,8 +132,6 @@ if __name__ == '__main__':
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
         
-    modelBasinLayer = fetchLayer("vPyQgisModelBasinLGUInput", "ModelBasinGeometry")
-    regionalSubbasinLayer = fetchLayer("vPyQgisRegionalSubbasinLGUInput", "CatchmentGeometry")
     if RSB_IDs is not None:
         regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
     if PLANNED_PROJECT_ID is not None:
@@ -131,45 +139,56 @@ if __name__ == '__main__':
         delineationLayer.setSubsetString("ProjectID is null or ProjectID=" + str(PLANNED_PROJECT_ID))
     else:
         delineationLayer = fetchLayer("vPyQgisDelineationLGUInput", "DelineationGeometry")
+
+    delineationLayer_path = OUTPUT_FOLDER + '\\delineationLayer.geojson'
+    writeVectorLayerToDisk(delineationLayer, delineationLayer_path, "GeoJSON")
+    delineationLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\delineationLayer_buffersnapfix.geojson'
+    delineationLayerResult = bufferSnapFix(delineationLayer_path, None, delineationLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+
+    modelBasinLayer = fetchLayer("vPyQgisModelBasinLGUInput", "ModelBasinGeometry")
+    modelBasinLayer_path = OUTPUT_FOLDER + '\\modelBasinLayer.geojson'
+    writeVectorLayerToDisk(modelBasinLayer, modelBasinLayer_path, "GeoJSON")
+    modelBasinLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\modelBasinLayer_buffersnapfix.geojson'
+    modelBasinLayerResult = bufferSnapFix(modelBasinLayer_path, None, modelBasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+
+    regionalSubbasinLayer = fetchLayer("vPyQgisRegionalSubbasinLGUInput", "CatchmentGeometry")
+    regionalSubbasinLayer_path = OUTPUT_FOLDER + '\\regionalSubbasinLayer.geojson'
+    writeVectorLayerToDisk(regionalSubbasinLayer, regionalSubbasinLayer_path, "GeoJSON")
+    regionalSubbasinLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\regionalSubbasinLayer_buffersnapfix.geojson'
+    regionalSubbasinLayerResult = bufferSnapFix(regionalSubbasinLayer_path, None, regionalSubbasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+
     wqmpLayer = fetchLayer("vPyQgisWaterQualityManagementPlanLGUInput", "WaterQualityManagementPlanBoundary")
-
-    # perhaps overly-aggressive application of the buffer-zero and 
-    modelBasinLayer = bufferZero(modelBasinLayer, "ModelBasins", None, context=PROCESSING_CONTEXT)
-    regionalSubbasinLayer = bufferZero(regionalSubbasinLayer, "RegionalSubbasins", None, context=PROCESSING_CONTEXT)
-
-    delineationLayer = snapGeometriesWithinLayer(delineationLayer, "DelineationSnapped", None, context=PROCESSING_CONTEXT)
-    delineationLayer = bufferZero(delineationLayer, "Delineations", None, context=PROCESSING_CONTEXT)
-
-    wqmpLayer = fixGeometriesWithinLayer(wqmpLayer, "WQMPFixed", None, context=PROCESSING_CONTEXT)
-    wqmpLayer = snapGeometriesWithinLayer(wqmpLayer, "WQMPSnapped", None, context=PROCESSING_CONTEXT)
-    wqmpLayer = bufferZero(wqmpLayer, "WQMP", None, context=PROCESSING_CONTEXT)
+    wqmpLayer_path = OUTPUT_FOLDER + '\\wqmpLayer.geojson'
+    writeVectorLayerToDisk(wqmpLayer, wqmpLayer_path, "GeoJSON")
+    wqmpLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\wqmpLayer_buffersnapfix.geojson'
+    wqmpLayerResult = bufferSnapFix(wqmpLayer_path, None, wqmpLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     if RSB_IDs is not None:
         #If we've got set RSBs we want only what's within those RSBs'
-        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, regionalSubbasinLayer, "RSBClipped", None)
-        delineationLayerClipped = clip(delineationLayer, regionalSubbasinLayer, "DelineationClipped", None)
-        wqmpLayerClipped = clip(wqmpLayer, regionalSubbasinLayer, "WQMPClipped", None)
+        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer_buffersnapfixpath, regionalSubbasinLayer_buffersnapfixpath, "RSBClipped", None)
+        delineationLayerClipped = clip(delineationLayer_path, regionalSubbasinLayer_buffersnapfixpath, "DelineationClipped", None)
+        wqmpLayerClipped = clip(wqmpLayer_buffersnapfixpath, regionalSubbasinLayer_buffersnapfixpath, "WQMPClipped", None)
     else:
         # At present time, we're only concerned with the area covered by Model basins. 
-        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer, modelBasinLayer, "RSBClipped", None)
-        delineationLayerClipped = clip(delineationLayer, modelBasinLayer, "DelineationClipped", None)
-        wqmpLayerClipped = clip(wqmpLayer, modelBasinLayer, "WQMPClipped", None)
+        regionalSubbasinLayerClipped = clip(regionalSubbasinLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "RSBClipped", None)
+        delineationLayerClipped = clip(delineationLayer_path, modelBasinLayer_buffersnapfixpath, "DelineationClipped", None)
+        wqmpLayerClipped = clip(wqmpLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "WQMPClipped", None)
 
-    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", None, context=PROCESSING_CONTEXT)
+    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", None, PROCESSING_CONTEXT)
 
-    rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, memoryOutputName="rsb_wqmp", None, context=PROCESSING_CONTEXT)
+    rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, "rsb_wqmp", None, PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb_delineation)
-    rsb_wqmp = bufferZero(rsb_wqmp, "ModelBasin-RSB-D", None, context=PROCESSING_CONTEXT)
+    rsb_wqmp = bufferZero(rsb_wqmp, "ModelBasin-RSB-D", None, PROCESSING_CONTEXT)
 
 
     # clip the model basin layer to the input boundary so that all further datasets will be clipped as well
     if clip_layer is not None:
-        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", None, context=PROCESSING_CONTEXT)
-        masterOverlay = clip(masterOverlay, clip_layer, memoryOutputName="MasterOverlay", None, context=PROCESSING_CONTEXT)
+        masterOverlay = union(rsb_wqmp, delineationLayerClipped, "MasterOverlay", None, PROCESSING_CONTEXT)
+        masterOverlay = clip(masterOverlay, clip_layer, "MasterOverlay", None, PROCESSING_CONTEXT)
     else: 
-        masterOverlay = union(rsb_wqmp, delineationLayerClipped, memoryOutputName="MasterOverlay", None, context=PROCESSING_CONTEXT)
+        masterOverlay = union(rsb_wqmp, delineationLayerClipped, "MasterOverlay", None, PROCESSING_CONTEXT)
 
-    masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", None, context=PROCESSING_CONTEXT)
+    masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", None, PROCESSING_CONTEXT)
 
     masterOverlay.startEditing()
 
@@ -180,6 +199,7 @@ if __name__ == '__main__':
     
     masterOverlay.commitChanges()
 
-    writeVectorLayerToDisk(masterOverlay, OUTPUT_PATH, "GeoJSON")
+    finalOutputPath = OUTPUT_FOLDER + '\\' + OUTPUT_FILE
+    writeVectorLayerToDisk(masterOverlay, finalOutputPath, "GeoJSON")
 
     #raiseIfLayerInvalid(masterOverlay)
