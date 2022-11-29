@@ -74,7 +74,8 @@ namespace Neptune.Web.ScheduledJobs
                     DelineationID = delineationID,
                     WaterQualityManagementPlanID = waterQualityManagementPlanID,
                     LandUseBlockID = landUseBlockID,
-                    OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID
+                    OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
+                    LastUpdateDate = DateTime.Now
                 };
                 
                 trashGeneratingUnits.Add(trashGeneratingUnit);
@@ -84,7 +85,8 @@ namespace Neptune.Web.ScheduledJobs
                     DelineationID = delineationID,
                     WaterQualityManagementPlanID = waterQualityManagementPlanID,
                     LandUseBlockID = landUseBlockID,
-                    OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID
+                    OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
+                    LastUpdateDate = DateTime.Now
                 };
                 trashGeneratingUnit4326s.Add(trashGeneratingUnit4326);
             }
