@@ -97,10 +97,10 @@ def parseArguments():
         RSB_IDs = args.rsb_ids
         print(RSB_IDs)
 
-def bufferSnapFix(inputLayer, inputLayerOutputPath, context=None):
+def bufferSnapFix(inputLayer, filesystemOutputPath, context=None):
     inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
     inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
-    inputLayer = fixGeometriesWithinLayer(inputLayer, None, inputLayerOutputPath, PROCESSING_CONTEXT)
+    inputLayer = fixGeometriesWithinLayer(inputLayer, None, filesystemOutputPath, PROCESSING_CONTEXT)
     print('Buffer snap fix succeeded')
     return inputLayer
 
@@ -143,25 +143,25 @@ if __name__ == '__main__':
     delineationLayer_path = OUTPUT_FOLDER + '\\delineationLayer.geojson'
     writeVectorLayerToDisk(delineationLayer, delineationLayer_path, "GeoJSON")
     delineationLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\delineationLayer_buffersnapfix.geojson'
-    delineationLayerResult = bufferSnapFix(delineationLayer_path, None, delineationLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+    delineationLayerResult = bufferSnapFix(delineationLayer_path, delineationLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     modelBasinLayer = fetchLayer("vPyQgisModelBasinLGUInput", "ModelBasinGeometry")
     modelBasinLayer_path = OUTPUT_FOLDER + '\\modelBasinLayer.geojson'
     writeVectorLayerToDisk(modelBasinLayer, modelBasinLayer_path, "GeoJSON")
     modelBasinLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\modelBasinLayer_buffersnapfix.geojson'
-    modelBasinLayerResult = bufferSnapFix(modelBasinLayer_path, None, modelBasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+    modelBasinLayerResult = bufferSnapFix(modelBasinLayer_path, modelBasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     regionalSubbasinLayer = fetchLayer("vPyQgisRegionalSubbasinLGUInput", "CatchmentGeometry")
     regionalSubbasinLayer_path = OUTPUT_FOLDER + '\\regionalSubbasinLayer.geojson'
     writeVectorLayerToDisk(regionalSubbasinLayer, regionalSubbasinLayer_path, "GeoJSON")
     regionalSubbasinLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\regionalSubbasinLayer_buffersnapfix.geojson'
-    regionalSubbasinLayerResult = bufferSnapFix(regionalSubbasinLayer_path, None, regionalSubbasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+    regionalSubbasinLayerResult = bufferSnapFix(regionalSubbasinLayer_path, regionalSubbasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     wqmpLayer = fetchLayer("vPyQgisWaterQualityManagementPlanLGUInput", "WaterQualityManagementPlanBoundary")
     wqmpLayer_path = OUTPUT_FOLDER + '\\wqmpLayer.geojson'
     writeVectorLayerToDisk(wqmpLayer, wqmpLayer_path, "GeoJSON")
     wqmpLayer_buffersnapfixpath = OUTPUT_FOLDER + '\\wqmpLayer_buffersnapfix.geojson'
-    wqmpLayerResult = bufferSnapFix(wqmpLayer_path, None, wqmpLayer_buffersnapfixpath, PROCESSING_CONTEXT)
+    wqmpLayerResult = bufferSnapFix(wqmpLayer_path, wqmpLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     if RSB_IDs is not None:
         #If we've got set RSBs we want only what's within those RSBs'

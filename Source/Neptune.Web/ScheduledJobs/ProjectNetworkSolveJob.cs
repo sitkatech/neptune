@@ -6,13 +6,11 @@ using System.Linq;
 using System.Data.Entity;
 using System.Net.Http;
 using LtInfo.Common;
-using LtInfo.Common.GdalOgr;
 using MoreLinq;
 using Neptune.Web.Common;
 using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 using System.Net.Mail;
-using DotSpatial.Projections.Transforms;
 using LtInfo.Common.Email;
 using System.Data.Entity.Spatial;
 using System.Text.Json;
@@ -119,9 +117,12 @@ You can view the results or trigger another network solve <a href='{planningURL}
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)
         {
             Logger.Info($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {ProjectID}");
-            var outputLayerName = $"LGU{DateTime.Now.Ticks}";
-            var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.geojson";
-            var additionalCommandLineArguments = new List<string> { outputLayerPath, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
+            var outputLayerName = $"PLGU{DateTime.Now.Ticks}";
+            var outputFolder = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}";
+            var outputLayerFilename = "plgu.geojson";
+            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerFilename)}";
+
+            var additionalCommandLineArguments = new List<string> { outputFolder, outputLayerFilename, "--planned_project_id", ProjectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
 
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);

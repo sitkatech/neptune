@@ -31,8 +31,8 @@ namespace Neptune.Web.ScheduledJobs
             Logger.Info($"Processing '{JobName}'");
 
             var layerName = $"TGU{DateTime.Now.Ticks}";
-            var outputFolder = Path.GetTempPath();
-            var outputFilename = $"{layerName}.geojson";
+            var outputFolder = $"{Path.Combine(Path.GetTempPath(), layerName)}";
+            var outputFilename = "tgu.geojson";
             var outputPath = $"{Path.Combine(outputFolder, outputFilename)}";
 
             // a PyQGIS script computes the TGU layer and saves it as a geojson
