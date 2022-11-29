@@ -25,14 +25,14 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(this IQueryable<TreatmentBMP> treatmentBMP, Person currentPerson)
+        public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(this IQueryable<TreatmentBMP> treatmentBMPs, Person currentPerson)
         {
-            return treatmentBMP.GetNonPlanningModuleBMPs().Where(x => x.InventoryIsVerified == false).ToList().Where(x => x.CanView(currentPerson)).OrderBy(x => x.TreatmentBMPName).ToList();
+            return treatmentBMPs.GetNonPlanningModuleBMPs().Where(x => x.InventoryIsVerified == false).ToList().Where(x => x.CanView(currentPerson)).OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
-        public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(this IQueryable<TreatmentBMP> treatmentBMP)
+        public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(this IQueryable<TreatmentBMP> treatmentBMPs)
         {
-            return treatmentBMP.Where(x => x.ProjectID == null);
+            return treatmentBMPs.Where(x => x.ProjectID == null);
         }
     }
 

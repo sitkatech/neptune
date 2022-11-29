@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using HomeController = Neptune.Web.Areas.Trash.Controllers.HomeController;
 using TrashGeneratingUnitController = Neptune.Web.Areas.Trash.Controllers.TrashGeneratingUnitController;
 using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
 
@@ -32,7 +31,6 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string StormwaterJurisdictionCQLFilter { get; }
 
         public string NegativeStormwaterJurisdictionCQLFilter { get; }
-        public string RefreshTguUrl { get; }
         public string ScoreDescriptionsUrl { get; }
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
@@ -48,10 +46,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             LoadBasedMapInitJson = loadBasedMapInitJson;
 
             var stormwaterJurisdictionIDs = stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
-            StormwaterJurisdictionCQLFilter =
-                currentPerson.GetStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDs);
-            NegativeStormwaterJurisdictionCQLFilter =
-                currentPerson.GetNegativeStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDs);
+            StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDs);
+            NegativeStormwaterJurisdictionCQLFilter = currentPerson.GetNegativeStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDs);
             JurisdictionSelectList = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                 .ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
                     x => x.GetOrganizationDisplayName());

@@ -25,7 +25,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     "You are not assigned to any Jurisdictions. Please log out and log in as a different user or request additional permissions");
             }
 
-            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView();
+            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView);
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", treatmentBmps.ToGeoJsonFeatureCollectionForTrashMap(), "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
 
             var parcels = HttpRequestStorage.DatabaseEntities.Parcels.Include(x => x.WaterQualityManagementPlanParcels).Include(x => x.WaterQualityManagementPlanParcels.Select(y => y.WaterQualityManagementPlan)).Where(x => x.WaterQualityManagementPlanParcels.Any()).ToList();
@@ -34,7 +34,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var boundingBox = BoundingBox.GetBoundingBox(stormwaterJurisdictionsPersonCanView);
             var geoJsonForJurisdictions = StormwaterJurisdiction.ToGeoJsonFeatureCollection(stormwaterJurisdictionsPersonCanView);
-            var jurisdictionLayersGeoJson = new List<LayerGeoJson> { new LayerGeoJson(MapInitJsonHelpers.CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0m, LayerInitialVisibility.Hide) }.ToList(); var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox, jurisdictionLayersGeoJson) {LayerControlClass = "ovta-based-map-layer-control"};
+            var jurisdictionLayersGeoJson = new List<LayerGeoJson> { new LayerGeoJson(MapInitJsonHelpers.CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0m, LayerInitialVisibility.Hide) }.ToList(); 
+            var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox, jurisdictionLayersGeoJson) {LayerControlClass = "ovta-based-map-layer-control"};
             var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox, jurisdictionLayersGeoJson) { LayerControlClass = "area-based-map-layer-control" };
             var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox, jurisdictionLayersGeoJson) { LayerControlClass = "load-based-map-layer-control" };
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);

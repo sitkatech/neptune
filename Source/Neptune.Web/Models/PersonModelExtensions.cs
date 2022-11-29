@@ -192,21 +192,21 @@ namespace Neptune.Web.Models
             return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
 
-        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person)
+        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person, List<StormwaterJurisdiction> stormwaterJurisdictionsPersonCanView)
         {
             //These users can technically see all Jurisdictions, just potentially not the BMPs inside them
             if (person.IsAnonymousOrUnassigned())
             {
-                var stormwaterJurisdictionIDsAnonymousPersonCanView = person.GetStormwaterJurisdictionsPersonCanView()
+                var stormwaterJurisdictionIDsAnonymousPersonCanView = stormwaterJurisdictionsPersonCanView
                     .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID != (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
                     .Select(x => x.StormwaterJurisdictionID);
                 
-                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && x.InventoryIsVerified).ToList();
+                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Include(x => x.TreatmentBMPType).Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && x.InventoryIsVerified).ToList();
                 return treatmentBMPs;
             }
             
-            var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
-            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID);
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Include(x => x.TreatmentBMPType).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return treatmentBmps;
         }
 
