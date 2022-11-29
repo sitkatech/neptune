@@ -75,6 +75,7 @@ def parseArguments():
     global DATABASE_PASSWORD
     global OUTPUT_FOLDER
     global OUTPUT_FILE_PREFIX
+    global OUTPUT_FOLDER_AND_FILE_PREFIX
     global CLIP_PATH
     global PLANNED_PROJECT_ID
     global RSB_IDs

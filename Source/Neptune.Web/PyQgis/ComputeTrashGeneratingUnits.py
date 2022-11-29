@@ -76,6 +76,7 @@ def parseArguments():
     global DATABASE_PASSWORD
     global OUTPUT_FOLDER
     global OUTPUT_FILE_PREFIX
+    global OUTPUT_FOLDER_AND_FILE_PREFIX
     DATABASE_SERVER_NAME = args.database_server_name
     DATABASE_NAME = args.database_name
     DATABASE_USER_NAME = args.database_username
