@@ -41,6 +41,8 @@ from pyqgis_utils import (
     duplicateLayer,
     fetchLayerFromDatabase,
     raiseIfLayerInvalid,
+    bufferSnapFix,
+    removeSliversAndNulls,
     bufferZero,
     fixGeometriesWithinLayer,
     snapGeometriesWithinLayer,
@@ -94,22 +96,14 @@ def assignFieldsToLayerFromSourceLayer(target, source):
     target.updateFields()
 
 def unionAndFix(inputLayer, overlayLayer, inputLayerOutputPath, overlayLayerOutputPath, unionResultOutputPath, context=None):
-    #inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, PROCESSING_CONTEXT)
-    #inputLayer = removeSlivers(inputLayer, 'noslivers', None, PROCESSING_CONTEXT)
-    inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
-    inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
-    inputLayer = fixGeometriesWithinLayer(inputLayer, None, inputLayerOutputPath, PROCESSING_CONTEXT)
-    #overlayLayer = removeNullGeometries(overlayLayer, 'nonnull', None, PROCESSING_CONTEXT)    
-    #overlayLayer = removeSlivers(overlayLayer, 'noslivers', None, PROCESSING_CONTEXT)
-    overlayLayer = bufferZero(overlayLayer, 'buffer', None, PROCESSING_CONTEXT)
-    overlayLayer = snapGeometriesWithinLayer(overlayLayer, 'snapped', None, PROCESSING_CONTEXT)
-    overlayLayer = fixGeometriesWithinLayer(overlayLayer, None, overlayLayerOutputPath, PROCESSING_CONTEXT)
+    inputLayer = bufferSnapFix(inputLayer, inputLayerOutputPath, context)
+    overlayLayer = bufferSnapFix(overlayLayer, overlayLayerOutputPath, context)
     if unionResultOutputPath is not None:
-        result = union(inputLayerOutputPath, overlayLayerOutputPath, None, unionResultOutputPath, PROCESSING_CONTEXT)
+        result = union(inputLayerOutputPath, overlayLayerOutputPath, None, unionResultOutputPath, context)
     else:
-        result = union(inputLayerOutputPath, overlayLayerOutputPath, 'unioned', None, PROCESSING_CONTEXT)
-    #selectPolygonFeatures(result, PROCESSING_CONTEXT)
-    #saveSelectedFeatures(result, None, unionResultOutputPath, PROCESSING_CONTEXT)
+        result = union(inputLayerOutputPath, overlayLayerOutputPath, 'unioned', None, context)
+    #selectPolygonFeatures(result, context)
+    #saveSelectedFeatures(result, None, unionResultOutputPath, context)
     print('Union succeeded')
     return result
 

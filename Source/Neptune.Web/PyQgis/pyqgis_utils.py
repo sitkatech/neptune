@@ -185,6 +185,21 @@ def multipartToSinglePart(inputLayer, memoryOutputName, filesystemOutputPath, co
     result = runNativeAlgorithm("native:multiparttosingleparts", params, memoryOutputName, filesystemOutputPath, context)
     return result
 
+def bufferSnapFix(inputLayer, filesystemOutputPath, context=None):
+    #inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, context)
+    #inputLayer = removeSlivers(inputLayer, 'noslivers', None, context)
+    inputLayer = bufferZero(inputLayer, 'buffer', None, context)
+    inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, context)
+    inputLayer = fixGeometriesWithinLayer(inputLayer, None, filesystemOutputPath, context)
+    print('Buffer snap fix succeeded')
+    return inputLayer
+
+def removeSliversAndNulls(inputLayer, filesystemOutputPath, context=None):
+    inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, context)
+    inputLayer = removeSlivers(inputLayer, 'noslivers', None, context)
+    print('Remove slivers and null geometries succeeded')
+    return inputLayer
+
 def runNativeAlgorithm(algorithm, params, memoryOutputName=None, filesystemOutputPath=None, context=None):
     if memoryOutputName is not None:
         params['OUTPUT'] = 'memory:' + memoryOutputName

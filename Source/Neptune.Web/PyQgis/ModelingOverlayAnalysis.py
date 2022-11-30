@@ -38,6 +38,7 @@ from pyqgis_utils import (
     QgisError,
     fetchLayerFromGeoJson,
     intersection,
+    bufferSnapFix,
     clip,
     snapGeometriesToLayer,
     multipartToSinglePart,
@@ -98,13 +99,6 @@ def parseArguments():
     if args.rsb_ids:
         RSB_IDs = args.rsb_ids
         print(RSB_IDs)
-
-def bufferSnapFix(inputLayer, filesystemOutputPath, context=None):
-    inputLayer = bufferZero(inputLayer, 'buffer', None, PROCESSING_CONTEXT)
-    inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, PROCESSING_CONTEXT)
-    inputLayer = fixGeometriesWithinLayer(inputLayer, None, filesystemOutputPath, PROCESSING_CONTEXT)
-    print('Buffer snap fix succeeded')
-    return inputLayer
 
 if __name__ == '__main__':
     parseArguments()
