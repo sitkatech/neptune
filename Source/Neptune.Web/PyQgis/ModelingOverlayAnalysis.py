@@ -128,8 +128,6 @@ if __name__ == '__main__':
     if CLIP_PATH is not None:
         clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
         
-    if RSB_IDs is not None:
-        regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
     if PLANNED_PROJECT_ID is not None:
         delineationLayer = fetchLayer("vPyQgisProjectDelineationLGUInput", "DelineationGeometry")
         delineationLayer.setSubsetString("ProjectID is null or ProjectID=" + str(PLANNED_PROJECT_ID))
@@ -148,6 +146,8 @@ if __name__ == '__main__':
     modelBasinLayerResult = bufferSnapFix(modelBasinLayer_path, modelBasinLayer_buffersnapfixpath, PROCESSING_CONTEXT)
 
     regionalSubbasinLayer = fetchLayer("vPyQgisRegionalSubbasinLGUInput", "CatchmentGeometry")
+    if RSB_IDs is not None:
+        regionalSubbasinLayer.setSubsetString("RSBID in (" + RSB_IDs + ")")
     regionalSubbasinLayer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'regionalSubbasinLayer.geojson'
     writeVectorLayerToDisk(regionalSubbasinLayer, regionalSubbasinLayer_path, "GeoJSON")
     regionalSubbasinLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'regionalSubbasinLayer_buffersnapfix.geojson'
