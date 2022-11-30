@@ -60,6 +60,7 @@ namespace Neptune.Web.ScheduledJobs
             var trashGeneratingUnit4326s = new List<TrashGeneratingUnit4326>();
             foreach (var feature in features)
             {
+                // TODO: We need to handle GeometryCollections, i.e. Polygons + Linestrings; we ideally want to remove the linestrings and convert to a MultiPolygon
                 var trashGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<TrashGeneratingUnitResult>(feature,
                     jsonSerializerOptions);
                 var stormwaterJurisdictionID = trashGeneratingUnitResult.StormwaterJurisdictionID;
