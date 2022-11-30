@@ -137,33 +137,35 @@ You can view the results or trigger another network solve <a href='{planningURL}
                 $"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {ProjectID}");
 
             var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
-            using var openStream = File.OpenRead(outputLayerPath);
-            var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
-            var features = featureCollection.Where(x => x.Geometry != null).ToList();
-            var projectLoadGeneratingUnits = new List<ProjectLoadGeneratingUnit>();
-
-            foreach (var feature in features)
+            using(var openStream = File.OpenRead(outputLayerPath))
             {
-                var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
-                var trashGeneratingUnit = new ProjectLoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID), ProjectID)
+                var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
+                var features = featureCollection.Where(x => x.Geometry != null).ToList();
+                var projectLoadGeneratingUnits = new List<ProjectLoadGeneratingUnit>();
+
+                foreach (var feature in features)
                 {
-                    DelineationID = loadGeneratingUnitResult.DelineationID,
-                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                };
+                    var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
+                    var trashGeneratingUnit = new ProjectLoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID), ProjectID)
+                    {
+                        DelineationID = loadGeneratingUnitResult.DelineationID,
+                        WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                        ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                        RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                    };
 
-                projectLoadGeneratingUnits.Add(trashGeneratingUnit);
+                    projectLoadGeneratingUnits.Add(trashGeneratingUnit);
+                }
+
+                if (projectLoadGeneratingUnits.Any())
+                {
+                    DbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
+                    DbContext.SaveChangesWithNoAuditing();
+                }
+
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
             }
-
-            if (projectLoadGeneratingUnits.Any())
-            {
-                DbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
-                DbContext.SaveChangesWithNoAuditing();
-            }
-
-            // we get invalid geometries from qgis so we need to make them valid
-            DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
 
             // clean up temp files if not running in a local environment
             if (NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType != NeptuneEnvironmentType.Local)
