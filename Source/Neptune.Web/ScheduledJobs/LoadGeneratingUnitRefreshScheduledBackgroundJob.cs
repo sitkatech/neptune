@@ -98,38 +98,40 @@ namespace Neptune.Web.ScheduledJobs
             }
 
             var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
-            using var openStream = File.OpenRead(outputLayerPath);
-            var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
-            var features = featureCollection.Where(x => x.Geometry != null).ToList();
-            var loadGeneratingUnits = new List<LoadGeneratingUnit>();
-
-            foreach (var feature in features)
+            using (var openStream = File.OpenRead(outputLayerPath))
             {
-                var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
-                var trashGeneratingUnit = new LoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID))
+                var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
+                var features = featureCollection.Where(x => x.Geometry != null).ToList();
+                var loadGeneratingUnits = new List<LoadGeneratingUnit>();
+
+                foreach (var feature in features)
                 {
-                    DelineationID = loadGeneratingUnitResult.DelineationID,
-                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                };
+                    var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
+                    var loadGeneratingUnit = new LoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID))
+                    {
+                        DelineationID = loadGeneratingUnitResult.DelineationID,
+                        WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                        ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                        RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                    };
 
-                loadGeneratingUnits.Add(trashGeneratingUnit);
-            }
+                    loadGeneratingUnits.Add(loadGeneratingUnit);
+                }
 
-            if (loadGeneratingUnits.Any())
-            {
-                DbContext.LoadGeneratingUnits.AddRange(loadGeneratingUnits);
-                DbContext.SaveChangesWithNoAuditing();
-            }
+                if (loadGeneratingUnits.Any())
+                {
+                    DbContext.LoadGeneratingUnits.AddRange(loadGeneratingUnits);
+                    DbContext.SaveChangesWithNoAuditing();
+                }
 
-            // we get invalid geometries from qgis so we need to make them valid
-            DbContext.Database.ExecuteSqlCommand("EXEC dbo.pLoadGeneratingUnitsMakeValid");
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pLoadGeneratingUnitsMakeValid");
 
-            if (loadGeneratingUnitRefreshArea != null)
-            {
-                loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
-                DbContext.SaveChangesWithNoAuditing();
+                if (loadGeneratingUnitRefreshArea != null)
+                {
+                    loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
+                    DbContext.SaveChangesWithNoAuditing();
+                }
             }
 
             // clean up temp files if not running in a local environment
