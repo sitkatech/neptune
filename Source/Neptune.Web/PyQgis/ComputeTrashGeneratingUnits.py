@@ -394,7 +394,7 @@ if __name__ == '__main__':
     delineation_flattened_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'delineation_flattened_layer.geojson'
     ovta_flattened_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'ovta_flattened_layer.geojson'
     ovta_delineation_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'ovta_delineation_layer.geojson'
-    ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, delineation_flattened_layer_path, ovta_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
+    ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, ovta_flattened_layer_path, delineation_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
     wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput", "WaterQualityManagementPlanBoundary")
     print("Flattening WQMPs...\n")
