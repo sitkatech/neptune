@@ -678,7 +678,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         if (upstreamFeature == null) {
             // no total upstream so check local upstream
             upstreamFeature = _.find(featureCollection.features, function (f) { return f.properties.WshdType === "Local Upstream"; });
-            if (localUpstreamFeature == null) {
+            if (upstreamFeature == null) {
                 window.alert("No total or local upstream returned from the remote service.  If the issue persists, please contact Support.");
                 self.removeLoading();
                 self.enableUserInteraction();
