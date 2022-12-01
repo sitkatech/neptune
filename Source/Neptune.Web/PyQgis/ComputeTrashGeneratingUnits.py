@@ -371,15 +371,15 @@ if __name__ == '__main__':
         return left_feat["AssessDate"] <= right_feat["AssessDate"]
     
     #Do note that the views here have all input filters built into them
-    delineation_layer = fetchLayer("vPyQgisDelineationTGUInput", "DelineationGeometry")    
-    # DEM-generated catchments are highly prone to ring-self-intersections near their edges, so for this layer we use the buffer-0 trick to smooth those out.
-    delineation_layer = bufferZero(delineation_layer, 'debuffered_delineations', context = PROCESSING_CONTEXT)
+    delineation_layer = fetchLayer("vPyQgisDelineationTGUInput", "DelineationGeometry")
+    delineation_layer = bufferZero(delineation_layer, 'bufferdelineations', PROCESSING_CONTEXT)
     print("Flattening Delineations...\n")
     flatten_delineations = Flatten(delineation_layer, "DelinID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
     flatten_delineations.run()
     print("\n\n")
 
     ovta_layer = fetchLayer("vPyQgisOnlandVisualTrashAssessmentAreaDated", "OnlandVisualTrashAssessmentAreaGeometry")
+    ovta_layer = bufferZero(ovta_layer, 'bufferovta', PROCESSING_CONTEXT)
     print("Flattening OVTAs...\n")
     flatten_ovtas = Flatten(ovta_layer, "OVTAID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers, "AssessDate")
     flatten_ovtas.run()
@@ -391,6 +391,7 @@ if __name__ == '__main__':
     ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, ovta_flattened_layer_path, delineation_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
     wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput", "WaterQualityManagementPlanBoundary")
+    wqmp_layer = bufferZero(wqmp_layer, 'bufferwqmps', PROCESSING_CONTEXT)
     print("Flattening WQMPs...\n")
     flatten_wqmps = Flatten(wqmp_layer, "WQMPID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
     flatten_wqmps.run()
@@ -411,7 +412,20 @@ if __name__ == '__main__':
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer_unionedandfixed.geojson'
     odw_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer_unionedandfixed.geojson'
+    #tgu_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'tgu_layer.geojson'
     tgu_layer = unionAndFix(land_use_block_layer_path, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
+
+    # we are getting line strings back from the union. let's try and remove the bad geometries
+    #tgu_layer = multipartToSinglePart(tgu_layer_path, "SinglePartTGUs", None, PROCESSING_CONTEXT)
+
+    #tgu_layer.startEditing()
+
+    #for feat in tgu_layer.getFeatures():
+    #    if feat.geometry().area() < 1 or feat["LUBID"] is None or feat["SJID"] is None:
+    #        tgu_layer.deleteFeature(feat.id())
+    
+    #tgu_layer.commitChanges()
+    #writeVectorLayerToDisk(tgu_layer, finalOutputPath, "GeoJSON")
 
     print("Succeeded!")
     qgs.exitQgis()
