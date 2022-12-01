@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
 using Neptune.Web.Common;
@@ -12,7 +13,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult Test()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisProcessing.py", @"C:\Windows\System32\", new List<string> { Path.GetTempPath(), $"TGU{DateTime.Now.Ticks}.geojson"});
 
             if (processUtilityResult.ReturnCode == 0)
             {
@@ -27,7 +28,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestNoProcessing()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\", $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisMssql.py", @"C:\Windows\System32\", new List<string> { Path.GetTempPath(), $"TGU{DateTime.Now.Ticks}.geojson"});
 
             if (processUtilityResult.ReturnCode == 0)
             {
@@ -43,7 +44,7 @@ namespace Neptune.Web.Controllers
         [SitkaAdminFeature]
         public ContentResult TestComputeTrashGeneratingUnits()
         {
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, $"{Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())}.shp");
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, new List<string> { Path.GetTempPath(), $"TGU{DateTime.Now.Ticks}.geojson"});
 
             if (processUtilityResult.ReturnCode == 0)
             {

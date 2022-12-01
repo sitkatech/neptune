@@ -48,6 +48,8 @@ var buildAutoDelineateParameters = function (latLng) {
     return {
         f: "json",
         Input_Batch_Point: JSON.stringify(buildInputBatchPointParameter(latLng)),
+        Get_Watershed_Characteristics: "No",
+        Input_Delineation_Type: "Direct Surface Only",
         Snap_Distance: JSON.stringify({ "distance": 10, "units": "esriFeet" })
     };
 };
@@ -64,9 +66,7 @@ var buildInputBatchPointParameter = function (latLng) {
                 }
             }
         ],
-        "sr": { "wkid": NeptuneMaps.Constants.spatialReference },
-        "Input_Catalog_Layer": "CatalogLayer",
-        "Input_Delineation_Type": "Direct Surface Contribution Only"
+        "sr": { "wkid": NeptuneMaps.Constants.spatialReference }
     };
 };
 

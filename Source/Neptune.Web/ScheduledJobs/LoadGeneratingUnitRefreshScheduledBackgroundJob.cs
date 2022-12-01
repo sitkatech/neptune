@@ -1,14 +1,15 @@
 ﻿using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
-using LtInfo.Common.GdalOgr;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -44,11 +45,11 @@ namespace Neptune.Web.ScheduledJobs
             Logger.Info($"Processing '{JobName}'");
 
             var outputLayerName = $"LGU{DateTime.Now.Ticks}";
-            var outputLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}.shp";
+            var outputFolder = Path.GetTempPath();
+            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}.geojson";
+            var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}_inputClip.json";
 
-            var clipLayerPath = $"{Path.Combine(Path.GetTempPath(), outputLayerName)}_inputClip.json";
-
-            var additionalCommandLineArguments = new List<string> { outputLayerPath };
+            var additionalCommandLineArguments = new List<string> { outputFolder, outputLayerName};
 
             LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea = null;
 
@@ -80,31 +81,48 @@ namespace Neptune.Web.ScheduledJobs
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
             var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
 
-            if (processUtilityResult.ReturnCode != 0)
+            if (processUtilityResult.ReturnCode > 0)
             {
                 Logger.Error("LGU Geoprocessing failed. Output:");
                 Logger.Error(processUtilityResult.StdOutAndStdErr);
                 throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             }
 
-            try
+            if (loadGeneratingUnitRefreshAreaID != null)
             {
-                if (loadGeneratingUnitRefreshAreaID != null)
+                DbContext.Database.ExecuteSqlCommand($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
+            }
+            else
+            {
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+            }
+
+            var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
+            using (var openStream = File.OpenRead(outputLayerPath))
+            {
+                var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
+                var features = featureCollection.Where(x => x.Geometry != null).ToList();
+                var loadGeneratingUnits = new List<LoadGeneratingUnit>();
+
+                foreach (var feature in features)
                 {
-                    DbContext.Database.ExecuteSqlCommand(
-                        $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
-                }
-                else
-                {
-                    DbContext.Database.ExecuteSqlCommand(
-                        $"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+                    var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
+                    var loadGeneratingUnit = new LoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID))
+                    {
+                        DelineationID = loadGeneratingUnitResult.DelineationID,
+                        WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                        ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                        RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                    };
+
+                    loadGeneratingUnits.Add(loadGeneratingUnit);
                 }
 
-                var ogr2OgrCommandLineRunner =
-                    new Ogr2OgrCommandLineRunnerForLGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
-
-                ogr2OgrCommandLineRunner.ImportLoadGeneratingUnitsFromShapefile(outputLayerName, outputLayerPath,
-                    NeptuneWebConfiguration.DatabaseConnectionString);
+                if (loadGeneratingUnits.Any())
+                {
+                    DbContext.LoadGeneratingUnits.AddRange(loadGeneratingUnits);
+                    DbContext.SaveChangesWithNoAuditing();
+                }
 
                 // we get invalid geometries from qgis so we need to make them valid
                 DbContext.Database.ExecuteSqlCommand("EXEC dbo.pLoadGeneratingUnitsMakeValid");
@@ -114,11 +132,6 @@ namespace Neptune.Web.ScheduledJobs
                     loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
                     DbContext.SaveChangesWithNoAuditing();
                 }
-            }
-            catch (Ogr2OgrCommandLineException e)
-            {
-                Logger.Error("LGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
-                throw;
             }
 
             // clean up temp files if not running in a local environment
@@ -131,66 +144,5 @@ namespace Neptune.Web.ScheduledJobs
                 }
             }
         }
-
-        private FeatureCollection MakeClipFeatureCollectionFromRefreshArea(
-            LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea)
-        {
-            if (loadGeneratingUnitRefreshArea == null)
-            {
-                return null;
-            }
-
-            var lguInputClipFeatures = DbContext.LoadGeneratingUnits
-                .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
-                    .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x =>
-                    DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LoadGeneratingUnitGeometry)).ToList();
-
-            return new FeatureCollection(lguInputClipFeatures)
-            {
-                CRS = new NamedCRS("EPSG:2771")
-            };
-        }
-    }
-
-
-}
-public class Ogr2OgrCommandLineRunnerForLGU : Ogr2OgrCommandLineRunner
-{
-    public Ogr2OgrCommandLineRunnerForLGU(string pathToOgr2OgrExecutable, int coordinateSystemId, double totalMilliseconds) : base(pathToOgr2OgrExecutable, coordinateSystemId, totalMilliseconds)
-    {
-    }
-
-    /// <summary>
-    /// Single-purpose method used by LGU job
-    /// </summary>
-    /// <param name="outputLayerName"></param>
-    /// <param name="outputPath"></param>
-    /// <param name="connectionString"></param>
-    public void ImportLoadGeneratingUnitsFromShapefile(string outputLayerName,
-        string outputPath, string connectionString, int? projectID = null)
-    {
-        var databaseConnectionString = $"MSSQL:{connectionString}";
-        var destinationTable = projectID != null ? "dbo.ProjectLoadGeneratingUnit" : "dbo.LoadGeneratingUnit";
-        // todo: fix this
-        var selectStatement =
-            $"Select {(projectID != null ? $"{projectID} as ProjectID," : "")} ModelID as ModelBasinID, RSBID as RegionalSubbasinID, DelinID as DelineationID, WQMPID as WaterQualityManagementPlanID from {outputLayerName}";
-
-        var commandLineArguments = new List<string>
-        {
-            "-skipfailures",
-            "-append",
-            "-sql",
-            selectStatement,
-            "-f",
-            "MSSQLSpatial",
-            databaseConnectionString,
-            outputPath,
-            "-t_srs",
-            GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
-            "-nln",
-            destinationTable
-        };
-
-        ExecuteOgr2OgrCommand(commandLineArguments);
     }
 }

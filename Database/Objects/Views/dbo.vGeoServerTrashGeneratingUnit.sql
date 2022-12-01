@@ -25,7 +25,28 @@ select
 	plut.PriorityLandUseTypeDisplayName as LandUseType,
 	tgu.LastUpdateDate as LastCalculatedDate
 from dbo.TrashGeneratingUnit4326 tgu
-	left join dbo.vOnlandVisualTrashAssessmentAreaDated ovtaad
+	left join 
+    (
+        Select
+	        a.OnlandVisualTrashAssessmentAreaID,
+	        q.CompletedDate as MostRecentAssessmentDate,
+	        Score.OnlandVisualTrashAssessmentScoreDisplayName as MostRecentAssessmentScore
+        from dbo.OnlandVisualTrashAssessmentArea a
+	        inner join (
+		        Select
+			        ovta.OnlandVisualTrashAssessmentID,
+			        ovta.OnlandVisualTrashAssessmentAreaID,
+			        ovta.OnlandVisualTrashAssessmentScoreID,
+			        ovta.CompletedDate,
+			        rownumber = Row_Number() over (partition by ovta.OnlandVisualTrashAssessmentAreaID order by ovta.CompletedDate desc)
+		        from dbo.OnlandVisualTrashAssessment ovta
+		        where CompletedDate is not null
+	        ) q 
+		        on a.OnlandVisualTrashAssessmentAreaID = q.OnlandVisualTrashAssessmentAreaID
+	        join  dbo.OnlandVisualTrashAssessmentScore score
+		        on score.OnlandVisualTrashAssessmentScoreID = q.OnlandVisualTrashAssessmentScoreID
+	        where rownumber = 1
+    ) ovtaad
 		on tgu.OnlandVisualTrashAssessmentAreaID = ovtaad.OnlandVisualTrashAssessmentAreaID
 	left join dbo.Delineation d
 		on tgu.DelineationID = d.DelineationID
@@ -43,5 +64,5 @@ from dbo.TrashGeneratingUnit4326 tgu
 		on o.OrganizationID = sj.OrganizationID
 	left join dbo.WaterQualityManagementPlan wqmp
 		on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
-WHERE tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
+--WHERE tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
 Go

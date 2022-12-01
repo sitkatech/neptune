@@ -32,6 +32,8 @@ namespace Neptune.Web.Common
     {
         public static readonly int MaximumAllowedUploadFileSize = Int32.Parse(SitkaConfiguration.GetRequiredAppSetting("MaximumAllowedUploadFileSize"));
         public static readonly string DatabaseConnectionString = SitkaConfiguration.GetRequiredAppSetting("DatabaseConnectionString");
+        public static readonly string DatabaseServerName = SitkaConfiguration.GetRequiredAppSetting("DatabaseServerName");
+        public static readonly string DatabaseName = SitkaConfiguration.GetRequiredAppSetting("DatabaseName");
         public static readonly string RecaptchaPublicKey = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("RecaptchaPublicKey");
         public static readonly string RecaptchaPrivateKey = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("RecaptchaPrivateKey");
         public static readonly string RecaptchaValidatorUrl = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("RecaptchaValidatorUrl");
@@ -66,8 +68,11 @@ namespace Neptune.Web.Common
         public static readonly string PathToPyqgisTestScript = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisTestScript");
         public static readonly string PyqgisWorkingDirectory = SitkaConfiguration.GetOptionalAppSetting("PyqgisWorkingDirectory");
         public static string PathToPyqgisLauncher = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisLauncher");
+        public static string PathToPyqgisProjData = SitkaConfiguration.GetOptionalAppSetting("PathToPyqgisProjData");
 
         public static string NereidUrl = SitkaConfiguration.GetOptionalAppSetting("NereidUrl");
+        public static string PyqgisUsername = SitkaConfiguration.GetOptionalAppSetting("PyqgisUsername");
+        public static string PyqgisPassword = SitkaConfiguration.GetOptionalAppSetting("PyqgisPassword");
 
         public static string PathToFieldVisitUploadTemplate =
             SitkaConfiguration.GetRequiredAppSetting("PathToFieldVisitUploadTemplate");

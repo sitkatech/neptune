@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.IO;
+using System.Linq;
 using LtInfo.Common;
-using LtInfo.Common.GdalOgr;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
+using NetTopologySuite.Features;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -14,7 +18,7 @@ namespace Neptune.Web.ScheduledJobs
         // only run in PROD--job takes a relatively long time to run, and QA and local can just refresh their data from PROD backups.
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
-            NeptuneEnvironmentType.Prod,
+            NeptuneEnvironmentType.Prod, NeptuneEnvironmentType.Qa, NeptuneEnvironmentType.Local
         };
 
         protected override void RunJobImplementation()
@@ -26,13 +30,15 @@ namespace Neptune.Web.ScheduledJobs
         {
             Logger.Info($"Processing '{JobName}'");
 
-            var layerName = $"TGU{DateTime.Now.Ticks}";
-            var outputPath = $"{Path.Combine(Path.GetTempPath(), layerName)}.shp";
+            var outputLayerName = $"TGU{DateTime.Now.Ticks}";
+            var outputFolder = Path.GetTempPath();
+            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}.geojson";
 
-            // a PyQGIS script computes the TGU layer and saves it as a shapefile
-            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, outputPath);
+            // a PyQGIS script computes the TGU layer and saves it as a geojson
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{NeptuneWebConfiguration.PyqgisWorkingDirectory}ComputeTrashGeneratingUnits.py", NeptuneWebConfiguration.PyqgisWorkingDirectory, new List<string>{outputFolder,
+                outputLayerName});
 
-            if (processUtilityResult.ReturnCode != 0)
+            if (processUtilityResult.ReturnCode > 0)
             {
                 Logger.Error("TGU Geoprocessing failed. Output:");
                 Logger.Error(processUtilityResult.StdOutAndStdErr);
@@ -42,104 +48,72 @@ namespace Neptune.Web.ScheduledJobs
             Logger.Info("QGIS output:");
             Logger.Info(processUtilityResult.StdOutAndStdErr);
 
-            try
+            // kill the old TGUs
+            DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
+            var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions(4, 2);
+            using (var openStream = File.OpenRead(outputLayerPath))
             {
-                // kill the old TGUs
-                DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit");
+                var featureCollection = JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions).Result;
+                var features = featureCollection.Where(x =>
+                    x.Geometry != null && x.Attributes["LUBID"] != null && x.Attributes["SJID"] != null).ToList();
+                var trashGeneratingUnits = new List<TrashGeneratingUnit>();
+                var trashGeneratingUnit4326s = new List<TrashGeneratingUnit4326>();
+                foreach (var feature in features)
+                {
+                    // TODO: We need to handle GeometryCollections, i.e. Polygons + Linestrings; we ideally want to remove the linestrings and convert to a MultiPolygon
+                    var trashGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<TrashGeneratingUnitResult>(feature,
+                        jsonSerializerOptions);
+                    var stormwaterJurisdictionID = trashGeneratingUnitResult.StormwaterJurisdictionID;
+                    var delineationID = trashGeneratingUnitResult.DelineationID;
+                    var waterQualityManagementPlanID = trashGeneratingUnitResult.WaterQualityManagementPlanID;
+                    var landUseBlockID = trashGeneratingUnitResult.LandUseBlockID;
+                    var onlandVisualTrashAssessmentAreaID = trashGeneratingUnitResult.OnlandVisualTrashAssessmentAreaID;
+                    var trashGeneratingUnit = new TrashGeneratingUnit(stormwaterJurisdictionID,
+                        DbGeometry.FromBinary(trashGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID))
+                    {
+                        DelineationID = delineationID,
+                        WaterQualityManagementPlanID = waterQualityManagementPlanID,
+                        LandUseBlockID = landUseBlockID,
+                        OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
+                        LastUpdateDate = DateTime.Now
+                    };
+                    
+                    trashGeneratingUnits.Add(trashGeneratingUnit);
+                    var trashGeneratingUnit4326 = new TrashGeneratingUnit4326(stormwaterJurisdictionID,
+                        DbGeometry.FromBinary(trashGeneratingUnitResult.Geometry.ProjectTo4326().AsBinary(), CoordinateSystemHelper.WGS_1984_SRID))
+                    {
+                        DelineationID = delineationID,
+                        WaterQualityManagementPlanID = waterQualityManagementPlanID,
+                        LandUseBlockID = landUseBlockID,
+                        OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
+                        LastUpdateDate = DateTime.Now
+                    };
+                    trashGeneratingUnit4326s.Add(trashGeneratingUnit4326);
+                }
 
-                // a GDAL command pulls the shapefile into the database.
-                var ogr2OgrCommandLineRunner =
-                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID, 3.6e+6);
+                if (trashGeneratingUnits.Any())
+                {
+                    DbContext.TrashGeneratingUnits.AddRange(trashGeneratingUnits);
+                    DbContext.SaveChangesWithNoAuditing();
+                }
 
-                ogr2OgrCommandLineRunner.ImportTrashGeneratingUnitsFromShapefile2771(layerName, outputPath,
-                    NeptuneWebConfiguration.DatabaseConnectionString);
-
-            }
-            catch (Ogr2OgrCommandLineException e)
-            {
-                Logger.Error("TGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
-                throw;
-            }
-            
-            // repeat but with 4326
-            try
-            {
+                // repeat but with 4326
                 DbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
-                var ogr2OgrCommandLineRunner4326 =
-                    new Ogr2OgrCommandLineRunnerForTGU(NeptuneWebConfiguration.Ogr2OgrExecutable, CoordinateSystemHelper.WGS_1984_SRID, 3.6e+6);
+                if (trashGeneratingUnit4326s.Any())
+                {
+                    DbContext.TrashGeneratingUnit4326s.AddRange(trashGeneratingUnit4326s);
+                    DbContext.SaveChangesWithNoAuditing();
+                }
 
-                ogr2OgrCommandLineRunner4326.ImportTrashGeneratingUnitsFromShapefile4326(layerName, outputPath,
-                    NeptuneWebConfiguration.DatabaseConnectionString);
+                // we get invalid geometries from qgis so we need to make them valid
+                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pTrashGeneratingUnitsMakeValid");
             }
-            catch (Ogr2OgrCommandLineException e)
+
+            // clean up temp files if not running in a local environment
+            if (NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType != NeptuneEnvironmentType.Local)
             {
-                Logger.Error("TGU loading (CRS: 2771) via GDAL reported the following errors. This usually means an invalid geometry was skipped. However, you may need to correct the error and re-run the TGU job.", e);
-                throw;
+                File.Delete(outputLayerPath);
             }
         }
     }
-}
-
-public class Ogr2OgrCommandLineRunnerForTGU : Ogr2OgrCommandLineRunner
-{
-    public Ogr2OgrCommandLineRunnerForTGU(string pathToOgr2OgrExecutable, int coordinateSystemId, double totalMilliseconds) : base(pathToOgr2OgrExecutable, coordinateSystemId, totalMilliseconds)
-    {
-    }
-
-    /// <summary>
-    /// Single-purpose method used by TGU job
-    /// </summary>
-    /// <param name="outputLayerName"></param>
-    /// <param name="outputPath"></param>
-    /// <param name="connectionString"></param>
-    public void ImportTrashGeneratingUnitsFromShapefile2771(string outputLayerName,
-        string outputPath, string connectionString)
-    {
-        var databaseConnectionString = $"MSSQL:{connectionString}";
-
-        var commandLineArguments = new List<string>
-        {
-            "-skipfailures",
-            "-append",
-            "-sql",
-            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from {outputLayerName} where LandUseBlo is not null",
-            "-f",
-            "MSSQLSpatial",
-            databaseConnectionString,
-            outputPath,
-            "-t_srs",
-            GetMapProjection(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID),
-            "-nln",
-            "dbo.TrashGeneratingUnit"
-        };
-
-        ExecuteOgr2OgrCommand(commandLineArguments);
-    }
-
-    // same as above but it uses 4326 instead
-    public void ImportTrashGeneratingUnitsFromShapefile4326(string outputLayerName,
-        string outputPath, string connectionString)
-    {
-        var databaseConnectionString = $"MSSQL:{connectionString}";
-
-        var commandLineArguments = new List<string>
-        {
-            "-skipfailures",
-            "-append",
-            "-sql",
-            $"SELECT Stormwater as StormwaterJurisdictionID, OnlandVisu as OnlandVisualTrashAssessmentAreaID, LandUseBlo as LandUseBlockID, Delineatio as DelineationID, WaterQuali as WaterQualityManagementPlanID from '{outputLayerName}' where LandUseBlo is not null",
-            "-f",
-            "MSSQLSpatial",
-            databaseConnectionString,
-            outputPath,
-            "-t_srs",
-            GetMapProjection(CoordinateSystemHelper.WGS_1984_SRID),
-            "-nln",
-            "dbo.TrashGeneratingUnit4326"
-        };
-
-        ExecuteOgr2OgrCommand(commandLineArguments);
-    }
-
-
 }

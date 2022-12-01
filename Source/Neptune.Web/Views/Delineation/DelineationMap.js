@@ -673,21 +673,22 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 
 
     promise.then(function (featureCollection) {
-        // RL 7/15/22 - Per Austin we only need to look for local upstream (not the total upstream) when we are grabbing the result. 
-        // This would be a one part feature instead of a multi - part.
-        var localUpstreamFeature = _.find(featureCollection.features, function (f) { return f.properties.WshdType === "Local Upstream"; });
-        if (localUpstreamFeature == null) {
-            window.alert("No local upstream returned from the remote service.  If the issue persists, please contact Support.");
-            self.removeLoading();
-            self.enableUserInteraction();
+        var upstreamFeature;
+        var upstreamFeature = _.find(featureCollection.features, function (f) { return f.properties.WshdType === "Total Upstream"; });
+        if (upstreamFeature == null) {
+            // no total upstream so check local upstream
+            upstreamFeature = _.find(featureCollection.features, function (f) { return f.properties.WshdType === "Local Upstream"; });
+            if (upstreamFeature == null) {
+                window.alert("No total or local upstream returned from the remote service.  If the issue persists, please contact Support.");
+                self.removeLoading();
+                self.enableUserInteraction();
 
-            self.enableSelectOnClick();
-            self.delineationMapService.resetDelineationMapEditingState();
-            return;
+                self.enableSelectOnClick();
+                self.delineationMapService.resetDelineationMapEditingState();
+                return;
+            }
         }
-
-        self.addBMPDelineationLayerFromDEM(localUpstreamFeature);
-
+        self.addBMPDelineationLayerFromDEM(upstreamFeature);
         self.removeLoading();
         self.enableUserInteraction();
 

@@ -1,64 +1,38 @@
-﻿using System;
-using LtInfo.Common;
+﻿using LtInfo.Common;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Neptune.Web.Common
 {
     public class QgisRunner
     {
-        public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory, string outputPath)
-        {
-            var commandLineArguments = new List<string>
-            {
-                "/q",
-                "/c",
-                NeptuneWebConfiguration.PathToPyqgisLauncher,
-                pathToPyqgisScript,       
-                NeptuneWebConfiguration.DatabaseConnectionString,
-                outputPath
-            };
-
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
-                "cmd.exe", commandLineArguments, true, null);
-
-            return processUtilityResult;
-        }
-
         public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory, 
             List<string> additionalArguments)
         {
-            var commandLineArguments = new List<string>
+            var commandLineArguments = new Dictionary<string, bool>
             {
-                "/q",
-                "/c",
-                NeptuneWebConfiguration.PathToPyqgisLauncher,
-                pathToPyqgisScript,       
-                NeptuneWebConfiguration.DatabaseConnectionString
+                {pathToPyqgisScript, false},
+                {NeptuneWebConfiguration.DatabaseServerName, false},
+                {NeptuneWebConfiguration.DatabaseName, false},
+                {NeptuneWebConfiguration.PyqgisUsername, false},
+                {NeptuneWebConfiguration.PyqgisPassword, true}
             };
 
-            commandLineArguments.AddRange(additionalArguments);
+            foreach (var additionalArgument in additionalArguments)
+            {
+                commandLineArguments.Add(additionalArgument, false);
+            }
 
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
-                "cmd.exe", commandLineArguments, true, null);
-
-            return processUtilityResult;
+            return ExecutePyqgisScriptImpl(workingDirectory, commandLineArguments);
         }
 
-
-        public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, string workingDirectory)
+        private static ProcessUtilityResult ExecutePyqgisScriptImpl(string workingDirectory, Dictionary<string, bool> commandLineArguments)
         {
-            var commandLineArguments = new List<string>
-            {
-                "/q",
-                "/c",
-                NeptuneWebConfiguration.PathToPyqgisLauncher,
-                pathToPyqgisScript,       
-                NeptuneWebConfiguration.DatabaseConnectionString
+            var environmentVariables = new Dictionary<string, string>{
+                {"PROJ_DATA", $"{NeptuneWebConfiguration.PathToPyqgisProjData}"},
             };
 
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(workingDirectory,
-                "cmd.exe", commandLineArguments, true, null);
+                NeptuneWebConfiguration.PathToPyqgisLauncher, commandLineArguments, true, 3600000, environmentVariables);
 
             return processUtilityResult;
         }

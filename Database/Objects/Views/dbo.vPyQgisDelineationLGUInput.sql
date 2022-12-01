@@ -1,7 +1,7 @@
-Drop View If Exists dbo.vDelineationLGUInput
+Drop View If Exists dbo.vPyQgisDelineationLGUInput
 GO
 
-Create view dbo.vDelineationLGUInput
+Create view dbo.vPyQgisDelineationLGUInput
 as
 Select
 	DelineationID as DelinID,

@@ -60,8 +60,9 @@ namespace Neptune.Web.Controllers
         [AnonymousUnclassifiedFeature]
         public ViewResult FindABMP()
         {
-            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView();
-            var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanView().Select(x => new StormwaterJurisdictionSimple(x)).ToList();
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
+            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView);
+            var jurisdictions = stormwaterJurisdictionsPersonCanView.Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
             var treatmentBMPTypeSimples = treatmentBmps.GroupBy(x => x.TreatmentBMPType)
@@ -76,7 +77,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView();
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView);
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount =
                 treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
@@ -663,7 +665,8 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs ?? new List<int>();
             var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs ?? new List<int>();
             // ReSharper disable once InconsistentNaming
-            var allTreatmentBMPsMatchingSearchString = CurrentPerson.GetTreatmentBmpsPersonCanView()
+            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
+            var allTreatmentBMPsMatchingSearchString = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView)
                 .Where(x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
                             stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdiction.StormwaterJurisdictionID) &&
                             x.TreatmentBMPName.ToLower().Contains(searchString)).ToList();

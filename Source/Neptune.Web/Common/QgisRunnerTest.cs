@@ -35,7 +35,7 @@ namespace Neptune.Web.Common
         {
             AssertCustom.IgnoreOnBuildServer();
             var processUtilityResult = QgisRunner.ExecutePyqgisScript(NeptuneWebConfiguration.PathToPyqgisTestScript,
-                NeptuneWebConfiguration.PyqgisWorkingDirectory);
+                NeptuneWebConfiguration.PyqgisWorkingDirectory, new List<string>());
 
             Assert.That(processUtilityResult.ReturnCode == 0);
         }
@@ -46,7 +46,7 @@ namespace Neptune.Web.Common
             AssertCustom.IgnoreOnBuildServer();
             var processUtilityResult = QgisRunner.ExecutePyqgisScript(
                 $"{NeptuneWebConfiguration.PyqgisWorkingDirectory}TestPyqgisProcessing.py",
-                @"C:\Windows\System32\");
+                @"C:\Windows\System32\", new List<string>());
 
             Assert.That(processUtilityResult.ReturnCode == 0);
         }

@@ -1,13 +1,13 @@
-Drop View If Exists dbo.vProjectDelineationLGUInput
+Drop View If Exists dbo.vPyQgisProjectDelineationLGUInput
 GO
 
 --We are going to use this to get ALL delineations, and then in our python script filter down
 --to non-project delineations and our delineations only
-Create view dbo.vProjectDelineationLGUInput
+Create view dbo.vPyQgisProjectDelineationLGUInput
 as
 Select
 	DelineationID as DelinID,
-	ProjectID as ProjectID,
+	ProjectID,
 	DelineationGeometry
 from
 	dbo.Delineation d join dbo.TreatmentBMP t

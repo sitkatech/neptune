@@ -1,7 +1,7 @@
-Drop View If Exists dbo.vWaterQualityManagementPlanLGUInput
+Drop View If Exists dbo.vPyQgisWaterQualityManagementPlanLGUInput
 GO
 
-Create view dbo.vWaterQualityManagementPlanLGUInput
+Create view dbo.vPyQgisWaterQualityManagementPlanLGUInput
 as 
 Select 
 	WaterQualityManagementPlanID as WQMPID,
