@@ -36,7 +36,7 @@ from pyqgis_utils import (
     snapGeometriesWithinLayer,
     union,
     QgisError,
-    fetchLayerFromGeoJson,
+    fetchLayerFromFileSystem,
     intersection,
     bufferSnapFix,
     clip,
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     qgs.initQgis()
     
     Processing.initialize()
-    QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
+    #QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
     # must set processing framework to skip invalid geometries as it defaults to halt-and-catch-fire
     PROCESSING_CONTEXT = dataobjects.createContext()
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     clip_layer = None
     delineationLayer = None
     if CLIP_PATH is not None:
-        clip_layer = fetchLayerFromGeoJson(CLIP_PATH, "ClipLayer")
+        clip_layer = fetchLayerFromFileSystem(CLIP_PATH, "ClipLayer")
         
     if PLANNED_PROJECT_ID is not None:
         delineationLayer = fetchLayer("vPyQgisProjectDelineationLGUInput", "DelineationGeometry")

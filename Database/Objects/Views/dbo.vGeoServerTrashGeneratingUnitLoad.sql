@@ -1,10 +1,9 @@
-Drop View If Exists dbo.vTrashGeneratingUnitLoadStatistic
+Drop View If Exists dbo.vGeoServerTrashGeneratingUnitLoad
 GO
 
-/*
-Everything needed to compute load-based results, including the choropleth symbology for the load-based maps
-*/
-Create view dbo.vTrashGeneratingUnitLoadStatistic
+
+/* Identical to the above but it uses the 4326 version instead */
+Create view dbo.vGeoServerTrashGeneratingUnitLoad
 as
 Select
 	*,
@@ -17,7 +16,7 @@ from
 (
 Select
 	PrimaryKey,
-	TrashGeneratingUnitID,
+	TrashGeneratingUnit4326ID,
 	TreatmentBMPID,
 	TreatmentBMPName,
 	TrashGeneratingUnitGeometry,
@@ -50,11 +49,11 @@ Select
 	LastUpdateDate
 From (
 	Select
-		TrashGeneratingUnitID as PrimaryKey,
-		TrashGeneratingUnitID,
+		TrashGeneratingUnit4326ID as PrimaryKey,
+		TrashGeneratingUnit4326ID,
 		tbmp.TreatmentBMPID,
 		tbmp.TreatmentBMPName,
-		tgu.TrashGeneratingUnitGeometry as TrashGeneratingUnitGeometry,
+		tgu.TrashGeneratingUnit4326Geometry as TrashGeneratingUnitGeometry,
 		tgu.StormwaterJurisdictionID,
 		o.OrganizationID,
 		o.OrganizationName,
@@ -105,7 +104,7 @@ From (
 		) as ProgressLoadingRate,
 		tgu.LastUpdateDate
 	From
-		dbo.TrashGeneratingUnit tgu
+		dbo.TrashGeneratingUnit4326 tgu
 		left join dbo.LandUseBlock lub
 			on tgu.LandUseBlockID = lub.LandUseBlockID
 		left join dbo.OnlandVisualTrashAssessmentArea area
@@ -134,7 +133,7 @@ From (
 		tgu.LandUseBlockID is not null
 		and (lub.TrashGenerationRate is not null or scoreBaseline.TrashGenerationRate is not null)
 		and lub.PermitTypeID = 1
-		and tgu.TrashGeneratingUnitGeometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
+		and tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
 ) subq
 ) subq2
 GO

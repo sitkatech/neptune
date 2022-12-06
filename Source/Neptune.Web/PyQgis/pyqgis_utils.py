@@ -46,12 +46,11 @@ def raiseIfLayerInvalid(qgsVectorLayer):
 
 def fetchLayerFromDatabase(uri, spatialTableName, geometryColumn):
     uri.setDataSource("dbo", spatialTableName, geometryColumn)
-#    uri.setSrid("2771")
     layer = QgsVectorLayer(uri.uri(), spatialTableName, "mssql")
     raiseIfLayerInvalid(layer)
     return layer
 
-def fetchLayerFromGeoJson(path, name):
+def fetchLayerFromFileSystem(path, name):
     layer = QgsVectorLayer(path, name, "ogr")
     raiseIfLayerInvalid(layer)
     return layer
