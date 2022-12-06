@@ -40,6 +40,7 @@ import argparse
 from pyqgis_utils import (
     duplicateLayer,
     fetchLayerFromDatabase,
+    fetchLayerFromFileSystem,
     raiseIfLayerInvalid,
     bufferSnapFix,
     removeSliversAndNulls,
@@ -346,7 +347,7 @@ if __name__ == '__main__':
     qgs.initQgis()
         
     Processing.initialize()
-    QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
+    #QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
     # must set processing framework to skip invalid geometries as it defaults to halt-and-catch-fire
     PROCESSING_CONTEXT = dataobjects.createContext()
@@ -412,20 +413,29 @@ if __name__ == '__main__':
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer_unionedandfixed.geojson'
     odw_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer_unionedandfixed.geojson'
-    #tgu_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'tgu_layer.geojson'
-    tgu_layer = unionAndFix(land_use_block_layer_path, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
+    unionAndFix(land_use_block_layer_path, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
     # we are getting line strings back from the union. let's try and remove the bad geometries
-    #tgu_layer = multipartToSinglePart(tgu_layer_path, "SinglePartTGUs", None, PROCESSING_CONTEXT)
+    #tgu_layer = fetchLayerFromFileSystem(finalOutputPath, "TGUsNoLines")
+    #print("Starting removing line strings and bad geometries.")
+    #print("Starting with {count} features".format(count = str(tgu_layer.featureCount())))
 
     #tgu_layer.startEditing()
 
     #for feat in tgu_layer.getFeatures():
-    #    if feat.geometry().area() < 1 or feat["LUBID"] is None or feat["SJID"] is None:
+    #    if feat.geometry().type() == 1: # line strings
+    #        print("Deleting " + str(feat.id()) + " with geometry type " + QgsWkbTypes.geometryDisplayString(feat.geometry().type()))
+    #        tgu_layer.deleteFeature(feat.id())
+    #    elif feat.geometry().area() < 1:
+    #        print("Deleting " + str(feat.id()) + " since it has area < 1")
+    #        tgu_layer.deleteFeature(feat.id())
+    #    elif feat["LUBID"] is None or feat["SJID"] is None:
+    #        print("Deleting " + str(feat.id()) + " since it has no LUBID or SJID")
     #        tgu_layer.deleteFeature(feat.id())
     
     #tgu_layer.commitChanges()
-    #writeVectorLayerToDisk(tgu_layer, finalOutputPath, "GeoJSON")
-
+    #print("Ending with {count} features".format(count = str(tgu_layer.featureCount())))
+    #print("Ending removing line strings and bad geometries.")
+    
     print("Succeeded!")
     qgs.exitQgis()
