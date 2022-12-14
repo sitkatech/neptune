@@ -122,8 +122,8 @@ namespace Neptune.Web.Common.EsriAsynchronousJob
                 var baseAttributes = new HRURequestFeatureAttributes
                 {
                     ObjectID = loadGeneratingUnit.PrimaryKey,
-                    Area = loadGeneratingUnit.ProjectLoadGeneratingUnitGeometry.Area.GetValueOrDefault(),
-                    Length = loadGeneratingUnit.ProjectLoadGeneratingUnitGeometry.Length.GetValueOrDefault(),
+                    Area = 0,
+                    Length = 0,
                     QueryFeatureID = loadGeneratingUnit.ProjectLoadGeneratingUnitID
                 };
                 var catchmentGeometry =
