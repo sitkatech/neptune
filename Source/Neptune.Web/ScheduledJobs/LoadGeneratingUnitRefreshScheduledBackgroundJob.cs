@@ -4,6 +4,7 @@ using LtInfo.Common;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using ProjNet.CoordinateSystems;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
@@ -107,15 +108,20 @@ namespace Neptune.Web.ScheduledJobs
                 foreach (var feature in features)
                 {
                     var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
-                    var loadGeneratingUnit = new LoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID))
+                    // we should only get Polygons from the Pyqgis rodeo overlay
+                    // when we convert geojson to dbgeometry, they can result in invalid geometries
+                    // however, when we run makevalid, it can potentially change the geometry type 
+                    // from Polygon to a MultiPolygon or GeometryCollection
+                    // so we need to explode them if that happens since we are only expecting polygons for LGUs
+                    var dbGeometries = GeometryHelpers.GeometryToDbGeometryAndMakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+
+                    loadGeneratingUnits.AddRange(dbGeometries.Select(dbGeometry => new LoadGeneratingUnit(dbGeometry)
                     {
                         DelineationID = loadGeneratingUnitResult.DelineationID,
                         WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
                         ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
                         RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                    };
-
-                    loadGeneratingUnits.Add(loadGeneratingUnit);
+                    }));
                 }
 
                 if (loadGeneratingUnits.Any())
@@ -123,9 +129,6 @@ namespace Neptune.Web.ScheduledJobs
                     DbContext.LoadGeneratingUnits.AddRange(loadGeneratingUnits);
                     DbContext.SaveChangesWithNoAuditing();
                 }
-
-                // we get invalid geometries from qgis so we need to make them valid
-                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pLoadGeneratingUnitsMakeValid");
 
                 if (loadGeneratingUnitRefreshArea != null)
                 {
