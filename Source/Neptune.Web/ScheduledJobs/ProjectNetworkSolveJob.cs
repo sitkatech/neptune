@@ -13,7 +13,10 @@ using Neptune.Web.Models;
 using System.Net.Mail;
 using LtInfo.Common.Email;
 using System.Data.Entity.Spatial;
+using System.Data.Entity.SqlServer;
+using System.Data.SqlTypes;
 using System.Text.Json;
+using Microsoft.SqlServer.Types;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -146,15 +149,45 @@ You can view the results or trigger another network solve <a href='{planningURL}
                 foreach (var feature in features)
                 {
                     var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
-                    var trashGeneratingUnit = new ProjectLoadGeneratingUnit(DbGeometry.FromBinary(loadGeneratingUnitResult.Geometry.AsBinary(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID), ProjectID)
+                    var projectLoadGeneratingUnitGeometry = SqlGeometry.STGeomFromText(new SqlChars(loadGeneratingUnitResult.Geometry.AsText()),
+                        CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                    if (!projectLoadGeneratingUnitGeometry.STIsValid())
                     {
-                        DelineationID = loadGeneratingUnitResult.DelineationID,
-                        WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                        ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                        RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                    };
+                        projectLoadGeneratingUnitGeometry = projectLoadGeneratingUnitGeometry.MakeValid();
+                        var dbGeometry = DbGeometry.FromText(
+                            projectLoadGeneratingUnitGeometry.STAsText().ToSqlString().ToString(),
+                            CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                        for (var i = 1; i <= dbGeometry.ElementCount; i++)
+                        {
+                            var loadGeneratingUnitGeometryPart = dbGeometry.ElementAt(i);
+                            if (loadGeneratingUnitGeometryPart.SpatialTypeName.ToUpper() == "POLYGON")
+                            {
+                                var projectLoadGeneratingUnit =
+                                    new ProjectLoadGeneratingUnit(loadGeneratingUnitGeometryPart, ProjectID)
+                                    {
+                                        DelineationID = loadGeneratingUnitResult.DelineationID,
+                                        WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                                        ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                                        RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                                    };
+                                projectLoadGeneratingUnits.Add(projectLoadGeneratingUnit);
+                            }
+                        }
 
-                    projectLoadGeneratingUnits.Add(trashGeneratingUnit);
+                    }
+                    else
+                    {
+                        var projectLoadGeneratingUnit =
+                            new ProjectLoadGeneratingUnit(DbGeometry.FromText(projectLoadGeneratingUnitGeometry.STAsText().ToSqlString().ToString(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID), ProjectID)
+                            {
+                                DelineationID = loadGeneratingUnitResult.DelineationID,
+                                WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                                ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                                RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                            };
+
+                        projectLoadGeneratingUnits.Add(projectLoadGeneratingUnit);
+                    }
                 }
 
                 if (projectLoadGeneratingUnits.Any())
@@ -164,7 +197,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
                 }
 
                 // we get invalid geometries from qgis so we need to make them valid
-                DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
+                //DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
             }
 
             // clean up temp files if not running in a local environment
