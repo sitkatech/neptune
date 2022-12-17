@@ -17,6 +17,7 @@ using System.Data.Entity.SqlServer;
 using System.Data.SqlTypes;
 using System.Text.Json;
 using Microsoft.SqlServer.Types;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.Web.ScheduledJobs
 {
@@ -149,45 +150,22 @@ You can view the results or trigger another network solve <a href='{planningURL}
                 foreach (var feature in features)
                 {
                     var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
-                    var projectLoadGeneratingUnitGeometry = SqlGeometry.STGeomFromText(new SqlChars(loadGeneratingUnitResult.Geometry.AsText()),
-                        CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
-                    if (!projectLoadGeneratingUnitGeometry.STIsValid())
-                    {
-                        projectLoadGeneratingUnitGeometry = projectLoadGeneratingUnitGeometry.MakeValid();
-                        var dbGeometry = DbGeometry.FromText(
-                            projectLoadGeneratingUnitGeometry.STAsText().ToSqlString().ToString(),
-                            CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
-                        for (var i = 1; i <= dbGeometry.ElementCount; i++)
+
+                    // we should only get Polygons from the Pyqgis rodeo overlay
+                    // when we convert geojson to dbgeometry, they can result in invalid geometries
+                    // however, when we run makevalid, it can potentially change the geometry type 
+                    // from Polygon to a MultiPolygon or GeometryCollection
+                    // so we need to explode them if that happens since we are only expecting polygons for LGUs
+                    var dbGeometries = GeometryHelpers.GeometryToDbGeometryAndMakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+
+                    projectLoadGeneratingUnits.AddRange(dbGeometries.Select(dbGeometry =>
+                        new ProjectLoadGeneratingUnit(dbGeometry, ProjectID)
                         {
-                            var loadGeneratingUnitGeometryPart = dbGeometry.ElementAt(i);
-                            if (loadGeneratingUnitGeometryPart.SpatialTypeName.ToUpper() == "POLYGON")
-                            {
-                                var projectLoadGeneratingUnit =
-                                    new ProjectLoadGeneratingUnit(loadGeneratingUnitGeometryPart, ProjectID)
-                                    {
-                                        DelineationID = loadGeneratingUnitResult.DelineationID,
-                                        WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                                        ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                                        RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                                    };
-                                projectLoadGeneratingUnits.Add(projectLoadGeneratingUnit);
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        var projectLoadGeneratingUnit =
-                            new ProjectLoadGeneratingUnit(DbGeometry.FromText(projectLoadGeneratingUnitGeometry.STAsText().ToSqlString().ToString(), CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID), ProjectID)
-                            {
-                                DelineationID = loadGeneratingUnitResult.DelineationID,
-                                WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                                ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                                RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                            };
-
-                        projectLoadGeneratingUnits.Add(projectLoadGeneratingUnit);
-                    }
+                            DelineationID = loadGeneratingUnitResult.DelineationID,
+                            WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                            ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                            RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                        }));
                 }
 
                 if (projectLoadGeneratingUnits.Any())
@@ -195,9 +173,6 @@ You can view the results or trigger another network solve <a href='{planningURL}
                     DbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
                     DbContext.SaveChangesWithNoAuditing();
                 }
-
-                // we get invalid geometries from qgis so we need to make them valid
-                //DbContext.Database.ExecuteSqlCommand("EXEC dbo.pProjectLoadGeneratingUnitsMakeValid");
             }
 
             // clean up temp files if not running in a local environment

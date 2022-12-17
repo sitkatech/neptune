@@ -64,7 +64,7 @@
     <add key="PyqgisWorkingDirectory" value="${pyqgis-working-directory}" />
     <add key="PathToPyqgisLauncher" value="${path-to-pyqgis-launcher}" />
     <add key="PathToPyqgisProjData" value="${path-to-pyqgis-projdata}" />
-    <add key="PyqgisUsername" value="PyqgisUser" />
+    <add key="PyqgisUsername" value="${pyqgisuser-name}" />
     <add key="PyqgisPassword" value="${pyqgisuser-database-password}" />
     <add key="NereidUrl" value="${nereid-url}" />
     <add key="PathToFieldVisitUploadTemplate" value="${path-to-field-visit-upload-template}" />

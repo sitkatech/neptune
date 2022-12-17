@@ -589,6 +589,7 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Common\GeometryHelpers.cs" />
     <Compile Include="Common\GeoJsonSerializer.cs" />
     <Compile Include="Common\IHasGeometry.cs" />
     <Compile Include="Common\IntConverter.cs" />

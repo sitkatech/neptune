@@ -17,6 +17,8 @@ from qgis.core import (
 from qgis.analysis import QgsNativeAlgorithms
 
 print ("imported Qgis")
+# See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
+QgsApplication.setPrefixPath('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr', True)
 
 # Append the path where processing plugin can be found
 sys.path.append('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr\\python\\plugins')
@@ -103,8 +105,6 @@ def parseArguments():
 if __name__ == '__main__':
     parseArguments()
     
-    # See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-    QgsApplication.setPrefixPath('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr', True)
     #qgs = QgsApplication([], False, "")
     qgs = QgsApplication([], False, r'C:\Sitka\Neptune\QGis', "server")
 
