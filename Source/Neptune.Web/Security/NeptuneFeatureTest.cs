@@ -54,7 +54,11 @@ namespace Neptune.Web.Security
             var exceptionsList = new List<string>()
             {
                 "JasmineController.Run",
-                "TreatmentBMPController.Detail"
+                "TreatmentBMPController.Detail",
+                "WaterQualityManagementPlanController.Detail",
+                "WaterQualityManagementPlanController.ParcelsForWaterQualityManagementPlanGridData",
+                "WaterQualityManagementPlanController.GetModelResults",
+                "OnlandVisualTrashAssessmentAreaController.Detail"
             };
 
             info = info.Where(x => !exceptionsList.Contains(x.Name)).ToList();
