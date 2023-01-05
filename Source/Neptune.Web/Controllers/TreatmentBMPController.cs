@@ -159,6 +159,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [AnonymousUnclassifiedFeature]
         [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {

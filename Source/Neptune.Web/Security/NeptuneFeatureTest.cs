@@ -54,6 +54,7 @@ namespace Neptune.Web.Security
             var exceptionsList = new List<string>()
             {
                 "JasmineController.Run",
+                "TreatmentBMPController.Detail"
             };
 
             info = info.Where(x => !exceptionsList.Contains(x.Name)).ToList();
