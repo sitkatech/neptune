@@ -1,4 +1,5 @@
-﻿using Neptune.Web.Common;
+﻿using System;
+using Neptune.Web.Common;
 using System.Collections.Generic;
 using System.Linq;
 using LtInfo.Common.DesignByContract;
@@ -11,7 +12,7 @@ namespace Neptune.Web.Models
         public int? NumberOfDelineations;
         public int? NumberOfDelineationsToBeUpdated;
         public int? NumberOfDelineationsToBeCreated;
-        public int NumberOfDelineationNotMatchingTreatmentBMP;
+        public List<string> DelineationNotMatchingTreatmentBMP;
         public List<string> Errors;
 
         public static DelineationUploadGisReportJsonResult GetDelineationUploadGisReportFromStaging(Person person,
@@ -29,16 +30,13 @@ namespace Neptune.Web.Models
 
             var treatmentBMPNamesInStormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.TreatmentBMPName).ToList();
 
-
             var candidateDelineationNames = delineationStagings.Select(x => x.TreatmentBMPName).Distinct().ToList();
-
 
             var numberOfDelineations = delineationStagings.Count;
 
+            var treatmentBMPNamesDifference = candidateDelineationNames.Except(treatmentBMPNamesInStormwaterJurisdiction, StringComparer.InvariantCultureIgnoreCase).ToList();
 
-            var treatmentBMPNamesDifference = candidateDelineationNames.Except(treatmentBMPNamesInStormwaterJurisdiction);
-
-            var numberOfDelineationsNotMatchingTreatmentBMPNames = treatmentBMPNamesDifference.Count();
+            var numberOfDelineationsNotMatchingTreatmentBMPNames = treatmentBMPNamesDifference.Count;
 
             if (candidateDelineationNames.Count != numberOfDelineations)
             {
@@ -60,7 +58,7 @@ namespace Neptune.Web.Models
                 NumberOfDelineations = numberOfDelineations,
                 NumberOfDelineationsToBeUpdated =
                     numberOfDelineationsToBeUpdated,
-                NumberOfDelineationNotMatchingTreatmentBMP = numberOfDelineationsNotMatchingTreatmentBMPNames,
+                DelineationNotMatchingTreatmentBMP = treatmentBMPNamesDifference,
                 NumberOfDelineationsToBeCreated =
                     numberOfDelineations - numberOfDelineationsToBeUpdated - numberOfDelineationsNotMatchingTreatmentBMPNames,
                 Errors = new List<string>()
