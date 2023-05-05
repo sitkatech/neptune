@@ -165,6 +165,7 @@ namespace LtInfo.Common.GdalOgr
             var commandLineArguments = new List<string>
             {
                 "-append",
+                "-makevalid",
                 "-sql",
                 selectStatement,
                 "-t_srs",

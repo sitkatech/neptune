@@ -1,4 +1,5 @@
-﻿@using Newtonsoft.Json
+﻿@using LtInfo.Common
+@using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.DelineationUpload.ApproveDelineationGisUpload
 
@@ -15,9 +16,7 @@
                         <li>The Feature Class contains @ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineations delineations</li>
                         <li>@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationsToBeUpdated Treatment BMPs with existing delineations will be replaced by new delineations from this Feature Class</li>
                         <li>@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationsToBeCreated Treatment BMPs that do not currently have delineations will receive new delineations from this Feature Class</li>
-                        <li id="numberOfDelineationNotMatchingTreatmentBMP">@ViewDataTyped.DelineationUpoadGisReportFromStaging.DelineationNotMatchingTreatmentBMP.Count Delineations were found that do not match a Treatment BMP Name in the selected Jurisdiction
-                            <i>@(string.Join(", ", ViewDataTyped.DelineationUpoadGisReportFromStaging.DelineationNotMatchingTreatmentBMP))</i>
-                        </li>
+
                     </ul>
                 </div>
             }
@@ -34,7 +33,7 @@
             }
         </div>
         <div class="text-right" style="margin-top: 15px;">
-            <button id="submitApproveDelineationGisUpload" type="submit" class="btn btn-neptune" disabled="disabled">Accept</button>
+            <button id="submitApproveDelineationGisUpload" type="submit" class="btn btn-neptune" @ViewDataTyped.DelineationUpoadGisReportFromStaging.Errors.Any().ToDisabledOrEmpty()>Accept</button>
             <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-neptune">Cancel</a>
         </div>
     </div>
