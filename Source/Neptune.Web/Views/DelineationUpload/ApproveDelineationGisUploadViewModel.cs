@@ -27,7 +27,7 @@ namespace Neptune.Web.Views.DelineationUpload
             {
                 var delineationStaging = delineationStagings.Single(z => treatmentBMP.TreatmentBMPName == z.TreatmentBMPName);
 
-                treatmentBMP.Delineation?.Delete(HttpRequestStorage.DatabaseEntities);
+                treatmentBMP.Delineation?.DeleteFull(HttpRequestStorage.DatabaseEntities);
 
                 treatmentBMP.Delineation = new Models.Delineation(
                     delineationStaging.DelineationStagingGeometry,

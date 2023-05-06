@@ -110,7 +110,7 @@ namespace Neptune.Web.Views.DelineationUpload
                             };
                         ogr2OgrCommandLineRunner.ImportFileGdbToMsSql(gdbFile, featureClassNames[0], "dbo.DelineationStaging", columns,
                             NeptuneWebConfiguration.DatabaseConnectionString, true, Ogr2OgrCommandLineRunner.GEOMETRY_TYPE_POLYGON, "");
-
+                        HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand("update dbo.DelineationStaging set DelineationStagingGeometry = DelineationStagingGeometry.MakeValid() where DelineationStagingGeometry.STIsValid() = 0");
                     }
                 }
                 catch (Exception e)
