@@ -38,17 +38,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    var submitApproveDelineationGisUploadButton = jQuery("#submitApproveDelineationGisUpload");
-    var report = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationUpoadGisReportFromStaging).ToString(Formatting.None));
-
-    if (report.DelineationNotMatchingTreatmentBMP.length > 0 || report.NumberOfDelineations === 0) {
-        jQuery("#numberOfDelineationNotMatchingTreatmentBMP").addClass("text-danger");
-    }
-    if (report.DelineationNotMatchingTreatmentBMP.length !== 0 || report.NumberOfDelineations === 0) {
-        submitApproveDelineationGisUploadButton.prop("disabled", true);
-    } else {
-        submitApproveDelineationGisUploadButton.prop("disabled", false);
-    }
-</script>
