@@ -123,7 +123,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     [TreatmentBMPModelingType.DryExtendedDetentionBasin]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
-        'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
+        'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
     [TreatmentBMPModelingType.DryWeatherTreatmentSystems]:
       ['DesignDryWeatherTreatmentCapacity', 'AverageTreatmentFlowrate', 'MonthsOfOperationID'],
