@@ -41,27 +41,35 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public DateTime? ApprovalDate { get; set; }
 
         [DisplayName("Name")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactName)]
         public string MaintenanceContactName { get; set; }
 
         [DisplayName("Organization")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactOrganization)]
         public string MaintenanceContactOrganization { get; set; }
 
         [DisplayName("Address Line 1")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactAddress1)]
         public string MaintenanceContactAddress1 { get; set; }
 
         [DisplayName("Address Line 2")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactAddress2)]
         public string MaintenanceContactAddress2 { get; set; }
 
         [DisplayName("City")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactCity)]
         public string MaintenanceContactCity { get; set; }
 
         [DisplayName("State")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactState)]
         public string MaintenanceContactState { get; set; }
 
         [DisplayName("Zip")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactZip)]
         public string MaintenanceContactZip { get; set; }
 
         [DisplayName("Phone")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.MaintenanceContactPhone)]
         public string MaintenanceContactPhone { get; set; }
 
         [DisplayName("Date of Construction")]
