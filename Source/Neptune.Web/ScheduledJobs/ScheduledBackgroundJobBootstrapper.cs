@@ -78,7 +78,7 @@ namespace Neptune.Web.ScheduledJobs
                 MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
             AddRecurringJob(HRURefreshBackgroundJob.JobName,
-                () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(), "*/30 * * * *", recurringJobIds);
+                () => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob(), "*/60 * * * *", recurringJobIds);
 
             // todo: remove this after the WQIP meeting. It ensures that data is accurate every morning for the trade of disguising bugs that happen during the day.
             AddRecurringJob(TotalNetworkSolveJob.JobName,
