@@ -67,17 +67,17 @@ namespace Neptune.Web.ScheduledJobs
                 {
                     try
                     {
-                        var batchHRUCharacteristics =
-                            HRUUtilities.RetrieveHRUResponseFeatures(batch.GetHRURequestFeatures().ToList(), Logger).ToList();
+                        var loadGeneratingUnits = batch.ToList();
+                        var batchHRUCharacteristics = HRUUtilities.RetrieveHRUResponseFeatures(loadGeneratingUnits.GetHRURequestFeatures().ToList(), Logger).ToList();
 
                         if (!batchHRUCharacteristics.Any())
                         {
-                            foreach (var loadGeneratingUnit in batch)
+                            foreach (var loadGeneratingUnit in loadGeneratingUnits)
                             {
                                 loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
 
                             }
-                            Logger.Warn($"No data for LGUs with these IDs: {string.Join(", ", batch.Select(x => x.LoadGeneratingUnitID.ToString()))}");
+                            Logger.Warn($"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x => x.LoadGeneratingUnitID.ToString()))}");
                         }
 
                         DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics.Select(x =>
@@ -158,7 +158,7 @@ namespace Neptune.Web.ScheduledJobs
                 x.RegionalSubbasin != null &&
                 x.ModelBasinID == x.RegionalSubbasin.ModelBasinID.Value &&
                 !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
-                  x.IsEmptyResponseFromHRUService == true));
+                  x.IsEmptyResponseFromHRUService == true) && x.LoadGeneratingUnitGeometry.Area >= 10);
         }
     }
 }
