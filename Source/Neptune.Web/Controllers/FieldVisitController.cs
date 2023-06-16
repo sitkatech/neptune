@@ -278,6 +278,7 @@ namespace Neptune.Web.Controllers
             }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
+            fieldVisit.TreatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(fieldVisit.TreatmentBMP.LocationPoint);
             fieldVisit.InventoryUpdated = true;
             if (FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit))); }
 
