@@ -191,7 +191,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdate = DbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == ProjectID).ToList();
+            var loadGeneratingUnitsToUpdate = DbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == ProjectID && x.ProjectLoadGeneratingUnitGeometry.Area >= 10).ToList();
             var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasin);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
@@ -202,23 +202,24 @@ You can view the results or trigger another network solve <a href='{planningURL}
                 {
                     try
                     {
-                        var batchHRUResponseFeatures =
-                            HRUUtilities.RetrieveHRUResponseFeatures(batch.GetHRURequestFeatures().ToList(), Logger).ToList();
+                        var projectLoadGeneratingUnits = batch.ToList();
+                        var batchHRUResponseFeatures = HRUUtilities.RetrieveHRUResponseFeatures(projectLoadGeneratingUnits.GetHRURequestFeatures().ToList(), Logger).ToList();
 
                         if (!batchHRUResponseFeatures.Any())
                         {
-                            foreach (var loadGeneratingUnit in batch)
+                            foreach (var loadGeneratingUnit in projectLoadGeneratingUnits)
                             {
                                 loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
                             }
-                            Logger.Warn($"No data for ProjectLGUs with these IDs: {string.Join(", ", batch.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
+                            Logger.Warn($"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
                         }
 
-                        DbContext.ProjectHRUCharacteristics.AddRange(batchHRUResponseFeatures.Select(x =>
+                        var projectHruCharacteristics = batchHRUResponseFeatures.Select(x =>
                         {
                             var hruCharacteristic = x.ToProjectHRUCharacteristic(ProjectID);
                             return hruCharacteristic;
-                        }));
+                        }).ToList();
+                        DbContext.ProjectHRUCharacteristics.AddRange(projectHruCharacteristics);
                         DbContext.SaveChangesWithNoAuditing();
                     }
                     catch (Exception ex)

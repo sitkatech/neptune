@@ -214,6 +214,7 @@ namespace Neptune.Web.Controllers
                 viewModel.TrashCaptureStatusTypeID.GetValueOrDefault(),
                 viewModel.SizingBasisTypeID.GetValueOrDefault());
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint);
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
@@ -869,6 +870,7 @@ namespace Neptune.Web.Controllers
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint);
 
             SetMessageForDisplay("Successfully updated Treatment BMP Location.");
 
@@ -899,6 +901,7 @@ namespace Neptune.Web.Controllers
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint);
 
             return Json(new {success = true});
         }
