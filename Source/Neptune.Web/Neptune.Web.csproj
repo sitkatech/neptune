@@ -2038,7 +2038,6 @@
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\Shared\UserJurisdictions\EditUserJurisdictionsController.js" />
     <Content Include="Views\Shared\ViewPageContent.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MoneyWholeNumber.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\Detail.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\Score.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreDetail.cshtml" />
@@ -3482,7 +3481,6 @@
     <Content Include="Views\Organization\Index.cshtml" />
     <Content Include="Views\Organization\Detail.cshtml" />
     <Content Include="Views\PersonOrganization\EditPersonOrganizations.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Money.cshtml" />
     <Content Include="Views\FieldDefinition\Index.cshtml" />
     <Content Include="Views\Shared\FieldDefinitionDetails.cshtml" />
     <Content Include="Views\FieldDefinition\Edit.cshtml" />
