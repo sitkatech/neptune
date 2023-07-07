@@ -49,7 +49,7 @@ namespace Neptune.Web.Models
         /// </summary>
         private static Guid DemandValidWebServiceToken(string allegedWebServiceToken, bool isBeingCalledByStaticConstructor)
         {
-            Check.Require(GuidUtility.TryParseGuid(allegedWebServiceToken, out var tokenGuid),
+            Check.Require(TryParseGuid(allegedWebServiceToken, out var tokenGuid),
                 $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{allegedWebServiceToken}\" is not a GUID.");
 
             if (IsValidAsUnitTestToken(tokenGuid, isBeingCalledByStaticConstructor))
@@ -63,6 +63,22 @@ namespace Neptune.Web.Models
                 $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{allegedWebServiceToken}\" is not associated with a person.");
             return tokenGuid;
         }
+
+        private static bool TryParseGuid(string stringToParse, out Guid parsedGuid)
+        {
+            parsedGuid = Guid.Empty;
+            try
+            {
+                parsedGuid = new Guid(stringToParse);
+            }
+            catch
+            {
+                // Deliberately suppress exception and return false for "bad parse"
+                return false;
+            }
+            return true;
+        }
+
 
         private readonly Person _person;
         private readonly Guid _tokenGuid;

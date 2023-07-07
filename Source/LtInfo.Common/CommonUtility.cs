@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -52,11 +51,6 @@ namespace LtInfo.Common
             var newLines = lineMatches.Cast<Match>().Select(x => indentString + x.Value);
             var newText = String.Join(String.Empty, newLines);
             return newText;
-        }
-
-        public static IEnumerable<Tuple<int, int>> ToContiguousRanges(this HashSet<int> nums)
-        {
-            return nums.Where(n => !nums.Contains(n - 1)).Zip(nums.Where(n => !nums.Contains(n + 1)), Tuple.Create);
         }
     }
 }

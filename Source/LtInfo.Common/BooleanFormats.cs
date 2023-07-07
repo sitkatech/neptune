@@ -20,9 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
-using System.Web;
 using System.Web.Mvc;
-using LtInfo.Common.BootstrapWrappers;
 using LtInfo.Common.Mvc;
 
 namespace LtInfo.Common
@@ -65,20 +63,6 @@ namespace LtInfo.Common
                     new SelectListItem {Text = "No", Value = false.ToString()},
                     new SelectListItem {Text = "Yes", Value = true.ToString()}
                 };
-        }
-
-        public static bool FromCheckedStringToBool(this string value)
-        {
-            switch (value.ToLower())
-            {
-                case "checked":
-                    return true;
-                case null:
-                case "":
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException(String.Format("Invalid boolean string of {0}", value));
-            }
         }
 
         public static string ToRequiredOptional(this bool? value)
@@ -149,40 +133,6 @@ namespace LtInfo.Common
         public static string ToDisabledOrEmpty(this bool value)
         {
             return (value) ? " disabled=\"disabled\" " : String.Empty;
-        }
-
-        public static HtmlString ToCheckboxImageOrEmpty(this bool value)
-        {
-            return new HtmlString(value ? String.Format(" {0} ", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-ok-circle", "Yes")) : String.Empty);
-        }
-
-        public static HtmlString ToCheckboxImageOrEmpty(this bool? value)
-        {
-            return ToCheckboxImageOrEmpty(value ?? false);
-        }
-
-        public static HtmlString ToCheckboxImageOrEmptyForGrid(this bool value)
-        {
-            var spanForFilter = new TagBuilder("span") {InnerHtml = value.ToYesNo()};
-            spanForFilter.AddCssClass("sr-only");
-
-            var div = new TagBuilder("div")
-            {
-                InnerHtml = $"{spanForFilter}{value.ToCheckboxImageOrEmpty()}",
-                Attributes = { {"style", "height: 1em; width: 1em; display: block; margin: auto;" } }
-            };
-
-            return div.ToString().ToHTMLFormattedString();
-        }
-
-        public static HtmlString ToCheckboxImageOrEmptyForGrid(this bool? value)
-        {
-            return ToCheckboxImageOrEmpty(value ?? false);
-        }
-
-        public static string ToYesOrEmpty(this bool value)
-        {
-            return (value) ? "Yes" : String.Empty;
         }
     }
 }
