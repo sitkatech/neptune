@@ -22,7 +22,6 @@ using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Security;
 using System.Text;
 using System.Web;
@@ -84,96 +83,6 @@ namespace LtInfo.Common.Views
         {
             var ret = value.HtmlEncode();
             return String.IsNullOrEmpty(ret) ? ret : ret.Replace("\r\n","\n").Replace("\r","\n").Replace("\n", "<br/>\r\n");
-        }
-
-        /// <summary>
-        /// Adds the proper HTTP headers for a file download.  <see>
-        ///                                                        <cref>SitkaGlobalBase.AddCachingHeaders</cref>
-        ///                                                    </see>
-        /// </summary>
-        public static void SetupHttpHeadersForDownload(HttpResponseBase response, DownloadFileDescriptor descriptor)
-        {
-            SetupHttpHeadersForDownloadImpl(response, descriptor, Encoding.Default);
-        }
-
-        /// <summary>
-        /// Adds the proper HTTP headers for a file download.  <see>
-        ///                                                        <cref>SitkaGlobalBase.AddCachingHeaders</cref>
-        ///                                                    </see>
-        /// </summary>
-        public static void SetupHttpHeadersForDownload(HttpResponseBase response, DownloadFileDescriptor descriptor, Encoding downloadContentEncoding)
-        {
-            SetupHttpHeadersForDownloadImpl(response, descriptor, downloadContentEncoding);
-        }
-
-        private static void SetupHttpHeadersForDownloadImpl(HttpResponseBase response, DownloadFileDescriptor descriptor, Encoding downloadContentEncoding)
-        {
-            // Leaving this ClearHeaders since it is IMMEDIDATELY followed by a line replacing the SetExpires below. -- SLG 10/2/2012
-            response.ClearHeaders();
-            SetupHttpContentDispositionForDownload(response, descriptor, downloadContentEncoding);
-            SetupHttpCachingHeaders(response);
-        }
-
-        /// <summary>
-        /// Adds the proper HTTP headers for a file download.  <see>
-        ///                                                        <cref>SitkaGlobalBase.AddCachingHeaders</cref>
-        ///                                                    </see>
-        /// </summary>
-        public static void SetupHttpHeadersForDownload(HttpResponseBase response)
-        {
-            // Leaving this ClearHeaders since it is IMMEDIDATELY followed by a line replacing the SetExpires below. -- SLG 10/2/2012
-            response.ClearHeaders();
-            SetupHttpCachingHeaders(response);
-        }
-
-        private static void SetupHttpCachingHeaders(HttpResponseBase response)
-        {
-            // this is to fix the problem with IE opening csv files under ssl.  you must set these headers, and these headers only.
-            // you CANNOT set Cache-Control: no-store and Pragma: no-cache.
-            // You HAVE to set Cache-Control: max-age=0
-            // the other cache headers should match the global.asax.cs
-
-            // Cache-Control: private
-            response.Cache.SetCacheability(HttpCacheability.Private);
-
-            // Cache-Control: must-revalidate
-            response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
-
-            // Expires: Mon, 01 Jan 1990 00:00:00 GMT
-            response.Cache.SetExpires(DateTime.Parse("01 Jan 1990 00:00:00 GMT"));
-
-            // Cache-Control: max-age=0
-            response.Cache.SetMaxAge(TimeSpan.Zero);
-        }
-
-        private static void SetupHttpContentDispositionForDownload(HttpResponseBase response, DownloadFileDescriptor descriptor, Encoding downloadContentEncoding)
-        {
-            response.ContentType = descriptor.MimeType;
-
-            response.ContentEncoding = downloadContentEncoding;
-
-            var filename = descriptor.ToStandardizedCsvDownloadFilename();
-            var contentDisposition = String.Format("attachment; filename=\"{0}\"", filename);
-            response.AddHeader("Content-Disposition", contentDisposition);
-        }
-
-        public static string DataTableToCsv(this DataTable table, GridSpec<IStringIndexer> spec)
-        {
-            var output = new StringBuilder();
-
-            output.AppendLine(ToCsvExtensionMethods.EnumerableStringToCsvRow(spec.ColumnNames));
-
-            var reader = table.CreateDataReader();
-
-            while (reader.Read())
-            {
-                var line = String.Join(ToCsvExtensionMethods.CsvDelimiter, spec.Select(cs => ToCsvExtensionMethods.CsvEscape(cs.CalculateStringValue(AdaptReaderToIStringIndexer(reader)))));
-                output.AppendLine(line);
-            }
-
-            reader.Close();
-
-            return output.ToString();
         }
 
         public static string DataTableToXmlRowCol(this DataTable table, GridSpec<IStringIndexer> spec)

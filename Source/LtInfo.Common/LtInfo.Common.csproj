@@ -226,7 +226,6 @@
     <Compile Include="CommonUtilityTest.cs" />
     <Compile Include="CoordinateSystemHelper.cs" />
     <Compile Include="CrossAreaRouteAttribute.cs" />
-    <Compile Include="Crypto.cs" />
     <Compile Include="DataTableExtensions.cs" />
     <Compile Include="DbSpatial\DbSpatialHelper.cs" />
     <Compile Include="DbSpatial\DbSpatialHelperTest.cs" />
@@ -278,8 +277,6 @@
     <Compile Include="GeoJson\GeoJsonTest.cs" />
     <Compile Include="DbSpatial\IHaveSqlGeometry.cs" />
     <Compile Include="GraphHelperTest.cs" />
-    <Compile Include="HealthMonitor\HealthCheckResult.cs" />
-    <Compile Include="HealthMonitor\HealthCheckResults.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="EntityModelBinding\ILtInfoEntityTypeLoader.cs" />
     <Compile Include="Interfaces\IRecaptchaModel.cs" />
@@ -320,7 +317,6 @@
     <Compile Include="Models\PercentageGreaterThanOne.cs" />
     <Compile Include="Models\PercentageTest.cs" />
     <Compile Include="Models\SitkaModelBinder.cs" />
-    <Compile Include="Models\TinyURL.cs" />
     <Compile Include="MvcResults\DhtmlxGridJsonRow.cs" />
     <Compile Include="MvcResults\GridXmlDataTableResult.cs" />
     <Compile Include="MvcResults\GridXmlResult.cs" />
@@ -331,7 +327,6 @@
     <Compile Include="Mvc\CheckboxExtensisonTest.cs" />
     <Compile Include="Mvc\MvcExtensionMethods.cs" />
     <Compile Include="MvcResults\ExcelResult.cs" />
-    <Compile Include="Mvc\DataAnnotationsValidator.cs" />
     <Compile Include="Mvc\ModelAttributeHelpers.cs" />
     <Compile Include="Mvc\CheckboxExtensions.cs" />
     <Compile Include="Mvc\SitkaFileExtensionsAttribute.cs" />
@@ -345,8 +340,6 @@
     <Compile Include="ProcessUtilityResult.cs" />
     <Compile Include="RedirectToHttpsAttribute.cs" />
     <Compile Include="NullableComparer.cs" />
-    <Compile Include="NullableRange.cs" />
-    <Compile Include="NullableRangeTest.cs" />
     <Compile Include="AssemblyVersionInfo.cs" />
     <Compile Include="ProcessUtilityTest.cs" />
     <Compile Include="RouteTableBuilderTestFolder\Areas\MyTestArea1\Controllers\MyTest4Controller.cs" />
@@ -362,17 +355,14 @@
     <Compile Include="SitkaRecordNotFoundException.cs" />
     <Compile Include="SitkaRegexLibrary.cs" />
     <Compile Include="BrowserMatch.cs" />
-    <Compile Include="ConnectionString.cs" />
     <Compile Include="CookieHelper.cs" />
     <Compile Include="DnsUtility.cs" />
     <Compile Include="BooleanFormats.cs" />
-    <Compile Include="EncryptorTest.cs" />
     <Compile Include="FileExtension.cs" />
     <Compile Include="DateUtilities.cs" />
     <Compile Include="DisposableTempFile.cs" />
     <Compile Include="Email\MockModeContext.cs" />
     <Compile Include="Email\SitkaSmtpClient.cs" />
-    <Compile Include="Encryptor.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FileUtility.cs" />
     <Compile Include="HostAndPort.cs" />
@@ -384,7 +374,6 @@
     <Compile Include="LoggingFilters\NagiosLoggingFilter.cs" />
     <Compile Include="LoggingFilters\NotReferred404LoggingFilter.cs" />
     <Compile Include="LoggingFilters\TrendMicroFilter.cs" />
-    <Compile Include="MimeType.cs" />
     <Compile Include="Models\Attributes\PercentDecimalAttribute.cs" />
     <Compile Include="Models\Attributes\RadioButtonListAttribute.cs" />
     <Compile Include="Models\Attributes\DropDownGroupList.cs" />
@@ -400,7 +389,6 @@
     <Compile Include="Models\ModelListAbstract.cs" />
     <Compile Include="Models\SimpleModelObject.cs" />
     <Compile Include="Models\StringIndexerDataReader.cs" />
-    <Compile Include="MvcResults\CsvDownloadResult.cs" />
     <Compile Include="MvcResults\GridJsonNetJObjectResult.cs" />
     <Compile Include="Mvc\SitkaDefaultModelBinder.cs" />
     <Compile Include="NunitSetupFixtureNeptune.cs" />
@@ -419,33 +407,24 @@
     <Compile Include="SitkaWcfException.cs" />
     <Compile Include="SmtpAppenderWithPathAndExceptionTypeInSubject.cs" />
     <Compile Include="StringFormatsTest.cs" />
-    <Compile Include="Tasks\LtInfoTaskBase.cs" />
-    <Compile Include="Tasks\SitkaTaskBase.cs" />
     <Compile Include="SitkaValidationException.cs" />
     <Compile Include="SitkaValidationResult.cs" />
     <Compile Include="StreamHelper.cs" />
     <Compile Include="StringFormats.cs" />
-    <Compile Include="Tasks\SitkaTaskBaseTest.cs" />
     <Compile Include="TcpUtility.cs" />
     <Compile Include="TcpUtilityTest.cs" />
-    <Compile Include="Threading\SitkaThreadCheckBase.cs" />
-    <Compile Include="Threading\ThreadUtility.cs" />
+    <Compile Include="GraphHelper.cs" />
     <Compile Include="ToCsvExtensionMethods.cs" />
     <Compile Include="ToCsvExtensionMethodsTest.cs" />
     <Compile Include="ToJsExtensionMethods.cs" />
     <Compile Include="ToJsExtensionMethodsTest.cs" />
-    <Compile Include="GraphHelper.cs" />
-    <Compile Include="UnixTimeConverter.cs" />
     <Compile Include="UrlTemplate.cs" />
     <Compile Include="UrlTemplateTest.cs" />
-    <Compile Include="Validation.cs" />
-    <Compile Include="ValidationAttributes.cs" />
     <Compile Include="DhtmlWrappers\DhtmlxGridColumnSortType.cs" />
     <Compile Include="DhtmlWrappers\DhtmlxGridColumnFilterType.cs" />
     <Compile Include="DhtmlWrappers\DhtmlxGridHtmlHelpers.cs" />
     <Compile Include="VersionInformation.cs" />
     <Compile Include="Views\CKEditorWithMaxLengthAttribute.cs" />
-    <Compile Include="Views\DownloadFileDescriptor.cs" />
     <Compile Include="Views\FieldTemplateMetadata.cs" />
     <Compile Include="DhtmlWrappers\GridSpec.cs" />
     <Compile Include="Views\TextAreaWithMaxLengthAttribute.cs" />
@@ -497,7 +476,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Models\EnumeratedEntities.ttinclude" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using NUnit.Framework;
-using List = DocumentFormat.OpenXml.Office2010.ExcelAc.List;
 
 namespace System.Web.Mvc.Html
 {

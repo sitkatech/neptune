@@ -73,46 +73,6 @@ namespace Neptune.Web.Models
             get { return $"{MaxUploadFileSizeInBytes / (1024 ^ 2):0.0} KB"; }
         }
 
-        private Jpeg _photo;
-        private bool _hasCheckedPhoto;
-
-        public int GetImageWidth()
-        {
-            if (!_hasCheckedPhoto)
-            {
-                PopulateFileResourceDataAsImage();
-            }
-
-            return _photo.Width;
-        }
-
-        private void PopulateFileResourceDataAsImage()
-        {
-            var fileResourceDataAsMemoryStream = new MemoryStream(FileResourceData);
-            _photo = new Jpeg(new Bitmap(fileResourceDataAsMemoryStream));
-            _hasCheckedPhoto = true;
-        }
-
-        public int GetImageHeight()
-        {
-            if (!_hasCheckedPhoto)
-            {
-                PopulateFileResourceDataAsImage();
-            }
-
-            return _photo.Height;
-        }
-
-        public FileResourceOrientation GetOrientation()
-        {
-            return GetImageHeight() >= GetImageWidth() ? FileResourceOrientation.Portrait : FileResourceOrientation.Landscape;
-        }
-
-        public string GetFullGuidBasedFilename()
-        {
-            return $"{FileResourceGUID}{OriginalFileExtension}";
-        }
-
         /// <summary>
         /// Prepare the file bytes for going into the database
         /// </summary>
