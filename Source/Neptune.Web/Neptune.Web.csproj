@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -900,7 +900,6 @@
     <Compile Include="Common\DomainRoute.cs" />
     <Compile Include="Common\ICanDeleteFull.cs" />
     <Compile Include="Common\MergeListHelper.cs" />
-    <Compile Include="Models\IHaveATenantID.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerify.DatabaseContextExtensions.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyStatus.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyTreatmentBMP.cs" />
@@ -1117,7 +1116,6 @@
     <Compile Include="Common\SitkaLinkBuilder.cs" />
     <Compile Include="Common\SitkaRoute.cs" />
     <Compile Include="Common\SitkaRouteTableEntry.cs" />
-    <Compile Include="Models\HslColor.cs" />
     <Compile Include="Models\MaintenanceActivityModelExtensions.cs" />
     <Compile Include="Models\CustomAttribute.cs" />
     <Compile Include="Models\CustomAttributeDataType.cs" />
@@ -1982,18 +1980,11 @@
     <Compile Include="Controllers\FileResourceController.cs" />
     <Compile Include="Controllers\NeptuneBaseController.cs" />
     <Compile Include="Common\FieldDefinitionDisplayAttribute.cs" />
-    <Compile Include="Models\EntityNote.cs" />
-    <Compile Include="Models\ExternalLink.cs" />
     <Compile Include="Models\BoundingBoxTest.cs" />
-    <Compile Include="Models\IEntityExternalLink.cs" />
     <Compile Include="Models\Notification.cs" />
-    <Compile Include="Views\Shared\CalendarYearString.cs" />
     <Compile Include="Views\Shared\DisplayPageContent.cs" />
     <Compile Include="Views\Shared\DisplayPageContentViewData.cs" />
     <Compile Include="Views\NeptuneViewData.cs" />
-    <Compile Include="Views\Shared\HtmlDiffContainer.cs" />
-    <Compile Include="Views\Shared\HtmlDiffSummary.cs" />
-    <Compile Include="Views\Shared\HtmlDiffSummaryViewData.cs" />
     <Compile Include="Views\Shared\NavAndHeaderLayout.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\Detail.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DetailViewData.cs" />
@@ -2515,10 +2506,8 @@
     <Compile Include="Common\CkEditorExtensionTest.cs" />
     <Compile Include="Common\FileResourceResult.cs" />
     <Compile Include="Common\PdfResult.cs" />
-    <Compile Include="Models\FancyTreeNode.cs" />
     <Compile Include="Models\FieldDefinition.cs" />
     <Compile Include="Models\OrganizationModelExtensions.cs" />
-    <Compile Include="Models\ICalendarYearMonetaryAmount.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\AuditLogEventType.cs" />
     <Compile Include="Models\NeptunePage.cs" />
@@ -2528,7 +2517,6 @@
     <Compile Include="Models\FieldDefinition.DatabaseContextExtensions.cs" />
     <Compile Include="Models\DatabaseEntities.cs" />
     <Compile Include="Models\IAuditableEntity.cs" />
-    <Compile Include="Models\IEntityNote.cs" />
     <Compile Include="Models\BoundingBox.cs" />
     <Compile Include="Models\BoundingBoxJson.cs" />
     <Compile Include="Models\CheckPrimaryNaturalAndForeignKeysTest.cs" />
@@ -2566,8 +2554,6 @@
     <Compile Include="UnitTestCommon\TestFramework.cs" />
     <Compile Include="UnitTestCommon\TestPerson.cs" />
     <Compile Include="Views\Shared\DhtmlxGridIncludes.cs" />
-    <Compile Include="Views\Shared\TextControls\EntityExternalLinks.cs" />
-    <Compile Include="Views\Shared\TextControls\EntityExternalLinksViewData.cs" />
     <Content Include="Content\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="Content\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
     <Content Include="Content\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
@@ -2640,8 +2626,6 @@
     <Compile Include="Views\Shared\SitkaRecaptcha.cs" />
     <Compile Include="Views\Shared\SitkaRecaptchaViewData.cs" />
     <Compile Include="Models\MapInitJson.cs" />
-    <Compile Include="Views\Shared\TextControls\EntityNotes.cs" />
-    <Compile Include="Views\Shared\TextControls\EntityNotesViewData.cs" />
     <Compile Include="Views\PersonOrganization\EditPersonOrganizations.cs" />
     <Compile Include="Views\PersonOrganization\EditPersonOrganizationsViewData.cs" />
     <Compile Include="Views\PersonOrganization\EditPersonOrganizationsViewModel.cs" />
@@ -3502,7 +3486,6 @@
     <Content Include="Views\FieldDefinition\Index.cshtml" />
     <Content Include="Views\Shared\FieldDefinitionDetails.cshtml" />
     <Content Include="Views\FieldDefinition\Edit.cshtml" />
-    <Content Include="Views\Shared\TextControls\EntityNotes.cshtml" />
     <Content Include="Views\Shared\SitkaRecaptcha.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Percentage.cshtml" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
@@ -3510,7 +3493,6 @@
     </Content>
     <Content Include="Scripts\jquery.validate.min.js.map" />
     <Content Include="Views\Shared\DhtmlxGridIncludes.cshtml" />
-    <Content Include="Views\Shared\TextControls\EntityExternalLinks.cshtml" />
     <Content Include="Views\Shared\SiteLayout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -3520,7 +3502,6 @@
     <Content Include="Views\Role\Detail.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Shared\SupportForm.cshtml" />
-    <Content Include="Views\Shared\HtmlDiffSummary.cshtml" />
     <Content Include="Views\Shared\DisplayPageContent.cshtml" />
     <Content Include="Views\Shared\NavAndHeaderLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
