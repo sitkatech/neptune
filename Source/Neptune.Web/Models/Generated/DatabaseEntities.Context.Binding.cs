@@ -384,11 +384,6 @@ namespace Neptune.Web.Models
                 case "FundingSource":
                     return FundingSources.GetFundingSource(primaryKey);
 
-                case "GoogleChartType":
-                    var googleChartType = GoogleChartType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
-                    return googleChartType;
-
                 case "HRUCharacteristicLandUseCode":
                     var hRUCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(hRUCharacteristicLandUseCode, "HRUCharacteristicLandUseCode", primaryKey);

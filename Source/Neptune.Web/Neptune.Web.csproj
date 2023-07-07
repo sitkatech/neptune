@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -50,7 +50,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Models\DirtyModelNode.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -134,8 +133,6 @@
     <Compile Include="Models\Generated\FundingSource.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\FundingSourceConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\FundingSourcePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\GoogleChartType.Binding.cs" />
-    <Compile Include="Models\Generated\GoogleChartTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\HRUCharacteristic.Binding.cs" />
     <Compile Include="Models\Generated\HRUCharacteristic.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\HRUCharacteristicConfiguration.Binding.cs" />
@@ -590,6 +587,7 @@
     <Compile Include="Models\Generated\Watershed.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WatershedConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WatershedPrimaryKey.Binding.cs" />
+    <Compile Include="Models\DirtyModelNode.cs" />
     <Compile Include="Common\GeometryHelpers.cs" />
     <Compile Include="Common\GeoJsonSerializer.cs" />
     <Compile Include="Common\IHasGeometry.cs" />
@@ -1119,7 +1117,6 @@
     <Compile Include="Common\SitkaLinkBuilder.cs" />
     <Compile Include="Common\SitkaRoute.cs" />
     <Compile Include="Common\SitkaRouteTableEntry.cs" />
-    <Compile Include="Controllers\GoogleChartController.cs" />
     <Compile Include="Models\HslColor.cs" />
     <Compile Include="Models\MaintenanceActivityModelExtensions.cs" />
     <Compile Include="Models\CustomAttribute.cs" />
@@ -1247,30 +1244,6 @@
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\ViewPassFailSchemaDetailViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\ViewRateSchemaDetailViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\ViewDiscreteValueSchemaDetailViewData.cs" />
-    <Compile Include="Views\Shared\GoogleChartAnnotations.cs" />
-    <Compile Include="Views\Shared\GoogleChartAxis.cs" />
-    <Compile Include="Views\Shared\GoogleChartAxisLabelFormat.cs" />
-    <Compile Include="Views\Shared\GoogleChartAxisType.cs" />
-    <Compile Include="Views\Shared\GoogleChartBackground.cs" />
-    <Compile Include="Views\Shared\GoogleChartColumn.cs" />
-    <Compile Include="Views\Shared\GoogleChartColumnDataType.cs" />
-    <Compile Include="Views\Shared\GoogleChartConfigurationArea.cs" />
-    <Compile Include="Views\Shared\GoogleChartDataSimple.cs" />
-    <Compile Include="Views\Shared\GoogleChartDomainAxis.cs" />
-    <Compile Include="Views\Shared\GoogleChartErrorBars.cs" />
-    <Compile Include="Views\Shared\GoogleChartFormatOptions.cs" />
-    <Compile Include="Views\Shared\GoogleChartGridlinesOptions.cs" />
-    <Compile Include="Views\Shared\GoogleChartLegend.cs" />
-    <Compile Include="Views\Shared\GoogleChartLegendPosition.cs" />
-    <Compile Include="Views\Shared\GoogleChartPopupViewModel.cs" />
-    <Compile Include="Views\Shared\GoogleChartRowC.cs" />
-    <Compile Include="Views\Shared\GoogleChartRowV.cs" />
-    <Compile Include="Views\Shared\GoogleChartSeries.cs" />
-    <Compile Include="Views\Shared\GoogleChartTextStyle.cs" />
-    <Compile Include="Views\Shared\GoogleChartTooltip.cs" />
-    <Compile Include="Views\Shared\GoogleChartViewWindow.cs" />
-    <Compile Include="Views\Shared\GooglePieChartConfiguration.cs" />
-    <Compile Include="Views\Shared\GooglePieChartSlice.cs" />
     <Compile Include="Views\Shared\ImageCarousel.cs" />
     <Compile Include="Views\Shared\ImageCarouselViewData.cs" />
     <Compile Include="Views\Shared\JurisdictionControls\JurisdictionsMap.cs" />
@@ -1279,8 +1252,6 @@
     <Compile Include="Views\Shared\SearchMapSummaryData.cs" />
     <Compile Include="Views\Shared\TreatmentBMPTypeLegend.cs" />
     <Compile Include="Views\Shared\TreatmentBMPTypeLegendViewData.cs" />
-    <Compile Include="Views\Shared\ViewGoogleChart.cs" />
-    <Compile Include="Views\Shared\ViewGoogleChartViewData.cs" />
     <Compile Include="Models\LayerGeoJsonType.cs" />
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
@@ -1613,7 +1584,6 @@
     <Content Include="ScriptsCustom\CkEditorReady.min.js.map" />
     <Content Include="ScriptsCustom\DatePickerReady.min.js.map" />
     <Content Include="ScriptsCustom\FancyboxReady.min.js.map" />
-    <Content Include="ScriptsCustom\GoogleAnalytics.min.js.map" />
     <Content Include="ScriptsCustom\ManagePhotoWithPreview.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js">
       <DependentUpon>NeptuneMaps.js</DependentUpon>
@@ -1821,8 +1791,6 @@
     <Content Include="ScriptsCustom\DatePickerReady.min.js" />
     <Content Include="ScriptsCustom\FancyboxReady.js" />
     <Content Include="ScriptsCustom\FancyboxReady.min.js" />
-    <Content Include="ScriptsCustom\GoogleAnalytics.js" />
-    <Content Include="ScriptsCustom\GoogleAnalytics.min.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.min.js">
@@ -2002,7 +1970,6 @@
     <Compile Include="Models\Role.cs" />
     <Compile Include="Common\NeptuneValidationMessages.cs" />
     <Compile Include="Controllers\FieldDefinitionController.cs" />
-    <Compile Include="Views\Shared\GoogleChartConfigurationViewModel.cs" />
     <Compile Include="Models\IRole.cs" />
     <Compile Include="Security\NeptuneAdminFeature.cs" />
     <Compile Include="Security\NeptunePageManageFeature.cs" />
@@ -2067,12 +2034,7 @@
     <Compile Include="Views\Shared\FieldDefinitionDetailsViewData.cs" />
     <Compile Include="Views\Shared\NeptuneLateLoadingIncludes.cs" />
     <Compile Include="Views\Shared\NeptuneIncludes.cs" />
-    <Compile Include="Views\Shared\GoogleChartJson.cs" />
-    <Compile Include="Views\Shared\GoogleChartConfiguration.cs" />
-    <Compile Include="Views\Shared\GoogleChartDataTable.cs" />
-    <Compile Include="Views\Shared\GoogleChartPopup.cs" />
     <Compile Include="Views\Shared\NotFound.cs" />
-    <Compile Include="Views\Shared\GoogleChartPopupViewData.cs" />
     <Compile Include="Views\Shared\NotFoundViewData.cs" />
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
@@ -2085,9 +2047,7 @@
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\Shared\UserJurisdictions\EditUserJurisdictionsController.js" />
     <Content Include="Views\Shared\ViewPageContent.cshtml" />
-    <Content Include="Views\Shared\ViewGoogleChart.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MoneyWholeNumber.cshtml" />
-    <Compile Include="Views\GoogleChart\DownloadChartDataViewModel.cs" />
     <Content Include="Views\TreatmentBMPAssessment\Detail.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\Score.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreDetail.cshtml" />
@@ -2666,7 +2626,6 @@
     <Content Include="Content\leaflet\leaflet.pip\leaflet-pip.min.js">
       <DependentUpon>leaflet-pip.js</DependentUpon>
     </Content>
-    <Content Include="Content\css\google-chart-config-overrides.css" />
     <Content Include="Content\css\dhtmlxgrid_ltinfo_skin.min.css">
       <DependentUpon>dhtmlxgrid_ltinfo_skin.css</DependentUpon>
     </Content>
@@ -3195,7 +3154,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js">
       <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
     </Content>
-    <Content Include="Views\Shared\GoogleCharts.js" />
     <Content Include="Views\PersonOrganization\PersonOrganizationController.js" />
     <Content Include="Content\css\dhtmlxgrid_ltinfo_skin.css" />
     <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -3557,7 +3515,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\NotFound.cshtml" />
-    <Content Include="Views\Shared\GoogleChartPopup.cshtml" />
     <Content Include="Views\Shared\NeptuneIncludes.cshtml" />
     <Content Include="Views\Shared\NeptuneLateLoadingIncludes.cshtml" />
     <Content Include="Views\Role\Detail.cshtml" />
