@@ -298,17 +298,12 @@
     <Compile Include="Models\PercentageTest.cs" />
     <Compile Include="Models\SitkaModelBinder.cs" />
     <Compile Include="MvcResults\DhtmlxGridJsonRow.cs" />
-    <Compile Include="MvcResults\JsonNetJArrayResult.cs" />
-    <Compile Include="MvcResults\JsonNetJObjectResult.cs" />
     <Compile Include="MvcResults\ModalDialogFormJsonResult.cs" />
-    <Compile Include="MvcResults\XmlResult.cs" />
     <Compile Include="Mvc\CheckboxExtensisonTest.cs" />
-    <Compile Include="Mvc\MvcExtensionMethods.cs" />
     <Compile Include="MvcResults\ExcelResult.cs" />
     <Compile Include="Mvc\ModelAttributeHelpers.cs" />
     <Compile Include="Mvc\CheckboxExtensions.cs" />
     <Compile Include="Mvc\SitkaFileExtensionsAttribute.cs" />
-    <Compile Include="Mvc\SitkaRecaptchaBinder.cs" />
     <Compile Include="Mvc\ToSelectListExtensions.cs" />
     <Compile Include="Mvc\TypedLayoutPage.cs" />
     <Compile Include="Mvc\TypedWebViewPage`1.cs">
@@ -316,7 +311,6 @@
     </Compile>
     <Compile Include="Mvc\TypedWebViewPage`2.cs" />
     <Compile Include="ProcessUtilityResult.cs" />
-    <Compile Include="RedirectToHttpsAttribute.cs" />
     <Compile Include="NullableComparer.cs" />
     <Compile Include="AssemblyVersionInfo.cs" />
     <Compile Include="ProcessUtilityTest.cs" />
@@ -331,7 +325,6 @@
     <Compile Include="SitkaDuplicateRecordException.cs" />
     <Compile Include="SitkaRecordNotAuthorizedException.cs" />
     <Compile Include="SitkaRecordNotFoundException.cs" />
-    <Compile Include="SitkaRegexLibrary.cs" />
     <Compile Include="CookieHelper.cs" />
     <Compile Include="DnsUtility.cs" />
     <Compile Include="BooleanFormats.cs" />
@@ -367,7 +360,6 @@
     <Compile Include="SitkaSetupFixture.cs" />
     <Compile Include="SmtpAppenderWithPathAndExceptionTypeInSubject.cs" />
     <Compile Include="StringFormatsTest.cs" />
-    <Compile Include="SitkaValidationException.cs" />
     <Compile Include="SitkaValidationResult.cs" />
     <Compile Include="StreamHelper.cs" />
     <Compile Include="StringFormats.cs" />
@@ -383,10 +375,7 @@
     <Compile Include="DhtmlWrappers\DhtmlxGridColumnFilterType.cs" />
     <Compile Include="DhtmlWrappers\DhtmlxGridHtmlHelpers.cs" />
     <Compile Include="VersionInformation.cs" />
-    <Compile Include="Views\CKEditorWithMaxLengthAttribute.cs" />
-    <Compile Include="Views\FieldTemplateMetadata.cs" />
     <Compile Include="DhtmlWrappers\GridSpec.cs" />
-    <Compile Include="Views\TextAreaWithMaxLengthAttribute.cs" />
     <Compile Include="Views\ViewUtilities.cs" />
     <Compile Include="WhoisUtility.cs" />
     <Compile Include="WhoisUtilityTest.cs" />
