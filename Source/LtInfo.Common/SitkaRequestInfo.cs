@@ -139,7 +139,7 @@ namespace LtInfo.Common
 
         public override string ToString()
         {
-            return string.Format("IP Address: {1}{0}Hostname: {2}{0}Whois Info: {0}{3}{0}URL: {4}{0}{0}Http Request: {0}{5}", Environment.NewLine, IpAddress, Hostname, CommonUtility.IndentLinesInStringByAmount(WhoIsInfo, 12, " "), Uri, RequestInfo);
+            return string.Format("IP Address: {1}{0}Hostname: {2}{0}Whois Info: {0}{3}{0}URL: {4}{0}{0}Http Request: {0}{5}", Environment.NewLine, IpAddress, Hostname, StringFormats.IndentLinesInStringByAmount(WhoIsInfo, 12, " "), Uri, RequestInfo);
         }
     }
 }

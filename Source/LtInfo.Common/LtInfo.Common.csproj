@@ -222,7 +222,6 @@
   <ItemGroup>
     <Compile Include="AssertCustom.cs" />
     <Compile Include="BootstrapWrappers\BootstrapHtmlHelpers.cs" />
-    <Compile Include="CommonUtility.cs" />
     <Compile Include="CommonUtilityTest.cs" />
     <Compile Include="CoordinateSystemHelper.cs" />
     <Compile Include="CrossAreaRouteAttribute.cs" />
@@ -253,12 +252,6 @@
     <Compile Include="DhtmlWrappers\ColumnSpec.cs" />
     <Compile Include="DisposableTempDirectory.cs" />
     <Compile Include="EntityModelBinding\LtInfoEntityPrimaryKeyModelBinder.cs" />
-    <Compile Include="ExcelWorkbookUtilities\ExcelColumnSpec.cs" />
-    <Compile Include="ExcelWorkbookUtilities\ExcelWorkbookMaker.cs" />
-    <Compile Include="ExcelWorkbookUtilities\ExcelWorkbookMakerTest.cs" />
-    <Compile Include="ExcelWorkbookUtilities\ExcelWorkbookSheetDescriptorFactory.cs" />
-    <Compile Include="ExcelWorkbookUtilities\ExcelWorksheetSpec.cs" />
-    <Compile Include="ExcelWorkbookUtilities\IExcelWorkbookSheetDescriptor.cs" />
     <Compile Include="ExtensionMethodsTest.cs" />
     <Compile Include="FileUtilityTest.cs" />
     <Compile Include="GdalOgr\DatabaseDirectAccessTestFixtureBase.cs" />
@@ -275,7 +268,6 @@
     <Compile Include="DbSpatial\IHaveSqlGeometry.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="EntityModelBinding\ILtInfoEntityTypeLoader.cs" />
-    <Compile Include="Interfaces\IRecaptchaModel.cs" />
     <Compile Include="LoggingFilters\RemoteHostClosedTheConnectionLoggingFilter.cs" />
     <Compile Include="LoggingFilters\SitkaDisplayExceptionWith503ServiceUnavailable503LoggingFilter.cs" />
     <Compile Include="LoggingFilters\RequireSslLoggingFilter.cs" />
@@ -287,7 +279,6 @@
     <Compile Include="ModalDialog\ModalDialogFormHelper.cs" />
     <Compile Include="Models\EntityFrameworkHelpers.cs" />
     <Compile Include="Models\FormViewModel.cs" />
-    <Compile Include="Models\IEnumeratedEntity.cs" />
     <Compile Include="Models\IFileResource.cs" />
     <Compile Include="Models\IHavePrimaryKey.cs" />
     <Compile Include="Models\ModelObjectForeignKeyManagerNonNullable.cs" />
@@ -299,10 +290,8 @@
     <Compile Include="Models\SitkaModelBinder.cs" />
     <Compile Include="MvcResults\DhtmlxGridJsonRow.cs" />
     <Compile Include="MvcResults\ModalDialogFormJsonResult.cs" />
-    <Compile Include="Mvc\CheckboxExtensisonTest.cs" />
     <Compile Include="MvcResults\ExcelResult.cs" />
     <Compile Include="Mvc\ModelAttributeHelpers.cs" />
-    <Compile Include="Mvc\CheckboxExtensions.cs" />
     <Compile Include="Mvc\SitkaFileExtensionsAttribute.cs" />
     <Compile Include="Mvc\ToSelectListExtensions.cs" />
     <Compile Include="Mvc\TypedLayoutPage.cs" />
@@ -353,7 +342,6 @@
     <Compile Include="RecaptchaValidator.cs" />
     <Compile Include="SitkaGlobalBase.cs" />
     <Compile Include="HtmlHelperExtensions\SitkaHtmlHelpersTest.cs" />
-    <Compile Include="SitkaHttpApplication.cs" />
     <Compile Include="SitkaHttpRequestStorage.cs" />
     <Compile Include="SitkaLogger.cs" />
     <Compile Include="SitkaRequestInfo.cs" />
@@ -429,6 +417,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

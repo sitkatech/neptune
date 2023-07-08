@@ -3,26 +3,23 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using LtInfo.Common;
 using System.Security.Claims;
-using System.Web;
 using Keystone.Common.OpenID;
 using Microsoft.Owin;
 using Owin;
 using LtInfo.Common.Email;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Neptune.Web;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using IdentityModel;
+using log4net;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Notifications;
 using Neptune.Web.ScheduledJobs;
@@ -34,13 +31,14 @@ namespace Neptune.Web
     public class Startup
     {
         private const string CookieDomain = ".ocstormwatertools.org";
+        public static readonly ILog Logger = LogManager.GetLogger(typeof(Startup));
 
         /// <summary>
         /// Function required by <see cref="OwinStartupAttribute"/>
         /// </summary>
         public void Configuration(IAppBuilder app)
         {
-            SitkaHttpApplication.Logger.Info("Owin Startup");
+            Logger.Info("Owin Startup");
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -212,7 +210,7 @@ namespace Neptune.Web
 
         public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims, IIdentity userIdentity)
         {
-            SitkaHttpApplication.Logger.DebugFormat("In SyncLocalAccountStore - User '{0}', Authenticated = '{1}'", userIdentity.Name, userIdentity.IsAuthenticated);
+            Logger.DebugFormat("In SyncLocalAccountStore - User '{0}', Authenticated = '{1}'", userIdentity.Name, userIdentity.IsAuthenticated);
 
             var sendNewUserNotification = false;
             var sendNewOrganizationNotification = false;
@@ -221,8 +219,7 @@ namespace Neptune.Web
             if (person == null)
             {
                 // new user - provision with limited role
-                SitkaHttpApplication.Logger.DebugFormat(
-                    "In SyncLocalAccountStore - creating local profile for User '{0}'", keystoneUserClaims.UserGuid);
+                Logger.DebugFormat("In SyncLocalAccountStore - creating local profile for User '{0}'", keystoneUserClaims.UserGuid);
                 var unknownOrganization = HttpRequestStorage.DatabaseEntities.Organizations.GetUnknownOrganization();
                 person = new Person(keystoneUserClaims.UserGuid,
                     keystoneUserClaims.FirstName,
@@ -241,8 +238,7 @@ namespace Neptune.Web
             else
             {
                 // existing user - sync values
-                SitkaHttpApplication.Logger.DebugFormat(
-                    "In SyncLocalAccountStore - syncing local profile for User '{0}'", keystoneUserClaims.UserGuid);
+                Logger.DebugFormat("In SyncLocalAccountStore - syncing local profile for User '{0}'", keystoneUserClaims.UserGuid);
             }
 
             person.FirstName = keystoneUserClaims.FirstName;

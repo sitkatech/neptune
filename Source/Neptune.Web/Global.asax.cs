@@ -68,12 +68,8 @@ namespace Neptune.Web
             // read the log4net configuration from the web.config file
             XmlConfigurator.Configure();
 
-            Logger.InfoFormat("Application Start{0}{1} version: {2}{0}Compiled: {3:MM/dd/yyyy HH:mm:ss}{0}"
-                , Environment.NewLine
-                , "Neptune"
-                , SitkaWebConfiguration.WebApplicationVersionInfo.Value.ApplicationVersion
-                , SitkaWebConfiguration.WebApplicationVersionInfo.Value.DateCompiled
-            );
+            SitkaLogger.Instance.LogInfoMessage(
+                $"Application Start{Environment.NewLine}Neptune version: {SitkaWebConfiguration.WebApplicationVersionInfo.Value.ApplicationVersion}{Environment.NewLine}Compiled: {SitkaWebConfiguration.WebApplicationVersionInfo.Value.DateCompiled:MM/dd/yyyy HH:mm:ss}{Environment.NewLine}");
 
             RouteTableBuilder.Build(NeptuneBaseController.AllControllerActionMethods, defaultRoutes, AreasDictionary);
             SetupCustomViewLocationsForTemplates(viewLocations, AreasDictionary);

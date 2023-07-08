@@ -21,12 +21,13 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using LtInfo.Common.Mvc;
 
 namespace LtInfo.Common
 {
     public static class BooleanFormats
     {
+        private const string DefaultEmptyFirstRowText = "<Choose one>";
+
         public static string ToYesNo(this bool? value, string nullString)
         {
             return value.HasValue ? ToYesNo(value) : nullString;
@@ -51,7 +52,7 @@ namespace LtInfo.Common
                 case "no":
                     return false;
                 default:
-                    throw new ArgumentOutOfRangeException(String.Format("Invalid boolean string of {0}", value));
+                    throw new ArgumentOutOfRangeException($"Invalid boolean string of {value}");
             }
         }
 
@@ -59,7 +60,7 @@ namespace LtInfo.Common
         {
             return new[]
                 {
-                    new SelectListItem {Text = ToSelectListExtensions.DefaultEmptyFirstRowText, Value = string.Empty},
+                    new SelectListItem {Text = DefaultEmptyFirstRowText, Value = string.Empty},
                     new SelectListItem {Text = "No", Value = false.ToString()},
                     new SelectListItem {Text = "Yes", Value = true.ToString()}
                 };
@@ -102,7 +103,7 @@ namespace LtInfo.Common
 
         public static string ToDisplayNoneOrEmpty(this bool value)
         {
-            return (value) ? " style=\"display:none\" " : String.Empty;
+            return (value) ? " style=\"display:none\" " : string.Empty;
         }
 
         public static string ToCheckedOrEmpty(this bool? value)
@@ -112,7 +113,7 @@ namespace LtInfo.Common
 
         public static string ToCheckedOrEmpty(this bool value)
         {
-            return (value) ? " checked=\"checked\" " : String.Empty;
+            return (value) ? " checked=\"checked\" " : string.Empty;
         }
 
         public static string ToSelectedOrEmpty(this bool? value)
@@ -122,7 +123,7 @@ namespace LtInfo.Common
 
         public static string ToSelectedOrEmpty(this bool value)
         {
-            return (value) ? " selected=\"selected\" " : String.Empty;
+            return (value) ? " selected=\"selected\" " : string.Empty;
         }
 
         public static string ToDisabledOrEmpty(this bool? value)
@@ -132,7 +133,7 @@ namespace LtInfo.Common
 
         public static string ToDisabledOrEmpty(this bool value)
         {
-            return (value) ? " disabled=\"disabled\" " : String.Empty;
+            return (value) ? " disabled=\"disabled\" " : string.Empty;
         }
     }
 }
