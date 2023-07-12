@@ -231,8 +231,7 @@ export class DelineationsComponent implements OnInit {
       layers: [
         this.tileLayers["Terrain"],
       ],
-      fullscreenControl: true,
-      gestureHandling: true
+      fullscreenControl: true
     } as L.MapOptions;
     this.map = L.map(this.mapID, mapOptions);
     L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
