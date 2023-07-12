@@ -77,10 +77,6 @@ export class PlanningMapComponent implements OnInit {
     fillOpacity: 0.2,
     opacity: 1
   }
-  private delineationTransparentStyle = {
-    fillOpacity: 0,
-    opacity: 0
-  }
   private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Project BMPs";
   private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs (Verified)";
 
