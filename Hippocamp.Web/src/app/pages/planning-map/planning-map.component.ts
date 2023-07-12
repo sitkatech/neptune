@@ -72,6 +72,15 @@ export class PlanningMapComponent implements OnInit {
     fillOpacity: 0.2,
     opacity: 1
   }
+  private delineationSelectedStyle = {
+    color: 'yellow',
+    fillOpacity: 0.2,
+    opacity: 1
+  }
+  private delineationTransparentStyle = {
+    fillOpacity: 0,
+    opacity: 0
+  }
   private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Project BMPs";
   private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs (Verified)";
 
@@ -399,8 +408,8 @@ export class PlanningMapComponent implements OnInit {
     }
 
     let selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-    this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.selectedTreatmentBMP = selectedTreatmentBMP;
+    this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
       
       if (!layer.feature.properties.DefaultZIndexOffset) {
@@ -424,7 +433,6 @@ export class PlanningMapComponent implements OnInit {
       //   this.map.flyTo(layer.getLatLng());
       // }
     });
-
     this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
   }
 
@@ -435,7 +443,7 @@ export class PlanningMapComponent implements OnInit {
     }
 
     this.selectedDelineation = null;
-    this.selectedTreatmentBMP = null;
+    //this.selectedTreatmentBMP = null;
 
     this.selectedProject = this.projects.filter(x => x.ProjectID == projectID)[0];
     this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == projectID);
@@ -446,7 +454,10 @@ export class PlanningMapComponent implements OnInit {
     if (relatedDelineations != null && relatedDelineations.length > 0) {
       this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations), {
         style: (feature) => {
-          return this.delineationDefaultStyle;
+          if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != feature.properties.TreatmentBMPID) {
+            return this.delineationDefaultStyle;
+          }
+          return this.delineationSelectedStyle;
         }
       });
       this.selectedProjectDelineationsLayer.addTo(this.map);
@@ -460,6 +471,9 @@ export class PlanningMapComponent implements OnInit {
       if (relatedTreatmentBMPIDs.includes(layer.feature.properties.TreatmentBMPID)) {
           layer.addTo(featureGroupForZoom);
           layer.enablePermanentHighlight();
+        }
+        if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID){
+          layer.bringToFront();
         }
       });
 
@@ -509,7 +523,6 @@ export class PlanningMapComponent implements OnInit {
       return;
     }
     let treatmentBMPID = this.treatmentBMPs.filter(x => x.ProjectID == selectedNode.data.ProjectID).map(x => x.TreatmentBMPID)[0];
-    
     if (treatmentBMPID != null) {
       this.selectTreatmentBMPImpl(treatmentBMPID);
       return;
