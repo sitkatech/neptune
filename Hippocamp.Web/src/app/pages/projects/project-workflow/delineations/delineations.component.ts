@@ -236,7 +236,7 @@ export class DelineationsComponent implements OnInit {
               }
           },
           onEachFeature: (feature, layer) => {
-              var popupContent = `RSB ID: ${feature.properties.RegionalSubbasinID}`
+              var popupContent = `RSB ID: <a href = "/RegionalSubbasin/Detail/${feature.properties.RegionalSubbasinID.toString()}">${feature.properties.RegionalSubbasinID}</a>`
               layer.bindPopup(popupContent);
               
           }
