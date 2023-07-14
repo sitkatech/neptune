@@ -1643,17 +1643,20 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  "type": "integer",
+                  "format": "int32"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  "type": "integer",
+                  "format": "int32"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }

@@ -17,6 +17,7 @@ namespace Hippocamp.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.OwnerOrganization)
+                .Include(x => x.Watershed)
                 .AsNoTracking();
         }
 
@@ -105,11 +106,13 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPTypeSimpleDtos;
         }
 
-        public static void ChangeTreatmentBMPType(HippocampDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
+        public static int ChangeTreatmentBMPType(HippocampDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
         {
             dbContext.Database.ExecuteSqlRaw(
                 "EXECUTE dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
                 treatmentBMPID, treatmentBMPTypeID);
+            var treatmentBMPModelingType = dbContext.TreatmentBMPTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingTypeID;
+            return (int)treatmentBMPModelingType;
         }
 
         public static List<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItemsAsDto(HippocampDbContext dbContext)

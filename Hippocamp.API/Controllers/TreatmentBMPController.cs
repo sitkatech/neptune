@@ -46,15 +46,14 @@ namespace Hippocamp.API.Controllers
 
         [HttpPut("treatmentBMP/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}")]
         [UserViewFeature]
-        public ActionResult<TreatmentBMPDisplayDto> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID, [FromBody] TreatmentBMPUpsertDto treatmentBMP)
+        public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID, [FromBody] TreatmentBMPUpsertDto treatmentBMP)
         {
-            TreatmentBMPs.ChangeTreatmentBMPType(_dbContext, treatmentBMPID, treatmentBMPTypeID);
-            var updatedTreatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID);
-            return Ok(updatedTreatmentBMP);
+            var updatedTreatmentBMPModelingTypeID = TreatmentBMPs.ChangeTreatmentBMPType(_dbContext, treatmentBMPID, treatmentBMPTypeID);
+            return Ok(updatedTreatmentBMPModelingTypeID);
         }
 
         [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
-        [UserViewFeature]
+        [JurisdictionEditFeature]
         public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems()
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);

@@ -52,7 +52,7 @@ export class TreatmentBMPService {
     return this.apiService.getFromApi(route);
   }
 
-  changeTreatmentBMPType(treatmentBMPID: Number, treatmentBMPTypeID: Number, treatmentBMP: TreatmentBMPUpsertDto): Observable<Array<TreatmentBMPDisplayDto>> {
+  changeTreatmentBMPType(treatmentBMPID: Number, treatmentBMPTypeID: Number, treatmentBMP: TreatmentBMPUpsertDto): Observable<number> {
     let route = `treatmentBMP/${treatmentBMPID}/treatmentBMPType/${treatmentBMPTypeID}`;
     return this.apiService.putToApi(route, treatmentBMP);
   }
