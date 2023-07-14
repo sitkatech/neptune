@@ -44,7 +44,6 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<FundingEventFundingSource> FundingEventFundingSources { get; set; }
         public virtual DbSet<FundingEventType> FundingEventTypes { get; set; }
         public virtual DbSet<FundingSource> FundingSources { get; set; }
-        public virtual DbSet<GoogleChartType> GoogleChartTypes { get; set; }
         public virtual DbSet<HRUCharacteristic> HRUCharacteristics { get; set; }
         public virtual DbSet<HRUCharacteristicLandUseCode> HRUCharacteristicLandUseCodes { get; set; }
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
@@ -169,8 +168,6 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<geometry_column> geometry_columns { get; set; }
         public virtual DbSet<gt_pk_metadatum> gt_pk_metadata { get; set; }
         public virtual DbSet<spatial_ref_sy> spatial_ref_sys { get; set; }
-        public virtual DbSet<vDelineationLGUInput> vDelineationLGUInputs { get; set; }
-        public virtual DbSet<vDelineationTGUInput> vDelineationTGUInputs { get; set; }
         public virtual DbSet<vFieldVisitDetailed> vFieldVisitDetaileds { get; set; }
         public virtual DbSet<vGeoServerAssessmentAreaExport> vGeoServerAssessmentAreaExports { get; set; }
         public virtual DbSet<vGeoServerDelineation> vGeoServerDelineations { get; set; }
@@ -187,8 +184,6 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vGeoServerTrashGeneratingUnitLoad> vGeoServerTrashGeneratingUnitLoads { get; set; }
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vGeoServerWatershed> vGeoServerWatersheds { get; set; }
-        public virtual DbSet<vLandUseBlockTGUInput> vLandUseBlockTGUInputs { get; set; }
-        public virtual DbSet<vModelBasinLGUInput> vModelBasinLGUInputs { get; set; }
         public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
         public virtual DbSet<vNereidBMPColocation> vNereidBMPColocations { get; set; }
@@ -198,20 +193,26 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vNereidProjectTreatmentBMPRegionalSubbasin> vNereidProjectTreatmentBMPRegionalSubbasins { get; set; }
         public virtual DbSet<vNereidRegionalSubbasinCentralizedBMP> vNereidRegionalSubbasinCentralizedBMPs { get; set; }
         public virtual DbSet<vNereidTreatmentBMPRegionalSubbasin> vNereidTreatmentBMPRegionalSubbasins { get; set; }
-        public virtual DbSet<vOnlandVisualTrashAssessmentAreaDated> vOnlandVisualTrashAssessmentAreaDateds { get; set; }
         public virtual DbSet<vOnlandVisualTrashAssessmentAreaProgress> vOnlandVisualTrashAssessmentAreaProgresses { get; set; }
         public virtual DbSet<vPowerBICentralizedBMPLoadGeneratingUnit> vPowerBICentralizedBMPLoadGeneratingUnits { get; set; }
         public virtual DbSet<vPowerBILandUseStatistic> vPowerBILandUseStatistics { get; set; }
         public virtual DbSet<vPowerBITreatmentBMP> vPowerBITreatmentBMPs { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlan> vPowerBIWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vPowerBIWaterQualityManagementPlanOAndMVerification> vPowerBIWaterQualityManagementPlanOAndMVerifications { get; set; }
-        public virtual DbSet<vProjectDelineationLGUInput> vProjectDelineationLGUInputs { get; set; }
         public virtual DbSet<vProjectDryWeatherWQLRIScore> vProjectDryWeatherWQLRIScores { get; set; }
         public virtual DbSet<vProjectGrantScore> vProjectGrantScores { get; set; }
         public virtual DbSet<vProjectLoadGeneratingResult> vProjectLoadGeneratingResults { get; set; }
         public virtual DbSet<vProjectLoadReducingResult> vProjectLoadReducingResults { get; set; }
         public virtual DbSet<vProjectWetWeatherWQLRIScore> vProjectWetWeatherWQLRIScores { get; set; }
-        public virtual DbSet<vRegionalSubbasinLGUInput> vRegionalSubbasinLGUInputs { get; set; }
+        public virtual DbSet<vPyQgisDelineationLGUInput> vPyQgisDelineationLGUInputs { get; set; }
+        public virtual DbSet<vPyQgisDelineationTGUInput> vPyQgisDelineationTGUInputs { get; set; }
+        public virtual DbSet<vPyQgisLandUseBlockTGUInput> vPyQgisLandUseBlockTGUInputs { get; set; }
+        public virtual DbSet<vPyQgisModelBasinLGUInput> vPyQgisModelBasinLGUInputs { get; set; }
+        public virtual DbSet<vPyQgisOnlandVisualTrashAssessmentAreaDated> vPyQgisOnlandVisualTrashAssessmentAreaDateds { get; set; }
+        public virtual DbSet<vPyQgisProjectDelineationLGUInput> vPyQgisProjectDelineationLGUInputs { get; set; }
+        public virtual DbSet<vPyQgisRegionalSubbasinLGUInput> vPyQgisRegionalSubbasinLGUInputs { get; set; }
+        public virtual DbSet<vPyQgisWaterQualityManagementPlanLGUInput> vPyQgisWaterQualityManagementPlanLGUInputs { get; set; }
+        public virtual DbSet<vPyQgisWaterQualityManagementPlanTGUInput> vPyQgisWaterQualityManagementPlanTGUInputs { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstream> vRegionalSubbasinUpstreams { get; set; }
         public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
         public virtual DbSet<vStormwaterJurisdictionOrganizationMapping> vStormwaterJurisdictionOrganizationMappings { get; set; }
@@ -219,8 +220,6 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }
         public virtual DbSet<vViewTreatmentBMPModelingAttribute> vViewTreatmentBMPModelingAttributes { get; set; }
         public virtual DbSet<vWaterQualityManagementPlanLGUAudit> vWaterQualityManagementPlanLGUAudits { get; set; }
-        public virtual DbSet<vWaterQualityManagementPlanLGUInput> vWaterQualityManagementPlanLGUInputs { get; set; }
-        public virtual DbSet<vWaterQualityManagementPlanTGUInput> vWaterQualityManagementPlanTGUInputs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -505,11 +504,6 @@ namespace Hippocamp.EFModels.Entities
                     .WithMany(p => p.FundingSources)
                     .HasForeignKey(d => d.OrganizationID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
-            modelBuilder.Entity<GoogleChartType>(entity =>
-            {
-                entity.Property(e => e.GoogleChartTypeID).ValueGeneratedNever();
             });
 
             modelBuilder.Entity<HRUCharacteristic>(entity =>
@@ -1695,16 +1689,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.srid).ValueGeneratedNever();
             });
 
-            modelBuilder.Entity<vDelineationLGUInput>(entity =>
-            {
-                entity.ToView("vDelineationLGUInput");
-            });
-
-            modelBuilder.Entity<vDelineationTGUInput>(entity =>
-            {
-                entity.ToView("vDelineationTGUInput");
-            });
-
             modelBuilder.Entity<vFieldVisitDetailed>(entity =>
             {
                 entity.ToView("vFieldVisitDetailed");
@@ -1793,20 +1777,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.Property(e => e.WatershedID).ValueGeneratedOnAdd();
             });
 
-            modelBuilder.Entity<vLandUseBlockTGUInput>(entity =>
-            {
-                entity.ToView("vLandUseBlockTGUInput");
-
-                entity.Property(e => e.LandUseBlockID).ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<vModelBasinLGUInput>(entity =>
-            {
-                entity.ToView("vModelBasinLGUInput");
-
-                entity.Property(e => e.ModelID).ValueGeneratedOnAdd();
-            });
-
             modelBuilder.Entity<vModelingResultUnitConversion>(entity =>
             {
                 entity.ToView("vModelingResultUnitConversion");
@@ -1852,11 +1822,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vNereidTreatmentBMPRegionalSubbasin");
             });
 
-            modelBuilder.Entity<vOnlandVisualTrashAssessmentAreaDated>(entity =>
-            {
-                entity.ToView("vOnlandVisualTrashAssessmentAreaDated");
-            });
-
             modelBuilder.Entity<vOnlandVisualTrashAssessmentAreaProgress>(entity =>
             {
                 entity.ToView("vOnlandVisualTrashAssessmentAreaProgress");
@@ -1887,11 +1852,6 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vPowerBIWaterQualityManagementPlanOAndMVerification");
             });
 
-            modelBuilder.Entity<vProjectDelineationLGUInput>(entity =>
-            {
-                entity.ToView("vProjectDelineationLGUInput");
-            });
-
             modelBuilder.Entity<vProjectDryWeatherWQLRIScore>(entity =>
             {
                 entity.ToView("vProjectDryWeatherWQLRIScore");
@@ -1917,11 +1877,57 @@ namespace Hippocamp.EFModels.Entities
                 entity.ToView("vProjectWetWeatherWQLRIScore");
             });
 
-            modelBuilder.Entity<vRegionalSubbasinLGUInput>(entity =>
+            modelBuilder.Entity<vPyQgisDelineationLGUInput>(entity =>
             {
-                entity.ToView("vRegionalSubbasinLGUInput");
+                entity.ToView("vPyQgisDelineationLGUInput");
+            });
+
+            modelBuilder.Entity<vPyQgisDelineationTGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisDelineationTGUInput");
+            });
+
+            modelBuilder.Entity<vPyQgisLandUseBlockTGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisLandUseBlockTGUInput");
+
+                entity.Property(e => e.LUBID).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<vPyQgisModelBasinLGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisModelBasinLGUInput");
+
+                entity.Property(e => e.ModelID).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<vPyQgisOnlandVisualTrashAssessmentAreaDated>(entity =>
+            {
+                entity.ToView("vPyQgisOnlandVisualTrashAssessmentAreaDated");
+            });
+
+            modelBuilder.Entity<vPyQgisProjectDelineationLGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisProjectDelineationLGUInput");
+            });
+
+            modelBuilder.Entity<vPyQgisRegionalSubbasinLGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisRegionalSubbasinLGUInput");
 
                 entity.Property(e => e.RSBID).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<vPyQgisWaterQualityManagementPlanLGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisWaterQualityManagementPlanLGUInput");
+
+                entity.Property(e => e.WQMPID).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<vPyQgisWaterQualityManagementPlanTGUInput>(entity =>
+            {
+                entity.ToView("vPyQgisWaterQualityManagementPlanTGUInput");
             });
 
             modelBuilder.Entity<vRegionalSubbasinUpstream>(entity =>
@@ -1957,18 +1963,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vWaterQualityManagementPlanLGUAudit>(entity =>
             {
                 entity.ToView("vWaterQualityManagementPlanLGUAudit");
-            });
-
-            modelBuilder.Entity<vWaterQualityManagementPlanLGUInput>(entity =>
-            {
-                entity.ToView("vWaterQualityManagementPlanLGUInput");
-
-                entity.Property(e => e.WQMPID).ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<vWaterQualityManagementPlanTGUInput>(entity =>
-            {
-                entity.ToView("vWaterQualityManagementPlanTGUInput");
             });
 
             OnModelCreatingPartial(modelBuilder);

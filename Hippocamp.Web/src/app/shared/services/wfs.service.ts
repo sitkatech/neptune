@@ -80,4 +80,21 @@ export class WfsService {
             );
 
     }
+
+    public getRegionalSubbasins(): Observable<FeatureCollection> {
+        var owsrootUrl = environment.geoserverMapServiceUrl + '/ows';
+
+        var defaultParameters = {
+            service : 'WFS',
+            version : '2.0',
+            request : 'GetFeature',
+            typeName : 'OCStormwater:RegionalSubbasins',
+            outputFormat : 'application/json',
+            // format_options : 'callback:getJson',
+            SrsName : 'EPSG:4326'
+        };
+        return this.http.get<FeatureCollection>(owsrootUrl, {
+            params: defaultParameters
+        });
+    }
 }
