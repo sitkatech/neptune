@@ -44,6 +44,15 @@ namespace Hippocamp.API.Controllers
             return Ok(treatmentBMPTypeSimpleDtos);
         }
 
+        [HttpPut("treatmentBMP/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}")]
+        [UserViewFeature]
+        public ActionResult<TreatmentBMPDisplayDto> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID, [FromBody] TreatmentBMPUpsertDto treatmentBMP)
+        {
+            TreatmentBMPs.ChangeTreatmentBMPType(_dbContext, treatmentBMPID, treatmentBMPTypeID);
+            var updatedTreatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID);
+            return Ok(updatedTreatmentBMP);
+        }
+
         [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
         [UserViewFeature]
         public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems()
@@ -82,6 +91,7 @@ namespace Hippocamp.API.Controllers
 
             Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
             TreatmentBMPs.MergeProjectTreatmentBMPs(_dbContext, treatmentBMPUpsertDtos, existingTreatmentBMPs, project);
+            _dbContext.SaveChanges();
 
             return Ok();
         }

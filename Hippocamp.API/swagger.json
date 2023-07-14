@@ -1588,6 +1588,79 @@
         }
       }
     },
+    "/treatmentBMP/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "treatmentBMPTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatmentBMPs/modelingAttributeDropdownItems": {
       "get": {
         "tags": [
@@ -3305,6 +3378,16 @@
           "ImperviousAreaTreatedAcres": {
             "type": "number",
             "format": "double",
+            "nullable": true
+          },
+          "UpdatePersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateUpdated": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           },
           "Organization": {

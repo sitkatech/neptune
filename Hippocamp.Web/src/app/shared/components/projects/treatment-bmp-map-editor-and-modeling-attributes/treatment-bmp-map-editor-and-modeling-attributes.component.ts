@@ -38,6 +38,7 @@ declare var $: any
 export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnInit {
 
   @ViewChild('deleteTreatmentBMPModal') deleteTreatmentBMPModal
+  @ViewChild('editTreatmentBMPTypeModal') editTreatmentBMPTypeModal
 
   @Input('readOnly') readOnly: boolean = true;
   @Input('includeDelineations') includeDelineations: boolean = false;
@@ -77,8 +78,10 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public selectedListItemDetails: { [key: string]: any } = {};
   public selectedObjectMarker: L.Layer;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
+  public selectedTreatmentBMPType: number;
   public treatmentBMPsLayer: L.GeoJSON<any>;
   public delineationsLayer: L.GeoJson<any>;
+  public newTreatmentBMPType: TreatmentBMPTypeSimpleDto;
   private delineationDefaultStyle = {
     color: 'blue',
     fillOpacity: 0.2,
@@ -537,6 +540,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     let selectedNumber = null;
     let selectedAttributes = null;
     this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
     selectedAttributes = [
       `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
       `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
@@ -601,6 +605,10 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     this.launchModal(this.deleteTreatmentBMPModal, 'deleteTreatmentBMPModalTitle');
   }
 
+  public onEditTreatmentBMPTypes() {
+    this.launchModal(this.editTreatmentBMPTypeModal, 'editTreatmentBMPTypeModalTitle');
+  }
+
   public deleteTreatmentBMP() {
     const index = this.treatmentBMPs.indexOf(this.selectedTreatmentBMP);
     this.treatmentBMPs.splice(index, 1);
@@ -611,6 +619,16 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     if (this.treatmentBMPs.length > 0) {
       this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
     }
+  }
+
+  public changeTreatmentBMPType(treatmentBMPType: number){
+    this.treatmentBMPService.changeTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType, this.selectedTreatmentBMP).subscribe(() => {
+      this.modalReference.close();
+      this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
+      this.originalTreatmentBMPs = JSON.stringify(this.treatmentBMPs);
+      console.log(this.treatmentBMPs)
+      console.log(this.selectedTreatmentBMP)
+    })
   }
 
   private clearSelectedItem() {

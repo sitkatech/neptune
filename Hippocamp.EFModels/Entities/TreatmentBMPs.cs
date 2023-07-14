@@ -105,6 +105,13 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPTypeSimpleDtos;
         }
 
+        public static void ChangeTreatmentBMPType(HippocampDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
+        {
+            dbContext.Database.ExecuteSqlRaw(
+                "EXECUTE dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
+                treatmentBMPID, treatmentBMPTypeID);
+        }
+
         public static List<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItemsAsDto(HippocampDbContext dbContext)
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = new List<TreatmentBMPModelingAttributeDropdownItemDto>();

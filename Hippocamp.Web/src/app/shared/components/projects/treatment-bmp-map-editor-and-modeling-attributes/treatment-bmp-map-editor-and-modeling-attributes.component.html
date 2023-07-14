@@ -54,6 +54,9 @@
                     <div class="col-lg-9">
                         <div *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0 || readOnly; else treatmentBMPTypeSelect">
                             {{getTypeNameByTypeID(selectedTreatmentBMP.TreatmentBMPTypeID)}}
+                            <button class="btn btn-outline-primary mr-2" (click)="onEditTreatmentBMPTypes()" *ngIf="!readOnly">
+                                Change Type
+                            </button>
                         </div>
                         <ng-template #treatmentBMPTypeSelect>
                             <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
@@ -199,6 +202,40 @@
             <button type="button" class="btn btn-danger btn-sm" (click)="deleteTreatmentBMP()">
                 <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
                 Delete
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editTreatmentBMPTypeModal let-modal *ngIf="!readOnly">
+    <div class="modal-header">
+        <h5 class="modal-title text-white" id="editTreatmentBMPTypeModalTitle">Change Treatment BMP Type</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>
+            This will convert {{selectedTreatmentBMP.TreatmentBMPName}} from {{selectTreatmentBMP.TreatmentBMPTypeName}} to the selected BMP Type.
+            Custom Attributes and ModelAttributes of this BMP which are not applicatble to the new BMP type will be discard along with any assessment records.
+        </p>
+        <p>This operation cannot be undone. Are you sure you wish to proceed?</p>
+        <div class="row mt-4">
+            <div class="col-sm-3 control-label text-sm-right">
+                <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
+            </div>
+            <div class="col-sm-7">
+                <ng-select [(ngModel)]="selectedTreatmentBMPType"
+                    [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
+                    name="type" required>
+                </ng-select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" (click)="changeTreatmentBMPType(selectedTreatmentBMPType)">
+                <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
+                Update
             </button>
             <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
         </div>

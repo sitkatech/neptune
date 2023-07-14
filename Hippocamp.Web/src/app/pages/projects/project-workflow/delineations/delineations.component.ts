@@ -64,9 +64,11 @@ export class DelineationsComponent implements OnInit {
   private boundingBox: BoundingBoxDto;
   private squareMetersToAcreDivisor: number = 4047;
   public selectedListItem: number;
+  public selectedObjectMarker: L.Layer;
   public selectedDelineation: DelineationUpsertDto;
   public selectedTreatmentBMP: TreatmentBMPUpsertDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
+  public selectedListItemDetails: { [key: string]: any } = {};
   private delineationDefaultStyle = {
     color: 'blue',
     fillOpacity: 0.2,
@@ -113,6 +115,7 @@ export class DelineationsComponent implements OnInit {
   private drawControl: L.Control.Draw;
   private newDelineationID: number = -1;
   public isLoadingSubmit: boolean = false;
+  public isEditingLocation = false;
 
   constructor(
     private treatmentBMPService: TreatmentBMPService,
@@ -254,6 +257,7 @@ export class DelineationsComponent implements OnInit {
         return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
       }
     });
+    this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
     this.registerClickEvents();
@@ -320,6 +324,9 @@ export class DelineationsComponent implements OnInit {
       onEachFeature: (feature, layer) => {
         this.addLayersToFeatureGroup(layer, featureGroup);
         layer.on('click', (e) => {
+          if (this.isEditingLocation) {
+            return;
+          }
           this.selectFeatureImpl(feature.properties.TreatmentBMPID);
         })
       }
@@ -441,6 +448,23 @@ export class DelineationsComponent implements OnInit {
     this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
       this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
     });
+    this.map.on("click", (event: L.LeafletEvent) => {
+      if (!this.isEditingLocation) {
+        return;
+      }
+      if (this.selectedObjectMarker) {
+        this.map.removeLayer(this.selectedObjectMarker);
+      }
+      this.selectedObjectMarker = new L.marker(
+        event.latlng,
+        { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
+
+      this.selectedObjectMarker.addTo(this.map);
+
+      this.selectedTreatmentBMP.Latitude = event.latlng.lat;
+      this.selectedTreatmentBMP.Longitude = event.latlng.lng;
+      this.updateTreatmentBMPsLayer();
+    });
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
@@ -502,6 +526,9 @@ export class DelineationsComponent implements OnInit {
     this.addOrRemoveDrawControl(true);
 
     if (this.drawMapClicked) {
+      if (this.isEditingLocation) {
+        return;
+      }
       if (this.selectedDelineation?.Geometry != null && this.selectedDelineation?.DelineationTypeID != DelineationTypeEnum.Centralized) {
         $('.leaflet-draw-edit-edit').get(0).click();
       } else {
@@ -552,7 +579,11 @@ export class DelineationsComponent implements OnInit {
     this.isLoadingSubmit = true;
     this.alertService.clearAlerts();
     this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
-    this.projectService.mergeDelineationsByProjectID(this.delineations.filter(x => x.Geometry != null), this.projectID).subscribe(() => {
+    var updatedDelineations = this.delineations.filter(x => x.Geometry != null);
+    forkJoin({
+      delineations: this.projectService.mergeDelineationsByProjectID(updatedDelineations, this.projectID),
+      treatmentBMPs: this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID)
+    }).subscribe(({delineations, treatmentBMPs}) => {
       window.scroll(0, 0); 
       this.isLoadingSubmit = false;
       this.projectWorkflowService.emitWorkflowUpdate();
@@ -610,5 +641,85 @@ export class DelineationsComponent implements OnInit {
       this.scrollToMapIfNecessary();
       this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
     })
+  }
+  public toggleIsEditingLocation() {
+    this.isEditingLocation = !this.isEditingLocation;
+    this.updateTreatmentBMPsLayer();
+  }
+  public treatmentBMPHasDelineation(treatmentBMPID: number) {
+    return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0] != null;
+  }
+  public updateTreatmentBMPsLayer() {
+    if (this.treatmentBMPsLayer) {
+      this.map.removeLayer(this.treatmentBMPsLayer);
+      this.treatmentBMPsLayer = null;
+    }
+
+    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
+      this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        pointToLayer: (feature, latlng) => {
+          return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
+        },
+        filter: (feature) => {
+          return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
+        },
+        onEachFeature: (feature, layer) => {
+          if (this.selectedTreatmentBMP != null) {
+            if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
+              return;
+            }
+            this.map.flyTo(layer.getLatLng(), 18);
+          }
+        }
+      });
+      this.treatmentBMPsLayer.addTo(this.map);
+
+    this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
+      if (this.isEditingLocation) {
+        return;
+      }
+      this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
+    });
+  }
+
+  private clearSelectedItem() {
+    if (this.selectedListItem) {
+      this.selectedListItem = null;
+      this.selectedListItemDetails = {};
+      if (this.selectedObjectMarker) {
+        this.map.removeLayer(this.selectedObjectMarker);
+      }
+      this.selectedObjectMarker = null;
+    }
+  }
+
+  public selectTreatmentBMP(treatmentBMPID: number) {
+    this.isEditingLocation = false;
+    this.selectTreatmentBMPImpl(treatmentBMPID);
+    this.updateTreatmentBMPsLayer();
+  }
+
+  private selectTreatmentBMPImpl(treatmentBMPID: number) {
+    this.clearSelectedItem();
+
+    this.selectedListItem = treatmentBMPID;
+    let selectedNumber = null;
+    let selectedAttributes = null;
+    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    selectedAttributes = [
+      `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
+      `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
+      `<strong>Longitude:</strong> ${this.selectedTreatmentBMP.Longitude}`
+    ];
+
+    if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
+      this.selectedObjectMarker = new L.marker(
+        { lat: this.selectedTreatmentBMP.Latitude, lng: this.selectedTreatmentBMP.Longitude },
+        { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
+
+      this.selectedObjectMarker.addTo(this.map);
+      this.selectedListItemDetails.title = `${selectedNumber}`;
+      this.selectedListItemDetails.attributes = selectedAttributes;
+    }
   }
 }

@@ -37,9 +37,9 @@ export class TreatmentBMPService {
     return this.apiService.getFromApi(route);
   }
 
-  mergeTreatmentBMPs(treamentBMPs: Array<TreatmentBMPUpsertDto>, projectID: number) {
+  mergeTreatmentBMPs(treatmentBMPs: Array<TreatmentBMPUpsertDto>, projectID: number) {
     let route = `treatmentBMPs/${projectID}`;
-    return this.apiService.putToApi(route, treamentBMPs);
+    return this.apiService.putToApi(route, treatmentBMPs);
   }
 
   getTreatmentBMPs() : Observable<Array<TreatmentBMPDisplayDto>> {
@@ -50,5 +50,10 @@ export class TreatmentBMPService {
   getVerifiedTreatmentBMPs(): Observable<Array<TreatmentBMPDisplayDto>> {
     let route = `treatmentBMPs/verified`;
     return this.apiService.getFromApi(route);
+  }
+
+  changeTreatmentBMPType(treatmentBMPID: Number, treatmentBMPTypeID: Number, treatmentBMP: TreatmentBMPUpsertDto): Observable<Array<TreatmentBMPDisplayDto>> {
+    let route = `treatmentBMP/${treatmentBMPID}/treatmentBMPType/${treatmentBMPTypeID}`;
+    return this.apiService.putToApi(route, treatmentBMP);
   }
 }
