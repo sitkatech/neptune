@@ -41,6 +41,8 @@ export class ProjectSimpleDto {
     WetWeatherWQLRI?: number;
     AreaTreatedAcres?: number;
     ImperviousAreaTreatedAcres?: number;
+    UpdatePersonID?: number;
+    DateUpdated?: string;
     Organization?: OrganizationSimpleDto;
     StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
     ProjectStatus?: ProjectStatusSimpleDto;

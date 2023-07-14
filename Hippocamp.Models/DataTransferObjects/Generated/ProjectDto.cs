@@ -35,6 +35,8 @@ namespace Hippocamp.Models.DataTransferObjects
         public double? WetWeatherWQLRI { get; set; }
         public double? AreaTreatedAcres { get; set; }
         public double? ImperviousAreaTreatedAcres { get; set; }
+        public PersonDto UpdatePerson { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 
     public partial class ProjectSimpleDto
@@ -65,6 +67,8 @@ namespace Hippocamp.Models.DataTransferObjects
         public double? WetWeatherWQLRI { get; set; }
         public double? AreaTreatedAcres { get; set; }
         public double? ImperviousAreaTreatedAcres { get; set; }
+        public int? UpdatePersonID { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 
 }

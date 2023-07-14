@@ -622,11 +622,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   }
 
   public changeTreatmentBMPType(treatmentBMPType: number){
-    console.log(this.selectedTreatmentBMP.TreatmentBMPModelingTypeID)
     this.treatmentBMPService.changeTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType, this.selectedTreatmentBMP).subscribe((temp) => {
       this.modalReference.close();
-      console.log(temp)
-      console.log(this.selectedTreatmentBMP)
       this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
       this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
       this.originalTreatmentBMPs = JSON.stringify(this.treatmentBMPs);

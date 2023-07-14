@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Hippocamp.Models.DataTransferObjects;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Hippocamp.EFModels.Entities
 {
@@ -74,7 +77,7 @@ namespace Hippocamp.EFModels.Entities
             return GetByIDAsSimpleDto(dbContext, project.ProjectID);
         }
 
-        public static void Update(HippocampDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto)
+        public static void Update(HippocampDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto, int personID)
         {
             project.ProjectName = projectUpsertDto.ProjectName;
             project.OrganizationID = projectUpsertDto.OrganizationID.Value;
@@ -84,6 +87,7 @@ namespace Hippocamp.EFModels.Entities
             project.AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation;
             project.DoesNotIncludeTreatmentBMPs = projectUpsertDto.DoesNotIncludeTreatmentBMPs;
             project.CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores;
+            SetUpdatePersonAndDate(dbContext, project.ProjectID, personID);
 
             if (projectUpsertDto.ShareOCTAM2Tier2Scores && !project.ShareOCTAM2Tier2Scores)
             {
@@ -384,6 +388,12 @@ namespace Hippocamp.EFModels.Entities
             }
 
             return projectModeledResultSummaryDtos;
+        }
+        public static void SetUpdatePersonAndDate(HippocampDbContext dbContext, int projectID, int personID)
+        {
+            var project = dbContext.Projects.Single(x => x.ProjectID == projectID);
+            project.UpdatePersonID = personID;
+            project.DateUpdated = DateTime.UtcNow;
         }
     }
 }

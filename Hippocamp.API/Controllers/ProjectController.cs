@@ -104,7 +104,7 @@ namespace Hippocamp.API.Controllers
             {
                 return Forbid();
             }
-            Projects.Update(_dbContext, project, projectCreateDto);
+            Projects.Update(_dbContext, project, projectCreateDto, personDto.PersonID);
             return Ok();
         }
 
@@ -346,6 +346,9 @@ namespace Hippocamp.API.Controllers
 
             Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
             Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
+
+            var personID = UserContext.GetUserFromHttpContext(_dbContext, HttpContext).PersonID;
+            Projects.SetUpdatePersonAndDate(_dbContext, projectID, personID);
 
             return Ok();
         }

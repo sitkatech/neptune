@@ -24,6 +24,7 @@ namespace Hippocamp.EFModels.Entities
             ProjectCreatePeople = new HashSet<Project>();
             ProjectNetworkSolveHistories = new HashSet<ProjectNetworkSolveHistory>();
             ProjectPrimaryContactPeople = new HashSet<Project>();
+            ProjectUpdatePeople = new HashSet<Project>();
             RegionalSubbasinRevisionRequestClosedByPeople = new HashSet<RegionalSubbasinRevisionRequest>();
             RegionalSubbasinRevisionRequestRequestPeople = new HashSet<RegionalSubbasinRevisionRequest>();
             StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
@@ -101,6 +102,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual ICollection<ProjectNetworkSolveHistory> ProjectNetworkSolveHistories { get; set; }
         [InverseProperty("PrimaryContactPerson")]
         public virtual ICollection<Project> ProjectPrimaryContactPeople { get; set; }
+        [InverseProperty("UpdatePerson")]
+        public virtual ICollection<Project> ProjectUpdatePeople { get; set; }
         [InverseProperty("ClosedByPerson")]
         public virtual ICollection<RegionalSubbasinRevisionRequest> RegionalSubbasinRevisionRequestClosedByPeople { get; set; }
         [InverseProperty("RequestPerson")]

@@ -38,7 +38,9 @@ namespace Hippocamp.EFModels.Entities
                 DryWeatherWQLRI = project.DryWeatherWQLRI,
                 WetWeatherWQLRI = project.WetWeatherWQLRI,
                 AreaTreatedAcres = project.AreaTreatedAcres,
-                ImperviousAreaTreatedAcres = project.ImperviousAreaTreatedAcres
+                ImperviousAreaTreatedAcres = project.ImperviousAreaTreatedAcres,
+                UpdatePerson = project.UpdatePerson?.AsDto(),
+                DateUpdated = project.DateUpdated
             };
             DoCustomMappings(project, projectDto);
             return projectDto;
@@ -75,7 +77,9 @@ namespace Hippocamp.EFModels.Entities
                 DryWeatherWQLRI = project.DryWeatherWQLRI,
                 WetWeatherWQLRI = project.WetWeatherWQLRI,
                 AreaTreatedAcres = project.AreaTreatedAcres,
-                ImperviousAreaTreatedAcres = project.ImperviousAreaTreatedAcres
+                ImperviousAreaTreatedAcres = project.ImperviousAreaTreatedAcres,
+                UpdatePersonID = project.UpdatePersonID,
+                DateUpdated = project.DateUpdated
             };
             DoCustomSimpleDtoMappings(project, projectSimpleDto);
             return projectSimpleDto;

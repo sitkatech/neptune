@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ProjNet.CoordinateSystems;
 
 namespace Hippocamp.API.Controllers
 {
@@ -49,6 +50,13 @@ namespace Hippocamp.API.Controllers
         public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID, [FromBody] TreatmentBMPUpsertDto treatmentBMP)
         {
             var updatedTreatmentBMPModelingTypeID = TreatmentBMPs.ChangeTreatmentBMPType(_dbContext, treatmentBMPID, treatmentBMPTypeID);
+            var personID = UserContext.GetUserFromHttpContext(_dbContext, HttpContext).PersonID;
+            var projectID = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID).ProjectID;
+            if (projectID != null)
+            {
+                Projects.SetUpdatePersonAndDate(_dbContext, (int)projectID, personID);
+            }
+            
             return Ok(updatedTreatmentBMPModelingTypeID);
         }
 

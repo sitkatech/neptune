@@ -58,6 +58,9 @@ namespace Hippocamp.EFModels.Entities
         public double? WetWeatherWQLRI { get; set; }
         public double? AreaTreatedAcres { get; set; }
         public double? ImperviousAreaTreatedAcres { get; set; }
+        public int? UpdatePersonID { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? DateUpdated { get; set; }
 
         [ForeignKey("CreatePersonID")]
         [InverseProperty("ProjectCreatePeople")]
@@ -74,6 +77,9 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey("StormwaterJurisdictionID")]
         [InverseProperty("Projects")]
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        [ForeignKey("UpdatePersonID")]
+        [InverseProperty("ProjectUpdatePeople")]
+        public virtual Person UpdatePerson { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectDocument> ProjectDocuments { get; set; }
         [InverseProperty("Project")]
