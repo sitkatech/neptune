@@ -57,10 +57,10 @@ REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [FK_Project_Person_PrimaryContactPersonID_PersonID]
 GO
-ALTER TABLE [dbo].[Project]  WITH CHECK ADD  CONSTRAINT [FK_Project_Person_UpdatePersonID] FOREIGN KEY([UpdatePersonID])
+ALTER TABLE [dbo].[Project]  WITH CHECK ADD  CONSTRAINT [FK_Project_Person_UpdatePersonID_PersonID] FOREIGN KEY([UpdatePersonID])
 REFERENCES [dbo].[Person] ([PersonID])
 GO
-ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [FK_Project_Person_UpdatePersonID]
+ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [FK_Project_Person_UpdatePersonID_PersonID]
 GO
 ALTER TABLE [dbo].[Project]  WITH CHECK ADD  CONSTRAINT [FK_Project_ProjectStatus_ProjectStatusID] FOREIGN KEY([ProjectStatusID])
 REFERENCES [dbo].[ProjectStatus] ([ProjectStatusID])
