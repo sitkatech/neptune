@@ -45,7 +45,7 @@ namespace Hippocamp.API.Controllers
             return Ok(treatmentBMPTypeSimpleDtos);
         }
 
-        [HttpPut("treatmentBMP/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}")]
+        [HttpPut("treatmentBMPs/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}")]
         [UserViewFeature]
         public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID, [FromBody] TreatmentBMPUpsertDto treatmentBMP)
         {
