@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using LtInfo.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {

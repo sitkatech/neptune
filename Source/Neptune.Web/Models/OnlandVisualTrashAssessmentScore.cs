@@ -1,5 +1,3 @@
-using System.Web.Mvc;
-
 namespace Neptune.Web.Models
 {
     public abstract partial class OnlandVisualTrashAssessmentScore

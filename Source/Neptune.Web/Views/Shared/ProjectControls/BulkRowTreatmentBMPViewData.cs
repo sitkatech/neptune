@@ -20,8 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 
 
 namespace Neptune.Web.Views.Shared.ProjectControls

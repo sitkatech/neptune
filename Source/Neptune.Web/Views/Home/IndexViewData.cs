@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Map;
 using Neptune.Web.Views.Shared;

@@ -20,8 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
-using System.Linq;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;

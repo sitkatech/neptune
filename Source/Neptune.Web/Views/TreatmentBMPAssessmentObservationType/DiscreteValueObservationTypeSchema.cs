@@ -1,5 +1,4 @@
-﻿using Neptune.Web.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {

@@ -18,14 +18,12 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Data.Entity;
-using System.Globalization;
+
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.UnitTestCommon;
 using LtInfo.Common.DesignByContract;
 using NUnit.Framework;
-using AssertCustom = LtInfo.Common.AssertCustom;
 
 namespace Neptune.Web.Models
 {

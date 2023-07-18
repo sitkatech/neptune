@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Security.Shared;

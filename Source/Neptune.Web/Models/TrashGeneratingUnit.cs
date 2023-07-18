@@ -1,4 +1,3 @@
-using System.Linq;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models

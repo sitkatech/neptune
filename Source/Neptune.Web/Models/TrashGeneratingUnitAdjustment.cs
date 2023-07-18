@@ -1,5 +1,3 @@
-using System;
-
 namespace Neptune.Web.Models
 {
     public static class TrashGeneratingUnitAdjustmentModelExtensions

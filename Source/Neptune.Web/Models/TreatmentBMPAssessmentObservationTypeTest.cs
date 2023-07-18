@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using Neptune.Web.UnitTestCommon;
 using NUnit.Framework;
 
 namespace Neptune.Web.Models

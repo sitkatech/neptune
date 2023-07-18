@@ -2,7 +2,6 @@
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
-using Neptune.Web.Views.TreatmentBMP;
 
 namespace Neptune.Web.Views.RegionalSubbasin
 {

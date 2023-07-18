@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using GeoAPI.CoordinateSystems.Transformations;
-using GeoAPI.CoordinateSystems;
 using LtInfo.Common.GdalOgr;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Prepared;
 using NetTopologySuite.IO.Converters;
-using ProjNet.CoordinateSystems.Transformations;
 
 namespace Neptune.Web.Common
 {

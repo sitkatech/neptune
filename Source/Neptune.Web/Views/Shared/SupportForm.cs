@@ -19,9 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
-
 namespace Neptune.Web.Views.Shared
 {
     public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebViewPage<SupportFormViewData, SupportFormViewModel>

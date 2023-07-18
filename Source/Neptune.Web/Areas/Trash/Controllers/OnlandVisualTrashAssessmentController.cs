@@ -17,7 +17,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common;
-using Neptune.Web.Security.Shared;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;

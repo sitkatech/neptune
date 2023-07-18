@@ -1,6 +1,4 @@
-﻿using LtInfo.Common.Models;
-
-namespace Neptune.Web.Models
+﻿namespace Neptune.Web.Models
 {
     public partial class SourceControlBMPAttribute : IAuditableEntity
     {

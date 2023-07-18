@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;

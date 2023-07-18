@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Areas.Trash.Controllers;
+﻿using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Models;

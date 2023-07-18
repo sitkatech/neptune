@@ -18,8 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
+
 using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.Home

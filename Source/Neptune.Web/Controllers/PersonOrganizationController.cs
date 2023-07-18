@@ -24,7 +24,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.PersonOrganization;
-using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 
 namespace Neptune.Web.Controllers

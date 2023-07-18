@@ -19,9 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using LtInfo.Common;
 using NUnit.Framework;
 

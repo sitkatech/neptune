@@ -5,7 +5,6 @@ using System.Web.UI.WebControls;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Parcel;
 
 namespace Neptune.Web.Controllers

@@ -1,5 +1,3 @@
-using System;
-
 namespace Neptune.Web.Models
 {
     public abstract partial class PreliminarySourceIdentificationType

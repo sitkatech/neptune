@@ -6,7 +6,6 @@ using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net.Mail;
 using LtInfo.Common;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Email;
 
 namespace Neptune.Web.ScheduledJobs

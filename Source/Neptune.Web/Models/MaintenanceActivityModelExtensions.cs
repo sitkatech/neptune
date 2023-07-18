@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using LtInfo.Common;
+﻿using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 

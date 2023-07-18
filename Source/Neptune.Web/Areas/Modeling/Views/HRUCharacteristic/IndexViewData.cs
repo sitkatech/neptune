@@ -1,6 +1,4 @@
 ﻿using Neptune.Web.Areas.Modeling.Controllers;
-using Neptune.Web.Areas.Trash.Controllers;
-using Neptune.Web.Areas.Trash.Views.TrashGeneratingUnit;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;

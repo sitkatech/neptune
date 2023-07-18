@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
-using System.Web;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Common

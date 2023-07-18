@@ -21,14 +21,12 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using LtInfo.Common.Models;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea

@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Neptune.Web.Controllers;
-using LtInfo.Common;
 using NUnit.Framework;
 
 namespace Neptune.Web.Common

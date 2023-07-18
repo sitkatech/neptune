@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Feature;
 using Neptune.Web.Models;
 
 // ReSharper disable once CheckNamespace

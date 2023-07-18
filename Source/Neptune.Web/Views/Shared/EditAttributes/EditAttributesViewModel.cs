@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.FieldVisit;

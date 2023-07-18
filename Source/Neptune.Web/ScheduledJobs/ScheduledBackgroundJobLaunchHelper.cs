@@ -1,7 +1,4 @@
-﻿using Neptune.Web.Areas.Modeling.Controllers;
-using Neptune.Web.Models;
-
-namespace Neptune.Web.ScheduledJobs
+﻿namespace Neptune.Web.ScheduledJobs
 {
     public static class ScheduledBackgroundJobLaunchHelper
     {

@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Linq;
-using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;

@@ -24,7 +24,6 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 
 namespace Neptune.Web.Common

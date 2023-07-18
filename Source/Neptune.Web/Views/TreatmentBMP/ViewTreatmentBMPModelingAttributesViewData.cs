@@ -1,8 +1,6 @@
-﻿using System;
-using Neptune.Web.Common;
+﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Views;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {

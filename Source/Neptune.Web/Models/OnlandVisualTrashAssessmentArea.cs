@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using GeoJSON.Net.Feature;
-using LtInfo.Common.DbSpatial;
-using LtInfo.Common.GeoJson;
-using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 
 namespace Neptune.Web.Models
 {

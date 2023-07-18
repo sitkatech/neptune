@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Neptune.Web.Models
+﻿namespace Neptune.Web.Models
 {
     public class SourceControlBMPSimple
     {

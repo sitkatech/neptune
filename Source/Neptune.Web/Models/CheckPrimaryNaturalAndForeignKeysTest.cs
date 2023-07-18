@@ -22,7 +22,6 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using Neptune.Web.UnitTestCommon;
 using NUnit.Framework;
-using AssertCustom = LtInfo.Common.AssertCustom;
 
 namespace Neptune.Web.Models
 {
