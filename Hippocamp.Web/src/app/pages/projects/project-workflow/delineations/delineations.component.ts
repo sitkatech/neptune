@@ -236,7 +236,7 @@ export class DelineationsComponent implements OnInit {
               }
           },
           onEachFeature: (feature, layer) => {
-              var popupContent = `RSB ID: <a href = "/RegionalSubbasin/Detail/${feature.properties.RegionalSubbasinID.toString()}">${feature.properties.RegionalSubbasinID}</a>`
+              var popupContent = `RSB ID: <a href = "${this.ocstBaseUrl()}/RegionalSubbasin/Detail/${feature.properties.RegionalSubbasinID.toString()}">${feature.properties.RegionalSubbasinID}</a>`
               layer.bindPopup(popupContent);
               
           }
@@ -746,5 +746,8 @@ export class DelineationsComponent implements OnInit {
       this.selectedListItemDetails.title = `${selectedNumber}`;
       this.selectedListItemDetails.attributes = selectedAttributes;
     }
+  }
+  public ocstBaseUrl(): string {
+    return environment.ocStormwaterToolsBaseUrl
   }
 }
