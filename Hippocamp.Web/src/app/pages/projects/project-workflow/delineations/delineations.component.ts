@@ -668,6 +668,9 @@ export class DelineationsComponent implements OnInit {
     })
   }
   public toggleIsEditingLocation() {
+    if (this.isEditingLocation){
+      this.onSubmit();
+    }
     this.isEditingLocation = !this.isEditingLocation;
     this.updateTreatmentBMPsLayer();
   }
