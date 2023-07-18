@@ -227,7 +227,7 @@ export class PlanningMapComponent implements OnInit {
               }
           },
           onEachFeature: (feature, layer) => {
-            var popupContent = `RSB ID: <a href = "/RegionalSubbasin/Detail/${feature.properties.RegionalSubbasinID.toString()}">${feature.properties.RegionalSubbasinID}</a>`
+            var popupContent = `RSB ID: <a href = "${this.ocstBaseUrl()}/RegionalSubbasin/Detail/${feature.properties.RegionalSubbasinID.toString()}">${feature.properties.RegionalSubbasinID}</a>`
             layer.bindPopup(popupContent);
               
           }
@@ -554,5 +554,8 @@ export class PlanningMapComponent implements OnInit {
   public getRelatedBMPsToShow() {
     let selectedTreatmentBMPID = this.selectedTreatmentBMP?.TreatmentBMPID;
     return this.relatedTreatmentBMPs.filter(x => x.TreatmentBMPID != selectedTreatmentBMPID);
+  }
+  public ocstBaseUrl(): string {
+    return environment.ocStormwaterToolsBaseUrl
   }
 }
