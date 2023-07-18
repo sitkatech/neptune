@@ -2023,7 +2023,6 @@
     <Compile Include="Views\Role\Detail.cs" />
     <Compile Include="Views\Role\IndexViewData.cs" />
     <Compile Include="Views\Role\DetailViewData.cs" />
-    <Compile Include="Views\Shared\AuditLogsGridSpec.cs" />
     <Compile Include="Views\Shared\FieldDefinitionDetails.cs" />
     <Compile Include="Views\Shared\FieldDefinitionDetailsViewData.cs" />
     <Compile Include="Views\Shared\NeptuneLateLoadingIncludes.cs" />
