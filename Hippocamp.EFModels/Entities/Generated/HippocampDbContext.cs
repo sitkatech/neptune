@@ -939,6 +939,11 @@ namespace Hippocamp.EFModels.Entities
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.StormwaterJurisdictionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.UpdatePerson)
+                    .WithMany(p => p.ProjectUpdatePeople)
+                    .HasForeignKey(d => d.UpdatePersonID)
+                    .HasConstraintName("FK_Project_Person_UpdatePersonID_PersonID");
             });
 
             modelBuilder.Entity<ProjectDocument>(entity =>

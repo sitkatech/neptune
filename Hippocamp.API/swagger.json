@@ -1588,7 +1588,7 @@
         }
       }
     },
-    "/treatmentBMP/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}": {
+    "/treatmentBMPs/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}": {
       "put": {
         "tags": [
           "TreatmentBMP"
