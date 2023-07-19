@@ -55,62 +55,60 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeIndexComponent,
-    UserDetailComponent,
-    LoginCallbackComponent,
-    CreateUserCallbackComponent,
-    FieldDefinitionListComponent,
-    FieldDefinitionEditComponent,
-    TrainingComponent,
-	  ProjectListComponent,
-	  AboutComponent,
-    ProjectWorkflowOutletComponent,
-    ProjectBasicsComponent,
-    ProjectInstructionsComponent,
-    TreatmentBmpsComponent,
-    ProjectAttachmentsComponent,
-    DelineationsComponent,
-    ModeledPerformanceComponent,
-    ProjectDetailComponent,
-    ReviewComponent,
-    PlanningMapComponent,
-    OCTAM2Tier2DashboardComponent
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    NgbModule,
-    RouterModule,
-    OAuthModule.forRoot(),
-    SharedModule.forRoot(),
-    FormsModule,
-    BrowserAnimationsModule,
-    AgGridModule.withComponents([]),
-    CKEditorModule,
-    DragDropModule,
-    NgSelectModule,
-
-  ],  
-  providers: [
-    CookieService,
-    AppInitService,
-    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppInitService, AppInsightsService], multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandlerService
-    },
-    DecimalPipe, CurrencyPipe, DatePipe,
-    {
-      provide: OAuthStorage,
-      useClass: CookieStorageService
-    }
-  ],
-  entryComponents: [LinkRendererComponent, FontAwesomeIconLinkRendererComponent, MultiLinkRendererComponent],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HomeIndexComponent,
+        UserDetailComponent,
+        LoginCallbackComponent,
+        CreateUserCallbackComponent,
+        FieldDefinitionListComponent,
+        FieldDefinitionEditComponent,
+        TrainingComponent,
+        ProjectListComponent,
+        AboutComponent,
+        ProjectWorkflowOutletComponent,
+        ProjectBasicsComponent,
+        ProjectInstructionsComponent,
+        TreatmentBmpsComponent,
+        ProjectAttachmentsComponent,
+        DelineationsComponent,
+        ModeledPerformanceComponent,
+        ProjectDetailComponent,
+        ReviewComponent,
+        PlanningMapComponent,
+        OCTAM2Tier2DashboardComponent
+    ],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        NgbModule,
+        RouterModule,
+        OAuthModule.forRoot(),
+        SharedModule.forRoot(),
+        FormsModule,
+        BrowserAnimationsModule,
+        AgGridModule.withComponents([]),
+        CKEditorModule,
+        DragDropModule,
+        NgSelectModule,
+    ],
+    providers: [
+        CookieService,
+        AppInitService,
+        { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppInitService, AppInsightsService], multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+        {
+            provide: ErrorHandler,
+            useClass: GlobalErrorHandlerService
+        },
+        DecimalPipe, CurrencyPipe, DatePipe,
+        {
+            provide: OAuthStorage,
+            useClass: CookieStorageService
+        }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

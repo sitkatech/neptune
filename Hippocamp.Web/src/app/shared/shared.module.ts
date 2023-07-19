@@ -111,8 +111,7 @@ import { GrantScoresComponent } from './components/projects/grant-scores/grant-s
         AttachmentsDisplayComponent,
         OctaPrioritizationDetailPopupComponent,
         GrantScoresComponent
-    ],
-    entryComponents:[]
+    ]
 })
 export class SharedModule {
     static forRoot(): ModuleWithProviders<SharedModule> {
