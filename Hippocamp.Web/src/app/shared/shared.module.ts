@@ -12,7 +12,6 @@ import { LinkRendererComponent } from './components/ag-grid/link-renderer/link-r
 import { FontAwesomeIconLinkRendererComponent } from './components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
 import { MultiLinkRendererComponent } from './components/ag-grid/multi-link-renderer/multi-link-renderer.component';
 import { CustomRichTextComponent } from './components/custom-rich-text/custom-rich-text.component'
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FieldDefinitionComponent } from './components/field-definition/field-definition.component';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AlertDisplayComponent } from './components/alert-display/alert-display.component';
@@ -36,6 +35,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { AttachmentsDisplayComponent } from './components/projects/attachments-display/attachments-display.component';
 import { OctaPrioritizationDetailPopupComponent } from './components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
 import { GrantScoresComponent } from './components/projects/grant-scores/grant-scores.component';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 
 @NgModule({
     declarations: [
@@ -71,7 +71,7 @@ import { GrantScoresComponent } from './components/projects/grant-scores/grant-s
         ModelResultsComponent,
         AttachmentsDisplayComponent,
         OctaPrioritizationDetailPopupComponent,
-        GrantScoresComponent
+        GrantScoresComponent,
     ],
     imports: [
         CommonModule,
@@ -79,10 +79,10 @@ import { GrantScoresComponent } from './components/projects/grant-scores/grant-s
         HttpClientModule,
         NgProgressModule,
         RouterModule,
-        CKEditorModule,
         NgbModule,
         DragDropModule,
-        NgSelectModule
+        NgSelectModule,
+        EditorModule
     ],
     exports: [
         AlertDisplayComponent,
@@ -110,7 +110,11 @@ import { GrantScoresComponent } from './components/projects/grant-scores/grant-s
         ModelResultsComponent,
         AttachmentsDisplayComponent,
         OctaPrioritizationDetailPopupComponent,
-        GrantScoresComponent
+        GrantScoresComponent,
+        EditorModule
+    ],
+    providers:[
+        { provide: TINYMCE_SCRIPT_SRC, useValue: 'assets/tinymce/tinymce.min.js' }
     ]
 })
 export class SharedModule {

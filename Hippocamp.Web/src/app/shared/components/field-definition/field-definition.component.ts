@@ -3,7 +3,6 @@ import { Alert } from '../../models/alert';
 import { FieldDefinitionService } from '../../services/field-definition-service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { AlertService } from '../../services/alert.service';
-import * as ClassicEditor from 'src/assets/main/ckeditor/ckeditor.js';
 import { AlertContext } from '../../models/enums/alert-context.enum';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { FieldDefinitionTypeEnum } from '../../models/enums/field-definition-type.enum';
@@ -30,19 +29,18 @@ export class FieldDefinitionComponent implements OnInit {
   public isEditing: boolean = false;
   public emptyContent: boolean = false;
   public watchUserChangeSubscription: any;
-  public Editor = ClassicEditor;
   public editedContent: string;
   public editor;
 
   currentUser: PersonDto;
 
-  public ckConfig = {"removePlugins": ["MediaEmbed", "ImageUpload"]};
-
-  constructor(private fieldDefinitionService: FieldDefinitionService,
+  constructor(
+    private fieldDefinitionService: FieldDefinitionService,
     private authenticationService: AuthenticationService,
     private cdr: ChangeDetectorRef,
     private alertService: AlertService,
-    private elem: ElementRef) { }
+    private elem: ElementRef
+  ) { }
 
   ngOnInit() {
     this.fieldDefinitionService.getFieldDefinition(FieldDefinitionTypeEnum[this.fieldDefinitionType]).subscribe(x => {
@@ -53,12 +51,6 @@ export class FieldDefinitionComponent implements OnInit {
   ngOnDestroy() {
     
     this.cdr.detach();
-  }
-
-  // tell CkEditor to use the class below as its upload adapter
-  // see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/upload-adapter.html#how-does-the-image-upload-work
-  public ckEditorReady(editor) {
-    this.editor = editor;
   }
 
   public getLabelText() {

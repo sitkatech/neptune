@@ -15,8 +15,10 @@
         Edit Definition for Label: {{fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName}} </h2>
     <div class="row mt-4">
         <div class="col-12">
-            <ckeditor [editor]="Editor" [(ngModel)]="fieldDefinition.FieldDefinitionValue" (ready)="ckEditorReady($event)"
-                [config]="ckConfig" ngDefaultControl></ckeditor>
+            <editor #tinyMceEditor
+                [init]="{ toolbar: false, menubar: false, plugins: 'quickbars', promotion: false }"
+                [(ngModel)]="fieldDefinition.FieldDefinitionValue">
+            </editor>
             <div style="float:right;">
                 <button type="button" class="btn btn-hippocamp mt-1 mr-1 mb-1" (click)="saveDefinition()" [disabled]="isLoadingSubmit">Save</button>
                 <a routerLink="/labels-and-definitions" class="btn btn-secondary mt-1 mb-1">Cancel</a>

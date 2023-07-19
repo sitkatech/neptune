@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FieldDefinitionService } from 'src/app/shared/services/field-definition-service';
-import * as ClassicEditor from 'src/assets/main/ckeditor/ckeditor.js';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alert } from 'src/app/shared/models/alert';
@@ -18,11 +17,9 @@ export class FieldDefinitionEditComponent implements OnInit {
   private currentUser: PersonDto;
 
   public fieldDefinition: FieldDefinitionDto;
-  public Editor = ClassicEditor;
   public editor;
 
-  public ckConfig = {"removePlugins": ["MediaEmbed", "ImageUpload"]};
-  isLoadingSubmit: boolean;
+  public isLoadingSubmit: boolean;
 
   constructor(
       private route: ActivatedRoute,
@@ -31,8 +28,7 @@ export class FieldDefinitionEditComponent implements OnInit {
       private fieldDefinitionService: FieldDefinitionService,
       private authenticationService: AuthenticationService,
       private cdr: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
       this.authenticationService.getCurrentUser().subscribe(currentUser => {
@@ -46,19 +42,12 @@ export class FieldDefinitionEditComponent implements OnInit {
       });
   }
 
-  ngOnDestroy() {
-           
+  ngOnDestroy() {      
       this.cdr.detach();
   }
 
   public currentUserIsAdmin(): boolean {
       return this.authenticationService.isUserAnAdministrator(this.currentUser);
-  }
-
-  // tell CkEditor to use the class below as its upload adapter
-  // see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/upload-adapter.html#how-does-the-image-upload-work
-  public ckEditorReady(editor) {
-    this.editor = editor;
   }
 
   saveDefinition(): void {
@@ -70,8 +59,7 @@ export class FieldDefinitionEditComponent implements OnInit {
         this.router.navigateByUrl("/labels-and-definitions").then(x => {
           this.alertService.pushAlert(new Alert(`The definition for ${this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName} was successfully updated.`, AlertContext.Success));
         });
-      }
-        ,
+      },
         error => {
           this.isLoadingSubmit = false;
           this.cdr.detectChanges();

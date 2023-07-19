@@ -22,7 +22,6 @@ import { CreateUserCallbackComponent } from './pages/create-user-callback/create
 import { AppInitService } from './app.init';
 import { FieldDefinitionListComponent } from './pages/field-definition-list/field-definition-list.component';
 import { FieldDefinitionEditComponent } from './pages/field-definition-edit/field-definition-edit.component';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { HttpErrorInterceptor } from './shared/interceptors/httpErrorInterceptor';
 import { environment } from 'src/environments/environment';
 import { AppInsightsService } from './shared/services/app-insights.service';
@@ -89,7 +88,6 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
         FormsModule,
         BrowserAnimationsModule,
         AgGridModule.withComponents([]),
-        CKEditorModule,
         DragDropModule,
         NgSelectModule,
     ],

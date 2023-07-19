@@ -29,8 +29,10 @@
             <div *ngIf="!showEditButton()" [innerHtml]="fieldDefinition.FieldDefinitionValue"></div>
         </ng-container>
         <div *ngIf="isEditing">
-            <ckeditor [editor]="Editor" [(ngModel)]="editedContent" (ready)="ckEditorReady($event)" [config]="ckConfig">
-            </ckeditor>
+            <editor #tinyMceEditor
+                [init]="{toolbar: false, menubar: false, height:200,width:250, plugins: 'quickbars'}"
+                [(ngModel)]="editedContent">
+            </editor>
             <div style="float:right;">
                 <button type="button" class="btn btn-sm btn-hippocamp mt-1 mr-1 mb-1" (click)="saveEdit()">Save</button>
                 <button type="button" class="btn btn-sm btn-secondary mt-1 mb-1" (click)="cancelEdit(p)">Cancel</button>
