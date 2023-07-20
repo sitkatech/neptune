@@ -220,7 +220,9 @@ namespace Neptune.Web.Models
                     .Select(x => x.StormwaterJurisdictionID);
 
                 var publicWaterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                    .Include(x => x.TreatmentBMPs)
                     .Include(x => x.WaterQualityManagementPlanVerifies)
+                    .Include(x => x.WaterQualityManagementPlanParcels.Select(y => y.Parcel))
                     .Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && 
                                 (x.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Active ||
                                  x.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Inactive && x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID == (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive)).ToList();
@@ -256,10 +258,8 @@ namespace Neptune.Web.Models
                 : $"StormwaterJurisdictionID NOT IN ({string.Join(",", stormwaterJurisdictionIDs)})";
         }
 
-        public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person, WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person, WaterQualityManagementPlan waterQualityManagementPlan)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-
             if (person.IsAnonymousOrUnassigned())
             {
                 switch (waterQualityManagementPlan.StormwaterJurisdiction

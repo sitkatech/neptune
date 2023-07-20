@@ -82,9 +82,8 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
 
-            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlanPrimaryKey);
-            var treatmentBmpGeoJsonFeatureCollection =
-                treatmentBMPs.ToGeoJsonFeatureCollection();
+            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlan);
+            var treatmentBmpGeoJsonFeatureCollection = treatmentBMPs.ToGeoJsonFeatureCollection();
 
             treatmentBmpGeoJsonFeatureCollection.Features.ForEach(x =>
             {
