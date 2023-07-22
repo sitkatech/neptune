@@ -14,17 +14,18 @@ select
 	wqmp.WaterQualityManagementPlanID as PrimaryKey,
     wqmp.WaterQualityManagementPlanID as WaterQualityManagementPlanID,
 	wqmp.WaterQualityManagementPlanName,
-	wqmp.WaterQualityManagementPlanBoundary,
+	wqmpb.GeometryNative as WaterQualityManagementPlanBoundary,
 	cast(case
 		when CountOfLGUs is not null then 1
 		else 0
 	end as bit) as LoadGeneratingUnitsPopulated,
 	cast(case
-		when WaterQualityManagementPlanBoundary is not null then 1
+		when wqmpb.GeometryNative is not null then 1
 		else 0
 	end as bit) as BoundaryIsDefined,
 	IsNull(ModelCount.CountOfModels, 0) as CountOfIntersectingModelBasins
 from dbo.WaterQualityManagementPlan wqmp
+left join dbo.WaterQualityManagementPlanBoundary wqmpb on wqmp.WaterQualityManagementPlanID = wqmpb.WaterQualityManagementPlanID
 	left join (
 		select
 			count(*) as CountOfLGUs,
@@ -36,9 +37,9 @@ from dbo.WaterQualityManagementPlan wqmp
 		select
 			WaterQualityManagementPlanID,
 			count(*) as CountOfModels
-		from dbo.WaterQualityManagementPlan wqmp
+		from dbo.WaterQualityManagementPlanBoundary wqmpb
 			left join dbo.ModelBasin Model
-				on Model.ModelBasinGeometry.STIntersects(wqmp.WaterQualityManagementPlanBoundary)  = 1
+				on Model.ModelBasinGeometry.STIntersects(wqmpb.GeometryNative)  = 1
 		where ModelBasinID is not null
 		group by WaterQualityManagementPlanID
 	) ModelCount on wqmp.WaterQualityManagementPlanID = ModelCount.WaterQualityManagementPlanID

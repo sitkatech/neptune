@@ -6,7 +6,7 @@ as
 Select
 	w.WaterQualityManagementPlanID as PrimaryKey,
 	w.WaterQualityManagementPlanID,
-	w.WaterQualityManagementPlanBoundary4326 as WaterQualityManagementPlanGeometry,
+	wqmpb.Geometry4326 as WaterQualityManagementPlanGeometry,
 	w.StormwaterJurisdictionID,
 	som.OrganizationName as OrganizationName,
 	ISNULL(Case
@@ -18,9 +18,8 @@ Select
 	tcs.TrashCaptureStatusTypeDisplayName
 From
 	dbo.WaterQualityManagementPlan w
-	join dbo.TrashCaptureStatusType tcs
-		on w.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
-	join dbo.vStormwaterJurisdictionOrganizationMapping som
-		on w.StormwaterJurisdictionID = som.StormwaterJurisdictionID
+    left join dbo.WaterQualityManagementPlanBoundary wqmpb on w.WaterQualityManagementPlanID = wqmpb.WaterQualityManagementPlanID
+	join dbo.TrashCaptureStatusType tcs on w.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
+	join dbo.vStormwaterJurisdictionOrganizationMapping som on w.StormwaterJurisdictionID = som.StormwaterJurisdictionID
 
 GO

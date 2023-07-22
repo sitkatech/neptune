@@ -51,23 +51,21 @@ namespace Neptune.Web.ScheduledJobs
                     DbContext.Database.ExecuteSqlCommand("EXECUTE dbo.pParcelUpdateFromStaging");
 
                     // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
-                    var parcels = DbContext.Parcels.ToList();
+                    var parcels = DbContext.ParcelGeometries.ToList();
                     foreach (var parcel in parcels)
                     {
-                        parcel.ParcelGeometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.ParcelGeometry);
+                        parcel.Geometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(parcel.GeometryNative);
                     }
 
                     DbContext.SaveChangesWithNoAuditing();
 
                     // calculate wqmp parcel intersections
-                    foreach (var wqmp in DbContext.WaterQualityManagementPlans)
+                    foreach (var waterQualityManagementPlanBoundary in DbContext.WaterQualityManagementPlanBoundaries)
                     {
-                        var waterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
-                            .Where(x => x.ParcelGeometry.Intersects(wqmp.WaterQualityManagementPlanBoundary))
-                            .ToList().Where(x => x.ParcelGeometry.Intersection(wqmp.WaterQualityManagementPlanBoundary).Area > ToleranceInSquareMeters)
+                        var waterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.ParcelGeometries.GetIntersected(waterQualityManagementPlanBoundary.GeometryNative).ToList().Where(x => x.GeometryNative.Intersection(waterQualityManagementPlanBoundary.GeometryNative).Area > ToleranceInSquareMeters)
                             .Select(x =>
                                 new WaterQualityManagementPlanParcel(
-                                    wqmp.WaterQualityManagementPlanID, x.ParcelID))
+                                    waterQualityManagementPlanBoundary.WaterQualityManagementPlanID, x.ParcelID))
                             .ToList();
                         DbContext.WaterQualityManagementPlanParcels.AddRange(waterQualityManagementPlanParcels);
                     }

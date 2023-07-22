@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity.Spatial;
 using System.Linq;
 using LtInfo.Common;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -37,14 +35,23 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
 
             // update the cached total boundary
-            waterQualityManagementPlan.WaterQualityManagementPlanBoundary = (ParcelIDs != null ? HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList() : new List<DbGeometry>())
-                .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
-            waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 = waterQualityManagementPlan
-                .WaterQualityManagementPlanBoundary != null ?
-                CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(waterQualityManagementPlan
-                    .WaterQualityManagementPlanBoundary) :
-                null;
+            var waterQualityManagementPlanBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            if (waterQualityManagementPlanBoundary == null)
+            {
+                waterQualityManagementPlanBoundary = new WaterQualityManagementPlanBoundary(waterQualityManagementPlan);
+            }
+
+            if (ParcelIDs != null)
+            {
+                var geometryNative = HttpRequestStorage.DatabaseEntities.ParcelGeometries.UnionAggregateByParcelIDs(ParcelIDs).FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                waterQualityManagementPlanBoundary.GeometryNative = geometryNative;
+                waterQualityManagementPlanBoundary.Geometry4326 = CoordinateSystemHelper.ProjectCaliforniaStatePlaneVIToWebMercator(geometryNative);
+            }
+            else
+            {
+                waterQualityManagementPlanBoundary.GeometryNative = null;
+                waterQualityManagementPlanBoundary.Geometry4326 = null;
+            }
         }
     }
 }

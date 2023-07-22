@@ -28,6 +28,7 @@ using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
@@ -46,17 +47,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         {
         }
 
-        public EditLocationViewModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
-        {
-
-        }
-
         public void UpdateModel(Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             if (IsParcelPicker.GetValueOrDefault())
             {
                 // since this is parcel picks, we don't need to reproject; the parcels are already in the correct system (State Plane)
-                var unionListGeometries = HttpRequestStorage.DatabaseEntities.Parcels.Where(x => ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList().UnionListGeometries();
+                var unionListGeometries = HttpRequestStorage.DatabaseEntities.ParcelGeometries.UnionAggregateByParcelIDs(ParcelIDs);
                 var onlandVisualTrashAssessmentAreaGeometry2771 = unionListGeometries.FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessmentAreaGeometry2771;
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(onlandVisualTrashAssessmentAreaGeometry2771);

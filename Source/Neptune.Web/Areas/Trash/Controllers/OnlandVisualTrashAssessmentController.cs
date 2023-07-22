@@ -264,9 +264,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewAddOrRemoveParcels(onlandVisualTrashAssessment, viewModel);
             }
 
-            var unionOfSelectedParcelGeometries = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => viewModel.ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
-                .UnionListGeometries().FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+            var unionOfSelectedParcelGeometries = HttpRequestStorage.DatabaseEntities.ParcelGeometries.UnionAggregateByParcelIDs(viewModel.ParcelIDs).FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
             
             onlandVisualTrashAssessment.DraftGeometry = unionOfSelectedParcelGeometries;
 

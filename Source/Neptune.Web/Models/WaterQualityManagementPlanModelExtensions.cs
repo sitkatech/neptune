@@ -23,13 +23,13 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static LayerGeoJson GetBoundaryLayerGeoJson(this Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public static LayerGeoJson GetBoundaryLayerGeoJson(this WaterQualityManagementPlan waterQualityManagementPlan)
         {
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326);
             featureCollection.Features.AddRange(new List<Feature> { feature });
 
-            LayerGeoJson boundaryLayerGeoJson = new LayerGeoJson("wqmpBoundary", featureCollection, "#4782ff",
+            var boundaryLayerGeoJson = new LayerGeoJson("wqmpBoundary", featureCollection, "#4782ff",
                 1,
                 LayerInitialVisibility.Show);
 

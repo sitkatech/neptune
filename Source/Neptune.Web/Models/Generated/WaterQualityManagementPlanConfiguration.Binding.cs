@@ -39,9 +39,7 @@ namespace Neptune.Web.Models
             Property(x => x.RecordedWQMPAreaInAcres).HasColumnName(@"RecordedWQMPAreaInAcres").HasColumnType("decimal").IsOptional().HasPrecision(5,1);
             Property(x => x.TrashCaptureStatusTypeID).HasColumnName(@"TrashCaptureStatusTypeID").HasColumnType("int").IsRequired();
             Property(x => x.TrashCaptureEffectiveness).HasColumnName(@"TrashCaptureEffectiveness").HasColumnType("int").IsOptional();
-            Property(x => x.WaterQualityManagementPlanBoundary).HasColumnName(@"WaterQualityManagementPlanBoundary").HasColumnType("geometry").IsOptional();
             Property(x => x.WaterQualityManagementPlanModelingApproachID).HasColumnName(@"WaterQualityManagementPlanModelingApproachID").HasColumnType("int").IsRequired();
-            Property(x => x.WaterQualityManagementPlanBoundary4326).HasColumnName(@"WaterQualityManagementPlanBoundary4326").HasColumnType("geometry").IsOptional();
             Property(x => x.WaterQualityManagementPlanAreaInAcres).HasColumnName(@"WaterQualityManagementPlanAreaInAcres").HasColumnType("float").IsOptional();
 
             // Foreign keys

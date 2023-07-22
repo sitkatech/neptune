@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.DbSpatial;
@@ -36,9 +35,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewAndRequiresJurisdictionsFeature]
         public ContentResult Union(UnionOfParcelsViewModel viewModel)
         {
-            var unionOfParcels = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => viewModel.ParcelIDs.Contains(x.ParcelID)).Select(x => x.ParcelGeometry).ToList()
-                .UnionListGeometries();
+            var unionOfParcels = HttpRequestStorage.DatabaseEntities.ParcelGeometries.UnionAggregateByParcelIDs(viewModel.ParcelIDs);
 
             var featureCollection = new FeatureCollection();
 

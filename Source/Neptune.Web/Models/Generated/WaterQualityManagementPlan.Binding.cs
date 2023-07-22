@@ -33,6 +33,7 @@ namespace Neptune.Web.Models
             this.SourceControlBMPs = new HashSet<SourceControlBMP>();
             this.TrashGeneratingUnit4326s = new HashSet<TrashGeneratingUnit4326>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+            this.WaterQualityManagementPlanBoundaries = new HashSet<WaterQualityManagementPlanBoundary>();
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
             this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
@@ -41,7 +42,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesTypeID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, DbGeometry waterQualityManagementPlanBoundary, int waterQualityManagementPlanModelingApproachID, DbGeometry waterQualityManagementPlanBoundary4326, double? waterQualityManagementPlanAreaInAcres) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesTypeID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID, int? trashCaptureEffectiveness, int waterQualityManagementPlanModelingApproachID, double? waterQualityManagementPlanAreaInAcres) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -67,9 +68,7 @@ namespace Neptune.Web.Models
             this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
             this.TrashCaptureEffectiveness = trashCaptureEffectiveness;
-            this.WaterQualityManagementPlanBoundary = waterQualityManagementPlanBoundary;
             this.WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlanModelingApproachID;
-            this.WaterQualityManagementPlanBoundary4326 = waterQualityManagementPlanBoundary4326;
             this.WaterQualityManagementPlanAreaInAcres = waterQualityManagementPlanAreaInAcres;
         }
 
@@ -116,7 +115,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return DirtyModelNodes.Any() || LoadGeneratingUnits.Any() || NereidResults.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
+            return DirtyModelNodes.Any() || LoadGeneratingUnits.Any() || NereidResults.Any() || ProjectLoadGeneratingUnits.Any() || ProjectNereidResults.Any() || QuickBMPs.Any() || SourceControlBMPs.Any() || TrashGeneratingUnit4326s.Any() || TreatmentBMPs.Any() || (WaterQualityManagementPlanBoundary != null) || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
@@ -171,6 +170,11 @@ namespace Neptune.Web.Models
                 dependentObjects.Add(typeof(TreatmentBMP).Name);
             }
 
+            if((WaterQualityManagementPlanBoundary != null))
+            {
+                dependentObjects.Add(typeof(WaterQualityManagementPlanBoundary).Name);
+            }
+
             if(WaterQualityManagementPlanDocuments.Any())
             {
                 dependentObjects.Add(typeof(WaterQualityManagementPlanDocument).Name);
@@ -191,7 +195,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(DirtyModelNode).Name, typeof(LoadGeneratingUnit).Name, typeof(NereidResult).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(DirtyModelNode).Name, typeof(LoadGeneratingUnit).Name, typeof(NereidResult).Name, typeof(ProjectLoadGeneratingUnit).Name, typeof(ProjectNereidResult).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TrashGeneratingUnit4326).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanBoundary).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -261,6 +265,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
+            foreach(var x in WaterQualityManagementPlanBoundaries.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
             foreach(var x in WaterQualityManagementPlanDocuments.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -302,9 +311,7 @@ namespace Neptune.Web.Models
         public decimal? RecordedWQMPAreaInAcres { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
-        public DbGeometry WaterQualityManagementPlanBoundary { get; set; }
         public int WaterQualityManagementPlanModelingApproachID { get; set; }
-        public DbGeometry WaterQualityManagementPlanBoundary4326 { get; set; }
         public double? WaterQualityManagementPlanAreaInAcres { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
@@ -318,6 +325,9 @@ namespace Neptune.Web.Models
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
         public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
+        public virtual ICollection<WaterQualityManagementPlanBoundary> WaterQualityManagementPlanBoundaries { get; set; }
+        [NotMapped]
+        public WaterQualityManagementPlanBoundary WaterQualityManagementPlanBoundary { get { return WaterQualityManagementPlanBoundaries.SingleOrDefault(); } set { WaterQualityManagementPlanBoundaries = new List<WaterQualityManagementPlanBoundary>{value};} }
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }

@@ -28,7 +28,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView);
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", treatmentBmps.ToGeoJsonFeatureCollectionForTrashMap(), "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
 
-            var parcels = HttpRequestStorage.DatabaseEntities.Parcels.Include(x => x.WaterQualityManagementPlanParcels).Include(x => x.WaterQualityManagementPlanParcels.Select(y => y.WaterQualityManagementPlan)).Where(x => x.WaterQualityManagementPlanParcels.Any()).ToList();
+            var parcels = HttpRequestStorage.DatabaseEntities.Parcels
+                .Include(x => x.ParcelGeometries)
+                .Include(x => x.WaterQualityManagementPlanParcels).Include(x => x.WaterQualityManagementPlanParcels.Select(y => y.WaterQualityManagementPlan)).Where(x => x.WaterQualityManagementPlanParcels.Any()).ToList();
 
             var parcelLayerGeoJson = new LayerGeoJson("Parcels", parcels.ToGeoJsonFeatureCollectionForTrashMap(), "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
 

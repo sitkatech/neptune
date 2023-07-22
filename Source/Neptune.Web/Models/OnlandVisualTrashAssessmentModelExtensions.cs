@@ -99,24 +99,24 @@ namespace Neptune.Web.Models
             return null;
         }
 
-        public static IQueryable<Parcel> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta)
+        public static IQueryable<ParcelGeometry> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta)
         {
             if (!ovta.OnlandVisualTrashAssessmentObservations.Any())
             {
-                return new List<Parcel>().AsQueryable();
+                return new List<ParcelGeometry>().AsQueryable();
             }
 
             var transect = ovta.OnlandVisualTrashAssessmentObservations.Count == 1
                 ? ovta.OnlandVisualTrashAssessmentObservations.Single().LocationPoint // don't attempt to calculate the transect
                 : ovta.GetTransect();
 
-            return HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry.Intersects(transect));
+            return HttpRequestStorage.DatabaseEntities.ParcelGeometries.GetIntersected(transect);
         }
 
         public static FeatureCollection GetAssessmentAreaFeatureCollection(this OnlandVisualTrashAssessment ovta)
         {
             var featureCollection = new FeatureCollection();
-            var parcelGeoms = ovta.GetParcelsViaTransect().Select(x => x.ParcelGeometry4326).ToList();
+            var parcelGeoms = ovta.GetParcelsViaTransect().Select(x => x.Geometry4326).ToList();
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(parcelGeoms.UnionListGeometries());
             featureCollection.Features.Add(feature);
             return featureCollection;
@@ -135,8 +135,8 @@ namespace Neptune.Web.Models
             // ... and the wrong SRID would cause this next lookup to fail bigly 
             var parcelIDs = draftGeometry == null
                 ? onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x => x.ParcelID)
-                : HttpRequestStorage.DatabaseEntities.Parcels
-                    .Where(x => draftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
+                : HttpRequestStorage.DatabaseEntities.ParcelGeometries
+                    .Where(x => draftGeometry.Contains(x.GeometryNative)).Select(x => x.ParcelID);
 
             return parcelIDs.ToList();
         }

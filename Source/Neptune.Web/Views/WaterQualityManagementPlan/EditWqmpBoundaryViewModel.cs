@@ -43,13 +43,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpBoundaryViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
-        {
-        }
-
         public void UpdateModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             var newWaterQualityManagementPlanParcels = new List<WaterQualityManagementPlanParcel>();
+            var waterQualityManagementPlanBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            if (waterQualityManagementPlanBoundary == null)
+            {
+                waterQualityManagementPlanBoundary = new WaterQualityManagementPlanBoundary(waterQualityManagementPlan);
+            }
 
             if (WktAndAnnotations != null)
             {
@@ -57,18 +58,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     DbGeometry.FromText(x.Wkt, CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID).ToSqlGeometry().MakeValid()
                         .ToDbGeometry());
                 var newGeometry4326 = dbGeometries.ToList().UnionListGeometries().FixSrid(CoordinateSystemHelper.WGS_1984_SRID);
-                newWaterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.Parcels
-                    .Where(x => x.ParcelGeometry4326.Intersects(newGeometry4326))
+                newWaterQualityManagementPlanParcels = HttpRequestStorage.DatabaseEntities.ParcelGeometries
+                    .Where(x => x.Geometry4326.Intersects(newGeometry4326))
                     .ToList()
                     .Select(x =>
                         new WaterQualityManagementPlanParcel(waterQualityManagementPlan.WaterQualityManagementPlanID, x.ParcelID))
                     .ToList();
 
                 // since this is coming from the browser, we have to transform to State Plane
-                waterQualityManagementPlan.WaterQualityManagementPlanBoundary =
+                waterQualityManagementPlanBoundary.GeometryNative =
                     CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(newGeometry4326);
 
-                waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 =
+                waterQualityManagementPlanBoundary.Geometry4326 =
                     newGeometry4326;
             }
 
@@ -79,8 +80,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             if (WktAndAnnotations == null)
             {
-                waterQualityManagementPlan.WaterQualityManagementPlanBoundary = null;
-                waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 = null;
+                waterQualityManagementPlanBoundary.GeometryNative = null;
+                waterQualityManagementPlanBoundary.Geometry4326 = null;
             }
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();

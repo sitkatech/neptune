@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -51,8 +52,8 @@ namespace Neptune.Web.Controllers
         {
             var searchString = term.Trim();
             var allParcelsMatchingSearchString =
-                HttpRequestStorage.DatabaseEntities.Parcels.Where(
-                    x => x.ParcelGeometry != null && (x.ParcelAddress + ", "+ x.ParcelZipCode).Contains(searchString)).OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode).ThenBy(x => x.ParcelNumber).Take(10).ToList();
+                HttpRequestStorage.DatabaseEntities.ParcelGeometries.Include(x => x.Parcel).Where(
+                    x => (x.Parcel.ParcelAddress + ", "+ x.Parcel.ParcelZipCode).Contains(searchString)).OrderBy(x => x.Parcel.ParcelAddress + ", " + x.Parcel.ParcelZipCode).ThenBy(x => x.Parcel.ParcelNumber).Take(10).Select(x => x.Parcel).ToList();
 
             var listItems = allParcelsMatchingSearchString.Select(pfr =>
             {
@@ -66,11 +67,11 @@ namespace Neptune.Web.Controllers
         public JsonResult FindSimpleByAddress(string term)
         {
             var searchString = term.Trim();
-            var listItems = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => x.ParcelGeometry != null && x.ParcelAddress.Contains(searchString))
-                .OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode)
-                .ThenBy(x => x.ParcelNumber)
-                .Take(10)
+            var listItems = HttpRequestStorage.DatabaseEntities.ParcelGeometries.Include(x => x.Parcel)
+                .Where(x => x.Parcel.ParcelAddress.Contains(searchString))
+                .OrderBy(x => x.Parcel.ParcelAddress + ", " + x.Parcel.ParcelZipCode)
+                .ThenBy(x => x.Parcel.ParcelNumber)
+                .Take(10).Select(x => x.Parcel)
                 .ToList()
                 .Select(x => new ParcelSimple(x))
                 .ToList();
@@ -83,7 +84,7 @@ namespace Neptune.Web.Controllers
         {
             var searchString = term.Trim();
             var allParcelsMatchingSearchString =
-                HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry != null && x.ParcelNumber.Contains(searchString)).OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode).ThenBy(x => x.ParcelNumber).Take(10).ToList();
+                HttpRequestStorage.DatabaseEntities.ParcelGeometries.Include(x => x.Parcel).Where(x => x.Parcel.ParcelNumber.Contains(searchString)).OrderBy(x => x.Parcel.ParcelAddress + ", " + x.Parcel.ParcelZipCode).ThenBy(x => x.Parcel.ParcelNumber).Take(10).Select(x => x.Parcel).ToList();
 
             var listItems = allParcelsMatchingSearchString.Select(pfr =>
             {
@@ -98,11 +99,11 @@ namespace Neptune.Web.Controllers
         public JsonResult FindSimpleByAPN(string term)
         {
             var searchString = term.Trim();
-            var listItems = HttpRequestStorage.DatabaseEntities.Parcels
-                .Where(x => x.ParcelGeometry != null && x.ParcelNumber.Contains(searchString))
-                .OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode)
-                .ThenBy(x => x.ParcelNumber)
-                .Take(10)
+            var listItems = HttpRequestStorage.DatabaseEntities.ParcelGeometries.Include(x => x.Parcel)
+                .Where(x => x.Parcel.ParcelNumber.Contains(searchString))
+                .OrderBy(x => x.Parcel.ParcelAddress + ", " + x.Parcel.ParcelZipCode)
+                .ThenBy(x => x.Parcel.ParcelNumber)
+                .Take(10).Select(x => x.Parcel)
                 .ToList()
                 .Select(x => new ParcelSimple(x))
                 .ToList();
