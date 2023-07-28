@@ -36,7 +36,7 @@ export class ModeledPerformanceComponent implements OnInit {
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: DelineationUpsertDto[];
   public zoomMapToDefaultExtent: boolean = true;
-  public mapHeight: string = '400px';
+  public mapHeight: string = '750px';
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
   public onEachFeatureCallback?: (feature, layer) => void;
   public map: L.Map;

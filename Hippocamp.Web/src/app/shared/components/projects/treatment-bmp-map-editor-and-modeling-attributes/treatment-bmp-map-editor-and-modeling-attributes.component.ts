@@ -55,7 +55,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   private originalDoesNotIncludeTreatmentBMPs: boolean;
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
-  public mapHeight: string = '400px';
+  public mapHeight: string = '750px';
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
   public onEachFeatureCallback?: (feature, layer) => void;
 

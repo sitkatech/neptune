@@ -39,7 +39,7 @@ export class DelineationsComponent implements OnInit {
   public delineations: DelineationUpsertDto[];
   private originalDelineations: string;
   public zoomMapToDefaultExtent: boolean = true;
-  public mapHeight: string = '500px';
+  public mapHeight: string = '750px';
   public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
   public onEachFeatureCallback?: (feature, layer) => void;
 
