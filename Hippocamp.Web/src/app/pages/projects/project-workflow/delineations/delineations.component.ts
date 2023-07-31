@@ -672,6 +672,7 @@ export class DelineationsComponent implements OnInit {
       this.onSubmit();
     }
     this.isEditingLocation = !this.isEditingLocation;
+    $('.leaflet-interactive').css('cursor','crosshair');
     this.updateTreatmentBMPsLayer();
   }
   public treatmentBMPHasDelineation(treatmentBMPID: number) {
