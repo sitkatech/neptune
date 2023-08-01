@@ -11,7 +11,7 @@
             <div class="col-auto" *ngIf="!isEditing">
                 <div class="row">
                     <div class="col-sm-2 pl-0 pr-0">
-                        <button type="button" class="btn btn-link" (click)="enterEdit()">
+                        <button type="button" class="btn btn-link" [hidden]="isEditing" *ngIf="showEditButton()" (click)="enterEdit($event)">
                             <i class="fa fa-pencil-square-o" attr.aria-label="Edit the definition for {{fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName}}">
                             </i>
                         </button>
@@ -40,11 +40,11 @@
         </div>
     </ng-template>
     <ng-container *ngIf="showEditButton()">
-        <div class="d-inline-block" (mouseenter)="notEditingMouseEnter()" (mouseleave)="notEditingMouseLeave()">
+        <div class="d-inline-block" >
             <span style="overflow:hidden; text-overflow:ellipsis">
                 {{getLabelText()}}
                 <i class="fas fa-question-circle small" style="cursor: help;" #p="ngbPopover" [ngbPopover]="popContent"
-                    [popoverTitle]="popTitle" triggers="manual" [autoClose]="false"
+                    [popoverTitle]="popTitle" [autoClose]="button_clicked?'inside':'outside'"
                     popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
                 </i>
             </span>
@@ -54,7 +54,7 @@
         <span> 
             {{getLabelText()}}
             <i class="fas fa-question-circle small" style="cursor: help;" [ngbPopover]="popContent"  popoverClass="popover-override"
-                [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName" triggers="mouseenter:mouseleave" 
+                [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName"
                 container="body" [ngClass]="{'text-white': white}">
             </i>
         </span>
