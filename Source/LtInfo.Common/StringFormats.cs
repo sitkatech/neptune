@@ -49,7 +49,7 @@ namespace LtInfo.Common
             return thisString.Substring(0, length);
         }
 
-        public static string EncloseInParaentheses(this string value)
+        public static string EncloseInParentheses(this string value)
         {
             if (value == null || value.IsEmpty())
             {
@@ -518,6 +518,33 @@ namespace LtInfo.Common
         public static bool DoesHtmlStringContainAbsoluteUrlWithApplicationDomainReference(this string htmlString, Regex containAbsoluteUrlWithApplicationDomainReferenceRegEx)
         {
             return htmlString != null && containAbsoluteUrlWithApplicationDomainReferenceRegEx.IsMatch(htmlString);
+        }
+
+        public static string IndentLinesInStringByAmount(string linesToIndent, uint indentLevel, string indentToken)
+        {
+            if (linesToIndent == null)
+            {
+                return null;
+            }
+            if (linesToIndent == String.Empty)
+            {
+                return String.Empty;
+            }
+            if (indentLevel == 0 || String.IsNullOrEmpty(indentToken))
+            {
+                return linesToIndent;
+            }
+
+            var indentString = String.Empty;
+            for (var i = 0; i < indentLevel; i++)
+            {
+                indentString += indentToken;
+            }
+
+            var lineMatches = Regex.Matches(linesToIndent, "[^\r\n]+([\r\n]+)?");
+            var newLines = lineMatches.Cast<Match>().Select(x => indentString + x.Value);
+            var newText = String.Join(String.Empty, newLines);
+            return newText;
         }
     }
 }

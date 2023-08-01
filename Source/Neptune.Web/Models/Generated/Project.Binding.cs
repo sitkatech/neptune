@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs, bool calculateOCTAM2Tier2Scores, bool shareOCTAM2Tier2Scores, DateTime? oCTAM2Tier2ScoresLastSharedDate, string oCTAWatersheds, double? pollutantVolume, double? pollutantMetals, double? pollutantBacteria, double? pollutantNutrients, double? pollutantTSS, double? tPI, double? sEA, double? dryWeatherWQLRI, double? wetWeatherWQLRI, double? areaTreatedAcres, double? imperviousAreaTreatedAcres) : this()
+        public Project(int projectID, string projectName, int organizationID, int stormwaterJurisdictionID, int projectStatusID, int primaryContactPersonID, int createPersonID, DateTime dateCreated, string projectDescription, string additionalContactInformation, bool doesNotIncludeTreatmentBMPs, bool calculateOCTAM2Tier2Scores, bool shareOCTAM2Tier2Scores, DateTime? oCTAM2Tier2ScoresLastSharedDate, string oCTAWatersheds, double? pollutantVolume, double? pollutantMetals, double? pollutantBacteria, double? pollutantNutrients, double? pollutantTSS, double? tPI, double? sEA, double? dryWeatherWQLRI, double? wetWeatherWQLRI, double? areaTreatedAcres, double? imperviousAreaTreatedAcres, int? updatePersonID, DateTime? dateUpdated) : this()
         {
             this.ProjectID = projectID;
             this.ProjectName = projectName;
@@ -63,6 +63,8 @@ namespace Neptune.Web.Models
             this.WetWeatherWQLRI = wetWeatherWQLRI;
             this.AreaTreatedAcres = areaTreatedAcres;
             this.ImperviousAreaTreatedAcres = imperviousAreaTreatedAcres;
+            this.UpdatePersonID = updatePersonID;
+            this.DateUpdated = dateUpdated;
         }
 
         /// <summary>
@@ -256,6 +258,8 @@ namespace Neptune.Web.Models
         public double? WetWeatherWQLRI { get; set; }
         public double? AreaTreatedAcres { get; set; }
         public double? ImperviousAreaTreatedAcres { get; set; }
+        public int? UpdatePersonID { get; set; }
+        public DateTime? DateUpdated { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ProjectID; } set { ProjectID = value; } }
 
@@ -270,6 +274,7 @@ namespace Neptune.Web.Models
         public virtual ProjectStatus ProjectStatus { get; set; }
         public virtual Person CreatePerson { get; set; }
         public virtual Person PrimaryContactPerson { get; set; }
+        public virtual Person UpdatePerson { get; set; }
 
         public static class FieldLengths
         {

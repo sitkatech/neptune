@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
-
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("View Funding Source")]

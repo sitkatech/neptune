@@ -836,12 +836,6 @@ select:-webkit-autofill {
   max-height: 200px;
   overflow: auto;
 }
-.googleChart {
-  width: 100%;
-}
-.google-visualization-charteditor-dialog {
-  z-index: 1000;
-}
 .systemText {
   font-style: italic;
 }

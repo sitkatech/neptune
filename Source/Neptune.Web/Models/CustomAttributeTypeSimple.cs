@@ -1,6 +1,4 @@
-﻿using LtInfo.Common.Views;
-
-namespace Neptune.Web.Models
+﻿namespace Neptune.Web.Models
 {
     public class CustomAttributeTypeSimple
     {

@@ -20,11 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System;
 using System.Net.Mail;
-using Neptune.Web.Controllers;
 using LtInfo.Common;
 using LtInfo.Common.Email;
 using LtInfo.Common.Views;
-using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {

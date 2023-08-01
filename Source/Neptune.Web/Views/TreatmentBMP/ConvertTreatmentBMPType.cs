@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
-
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public abstract class ConvertTreatmentBMPType : LtInfo.Common.Mvc.TypedWebPartialViewPage<ConvertTreatmentBMPTypeViewData, ConvertTreatmentBMPTypeViewModel>

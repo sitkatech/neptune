@@ -28,7 +28,7 @@ namespace LtInfo.Common.Mvc
 {
     public static class ToSelectListExtensions
     {
-        public const string DefaultEmptyFirstRowText = "<Choose one>";
+        private const string DefaultEmptyFirstRowText = "<Choose one>";
 
         /// <summary>
         /// Returns an IEnumerable&lt;SelectListItem&gt; by using the specified func for data value field.

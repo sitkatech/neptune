@@ -1,7 +1,5 @@
-﻿using System;
-using GeoJSON.Net.Feature;
+﻿using GeoJSON.Net.Feature;
 using Hangfire;
-using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -14,7 +12,6 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
 using Index = Neptune.Web.Views.RegionalSubbasin.Index;

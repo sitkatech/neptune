@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared

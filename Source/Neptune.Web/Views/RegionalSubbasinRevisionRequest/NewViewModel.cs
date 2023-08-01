@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Entity.Spatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Views.Shared;
 

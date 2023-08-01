@@ -27,9 +27,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[RecordedWQMPAreaInAcres] [decimal](5, 1) NULL,
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
 	[TrashCaptureEffectiveness] [int] NULL,
-	[WaterQualityManagementPlanBoundary] [geometry] NULL,
 	[WaterQualityManagementPlanModelingApproachID] [int] NOT NULL,
-	[WaterQualityManagementPlanBoundary4326] [geometry] NULL,
 	[WaterQualityManagementPlanAreaInAcres] [float] NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
@@ -40,7 +38,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[WaterQualityManagementPlanName] ASC,
 	[StormwaterJurisdictionID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID] FOREIGN KEY([HydrologicSubareaID])
@@ -96,35 +94,3 @@ GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [CK_WaterQualityManagementPlan_TrashCaptureEffectivenessMustBeBetween1And99] CHECK  (([TrashCaptureEffectiveness] IS NULL OR [TrashCaptureEffectiveness]>(0) AND [TrashCaptureEffectiveness]<(100)))
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [CK_WaterQualityManagementPlan_TrashCaptureEffectivenessMustBeBetween1And99]
-GO
-SET ARITHABORT ON
-SET CONCAT_NULL_YIELDS_NULL ON
-SET QUOTED_IDENTIFIER ON
-SET ANSI_NULLS ON
-SET ANSI_PADDING ON
-SET ANSI_WARNINGS ON
-SET NUMERIC_ROUNDABORT OFF
-
-GO
-CREATE SPATIAL INDEX [SPATIAL_WaterQualityManagementPlan_WaterQualityManagementPlanBoundary] ON [dbo].[WaterQualityManagementPlan]
-(
-	[WaterQualityManagementPlanBoundary]
-)USING  GEOMETRY_AUTO_GRID 
-WITH (BOUNDING_BOX =(1830180, 637916, 1880090, 690975), 
-CELLS_PER_OBJECT = 8, PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-SET ARITHABORT ON
-SET CONCAT_NULL_YIELDS_NULL ON
-SET QUOTED_IDENTIFIER ON
-SET ANSI_NULLS ON
-SET ANSI_PADDING ON
-SET ANSI_WARNINGS ON
-SET NUMERIC_ROUNDABORT OFF
-
-GO
-CREATE SPATIAL INDEX [SPATIAL_WaterQualityManagementPlan_WaterQualityManagementPlanBoundary4326] ON [dbo].[WaterQualityManagementPlan]
-(
-	[WaterQualityManagementPlanBoundary4326]
-)USING  GEOMETRY_AUTO_GRID 
-WITH (BOUNDING_BOX =(-119, 33, -117, 34), 
-CELLS_PER_OBJECT = 8, PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]

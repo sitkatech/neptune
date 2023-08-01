@@ -9,6 +9,7 @@ using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
@@ -48,6 +49,7 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanView();
             var waterQualityManagementPlanVerifications = HttpRequestStorage.DatabaseEntities
                 .WaterQualityManagementPlanVerifies
+                .Include(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization)
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID))
                 .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
                 .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
@@ -82,9 +84,8 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
 
-            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlanPrimaryKey);
-            var treatmentBmpGeoJsonFeatureCollection =
-                treatmentBMPs.ToGeoJsonFeatureCollection();
+            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlan);
+            var treatmentBmpGeoJsonFeatureCollection = treatmentBMPs.ToGeoJsonFeatureCollection();
 
             treatmentBmpGeoJsonFeatureCollection.Features.ForEach(x =>
             {
@@ -99,9 +100,10 @@ namespace Neptune.Web.Controllers
 
             var boundaryAreaFeatureCollection = new FeatureCollection();
 
-            if (waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 != null)
+            var dbGeometry = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326;
+            if (dbGeometry != null)
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
                 boundaryAreaFeatureCollection.Features.AddRange(new List<Feature> { feature });
             }
 
@@ -120,7 +122,7 @@ namespace Neptune.Web.Controllers
 
             var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
-                waterQualityManagementPlan.WaterQualityManagementPlanBoundary4326 != null ? 
+                dbGeometry != null ? 
                     BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons) :
                     BoundingBox.GetBoundingBox(new List<StormwaterJurisdiction> {wqmpJurisdiction}));
 
@@ -430,12 +432,12 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
             }
 
-            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
 
             viewModel.UpdateModels(waterQualityManagementPlan);
             SetMessageForDisplay($"Successfully edited {FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
 
-            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
 
             if (!(oldBoundary == null && newBoundary == null))
             {
@@ -450,7 +452,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
         {
             var wqmpParcelGeometries =
-                waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel.ParcelGeometry4326);
+                waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel.ParcelGeometry?.Geometry4326);
             var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
             var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), wqmpParcelGeometries.Any() ? 
                     new BoundingBox(wqmpParcelGeometries) : BoundingBox.GetBoundingBox(new List<StormwaterJurisdiction> { wqmpJurisdiction }));
@@ -474,7 +476,7 @@ namespace Neptune.Web.Controllers
         public ViewResult EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var viewModel = new EditWqmpBoundaryViewModel(waterQualityManagementPlan);
+            var viewModel = new EditWqmpBoundaryViewModel();
             return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
         }
 
@@ -489,12 +491,12 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
             }
 
-            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
 
             viewModel.UpdateModel(waterQualityManagementPlan);
             SetMessageForDisplay($"Successfully edited boundary for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
 
-            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
+            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
 
             if (!(oldBoundary == null && newBoundary == null))
             {
@@ -733,7 +735,7 @@ namespace Neptune.Web.Controllers
 
             if (waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
             {
-                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlan.WaterQualityManagementPlanBoundary, null);
+                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative, null);
                 NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, HttpRequestStorage.DatabaseEntities);
             }
 

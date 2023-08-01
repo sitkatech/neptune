@@ -12,12 +12,7 @@ using Neptune.Web.Common.EsriAsynchronousJob;
 using Neptune.Web.Models;
 using System.Net.Mail;
 using LtInfo.Common.Email;
-using System.Data.Entity.Spatial;
-using System.Data.Entity.SqlServer;
-using System.Data.SqlTypes;
 using System.Text.Json;
-using Microsoft.SqlServer.Types;
-using NetTopologySuite.Geometries;
 
 namespace Neptune.Web.ScheduledJobs
 {

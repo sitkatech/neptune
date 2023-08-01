@@ -10,7 +10,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Security.Shared;
-using Neptune.Web.Views.FundingSource;
 using Neptune.Web.Views.Shared;
 using Detail = Neptune.Web.Views.FundingSource.Detail;
 using DetailViewData = Neptune.Web.Views.FundingSource.DetailViewData;

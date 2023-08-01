@@ -20,15 +20,14 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
-using System.Web;
 using System.Web.Mvc;
-using LtInfo.Common.BootstrapWrappers;
-using LtInfo.Common.Mvc;
 
 namespace LtInfo.Common
 {
     public static class BooleanFormats
     {
+        private const string DefaultEmptyFirstRowText = "<Choose one>";
+
         public static string ToYesNo(this bool? value, string nullString)
         {
             return value.HasValue ? ToYesNo(value) : nullString;
@@ -53,7 +52,7 @@ namespace LtInfo.Common
                 case "no":
                     return false;
                 default:
-                    throw new ArgumentOutOfRangeException(String.Format("Invalid boolean string of {0}", value));
+                    throw new ArgumentOutOfRangeException($"Invalid boolean string of {value}");
             }
         }
 
@@ -61,24 +60,10 @@ namespace LtInfo.Common
         {
             return new[]
                 {
-                    new SelectListItem {Text = ToSelectListExtensions.DefaultEmptyFirstRowText, Value = string.Empty},
+                    new SelectListItem {Text = DefaultEmptyFirstRowText, Value = string.Empty},
                     new SelectListItem {Text = "No", Value = false.ToString()},
                     new SelectListItem {Text = "Yes", Value = true.ToString()}
                 };
-        }
-
-        public static bool FromCheckedStringToBool(this string value)
-        {
-            switch (value.ToLower())
-            {
-                case "checked":
-                    return true;
-                case null:
-                case "":
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException(String.Format("Invalid boolean string of {0}", value));
-            }
         }
 
         public static string ToRequiredOptional(this bool? value)
@@ -118,7 +103,7 @@ namespace LtInfo.Common
 
         public static string ToDisplayNoneOrEmpty(this bool value)
         {
-            return (value) ? " style=\"display:none\" " : String.Empty;
+            return (value) ? " style=\"display:none\" " : string.Empty;
         }
 
         public static string ToCheckedOrEmpty(this bool? value)
@@ -128,7 +113,7 @@ namespace LtInfo.Common
 
         public static string ToCheckedOrEmpty(this bool value)
         {
-            return (value) ? " checked=\"checked\" " : String.Empty;
+            return (value) ? " checked=\"checked\" " : string.Empty;
         }
 
         public static string ToSelectedOrEmpty(this bool? value)
@@ -138,7 +123,7 @@ namespace LtInfo.Common
 
         public static string ToSelectedOrEmpty(this bool value)
         {
-            return (value) ? " selected=\"selected\" " : String.Empty;
+            return (value) ? " selected=\"selected\" " : string.Empty;
         }
 
         public static string ToDisabledOrEmpty(this bool? value)
@@ -148,41 +133,7 @@ namespace LtInfo.Common
 
         public static string ToDisabledOrEmpty(this bool value)
         {
-            return (value) ? " disabled=\"disabled\" " : String.Empty;
-        }
-
-        public static HtmlString ToCheckboxImageOrEmpty(this bool value)
-        {
-            return new HtmlString(value ? String.Format(" {0} ", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-ok-circle", "Yes")) : String.Empty);
-        }
-
-        public static HtmlString ToCheckboxImageOrEmpty(this bool? value)
-        {
-            return ToCheckboxImageOrEmpty(value ?? false);
-        }
-
-        public static HtmlString ToCheckboxImageOrEmptyForGrid(this bool value)
-        {
-            var spanForFilter = new TagBuilder("span") {InnerHtml = value.ToYesNo()};
-            spanForFilter.AddCssClass("sr-only");
-
-            var div = new TagBuilder("div")
-            {
-                InnerHtml = $"{spanForFilter}{value.ToCheckboxImageOrEmpty()}",
-                Attributes = { {"style", "height: 1em; width: 1em; display: block; margin: auto;" } }
-            };
-
-            return div.ToString().ToHTMLFormattedString();
-        }
-
-        public static HtmlString ToCheckboxImageOrEmptyForGrid(this bool? value)
-        {
-            return ToCheckboxImageOrEmpty(value ?? false);
-        }
-
-        public static string ToYesOrEmpty(this bool value)
-        {
-            return (value) ? "Yes" : String.Empty;
+            return (value) ? " disabled=\"disabled\" " : string.Empty;
         }
     }
 }

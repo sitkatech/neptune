@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using LtInfo.Common.Models;

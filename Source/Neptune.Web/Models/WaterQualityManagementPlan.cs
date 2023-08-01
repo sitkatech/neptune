@@ -63,7 +63,7 @@ namespace Neptune.Web.Models
         {
             return
                 (this
-                    .WaterQualityManagementPlanBoundary?.Area.GetValueOrDefault() ?? 0) * DbSpatialHelper.SquareMetersToAcres;
+                    .WaterQualityManagementPlanBoundary?.GeometryNative?.Area.GetValueOrDefault() ?? 0) * DbSpatialHelper.SquareMetersToAcres;
         }
 
         public string GetLatestOandMVerificationDate()
@@ -92,10 +92,8 @@ namespace Neptune.Web.Models
 
         public DbGeometry GetCatchmentGeometry()
         {
-            return WaterQualityManagementPlanBoundary;
+            return WaterQualityManagementPlanBoundary?.GeometryNative;
         }
-
-
 
         public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
         {

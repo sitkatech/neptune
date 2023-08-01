@@ -24,7 +24,6 @@ using System.Drawing;
 using System.Linq;
 using System.Web;
 using Neptune.Web.Controllers;
-using LtInfo.Common;
 
 namespace Neptune.Web.Common
 {

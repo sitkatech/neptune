@@ -18,16 +18,13 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
-using System.Text.RegularExpressions;
 using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Models;
 using Keystone.Common.OpenID;
-using LtInfo.Common.DesignByContract;
 using Person = Neptune.Web.Models.Person;
 
 namespace Neptune.Web.Common

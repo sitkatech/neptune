@@ -18,13 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using LtInfo.Common.ModalDialog;
+
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
-using System.Web.Mvc;
-using LtInfo.Common.BootstrapWrappers;
 
 namespace Neptune.Web.Views.Shared
 {

@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.Web.Models;
-using Neptune.Web.Views;
 
 namespace Neptune.Web.Areas.Trash.Views.TreatmentBMP
 {

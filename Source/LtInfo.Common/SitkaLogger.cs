@@ -106,8 +106,12 @@ namespace LtInfo.Common
         /// </summary>
         public void LogDetailedInfoMessage(string infoMessage, SitkaDebugInfo debugInfo)
         {
-            var s = string.Format("{0}\r\n{1}", infoMessage, debugInfo);
-            Logger.Info(s);
+            Logger.Info($"{infoMessage}\r\n{debugInfo}");
+        }
+
+        public void LogInfoMessage(string infoMessage)
+        {
+            Logger.Info(infoMessage);
         }
 
         public static string DebugInfo(HttpRequest request)
@@ -129,7 +133,7 @@ namespace LtInfo.Common
             {
                 var userHostIpAddress = IPAddress.Parse(request.UserHostAddress);
                 rdns = DnsUtility.GetReverseDns(userHostIpAddress);
-                whoisInfo = CommonUtility.IndentLinesInStringByAmount(WhoisUtility.Lookup(userHostIpAddress), 12, " ");
+                whoisInfo = StringFormats.IndentLinesInStringByAmount(WhoisUtility.Lookup(userHostIpAddress), 12, " ");
             }
             return String.Format("IP Address: {1}{0}Hostname: {2}{0}Whois Info: {0}{3}{0}URL: {4}{0}{0}Begin Http Request:-->{0}{5}{6}{0}<--End Http Request", Environment.NewLine, request.UserHostAddress, rdns, whoisInfo, request.Url.AbsoluteUri, requestContent, truncationWarning);
         }

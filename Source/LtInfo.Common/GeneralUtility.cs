@@ -61,30 +61,6 @@ namespace LtInfo.Common
             return new FileInfo(localAssemblyPathString);
         }
 
-        public static string Coalesce(string first, string second)
-        {
-            if (String.IsNullOrEmpty(first))
-                return second;
-
-            return first;
-        }
-
-        /// <summary>
-        /// Returns all the values of an enumerated class
-        /// </summary>
-        public static List<T> EnumGetValues<T>() where T : struct
-        {
-            return Enum.GetValues(typeof(T)).Cast<T>().ToList();
-        }
-
-        public static string Coalesce(decimal? first, string second)
-        {
-            if (!first.HasValue)
-                return second;
-
-            return first.ToString();
-        }
-
         public static Dictionary<string, object> ToDictionary(this object data)
         {
             const BindingFlags attr = BindingFlags.Public | BindingFlags.Instance;
@@ -176,14 +152,14 @@ namespace LtInfo.Common
 
         public static string HtmlizeEncodeLineBreaks(string stringToEncode)
         {
-            if (String.IsNullOrEmpty(stringToEncode))
-                return String.Empty;
+            if (string.IsNullOrEmpty(stringToEncode))
+                return string.Empty;
             return stringToEncode.Replace("\n", "<br/>");
         }
 
         public static string TrimWhitespaceEvenIfNull(string possiblyNullableThingToTrim)
         {
-            return possiblyNullableThingToTrim == null ? null : possiblyNullableThingToTrim.Trim();
+            return possiblyNullableThingToTrim?.Trim();
         }
 
         /// <summary>
@@ -191,7 +167,7 @@ namespace LtInfo.Common
         /// </summary>
         public static string TrimWhitespaceMapNullToEmptyString(string possiblyNullableThingToTrim)
         {
-            return possiblyNullableThingToTrim == null ? String.Empty : possiblyNullableThingToTrim.Trim();
+            return possiblyNullableThingToTrim == null ? string.Empty : possiblyNullableThingToTrim.Trim();
         }
 
         /// <summary>
@@ -199,7 +175,7 @@ namespace LtInfo.Common
         /// </summary>
         public static bool IsNullOrEmptyOrOnlyWhitespace(string stringToCheck)
         {
-            return stringToCheck == null || String.IsNullOrEmpty(stringToCheck.Trim());
+            return stringToCheck == null || string.IsNullOrEmpty(stringToCheck.Trim());
         }
 
         public static bool IsNullableType(this Type type)
@@ -233,21 +209,9 @@ namespace LtInfo.Common
             foreach (char c in asciiString)
             {
                 int tmp = c;
-                hex += String.Format("{0:x2}", Convert.ToUInt32(tmp.ToString()));
+                hex += string.Format("{0:x2}", Convert.ToUInt32(tmp.ToString()));
             }
             return hex;
-        }
-
-        public static decimal CelsiusToFahrenheit(string temperatureCelsius)
-        {
-            decimal celsius = Decimal.Parse(temperatureCelsius);
-            return (celsius * 9 / 5) + 32;
-        }
-
-        public static decimal FahrenheitToCelsius(string temperatureFahrenheit)
-        {
-            decimal fahrenheit = Decimal.Parse(temperatureFahrenheit);
-            return (fahrenheit - 32) * 5 / 9;
         }
 
         public static bool HasDuplicates<T>(this IEnumerable<T> items)
@@ -257,29 +221,9 @@ namespace LtInfo.Common
             return fullCount > distinctCount;
         }
 
-        public static bool ContainsCaseInsensitive(this string source, string value)
-        {
-            if(source == null || value == null)
-                return false;
-
-            var results = source.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
-            return results == -1 ? false : true;
-        }
-
-        public static bool ByteArrayCompare(this byte[] a1, byte[] a2)
-        {
-            if (a1 == null || a2 == null)
-                return a1 == a2;
-
-            if (a1.Length != a2.Length)
-                return false;
-
-            return !a1.Where((t, i) => t != a2[i]).Any();
-        }
-
         public static string CompressPhoneNumber(string uncompressed)
         {
-            if (String.IsNullOrEmpty(uncompressed))
+            if (string.IsNullOrEmpty(uncompressed))
                 return uncompressed;
 
             return RemoveNoise(uncompressed.Trim(), new[] { '(', ')', '-', '.', ' ' });            
@@ -288,7 +232,7 @@ namespace LtInfo.Common
         // "compresses" a string by removing any of the "noise" characters
         public static string RemoveNoise(string p, char[] noise)
         {
-            if (String.IsNullOrEmpty(p))
+            if (string.IsNullOrEmpty(p))
                 return "";
 
             int j = 0;
@@ -434,8 +378,8 @@ namespace LtInfo.Common
             var bytes = new byte[str.Length >> 1];
             for (var i = 0; i < str.Length; i += 2)
             {
-                var highDigit = HexDigits.IndexOf(Char.ToUpperInvariant(str[i]));
-                var lowDigit = HexDigits.IndexOf(Char.ToUpperInvariant(str[i + 1]));
+                var highDigit = HexDigits.IndexOf(char.ToUpperInvariant(str[i]));
+                var lowDigit = HexDigits.IndexOf(char.ToUpperInvariant(str[i + 1]));
                 if (highDigit == -1 || lowDigit == -1)
                 {
                     throw new ArgumentException("The string contains an invalid digit.", "s");

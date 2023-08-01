@@ -16,8 +16,8 @@ begin
 		(
 			-- again, intentionally having this in an inner query; it is much faster to have it stintersects both sets
 			select wqmp.WaterQualityManagementPlanID, p.ParcelID
-			from dbo.WaterQualityManagementPlan wqmp, dbo.Parcel p
-			where wqmp.WaterQualityManagementPlanBoundary.STIntersection(p.ParcelGeometry).STArea() > @toleranceInSquareMeters -- tolerance here is even less, .05 acre
+			from dbo.WaterQualityManagementPlanBoundary wqmp, dbo.ParcelGeometry p
+			where wqmp.GeometryNative.STIntersection(p.GeometryNative).STArea() > @toleranceInSquareMeters -- tolerance here is even less, .05 acre
 		) a
 	)
 end

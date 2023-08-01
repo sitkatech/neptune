@@ -76,6 +76,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
+            modelBuilder.Configurations.Add(new ParcelGeometryConfiguration());
             modelBuilder.Configurations.Add(new ParcelStagingConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new PrecipitationZoneConfiguration());
@@ -116,6 +117,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new TreatmentBMPTypeAssessmentObservationTypeConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPTypeCustomAttributeTypeConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanBoundaryConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanDocumentConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanParcelConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanPhotoConfiguration());
@@ -198,6 +200,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
+        public virtual DbSet<ParcelGeometry> ParcelGeometries { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<ParcelStaging> ParcelStagings { get; set; }
         public virtual DbSet<Person> People { get; set; }
@@ -238,6 +241,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
         public virtual DbSet<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
         public virtual DbSet<TreatmentBMPType> TreatmentBMPTypes { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanBoundary> WaterQualityManagementPlanBoundaries { get; set; }
         public virtual DbSet<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual DbSet<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
         public virtual DbSet<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get; set; }
@@ -383,11 +387,6 @@ namespace Neptune.Web.Models
 
                 case "FundingSource":
                     return FundingSources.GetFundingSource(primaryKey);
-
-                case "GoogleChartType":
-                    var googleChartType = GoogleChartType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
-                    return googleChartType;
 
                 case "HRUCharacteristicLandUseCode":
                     var hRUCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
@@ -541,6 +540,9 @@ namespace Neptune.Web.Models
                     var oVTASection = OVTASection.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(oVTASection, "OVTASection", primaryKey);
                     return oVTASection;
+
+                case "ParcelGeometry":
+                    return ParcelGeometries.GetParcelGeometry(primaryKey);
 
                 case "Parcel":
                     return Parcels.GetParcel(primaryKey);
@@ -756,6 +758,9 @@ namespace Neptune.Web.Models
                     var underlyingHydrologicSoilGroup = UnderlyingHydrologicSoilGroup.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(underlyingHydrologicSoilGroup, "UnderlyingHydrologicSoilGroup", primaryKey);
                     return underlyingHydrologicSoilGroup;
+
+                case "WaterQualityManagementPlanBoundary":
+                    return WaterQualityManagementPlanBoundaries.GetWaterQualityManagementPlanBoundary(primaryKey);
 
                 case "WaterQualityManagementPlanDevelopmentType":
                     var waterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

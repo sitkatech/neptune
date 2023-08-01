@@ -48,14 +48,6 @@ namespace LtInfo.Common.Mvc
             {
                 return TryModelBindNullableInt(bindingContext);
             }
-            if (bindingContext.ModelType == typeof(Money))
-            {
-                return TryModelBindMoney(bindingContext);
-            }
-            if (bindingContext.ModelType == typeof(Money?))
-            {
-                return TryModelBindNullableMoney(bindingContext);
-            }
             if (bindingContext.ModelType == typeof(HtmlString))
             {
                 return TryModelBindHtmlString(bindingContext);
@@ -128,33 +120,6 @@ namespace LtInfo.Common.Mvc
             if (!int.TryParse(valueProviderResult.AttemptedValue, NumberStyles.Any, new NumberFormatInfo(), out result))
             {
                 bindingContext.ModelState.AddModelError(modelName, string.Format("Could not parse {0} for field '{1}' to an integer.", valueProviderResult.AttemptedValue, modelName));
-            }
-            return result;
-        }
-
-        private static Money TryModelBindMoney(ModelBindingContext bindingContext)
-        {
-            var result = TryModelBindNullableMoney(bindingContext);
-            if (!result.HasValue)
-            {
-                bindingContext.ModelState.AddModelError(bindingContext.ModelName, string.Format("A valid currency value is required for field '{0}'.", bindingContext.ModelName));
-                return 0;
-            }
-            return result.Value;
-        }
-
-        private static Money? TryModelBindNullableMoney(ModelBindingContext bindingContext)
-        {
-            var modelName = bindingContext.ModelName;
-            var valueProviderResult = bindingContext.ValueProvider.GetValue(modelName);
-            if (CheckIfValueProviderResultIsNull(valueProviderResult))
-            {
-                return null;
-            }
-            Money result;
-            if (!Money.TryParse(valueProviderResult.AttemptedValue, out result))
-            {
-                bindingContext.ModelState.AddModelError(modelName, string.Format("The value '{0}' is not in a valid currency format.", valueProviderResult.AttemptedValue));
             }
             return result;
         }

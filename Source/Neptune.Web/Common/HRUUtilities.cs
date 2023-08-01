@@ -1,7 +1,5 @@
 using log4net;
-using LtInfo.Common;
 using Neptune.Web.Common.EsriAsynchronousJob;
-using Neptune.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -27,7 +27,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Common
 {

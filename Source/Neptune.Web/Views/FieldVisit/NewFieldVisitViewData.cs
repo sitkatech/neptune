@@ -23,7 +23,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Models;

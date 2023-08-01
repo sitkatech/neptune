@@ -41,6 +41,8 @@ namespace Neptune.Web.Models
             Property(x => x.WetWeatherWQLRI).HasColumnName(@"WetWeatherWQLRI").HasColumnType("float").IsOptional();
             Property(x => x.AreaTreatedAcres).HasColumnName(@"AreaTreatedAcres").HasColumnType("float").IsOptional();
             Property(x => x.ImperviousAreaTreatedAcres).HasColumnName(@"ImperviousAreaTreatedAcres").HasColumnType("float").IsOptional();
+            Property(x => x.UpdatePersonID).HasColumnName(@"UpdatePersonID").HasColumnType("int").IsOptional();
+            Property(x => x.DateUpdated).HasColumnName(@"DateUpdated").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.Organization).WithMany(b => b.Projects).HasForeignKey(c => c.OrganizationID).WillCascadeOnDelete(false); // FK_Project_Organization_OrganizationID
@@ -48,6 +50,7 @@ namespace Neptune.Web.Models
             HasRequired(a => a.ProjectStatus).WithMany(b => b.Projects).HasForeignKey(c => c.ProjectStatusID).WillCascadeOnDelete(false); // FK_Project_ProjectStatus_ProjectStatusID
             HasRequired(a => a.PrimaryContactPerson).WithMany(b => b.ProjectsWhereYouAreThePrimaryContactPerson).HasForeignKey(c => c.PrimaryContactPersonID).WillCascadeOnDelete(false); // FK_Project_Person_PrimaryContactPersonID_PersonID
             HasRequired(a => a.CreatePerson).WithMany(b => b.ProjectsWhereYouAreTheCreatePerson).HasForeignKey(c => c.CreatePersonID).WillCascadeOnDelete(false); // FK_Project_Person_CreatePersonID_PersonID
+            HasOptional(a => a.UpdatePerson).WithMany(b => b.ProjectsWhereYouAreTheUpdatePerson).HasForeignKey(c => c.UpdatePersonID).WillCascadeOnDelete(false); // FK_Project_Person_UpdatePersonID_PersonID
         }
     }
 }

@@ -25,7 +25,6 @@ using System.Linq;
 using System.Text;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.Views;
 
 namespace LtInfo.Common
 {

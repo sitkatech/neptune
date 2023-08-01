@@ -30,7 +30,6 @@ using Neptune.Web.Controllers;
 using Neptune.Web.UnitTestCommon;
 using LtInfo.Common;
 using NUnit.Framework;
-using AssertCustom = LtInfo.Common.AssertCustom;
 
 namespace Neptune.Web.Models
 {

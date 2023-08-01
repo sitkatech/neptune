@@ -33,13 +33,13 @@ namespace LtInfo.Common
 {
     public class ViewEngineLocations
     {
-        public List<String> ViewLocations;
-        public List<String> PartialViewLocations;
-        public List<String> AreaViewLocations;
-        public List<String> AreaPartialViewLocations;
+        public List<string> ViewLocations;
+        public List<string> PartialViewLocations;
+        public List<string> AreaViewLocations;
+        public List<string> AreaPartialViewLocations;
     }
 
-    public abstract class SitkaGlobalBase : SitkaHttpApplication
+    public abstract class SitkaGlobalBase : HttpApplication
     {
         public const string CustomErrorMessageDivID = "customErrorMessageDiv";
         public const string CustomErrorMessageReplaceToken = "CUSTOM ERROR HERE";

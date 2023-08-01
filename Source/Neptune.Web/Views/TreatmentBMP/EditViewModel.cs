@@ -28,7 +28,6 @@ using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
-using Newtonsoft.Json;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {

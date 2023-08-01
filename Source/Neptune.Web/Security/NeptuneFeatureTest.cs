@@ -25,7 +25,6 @@ using System.Reflection;
 using System.Web.Mvc;
 using ApprovalTests;
 using ApprovalTests.Reporters;
-using LtInfo.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using LtInfo.Common.EntityModelBinding;

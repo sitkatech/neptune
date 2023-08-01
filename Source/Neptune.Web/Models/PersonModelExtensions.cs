@@ -219,8 +219,7 @@ namespace Neptune.Web.Models
                     .Where(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID != (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
                     .Select(x => x.StormwaterJurisdictionID);
 
-                var publicWaterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                    .Include(x => x.WaterQualityManagementPlanVerifies)
+                var publicWaterQualityManagementPlans = GetWQMPsImpl()
                     .Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) && 
                                 (x.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Active ||
                                  x.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Inactive && x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID == (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive)).ToList();
@@ -228,10 +227,17 @@ namespace Neptune.Web.Models
             }
 
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanView();
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .Include(x => x.WaterQualityManagementPlanVerifies)
+            var waterQualityManagementPlans =  GetWQMPsImpl()
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return waterQualityManagementPlans;
+        }
+
+        private static IQueryable<WaterQualityManagementPlan> GetWQMPsImpl()
+        {
+            return HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .Include(x => x.TreatmentBMPs)
+                .Include(x => x.WaterQualityManagementPlanVerifies)
+                .Include(x => x.WaterQualityManagementPlanParcels.Select(y => y.Parcel));
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson)
@@ -256,10 +262,8 @@ namespace Neptune.Web.Models
                 : $"StormwaterJurisdictionID NOT IN ({string.Join(",", stormwaterJurisdictionIDs)})";
         }
 
-        public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person, WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person, WaterQualityManagementPlan waterQualityManagementPlan)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-
             if (person.IsAnonymousOrUnassigned())
             {
                 switch (waterQualityManagementPlan.StormwaterJurisdiction

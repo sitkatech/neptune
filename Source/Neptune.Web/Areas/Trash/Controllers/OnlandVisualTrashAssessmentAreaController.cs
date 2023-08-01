@@ -129,7 +129,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ViewResult EditLocation(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
-            var viewModel = new EditLocationViewModel(onlandVisualTrashAssessmentArea);
+            var viewModel = new EditLocationViewModel();
             return ViewEditLocation(onlandVisualTrashAssessmentArea, viewModel);
         }
 
@@ -161,7 +161,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
 
 
-            return Json(new {ParcelIDs = HttpRequestStorage.DatabaseEntities.Parcels.Where(x=>x.ParcelGeometry.Intersects(onlandVisualTrashAssessmentArea.TransectLine)).Select(x=>x.ParcelID).ToList()}, JsonRequestBehavior.AllowGet);
+            return Json(
+                new
+                {
+                    ParcelIDs = HttpRequestStorage.DatabaseEntities.ParcelGeometries
+                        .GetIntersected(onlandVisualTrashAssessmentArea.TransectLine).Select(x => x.ParcelID).ToList()
+                }, JsonRequestBehavior.AllowGet);
         }
 
 

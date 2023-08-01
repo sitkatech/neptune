@@ -1,5 +1,3 @@
-using System;
-
 namespace Neptune.Web.Models
 {
     public partial class OnlandVisualTrashAssessmentPreliminarySourceIdentificationType

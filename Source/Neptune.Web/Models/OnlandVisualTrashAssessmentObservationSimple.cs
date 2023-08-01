@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
-using System.Globalization;
 using System.Linq;
-using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 

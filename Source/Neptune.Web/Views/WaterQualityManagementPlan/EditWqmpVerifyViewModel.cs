@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Neptune.Web.Common;
-using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
-using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {

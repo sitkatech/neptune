@@ -19,14 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-using Neptune.Web.Security;
-
 namespace Neptune.Web.Views.Shared
 {
     public abstract class SiteLayout : LtInfo.Common.Mvc.TypedWebViewPage<NeptuneViewData>

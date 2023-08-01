@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity.Spatial;
 using System.Linq;
-using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
 using MoreLinq;
 using Neptune.Web.Common;
 using Neptune.Web.Models;

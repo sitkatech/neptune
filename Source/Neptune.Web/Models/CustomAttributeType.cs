@@ -2,7 +2,6 @@
 using System.Linq;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Views;
-using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
