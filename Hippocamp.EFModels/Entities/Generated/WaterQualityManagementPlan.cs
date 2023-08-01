@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using NetTopologySuite.Geometries;
 
 namespace Hippocamp.EFModels.Entities
 {
     [Table("WaterQualityManagementPlan")]
     [Index("WaterQualityManagementPlanName", "StormwaterJurisdictionID", Name = "AK_WaterQualityManagementPlan_WaterQualityManagementPlanName_StormwaterJurisdictionID", IsUnique = true)]
-    [Index("WaterQualityManagementPlanBoundary", Name = "SPATIAL_WaterQualityManagementPlan_WaterQualityManagementPlanBoundary")]
-    [Index("WaterQualityManagementPlanBoundary4326", Name = "SPATIAL_WaterQualityManagementPlan_WaterQualityManagementPlanBoundary4326")]
     public partial class WaterQualityManagementPlan
     {
         public WaterQualityManagementPlan()
@@ -78,11 +75,7 @@ namespace Hippocamp.EFModels.Entities
         public decimal? RecordedWQMPAreaInAcres { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
-        [Column(TypeName = "geometry")]
-        public Geometry WaterQualityManagementPlanBoundary { get; set; }
         public int WaterQualityManagementPlanModelingApproachID { get; set; }
-        [Column(TypeName = "geometry")]
-        public Geometry WaterQualityManagementPlanBoundary4326 { get; set; }
         public double? WaterQualityManagementPlanAreaInAcres { get; set; }
 
         [ForeignKey("HydrologicSubareaID")]
@@ -115,6 +108,8 @@ namespace Hippocamp.EFModels.Entities
         [ForeignKey("WaterQualityManagementPlanStatusID")]
         [InverseProperty("WaterQualityManagementPlans")]
         public virtual WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get; set; }
+        [InverseProperty("WaterQualityManagementPlan")]
+        public virtual WaterQualityManagementPlanBoundary WaterQualityManagementPlanBoundary { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]
         public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; }
         [InverseProperty("WaterQualityManagementPlan")]

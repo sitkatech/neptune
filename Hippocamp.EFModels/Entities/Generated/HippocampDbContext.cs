@@ -87,6 +87,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
+        public virtual DbSet<ParcelGeometry> ParcelGeometries { get; set; }
         public virtual DbSet<ParcelStaging> ParcelStagings { get; set; }
         public virtual DbSet<PermitType> PermitTypes { get; set; }
         public virtual DbSet<Person> People { get; set; }
@@ -146,6 +147,7 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
         public virtual DbSet<UnderlyingHydrologicSoilGroup> UnderlyingHydrologicSoilGroups { get; set; }
         public virtual DbSet<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanBoundary> WaterQualityManagementPlanBoundaries { get; set; }
         public virtual DbSet<WaterQualityManagementPlanDevelopmentType> WaterQualityManagementPlanDevelopmentTypes { get; set; }
         public virtual DbSet<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual DbSet<WaterQualityManagementPlanDocumentType> WaterQualityManagementPlanDocumentTypes { get; set; }
@@ -864,6 +866,14 @@ namespace Hippocamp.EFModels.Entities
                     .HasConstraintName("FK_Organization_Person_PrimaryContactPersonID_PersonID");
             });
 
+            modelBuilder.Entity<ParcelGeometry>(entity =>
+            {
+                entity.HasOne(d => d.Parcel)
+                    .WithOne(p => p.ParcelGeometry)
+                    .HasForeignKey<ParcelGeometry>(d => d.ParcelID)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
             modelBuilder.Entity<ParcelStaging>(entity =>
             {
                 entity.HasOne(d => d.UploadedByPerson)
@@ -1515,6 +1525,18 @@ namespace Hippocamp.EFModels.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
+            modelBuilder.Entity<WaterQualityManagementPlanBoundary>(entity =>
+            {
+                entity.HasKey(e => e.WaterQualityManagementPlanGeometryID)
+                    .HasName("PK_WaterQualityManagementPlanGeometry_WaterQualityManagementPlanGeometryID");
+
+                entity.HasOne(d => d.WaterQualityManagementPlan)
+                    .WithOne(p => p.WaterQualityManagementPlanBoundary)
+                    .HasForeignKey<WaterQualityManagementPlanBoundary>(d => d.WaterQualityManagementPlanID)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WaterQualityManagementPlanGeometry_WaterQualityManagementPlan_WaterQualityManagementPlanID");
+            });
+
             modelBuilder.Entity<WaterQualityManagementPlanDevelopmentType>(entity =>
             {
                 entity.Property(e => e.WaterQualityManagementPlanDevelopmentTypeID).ValueGeneratedNever();
@@ -1926,8 +1948,6 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vPyQgisWaterQualityManagementPlanLGUInput>(entity =>
             {
                 entity.ToView("vPyQgisWaterQualityManagementPlanLGUInput");
-
-                entity.Property(e => e.WQMPID).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<vPyQgisWaterQualityManagementPlanTGUInput>(entity =>
