@@ -45,7 +45,6 @@ export default class TinyMCEHelpers {
         }; 
 
         let resultConfig = this.OverrideConfig(config, overrideConfig)
-        console.log(resultConfig)
         return resultConfig;
     }
 
