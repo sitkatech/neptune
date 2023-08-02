@@ -339,7 +339,7 @@
                     {
                         <div>
                             <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
-                            <a class="btn btn-neptune @(true ? "btn-default disabled" : String.Empty)" href="@ViewDataTyped.EditWqmpBoundaryUrl">Refine Area</a>
+                            <a class="btn btn-neptune @(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null ? "btn-default disabled" : String.Empty)" href="@ViewDataTyped.EditWqmpBoundaryUrl">Refine Area</a>
                         </div>
                     }
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
