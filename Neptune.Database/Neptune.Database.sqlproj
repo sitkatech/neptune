@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Neptune.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{18896e6a-80c1-423a-b354-62466f4de70d}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Neptune.Database</RootNamespace>
+    <AssemblyName>Neptune.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="HangFire" />
+    <Folder Include="Scripts" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Functions" />
+    <Folder Include="dbo\Procs" />
+    <Folder Include="dbo\Views" />
+    <Folder Include="dbo\User Defined Types" />
+    <Folder Include="HangFire\Tables" />
+    <Folder Include="Scripts\LookupTables" />
+    <Folder Include="Scripts\PreReleaseScripts" />
+    <Folder Include="Scripts\ReleaseScripts" />
+    <Folder Include="Scripts\Utility" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Neptune.Database.publish.xml" />
+    <None Include="Scripts\PreReleaseScripts\README.md" />
+    <None Include="Scripts\ReleaseScripts\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Scripts\LookupTables\Script.PostDeployment.LookupTables.sql" />
+    <Build Include="Scripts\PreReleaseScripts\Script.PreDeployment.ReleaseScripts.sql" />
+    <Build Include="Scripts\ReleaseScripts\Script.PostDeployment.ReleaseScripts.sql" />
+    <Build Include="Scripts\Utility\Script.PostDeployment.Utility.sql" />
+    <Build Include="HangFire\HangFire.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\Script.PreDeployment.sql" />
+  </ItemGroup>
+  <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <releaseScriptFolder ParameterType="System.String" Required="true" />
+      <releaseScriptFileName ParameterType="System.String" Required="true" />
+      <projectName ParameterType="System.String" Required="true" />
+      <title ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs"><![CDATA[
+
+        var files = Directory.GetFiles(releaseScriptFolder, "*.sql");
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("/*");
+        sb.AppendLine(title + " Script");
+        sb.AppendLine("--------------------------------------------------------------------------------------");
+        sb.AppendLine("This file is generated on every build, DO NOT modify.");
+        sb.AppendLine("--------------------------------------------------------------------------------------");
+        sb.AppendLine("*/");
+        sb.AppendLine("");
+        sb.AppendLine("PRINT N'" + projectName + " - " + releaseScriptFileName +"';");
+        sb.AppendLine("GO");
+        sb.AppendLine("");
+
+        foreach (var file in files.OrderBy(f => f))
+        {
+            if (file.Contains(releaseScriptFileName))
+            {
+              continue;
+            }
+
+            var fileName = file.Replace(releaseScriptFolder, "");
+
+            sb.AppendLine(":r \"." + fileName + "\"");
+            sb.AppendLine("GO");
+                    
+        }
+        using (System.IO.StreamWriter file = new System.IO.StreamWriter(Path.Combine(releaseScriptFolder, releaseScriptFileName)))
+        {
+          file.WriteLine(sb.ToString()); 
+        }
+
+]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="CustomBuildStep" BeforeTargets="BeforeBuild">
+    <ScriptDeploymentGenerator projectName="$(MSBuildProjectName)" title="Post-Deployment" releaseScriptFolder="Scripts\\ReleaseScripts" releaseScriptFileName="Script.PostDeployment.ReleaseScripts.sql" />
+    <ScriptDeploymentGenerator projectName="$(MSBuildProjectName)" title="Pre-Deployment" releaseScriptFolder="Scripts\\PreReleaseScripts" releaseScriptFileName="Script.PreDeployment.ReleaseScripts.sql" />
+    <ScriptDeploymentGenerator projectName="$(MSBuildProjectName)" title="Lookup-Table" releaseScriptFolder="Scripts\\LookupTables" releaseScriptFileName="Script.PostDeployment.LookupTables.sql" />
+  </Target>
+</Project>
