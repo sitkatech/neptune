@@ -43,10 +43,19 @@
         <div class="d-inline-block" >
             <span style="overflow:hidden; text-overflow:ellipsis">
                 {{getLabelText()}}
-                <i class="fas fa-question-circle small" style="cursor: help;" #p="ngbPopover" [ngbPopover]="popContent"
-                    [popoverTitle]="popTitle" [autoClose]="button_clicked?'inside':'outside'"
-                    popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
-                </i>
+
+                <ng-container *ngIf="!isEditing else isEditingTemplate">
+                    <i class="fas fa-question-circle small" style="cursor: help;" #p="ngbPopover" [ngbPopover]="popContent"
+                        [popoverTitle]="popTitle" [autoClose]="'outside'"
+                        popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
+                    </i>
+                </ng-container>
+                <ng-template #isEditingTemplate>
+                    <i class="fas fa-question-circle small" style="cursor: help;" #editingPopover="ngbPopover" [ngbPopover]="popContent"
+                        [popoverTitle]="popTitle" [autoClose]="false"
+                        popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
+                    </i>
+                </ng-template>
             </span>
         </div>
     </ng-container>

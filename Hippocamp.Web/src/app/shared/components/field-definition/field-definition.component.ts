@@ -24,7 +24,8 @@ export class FieldDefinitionComponent implements OnInit {
     @Input() inline: boolean = true;
     @Input() white?: boolean;
     @ViewChild('tinyMceEditor') tinyMceEditor : EditorComponent;
-    @ViewChild('p') public popover: NgbPopover;
+    @ViewChild('p') public p: NgbPopover;
+    @ViewChild('editingPopover') public editingPopover: NgbPopover;
     @ViewChild('popContent') public content: any;
     public tinyMceConfig: object;
 
@@ -87,6 +88,10 @@ export class FieldDefinitionComponent implements OnInit {
 
         this.editedContent = this.fieldDefinition.FieldDefinitionValue;
         this.isEditing = true;
+
+        setTimeout(() => {
+          this.editingPopover.open()
+        }, 0);
     }
 
     public cancelEdit(): void {
@@ -98,7 +103,14 @@ export class FieldDefinitionComponent implements OnInit {
         this.isLoading = true;
         
         this.fieldDefinition.FieldDefinitionValue = this.editedContent;
-        this.fieldDefinitionService.updateFieldDefinition(this.fieldDefinition).subscribe(x => this.loadFieldDefinition(x),
+        this.fieldDefinitionService.updateFieldDefinition(this.fieldDefinition).subscribe(x => {
+          this.loadFieldDefinition(x);
+          
+          setTimeout(() => {
+            this.p.open();  
+          }, 250);
+          
+        },
             error => {
                 this.isLoading = false;
                 this.alertService.pushAlert(new Alert("There was an error updating the field definition", AlertContext.Danger));
