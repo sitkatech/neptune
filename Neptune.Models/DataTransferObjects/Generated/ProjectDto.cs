@@ -1,0 +1,74 @@
+//  IMPORTANT:
+//  This file is generated. Your changes will be lost.
+//  Use the corresponding partial class for customizations.
+//  Source Table: [dbo].[Project]
+using System;
+
+
+namespace Neptune.Models.DataTransferObjects
+{
+    public partial class ProjectDto
+    {
+        public int ProjectID { get; set; }
+        public string ProjectName { get; set; }
+        public OrganizationDto Organization { get; set; }
+        public StormwaterJurisdictionDto StormwaterJurisdiction { get; set; }
+        public ProjectStatusDto ProjectStatus { get; set; }
+        public PersonDto PrimaryContactPerson { get; set; }
+        public PersonDto CreatePerson { get; set; }
+        public DateTime DateCreated { get; set; }
+        public string ProjectDescription { get; set; }
+        public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
+        public bool CalculateOCTAM2Tier2Scores { get; set; }
+        public bool ShareOCTAM2Tier2Scores { get; set; }
+        public DateTime? OCTAM2Tier2ScoresLastSharedDate { get; set; }
+        public string OCTAWatersheds { get; set; }
+        public double? PollutantVolume { get; set; }
+        public double? PollutantMetals { get; set; }
+        public double? PollutantBacteria { get; set; }
+        public double? PollutantNutrients { get; set; }
+        public double? PollutantTSS { get; set; }
+        public double? TPI { get; set; }
+        public double? SEA { get; set; }
+        public double? DryWeatherWQLRI { get; set; }
+        public double? WetWeatherWQLRI { get; set; }
+        public double? AreaTreatedAcres { get; set; }
+        public double? ImperviousAreaTreatedAcres { get; set; }
+        public PersonDto UpdatePerson { get; set; }
+        public DateTime? DateUpdated { get; set; }
+    }
+
+    public partial class ProjectSimpleDto
+    {
+        public int ProjectID { get; set; }
+        public string ProjectName { get; set; }
+        public System.Int32 OrganizationID { get; set; }
+        public System.Int32 StormwaterJurisdictionID { get; set; }
+        public System.Int32 ProjectStatusID { get; set; }
+        public System.Int32 PrimaryContactPersonID { get; set; }
+        public System.Int32 CreatePersonID { get; set; }
+        public DateTime DateCreated { get; set; }
+        public string ProjectDescription { get; set; }
+        public string AdditionalContactInformation { get; set; }
+        public bool DoesNotIncludeTreatmentBMPs { get; set; }
+        public bool CalculateOCTAM2Tier2Scores { get; set; }
+        public bool ShareOCTAM2Tier2Scores { get; set; }
+        public DateTime? OCTAM2Tier2ScoresLastSharedDate { get; set; }
+        public string OCTAWatersheds { get; set; }
+        public double? PollutantVolume { get; set; }
+        public double? PollutantMetals { get; set; }
+        public double? PollutantBacteria { get; set; }
+        public double? PollutantNutrients { get; set; }
+        public double? PollutantTSS { get; set; }
+        public double? TPI { get; set; }
+        public double? SEA { get; set; }
+        public double? DryWeatherWQLRI { get; set; }
+        public double? WetWeatherWQLRI { get; set; }
+        public double? AreaTreatedAcres { get; set; }
+        public double? ImperviousAreaTreatedAcres { get; set; }
+        public System.Int32? UpdatePersonID { get; set; }
+        public DateTime? DateUpdated { get; set; }
+    }
+
+}
