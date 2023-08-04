@@ -296,6 +296,60 @@
     <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanPriority.sql" />
     <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanStatus.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Views\dbo.vFieldVisitDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerAssessmentAreaExport.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerDelineation.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerJurisdiction.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerLandUseBlock.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerMaskLayer.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerObservationPointExport.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerOCTAPrioritization.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerOnlandVisualTrashAssessmentArea.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerParcel.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerRegionalSubbasin.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTransectLineExport.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnit.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnitLoad.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerWaterQualityManagementPlan.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerWatershed.sql" />
+    <Build Include="dbo\Views\dbo.vModelingResultUnitConversion.sql" />
+    <Build Include="dbo\Views\dbo.vMostRecentTreatmentBMPAssessment.sql" />
+    <Build Include="dbo\Views\dbo.vNereidBMPColocation.sql" />
+    <Build Include="dbo\Views\dbo.vNereidLoadingInput.sql" />
+    <Build Include="dbo\Views\dbo.vNereidProjectLoadingInput.sql" />
+    <Build Include="dbo\Views\dbo.vNereidProjectRegionalSubbasinCentralizedBMP.sql" />
+    <Build Include="dbo\Views\dbo.vNereidProjectTreatmentBMPRegionalSubbasin.sql" />
+    <Build Include="dbo\Views\dbo.vNereidRegionalSubbasinCentralizedBMP.sql" />
+    <Build Include="dbo\Views\dbo.vNereidTreatmentBMPRegionalSubbasin.sql" />
+    <Build Include="dbo\Views\dbo.vOnlandVisualTrashAssessmentAreaProgress.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBICentralizedBMPLoadGeneratingUnit.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBILandUseStatistic.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBITreatmentBMP.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBIWaterQualityManagementPlan.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBIWaterQualityManagementPlanOAndMVerification.sql" />
+    <Build Include="dbo\Views\dbo.vProjectDryWeatherWQLRIScore.sql" />
+    <Build Include="dbo\Views\dbo.vProjectGrantScore.sql" />
+    <Build Include="dbo\Views\dbo.vProjectLoadGeneratingResult.sql" />
+    <Build Include="dbo\Views\dbo.vProjectLoadReducingResult.sql" />
+    <Build Include="dbo\Views\dbo.vProjectWetWeatherWQLRIScore.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisDelineationLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisDelineationTGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisLandUseBlockTGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisModelBasinLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisProjectDelineationLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisRegionalSubbasinLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisWaterQualityManagementPlanLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisWaterQualityManagementPlanTGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstream.sql" />
+    <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstreamCatchmentGeometry4326.sql" />
+    <Build Include="dbo\Views\dbo.vStormwaterJurisdictionOrganizationMapping.sql" />
+    <Build Include="dbo\Views\dbo.vTrashGeneratingUnitLoadStatistic.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vViewTreatmentBMPModelingAttributes.sql" />
+    <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanLGUAudit.sql" />
+  </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <releaseScriptFolder ParameterType="System.String" Required="true" />
