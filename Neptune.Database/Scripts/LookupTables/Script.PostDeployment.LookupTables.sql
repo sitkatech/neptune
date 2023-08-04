@@ -114,4 +114,8 @@ GO
 GO
 :r ".\dbo.WaterQualityManagementPlanStatus.sql"
 GO
+:r ".\dbo.WaterQualityManagementPlanVerifyStatus.sql"
+GO
+:r ".\dbo.WaterQualityManagementPlanVerifyType.sql"
+GO
 
