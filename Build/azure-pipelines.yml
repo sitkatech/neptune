@@ -27,12 +27,12 @@ stages:
       displayName: 'dotnet restore'
       inputs:
         command: restore
-        projects: 'Qanat.Tests/Qanat.Tests.csproj'
+        projects: 'Neptune.Tests/Neptune.Tests.csproj'
         
     # - task: replacetokens@3
     #   displayName: 'Create Test environment.json'
     #   inputs:
-    #     rootDirectory: 'Qanat.Tests/'
+    #     rootDirectory: 'Neptune.Tests/'
     #     targetFiles: 'environment.json.template => environment.json'
     #     encoding: 'auto'
     #     writeBOM: true
@@ -46,7 +46,7 @@ stages:
       displayName: 'dotnet test'
       inputs:
         command: test
-        projects: 'Qanat.Tests/Qanat.Tests.csproj'
+        projects: 'Neptune.Tests/Neptune.Tests.csproj'
         arguments: '--no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
         
     - task: PublishCodeCoverageResults@1
@@ -110,7 +110,7 @@ stages:
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: Qanat.Web/docker-compose/docker-compose.yml
+        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
         dockerComposeFileArgs: env=$(environment)
         action: Build services
         additionalImageTags: >-
@@ -126,7 +126,7 @@ stages:
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'      
-        dockerComposeFile: Qanat.Web/docker-compose/docker-compose.yml
+        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
         dockerComposeFileArgs: env=$(environment)
         action: Push services
         additionalImageTags: >-
@@ -181,7 +181,7 @@ stages:
     #     environmentServiceName: '$(azureSubscription)'
     #     allowTelemetryCollection: true
     #     resourceAddress: 'azurerm_mssql_database.database'
-    #     resourceId: '/subscriptions/21fa2974-9388-4e50-a33d-bddc9d3469ca/resourceGroups/aks-spoke-prod/providers/Microsoft.Sql/servers/aks-spoke-prod-sqlserver/databases/QanatDB'
+    #     resourceId: '/subscriptions/21fa2974-9388-4e50-a33d-bddc9d3469ca/resourceGroups/aks-spoke-prod/providers/Microsoft.Sql/servers/aks-spoke-prod-sqlserver/databases/NeptuneDB'
     #     commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "rabbitMqUser=$(rabbitMqUser)" -var "rabbitMqPass=$(rabbitMqPass)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)"'
     #   continueOnError: true #after initial import this should not stop builds until it's removed.
 
@@ -197,12 +197,12 @@ stages:
     - publish: 'tfplan'
       artifact: plan
       
-    - publish: 'qanat.tf'
+    - publish: 'neptune.tf'
       artifact: terraform
     
     - task: CopyFiles@2
       inputs:
-        sourceFolder: 'charts/qanat'
+        sourceFolder: 'charts/neptune'
         contents: '**'
         targetFolder: $(Build.ArtifactStagingDirectory)/chart
       condition: and(succeeded(), eq(variables['deploy'], 'true'))
@@ -216,7 +216,7 @@ stages:
     - task: PublishBuildArtifacts@1
       inputs:
         artifactName: GeoServerArtifacts
-        pathtoPublish: 'Qanat.GeoServer/data_dir'
+        pathtoPublish: 'Neptune.GeoServer/data_dir'
       condition: and(succeeded(), eq(variables['deploy'], 'true'))
 
 
@@ -229,9 +229,9 @@ stages:
   - template: templates/dacpac-template.yml
     parameters:
       name: 'Database'
-      solutionFile: 'Qanat.Database/Qanat.Database.sqlproj'
+      solutionFile: 'Neptune.Database/Neptune.Database.sqlproj'
       additionalArgs: '/p:DSP=Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider'
-      publishPath: 'Qanat.Database/bin/Debug/Qanat.Database.dacpac'
+      publishPath: 'Neptune.Database/bin/Debug/Neptune.Database.dacpac'
       artifactName: 'Database'
 
 
@@ -333,8 +333,8 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               source: 'specific'
-              project: 'Qanat'
-              pipeline: 'QanatDB Backup Job'
+              project: 'Neptune'
+              pipeline: 'NeptuneDB Backup Job'
               runVersion: 'latest'
               artifact: bacpac  
               path: '$(Pipeline.Workspace)/bacpac'
@@ -382,7 +382,7 @@ stages:
               DatabaseName: '$(databaseName)_prod'
               SqlUsername: '$(sqlUsername)'
               SqlPassword: '$(sqlPassword)'
-              DacpacFile: '$(Pipeline.Workspace)/Database/Qanat.Database.dacpac'
+              DacpacFile: '$(Pipeline.Workspace)/Database/Neptune.Database.dacpac'
               AdditionalArguments: '/p:GenerateSmartDefaults=true /p:BlockOnPossibleDataLoss=false /p:DropObjectsNotInSource=true /p:CommandTimeout=600 /TargetTimeout:600 /p:DatabaseEdition=$(databaseEdition) /p:DatabaseServiceObjective=$(databaseTier)'
             condition: and(succeeded(), eq(variables['restoreDatabase'], true))
 
@@ -394,7 +394,7 @@ stages:
               DatabaseName: '$(databaseName)'
               SqlUsername: '$(sqlUsername)'
               SqlPassword: '$(sqlPassword)'
-              DacpacFile: '$(Pipeline.Workspace)/Database/Qanat.Database.dacpac'
+              DacpacFile: '$(Pipeline.Workspace)/Database/Neptune.Database.dacpac'
               AdditionalArguments: '/p:GenerateSmartDefaults=true /p:BlockOnPossibleDataLoss=false /p:DropObjectsNotInSource=true /p:CommandTimeout=600 /TargetTimeout:600 /p:DatabaseEdition=$(databaseEdition) /p:DatabaseServiceObjective=$(databaseTier)'
             condition: and(succeeded(), eq(variables['restoreDatabase'], false))
 
@@ -549,7 +549,7 @@ stages:
               arguments: 'update $(Pipeline.Workspace)/ChartArtifacts/chart'
 
           - task: HelmDeploy@0
-            displayName: 'helm upgrade qanat'
+            displayName: 'helm upgrade neptune'
             inputs:
               connectionType: Azure Resource Manager
               azureSubscription: '$(azureSubscription)'
@@ -560,7 +560,7 @@ stages:
               command: upgrade
               chartType: FilePath
               chartPath: '$(Pipeline.Workspace)/ChartArtifacts/chart'
-              releaseName: 'qanat'
+              releaseName: 'neptune'
               overrideValues: |
                 global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
                 global.domains.api="$(domainApi)"
@@ -585,9 +585,9 @@ stages:
                 rabbitmq.auth.password="$(rabbitMqPass)"
                 api.image.tag="$(Build.BuildNumber)-$(environment)"
                 web.image.tag="$(Build.BuildNumber)-$(environment)"
-                api.image.repository="$(containerRegistry)/qanat/api"
-                web.image.repository="$(containerRegistry)/qanat/web"
+                api.image.repository="$(containerRegistry)/neptune/api"
+                web.image.repository="$(containerRegistry)/neptune/web"
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
                 global.secrets.openETApiKey="$(openETApiKey)"
-                global.secrets.qanatApiKey="$(qanatApiKey)"
+                global.secrets.neptuneApiKey="$(neptuneApiKey)"
               force: false

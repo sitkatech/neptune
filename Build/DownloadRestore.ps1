@@ -1,6 +1,6 @@
 
-"Download Qanat"
+"Download Neptune"
 & "$PSScriptRoot\DatabaseDownload.ps1" -iniFile "./build.ini" -secretsIniFile "./secrets.ini"
 
-"Restore Qanat"
+"Restore Neptune"
 & "$PSScriptRoot\DatabaseRestore.ps1" -iniFile "./build.ini"
