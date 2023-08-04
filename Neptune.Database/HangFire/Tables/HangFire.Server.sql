@@ -1,9 +1,11 @@
 CREATE TABLE [HangFire].[Server](
-	[Id] [nvarchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[Data] [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[LastHeartbeat] [datetime] NOT NULL,
- CONSTRAINT [PK_HangFire_Server] PRIMARY KEY CLUSTERED 
+	[Id] [nvarchar](200) NOT NULL CONSTRAINT [PK_HangFire_Server] PRIMARY KEY,
+	[Data] [nvarchar](max) NULL,
+	[LastHeartbeat] [datetime] NOT NULL
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_HangFire_Server_LastHeartbeat] ON [HangFire].[Server]
 (
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+	[LastHeartbeat] ASC
+)
