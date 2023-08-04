@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pTreatmentBMPUpdatePrecipitationZone
-GO
-
 Create Procedure dbo.pTreatmentBMPUpdatePrecipitationZone
 As
 

@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pModelBasinUpdateFromStaging
-GO
-
 Create Procedure dbo.pModelBasinUpdateFromStaging
 As
 

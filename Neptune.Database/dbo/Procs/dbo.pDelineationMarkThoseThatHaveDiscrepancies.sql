@@ -1,9 +1,3 @@
-IF EXISTS ( SELECT  *
-            FROM    sys.objects
-            WHERE   object_id = OBJECT_ID(N'dbo.pDelineationMarkThoseThatHaveDiscrepancies')
-                    AND type IN ( N'P', N'PC' ) ) 
-DROP PROCEDURE dbo.pDelineationMarkThoseThatHaveDiscrepancies
-GO
 Create Procedure dbo.pDelineationMarkThoseThatHaveDiscrepancies
 as
 

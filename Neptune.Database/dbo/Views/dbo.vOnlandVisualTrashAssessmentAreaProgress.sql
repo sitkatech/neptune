@@ -31,4 +31,4 @@ From (
 	on subq.NumericValue = score.NumericValue
 Go
 
-select * from dbo.vOnlandVisualTrashAssessmentAreaProgress
+/* select * from dbo.vOnlandVisualTrashAssessmentAreaProgress */

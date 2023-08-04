@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pLandUseBlockStagingDeleteByPersonID
-GO
-
 Create Procedure dbo.pLandUseBlockStagingDeleteByPersonID
 (
 	@personID int

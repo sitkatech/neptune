@@ -372,6 +372,7 @@
     <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateWatershed.sql" />
     <Build Include="dbo\Procs\dbo.pUpdateRegionalSubbasinIntersectionCache.sql" />
     <Build Include="dbo\Procs\dbo.pUpdateRegionalSubbasinLiveFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>

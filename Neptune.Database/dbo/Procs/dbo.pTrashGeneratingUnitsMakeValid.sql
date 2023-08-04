@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pTrashGeneratingUnitsMakeValid
-GO
-
 Create Procedure dbo.pTrashGeneratingUnitsMakeValid
 
 As

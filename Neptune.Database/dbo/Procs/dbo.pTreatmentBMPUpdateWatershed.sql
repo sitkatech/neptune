@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pTreatmentBMPUpdateWatershed
-GO
-
 Create Procedure dbo.pTreatmentBMPUpdateWatershed
 As
 

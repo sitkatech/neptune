@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pProjectGrantScoreUpdate
-GO
-
 Create Procedure dbo.pProjectGrantScoreUpdate
 (
 	@projectID int

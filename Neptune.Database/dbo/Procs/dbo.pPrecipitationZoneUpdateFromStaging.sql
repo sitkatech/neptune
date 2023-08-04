@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pPrecipitationZoneUpdateFromStaging
-GO
-
 Create Procedure dbo.pPrecipitationZoneUpdateFromStaging
 As
 

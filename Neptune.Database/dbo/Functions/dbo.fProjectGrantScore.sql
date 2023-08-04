@@ -1,8 +1,4 @@
-﻿if exists (select * from dbo.sysobjects where id = object_id('dbo.fProjectGrantScore'))
-    drop function dbo.fProjectGrantScore
-go
-
-create function dbo.fProjectGrantScore
+﻿create function dbo.fProjectGrantScore
 (
     @projectID int
 )

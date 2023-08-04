@@ -1,7 +1,3 @@
-IF EXISTS(SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.pRebuildWaterQualityManagementPlanParcel'))
-    drop procedure dbo.pRebuildWaterQualityManagementPlanParcel
-go
-
 create procedure dbo.pRebuildWaterQualityManagementPlanParcel
 as
 begin

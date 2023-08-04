@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pTreatmentBMPUpdateTreatmentBMPType
-GO
-
 Create Procedure dbo.pTreatmentBMPUpdateTreatmentBMPType
 (
 	@treatmentBMPID int,

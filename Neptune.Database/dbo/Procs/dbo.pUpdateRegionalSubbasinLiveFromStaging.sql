@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pUpdateRegionalSubbasinLiveFromStaging
-GO
-
 Create Procedure dbo.pUpdateRegionalSubbasinLiveFromStaging
 As
 

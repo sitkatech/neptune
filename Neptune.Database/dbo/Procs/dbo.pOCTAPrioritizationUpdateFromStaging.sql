@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pOCTAPrioritizationUpdateFromStaging
-GO
-
 Create Procedure dbo.pOCTAPrioritizationUpdateFromStaging
 As
 

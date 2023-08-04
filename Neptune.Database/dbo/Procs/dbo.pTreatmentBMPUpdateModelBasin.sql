@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pTreatmentBMPUpdateModelBasin
-GO
-
 Create Procedure dbo.pTreatmentBMPUpdateModelBasin
 As
 

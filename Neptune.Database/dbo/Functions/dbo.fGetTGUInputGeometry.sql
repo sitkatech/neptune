@@ -1,10 +1,3 @@
-IF EXISTS (
-    SELECT * FROM sysobjects WHERE id = object_id(N'dbo.fGetTGUInputGeometry') 
-    AND xtype IN (N'FN', N'IF', N'TF')
-)
-    DROP FUNCTION dbo.fGetTGUInputGeometry
-GO
-
 create function dbo.fGetTGUInputGeometry (
 	@ObjectIDs as varchar(max), --comma-separated list of ids
 	@ObjectType as varchar(max)

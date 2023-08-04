@@ -1,6 +1,3 @@
-drop procedure if exists dbo.pFixInvalidRegionalSubbasinGeometries
-GO
-
 Create Procedure dbo.pFixInvalidRegionalSubbasinGeometries
 As
 
