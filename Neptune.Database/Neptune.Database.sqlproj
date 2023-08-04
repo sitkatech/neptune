@@ -349,6 +349,29 @@
     <Build Include="dbo\Views\dbo.vTreatmentBMPDetailed.sql" />
     <Build Include="dbo\Views\dbo.vViewTreatmentBMPModelingAttributes.sql" />
     <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanLGUAudit.sql" />
+    <Build Include="dbo\Functions\dbo.fGetTGUInputGeometry.sql" />
+    <Build Include="dbo\Functions\dbo.fProjectGrantScore.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteNereidResults.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteProjectNereidResults.sql" />
+    <Build Include="dbo\Procs\dbo.pDelineationMarkThoseThatHaveDiscrepancies.sql" />
+    <Build Include="dbo\Procs\dbo.pFixInvalidRegionalSubbasinGeometries.sql" />
+    <Build Include="dbo\Procs\dbo.pLandUseBlockStagingDeleteByPersonID.sql" />
+    <Build Include="dbo\Procs\dbo.pModelBasinUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pOCTAPrioritizationUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pParcelStagingDeleteByPersonID.sql" />
+    <Build Include="dbo\Procs\dbo.pParcelUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pPrecipitationZoneUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pProjectGrantScoreUpdate.sql" />
+    <Build Include="dbo\Procs\dbo.pRebuildWaterQualityManagementPlanParcel.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitsMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateModelBasin.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdatePrecipitationZone.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateTreatmentBMPType.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateWatershed.sql" />
+    <Build Include="dbo\Procs\dbo.pUpdateRegionalSubbasinIntersectionCache.sql" />
+    <Build Include="dbo\Procs\dbo.pUpdateRegionalSubbasinLiveFromStaging.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
