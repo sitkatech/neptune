@@ -1,22 +1,7 @@
 CREATE TABLE [dbo].[SourceControlBMP](
-	[SourceControlBMPID] [int] IDENTITY(1,1) NOT NULL,
-	[WaterQualityManagementPlanID] [int] NOT NULL,
-	[SourceControlBMPAttributeID] [int] NOT NULL,
+	[SourceControlBMPID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_SourceControlBMP_SourceControlBMPID] PRIMARY KEY,
+	[WaterQualityManagementPlanID] [int] NOT NULL CONSTRAINT [FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID]),
+	[SourceControlBMPAttributeID] [int] NOT NULL CONSTRAINT [FK_SourceControlBMP_SourceControlBMPAttribute_SourceControlBMPAttributeID] FOREIGN KEY REFERENCES [dbo].[SourceControlBMPAttribute] ([SourceControlBMPAttributeID]),
 	[IsPresent] [bit] NULL,
-	[SourceControlBMPNote] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
- CONSTRAINT [PK_SourceControlBMP_SourceControlBMPID] PRIMARY KEY CLUSTERED 
-(
-	[SourceControlBMPID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-ALTER TABLE [dbo].[SourceControlBMP]  WITH CHECK ADD  CONSTRAINT [FK_SourceControlBMP_SourceControlBMPAttribute_SourceControlBMPAttributeID] FOREIGN KEY([SourceControlBMPAttributeID])
-REFERENCES [dbo].[SourceControlBMPAttribute] ([SourceControlBMPAttributeID])
-GO
-ALTER TABLE [dbo].[SourceControlBMP] CHECK CONSTRAINT [FK_SourceControlBMP_SourceControlBMPAttribute_SourceControlBMPAttributeID]
-GO
-ALTER TABLE [dbo].[SourceControlBMP]  WITH CHECK ADD  CONSTRAINT [FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
-REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
-GO
-ALTER TABLE [dbo].[SourceControlBMP] CHECK CONSTRAINT [FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID]
+	[SourceControlBMPNote] [varchar](200) NULL
+)

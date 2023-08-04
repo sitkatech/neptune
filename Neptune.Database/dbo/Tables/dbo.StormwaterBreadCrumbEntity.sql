@@ -1,11 +1,7 @@
 CREATE TABLE [dbo].[StormwaterBreadCrumbEntity](
-	[StormwaterBreadCrumbEntityID] [int] NOT NULL,
-	[StormwaterBreadCrumbEntityName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[StormwaterBreadCrumbEntityDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[GlyphIconClass] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[ColorClass] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_StormwaterBreadCrumbEntity_StormwaterBreadCrumbEntityID] PRIMARY KEY CLUSTERED 
-(
-	[StormwaterBreadCrumbEntityID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+	[StormwaterBreadCrumbEntityID] [int] NOT NULL CONSTRAINT [PK_StormwaterBreadCrumbEntity_StormwaterBreadCrumbEntityID] PRIMARY KEY,
+	[StormwaterBreadCrumbEntityName] [varchar](100) CONSTRAINT [AK_StormwaterBreadCrumbEntity_StormwaterBreadCrumbEntityName] UNIQUE,
+	[StormwaterBreadCrumbEntityDisplayName] [varchar](100) CONSTRAINT [AK_StormwaterBreadCrumbEntity_StormwaterBreadCrumbEntityDisplayName] UNIQUE,
+	[GlyphIconClass] [varchar](100),
+	[ColorClass] [varchar](100)
+)

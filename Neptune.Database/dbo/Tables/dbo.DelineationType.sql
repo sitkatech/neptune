@@ -1,17 +1,5 @@
 CREATE TABLE [dbo].[DelineationType](
-	[DelineationTypeID] [int] NOT NULL,
-	[DelineationTypeName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[DelineationTypeDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_DelineationType_DelineationTypeID] PRIMARY KEY CLUSTERED 
-(
-	[DelineationTypeID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_DelineationType_DelineationTypeDisplayName] UNIQUE NONCLUSTERED 
-(
-	[DelineationTypeDisplayName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_DelineationType_DelineationTypeName] UNIQUE NONCLUSTERED 
-(
-	[DelineationTypeName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+	[DelineationTypeID] [int] NOT NULL CONSTRAINT [PK_DelineationType_DelineationTypeID] PRIMARY KEY,
+	[DelineationTypeName] [varchar](100) CONSTRAINT [AK_DelineationType_DelineationTypeName] UNIQUE,
+	[DelineationTypeDisplayName] [varchar](100) CONSTRAINT [AK_DelineationType_DelineationTypeDisplayName] UNIQUE
+)

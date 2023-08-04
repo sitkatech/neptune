@@ -1,18 +1,6 @@
 CREATE TABLE [dbo].[MonthsOfOperation](
-	[MonthsOfOperationID] [int] NOT NULL,
-	[MonthsOfOperationName] [varchar](6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[MonthsOfOperationDisplayName] [varchar](6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[MonthsOfOperationNereidAlias] [varchar](6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_MonthsOfOperation_MonthsOfOperationID] PRIMARY KEY CLUSTERED 
-(
-	[MonthsOfOperationID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_MonthsOfOperation_MonthsOfOperationDisplayName] UNIQUE NONCLUSTERED 
-(
-	[MonthsOfOperationDisplayName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_MonthsOfOperation_MonthsOfOperationName] UNIQUE NONCLUSTERED 
-(
-	[MonthsOfOperationName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+	[MonthsOfOperationID] [int] NOT NULL CONSTRAINT [PK_MonthsOfOperation_MonthsOfOperationID] PRIMARY KEY,
+	[MonthsOfOperationName] [varchar](6) CONSTRAINT [AK_MonthsOfOperation_MonthsOfOperationName] UNIQUE,
+	[MonthsOfOperationDisplayName] [varchar](6) CONSTRAINT [AK_MonthsOfOperation_MonthsOfOperationDisplayName] UNIQUE,
+	[MonthsOfOperationNereidAlias] [varchar](6) null
+)

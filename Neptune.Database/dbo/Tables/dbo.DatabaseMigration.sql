@@ -1,7 +1,8 @@
-CREATE TABLE [dbo].[DatabaseMigration](
-	[DatabaseMigrationNumber] [int] NOT NULL,
- CONSTRAINT [PK_DatabaseMigration_DatabaseMigrationNumber] PRIMARY KEY CLUSTERED 
-(
-	[DatabaseMigrationNumber] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+CREATE TABLE [dbo].[DatabaseMigration] (
+    [DatabaseMigrationNumber]	INT				NOT NULL IDENTITY(1,1) CONSTRAINT [PK_DatabaseMigration_DatabaseMigrationNumber] PRIMARY KEY,
+	[ReleaseScriptFileName]		VARCHAR(500)	NOT NULL CONSTRAINT [AK_DatabaseMigration_ReleaseScriptFileName] UNIQUE ([ReleaseScriptFileName] ASC),
+	[DateMigrated]				DATETIME2		NOT NULL DEFAULT(GETUTCDATE()),
+	[MigrationAuthorName]		VARCHAR(200)	NOT NULL, 
+	[MigrationReason]			VARCHAR(MAX)	NULL
+);
+

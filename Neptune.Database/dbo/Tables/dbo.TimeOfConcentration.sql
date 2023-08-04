@@ -1,17 +1,5 @@
 CREATE TABLE [dbo].[TimeOfConcentration](
-	[TimeOfConcentrationID] [int] NOT NULL,
-	[TimeOfConcentrationName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[TimeOfConcentrationDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_TimeOfConcentration_TimeOfConcentrationID] PRIMARY KEY CLUSTERED 
-(
-	[TimeOfConcentrationID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_TimeOfConcentration_TimeOfConcentrationDisplayName] UNIQUE NONCLUSTERED 
-(
-	[TimeOfConcentrationDisplayName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_TimeOfConcentration_TimeOfConcentrationName] UNIQUE NONCLUSTERED 
-(
-	[TimeOfConcentrationName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+	[TimeOfConcentrationID] [int] NOT NULL CONSTRAINT [PK_TimeOfConcentration_TimeOfConcentrationID] PRIMARY KEY,
+	[TimeOfConcentrationName] [varchar](100) CONSTRAINT [AK_TimeOfConcentration_TimeOfConcentrationName] UNIQUE,
+	[TimeOfConcentrationDisplayName] [varchar](100) CONSTRAINT [AK_TimeOfConcentration_TimeOfConcentrationDisplayName] UNIQUE
+)

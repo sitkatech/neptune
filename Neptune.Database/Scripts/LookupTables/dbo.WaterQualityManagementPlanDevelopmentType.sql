@@ -1,0 +1,16 @@
+MERGE INTO dbo.WaterQualityManagementPlanDevelopmentType AS Target
+USING (VALUES
+(1, 'NewDevelopment', 'New Development'),
+(2, 'Redevelopment', 'Redevelopment')
+)
+AS Source (WaterQualityManagementPlanDevelopmentTypeID, WaterQualityManagementPlanDevelopmentTypeName, WaterQualityManagementPlanDevelopmentTypeDisplayName)
+ON Target.WaterQualityManagementPlanDevelopmentTypeID = Source.WaterQualityManagementPlanDevelopmentTypeID
+WHEN MATCHED THEN
+UPDATE SET
+	WaterQualityManagementPlanDevelopmentTypeName = Source.WaterQualityManagementPlanDevelopmentTypeName,
+	WaterQualityManagementPlanDevelopmentTypeDisplayName = Source.WaterQualityManagementPlanDevelopmentTypeDisplayName
+WHEN NOT MATCHED BY TARGET THEN
+	INSERT (WaterQualityManagementPlanDevelopmentTypeID, WaterQualityManagementPlanDevelopmentTypeName, WaterQualityManagementPlanDevelopmentTypeDisplayName)
+	VALUES (WaterQualityManagementPlanDevelopmentTypeID, WaterQualityManagementPlanDevelopmentTypeName, WaterQualityManagementPlanDevelopmentTypeDisplayName)
+WHEN NOT MATCHED BY SOURCE THEN
+	DELETE;

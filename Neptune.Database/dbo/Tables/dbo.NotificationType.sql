@@ -1,17 +1,5 @@
 CREATE TABLE [dbo].[NotificationType](
-	[NotificationTypeID] [int] NOT NULL,
-	[NotificationTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[NotificationTypeDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_NotificationType_NotificationTypeID] PRIMARY KEY CLUSTERED 
-(
-	[NotificationTypeID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_NotificationType_NotificationTypeDisplayName] UNIQUE NONCLUSTERED 
-(
-	[NotificationTypeDisplayName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_NotificationType_NotificationTypeName] UNIQUE NONCLUSTERED 
-(
-	[NotificationTypeName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+	[NotificationTypeID] [int] NOT NULL CONSTRAINT [PK_NotificationType_NotificationTypeID] PRIMARY KEY,
+	[NotificationTypeName] [varchar](100) CONSTRAINT [AK_NotificationType_NotificationTypeName] UNIQUE,
+	[NotificationTypeDisplayName] [varchar](100) CONSTRAINT [AK_NotificationType_NotificationTypeDisplayName] UNIQUE
+)

@@ -1,7 +1,7 @@
 CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
-	[TreatmentBMPModelingAttributeID] [int] IDENTITY(1,1) NOT NULL,
-	[TreatmentBMPID] [int] NOT NULL,
-	[UpstreamTreatmentBMPID] [int] NULL,
+	[TreatmentBMPModelingAttributeID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TreatmentBMPModelingAttribute_TreatmentBMPModelingAttributeID] PRIMARY KEY,
+	[TreatmentBMPID] [int] NOT NULL CONSTRAINT [AK_TreatmentBMPModelingAttribute_TreatmentBMPID] UNIQUE CONSTRAINT [FK_TreatmentBMPModelingAttribute_TreatmentBMP_TreatmentBMPID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID]),
+	[UpstreamTreatmentBMPID] [int] NULL CONSTRAINT [FK_TreatmentBMPModelingAttribute_TreatmentBMP_UpstreamTreatmentBMPID_TreatmentBMPID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID]),
 	[AverageDivertedFlowrate] [float] NULL,
 	[AverageTreatmentFlowrate] [float] NULL,
 	[DesignDryWeatherTreatmentCapacity] [float] NULL,
@@ -15,63 +15,19 @@ CREATE TABLE [dbo].[TreatmentBMPModelingAttribute](
 	[InfiltrationSurfaceArea] [float] NULL,
 	[MediaBedFootprint] [float] NULL,
 	[PermanentPoolorWetlandVolume] [float] NULL,
-	[RoutingConfigurationID] [int] NULL,
+	[RoutingConfigurationID] [int] NULL CONSTRAINT [FK_TreatmentBMPModelingAttribute_RoutingConfiguration_RoutingConfigurationID] FOREIGN KEY REFERENCES [dbo].[RoutingConfiguration] ([RoutingConfigurationID]),
 	[StorageVolumeBelowLowestOutletElevation] [float] NULL,
 	[SummerHarvestedWaterDemand] [float] NULL,
-	[TimeOfConcentrationID] [int] NULL,
+	[TimeOfConcentrationID] [int] NULL CONSTRAINT [FK_TreatmentBMPModelingAttribute_TimeOfConcentration_TimeOfConcentrationID] FOREIGN KEY REFERENCES [dbo].[TimeOfConcentration] ([TimeOfConcentrationID]),
 	[DrawdownTimeForDetentionVolume] [float] NULL,
 	[TotalEffectiveBMPVolume] [float] NULL,
 	[TotalEffectiveDrywellBMPVolume] [float] NULL,
 	[TreatmentRate] [float] NULL,
-	[UnderlyingHydrologicSoilGroupID] [int] NULL,
+	[UnderlyingHydrologicSoilGroupID] [int] NULL CONSTRAINT [FK_TreatmentBMPModelingAttribute_UnderlyingHydrologicSoilGroup_UnderlyingHydrologicSoilGroupID] FOREIGN KEY REFERENCES [dbo].[UnderlyingHydrologicSoilGroup] ([UnderlyingHydrologicSoilGroupID]),
 	[UnderlyingInfiltrationRate] [float] NULL,
 	[WaterQualityDetentionVolume] [float] NULL,
 	[WettedFootprint] [float] NULL,
 	[WinterHarvestedWaterDemand] [float] NULL,
-	[MonthsOfOperationID] [int] NULL,
-	[DryWeatherFlowOverrideID] [int] NULL,
- CONSTRAINT [PK_TreatmentBMPModelingAttribute_TreatmentBMPModelingAttributeID] PRIMARY KEY CLUSTERED 
-(
-	[TreatmentBMPModelingAttributeID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_TreatmentBMPModelingAttribute_TreatmentBMPID] UNIQUE NONCLUSTERED 
-(
-	[TreatmentBMPID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_DryWeatherFlowOverride_DryWeatherFlowOverrideID] FOREIGN KEY([DryWeatherFlowOverrideID])
-REFERENCES [dbo].[DryWeatherFlowOverride] ([DryWeatherFlowOverrideID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_DryWeatherFlowOverride_DryWeatherFlowOverrideID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID] FOREIGN KEY([MonthsOfOperationID])
-REFERENCES [dbo].[MonthsOfOperation] ([MonthsOfOperationID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_RoutingConfiguration_RoutingConfigurationID] FOREIGN KEY([RoutingConfigurationID])
-REFERENCES [dbo].[RoutingConfiguration] ([RoutingConfigurationID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_RoutingConfiguration_RoutingConfigurationID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_TimeOfConcentration_TimeOfConcentrationID] FOREIGN KEY([TimeOfConcentrationID])
-REFERENCES [dbo].[TimeOfConcentration] ([TimeOfConcentrationID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_TimeOfConcentration_TimeOfConcentrationID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
-REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_TreatmentBMP_TreatmentBMPID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_TreatmentBMP_UpstreamTreatmentBMPID_TreatmentBMPID] FOREIGN KEY([UpstreamTreatmentBMPID])
-REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_TreatmentBMP_UpstreamTreatmentBMPID_TreatmentBMPID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPModelingAttribute_UnderlyingHydrologicSoilGroup_UnderlyingHydrologicSoilGroupID] FOREIGN KEY([UnderlyingHydrologicSoilGroupID])
-REFERENCES [dbo].[UnderlyingHydrologicSoilGroup] ([UnderlyingHydrologicSoilGroupID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPModelingAttribute] CHECK CONSTRAINT [FK_TreatmentBMPModelingAttribute_UnderlyingHydrologicSoilGroup_UnderlyingHydrologicSoilGroupID]
+	[MonthsOfOperationID] [int] NULL CONSTRAINT [FK_TreatmentBMPModelingAttribute_MonthsOfOperation_MonthsOfOperationID] FOREIGN KEY REFERENCES [dbo].[MonthsOfOperation] ([MonthsOfOperationID]),
+	[DryWeatherFlowOverrideID] [int] NULL CONSTRAINT [FK_TreatmentBMPModelingAttribute_DryWeatherFlowOverride_DryWeatherFlowOverrideID] FOREIGN KEY REFERENCES [dbo].[DryWeatherFlowOverride] ([DryWeatherFlowOverrideID]),
+)

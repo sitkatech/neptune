@@ -1,17 +1,5 @@
 CREATE TABLE [dbo].[SizingBasisType](
-	[SizingBasisTypeID] [int] NOT NULL,
-	[SizingBasisTypeName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[SizingBasisTypeDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_SizingBasisType_SizingBasisTypeID] PRIMARY KEY CLUSTERED 
-(
-	[SizingBasisTypeID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_SizingBasisType_SizingBasisTypeDisplayName] UNIQUE NONCLUSTERED 
-(
-	[SizingBasisTypeDisplayName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_SizingBasisType_SizingBasisTypeName] UNIQUE NONCLUSTERED 
-(
-	[SizingBasisTypeName] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+	[SizingBasisTypeID] [int] NOT NULL CONSTRAINT [PK_SizingBasisType_SizingBasisTypeID] PRIMARY KEY,
+	[SizingBasisTypeName] [varchar](100) CONSTRAINT [AK_SizingBasisType_SizingBasisTypeName] UNIQUE,
+	[SizingBasisTypeDisplayName] [varchar](100) CONSTRAINT [AK_SizingBasisType_SizingBasisTypeDisplayName] UNIQUE
+)

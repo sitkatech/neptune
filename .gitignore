@@ -42,3 +42,9 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.EFModels/obj
 /Neptune.Web/obj
 /Neptune.Database/*.dbmdl
+/Neptune.Database/obj/Debug
+/Neptune.Web/bin/Debug/net6.0
+/Neptune.EFModels/bin/Debug/net6.0
+/Neptune.Database/bin/Debug
+/Neptune.Models/bin/Debug/net6.0
+/Neptune.Database/*.jfm

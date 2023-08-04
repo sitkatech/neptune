@@ -1,16 +1,8 @@
 CREATE TABLE [dbo].[ModelBasin](
-	[ModelBasinID] [int] IDENTITY(1,1) NOT NULL,
-	[ModelBasinKey] [int] NOT NULL,
+	[ModelBasinID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ModelBasin_ModelBasinID] PRIMARY KEY,
+	[ModelBasinKey] [int] NOT NULL CONSTRAINT [AK_ModelBasin_ModelBasinKey] UNIQUE,
 	[ModelBasinGeometry] [geometry] NOT NULL,
 	[LastUpdate] [datetime] NOT NULL,
-	[ModelBasinState] [varchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[ModelBasinRegion] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- CONSTRAINT [PK_ModelBasin_ModelBasinID] PRIMARY KEY CLUSTERED 
-(
-	[ModelBasinID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [AK_ModelBasin_ModelBasinKey] UNIQUE NONCLUSTERED 
-(
-	[ModelBasinKey] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+	[ModelBasinState] [varchar](5),
+	[ModelBasinRegion] [varchar](10)
+)
