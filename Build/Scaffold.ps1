@@ -20,7 +20,7 @@ $tablesIncluded = Compare-Object -ReferenceObject ($tablesComparedName) -Differe
 
 $tablesIncludedForEFScaffold = $tablesIncluded.InputObject
 
-$connectionString = "Server=" + $config.Server + ";Database=" + $config.DatabaseName + ";Trusted_Connection=True;"
+$connectionString = "Server=" + $config.Server + ";Database=" + $config.DatabaseName + ";Trusted_Connection=True;Encrypt=False;"
 
 "Scaffold"
 & Scaffold-DbContext $connectionString Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities/Generated -Project $config.ApiEFModelsProject -Context $config.ApiEFModelsDbContextName -Force -StartupProject $config.ApiEFModelsProject -DataAnnotations -UseDatabaseNames -NoOnConfiguring -Namespace $config.ApiEFModelsNamespace -Tables $tablesIncludedForEFScaffold
