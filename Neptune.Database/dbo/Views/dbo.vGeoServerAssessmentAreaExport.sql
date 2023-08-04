@@ -1,6 +1,3 @@
-DROP VIEW IF EXISTS dbo.vGeoServerAssessmentAreaExport
-GO
-
 create view dbo.vGeoServerAssessmentAreaExport as
 	Select
 		area.OnlandVisualTrashAssessmentAreaID as OVTAAreaID,

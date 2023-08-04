@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vGeoServerDelineation
-GO
-
 Create View dbo.vGeoServerDelineation as
 Select
 	2 * DelineationID - 1 as PrimaryKey,

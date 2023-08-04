@@ -1,6 +1,3 @@
-drop view if exists dbo.vPowerBICentralizedBMPLoadGeneratingUnit
-GO
-
 create view dbo.vPowerBICentralizedBMPLoadGeneratingUnit
 as
 select

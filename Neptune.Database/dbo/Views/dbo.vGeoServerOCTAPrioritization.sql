@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vGeoServerOCTAPrioritization
-Go
-
 Create View dbo.vGeoServerOCTAPrioritization As
 Select
 	o.OCTAPrioritizationID,

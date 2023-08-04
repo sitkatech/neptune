@@ -1,6 +1,3 @@
-drop view if exists dbo.vPowerBITreatmentBMP
-GO
-
 create view dbo.vPowerBITreatmentBMP
 as
 select 

@@ -1,6 +1,3 @@
-Drop view if exists dbo.vNereidTreatmentBMPRegionalSubbasin
-go
-
 -- collects the Distributed Modeling BMPs together with the RSBs they flow to,
 -- accounting for the upstream-BMP relationship
 Create view dbo.vNereidTreatmentBMPRegionalSubbasin

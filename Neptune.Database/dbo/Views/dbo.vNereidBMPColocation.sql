@@ -1,6 +1,3 @@
-drop view if exists dbo.vNereidBMPColocation
-GO
-
 create view dbo.vNereidBMPColocation
 as
 select 

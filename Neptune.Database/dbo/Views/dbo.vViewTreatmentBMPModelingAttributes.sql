@@ -1,6 +1,3 @@
-Drop view if exists dbo.vViewTreatmentBMPModelingAttributes
-GO
-
 Create View dbo.vViewTreatmentBMPModelingAttributes
 as
 

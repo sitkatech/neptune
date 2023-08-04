@@ -1,6 +1,3 @@
-Drop view if exists dbo.vGeoServerWaterQualityManagementPlan
-Go
-
 Create View dbo.vGeoServerWaterQualityManagementPlan
 as
 Select

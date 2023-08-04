@@ -1,6 +1,3 @@
-Drop view if exists dbo.vPowerBIWaterQualityManagementPlan
-GO
-
 Create view dbo.vPowerBIWaterQualityManagementPlan
 as
 select 

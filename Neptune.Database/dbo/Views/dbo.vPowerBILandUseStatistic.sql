@@ -1,6 +1,3 @@
-drop view if exists dbo.vPowerBILandUseStatistic
-GO
-
 Create view dbo.vPowerBILandUseStatistic
 as
 select

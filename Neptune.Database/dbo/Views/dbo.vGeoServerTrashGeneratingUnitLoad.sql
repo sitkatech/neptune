@@ -1,8 +1,3 @@
-Drop View If Exists dbo.vGeoServerTrashGeneratingUnitLoad
-GO
-
-
-/* Identical to the above but it uses the 4326 version instead */
 Create view dbo.vGeoServerTrashGeneratingUnitLoad
 as
 Select

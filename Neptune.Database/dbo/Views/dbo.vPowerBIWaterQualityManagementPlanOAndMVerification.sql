@@ -1,6 +1,3 @@
-Drop view if exists dbo.vPowerBIWaterQualityManagementPlanOAndMVerification
-GO
-
 Create view dbo.vPowerBIWaterQualityManagementPlanOAndMVerification
 as
 select wqmp.WaterQualityManagementPlanID as PrimaryKey,

@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vPyQgisDelineationTGUInput
-Go
-
 Create View dbo.vPyQgisDelineationTGUInput
 As
 Select

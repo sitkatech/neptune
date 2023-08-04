@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vPyQgisProjectDelineationLGUInput
-GO
-
 --We are going to use this to get ALL delineations, and then in our python script filter down
 --to non-project delineations and our delineations only
 Create view dbo.vPyQgisProjectDelineationLGUInput

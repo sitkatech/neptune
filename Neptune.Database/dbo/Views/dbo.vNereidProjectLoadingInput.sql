@@ -1,6 +1,3 @@
-drop view if exists dbo.vNereidProjectLoadingInput
-GO
-
 create view dbo.vNereidProjectLoadingInput
 as
 select

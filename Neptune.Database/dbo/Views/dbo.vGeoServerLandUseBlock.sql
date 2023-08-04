@@ -1,6 +1,3 @@
-Drop view if exists dbo.vGeoServerLandUseBlock
-Go
-
 create view  dbo.vGeoServerLandUseBlock 
 as
 select

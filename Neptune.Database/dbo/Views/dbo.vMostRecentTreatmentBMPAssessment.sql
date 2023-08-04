@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vMostRecentTreatmentBMPAssessment
-Go
-
 Create View dbo.vMostRecentTreatmentBMPAssessment
 as
 select

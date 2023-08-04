@@ -1,8 +1,4 @@
-﻿if exists (select * from dbo.sysobjects where id = object_id('dbo.vProjectWetWeatherWQLRIScore'))
-    drop view dbo.vProjectWetWeatherWQLRIScore
-go
-
-create view dbo.vProjectWetWeatherWQLRIScore
+﻿create view dbo.vProjectWetWeatherWQLRIScore
 as
 
     select 

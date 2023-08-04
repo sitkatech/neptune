@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vPyQgisWaterQualityManagementPlanLGUInput
-GO
-
 Create view dbo.vPyQgisWaterQualityManagementPlanLGUInput
 as 
 Select 

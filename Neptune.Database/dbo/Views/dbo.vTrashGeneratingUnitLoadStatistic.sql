@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vTrashGeneratingUnitLoadStatistic
-GO
-
 /*
 Everything needed to compute load-based results, including the choropleth symbology for the load-based maps
 */

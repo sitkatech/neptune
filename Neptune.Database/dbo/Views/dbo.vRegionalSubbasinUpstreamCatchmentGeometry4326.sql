@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vRegionalSubbasinUpstreamCatchmentGeometry4326
-GO
-
 Create view dbo.vRegionalSubbasinUpstreamCatchmentGeometry4326
 as
 

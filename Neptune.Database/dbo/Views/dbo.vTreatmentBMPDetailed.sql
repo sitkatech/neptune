@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vTreatmentBMPDetailed
-Go
-
 Create View dbo.vTreatmentBMPDetailed
 as
 

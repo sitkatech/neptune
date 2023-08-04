@@ -1,6 +1,3 @@
-drop view if exists dbo.vOnlandVisualTrashAssessmentAreaProgress
-go
-
 Create View dbo.vOnlandVisualTrashAssessmentAreaProgress
 as
 Select

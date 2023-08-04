@@ -1,8 +1,4 @@
-﻿if exists (select * from dbo.sysobjects where id = object_id('dbo.vProjectDryWeatherWQLRIScore'))
-    drop view dbo.vProjectDryWeatherWQLRIScore
-go
-
-create view dbo.vProjectDryWeatherWQLRIScore
+﻿create view dbo.vProjectDryWeatherWQLRIScore
 as
     select 
     a.ProjectID as PrimaryKey,

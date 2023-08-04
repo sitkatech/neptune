@@ -1,6 +1,3 @@
-DROP VIEW IF EXISTS dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated
-GO
-
 Create View dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated as
 
 Select

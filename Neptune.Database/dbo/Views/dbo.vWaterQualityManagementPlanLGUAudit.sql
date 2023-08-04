@@ -4,10 +4,6 @@
 -- -a bit telling whether the Boundary is defined, (BoundaryIsDefined)
 -- -and an int telling how mnay Model basins it intersects (CountOfIntersectingModelBasins)
 -- The upshot is that LoadGeneratingUnitsPopulated should = BoundaryIsDefined AND CountOfIntersectingModelBasins
-
-drop view if exists dbo.vWaterQualityManagementPlanLGUAudit
-GO
-
 create view dbo.vWaterQualityManagementPlanLGUAudit
 as
 select 

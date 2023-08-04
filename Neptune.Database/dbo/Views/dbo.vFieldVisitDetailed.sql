@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vFieldVisitDetailed
-Go
-
 Create View dbo.vFieldVisitDetailed
 as
 

@@ -1,6 +1,3 @@
-drop view if exists dbo.vNereidProjectRegionalSubbasinCentralizedBMP
-GO
-
 create view dbo.vNereidProjectRegionalSubbasinCentralizedBMP
 As
 Select

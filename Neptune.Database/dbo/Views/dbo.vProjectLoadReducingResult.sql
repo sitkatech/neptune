@@ -1,8 +1,4 @@
-﻿if exists (select * from dbo.sysobjects where id = object_id('dbo.vProjectLoadReducingResult'))
-    drop view dbo.vProjectLoadReducingResult
-go
-
-create view dbo.vProjectLoadReducingResult
+﻿create view dbo.vProjectLoadReducingResult
 as
 
 select  ProjectNereidResultID as PrimaryKey,        

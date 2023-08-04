@@ -1,6 +1,3 @@
-DROP VIEW IF EXISTS dbo.vGeoServerOnlandVisualTrashAssessmentArea
-GO
-
 create view dbo.vGeoServerOnlandVisualTrashAssessmentArea as
 	Select
 		area.OnlandVisualTrashAssessmentAreaID,

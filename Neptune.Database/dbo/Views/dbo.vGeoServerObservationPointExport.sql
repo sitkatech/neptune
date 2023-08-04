@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vGeoServerObservationPointExport
-go
-
 Create View dbo.vGeoServerObservationPointExport
 as
 Select

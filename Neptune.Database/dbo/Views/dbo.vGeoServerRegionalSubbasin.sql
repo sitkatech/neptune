@@ -1,6 +1,3 @@
-Drop view if exists dbo.vGeoServerRegionalSubbasin
-GO
-
 Create View dbo.vGeoServerRegionalSubbasin As
 Select
 	RegionalSubbasinID,

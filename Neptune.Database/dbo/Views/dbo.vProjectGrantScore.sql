@@ -1,8 +1,4 @@
-﻿if exists (select * from dbo.sysobjects where id = object_id('dbo.vProjectGrantScore'))
-    drop view dbo.vProjectGrantScore
-go
-
-create view dbo.vProjectGrantScore
+﻿create view dbo.vProjectGrantScore
 as
 
 with projectDelineations(ProjectID, TreatmentBMPID, DelineationID, DelineationTypeID, RegionalSubbasinID)

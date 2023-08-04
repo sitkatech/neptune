@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vRegionalSubbasinUpstream
-GO
-
 Create view dbo.vRegionalSubbasinUpstream
 as
 

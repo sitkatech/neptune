@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vPyQgisRegionalSubbasinLGUInput
-GO
-
 Create view dbo.vPyQgisRegionalSubbasinLGUInput
 as
 Select

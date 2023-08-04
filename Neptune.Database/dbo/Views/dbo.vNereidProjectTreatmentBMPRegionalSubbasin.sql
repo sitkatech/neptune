@@ -1,6 +1,3 @@
-Drop view if exists dbo.vNereidProjectTreatmentBMPRegionalSubbasin
-go
-
 -- collects the Distributed Modeling BMPs together with the RSBs they flow to,
 -- for any  projects
 -- we don't allow upstream bmps in  projects so they should not be a concern here
