@@ -634,6 +634,7 @@
     <Compile Include="Models\vNereidPlannedProjectRegionalSubbasinCentralizedBMPExtensionMethods.cs" />
     <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanBoundary.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
     <Compile Include="ScheduledJobs\LoadGeneratingUnitResult.cs" />
     <Compile Include="ScheduledJobs\ParcelLayerUploadBackgroundJob.cs" />
