@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SitkaRecordNotFoundException.cs" company="Sitka Technology Group">
+<copyright file="AssertionException.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,21 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
 
-namespace LtInfo.Common
+using System.Runtime.Serialization;
+
+namespace Neptune.Web.Common.DesignByContract
 {
-    public class SitkaRecordNotFoundException : SitkaDisplayErrorException
-    {
-        public SitkaRecordNotFoundException(string objectName, int id)
-            : base(string.Format("Could not find {0} with ID# {1}", objectName, id)) {}
-
-        public SitkaRecordNotFoundException(string objectName, Guid guid)
-            : base(string.Format("Could not find {0} with GUID {1}", objectName, guid)) { }
-
-        public SitkaRecordNotFoundException(string objectName, string matchingCriteria)
-            : base(string.Format("Could not find {0} with criteria \"{1}\"", objectName, matchingCriteria)) { }
-
-        public SitkaRecordNotFoundException(string errorMessage) : base(errorMessage) { }
-    }
+	[Serializable]
+	public class AssertionException : ApplicationException
+	{
+		public AssertionException() {}
+		public AssertionException(string message) : base(message) {}
+		public AssertionException(string message, Exception inner) : base(message, inner) {}
+		public AssertionException(SerializationInfo info, StreamingContext context): base(info, context) {}
+	}
 }

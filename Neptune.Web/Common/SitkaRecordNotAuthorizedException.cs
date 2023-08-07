@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="AssertionException.cs" company="Sitka Technology Group">
+<copyright file="SitkaRecordNotAuthorizedException.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,17 +18,15 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Runtime.Serialization;
 
-namespace LtInfo.Common.DesignByContract
+namespace Neptune.Web.Common
 {
-	[Serializable]
-	public class AssertionException : ApplicationException
-	{
-		public AssertionException() {}
-		public AssertionException(string message) : base(message) {}
-		public AssertionException(string message, Exception inner) : base(message, inner) {}
-		public AssertionException(SerializationInfo info, StreamingContext context): base(info, context) {}
-	}
+    public class SitkaRecordNotAuthorizedException : SitkaDisplayErrorException
+    {
+        public SitkaRecordNotAuthorizedException(string objectTypeName, int id) : base(
+            $"You are not authorized to view {objectTypeName} ID# {id}") {}
+        public SitkaRecordNotAuthorizedException(string objectTypeName, string stringID) : base(
+            $"You are not authorized to view {objectTypeName} {stringID}") { }
+        public SitkaRecordNotAuthorizedException(string message) : base(message) { }
+    }
 }

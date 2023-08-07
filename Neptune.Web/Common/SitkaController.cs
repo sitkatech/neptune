@@ -19,25 +19,31 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
-using System.Web.Mvc;
-using DHTMLX.Export.Excel;
-using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Neptune.Web.Common.DesignByContract;
 
 namespace Neptune.Web.Common
 {
     public abstract partial class SitkaController : Controller
     {
+        private ICompositeViewEngine _viewEngine;
+        protected SitkaController()
+        {
+        }
+
+        protected SitkaController(ICompositeViewEngine viewEngine)
+        {
+            _viewEngine = viewEngine;
+        }
+
         public const string StatusErrorIndex = "StatusError";
         public const string StatusMessageIndex = "StatusMessage";
         public const string InfoMessageIndex = "InfoMessage";
@@ -55,25 +61,25 @@ namespace Neptune.Web.Common
         protected abstract string LoginUrl { get; }
 
 
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            var lastError = filterContext.Exception;
-            if (lastError is SitkaRecordNotAuthorizedException && IsCurrentUserAnonymous())
-            {
-                var requestUrl = Request.Url != null ? Request.Url.ToString() : String.Empty;
-                var url = String.Format("{0}?returnUrl={1}", LoginUrl, Server.UrlEncode(requestUrl));
-                filterContext.ExceptionHandled = true;
-                Response.Redirect(url);
-                return;
-            }
+        //protected override void OnException(ExceptionContext filterContext)
+        //{
+        //    var lastError = filterContext.Exception;
+        //    if (lastError is SitkaRecordNotAuthorizedException && IsCurrentUserAnonymous())
+        //    {
+        //        var requestUrl = Request.Url != null ? Request.Url.ToString() : String.Empty;
+        //        var url = $"{LoginUrl}?returnUrl={Server.UrlEncode(requestUrl)}";
+        //        filterContext.ExceptionHandled = true;
+        //        Response.Redirect(url);
+        //        return;
+        //    }
 
-            if (lastError is SitkaRecordNotFoundException)
-            {
-                SitkaHttpRequestStorage.NotFoundStoredError = lastError as SitkaRecordNotFoundException;
-            }
+        //    if (lastError is SitkaRecordNotFoundException)
+        //    {
+        //        SitkaHttpRequestStorage.NotFoundStoredError = lastError as SitkaRecordNotFoundException;
+        //    }
 
-            base.OnException(filterContext);
-        }
+        //    base.OnException(filterContext);
+        //}
 
         public static void SetErrorForDisplay(TempDataDictionary tempData, string errorMessage)
         {
@@ -100,12 +106,12 @@ namespace Neptune.Web.Common
             RemoveMessage(StatusMessageIndex, TempData);
         }
 
-        private static void RemoveMessage(string index, TempDataDictionary tempData)
+        private static void RemoveMessage(string index, ITempDataDictionary tempData)
         {
             tempData.Remove(index);
         }
 
-        private static void SetMessage(string index, string message, TempDataDictionary tempData)
+        private static void SetMessage(string index, string message, ITempDataDictionary tempData)
         {
             tempData[index] = message;
         }
@@ -118,55 +124,6 @@ namespace Neptune.Web.Common
         protected void ClearInfoForDisplay()
         {
             RemoveMessage(InfoMessageIndex, TempData);
-        }
-
-        /// <summary>
-        /// This can be null so be careful when using it
-        /// </summary>
-        protected abstract ISitkaDbContext SitkaDbContext { get; }
-
-        public interface ISitkaDbContext
-        {
-            DbContext GetDbContext();
-            int SaveChanges(IPrincipal user);
-        }
-
-
-        private static bool IsSetToAutomaticallyCallEntityFrameworkSaveChangesAttribute(ActionExecutedContext filterContext)
-        {
-            return filterContext.ActionDescriptor.GetCustomAttributes(typeof(AutomaticallyCallEntityFrameworkSaveChangesWhenModelValidAttribute), true).Any();
-        }
-
-        protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        {
-            if ((filterContext.Exception == null || filterContext.ExceptionHandled) && IsSetToAutomaticallyCallEntityFrameworkSaveChangesAttribute(filterContext) && ModelState.IsValid)
-            {
-                // We have Configuration.AutoDetectChangesEnabled turned off by default instead of it being true out of the box
-                // We only need to detect changes when we know we are saving
-                try
-                {
-                    SitkaDbContext.SaveChanges(User);
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    // something can go wrong when we are doing our save of EF; since this happens after the action has executed, we need to clear any messages that assumed the happy path
-                    ClearMessageForDisplay();
-                    var errorDetails = string.Format("DbEntityValidationException occurred, below are details from the 'EntityValidationErrors' property.\r\n{0}",
-                        String.Join("\r\n",
-                            ex.EntityValidationErrors.Select(
-                                x =>
-                                    "Entry.Entity: " + x.Entry.Entity.GetType().Name + "\r\n" +
-                                    String.Join("\r\n", x.ValidationErrors.Select(y => String.Format("   PropertyName: {0}, ErrorMessage: {1}", y.PropertyName, y.ErrorMessage))))));
-                    throw new ApplicationException(errorDetails, ex);
-                }
-                catch
-                {
-                    // something can go wrong when we are doing our save of EF; since this happens after the action has executed, we need to clear any messages that assumed the happy path
-                    ClearMessageForDisplay();
-                    throw;
-                }
-            }
-            base.OnActionExecuted(filterContext);
         }
 
         public static List<MethodInfo> FindControllerActions(Type controller)
@@ -185,7 +142,8 @@ namespace Neptune.Web.Common
         public static List<MethodInfo> GetAllControllerActionMethods(Type controllerTypeInTheAssemblyToSearchForOtherControllers)
         {
             var aspnetMvcControllerBaseClassType = typeof(Controller);
-            Check.Require(controllerTypeInTheAssemblyToSearchForOtherControllers.IsSubclassOf(aspnetMvcControllerBaseClassType), string.Format("Type \"{0}\" must be a subclass of \"{1}\" to make this call. Change call site to get this fixed.", controllerTypeInTheAssemblyToSearchForOtherControllers.FullName, aspnetMvcControllerBaseClassType.FullName));
+            Check.Require(controllerTypeInTheAssemblyToSearchForOtherControllers.IsSubclassOf(aspnetMvcControllerBaseClassType),
+                $"Type \"{controllerTypeInTheAssemblyToSearchForOtherControllers.FullName}\" must be a subclass of \"{aspnetMvcControllerBaseClassType.FullName}\" to make this call. Change call site to get this fixed.");
 
             // Find all the controllers in the main assembly for all controllers
             var assembly = Assembly.GetAssembly(controllerTypeInTheAssemblyToSearchForOtherControllers);
@@ -201,7 +159,7 @@ namespace Neptune.Web.Common
             {
                 // Get out the most important part - the LoaderExceptions which will help speed fixing the problem
                 var loaderExceptions = String.Join("\r\n   ", ex.LoaderExceptions.Select(x => x.ToString()));
-                var message = string.Format("{0}\r\nLoaderExceptions:\r\n{1}", ex.Message, loaderExceptions);
+                var message = $"{ex.Message}\r\nLoaderExceptions:\r\n{loaderExceptions}";
                 throw new ReflectionTypeLoadException(ex.Types, ex.LoaderExceptions, message);
             }
 
@@ -230,7 +188,8 @@ namespace Neptune.Web.Common
             var viewNamespace = (viewType.Namespace ?? String.Empty);
             var viewNamespaceSet = viewNamespace.Split('.');
 
-            Check.Require(viewNamespaceSet.Contains(ViewsRootNamespace), string.Format("Could not find views root namespace {0} in the view {1}, is it a proper view?", ViewsRootNamespace, viewName));
+            Check.Require(viewNamespaceSet.Contains(ViewsRootNamespace),
+                $"Could not find views root namespace {ViewsRootNamespace} in the view {viewName}, is it a proper view?");
 
             var isViewShared = viewNamespaceSet.Contains("Shared");
 
@@ -239,7 +198,8 @@ namespace Neptune.Web.Common
             var thisControllerName = ControllerTypeToControllerName(thisControllerType);
             var controllerAndPageInSameDirectory = (viewNameLastNamespace == thisControllerName);
 
-            Check.Require(isViewShared || controllerAndPageInSameDirectory, String.Format("You can't cross boundaries on controllers ({0} -> {1}). You must return a View that is within your controller's view directory or a shared one, otherwise view resolution will fail.", thisControllerTypeName, viewName));
+            Check.Require(isViewShared || controllerAndPageInSameDirectory,
+                $"You can't cross boundaries on controllers ({thisControllerTypeName} -> {viewName}). You must return a View that is within your controller's view directory or a shared one, otherwise view resolution will fail.");
         }
 
         /// <summary>
@@ -250,9 +210,11 @@ namespace Neptune.Web.Common
         public static string ControllerTypeToControllerName(Type controllerType)
         {
             var typeName = controllerType.Name;
-            Check.Require(typeName.EndsWith(ControllerSuffix), string.Format("Type {0} does not match naming convention for controller, expected suffix \"{1}\"", typeName, ControllerSuffix));
+            Check.Require(typeName.EndsWith(ControllerSuffix),
+                $"Type {typeName} does not match naming convention for controller, expected suffix \"{ControllerSuffix}\"");
             var controllerTypeToControllerName = typeName.Substring(0, typeName.Length - ControllerSuffix.Length);
-            Check.RequireNotNullNotEmptyNotWhitespace(controllerTypeToControllerName, string.Format("Got an empty controller name off of type {0} after removing suffix \"{1}\", illegal name unreachable by routes", typeName, ControllerSuffix));
+            Check.RequireNotNullNotEmptyNotWhitespace(controllerTypeToControllerName,
+                $"Got an empty controller name off of type {typeName} after removing suffix \"{ControllerSuffix}\", illegal name unreachable by routes");
             return controllerTypeToControllerName;
         }
 
@@ -266,7 +228,8 @@ namespace Neptune.Web.Common
             var namespaceParts = new Stack<string>(controllerType.FullName.Split('.'));
 
             var typeName = namespaceParts.Pop();
-            Check.Require(namespaceParts.Pop() == "Controllers", string.Format("Folder containing type {0} does not match expected name convention of \"Controllers\"", typeName));
+            Check.Require(namespaceParts.Pop() == "Controllers",
+                $"Folder containing type {typeName} does not match expected name convention of \"Controllers\"");
 
             var areaName = namespaceParts.Pop();
             var areasFolder = namespaceParts.Pop();
@@ -286,13 +249,12 @@ namespace Neptune.Web.Common
         }
 
         /// <summary>
-        /// Convert a controller name into the segement of the URL following MVC conventions adding .mvc as needed: Foo => string: Foo.mvc or Foo
+        /// Convert a controller name into the segment of the URL following MVC conventions adding .mvc as needed: Foo => string: Foo.mvc or Foo
         /// </summary>
         /// <param name="controllerName">Controller name (name minus the "Controller" suffix)</param>
         public static string ControllerNameToUrlSegment(string controllerName)
         {
-            var mvcFileExtensionIfAny = (SitkaWebConfiguration.UseMvcExtensionInUrl) ? ".mvc" : "";
-            return string.Format("{0}{1}", controllerName, mvcFileExtensionIfAny);
+            return controllerName;
         }
 
         public static List<MethodInfo> FindAttributedMethods(Type webServiceType, Type attributeType)
@@ -304,9 +266,10 @@ namespace Neptune.Web.Common
         protected ActionResult RedirectToReferrerOrTo<T>(SitkaRoute<T> fallbackRoute)
             where T : Controller
         {
-            if (HttpContext.Request.UrlReferrer != null)
+            var referrer = HttpContext.Request.GetTypedHeaders().Referer;
+            if (referrer != null)
             {
-                return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
+                return Redirect(referrer.AbsoluteUri);
             }
 
             return RedirectToAction(fallbackRoute);
@@ -328,15 +291,15 @@ namespace Neptune.Web.Common
             return new RedirectResult(route.BuildUrlFromExpression());
         }
 
-        protected FileResult ExportGridToExcelImpl(string gridName, bool printFooter)
-        {
-            var generator = new ExcelWriter { PrintFooter = false };
-            var xml = Request.Form["grid_xml"];
-            xml = Server.UrlDecode(xml);
-            xml = xml.Replace("<![CDATA[$", "<![CDATA["); // RL 7/11/2015 Poor man's hack to remove currency and allow for total rows
-            var stream = generator.Generate(xml);
-            return File(stream.ToArray(), generator.ContentType, string.Format("{0}.xlsx", gridName));
-        }
+        //protected FileResult ExportGridToExcelImpl(string gridName, bool printFooter)
+        //{
+        //    var generator = new ExcelWriter { PrintFooter = false };
+        //    var xml = Request.Form["grid_xml"];
+        //    xml = Server.UrlDecode(xml);
+        //    xml = xml.Replace("<![CDATA[$", "<![CDATA["); // RL 7/11/2015 Poor man's hack to remove currency and allow for total rows
+        //    var stream = generator.Generate(xml);
+        //    return File(stream.ToArray(), generator.ContentType, string.Format("{0}.xlsx", gridName));
+        //}
 
         /// <summary>
         /// Preferred signature for creating view results
@@ -422,22 +385,16 @@ namespace Neptune.Web.Common
             HttpContext.Response.Headers.Remove("Pragma");
         }
 
-        protected override FileContentResult File(byte[] fileContents, string contentType, string fileDownloadName)
+        public override FileContentResult File(byte[] fileContents, string contentType, string fileDownloadName)
         {
             SetHeadersForInternetExplorer8Support();
             return base.File(fileContents, contentType, fileDownloadName);
         }
 
-        protected override FileStreamResult File(Stream fileStream, string contentType, string fileDownloadName)
+        public override FileStreamResult File(Stream fileStream, string contentType, string fileDownloadName)
         {
             SetHeadersForInternetExplorer8Support();
             return base.File(fileStream, contentType, fileDownloadName);
-        }
-
-        protected override FilePathResult File(string fileName, string contentType, string fileDownloadName)
-        {
-            SetHeadersForInternetExplorer8Support();
-            return base.File(fileName, contentType, fileDownloadName);
         }
 
         protected FileContentResult TemporaryFile(string fileName, string contentType, string fileDownloadName)
@@ -448,28 +405,12 @@ namespace Neptune.Web.Common
             return File(bytes, contentType, fileDownloadName);
         }
 
-        protected string RenderPartialViewToString(string viewName, object viewData)
+        protected async Task<string> RenderPartialViewToString(string viewName, object viewData)
         {
-            if (string.IsNullOrEmpty(viewName))
-            {
-                viewName = ControllerContext.RouteData.GetRequiredString("action");
-            }
-
-            ViewData[TypedWebViewPage.ViewDataDictionaryKey] = viewData;
-
-            ViewData.Model = viewData;
-
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-
-                return sw.GetStringBuilder().ToString();
-            }
+            return await RenderPartialViewToString(viewName, viewData, viewData);
         }
 
-        protected string RenderPartialViewToString(string viewName, object viewData, object viewModel)
+        protected async Task<string> RenderPartialViewToString(string viewName, object viewData, object viewModel)
         {
             if (string.IsNullOrEmpty(viewName))
             {
@@ -480,18 +421,13 @@ namespace Neptune.Web.Common
 
             ViewData.Model = viewModel;
 
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-                viewResult.View.Render(viewContext, sw);
+            await using var sw = new StringWriter();
+            var viewResult = _viewEngine.FindView(ControllerContext, viewName, false);
+            var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw,
+                new HtmlHelperOptions());
+            await viewResult.View.RenderAsync(viewContext);
 
-                return sw.GetStringBuilder().ToString();
-            }
+            return sw.GetStringBuilder().ToString();
         }
     }
-
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class AutomaticallyCallEntityFrameworkSaveChangesWhenModelValidAttribute : Attribute
-    { }
 }

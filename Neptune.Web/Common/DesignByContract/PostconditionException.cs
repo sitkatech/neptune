@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="InvariantException.cs" company="Sitka Technology Group">
+<copyright file="PostconditionException.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,18 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
+
 using System.Runtime.Serialization;
 
-namespace LtInfo.Common.DesignByContract
+namespace Neptune.Web.Common.DesignByContract
 {
 	[Serializable]
-	public class InvariantException : ApplicationException
+	public class PostconditionException : ApplicationException
 	{
-		public InvariantException() {}
-		public InvariantException(string message) : base(message) {}
-		public InvariantException(string message, Exception inner) : base(message, inner) {}
-		public InvariantException(SerializationInfo info, StreamingContext context): base(info, context) {}
+		public PostconditionException() {}
+		public PostconditionException(string message) : base(message) {}
+		public PostconditionException(string message, Exception inner) : base(message, inner) {}
+		public PostconditionException(SerializationInfo info, StreamingContext context): base(info, context) {}
 	}
 }
 

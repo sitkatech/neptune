@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SitkaDuplicateRecordException.cs" company="Sitka Technology Group">
+<copyright file="InvariantException.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,19 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
 
-namespace LtInfo.Common
+using System.Runtime.Serialization;
+
+namespace Neptune.Web.Common.DesignByContract
 {
-    public class SitkaDuplicateRecordException : SitkaDisplayErrorException
-    {
-        public SitkaDuplicateRecordException(string objectName, int id)
-            : base(string.Format("{0} with ID# {1} already exists", objectName, id)) { }
-
-        public SitkaDuplicateRecordException(string objectName, Guid guid)
-            : base(string.Format("{0} with GUID {1} already exists", objectName, guid)) { }
-
-        public SitkaDuplicateRecordException(string objectName, string matchingCriteria)
-            : base(string.Format("{0} with with criteria \"{1}\" already exists", objectName, matchingCriteria)) { }
-    }
+	[Serializable]
+	public class InvariantException : ApplicationException
+	{
+		public InvariantException() {}
+		public InvariantException(string message) : base(message) {}
+		public InvariantException(string message, Exception inner) : base(message, inner) {}
+		public InvariantException(SerializationInfo info, StreamingContext context): base(info, context) {}
+	}
 }
+

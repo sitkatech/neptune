@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PreconditionException.cs" company="Sitka Technology Group">
+<copyright file="SitkaDisplayErrorExceptionWithHttpCode.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,17 +18,25 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
+
+using System.Net;
 using System.Runtime.Serialization;
 
-namespace LtInfo.Common.DesignByContract
+namespace Neptune.Web.Common
 {
-	[Serializable]
-	public class PreconditionException : ApplicationException
-	{
-		public PreconditionException() {}
-		public PreconditionException(string message) : base(message) {}
-		public PreconditionException(string message, Exception inner) : base(message, inner) {}
-		public PreconditionException(SerializationInfo info, StreamingContext context): base(info, context) {}
-	}
+    public class SitkaDisplayErrorExceptionWithHttpCode : SitkaDisplayErrorException
+    {
+        public HttpStatusCode HttpStatusCode;
+
+        public SitkaDisplayErrorExceptionWithHttpCode(HttpStatusCode httpStatusCode, string message) : base(message)
+        {
+            HttpStatusCode = httpStatusCode;
+        }
+        //public SitkaDisplayErrorExceptionWithHttpCode() { }
+        public SitkaDisplayErrorExceptionWithHttpCode(HttpStatusCode httpStatusCode, string message, Exception innerException) : base(message, innerException)
+        {
+            HttpStatusCode = httpStatusCode;
+        }
+        protected SitkaDisplayErrorExceptionWithHttpCode(SerializationInfo info, StreamingContext context) : base(info, context) { }
+    }
 }

@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SitkaRecordNotAuthorizedException.cs" company="Sitka Technology Group">
+<copyright file="PreconditionException.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,12 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace LtInfo.Common
+
+using System.Runtime.Serialization;
+
+namespace Neptune.Web.Common.DesignByContract
 {
-    public class SitkaRecordNotAuthorizedException : SitkaDisplayErrorException
-    {
-        public SitkaRecordNotAuthorizedException(string objectTypeName, int id) : base(string.Format("You are not authorized to view {0} ID# {1}", objectTypeName, id)) {}
-        public SitkaRecordNotAuthorizedException(string objectTypeName, string stringID) : base(string.Format("You are not authorized to view {0} {1}", objectTypeName, stringID)) { }
-        public SitkaRecordNotAuthorizedException(string message) : base(message) { }
-    }
+	[Serializable]
+	public class PreconditionException : ApplicationException
+	{
+		public PreconditionException() {}
+		public PreconditionException(string message) : base(message) {}
+		public PreconditionException(string message, Exception inner) : base(message, inner) {}
+		public PreconditionException(SerializationInfo info, StreamingContext context): base(info, context) {}
+	}
 }

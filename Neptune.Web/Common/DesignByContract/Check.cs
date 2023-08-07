@@ -18,14 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
+
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace LtInfo.Common.DesignByContract
+namespace Neptune.Web.Common.DesignByContract
 {
     /// <summary>
     /// Design By Contract Checks.
@@ -134,7 +131,7 @@ namespace LtInfo.Common.DesignByContract
         {
             RequireNotNull(stringToCheck, message);
             if (string.IsNullOrEmpty(stringToCheck))
-                ThrowThisException(new ArgumentException(message + " String is empty, expected non-empty string."));
+                ThrowThisException(new ArgumentException($"{message} String is empty, expected non-empty string."));
         }
 
         public static void RequireNotNullNotEmpty<T>(IEnumerable<T> itemsToCheck, string message)
@@ -142,29 +139,30 @@ namespace LtInfo.Common.DesignByContract
             RequireNotNull(itemsToCheck, message);
             if (!itemsToCheck.Any())
             {
-                ThrowThisException(new ArgumentException(message + " Item list is empty, expected non-empty list."));
+                ThrowThisException(new ArgumentException($"{message} Item list is empty, expected non-empty list."));
             }
         }
 
         public static void RequireNotNullNotEmptyNotWhitespace(string stringToCheck, string message)
         {
             RequireNotNull(stringToCheck, message);
-            if (GeneralUtility.IsNullOrEmptyOrOnlyWhitespace(stringToCheck))
-                ThrowThisException(new ArgumentException(message + " String is empty or only blank, expected non-empty string with some non-whitespace characters."));
+            if (string.IsNullOrWhiteSpace(stringToCheck))
+                ThrowThisException(new ArgumentException(
+                    $"{message} String is empty or only blank, expected non-empty string with some non-whitespace characters."));
         }
 
         public static void RequireNoWhitespace(string stringToExamine, string message)
         {
             if (Regex.IsMatch(stringToExamine, @"\s"))
             {
-                ThrowThisException(new ArgumentException(message + " String \"{0}\" contains one or more whitespace characters and isn't allowed to contain whitespace."));
+                ThrowThisException(new ArgumentException(
+                    $"{message} String \"{{0}}\" contains one or more whitespace characters and isn't allowed to contain whitespace."));
             }
         }
 
         public static void RequireDirectoryExists(string path)
         {
-            string problem;
-            if (!DirectoryExists(path, out problem))
+            if (!DirectoryExists(path, out var problem))
             {
                 ThrowThisException(new DirectoryNotFoundException(problem));
             }
@@ -172,33 +170,30 @@ namespace LtInfo.Common.DesignByContract
 
         public static void RequireDirectoryExists(DirectoryInfo dir)
         {
-            string problem;
-            if (!DirectoryExists(dir, out problem))
+            if (!DirectoryExists(dir, out var problem))
             {
                 ThrowThisException(new DirectoryNotFoundException(problem));
             }
         }
         public static void RequireDirectoryExists(string path, string message)
         {
-            string problem;
-            if (!DirectoryExists(path, out problem))
+            if (!DirectoryExists(path, out var problem))
             {
-                ThrowThisException(new DirectoryNotFoundException(message + "\r\n" + problem + "\r\n" + "Directory: " + path));
+                ThrowThisException(new DirectoryNotFoundException($"{message}\r\n{problem}\r\nDirectory: {path}"));
             }
         }
 
 
-        public static void RequireFileExists(FileInfo file, string message)
+        public static void RequireFileExists(FileInfo? file, string message)
         {
-            string problem;
-            if (!FileExists(file, out problem))
+            if (!FileExists(file, out var problem))
             {
-                var messageFormatted = (String.IsNullOrEmpty(message) || message.Trim() == String.Empty) ? string.Empty : message + "\r\n";
+                var messageFormatted = (string.IsNullOrEmpty(message) || message.Trim() == string.Empty) ? string.Empty : message + "\r\n";
                 ThrowThisException(new FileNotFoundException(messageFormatted + problem, file.FullName));
             }
         }
 
-        public static void RequireFileExists(FileInfo file)
+        public static void RequireFileExists(FileInfo? file)
         {
             RequireFileExists(file, String.Empty);
         }
@@ -213,10 +208,9 @@ namespace LtInfo.Common.DesignByContract
             RequireFileExists(new FileInfo(file), message);
         }
 
-        public static void RequireFileExists(FileInfo[] files)
+        public static void RequireFileExists(FileInfo?[] files)
         {
-            string problem;
-            if (!FileExists(files, out problem))
+            if (!FileExists(files, out var problem))
             {
                 ThrowThisException(new FileNotFoundException(problem));
             }
@@ -282,20 +276,18 @@ namespace LtInfo.Common.DesignByContract
             }
         }
 
-        public static void EnsureFileExists(FileInfo file)
+        public static void EnsureFileExists(FileInfo? file)
         {
-            string problem;
-            if (!FileExists(file, out problem))
+            if (!FileExists(file, out var problem))
             {
                 throw new FileNotFoundException(problem);
             }
         }
 
 
-        public static void EnsureFileExists(FileInfo[] files)
+        public static void EnsureFileExists(FileInfo?[] files)
         {
-            string problem;
-            if (!FileExists(files, out problem))
+            if (!FileExists(files, out var problem))
             {
                 throw new FileNotFoundException(problem);
             }
@@ -303,8 +295,7 @@ namespace LtInfo.Common.DesignByContract
 
         public static void EnsureFileExists(string file)
         {
-            string problem;
-            if (!FileExists(new FileInfo(file), out problem))
+            if (!FileExists(new FileInfo(file), out var problem))
             {
                 throw new FileNotFoundException(problem);
             }
@@ -312,8 +303,7 @@ namespace LtInfo.Common.DesignByContract
 
         public static void EnsureFileExists(string file, string message)
         {
-            string problem;
-            if (!FileExists(new FileInfo(file), out problem))
+            if (!FileExists(new FileInfo(file), out var problem))
             {
                 throw new FileNotFoundException(message + "\r\n" + problem, file);
             }
@@ -407,7 +397,7 @@ namespace LtInfo.Common.DesignByContract
 
         public static void EnsureTrace(bool assertion, string message)
         {
-            Trace.Assert(assertion, "Postcondition: " + message);
+            Trace.Assert(assertion, $"Postcondition: {message}");
         }
 
         #endregion
@@ -421,7 +411,7 @@ namespace LtInfo.Common.DesignByContract
 
         public static void InvariantTrace(bool assertion, string message)
         {
-            Trace.Assert(assertion, "Invariant: " + message);
+            Trace.Assert(assertion, $"Invariant: {message}");
         }
 
         #endregion
@@ -440,10 +430,10 @@ namespace LtInfo.Common.DesignByContract
 
         #endregion
 
-        private static bool FileExists(FileInfo[] files, out string problem)
+        private static bool FileExists(FileInfo?[] files, out string problem)
         {
-            bool exists = true;
-            problem = String.Empty;
+            var exists = true;
+            problem = string.Empty;
             if (files == null)
             {
                 exists = false;
@@ -451,10 +441,9 @@ namespace LtInfo.Common.DesignByContract
             }
             else
             {
-                foreach (FileInfo file in files)
+                foreach (var file in files)
                 {
-                    string thisProblem;
-                    bool thisExists = FileExists(file, out thisProblem);
+                    var thisExists = FileExists(file, out var thisProblem);
                     exists = exists && thisExists;
                     problem += thisProblem;
                 }
@@ -462,10 +451,10 @@ namespace LtInfo.Common.DesignByContract
             return exists;
         }
 
-        private static bool FileExists(FileInfo file, out string problem)
+        private static bool FileExists(FileInfo? file, out string problem)
         {
-            bool exists = true;
-            problem = String.Empty;
+            var exists = true;
+            problem = string.Empty;
             if (file == null)
             {
                 exists = false;
@@ -474,15 +463,15 @@ namespace LtInfo.Common.DesignByContract
             else if (!File.Exists(file.FullName))
             {
                 exists = false;
-                problem = String.Format("File \"{0}\" not found.\n", file.FullName);
+                problem = $"File \"{file.FullName}\" not found.\n";
             }
             return exists;
         }
 
         private static bool DirectoryExists(string dirName, out string problem)
         {
-            bool exists = true;
-            problem = String.Empty;
+            var exists = true;
+            problem = string.Empty;
             if (dirName == null)
             {
                 exists = false;
@@ -491,7 +480,7 @@ namespace LtInfo.Common.DesignByContract
             else if (!Directory.Exists(dirName))
             {
                 exists = false;
-                problem = String.Format("Directory \"{0}\" not found.\n", dirName);
+                problem = $"Directory \"{dirName}\" not found.\n";
             }
             return exists;
         }
@@ -514,10 +503,10 @@ namespace LtInfo.Common.DesignByContract
 
         public static void RequireType<T>(object objectRequiringType, string message)
         {
-            string fullMessage = String.Format("Expected object of type {0} but got type {1}", typeof(T).Name, objectRequiringType.GetType().Name);
-            if (!(String.IsNullOrEmpty(message)))
+            var fullMessage = $"Expected object of type {typeof(T).Name} but got type {objectRequiringType.GetType().Name}";
+            if (!(string.IsNullOrWhiteSpace(message)))
             {
-                fullMessage = string.Format("{0} {1}", message, fullMessage);
+                fullMessage = $"{message} {fullMessage}";
             }
             Require(objectRequiringType is T, fullMessage);
         }

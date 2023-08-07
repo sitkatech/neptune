@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PostconditionException.cs" company="Sitka Technology Group">
+<copyright file="SitkaDuplicateRecordException.cs" company="Sitka Technology Group">
 Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,18 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Runtime.Serialization;
 
-namespace LtInfo.Common.DesignByContract
+namespace Neptune.Web.Common
 {
-	[Serializable]
-	public class PostconditionException : ApplicationException
-	{
-		public PostconditionException() {}
-		public PostconditionException(string message) : base(message) {}
-		public PostconditionException(string message, Exception inner) : base(message, inner) {}
-		public PostconditionException(SerializationInfo info, StreamingContext context): base(info, context) {}
-	}
-}
+    public class SitkaDuplicateRecordException : SitkaDisplayErrorException
+    {
+        public SitkaDuplicateRecordException(string objectName, int id)
+            : base($"{objectName} with ID# {id} already exists") { }
 
+        public SitkaDuplicateRecordException(string objectName, Guid guid)
+            : base($"{objectName} with GUID {guid} already exists") { }
+
+        public SitkaDuplicateRecordException(string objectName, string matchingCriteria)
+            : base($"{objectName} with with criteria \"{matchingCriteria}\" already exists") { }
+    }
+}
