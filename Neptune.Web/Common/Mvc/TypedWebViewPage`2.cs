@@ -24,14 +24,14 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace LtInfo.Common.Mvc
+namespace Neptune.Web.Common.Mvc
 {
     public abstract class TypedWebViewPage<TViewData> : TypedWebViewPage<TViewData, object>
     {
 
     }
 
-    public abstract class TypedWebPartialViewPage<TViewData> : TypedWebViewPage<TViewData, object>
+    public abstract class TypedWebPartialViewPage<TViewData> : TypedWebPartialViewPage<TViewData, object>
     {
 
     }

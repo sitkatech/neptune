@@ -21,14 +21,13 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.ObjectModel;
 using System.Reflection;
-using System.Security.Principal;
 using LtInfo.Common.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Neptune.Web.Common.DesignByContract;
+using Neptune.Common.DesignByContract;
+using Neptune.Web.Common.Mvc;
 
 namespace Neptune.Web.Common
 {
@@ -56,10 +55,6 @@ namespace Neptune.Web.Common
         private const string ViewsRootNamespace = "Views";
         public const string DefaultAction = "Index";
         public const string DefaultController = "Home";
-
-        protected abstract bool IsCurrentUserAnonymous();
-        protected abstract string LoginUrl { get; }
-
 
         //protected override void OnException(ExceptionContext filterContext)
         //{

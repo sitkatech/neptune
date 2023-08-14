@@ -15,8 +15,8 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanStatus
     {
-        public static readonly WaterQualityManagementPlanStatusInitialAnnualVerification InitialAnnualVerification = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusInitialAnnualVerification.Instance;
-        public static readonly WaterQualityManagementPlanStatusFollowupVerification FollowupVerification = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusFollowupVerification.Instance;
+        public static readonly WaterQualityManagementPlanStatusActive Inactive = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusActive.Instance;
+        public static readonly WaterQualityManagementPlanStatusInactive Active = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusInactive.Instance;
 
         public static readonly List<WaterQualityManagementPlanStatus> All;
         public static readonly List<WaterQualityManagementPlanStatusDto> AllAsDto;
@@ -28,8 +28,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static WaterQualityManagementPlanStatus()
         {
-            All = new List<WaterQualityManagementPlanStatus> { InitialAnnualVerification, FollowupVerification };
-            AllAsDto = new List<WaterQualityManagementPlanStatusDto> { InitialAnnualVerification.AsDto(), FollowupVerification.AsDto() };
+            All = new List<WaterQualityManagementPlanStatus> { Inactive, Active };
+            AllAsDto = new List<WaterQualityManagementPlanStatusDto> { Inactive.AsDto(), Active.AsDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
             AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatusDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
         }
@@ -100,10 +100,10 @@ namespace Neptune.EFModels.Entities
         {
             switch (enumValue)
             {
-                case WaterQualityManagementPlanStatusEnum.FollowupVerification:
-                    return FollowupVerification;
-                case WaterQualityManagementPlanStatusEnum.InitialAnnualVerification:
-                    return InitialAnnualVerification;
+                case WaterQualityManagementPlanStatusEnum.Active:
+                    return Active;
+                case WaterQualityManagementPlanStatusEnum.Inactive:
+                    return Inactive;
                 default:
                     throw new ArgumentException("Unable to map Enum: {enumValue}");
             }
@@ -112,19 +112,19 @@ namespace Neptune.EFModels.Entities
 
     public enum WaterQualityManagementPlanStatusEnum
     {
-        InitialAnnualVerification = 1,
-        FollowupVerification = 2
+        Inactive = 1,
+        Active = 2
     }
 
-    public partial class WaterQualityManagementPlanStatusInitialAnnualVerification : WaterQualityManagementPlanStatus
+    public partial class WaterQualityManagementPlanStatusActive : WaterQualityManagementPlanStatus
     {
-        private WaterQualityManagementPlanStatusInitialAnnualVerification(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName) : base(waterQualityManagementPlanStatusID, waterQualityManagementPlanStatusName, waterQualityManagementPlanStatusDisplayName) {}
-        public static readonly WaterQualityManagementPlanStatusInitialAnnualVerification Instance = new WaterQualityManagementPlanStatusInitialAnnualVerification(1, @"Initial Annual Verification", @"Initial Annual Verification");
+        private WaterQualityManagementPlanStatusActive(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName) : base(waterQualityManagementPlanStatusID, waterQualityManagementPlanStatusName, waterQualityManagementPlanStatusDisplayName) {}
+        public static readonly WaterQualityManagementPlanStatusActive Instance = new WaterQualityManagementPlanStatusActive(1, @"Active", @"Active");
     }
 
-    public partial class WaterQualityManagementPlanStatusFollowupVerification : WaterQualityManagementPlanStatus
+    public partial class WaterQualityManagementPlanStatusInactive : WaterQualityManagementPlanStatus
     {
-        private WaterQualityManagementPlanStatusFollowupVerification(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName) : base(waterQualityManagementPlanStatusID, waterQualityManagementPlanStatusName, waterQualityManagementPlanStatusDisplayName) {}
-        public static readonly WaterQualityManagementPlanStatusFollowupVerification Instance = new WaterQualityManagementPlanStatusFollowupVerification(2, @"Follow-up Verification", @"Follow-up Verification");
+        private WaterQualityManagementPlanStatusInactive(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName) : base(waterQualityManagementPlanStatusID, waterQualityManagementPlanStatusName, waterQualityManagementPlanStatusDisplayName) {}
+        public static readonly WaterQualityManagementPlanStatusInactive Instance = new WaterQualityManagementPlanStatusInactive(2, @"Inactive", @"Inactive");
     }
 }

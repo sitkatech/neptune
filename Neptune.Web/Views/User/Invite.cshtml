@@ -1,0 +1,84 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Common.BootstrapWrappers
+@using Neptune.Web.Common.HtmlHelperExtensions
+@inherits Neptune.Web.Views.User.Invite
+@model Neptune.Web.Views.User.InviteViewModel
+
+@{ /*ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);*/ }
+
+@using (Html.BeginForm())
+{
+    <div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">
+                            @Html.LabelWithSugarFor(x => x.FirstName)
+                        </div>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.FirstName, new { style = "width:100%", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.FirstName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">
+                            @Html.LabelWithSugarFor(x => x.LastName)
+                        </div>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.LastName, new { style = "width:100%", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.LastName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">
+                            @Html.LabelWithSugarFor(x => x.Email)
+                        </div>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Email, new { style = "width:100%", @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Email)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">
+                            @Html.LabelWithSugarFor(x => x.OrganizationGuid)
+                        </div>
+                        <div class="col-sm-10">
+                            @Html.SearchableDropDownListFor(m => m.OrganizationGuid, ViewDataTyped.AllOrganizations, new { @class = "selectpicker form-control" })
+                            @Html.ValidationMessageFor(x => x.OrganizationGuid)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <hr />
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button type="submit" class="btn btn-neptune">Invite</button>
+            <a href="@ViewDataTyped.CancelUrl" class="btn btn-neptune" style="display: inline-block;">Cancel</a>
+        </div>
+    </div>
+}

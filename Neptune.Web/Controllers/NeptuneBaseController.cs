@@ -18,57 +18,29 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.ObjectModel;
-using System.Reflection;
-using System.Web.Mvc;
+
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
-using log4net;
-using SitkaController = Neptune.Web.Common.SitkaController;
 
 namespace Neptune.Web.Controllers
 {
-    [ValidateInput(false)]
-    public abstract class NeptuneBaseController : SitkaController
+    public abstract class NeptuneBaseController<T> : SitkaController
     {
-        public static ControllerContext ControllerContextStatic;
+        protected Person CurrentPerson => UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+        protected readonly NeptuneDbContext _dbContext;
+        protected readonly ILogger<T> _logger;
 
-        protected ILog Logger = LogManager.GetLogger(typeof(NeptuneBaseController));
+        protected readonly LinkGenerator _linkGenerator;
+        //        protected readonly WebConfiguration _qanatConfiguration;
 
-        protected override void OnAuthorization(AuthorizationContext filterContext)
+        protected NeptuneBaseController(NeptuneDbContext dbContext, ILogger<T> logger, LinkGenerator linkGenerator
+            //, IOptions<QanatConfiguration> qanatConfiguration
+        )
         {
-            if (!IsCurrentUserAnonymous())
-            {
-                CurrentPerson.LastActivityDate = DateTime.Now;
-                HttpRequestStorage.DatabaseEntities.ChangeTracker.DetectChanges();
-                HttpRequestStorage.DatabaseEntities.SaveChangesWithNoAuditing();
-            }
-            base.OnAuthorization(filterContext);
+            _dbContext = dbContext;
+            _logger = logger;
+            _linkGenerator = linkGenerator;
+            //_qanatConfiguration = qanatConfiguration.Value;
         }
-
-        protected NeptuneBaseController()
-        {
-            if (ControllerContextStatic == null)
-                ControllerContextStatic = ControllerContext;
-        }
-
-        public static ReadOnlyCollection<MethodInfo> AllControllerActionMethods => AllControllerActionMethodsProtected;
-
-        static NeptuneBaseController()
-        {
-            AllControllerActionMethodsProtected = new ReadOnlyCollection<MethodInfo>(GetAllControllerActionMethods(typeof(NeptuneBaseController)));
-        }
-
-        protected override bool IsCurrentUserAnonymous()
-        {
-            return CurrentPerson == null || CurrentPerson.IsAnonymousUser();
-        }
-
-        protected override string LoginUrl => NeptuneHelpers.GenerateLogInUrlWithReturnUrl();
-
-        protected override ISitkaDbContext SitkaDbContext => HttpRequestStorage.DatabaseEntities;
-
-        protected Person CurrentPerson => HttpRequestStorage.Person;
     }
 }

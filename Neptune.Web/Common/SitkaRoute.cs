@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
-using Neptune.Web.Common.DesignByContract;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.Web.Common
 {
@@ -34,23 +34,46 @@ namespace Neptune.Web.Common
     public class SitkaRoute<T> where T : Controller
     {
         private readonly LinkGenerator _linkGenerator;
-        public string ControllerName { get; private set; }
-        public string ActionName { get; private set; }
-        public MethodCallExpression Body { get; private set; }
+        public string ControllerName { get; }
+        public string ActionName { get; }
+        public MethodCallExpression Body { get; }
 
-        public Expression<Action<T>> RouteExpression { get; private set; }
+        public Expression<Action<T>> RouteExpression { get; }
 
         public SitkaRouteSecurity RouteSecurity { get; set; }
 
-
-        public SitkaRoute(Expression<Action<T>> routeExpression, SitkaRouteSecurity routeSecurity, HttpContext httpContext) : this(routeExpression, httpContext)
+        public SitkaRoute(Expression<Action<T>> routeExpression, SitkaRouteSecurity routeSecurity, LinkGenerator linkGenerator) : this(routeExpression, linkGenerator)
         {
             RouteSecurity = routeSecurity;
         }
 
-        public SitkaRoute(Expression<Action<T>> routeExpression, HttpContext httpContext)
+        //public SitkaRoute(Expression<Action<T>> routeExpression, SitkaRouteSecurity routeSecurity, HttpContext httpContext) : this(routeExpression, httpContext)
+        //{
+        //    RouteSecurity = routeSecurity;
+        //}
+
+        //public SitkaRoute(Expression<Action<T>> routeExpression, HttpContext httpContext)
+        //{
+        //    _linkGenerator = httpContext.RequestServices.GetRequiredService<LinkGenerator>();
+
+        //    RouteExpression = routeExpression;
+        //    ControllerName = SitkaController.ControllerTypeToControllerName(typeof(T));
+        //    Body = GetRouteExpressionBody(routeExpression);
+
+        //    var actionName = Body.Method.Name;
+        //    var attributes = Body.Method.GetCustomAttributes(typeof(ActionNameAttribute), false);
+        //    if (attributes.Length > 0)
+        //    {
+        //        var actionNameAttr = (ActionNameAttribute)attributes[0];
+        //        actionName = actionNameAttr.Name;
+        //    }
+
+        //    ActionName = actionName;
+        //}
+
+        public SitkaRoute(Expression<Action<T>> routeExpression, LinkGenerator linkGenerator)
         {
-            _linkGenerator = httpContext.RequestServices.GetRequiredService<LinkGenerator>();
+            _linkGenerator = linkGenerator;
 
             RouteExpression = routeExpression;
             ControllerName = SitkaController.ControllerTypeToControllerName(typeof(T));

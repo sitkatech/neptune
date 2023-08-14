@@ -5,11 +5,15 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Web", "Neptune.Web\Neptune.Web.csproj", "{5CA350B9-C4E2-4F7A-AE29-62B975CC0F0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.EFModels", "Neptune.EFModels\Neptune.EFModels.csproj", "{ABE6DF19-5CEB-4306-B866-737186A00E1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.EFModels", "Neptune.EFModels\Neptune.EFModels.csproj", "{ABE6DF19-5CEB-4306-B866-737186A00E1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Models", "Neptune.Models\Neptune.Models.csproj", "{4F505B9F-9655-4DB8-AFF9-1AEBEE1A1233}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Models", "Neptune.Models\Neptune.Models.csproj", "{4F505B9F-9655-4DB8-AFF9-1AEBEE1A1233}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Neptune.Database", "Neptune.Database\Neptune.Database.sqlproj", "{18896E6A-80C1-423A-B354-62466F4DE70D}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{FD1871DB-6453-466E-A171-0C83CD29D48F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Common", "Neptune.Common\Neptune.Common.csproj", "{E14A5B40-2DD3-4287-A0A9-23B490155C19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +39,14 @@ Global
 		{18896E6A-80C1-423A-B354-62466F4DE70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18896E6A-80C1-423A-B354-62466F4DE70D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18896E6A-80C1-423A-B354-62466F4DE70D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{FD1871DB-6453-466E-A171-0C83CD29D48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1871DB-6453-466E-A171-0C83CD29D48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1871DB-6453-466E-A171-0C83CD29D48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1871DB-6453-466E-A171-0C83CD29D48F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E14A5B40-2DD3-4287-A0A9-23B490155C19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E14A5B40-2DD3-4287-A0A9-23B490155C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E14A5B40-2DD3-4287-A0A9-23B490155C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E14A5B40-2DD3-4287-A0A9-23B490155C19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

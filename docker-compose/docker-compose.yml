@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  neptune.webmvc:
+    image: neptune/webmvc
+    build:
+      context: ..
+      dockerfile: Neptune.Web/Dockerfile

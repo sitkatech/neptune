@@ -1,0 +1,154 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Security
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common.BootstrapWrappers
+@using Neptune.Web.Common.HtmlHelperExtensions
+@using Neptune.Web.Common.ModalDialog
+@inherits Neptune.Web.Views.Organization.Detail
+@section JavascriptAndStylesContent
+{
+    @*@{ DhtmlxGridIncludes.RenderPartialView(Html); }
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }*@
+    <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
+}
+
+@if (ViewDataTyped.Organization.StormwaterJurisdiction != null)
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-info">@ViewDataTyped.Organization.GetDisplayName() is a @Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction). @*<a href="@ViewDataTyped.Organization.StormwaterJurisdiction.GetDetailUrl()">View the Stormwater Jurisdiction Page</a>*@ to see stormwater assets and assessments.</div>
+        </div>                               
+    </div>
+}
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditOrganizationUrl, string.Format("Edit {0} - {1}", FieldDefinitionType.Organization.GetFieldDefinitionLabel(), ViewDataTyped.Organization.GetDisplayName()), ViewDataTyped.UserHasOrganizationManagePermissions) Basics
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @*TODO: @if (ViewDataTyped.Organization.LogoFileResource != null)
+                    {
+                        <div class="col-xs-1">
+                            <div style="text-align: center;">
+                                <img src="@ViewDataTyped.Organization.LogoFileResource.GetFileResourceUrl()" style="max-width: 100px; max-height: 200px; margin-left: auto; margin-right: auto;" />
+                            </div>
+                        </div>
+                    }*@
+
+                    <div class="@(ViewDataTyped.Organization.LogoFileResource != null ? "col-xs-11" : "col-xs-12")">
+                        <div class="row">
+                            <div class="col-xs-6 fieldLabel text-right">@Html.Label("Name")</div>
+                            <div class="col-xs-6">@ViewDataTyped.Organization.OrganizationName</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 fieldLabel text-right">@Html.Label("Short Name")</div>
+                            <div class="col-xs-6">@ViewDataTyped.Organization.OrganizationShortName</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinitionType.OrganizationType)</div>
+                            <div class="col-xs-6">@(ViewDataTyped.Organization.OrganizationType != null ? ViewDataTyped.Organization.OrganizationType.OrganizationTypeName : string.Empty)</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinitionType.PrimaryContact)</div>
+                            @*todo: <div class="col-xs-6">@(new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, ViewDataTyped.Organization.PrimaryContactPerson).HasPermission ? ViewDataTyped.Organization.GetPrimaryContactPersonWithOrgAsUrl() : ViewDataTyped.Organization.GetPrimaryContactPersonAsStringAndOrgAsUrl())</div>*@
+                            <div class="col-xs-6">@ViewDataTyped.Organization.GetPrimaryContactPersonAsStringAndOrgAsUrl()</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 fieldLabel text-right">@Html.Label("Home Page")</div>
+                            <div class="col-xs-6">
+                                <a href="@ViewDataTyped.Organization.OrganizationUrl">@ViewDataTyped.Organization.OrganizationUrl</a>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                @Html.LabelWithSugarFor(FieldDefinitionType.FundingSource, LabelWithSugarForExtensions.DisplayStyle.HelpIconOnly)
+                <a href="@ViewDataTyped.ManageFundingSourcesUrl">@FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()</a>
+
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewFundingSourceUrl, string.Format("Create a new {0}", FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()), new List<string>(), ViewDataTyped.UserHasCreateFundingSourcePermissions)
+                </span>
+            </div>
+            <div class="panel-body">
+                @*todo:
+                    @if (ViewDataTyped.Organization.FundingSources.Any())
+                {
+                    <ul>
+                        @foreach (var fundingSource in ViewDataTyped.Organization.FundingSources.OrderBy(x => x.FundingSourceName))
+                        {
+                            <li>
+                                @fundingSource.GetDisplayNameAsUrl()
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="systemText">No @FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized() set for this @FieldDefinitionType.Organization.GetFieldDefinitionLabel().</p>
+                }*@
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Users
+            </div>
+            <div class="panel-body">
+                @*todo:
+                    @if (ViewDataTyped.Organization.People.Any())
+                {
+                    <ul>
+                        @foreach (var person in ViewDataTyped.Organization.People.Where(x => x.IsActive).OrderBy(x => x.GetFullNameLastFirst()))
+                        {
+                            if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
+                            {
+                                <li>
+                                    @person.GetFullNameFirstLastAsUrl()
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    @person.GetFullNameFirstLast()
+                                </li>
+                            }
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="sys">No Users belong to this @FieldDefinitionType.Organization.GetFieldDefinitionLabel().</p>
+                }*@
+            </div>
+        </div>
+    </div>
+</div>

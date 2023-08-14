@@ -48,3 +48,11 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Database/bin/Debug
 /Neptune.Models/bin/Debug/net6.0
 /Neptune.Database/*.jfm
+/obj/Docker
+/Neptune.Web/appsecrets.json
+/Neptune.Common/obj
+/Neptune.Common/bin/Debug/net6.0
+/docker-compose/obj/Debug
+/docker-compose/obj/Docker/*.yml
+/docker-compose/bin/Debug
+/docker-compose/*.env

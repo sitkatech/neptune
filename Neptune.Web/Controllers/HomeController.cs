@@ -18,6 +18,7 @@ namespace Neptune.Web.Controllers
             return View();
         }
 
+        //[HttpGet("privacy", Name = "homePrivacy")]
         public IActionResult Privacy()
         {
             return View();

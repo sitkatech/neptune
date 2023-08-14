@@ -18,68 +18,73 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Neptune.Web.Models;
+
 using Neptune.Web.Security;
 using Neptune.Web.Views.Role;
-using LtInfo.Common.MvcResults;
 using Microsoft.AspNetCore.Mvc;
+using Neptune.EFModels;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.MvcResults;
 
 namespace Neptune.Web.Controllers
 {
-    public class RoleController : NeptuneBaseController
+    [Route("Role")]
+    public class RoleController : NeptuneBaseController<RoleController>
     {
-        [UserEditFeature]
-        public ViewResult Index()
+        public RoleController(NeptuneDbContext dbContext, ILogger<RoleController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
         {
-            var viewData = new IndexViewData(CurrentPerson);
-            return RazorView<Index, IndexViewData>(viewData);
         }
 
         [UserEditFeature]
-        public GridJsonNetJObjectResult<IRole> IndexGridJsonData()
+        public ViewResult Index()
         {
-            var gridSpec = new IndexGridSpec();
+            var viewData = new IndexViewData(CurrentPerson, _linkGenerator);
+            return RazorView<Views.Role.Index, IndexViewData>(viewData);
+        }
+
+        [UserEditFeature]
+        public GridJsonNetJObjectResult<Role> IndexGridJsonData()
+        {
+            var gridSpec = new IndexGridSpec(_linkGenerator);
             var roleSummaries = GetRoleSummaryData();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<IRole>(roleSummaries, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Role>(roleSummaries, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
         [UserEditFeature]
         public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData(NeptuneAreaEnum neptuneAreaEnum, int roleID)
         {
-            var role = NeptuneArea.ToType(neptuneAreaEnum).GetRole(roleID);
             var gridSpec = new PersonWithRoleGridSpec();
-            var peopleWithRole = role.GetPeopleWithRole();
+            var peopleWithRole = People.GetPeopleWithRole(_dbContext, roleID);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(peopleWithRole, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        public static List<IRole> GetRoleSummaryData()
+        public static List<Role> GetRoleSummaryData()
         {
-            var roles = new List<IRole> {new AnonymousRole()};
-            roles.AddRange(Role.All);
-            return roles.OrderBy(x => x.RoleDisplayName).ToList();
+            //var roles = new List<IRole> {new AnonymousRole()};
+            //roles.AddRange(Role.All);
+            //return roles.OrderBy(x => x.RoleDisplayName).ToList();
+            return Role.All.OrderBy(x => x.RoleDisplayName).ToList();
         }
 
-        [UserEditFeature]
-        public ViewResult Anonymous()
-        {
-            return ViewDetail(new AnonymousRole());
-        }
+        //[UserEditFeature]
+        //public ViewResult Anonymous()
+        //{
+        //    return ViewDetail(new AnonymousRole());
+        //}
 
         [UserEditFeature]
-        public ViewResult Detail(int neptuneAreID, int roleID)
+        [HttpGet("Detail/{roleID}")]
+        public ViewResult Detail([FromRoute] int roleID)
         {
-            var role = NeptuneArea.AllLookupDictionary[neptuneAreID].GetRole(roleID);
+            var role = Role.AllLookupDictionary[roleID];
             return ViewDetail(role);
         }
 
         private ViewResult ViewDetail(IRole role)
         {
-            var viewData = new DetailViewData(CurrentPerson, role);
+            var viewData = new DetailViewData(CurrentPerson, role, _linkGenerator);
             return RazorView<Detail, DetailViewData>(viewData);
         }
     }
