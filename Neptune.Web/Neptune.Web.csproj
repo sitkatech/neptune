@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Mvc\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
 
   <ItemGroup>
