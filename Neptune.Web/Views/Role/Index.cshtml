@@ -19,12 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @using Neptune.Web.Common.DhtmlWrappers
+@using Neptune.Web.Views.Shared
 
 @inherits Neptune.Web.Views.Role.Index
 
 @section JavascriptAndStylesContent
 {
-    @*@{ DhtmlxGridIncludes.RenderPartialView(Html); }*@
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 
 <div style="margin-top: 10px">

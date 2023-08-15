@@ -31,6 +31,7 @@ namespace Neptune.Web.Common
         SSL
     }
 
+
     public class SitkaRoute<T> where T : Controller
     {
         private readonly LinkGenerator _linkGenerator;
@@ -96,11 +97,22 @@ namespace Neptune.Web.Common
             var objectBody = new Dictionary<string, dynamic>();
             for (var i = 0; i < actionParameters.Length; i++)
             {
-                var parameterValue = (Body.Arguments[i] as ConstantExpression)?.Value;
+                //var parameterValue = (Body.Arguments[i] as ConstantExpression)?.Value;
+                var parameterValue = GetArgumentValue(Body.Arguments[i]);
                 objectBody.Add(actionParameters[i].Name, parameterValue);
             }
             var relativePath = _linkGenerator.GetPathByAction(ActionName, ControllerName, objectBody);
             return relativePath;
+        }
+
+        private static object GetArgumentValue(Expression element)
+        {
+            if (element is ConstantExpression expression)
+            {
+                return expression.Value;
+            }
+
+            return Expression.Lambda(Expression.Convert(element, element.Type)).Compile().DynamicInvoke();
         }
 
         public static string BuildLinkFromUrl(string url, string linkText)

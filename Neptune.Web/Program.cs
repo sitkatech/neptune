@@ -65,6 +65,9 @@ var app = builder.Build();
         app.UseHsts();
     }
 
+    app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
+            string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
+
     app.UseHttpsRedirection();
     app.UseStaticFiles();
 

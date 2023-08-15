@@ -22,10 +22,8 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Globalization;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Neptune.Web.Common.BootstrapWrappers;
 using Neptune.Web.Common.ModalDialog;
-using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Common.DhtmlWrappers
 {
@@ -53,8 +51,10 @@ namespace Neptune.Web.Common.DhtmlWrappers
 
         public static readonly HtmlString PlusIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus-sign gi-1x blue");
         public static readonly HtmlString FactSheetIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search gi-1x blue");
-        public static readonly UrlTemplate<string> ExcelDownloadWithFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, true)));
-        public static readonly UrlTemplate<string> ExcelDownloadWithoutFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, false)));
+        public static readonly string ExcelDownloadWithFooterUrl = $"/Home/ExportGridToExcel/{0}/true";
+        public static readonly string ExcelDownloadWithoutFooterUrl = $"/Home/ExportGridToExcel/{0}/false";
+        //public static readonly UrlTemplate<string> ExcelDownloadWithFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, true)));
+        //public static readonly UrlTemplate<string> ExcelDownloadWithoutFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, false)));
 
         /// <summary>
         /// All grids use this
@@ -250,7 +250,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
             return string.Format(template, gridName);
         }
 
-        public static string BuildDhtmlxGridHeader<T>(GridSpec<T> gridSpec, string gridName, UrlTemplate<string> excelDownloadWithFooterUrl, UrlTemplate<string> excelDownloadWithoutFooterUrl)
+        public static string BuildDhtmlxGridHeader<T>(GridSpec<T> gridSpec, string gridName, string excelDownloadWithFooterUrl, string excelDownloadWithoutFooterUrl)
         {
             var filteredStateHtml = CreateFilteredStateHtml(gridName, gridSpec.ShowFilterBar);
             var gridHeaderIconsHtml = CreateGridHeaderIconsHtml(gridSpec, gridName, excelDownloadWithFooterUrl, excelDownloadWithoutFooterUrl);
@@ -267,7 +267,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
     </span>";
         }
 
-        private static string CreateGridHeaderIconsHtml<T>(GridSpec<T> gridSpec, string gridName, UrlTemplate<string> excelDownloadWithFooterUrl, UrlTemplate<string> excelDownloadWithoutFooterUrl)
+        private static string CreateGridHeaderIconsHtml<T>(GridSpec<T> gridSpec, string gridName, string excelDownloadWithFooterUrl, string excelDownloadWithoutFooterUrl)
         {
             var clearCookiesIconHtml = CreateClearAllCookiesIconHtml(gridName);
             var filteredExcelDownloadIconHtml = CreateFilteredExcelDownloadIconHtml(gridName, gridSpec.HasColumnTotals, excelDownloadWithFooterUrl, excelDownloadWithoutFooterUrl);
@@ -469,7 +469,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="excelDownloadWithFooterUrl"></param>
         /// <param name="excelDownloadWithoutFooterUrl"></param>
         /// <returns></returns>
-        public static string CreateFilteredExcelDownloadIconHtml(string gridName, bool printFooter, UrlTemplate<string> excelDownloadWithFooterUrl, UrlTemplate<string> excelDownloadWithoutFooterUrl)
+        public static string CreateFilteredExcelDownloadIconHtml(string gridName, bool printFooter, string? excelDownloadWithFooterUrl, string? excelDownloadWithoutFooterUrl)
         {
             if (excelDownloadWithFooterUrl == null || excelDownloadWithoutFooterUrl == null) return string.Empty;
 
@@ -477,7 +477,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                 String.Format(
                     @"<a class=""excelbutton"" id=""{0}DownloadLink"" href=""javascript:void(0)"" onclick=""Sitka.{0}.grid.toExcel({1})"" title=""Download this table as an Excel file"">Download Table</a>",
                     gridName,
-                    printFooter ? excelDownloadWithFooterUrl.ParameterReplace(gridName).ToJS() : excelDownloadWithoutFooterUrl.ParameterReplace(gridName).ToJS());
+                    printFooter ? string.Format(excelDownloadWithFooterUrl, gridName).ToJS() : string.Format(excelDownloadWithoutFooterUrl, gridName).ToJS());
         }
 
         /// <summary>

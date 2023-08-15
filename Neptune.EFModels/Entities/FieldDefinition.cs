@@ -28,5 +28,9 @@ namespace Neptune.EFModels.Entities
             FieldDefinitionID = fieldDefinitionID;
             FieldDefinitionValue = fieldDefinitionDataValue;
         }
+
+        public FieldDefinition()
+        {
+        }
     }
 }

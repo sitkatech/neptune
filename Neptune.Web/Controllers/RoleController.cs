@@ -24,11 +24,11 @@ using Neptune.Web.Views.Role;
 using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
 
 namespace Neptune.Web.Controllers
 {
-    [Route("Role")]
     public class RoleController : NeptuneBaseController<RoleController>
     {
         public RoleController(NeptuneDbContext dbContext, ILogger<RoleController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
@@ -36,6 +36,7 @@ namespace Neptune.Web.Controllers
         }
 
         [UserEditFeature]
+        [HttpGet]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson, _linkGenerator);
@@ -43,16 +44,18 @@ namespace Neptune.Web.Controllers
         }
 
         [UserEditFeature]
-        public GridJsonNetJObjectResult<Role> IndexGridJsonData()
+        [HttpGet]
+        public GridJsonNetJObjectResult<RoleSimpleDto> IndexGridJsonData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator);
-            var roleSummaries = GetRoleSummaryData();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Role>(roleSummaries, gridSpec);
+            var roleSummaries = GetRoleSummaryData(_dbContext);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<RoleSimpleDto>(roleSummaries, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
         [UserEditFeature]
-        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData(NeptuneAreaEnum neptuneAreaEnum, int roleID)
+        [HttpGet("{roleID}")]
+        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData(int roleID)
         {
             var gridSpec = new PersonWithRoleGridSpec();
             var peopleWithRole = People.GetPeopleWithRole(_dbContext, roleID);
@@ -60,12 +63,18 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        public static List<Role> GetRoleSummaryData()
+        public static List<RoleSimpleDto> GetRoleSummaryData(NeptuneDbContext dbContext)
         {
             //var roles = new List<IRole> {new AnonymousRole()};
             //roles.AddRange(Role.All);
             //return roles.OrderBy(x => x.RoleDisplayName).ToList();
-            return Role.All.OrderBy(x => x.RoleDisplayName).ToList();
+            var peopleDict = People.ListActive(dbContext).GroupBy(x => x.RoleID).ToDictionary(x => x.Key, x => x.Count());
+            return Role.All.Select(x =>
+            {
+                var roleSimpleDto = x.AsSimpleDto();
+                roleSimpleDto.PeopleWithRoleCount = peopleDict[x.RoleID];
+                return roleSimpleDto;
+            }).OrderBy(x => x.RoleDisplayName).ToList();
         }
 
         //[UserEditFeature]
@@ -75,7 +84,7 @@ namespace Neptune.Web.Controllers
         //}
 
         [UserEditFeature]
-        [HttpGet("Detail/{roleID}")]
+        [HttpGet("{roleID}")]
         public ViewResult Detail([FromRoute] int roleID)
         {
             var role = Role.AllLookupDictionary[roleID];

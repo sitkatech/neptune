@@ -19,18 +19,20 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.EFModels;
+using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Role
 {
-    public class IndexGridSpec : GridSpec<EFModels.Entities.Role>
+    public class IndexGridSpec : GridSpec<RoleSimpleDto>
     {
         public IndexGridSpec(LinkGenerator linkGenerator)
         {
-            Add("Role", a => UrlTemplate.MakeHrefString(linkGenerator.GetPathByAction("Detail", "Role", new Dictionary<string, dynamic>{{ "neptuneAreaID", (int) a.NeptuneAreaEnum.Value}, {"roleID", a.RoleID}}), a.RoleDisplayName), 200, DhtmlxGridColumnFilterType.Html);
-            //Add("Count", a => a.GetPeopleWithRole().Count, 50);
+            Add("Role", a => UrlTemplate.MakeHrefString(
+                new SitkaRoute<RoleController>(x => x.Detail(a.RoleID), linkGenerator).BuildUrlFromExpression(), a.RoleDisplayName), 200, DhtmlxGridColumnFilterType.Html);
+            Add("Count", a => a.PeopleWithRoleCount, 50);
         }
     }
 }

@@ -19,11 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Controllers
 {
+    [ApiController]
+    [Route("[controller]/[action]", Name = "[controller]_[action]")]
     public abstract class NeptuneBaseController<T> : SitkaController
     {
         protected Person CurrentPerson => UserContext.GetUserFromHttpContext(_dbContext, HttpContext);

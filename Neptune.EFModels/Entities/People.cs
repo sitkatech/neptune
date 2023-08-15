@@ -81,11 +81,15 @@ namespace Neptune.EFModels.Entities
             return persons;
         }
 
-        public static List<PersonSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
+        public static List<PersonSimpleDto> ListActiveAsSimpleDto(NeptuneDbContext dbContext)
         {
-            return GetPersonImpl(dbContext)
-                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
-                .Select(x => x.AsSimpleDto()).ToList();
+            return ListActive(dbContext).Select(x => x.AsSimpleDto()).ToList();
+        }
+
+        public static IQueryable<Person> ListActive(NeptuneDbContext dbContext)
+        {
+            return GetPersonImpl(dbContext).Where(x => x.IsActive)
+                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
         }
 
         public static Person GetByID(NeptuneDbContext dbContext, int personID)
@@ -147,7 +151,7 @@ namespace Neptune.EFModels.Entities
 
         public static List<Person> GetPeopleWithRole(NeptuneDbContext dbContext, int roleID)
         {
-            return GetPersonImpl(dbContext).Where(x => x.IsActive && x.RoleID == roleID).ToList();
+            return ListActive(dbContext).Where(x => x.RoleID == roleID).ToList();
         }
     }
 }
