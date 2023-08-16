@@ -129,23 +129,23 @@ namespace Neptune.Web.Common.DhtmlWrappers
         #endregion
 
         #region HtmlString
-        public ColumnSpec<T> Add(string columnName, Func<T, HtmlString> valueFunction, int gridWidth)
+        public ColumnSpec<T> Add(string columnName, Func<T, IHtmlContent> valueFunction, int gridWidth)
         {
             return Add(columnName, valueFunction, gridWidth, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
 
-        public ColumnSpec<T> Add(string columnName, Func<T, HtmlString> valueFunction, int gridWidth, DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType)
+        public ColumnSpec<T> Add(string columnName, Func<T, IHtmlContent> valueFunction, int gridWidth, DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType)
         {
             return Add(columnName, valueFunction, null, gridWidth, null, dhtmlxGridColumnFilterType, null, DhtmlxGridColumnAlignType.Left);
         }
 
-        public ColumnSpec<T> Add(string columnName, Func<T, HtmlString> valueFunction, int gridWidth, DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType, DhtmlxGridColumnAlignType dhtmlxGridColumnAlignType)
+        public ColumnSpec<T> Add(string columnName, Func<T, IHtmlContent> valueFunction, int gridWidth, DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType, DhtmlxGridColumnAlignType dhtmlxGridColumnAlignType)
         {
             return Add(columnName, valueFunction, null, gridWidth, null, dhtmlxGridColumnFilterType, null, dhtmlxGridColumnAlignType);
         }
 
         private ColumnSpec<T> Add(string columnName,
-            Func<T, HtmlString> valueFunction,
+            Func<T, IHtmlContent> valueFunction,
             Func<T, string> cssClassFunction,
             int gridWidth,
             Func<T, string> titleFunction,

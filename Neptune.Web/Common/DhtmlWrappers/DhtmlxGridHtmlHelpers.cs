@@ -117,7 +117,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
             var javascriptDocumentReadyHtml = RenderGridJavascriptDocumentReady(gridSpec, gridName, optionalGridDataUrl,
                 splitAtColumn, dhtmlxGridResizeType);
 
-            return String.Format(template, gridName, gridSpec.LoadingBarHtml, metaDivHtml, styleString, javascriptDocumentReadyHtml);
+            return string.Format(template, gridName, gridSpec.LoadingBarHtml, metaDivHtml, styleString, javascriptDocumentReadyHtml);
         }
 
         /// <summary>
@@ -579,7 +579,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="editUrl"></param>
         /// <param name="hasPermission"></param>
         /// <returns></returns>
-        public static HtmlString MakeEditIconAsHyperlink(string editUrl, bool hasPermission)
+        public static IHtmlContent MakeEditIconAsHyperlink(string editUrl, bool hasPermission)
         {
             return hasPermission ? UrlTemplate.MakeHrefString(editUrl,
                 $"{EditIcon}<span style=\"display:none\">Edit</span>") : new HtmlString(string.Empty);
@@ -590,7 +590,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// </summary>
         /// <param name="editUrl"></param>
         /// <returns></returns>
-        public static HtmlString MakeEditIconAsHyperlink(string editUrl)
+        public static IHtmlContent MakeEditIconAsHyperlink(string editUrl)
         {
             return MakeEditIconAsHyperlink(editUrl, true);
         }
@@ -602,7 +602,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="editUrl"></param>
         /// <param name="hasPermission"></param>
         /// <returns></returns>
-        public static HtmlString MakeEditIconAsHyperlinkBootstrap(string editUrl, bool hasPermission)
+        public static IHtmlContent MakeEditIconAsHyperlinkBootstrap(string editUrl, bool hasPermission)
         {
             return hasPermission ? UrlTemplate.MakeHrefString(editUrl,
                 $"{EditIconBootstrap}<span style=\"display:none\">Edit</span>") : new HtmlString(string.Empty);
@@ -613,7 +613,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// </summary>
         /// <param name="editUrl"></param>
         /// <returns></returns>
-        public static HtmlString MakeEditIconAsHyperlinkBootstrap(string editUrl)
+        public static IHtmlContent MakeEditIconAsHyperlinkBootstrap(string editUrl)
         {
             return MakeEditIconAsHyperlinkBootstrap(editUrl, true);
         }
@@ -622,7 +622,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// If insufficient permissions, returns empty string
         /// </summary>
-        public static HtmlString MakeModalDialogLink(string linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, bool hasPermission, string saveButtonText, string cancelButtonText, List<string> extraCssClasses, string onJavascriptReadyFunction, string postData)
+        public static IHtmlContent MakeModalDialogLink(string linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, bool hasPermission, string saveButtonText, string cancelButtonText, List<string> extraCssClasses, string onJavascriptReadyFunction, string postData)
         {
             if (hasPermission)
             {
@@ -634,7 +634,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static HtmlString MakeModalDialogLink(string linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
+        public static IHtmlContent MakeModalDialogLink(string linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
         {
             return MakeModalDialogLink(linkHtml, dialogContentUrl, dialogWidth, dialogTitle, true, "Save", "Cancel", new List<string>(), onJavascriptReadyFunction, null);
         }
@@ -642,7 +642,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static HtmlString MakeEditIconAsModalDialogLink(ModalDialogForm modalDialogForm)
+        public static IHtmlContent MakeEditIconAsModalDialogLink(ModalDialogForm modalDialogForm)
         {
             return MakeModalDialogLink($"{EditIcon}<span style=\"display:none\">Edit</span>", modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle, modalDialogForm.OnJavascriptReadyFunction);
         }
@@ -650,7 +650,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static HtmlString MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
+        public static IHtmlContent MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
         {
             return MakeModalDialogLink($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>", modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle, modalDialogForm.OnJavascriptReadyFunction);
         }
@@ -658,7 +658,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static HtmlString MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm, bool userCanEdit)
+        public static IHtmlContent MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm, bool userCanEdit)
         {
             return userCanEdit
                 ? MakeModalDialogLink($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>",
@@ -670,7 +670,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static HtmlString MakeLtInfoEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
+        public static IHtmlContent MakeLtInfoEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
         {
             string linkText = $"{EditIconBootstrap}<span style=\"display:none\">Edit</span>";
             List<string> extraCssClasses = new List<string>();
@@ -694,7 +694,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="deleteDialogUrl"></param>
         /// <param name="userHasDeletePermission"></param>
         /// <returns></returns>
-        public static HtmlString MakeDeleteIconAndLink(string deleteDialogUrl, bool userHasDeletePermission)
+        public static IHtmlContent MakeDeleteIconAndLink(string deleteDialogUrl, bool userHasDeletePermission)
         {
             return MakeDeleteIconAndLink(deleteDialogUrl, userHasDeletePermission, true);
         }
@@ -707,7 +707,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="userHasDeletePermission">Does the given user have permission to perform a delete?</param>
         /// <param name="deletePossibleForObject">Is a delete possible for the given object?</param>
         /// <returns></returns>
-        public static HtmlString MakeDeleteIconAndLink(string deleteDialogUrl, bool userHasDeletePermission, bool deletePossibleForObject)
+        public static IHtmlContent MakeDeleteIconAndLink(string deleteDialogUrl, bool userHasDeletePermission, bool deletePossibleForObject)
         {
             var deleteIcon = deletePossibleForObject ? DeleteIcon : DeleteIconGrey;
             return ModalDialogFormHelper.MakeDeleteLink($"{deleteIcon}<span style=\"display:none\">Delete</span>", deleteDialogUrl, new List<string>(), userHasDeletePermission);
@@ -719,7 +719,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="deleteDialogUrl"></param>
         /// <param name="userHasDeletePermission"></param>
         /// <returns></returns>
-        public static HtmlString MakeDeleteIconAndLinkBootstrap(string deleteDialogUrl, bool userHasDeletePermission)
+        public static IHtmlContent MakeDeleteIconAndLinkBootstrap(string deleteDialogUrl, bool userHasDeletePermission)
         {
             return MakeDeleteIconAndLinkBootstrap(deleteDialogUrl, userHasDeletePermission, true);
         }
@@ -732,7 +732,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <param name="userHasDeletePermission">Does the given user have permission to perform a delete?</param>
         /// <param name="deletePossibleForObject">Is a delete possible for the given object?</param>
         /// <returns></returns>
-        public static HtmlString MakeDeleteIconAndLinkBootstrap(string deleteDialogUrl, bool userHasDeletePermission, bool deletePossibleForObject)
+        public static IHtmlContent MakeDeleteIconAndLinkBootstrap(string deleteDialogUrl, bool userHasDeletePermission, bool deletePossibleForObject)
         {
             var deleteIcon = deletePossibleForObject ? $"{DeleteIconBootstrap}<span style=\"display:none\">Delete</span>"
                 : BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash gi-1x disabled").ToString();

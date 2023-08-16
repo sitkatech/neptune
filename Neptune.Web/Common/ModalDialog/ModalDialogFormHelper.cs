@@ -43,7 +43,7 @@ namespace Neptune.Web.Common.ModalDialog
         /// <param name="onJavascriptReadyFunction">Optional javascript function to run when dialog is loaded</param>
         /// <param name="postData">Optional; if provided, will switch the dialog load to a POST from a GET</param>
         /// <returns></returns>
-        public static HtmlString ModalDialogFormLink(string linkText,
+        public static IHtmlContent ModalDialogFormLink(string linkText,
             string dialogContentUrl,
             string dialogTitle,
             int? dialogWidth,
@@ -85,7 +85,7 @@ namespace Neptune.Web.Common.ModalDialog
         /// <param name="postData">Optional; if provided, will switch the dialog load to a POST from a GET</param>
         /// <param name="optionalDialogFormID"></param>
         /// <returns></returns>
-        public static HtmlString ModalDialogFormLink(string linkID,
+        public static IHtmlContent ModalDialogFormLink(string linkID,
             string linkText,
             string dialogContentUrl,
             string dialogTitle,
@@ -121,7 +121,7 @@ namespace Neptune.Web.Common.ModalDialog
         /// <param name="optionalDialogFormID"></param>
         /// <param name="hoverText"></param>
         /// <returns></returns>
-        public static HtmlString ModalDialogFormLink(string linkID,
+        public static IHtmlContent ModalDialogFormLink(string linkID,
             string linkText,
             string dialogContentUrl,
             string dialogTitle,
@@ -180,32 +180,32 @@ namespace Neptune.Web.Common.ModalDialog
                 builder.Attributes.Add("title", hoverText);
             }
 
-            return new HtmlString(builder.ToString());
+            return builder;
         }
 
-        public static HtmlString ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, List<string> extraCssClasses, bool hasPermission)
+        public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, List<string> extraCssClasses, bool hasPermission)
         {
             return hasPermission ? ModalDialogFormLink(linkText, dialogUrl, dialogTitle, DefaultDialogWidth, "Save", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
         }
 
-        public static HtmlString ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, int dialogWidth, bool hasPermission, string dialogFormID)
+        public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, int dialogWidth, bool hasPermission, string dialogFormID)
         {
             return hasPermission
                 ? ModalDialogFormLink(null, linkText, dialogUrl, dialogTitle, dialogWidth, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, dialogFormID, null)
                 : new HtmlString(string.Empty);
         }
 
-        public static HtmlString MakeDeleteLink(string linkText, string deleteDialogUrl, List<string> extraCssClasses, bool userHasDeletePermission)
+        public static IHtmlContent MakeDeleteLink(string linkText, string deleteDialogUrl, List<string> extraCssClasses, bool userHasDeletePermission)
         {
             return userHasDeletePermission ? ModalDialogFormLink(linkText, deleteDialogUrl, "Confirm Delete", 500, "Delete", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
         }
 
-        public static HtmlString MakeEditIconLink(string dialogUrl, string dialogTitle, bool hasPermission)
+        public static IHtmlContent MakeEditIconLink(string dialogUrl, string dialogTitle, bool hasPermission)
         {
             return MakeEditIconLink(dialogUrl, dialogTitle, DefaultDialogWidth, hasPermission);
         }
 
-        public static HtmlString MakeEditIconLink(string dialogUrl, string dialogTitle, int width, bool hasPermission)
+        public static IHtmlContent MakeEditIconLink(string dialogUrl, string dialogTitle, int width, bool hasPermission)
         {
             return hasPermission ? ModalDialogFormLink(null, BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), dialogUrl, dialogTitle, width, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, null) : new HtmlString(string.Empty);
         }

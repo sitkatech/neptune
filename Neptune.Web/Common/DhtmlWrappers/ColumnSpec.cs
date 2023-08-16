@@ -45,7 +45,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         private readonly Func<T, double?> _nullableDoubleValueFunc;
         private readonly Func<T, bool> _boolValueFunc;
         private readonly Func<T, bool?> _nullableBoolValueFunc;
-        private readonly Func<T, HtmlString> _htmlStringValueFunc;
+        private readonly Func<T, IHtmlContent> _htmlStringValueFunc;
 
         private readonly FuncType _funcType;
         private readonly Func<T, string> _cssClassFunction;
@@ -380,7 +380,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
             _funcType = FuncType.NullableDecimal;
         }
 
-        public ColumnSpec(string columnName, Func<T, HtmlString> htmlStringValueFunc, int gridWidth,
+        public ColumnSpec(string columnName, Func<T, IHtmlContent> htmlStringValueFunc, int gridWidth,
             DhtmlxGridColumnDataType dhtmlxGridColumnDataType, DhtmlxGridColumnFormatType dhtmlxGridColumnFormatType,
             DhtmlxGridColumnAlignType dhtmlxGridColumnAlignType, DhtmlxGridColumnSortType dhtmlxGridColumnSortType,
             DhtmlxGridColumnFilterType dhtmlxGridColumnFilterType,
