@@ -57,15 +57,23 @@ namespace Neptune.Web.Security
                     "Could not find injected DbRepository. Can't check rights appropriately!");
             }
 
-            var userDto = UserContext.GetUserFromHttpContext(dbContext, context.HttpContext);
+            var person = UserContext.GetUserFromHttpContext(dbContext, context.HttpContext);
 
-            var isAuthorized = userDto != null && (_grantedRoles.Any(x => (int)x == userDto.Role.RoleID) || !_grantedRoles.Any()); // allowing an empty list lets us implement LoggedInUnclassifiedFeature easily
-
+            var isAuthorized = HasPermissionByPerson(person);
+                
             if (!isAuthorized)
             {
                 context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             }
         }
+
+        public virtual bool HasPermissionByPerson(Person person)
+        {
+            return person != null && (_grantedRoles.Any(x => (int)x == person.Role.RoleID)
+                    //|| !_grantedRoles.Any()); // allowing an empty list lets us implement LoggedInUnclassifiedFeature easily
+                );
+        }
+
 
 
         //public override void OnAuthorization(AuthorizationFilterContext context)

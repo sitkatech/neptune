@@ -13,7 +13,9 @@
     <PackageReference Include="ApprovalTests" Version="5.8.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON4STJ" Version="3.0.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="ProjNet" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -543,5 +543,11 @@ namespace Neptune.Web.Common
             var newText = string.Join(string.Empty, newLines);
             return newText;
         }
+
+        public static string SanitizeStringForGdb(this string str)
+        {
+            var arr = str.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)).ToArray();
+            return new string(arr).Replace(" ", "_");
+        }
     }
 }

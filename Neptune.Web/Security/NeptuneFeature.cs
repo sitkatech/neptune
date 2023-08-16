@@ -18,10 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Linq;
+
 using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {

@@ -1,8 +1,5 @@
-﻿using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-using Neptune.Web.Security;
+﻿using Microsoft.AspNetCore.Html;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -13,14 +10,16 @@ namespace Neptune.Web.Views.Shared
         public readonly string NeptunePageContentID;
         public readonly string NeptunePageEditHoverButtonID;
         public readonly string EditPageContentUrl;
+        public readonly HtmlString HtmlContent;
 
         public ViewPageContentViewData(NeptunePage neptunePage, Person currentPerson)
         {
             NeptunePage = neptunePage;
-            ShowEditButton = true; //new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;
+            ShowEditButton = true; //todo: new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;
             NeptunePageContentID = $"neptunePageContent{neptunePage.NeptunePageID}";
             NeptunePageEditHoverButtonID = $"editHoverButton{neptunePage.NeptunePageID}";
             EditPageContentUrl = "";// todo: SitkaRoute<NeptunePageController>.BuildUrlFromExpression(t => t.EditInDialog(NeptunePage));
+            HtmlContent = new HtmlString(neptunePage.NeptunePageContent);
         }        
     }
 }

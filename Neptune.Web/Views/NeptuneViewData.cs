@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Web.Views.Shared;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views
 {
@@ -62,18 +64,17 @@ namespace Neptune.Web.Views
             _linkGenerator = linkGenerator;
 
             CurrentPerson = currentPerson;
-            NeptuneHomeUrl = _linkGenerator.GetPathByAction("Index", "Role");
-                //SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(c => c.Index(), NeptuneWebConfiguration.CanonicalHostNameRoot);
+            NeptuneHomeUrl = new SitkaRoute<HomeController>(c => c.Index(), linkGenerator).BuildUrlFromExpression();
 
             LogInUrl = "";// todo: NeptuneHelpers.GenerateLogInUrlWithReturnUrl();
             LogOutUrl = "";// todo: NeptuneHelpers.GenerateLogOutUrlWithReturnUrl();
 
             RequestSupportUrl = "";// todo: SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.Support());
 
-            LegalUrl = "";// todo: SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
+            LegalUrl = new SitkaRoute<HomeController>(c => c.Legal(), linkGenerator).BuildUrlFromExpression();
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage);
+            NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, linkGenerator);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
@@ -157,7 +158,7 @@ namespace Neptune.Web.Views
         {
             var manageMenu = new LtInfoMenuItem("Manage");
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.ManageHomePageImages(), _linkGenerator), currentPerson, "Homepage Configuration", "Group1"));
             //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group1"));
             //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
             //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group1"));

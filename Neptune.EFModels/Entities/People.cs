@@ -109,7 +109,7 @@ namespace Neptune.EFModels.Entities
             return person?.AsDto();
         }
 
-        public static Person GetByPersonGuid(NeptuneDbContext dbContext, Guid personGuid)
+        public static Person? GetByPersonGuid(NeptuneDbContext dbContext, Guid personGuid)
         {
             return GetPersonImpl(dbContext)
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
@@ -117,7 +117,7 @@ namespace Neptune.EFModels.Entities
 
         public static PersonDto GetByPersonGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
-            var person = GetPersonImpl(dbContext)
+            var person = GetPersonImpl(dbContext).Include(x => x.StormwaterJurisdictionPeople)
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
 
             return person?.AsDto();

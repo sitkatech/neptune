@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     var services = builder.Services;
     services.AddRazorPages();
-    services.AddControllersWithViews();
+    services.AddControllersWithViews().AddJsonOptions(options => {
+        options.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory());
+    });
 
     builder.Configuration.AddJsonFile(builder.Configuration["SECRET_PATH"], optional: false, reloadOnChange: true);
 

@@ -1,0 +1,42 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Training.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Views.Home
+@using Neptune.Web.Views.Shared
+@inherits Training
+
+@{ @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped) }
+
+@{
+    ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
+}
+
+@foreach (var video in ViewDataTyped.TrainingVideos)
+{
+    <div class="row">
+        <div class="col-md-6" style="margin-bottom: 20px;">
+            <div style="background:#eee; border:1px solid #ccc; padding: 5px 10px;"><strong>@video.VideoName</strong></div>
+            <div style="background:#eee; border:1px solid #ccc; padding: 5px 10px">
+                <iframe src="@video.VideoURL" allowfullscreen="" width="100%" height="344" frameborder="0"></iframe>
+                <p>@video.VideoDescription</p>
+            </div>
+        </div>
+    </div>
+}

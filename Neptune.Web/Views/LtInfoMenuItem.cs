@@ -148,7 +148,7 @@ namespace Neptune.Web.Views
             childMenuItems.Add($"{childIndent}<ul class=\"{classes}\" role=\"menu\">");
 
             var menuGroups = ChildenMenuItemsAndDividersSecurityFiltered.GroupBy(x => x.MenuGroupName).ToList();
-            var currentIndent = string.Format("{0}{1}", Indent, childIndent);
+            var currentIndent = $"{Indent}{childIndent}";
             foreach (var menuGroup in menuGroups)
             {
                 childMenuItems.AddRange(menuGroup.Select(childMenuItem => childMenuItem.RenderMenu(currentIndent)).ToList());

@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.EFModels.Entities;
@@ -39,19 +38,22 @@ namespace Neptune.Web.Views.Shared
         public readonly string HomeUrl;
 
         public readonly NeptuneArea NeptuneArea;
+        private readonly LinkGenerator _linkGenerator;
         public readonly bool ShowLinkToArea;
 
-        public NeptuneNavBarViewData(Person currentPerson, string logInUrl, string logOutUrl, string requestSupportUrl, NeptuneArea neptuneArea, bool isHomePage)
+        public NeptuneNavBarViewData(Person currentPerson, string logInUrl, string logOutUrl, string requestSupportUrl,
+            NeptuneArea neptuneArea, bool isHomePage, LinkGenerator linkGenerator)
         {
             CurrentPerson = currentPerson;
+            _linkGenerator = linkGenerator;
 
-            HomeUrl = "";// todo: SitkaRoute<HomeController>.BuildUrlFromExpression(hc => hc.Index());
+            HomeUrl = new SitkaRoute<HomeController>(hc => hc.Index(), linkGenerator).BuildUrlFromExpression();
 
             LogInUrl = logInUrl;
             LogOutUrl = logOutUrl;
             RequestSupportUrl = requestSupportUrl;
 
-            AboutUrl = ""; //todo: SitkaRoute<HomeController>.BuildUrlFromExpression(hc => hc.About());
+            AboutUrl = new SitkaRoute<HomeController>(hc => hc.About(), linkGenerator).BuildUrlFromExpression();
             TopLevelNeptuneMenus = MakeNeptuneHelpMenu(currentPerson);
 
             NeptuneAreas = NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName);
@@ -66,7 +68,7 @@ namespace Neptune.Web.Views.Shared
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
                 $@"<a href='{RequestSupportUrl}' target='_blank'>Request Support<span class='glyphicon glyphicon-new-window'></span></a>", "ToolHelp"));
 
-            //helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training(), _linkGenerator), currentPerson, "Training", "ToolHelp"));
             //if (!currentPerson.IsAnonymousUser())
             //{
             //    helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(c => c.BulkUploadRequest()),

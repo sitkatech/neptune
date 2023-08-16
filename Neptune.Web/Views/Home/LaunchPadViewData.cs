@@ -1,0 +1,62 @@
+﻿using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Security;
+using Neptune.Web.Views.Shared;
+
+namespace Neptune.Web.Views.Home
+{
+    public class LaunchPadViewData
+    {
+        public Person CurrentPerson { get; }
+        public bool IsLoggedIn { get; }
+        public bool IsAdmin { get; }
+        public bool IsUnassigned { get; }
+        public bool IsJurisdictionManager { get; }
+        public IEnumerable<StormwaterJurisdiction> Jurisdictions { get; }
+        public int NumberOfBmpTypes { get; set; }
+        public ViewPageContentViewData LaunchPadViewPageContentViewData { get; }
+        public string ManagerDashboardDescription { get;  }
+
+        public string JurisdictionIndexUrl { get; }
+        public string RequestSupportUrl { get; set; }
+        public string FindABmpUrl { get; set; }
+        public string ExploreBmpTypesUrl { get; set; }
+        public string AddABmpUrl { get; set; }
+        public string InviteANewUserUrl { get; set; }
+        public string AddAFundingSourceUrl { get; set; }
+        public string FieldFieldVisitsUrl { get; set; }
+        public string EditUserRolesUrl { get; set; }
+        public string ViewAssessmentAndMaintenanceRecordsUrl { get; }
+        public string ViewWaterQualityManagementPlansUrl { get; }
+        public string ManagerDashboardUrl { get; }
+        public string ViewDelineationReconciliationReportUrl { get; }
+
+        public LaunchPadViewData(Person currentPerson, NeptunePage launchPadNeptunePage, int numberOfBmpTypes, string managerDashboardDescription)
+        {
+            CurrentPerson = currentPerson;
+            IsLoggedIn = !CurrentPerson.IsAnonymousUser();
+            IsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
+            IsUnassigned = !CurrentPerson.IsAnonymousUser() && CurrentPerson.RoleID == EFModels.Entities.Role.Unassigned.RoleID;
+            IsJurisdictionManager = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
+            Jurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
+            NumberOfBmpTypes = numberOfBmpTypes;
+            ManagerDashboardDescription = managerDashboardDescription;
+            LaunchPadViewPageContentViewData =
+                new ViewPageContentViewData(launchPadNeptunePage, CurrentPerson);
+            JurisdictionIndexUrl = ""; //todo SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Index());
+            RequestSupportUrl = ""; //todo SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.RequestToChangePrivileges());
+            FindABmpUrl = ""; //todo SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.FindABMP());
+            ExploreBmpTypesUrl = ""; //todo SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
+            AddABmpUrl = ""; //todo SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.New());
+            ViewAssessmentAndMaintenanceRecordsUrl = ""; //todo SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
+            ViewWaterQualityManagementPlansUrl = ""; //todo SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Index());
+            FieldFieldVisitsUrl = ""; //todo SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
+            InviteANewUserUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Invite());
+            EditUserRolesUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Index());
+            AddAFundingSourceUrl = ""; //todo SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
+            ManagerDashboardUrl = ""; //todo SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index());
+            ViewDelineationReconciliationReportUrl = ""; //todo SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationReconciliationReport());
+        }
+    }
+}

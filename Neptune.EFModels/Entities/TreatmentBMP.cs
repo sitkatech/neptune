@@ -19,11 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Models;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMP // : IAuditableEntity, IHaveHRUCharacteristics
+    public partial class TreatmentBMP : IAuditableEntity//, IHaveHRUCharacteristics
     {
         public bool CanView(Person person)
         {

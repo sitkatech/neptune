@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using NetTopologySuite.Features;
 
 namespace Neptune.Web.Models
 {
@@ -108,143 +110,152 @@ namespace Neptune.Web.Models
         //    return treatmentBMP == null ? new HtmlString(String.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
         //}
 
-        //public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs)
-        //{
-        //    var featureCollection = new FeatureCollection();
-        //    featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
-        //    {
-        //        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
-        //        feature.Properties.Add("Name", x.TreatmentBMPName);
-        //        feature.Properties.Add("FeatureColor", "#935F59");
-        //        feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
-        //        feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
-        //        feature.Properties.Add("MapSummaryUrl", x.GetMapSummaryUrl() );
-        //        feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
-        //        feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
-        //        feature.Properties.Add("TrashCaptureStatusTypeID", x.TrashCaptureStatusTypeID);
-        //        feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdictionID);
-        //        return feature;
-        //    }));
-        //    return featureCollection;
-        //}
+        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        {
+            var featureCollection = new FeatureCollection();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "Name", treatmentBMP.TreatmentBMPName },
+                    { "FeatureColor", "#935F59" },
+                    { "FeatureGlyph", "water" }, // TODO: Need to be able to customize this per Treatment BMP Type
+                    { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
+                    // todo: { "MapSummaryUrl", treatmentBMP.GetMapSummaryUrl() },
+                    { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
+                    { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
+                    { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },
+                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
+                };
+                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                featureCollection.Add(feature);
+            }
+            return featureCollection;
+        }
 
-        //public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<TreatmentBMP> treatmentBMPs)
-        //{
-        //    var featureCollection = new FeatureCollection();
-        //    featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
-        //    {
-        //        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
-        //        var trashCaptureStatusType = x.TrashCaptureStatusType;
+        public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        {
+            var featureCollection = new FeatureCollection();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                var trashCaptureStatusType = treatmentBMP.TrashCaptureStatusType;
+                var attributesTable = new AttributesTable
+                {
+                    { "Name", treatmentBMP.TreatmentBMPName },
+                    { "FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap() },
+                    { "FeatureGlyph", "water" },
+                    { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
+                    //todo: { "MapSummaryUrl", treatmentBMP.GetTrashMapAssetUrl() },
+                    { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
+                    { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
+                    { "TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID },
+                    { "TrashCaptureStatus", trashCaptureStatusType.TrashCaptureStatusTypeName },
+                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
+                };
+                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                featureCollection.Add(feature);
+            }
+            return featureCollection;
+        }
 
-        //        feature.Properties.Add("Name", x.TreatmentBMPName);
-        //        feature.Properties.Add("FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap());
-        //        feature.Properties.Add("FeatureGlyph", "water");
-        //        feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
-        //        feature.Properties.Add("MapSummaryUrl", x.GetTrashMapAssetUrl() );
-        //        feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
-        //        feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
-        //        feature.Properties.Add("TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID);
-        //        feature.Properties.Add("TrashCaptureStatus", trashCaptureStatusType.TrashCaptureStatusTypeName);
-        //        feature.Properties.Add("StormwaterJurisdictionID", x.StormwaterJurisdictionID);
-        //        return feature;
-        //    }));
-        //    return featureCollection;
-        //}
+        /// <summary>
+        /// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
+        /// Adds some common properties (Name, Treatment BMP Type, ID, Type ID) to each feature.
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <returns></returns>
+        public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        {
+            return treatmentBMPs.ToGeoJsonFeatureCollectionGeneric(null);
+        }
 
-        ///// <summary>
-        ///// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
-        ///// Adds some common properties (Name, Treatment BMP Type, ID, Type ID) to each feature.
-        ///// </summary>
-        ///// <param name="treatmentBMPs"></param>
-        ///// <returns></returns>
-        //public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs)
-        //{
-        //    return treatmentBMPs.ToGeoJsonFeatureCollectionGeneric(null);
-        //}
+        /// <summary>
+        /// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
+        /// The onEachFeature Action parameter allows the caller to add additional properties to the features.
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <param name="onEachFeature"></param>
+        /// <returns></returns>
+        public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs, Action<Feature, TreatmentBMP> onEachFeature)
+        {
+            var featureCollection = new FeatureCollection();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "Name", treatmentBMP.TreatmentBMPName },
+                    { "FeatureColor", "#935F59" },
+                    { "FeatureGlyph", "water" }, // TODO: Need to be able to customize this per Treatment BMP Type
+                    { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
+                    { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
+                    { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
+                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdiction.StormwaterJurisdictionID }
+                };
+                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                onEachFeature?.Invoke(feature, treatmentBMP);
+                featureCollection.Add(feature);
+            }
+            return featureCollection;
+        }
 
-        ///// <summary>
-        ///// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
-        ///// The onEachFeature Action parameter allows the caller to add additional properties to the features.
-        ///// </summary>
-        ///// <param name="treatmentBMPs"></param>
-        ///// <param name="onEachFeature"></param>
-        ///// <returns></returns>
-        //public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs, Action<Feature, TreatmentBMP> onEachFeature)
-        //{
-        //    var featureCollection = new FeatureCollection();
-        //    featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
-        //    {
-        //        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(treatmentBMP.LocationPoint4326);
-        //        feature.Properties.Add("Name", treatmentBMP.TreatmentBMPName);
-        //        feature.Properties.Add("FeatureColor", "#935F59");
-        //        feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
-        //        feature.Properties.Add("Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName);
-        //        feature.Properties.Add("TreatmentBMPID",treatmentBMP.TreatmentBMPID);
-        //        feature.Properties.Add("TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID);
-        //        feature.Properties.Add("StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdiction.StormwaterJurisdictionID);
-        //        onEachFeature?.Invoke(feature, treatmentBMP);
-        //        return feature;
-        //    }));
-        //    return featureCollection;
-        //}
+        public static FeatureCollection ToExportGeoJsonFeatureCollection(
+            this IEnumerable<TreatmentBMP> treatmentBMPs)
+        {
+            var featureCollection = new FeatureCollection();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                var attributesTable = AddAllCommonPropertiesToTreatmentBMPFeature(treatmentBMP);
+                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                featureCollection.Add(feature);
+            }
+            return featureCollection;
+        }
 
-        //public static FeatureCollection ToExportGeoJsonFeatureCollection(
-        //    this IEnumerable<TreatmentBMP> treatmentBMPs)
-        //{
-        //    var featureCollection = new FeatureCollection();
-        //    featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
-        //    {
-        //        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(x.LocationPoint4326);
-        //        AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
-        //        return feature;
-        //    }));
-        //    return featureCollection;
-        //}
+        /// <summary>
+        /// Overload taking a TreatmentBMPType so it can access the Custom Attributes
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <param name="treatmentBMPType"></param>
+        /// <returns></returns>
+        public static FeatureCollection ToExportGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs, TreatmentBMPType treatmentBMPType)
+        {
+            var featureCollection = new FeatureCollection();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                var attributesTable = AddAllCommonPropertiesToTreatmentBMPFeature(treatmentBMP);
+                foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
+                {
+                    attributesTable.Add(ca.CustomAttributeType.CustomAttributeTypeName.SanitizeStringForGdb(), treatmentBMP.GetCustomAttributeValueWithUnits(ca));
+                }
+                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                featureCollection.Add(feature);
+            }
+            return featureCollection;
+        }
 
-        ///// <summary>
-        ///// Overload taking a TreatmentBMPType so it can access the Custom Attributes
-        ///// </summary>
-        ///// <param name="treatmentBMPs"></param>
-        ///// <param name="treatmentBMPType"></param>
-        ///// <returns></returns>
-        //public static FeatureCollection ToExportGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs, TreatmentBMPType treatmentBMPType)
-        //{
-        //    var featureCollection = new FeatureCollection();
-        //    featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
-        //    {
-        //        var feature = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(treatmentBMP.LocationPoint4326);
-        //        AddAllCommonPropertiesToTreatmentBMPFeature(feature, treatmentBMP);
-        //        foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
-        //        {
-        //            feature.Properties.Add(Ogr2OgrCommandLineRunner.SanitizeStringForGdb(ca.CustomAttributeType.CustomAttributeTypeName), treatmentBMP.GetCustomAttributeValueWithUnits(ca));
-        //        }
-        //        return feature;
-        //    }));
-        //    return featureCollection;
-        //}
-
-        //private static void AddAllCommonPropertiesToTreatmentBMPFeature(Feature feature, TreatmentBMP x)
-        //{
-        //    feature.Properties.Add("Name", x.TreatmentBMPName);
-        //    feature.Properties.Add("Jurisdiction", x.StormwaterJurisdiction.GetOrganizationDisplayName());
-        //    feature.Properties.Add("Type", x.TreatmentBMPType.TreatmentBMPTypeName);
-        //    feature.Properties.Add("Owner", x.OwnerOrganization.GetDisplayName());
-        //    feature.Properties.Add("Year_Built", x.YearBuilt);
-        //    feature.Properties.Add("ID_in_System_of_Record", x.SystemOfRecordID);
-        //    feature.Properties.Add("Water_Quality_Management_Plan", x.WaterQualityManagementPlan?.WaterQualityManagementPlanName);
-        //    feature.Properties.Add("Notes", x.Notes);
-        //    feature.Properties.Add("Last_Assessment_Date", x.GetMostRecentAssessment()?.GetAssessmentDate());
-        //    feature.Properties.Add("Last_Assessed_Score", x.GetMostRecentScoreAsString());
-        //    feature.Properties.Add("Number_of_Assessments", x.TreatmentBMPAssessments.Count);
-        //    feature.Properties.Add("Benchmark_and_Threshold_Set", x.IsBenchmarkAndThresholdsComplete().ToYesNo());
-        //    feature.Properties.Add("Required_Lifespan_of_Installation",
-        //        x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown");
-        //    feature.Properties.Add("Lifespan_End_Date", x.TreatmentBMPLifespanEndDate);
-        //    feature.Properties.Add("Required_Field_Visits_Per_Year",
-        //        x.RequiredFieldVisitsPerYear);
-        //    feature.Properties.Add("Required_Post_Storm_Visits_Per_Year",
-        //        x.RequiredPostStormFieldVisitsPerYear);
-        //}
+        private static AttributesTable AddAllCommonPropertiesToTreatmentBMPFeature(TreatmentBMP x)
+        {
+            var attributesTable = new AttributesTable
+            {
+                { "Name", x.TreatmentBMPName },
+                { "Jurisdiction", x.StormwaterJurisdiction.GetOrganizationDisplayName() },
+                { "Type", x.TreatmentBMPType.TreatmentBMPTypeName },
+                { "Owner", x.OwnerOrganization.GetDisplayName() },
+                { "Year_Built", x.YearBuilt },
+                { "ID_in_System_of_Record", x.SystemOfRecordID },
+                { "Water_Quality_Management_Plan", x.WaterQualityManagementPlan?.WaterQualityManagementPlanName },
+                { "Notes", x.Notes },
+                { "Last_Assessment_Date", x.GetMostRecentAssessment()?.GetAssessmentDate() },
+                { "Last_Assessed_Score", x.GetMostRecentScoreAsString() },
+                // todo: { "Number_of_Assessments", x.TreatmentBMPAssessments.Count },
+                { "Benchmark_and_Threshold_Set", x.IsBenchmarkAndThresholdsComplete().ToYesNo() },
+                { "Required_Lifespan_of_Installation", x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown" },
+                { "Lifespan_End_Date", x.TreatmentBMPLifespanEndDate },
+                { "Required_Field_Visits_Per_Year", x.RequiredFieldVisitsPerYear },
+                { "Required_Post_Storm_Visits_Per_Year", x.RequiredPostStormFieldVisitsPerYear }
+            };
+            return attributesTable;
+        }
 
         //public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
         //{

@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.ObjectModel;
 using System.Reflection;
-using LtInfo.Common.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -33,6 +32,10 @@ namespace Neptune.Web.Common
 {
     public abstract partial class SitkaController : Controller
     {
+        public const string CustomErrorMessageDivID = "customErrorMessageDiv";
+        public const string CustomErrorMessageReplaceToken = "CUSTOM ERROR HERE";
+        public const string CustomNotFoundMessageReplaceToken = "CUSTOM NOT FOUND HERE";
+
         private ICompositeViewEngine _viewEngine;
         protected SitkaController()
         {
