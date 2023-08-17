@@ -58,7 +58,7 @@ namespace Neptune.Web.Models
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization).ThenInclude(x => x.OrganizationType).ToList();
 
-            return jurisdictionsToShow.GroupBy(x => x.StormwaterJurisdiction.Organization.OrganizationType, (organizationType, stormwaterJurisdictionGeometries) =>
+            return jurisdictionsToShow.GroupBy(x => x.StormwaterJurisdiction.Organization.OrganizationType.OrganizationTypeID, (_, stormwaterJurisdictionGeometries) =>
             {
                 var featureCollection = new FeatureCollection();
                 foreach (var stormwaterJurisdictionGeometry in stormwaterJurisdictionGeometries)
@@ -74,6 +74,8 @@ namespace Neptune.Web.Models
                     var feature = new Feature(stormwaterJurisdictionGeometry.Geometry4326, attributesTable);
                     featureCollection.Add(feature);
                 }
+
+                var organizationType = stormwaterJurisdictionGeometries.First().StormwaterJurisdiction.Organization.OrganizationType;
                 return new LayerGeoJson(
                     $"{organizationType.OrganizationTypeName} {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}",
                     featureCollection,

@@ -14,7 +14,7 @@ namespace Neptune.Web.Common
             var jurisdictions = dbContext.StormwaterJurisdictionGeometries.AsNoTracking()
                 .Select(x => x.StormwaterJurisdiction).ToList();
             var geoJsonForJurisdictions = StormwaterJurisdictionModelExtensions.ToGeoJsonFeatureCollection(jurisdictions);
-            layerGeoJsons.Add(new LayerGeoJson(CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0m, LayerInitialVisibility.Hide));
+            layerGeoJsons.Add(new LayerGeoJson(CountyCityLayerName, geoJsonForJurisdictions, "#FF6C2D", 0f, LayerInitialVisibility.Hide));
             return layerGeoJsons;
         }
     }

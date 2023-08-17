@@ -1,8 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common.JsonConverters;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -10,7 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
     var services = builder.Services;
     services.AddRazorPages();
     services.AddControllersWithViews().AddJsonOptions(options => {
-        options.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory());
+        var scale = Math.Pow(10, 3);
+        var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
+        options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
+        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new DoubleConverter(2));
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        options.JsonSerializerOptions.WriteIndented = false;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
     });
 
     builder.Configuration.AddJsonFile(builder.Configuration["SECRET_PATH"], optional: false, reloadOnChange: true);

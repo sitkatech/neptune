@@ -25,6 +25,10 @@ namespace Neptune.Web.Common
 {
     public class JurisdictionsMapInitJson : MapInitJson
     {
+        public JurisdictionsMapInitJson()
+        {
+        }
+
         public JurisdictionsMapInitJson(string mapDivID)
             : base(mapDivID, DefaultZoomLevel, new List<LayerGeoJson>(), new BoundingBoxDto())
         {

@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/Maps/NeptuneMaps.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/Maps/NeptuneMaps.js"
+    ]
+  }
+]

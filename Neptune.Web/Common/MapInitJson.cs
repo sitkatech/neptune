@@ -27,13 +27,18 @@ namespace Neptune.Web.Common
     {
         protected internal const int DefaultZoomLevel = 10;
 
-        public string MapDivID;
-        public string LayerControlClass;
-        public BoundingBoxDto BoundingBox;
-        public int ZoomLevel;
-        public List<LayerGeoJson> Layers;
-        public readonly bool TurnOnFeatureIdentify;
-        public bool AllowFullScreen = true;
+        public string MapDivID { get; set; }
+        public string LayerControlClass { get; set; }
+        public BoundingBoxDto BoundingBox { get; set; }
+        public int ZoomLevel { get; set; }
+        public List<LayerGeoJson> Layers { get; set; }
+        public bool TurnOnFeatureIdentify { get; set; }
+        public bool AllowFullScreen { get; set; } = true;
+
+        public MapInitJson()
+        {
+
+        }
 
         public MapInitJson(string mapDivID, int zoomLevel, List<LayerGeoJson> layers, BoundingBoxDto boundingBox, bool turnOnFeatureIdentify)
         {

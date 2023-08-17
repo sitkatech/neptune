@@ -123,7 +123,6 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, cus
     // add vector layers
     this.vectorLayers = [];
     this.vectorLayerGroups = [];
-    
     for (var i = 0; i < mapInitJson.Layers.length; ++i) {
         var currentLayer = mapInitJson.Layers[i];
         switch (currentLayer.LayerType) {
@@ -157,7 +156,6 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, cus
 
 NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers) {
     var self = this;
-
     var layerGroup = new L.LayerGroup();
     var layerGeoJson = L.geoJson(currentLayer.GeoJsonFeatureCollection, {
         pointToLayer: function (feature, latlng) {
@@ -179,7 +177,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
         }
     }).addTo(layerGroup);
 
-    if (currentLayer.LayerInitialVisibility === 1) {
+    if (currentLayer.LayerInitialVisibility === "Show") {
         layerGroup.addTo(this.map);
     }
 
@@ -200,7 +198,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
 //    var wmsParams = L.Util.extend(this.wmsParams, { layers: currentLayer.MapServerLayerName });
 //    var wmsLayer = L.tileLayer.wms(currentLayer.MapServerUrl, wmsParams).addTo(layerGroup);
 
-//    if (currentLayer.LayerInitialVisibility === 1) {
+//    if (currentLayer.LayerInitialVisibility === "Show") {
 //        layerGroup.addTo(this.map);
 //    }
 
@@ -362,8 +360,8 @@ NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, ove
 
 NeptuneMaps.Map.prototype.setMapBounds = function(mapInitJson) {
     this.map.fitBounds([
-        [mapInitJson.BoundingBox.Northeast.Latitude, mapInitJson.BoundingBox.Northeast.Longitude],
-        [mapInitJson.BoundingBox.Southwest.Latitude, mapInitJson.BoundingBox.Southwest.Longitude]
+        [mapInitJson.BoundingBox.Top, mapInitJson.BoundingBox.Left],
+        [mapInitJson.BoundingBox.Bottom, mapInitJson.BoundingBox.Right]
     ]);
 };
 

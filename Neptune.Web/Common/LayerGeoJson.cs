@@ -29,22 +29,21 @@ namespace Neptune.Web.Common
     /// </summary>
     public class LayerGeoJson
     {
-        public readonly string LayerName;
-        public readonly FeatureCollection GeoJsonFeatureCollection;
-        public readonly string MapServerUrl;
-        public readonly string MapServerLayerName;
-        public readonly string TooltipUrlTemplate;
-        public readonly string LayerColor;
-        public decimal LayerOpacity;
-        public LayerInitialVisibility LayerInitialVisibility;
-//        [JsonConverter(typeof(StringEnumConverter))]
-        public readonly LayerGeoJsonType LayerType;
-        public readonly bool HasCustomPopups;
-        public readonly bool HasClickThrough;
-        public bool EnablePopups = true;
+        public string LayerName { get; set; }
+        public FeatureCollection GeoJsonFeatureCollection { get; set; }
+        public string MapServerUrl { get; set; }
+        public string MapServerLayerName { get; set; }
+        public string TooltipUrlTemplate { get; set; }
+        public string LayerColor { get; set; }
+        public double LayerOpacity { get; set; }
+        public LayerInitialVisibility LayerInitialVisibility { get; set; }
+        public LayerGeoJsonType LayerType { get; set; }
+        public bool HasCustomPopups { get; set; }
+        public bool HasClickThrough { get; set; }
+        public bool EnablePopups { get; set; } = true;
 
         public LayerGeoJson(string layerName, FeatureCollection geoJsonFeatureCollection, string layerColor,
-            decimal layerOpacity, LayerInitialVisibility layerInitialVisibility) : this(layerName,
+            double layerOpacity, LayerInitialVisibility layerInitialVisibility) : this(layerName,
             geoJsonFeatureCollection, layerColor, layerOpacity, layerInitialVisibility, false)
         {
         }
@@ -52,7 +51,7 @@ namespace Neptune.Web.Common
         /// <summary>
         /// Constructor for LayerGeoJson with Vector Type
         /// </summary>
-        public LayerGeoJson(string layerName, FeatureCollection geoJsonFeatureCollection, string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, bool clickThrough)
+        public LayerGeoJson(string layerName, FeatureCollection geoJsonFeatureCollection, string layerColor, double layerOpacity, LayerInitialVisibility layerInitialVisibility, bool clickThrough)
         {
             LayerName = layerName;
             GeoJsonFeatureCollection = geoJsonFeatureCollection;
@@ -66,7 +65,7 @@ namespace Neptune.Web.Common
         /// <summary>
         /// Constructor for LayerGeoJson with WMS Type
         /// </summary>
-        public LayerGeoJson(string layerName, string mapServerUrl, string mapServerLayerName, string tooltipUrlTemplate, string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility)
+        public LayerGeoJson(string layerName, string mapServerUrl, string mapServerLayerName, string tooltipUrlTemplate, string layerColor, double layerOpacity, LayerInitialVisibility layerInitialVisibility)
         {
             LayerName = layerName;
             MapServerUrl = mapServerUrl;
