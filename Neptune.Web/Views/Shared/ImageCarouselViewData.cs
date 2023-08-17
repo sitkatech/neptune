@@ -20,19 +20,23 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels;
-using Neptune.Web.Models;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Shared
 {
     public class ImageCarouselViewData
     {
-        public readonly List<IFileResourcePhoto> CarouselImages;
-        public readonly int Height;
+        public List<IFileResourcePhoto> CarouselImages { get; }
+        public int Height { get; }
+        public UrlTemplate<string> DisplayFileResourceUrl { get; }
 
-        public ImageCarouselViewData(IEnumerable<IFileResourcePhoto> carouselImages, int height)
+        public ImageCarouselViewData(IEnumerable<IFileResourcePhoto> carouselImages, int height, LinkGenerator linkGenerator)
         {
             CarouselImages = carouselImages.ToList();
             Height = height;
+            DisplayFileResourceUrl = new UrlTemplate<string>(new SitkaRoute<FileResourceController>(t => t.DisplayResource(UrlTemplate.Parameter1String),
+                linkGenerator).BuildUrlFromExpression());
         }
     }
 }

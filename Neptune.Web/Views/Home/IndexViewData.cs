@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.JurisdictionControls;
 
@@ -36,6 +37,7 @@ namespace Neptune.Web.Views.Home
         public JurisdictionsMapInitJson JurisdictionsMapInitJson { get; }
         public List<NeptuneHomePageImage> NeptuneHomePageCarouselImages { get; }
         public LaunchPadViewData LaunchPadViewData { get; }
+        public UrlTemplate<string> DisplayFileResourceUrl { get; }
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePageHomePage,
             NeptunePage neptunePageAdditionalInfo, NeptunePage neptunePageMapInfo,
@@ -51,6 +53,8 @@ namespace Neptune.Web.Views.Home
             JurisdictionsMapInitJson = jurisdictionsMapInitJson;
             NeptuneHomePageCarouselImages = neptuneHomePageImages;
             LaunchPadViewData = launchPadViewData;
+            DisplayFileResourceUrl = new UrlTemplate<string>(new SitkaRoute<FileResourceController>(t => t.DisplayResource(UrlTemplate.Parameter1String),
+                linkGenerator).BuildUrlFromExpression());
         }
     }
 }

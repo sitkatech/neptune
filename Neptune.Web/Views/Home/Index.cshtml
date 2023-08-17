@@ -61,7 +61,7 @@
                             @for (var i = 0; i < ViewDataTyped.NeptuneHomePageCarouselImages.Count; i++)
                             {
                                 var neptuneSiteImage = ViewDataTyped.NeptuneHomePageCarouselImages[i];
-                                <div class="item@(i == 0 ? " active" : null)" style="background-image: url('@neptuneSiteImage.FileResource.GetFileResourceUrl()')">
+                                <div class="item@(i == 0 ? " active" : null)" style="background-image: url('@ViewDataTyped.DisplayFileResourceUrl.ParameterReplace(neptuneSiteImage.FileResource.FileResourceGUID.ToString())')">
                                     <div class="carousel-caption">
                                         <div class="container">
                                             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 captionBlock">

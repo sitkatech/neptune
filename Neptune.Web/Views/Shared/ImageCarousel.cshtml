@@ -56,7 +56,7 @@ Source code is available upon request via <support@sitkatech.com>.
             @for (var i = 0; i < ViewDataTyped.CarouselImages.Count; i++)
             {
                 var carouselImage = ViewDataTyped.CarouselImages[i];
-                <a href="@carouselImage.FileResource.GetFileResourceUrl()" class="item gallery@(i == 0 ? " active" : null)" style="background-image: url('@carouselImage.FileResource.GetFileResourceUrl()')"
+                <a href="@ViewDataTyped.DisplayFileResourceUrl.ParameterReplace(carouselImage.FileResource.FileResourceGUID.ToString())" class="item gallery@(i == 0 ? " active" : null)" style="background-image: url('@carouselImage.FileResource.GetFileResourceUrl()')"
                    data-caption="@carouselImage.Caption" title="@carouselImage.Caption" rel="group1">
                     <div class="carousel-caption">
                         @carouselImage.Caption

@@ -24,7 +24,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Home;
 using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.JurisdictionControls;
