@@ -53,7 +53,7 @@ namespace Neptune.EFModels
         }
         public int PrimaryKeyValue
         {
-            get => _entityObject.IsValueCreated ? _entityObject.Value.PrimaryKey : _primaryKeyValue;
+            get => _entityObject?.IsValueCreated ?? false ? _entityObject.Value.PrimaryKey : _primaryKeyValue;
             set => _primaryKeyValue = value;
         }
         public override string ToString()

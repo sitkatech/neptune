@@ -24,6 +24,8 @@ using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
+using Neptune.Web.Views.Organization;
 using Index = Neptune.Web.Views.Organization.Index;
 using IndexGridSpec = Neptune.Web.Views.Organization.IndexGridSpec;
 using IndexViewData = Neptune.Web.Views.Organization.IndexViewData;
@@ -123,14 +125,15 @@ namespace Neptune.Web.Controllers
         //    return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         //}
 
-        //[OrganizationViewFeature]
-        //public ViewResult Detail(OrganizationPrimaryKey organizationPrimaryKey)
-        //{
-        //    var organization = organizationPrimaryKey.EntityObject;
-
-        //    var viewData = new DetailViewData(CurrentPerson, organization);
-        //    return RazorView<Detail, DetailViewData>(viewData);
-        //}
+        [OrganizationViewFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
+        [Route("{organizationID}")]
+        public ViewResult Detail([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
+        {
+            var organization = organizationPrimaryKey.EntityObject;
+            var viewData = new DetailViewData(CurrentPerson, organization, _linkGenerator);
+            return RazorView<Detail, DetailViewData>(viewData);
+        }
 
         //[HttpGet]
         //[OrganizationManageFeature]

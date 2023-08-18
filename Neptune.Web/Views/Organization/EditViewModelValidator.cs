@@ -40,11 +40,11 @@ namespace Neptune.Web.Views.Organization
         //    RuleFor(x => x.OrganizationName)
         //        .NotEmpty()
         //        .WithMessage("Organization name is required")
-        //        .Length(1, Models.Organization.FieldLengths.OrganizationName)
-        //        .Must((viewModel, organizationName) => Models.Organization.IsOrganizationNameUnique(Organizations(), organizationName, viewModel.OrganizationID))
+        //        .Length(1, EFModels.Entities.Organization.FieldLengths.OrganizationName)
+        //        .Must((viewModel, organizationName) => EFModels.Entities.Organization.IsOrganizationNameUnique(Organizations(), organizationName, viewModel.OrganizationID))
         //        .WithMessage(NeptuneValidationMessages.OrganizationNameUnique);
         //    RuleFor(x => x.OrganizationShortName)
-        //        .Must((viewModel, organizationShortName) => Models.Organization.IsOrganizationShortNameUniqueIfProvided(Organizations(), organizationShortName, viewModel.OrganizationID))
+        //        .Must((viewModel, organizationShortName) => EFModels.Entities.Organization.IsOrganizationShortNameUniqueIfProvided(Organizations(), organizationShortName, viewModel.OrganizationID))
         //        .WithMessage(NeptuneValidationMessages.OrganizationShortNameUnique);
         //    RuleFor(x => x.IsActive).NotEmpty().WithMessage("Is Active is required");
         //}
