@@ -19,13 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Globalization;
+using LtInfo.Common.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
 using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.Organization;
+using Neptune.Web.Views.Shared;
 using Index = Neptune.Web.Views.Organization.Index;
 using IndexGridSpec = Neptune.Web.Views.Organization.IndexGridSpec;
 using IndexViewData = Neptune.Web.Views.Organization.IndexViewData;
@@ -49,81 +53,86 @@ namespace Neptune.Web.Controllers
         [OrganizationManageFeature]
         public GridJsonNetJObjectResult<Organization> IndexGridJsonData()
         {
-            var hasDeleteOrganizationPermission = false;//todo:new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
+            var hasDeleteOrganizationPermission = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new IndexGridSpec(CurrentPerson, hasDeleteOrganizationPermission);
             var organizations = _dbContext.Organizations.AsNoTracking().ToList().OrderBy(x => x.GetDisplayName()).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Organization>(organizations, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        //TODO:
-        //[HttpGet]
-        //[OrganizationManageFeature]
-        //public PartialViewResult New()
-        //{
-        //    var viewModel = new EditViewModel {IsActive = true};
-        //    return ViewEdit(viewModel, false, null);
-        //}
+        [HttpGet]
+        [OrganizationManageFeature]
+        public PartialViewResult New()
+        {
+            var viewModel = new EditViewModel { IsActive = true };
+            return ViewEdit(viewModel, false, null);
+        }
 
-        //[HttpPost]
-        //[OrganizationManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult New(EditViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewEdit(viewModel, true, null);
-        //    }
-        //    var organization = new Organization(String.Empty, true, ModelObjectHelpers.NotYetAssignedID);
-        //    viewModel.UpdateModel(organization, CurrentPerson);
-        //    HttpRequestStorage.DatabaseEntities.Organizations.Add(organization);
-        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
-        //    SetMessageForDisplay($"Organization {organization.GetDisplayName()} succesfully created.");
+        [HttpPost]
+        [OrganizationManageFeature]
+        [Route("{organizationID}")]
+        public async Task<IActionResult> New(EditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewEdit(viewModel, true, null);
+            }
 
-        //    return new ModalDialogFormJsonResult();
-        //}
+            var organization = new Organization()
+            {
+                IsActive = true
+            };
+            viewModel.UpdateModel(organization, CurrentPerson);
+            _dbContext.Organizations.Add(organization);
+            await _dbContext.SaveChangesAsync();
+            SetMessageForDisplay($"Organization {organization.GetDisplayName()} successfully created.");
 
-        //[HttpGet]
-        //[OrganizationManageFeature]
-        //public PartialViewResult Edit(OrganizationPrimaryKey organizationPrimaryKey)
-        //{
-        //    var organization = organizationPrimaryKey.EntityObject;
-        //    var viewModel = new EditViewModel(organization);
-        //    return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
-        //}
+            return new ModalDialogFormJsonResult();
+        }
 
-        //[HttpPost]
-        //[OrganizationManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult Edit(OrganizationPrimaryKey organizationPrimaryKey, EditViewModel viewModel)
-        //{
-        //    var organization = organizationPrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
-        //    }
-        //    viewModel.UpdateModel(organization, CurrentPerson);
-        //    return new ModalDialogFormJsonResult();
-        //}
+        [HttpGet]
+        [OrganizationManageFeature]
+        [Route("{organizationID}")]
+        public PartialViewResult Edit(OrganizationPrimaryKey organizationPrimaryKey)
+        {
+            var organization = organizationPrimaryKey.EntityObject;
+            var viewModel = new EditViewModel(organization);
+            return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
+        }
 
-        //private PartialViewResult ViewEdit(EditViewModel viewModel, bool isInKeystone, Person currentPrimaryContactPerson)
-        //{
-        //    var organizationTypesAsSelectListItems = HttpRequestStorage.DatabaseEntities.OrganizationTypes
-        //        .OrderBy(x => x.OrganizationTypeName)
-        //        .ToSelectListWithEmptyFirstRow(x => x.OrganizationTypeID.ToString(CultureInfo.InvariantCulture),
-        //            x => x.OrganizationTypeName);
-        //    var activePeople = HttpRequestStorage.DatabaseEntities.People.GetActivePeople();
-        //    if (currentPrimaryContactPerson != null && !activePeople.Contains(currentPrimaryContactPerson))
-        //    {
-        //        activePeople.Add(currentPrimaryContactPerson);
-        //    }
-        //    var people = activePeople.OrderBy(x => x.GetFullNameLastFirst()).ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(CultureInfo.InvariantCulture),
-        //        x => x.GetFullNameFirstLastAndOrg());
-        //    var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
-        //    var requestOrganizationChangeUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(x => x.RequestOrganizationNameChange());
-        //    var viewData = new EditViewData(organizationTypesAsSelectListItems, people, isInKeystone, requestOrganizationChangeUrl, isSitkaAdmin);
-        //    return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
-        //}
+        [HttpPost]
+        [OrganizationManageFeature]
+        [Route("{organizationID}")]
+        public async Task<IActionResult> Edit(OrganizationPrimaryKey organizationPrimaryKey, EditViewModel viewModel)
+        {
+            var organization = organizationPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
+            }
+            viewModel.UpdateModel(organization, CurrentPerson);
+            await _dbContext.SaveChangesAsync();
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewEdit(EditViewModel viewModel, bool isInKeystone, Person currentPrimaryContactPerson)
+        {
+            var organizationTypesAsSelectListItems = _dbContext.OrganizationTypes
+                .OrderBy(x => x.OrganizationTypeName)
+                .ToSelectListWithEmptyFirstRow(x => x.OrganizationTypeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.OrganizationTypeName);
+            var activePeople = People.ListActive(_dbContext).ToList();
+            if (currentPrimaryContactPerson != null && !activePeople.Contains(currentPrimaryContactPerson))
+            {
+                activePeople.Add(currentPrimaryContactPerson);
+            }
+            var people = activePeople.OrderBy(x => x.GetFullNameLastFirst()).ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(CultureInfo.InvariantCulture),
+                x => x.GetFullNameFirstLastAndOrg());
+            var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
+            var requestOrganizationChangeUrl = "";//todo: SitkaRoute<HelpController>.BuildUrlFromExpression(x => x.RequestOrganizationNameChange());
+            var viewData = new EditViewData(organizationTypesAsSelectListItems, people, isInKeystone, requestOrganizationChangeUrl, isSitkaAdmin);
+            return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        }
 
         [OrganizationViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
@@ -135,40 +144,43 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        //[HttpGet]
-        //[OrganizationManageFeature]
-        //public PartialViewResult DeleteOrganization(OrganizationPrimaryKey organizationPrimaryKey)
-        //{
-        //    var organization = organizationPrimaryKey.EntityObject;
-        //    var viewModel = new ConfirmDialogFormViewModel(organization.OrganizationID);
-        //    return ViewDeleteOrganization(organization, viewModel);
-        //}
+        [HttpGet]
+        [OrganizationManageFeature]
+        [Route("{organizationID}")]
+        public PartialViewResult DeleteOrganization(OrganizationPrimaryKey organizationPrimaryKey)
+        {
+            var organization = organizationPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(organization.OrganizationID);
+            return ViewDeleteOrganization(organization, viewModel);
+        }
 
-        //private PartialViewResult ViewDeleteOrganization(Organization organization, ConfirmDialogFormViewModel viewModel)
-        //{
-        //    var canDelete = !organization.HasDependentObjects() && !organization.IsUnknown();
-        //    var confirmMessage = canDelete
-        //        ? $"Are you sure you want to delete this {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} '{organization.OrganizationName}'?"
-        //        : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", SitkaRoute<OrganizationController>.BuildLinkFromExpression(x => x.Detail(organization), "here"));
+        private PartialViewResult ViewDeleteOrganization(Organization organization, ConfirmDialogFormViewModel viewModel)
+        {
+            var canDelete = !organization.IsUnknown() /*&& !organization.HasDependentObjects()*/;
+            var confirmMessage = canDelete
+                ? $"Are you sure you want to delete this {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} '{organization.OrganizationName}'?"
+                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", UrlTemplate.MakeHrefString(
+                    new SitkaRoute<OrganizationController>(x => x.Detail(organization), _linkGenerator).BuildUrlFromExpression(), "here").ToString());
 
-        //    var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
-        //    return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
-        //}
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
 
-        //[HttpPost]
-        //[OrganizationManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult DeleteOrganization(OrganizationPrimaryKey organizationPrimaryKey, ConfirmDialogFormViewModel viewModel)
-        //{
-        //    var organization = organizationPrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewDeleteOrganization(organization, viewModel);
-        //    }
+        [HttpPost]
+        [OrganizationManageFeature]
+        [Route("{organizationID}")]
+        public async Task<IActionResult> DeleteOrganization(OrganizationPrimaryKey organizationPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var organization = organizationPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDeleteOrganization(organization, viewModel);
+            }
 
-        //    HttpRequestStorage.DatabaseEntities.Organizations.DeleteOrganization(organization);
-        //    return new ModalDialogFormJsonResult();
-        //}
+            _dbContext.Organizations.Remove(organization);
+            await _dbContext.SaveChangesAsync();
+            return new ModalDialogFormJsonResult();
+        }
 
         //[HttpGet]
         //[SitkaAdminFeature]
