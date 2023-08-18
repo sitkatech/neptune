@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class OVTASection
+    public abstract partial class OVTASection : IHavePrimaryKey
     {
         public static readonly OVTASectionInstructions Instructions = Neptune.EFModels.Entities.OVTASectionInstructions.Instance;
         public static readonly OVTASectionInitiateOVTA InitiateOVTA = Neptune.EFModels.Entities.OVTASectionInitiateOVTA.Instance;

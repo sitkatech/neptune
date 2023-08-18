@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[Notification]
 namespace Neptune.EFModels.Entities
 {
-    public partial class Notification
+    public partial class Notification : IHavePrimaryKey
     {
+        public int PrimaryKey => NotificationID;
         public NotificationType NotificationType => NotificationType.AllLookupDictionary[NotificationTypeID];
     }
 }

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class CustomAttributeDataType
+    public abstract partial class CustomAttributeDataType : IHavePrimaryKey
     {
         public static readonly CustomAttributeDataTypeString String = Neptune.EFModels.Entities.CustomAttributeDataTypeString.Instance;
         public static readonly CustomAttributeDataTypeInteger Integer = Neptune.EFModels.Entities.CustomAttributeDataTypeInteger.Instance;

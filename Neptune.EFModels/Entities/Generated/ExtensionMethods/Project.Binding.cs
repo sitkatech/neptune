@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[Project]
 namespace Neptune.EFModels.Entities
 {
-    public partial class Project
+    public partial class Project : IHavePrimaryKey
     {
+        public int PrimaryKey => ProjectID;
         public ProjectStatus ProjectStatus => ProjectStatus.AllLookupDictionary[ProjectStatusID];
     }
 }

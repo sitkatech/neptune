@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class UnderlyingHydrologicSoilGroup
+    public abstract partial class UnderlyingHydrologicSoilGroup : IHavePrimaryKey
     {
         public static readonly UnderlyingHydrologicSoilGroupA A = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupA.Instance;
         public static readonly UnderlyingHydrologicSoilGroupB B = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupB.Instance;

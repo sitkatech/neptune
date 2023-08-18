@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[OnlandVisualTrashAssessment]
 namespace Neptune.EFModels.Entities
 {
-    public partial class OnlandVisualTrashAssessment
+    public partial class OnlandVisualTrashAssessment : IHavePrimaryKey
     {
+        public int PrimaryKey => OnlandVisualTrashAssessmentID;
         public OnlandVisualTrashAssessmentStatus OnlandVisualTrashAssessmentStatus => OnlandVisualTrashAssessmentStatus.AllLookupDictionary[OnlandVisualTrashAssessmentStatusID];
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentScore => OnlandVisualTrashAssessmentScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentScoreID.Value] : null;
     }

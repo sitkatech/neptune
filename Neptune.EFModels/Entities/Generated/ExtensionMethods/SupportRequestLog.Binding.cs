@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[SupportRequestLog]
 namespace Neptune.EFModels.Entities
 {
-    public partial class SupportRequestLog
+    public partial class SupportRequestLog : IHavePrimaryKey
     {
+        public int PrimaryKey => SupportRequestLogID;
         public SupportRequestType SupportRequestType => SupportRequestType.AllLookupDictionary[SupportRequestTypeID];
     }
 }

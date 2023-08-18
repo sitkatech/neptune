@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class TreatmentBMPLifespanType
+    public abstract partial class TreatmentBMPLifespanType : IHavePrimaryKey
     {
         public static readonly TreatmentBMPLifespanTypeUnspecified Unspecified = Neptune.EFModels.Entities.TreatmentBMPLifespanTypeUnspecified.Instance;
         public static readonly TreatmentBMPLifespanTypePerpetuity Perpetuity = Neptune.EFModels.Entities.TreatmentBMPLifespanTypePerpetuity.Instance;

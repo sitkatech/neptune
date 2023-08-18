@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class PreliminarySourceIdentificationCategory
+    public abstract partial class PreliminarySourceIdentificationCategory : IHavePrimaryKey
     {
         public static readonly PreliminarySourceIdentificationCategoryVehicles Vehicles = Neptune.EFModels.Entities.PreliminarySourceIdentificationCategoryVehicles.Instance;
         public static readonly PreliminarySourceIdentificationCategoryInadequateWasteContainerManagement InadequateWasteContainerManagement = Neptune.EFModels.Entities.PreliminarySourceIdentificationCategoryInadequateWasteContainerManagement.Instance;

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class OnlandVisualTrashAssessmentStatus
+    public abstract partial class OnlandVisualTrashAssessmentStatus : IHavePrimaryKey
     {
         public static readonly OnlandVisualTrashAssessmentStatusInProgress InProgress = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentStatusInProgress.Instance;
         public static readonly OnlandVisualTrashAssessmentStatusComplete Complete = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentStatusComplete.Instance;

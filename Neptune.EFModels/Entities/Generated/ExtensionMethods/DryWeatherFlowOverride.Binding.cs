@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class DryWeatherFlowOverride
+    public abstract partial class DryWeatherFlowOverride : IHavePrimaryKey
     {
         public static readonly DryWeatherFlowOverrideNo No = Neptune.EFModels.Entities.DryWeatherFlowOverrideNo.Instance;
         public static readonly DryWeatherFlowOverrideYes Yes = Neptune.EFModels.Entities.DryWeatherFlowOverrideYes.Instance;

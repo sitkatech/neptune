@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class SupportRequestType
+    public abstract partial class SupportRequestType : IHavePrimaryKey
     {
         public static readonly SupportRequestTypeReportBug ReportBug = Neptune.EFModels.Entities.SupportRequestTypeReportBug.Instance;
         public static readonly SupportRequestTypeForgotLoginInfo ForgotLoginInfo = Neptune.EFModels.Entities.SupportRequestTypeForgotLoginInfo.Instance;

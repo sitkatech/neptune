@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[FieldVisit]
 namespace Neptune.EFModels.Entities
 {
-    public partial class FieldVisit
+    public partial class FieldVisit : IHavePrimaryKey
     {
+        public int PrimaryKey => FieldVisitID;
         public FieldVisitStatus FieldVisitStatus => FieldVisitStatus.AllLookupDictionary[FieldVisitStatusID];
         public FieldVisitType FieldVisitType => FieldVisitType.AllLookupDictionary[FieldVisitTypeID];
     }

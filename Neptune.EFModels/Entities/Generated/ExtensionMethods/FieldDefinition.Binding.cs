@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[FieldDefinition]
 namespace Neptune.EFModels.Entities
 {
-    public partial class FieldDefinition
+    public partial class FieldDefinition : IHavePrimaryKey
     {
+        public int PrimaryKey => FieldDefinitionID;
         public FieldDefinitionType FieldDefinitionType => FieldDefinitionType.AllLookupDictionary[FieldDefinitionTypeID];
     }
 }

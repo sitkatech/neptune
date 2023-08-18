@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[QuickBMP]
 namespace Neptune.EFModels.Entities
 {
-    public partial class QuickBMP
+    public partial class QuickBMP : IHavePrimaryKey
     {
+        public int PrimaryKey => QuickBMPID;
         public DryWeatherFlowOverride DryWeatherFlowOverride => DryWeatherFlowOverrideID.HasValue ? DryWeatherFlowOverride.AllLookupDictionary[DryWeatherFlowOverrideID.Value] : null;
     }
 }

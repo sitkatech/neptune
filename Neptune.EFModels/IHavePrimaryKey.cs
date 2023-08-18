@@ -19,7 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-namespace Neptune.Web.Common.Models
+namespace Neptune.EFModels
 {
     public interface IHavePrimaryKey
     {

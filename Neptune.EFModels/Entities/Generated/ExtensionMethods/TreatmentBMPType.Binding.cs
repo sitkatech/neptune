@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[TreatmentBMPType]
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPType
+    public partial class TreatmentBMPType : IHavePrimaryKey
     {
+        public int PrimaryKey => TreatmentBMPTypeID;
         public TreatmentBMPModelingType TreatmentBMPModelingType => TreatmentBMPModelingTypeID.HasValue ? TreatmentBMPModelingType.AllLookupDictionary[TreatmentBMPModelingTypeID.Value] : null;
     }
 }

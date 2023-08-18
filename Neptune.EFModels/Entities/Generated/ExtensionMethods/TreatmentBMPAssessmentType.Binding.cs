@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class TreatmentBMPAssessmentType
+    public abstract partial class TreatmentBMPAssessmentType : IHavePrimaryKey
     {
         public static readonly TreatmentBMPAssessmentTypeInitial Initial = Neptune.EFModels.Entities.TreatmentBMPAssessmentTypeInitial.Instance;
         public static readonly TreatmentBMPAssessmentTypePostMaintenance PostMaintenance = Neptune.EFModels.Entities.TreatmentBMPAssessmentTypePostMaintenance.Instance;

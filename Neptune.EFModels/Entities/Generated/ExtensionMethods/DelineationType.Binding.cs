@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class DelineationType
+    public abstract partial class DelineationType : IHavePrimaryKey
     {
         public static readonly DelineationTypeCentralized Centralized = Neptune.EFModels.Entities.DelineationTypeCentralized.Instance;
         public static readonly DelineationTypeDistributed Distributed = Neptune.EFModels.Entities.DelineationTypeDistributed.Instance;

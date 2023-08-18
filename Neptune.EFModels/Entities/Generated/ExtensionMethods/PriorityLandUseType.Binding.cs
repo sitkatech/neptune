@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class PriorityLandUseType
+    public abstract partial class PriorityLandUseType : IHavePrimaryKey
     {
         public static readonly PriorityLandUseTypeCommercial Commercial = Neptune.EFModels.Entities.PriorityLandUseTypeCommercial.Instance;
         public static readonly PriorityLandUseTypeHighDensityResidential HighDensityResidential = Neptune.EFModels.Entities.PriorityLandUseTypeHighDensityResidential.Instance;

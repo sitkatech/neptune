@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[Delineation]
 namespace Neptune.EFModels.Entities
 {
-    public partial class Delineation
+    public partial class Delineation : IHavePrimaryKey
     {
+        public int PrimaryKey => DelineationID;
         public DelineationType DelineationType => DelineationType.AllLookupDictionary[DelineationTypeID];
     }
 }

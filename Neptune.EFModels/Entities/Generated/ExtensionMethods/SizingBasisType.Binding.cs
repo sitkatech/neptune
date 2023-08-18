@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class SizingBasisType
+    public abstract partial class SizingBasisType : IHavePrimaryKey
     {
         public static readonly SizingBasisTypeFullTrashCapture FullTrashCapture = Neptune.EFModels.Entities.SizingBasisTypeFullTrashCapture.Instance;
         public static readonly SizingBasisTypeWaterQuality WaterQuality = Neptune.EFModels.Entities.SizingBasisTypeWaterQuality.Instance;

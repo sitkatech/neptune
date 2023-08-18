@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class FileResourceMimeType
+    public abstract partial class FileResourceMimeType : IHavePrimaryKey
     {
         public static readonly FileResourceMimeTypePDF PDF = Neptune.EFModels.Entities.FileResourceMimeTypePDF.Instance;
         public static readonly FileResourceMimeTypeWordDOCX WordDOCX = Neptune.EFModels.Entities.FileResourceMimeTypeWordDOCX.Instance;

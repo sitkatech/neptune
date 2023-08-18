@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanDocument]
 namespace Neptune.EFModels.Entities
 {
-    public partial class WaterQualityManagementPlanDocument
+    public partial class WaterQualityManagementPlanDocument : IHavePrimaryKey
     {
+        public int PrimaryKey => WaterQualityManagementPlanDocumentID;
         public WaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType => WaterQualityManagementPlanDocumentType.AllLookupDictionary[WaterQualityManagementPlanDocumentTypeID];
     }
 }

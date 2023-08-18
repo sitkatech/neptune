@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class NotificationType
+    public abstract partial class NotificationType : IHavePrimaryKey
     {
         public static readonly NotificationTypeCustom Custom = Neptune.EFModels.Entities.NotificationTypeCustom.Instance;
 

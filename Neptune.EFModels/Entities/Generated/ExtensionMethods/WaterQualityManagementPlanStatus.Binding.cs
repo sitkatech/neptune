@@ -13,10 +13,10 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanStatus
+    public abstract partial class WaterQualityManagementPlanStatus : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanStatusActive Inactive = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusActive.Instance;
-        public static readonly WaterQualityManagementPlanStatusInactive Active = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusInactive.Instance;
+        public static readonly WaterQualityManagementPlanStatusActive Active = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusActive.Instance;
+        public static readonly WaterQualityManagementPlanStatusInactive Inactive = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusInactive.Instance;
 
         public static readonly List<WaterQualityManagementPlanStatus> All;
         public static readonly List<WaterQualityManagementPlanStatusDto> AllAsDto;
@@ -28,8 +28,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static WaterQualityManagementPlanStatus()
         {
-            All = new List<WaterQualityManagementPlanStatus> { Inactive, Active };
-            AllAsDto = new List<WaterQualityManagementPlanStatusDto> { Inactive.AsDto(), Active.AsDto() };
+            All = new List<WaterQualityManagementPlanStatus> { Active, Inactive };
+            AllAsDto = new List<WaterQualityManagementPlanStatusDto> { Active.AsDto(), Inactive.AsDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
             AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatusDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
         }
@@ -112,8 +112,8 @@ namespace Neptune.EFModels.Entities
 
     public enum WaterQualityManagementPlanStatusEnum
     {
-        Inactive = 1,
-        Active = 2
+        Active = 1,
+        Inactive = 2
     }
 
     public partial class WaterQualityManagementPlanStatusActive : WaterQualityManagementPlanStatus

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class RegionalSubbasinRevisionRequestStatus
+    public abstract partial class RegionalSubbasinRevisionRequestStatus : IHavePrimaryKey
     {
         public static readonly RegionalSubbasinRevisionRequestStatusOpen Open = Neptune.EFModels.Entities.RegionalSubbasinRevisionRequestStatusOpen.Instance;
         public static readonly RegionalSubbasinRevisionRequestStatusClosed Closed = Neptune.EFModels.Entities.RegionalSubbasinRevisionRequestStatusClosed.Instance;

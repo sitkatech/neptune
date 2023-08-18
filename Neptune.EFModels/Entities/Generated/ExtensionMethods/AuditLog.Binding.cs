@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[AuditLog]
 namespace Neptune.EFModels.Entities
 {
-    public partial class AuditLog
+    public partial class AuditLog : IHavePrimaryKey
     {
+        public int PrimaryKey => AuditLogID;
         public AuditLogEventType AuditLogEventType => AuditLogEventType.AllLookupDictionary[AuditLogEventTypeID];
     }
 }

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class AuditLogEventType
+    public abstract partial class AuditLogEventType : IHavePrimaryKey
     {
         public static readonly AuditLogEventTypeAdded Added = Neptune.EFModels.Entities.AuditLogEventTypeAdded.Instance;
         public static readonly AuditLogEventTypeDeleted Deleted = Neptune.EFModels.Entities.AuditLogEventTypeDeleted.Instance;

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class TimeOfConcentration
+    public abstract partial class TimeOfConcentration : IHavePrimaryKey
     {
         public static readonly TimeOfConcentrationFiveMinutes FiveMinutes = Neptune.EFModels.Entities.TimeOfConcentrationFiveMinutes.Instance;
         public static readonly TimeOfConcentrationTenMinutes TenMinutes = Neptune.EFModels.Entities.TimeOfConcentrationTenMinutes.Instance;

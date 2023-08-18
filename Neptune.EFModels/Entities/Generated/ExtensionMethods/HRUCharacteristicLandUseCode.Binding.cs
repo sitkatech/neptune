@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class HRUCharacteristicLandUseCode
+    public abstract partial class HRUCharacteristicLandUseCode : IHavePrimaryKey
     {
         public static readonly HRUCharacteristicLandUseCodeCOMM COMM = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeCOMM.Instance;
         public static readonly HRUCharacteristicLandUseCodeEDU EDU = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeEDU.Instance;

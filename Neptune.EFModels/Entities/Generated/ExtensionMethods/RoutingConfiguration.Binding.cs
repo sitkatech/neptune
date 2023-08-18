@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class RoutingConfiguration
+    public abstract partial class RoutingConfiguration : IHavePrimaryKey
     {
         public static readonly RoutingConfigurationOnline Online = Neptune.EFModels.Entities.RoutingConfigurationOnline.Instance;
         public static readonly RoutingConfigurationOffline Offline = Neptune.EFModels.Entities.RoutingConfigurationOffline.Instance;

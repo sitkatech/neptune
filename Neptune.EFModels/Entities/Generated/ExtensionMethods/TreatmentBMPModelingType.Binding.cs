@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class TreatmentBMPModelingType
+    public abstract partial class TreatmentBMPModelingType : IHavePrimaryKey
     {
         public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain BioinfiltrationBioretentionWithRaisedUnderdrain = Neptune.EFModels.Entities.TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain.Instance;
         public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain BioretentionWithNoUnderdrain = Neptune.EFModels.Entities.TreatmentBMPModelingTypeBioretentionWithNoUnderdrain.Instance;

@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[HRUCharacteristic]
 namespace Neptune.EFModels.Entities
 {
-    public partial class HRUCharacteristic
+    public partial class HRUCharacteristic : IHavePrimaryKey
     {
+        public int PrimaryKey => HRUCharacteristicID;
         public HRUCharacteristicLandUseCode BaselineHRUCharacteristicLandUseCode => HRUCharacteristicLandUseCode.AllLookupDictionary[BaselineHRUCharacteristicLandUseCodeID];
         public HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode => HRUCharacteristicLandUseCode.AllLookupDictionary[HRUCharacteristicLandUseCodeID];
     }

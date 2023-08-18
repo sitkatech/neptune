@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class PermitType
+    public abstract partial class PermitType : IHavePrimaryKey
     {
         public static readonly PermitTypePhaseIMS4 PhaseIMS4 = Neptune.EFModels.Entities.PermitTypePhaseIMS4.Instance;
         public static readonly PermitTypePhaseIIMS4 PhaseIIMS4 = Neptune.EFModels.Entities.PermitTypePhaseIIMS4.Instance;

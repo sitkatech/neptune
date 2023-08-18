@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanDocumentType
+    public abstract partial class WaterQualityManagementPlanDocumentType : IHavePrimaryKey
     {
         public static readonly WaterQualityManagementPlanDocumentTypeFinalWQMP FinalWQMP = Neptune.EFModels.Entities.WaterQualityManagementPlanDocumentTypeFinalWQMP.Instance;
         public static readonly WaterQualityManagementPlanDocumentTypeAsBuiltDrawings AsBuiltDrawings = Neptune.EFModels.Entities.WaterQualityManagementPlanDocumentTypeAsBuiltDrawings.Instance;

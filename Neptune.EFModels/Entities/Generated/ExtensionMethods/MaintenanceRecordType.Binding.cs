@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class MaintenanceRecordType
+    public abstract partial class MaintenanceRecordType : IHavePrimaryKey
     {
         public static readonly MaintenanceRecordTypeRoutine Routine = Neptune.EFModels.Entities.MaintenanceRecordTypeRoutine.Instance;
         public static readonly MaintenanceRecordTypeCorrective Corrective = Neptune.EFModels.Entities.MaintenanceRecordTypeCorrective.Instance;

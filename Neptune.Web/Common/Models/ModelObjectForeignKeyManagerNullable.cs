@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.Common.DesignByContract;
+using Neptune.EFModels;
 
 namespace Neptune.Web.Common.Models
 {

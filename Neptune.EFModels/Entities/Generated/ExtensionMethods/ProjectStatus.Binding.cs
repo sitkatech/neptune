@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class ProjectStatus
+    public abstract partial class ProjectStatus : IHavePrimaryKey
     {
         public static readonly ProjectStatusDraft Draft = Neptune.EFModels.Entities.ProjectStatusDraft.Instance;
 

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class NeptunePageType
+    public abstract partial class NeptunePageType : IHavePrimaryKey
     {
         public static readonly NeptunePageTypeHomePage HomePage = Neptune.EFModels.Entities.NeptunePageTypeHomePage.Instance;
         public static readonly NeptunePageTypeAbout About = Neptune.EFModels.Entities.NeptunePageTypeAbout.Instance;

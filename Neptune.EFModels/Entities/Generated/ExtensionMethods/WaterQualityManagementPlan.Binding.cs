@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[WaterQualityManagementPlan]
 namespace Neptune.EFModels.Entities
 {
-    public partial class WaterQualityManagementPlan
+    public partial class WaterQualityManagementPlan : IHavePrimaryKey
     {
+        public int PrimaryKey => WaterQualityManagementPlanID;
         public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse => WaterQualityManagementPlanLandUseID.HasValue ? WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID.Value] : null;
         public WaterQualityManagementPlanPriority WaterQualityManagementPlanPriority => WaterQualityManagementPlanPriorityID.HasValue ? WaterQualityManagementPlanPriority.AllLookupDictionary[WaterQualityManagementPlanPriorityID.Value] : null;
         public WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus => WaterQualityManagementPlanStatusID.HasValue ? WaterQualityManagementPlanStatus.AllLookupDictionary[WaterQualityManagementPlanStatusID.Value] : null;

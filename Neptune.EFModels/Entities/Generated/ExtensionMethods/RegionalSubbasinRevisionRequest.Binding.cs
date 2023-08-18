@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[RegionalSubbasinRevisionRequest]
 namespace Neptune.EFModels.Entities
 {
-    public partial class RegionalSubbasinRevisionRequest
+    public partial class RegionalSubbasinRevisionRequest : IHavePrimaryKey
     {
+        public int PrimaryKey => RegionalSubbasinRevisionRequestID;
         public RegionalSubbasinRevisionRequestStatus RegionalSubbasinRevisionRequestStatus => RegionalSubbasinRevisionRequestStatus.AllLookupDictionary[RegionalSubbasinRevisionRequestStatusID];
     }
 }

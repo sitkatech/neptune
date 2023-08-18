@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[TreatmentBMPAssessmentObservationType]
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPAssessmentObservationType
+    public partial class TreatmentBMPAssessmentObservationType : IHavePrimaryKey
     {
+        public int PrimaryKey => TreatmentBMPAssessmentObservationTypeID;
         public ObservationTypeSpecification ObservationTypeSpecification => ObservationTypeSpecification.AllLookupDictionary[ObservationTypeSpecificationID];
     }
 }

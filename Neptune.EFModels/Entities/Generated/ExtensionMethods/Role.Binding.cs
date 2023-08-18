@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class Role
+    public abstract partial class Role : IHavePrimaryKey
     {
         public static readonly RoleAdmin Admin = Neptune.EFModels.Entities.RoleAdmin.Instance;
         public static readonly RoleUnassigned Unassigned = Neptune.EFModels.Entities.RoleUnassigned.Instance;

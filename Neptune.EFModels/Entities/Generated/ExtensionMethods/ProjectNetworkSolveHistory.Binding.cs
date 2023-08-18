@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[ProjectNetworkSolveHistory]
 namespace Neptune.EFModels.Entities
 {
-    public partial class ProjectNetworkSolveHistory
+    public partial class ProjectNetworkSolveHistory : IHavePrimaryKey
     {
+        public int PrimaryKey => ProjectNetworkSolveHistoryID;
         public ProjectNetworkSolveHistoryStatusType ProjectNetworkSolveHistoryStatusType => ProjectNetworkSolveHistoryStatusType.AllLookupDictionary[ProjectNetworkSolveHistoryStatusTypeID];
     }
 }

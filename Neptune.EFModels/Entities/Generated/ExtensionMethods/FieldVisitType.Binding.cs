@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class FieldVisitType
+    public abstract partial class FieldVisitType : IHavePrimaryKey
     {
         public static readonly FieldVisitTypeDryWeather DryWeather = Neptune.EFModels.Entities.FieldVisitTypeDryWeather.Instance;
         public static readonly FieldVisitTypeWetWeather WetWeather = Neptune.EFModels.Entities.FieldVisitTypeWetWeather.Instance;

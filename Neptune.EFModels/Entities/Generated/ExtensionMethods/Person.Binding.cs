@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[Person]
 namespace Neptune.EFModels.Entities
 {
-    public partial class Person
+    public partial class Person : IHavePrimaryKey
     {
+        public int PrimaryKey => PersonID;
         public Role Role => Role.AllLookupDictionary[RoleID];
     }
 }

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class StormwaterBreadCrumbEntity
+    public abstract partial class StormwaterBreadCrumbEntity : IHavePrimaryKey
     {
         public static readonly StormwaterBreadCrumbEntityTreatmentBMP TreatmentBMP = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityTreatmentBMP.Instance;
         public static readonly StormwaterBreadCrumbEntityJurisdiction Jurisdiction = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityJurisdiction.Instance;

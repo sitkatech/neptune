@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[OnlandVisualTrashAssessmentPreliminarySourceIdentificationType]
 namespace Neptune.EFModels.Entities
 {
-    public partial class OnlandVisualTrashAssessmentPreliminarySourceIdentificationType
+    public partial class OnlandVisualTrashAssessmentPreliminarySourceIdentificationType : IHavePrimaryKey
     {
+        public int PrimaryKey => OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeID;
         public PreliminarySourceIdentificationType PreliminarySourceIdentificationType => PreliminarySourceIdentificationType.AllLookupDictionary[PreliminarySourceIdentificationTypeID];
     }
 }

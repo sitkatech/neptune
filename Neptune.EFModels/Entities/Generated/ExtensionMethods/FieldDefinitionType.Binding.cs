@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class FieldDefinitionType
+    public abstract partial class FieldDefinitionType : IHavePrimaryKey
     {
         public static readonly FieldDefinitionTypeIsPrimaryContactOrganization IsPrimaryContactOrganization = Neptune.EFModels.Entities.FieldDefinitionTypeIsPrimaryContactOrganization.Instance;
         public static readonly FieldDefinitionTypeOrganization Organization = Neptune.EFModels.Entities.FieldDefinitionTypeOrganization.Instance;

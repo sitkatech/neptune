@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class ObservationTypeSpecification
+    public abstract partial class ObservationTypeSpecification : IHavePrimaryKey
     {
         public static readonly ObservationTypeSpecificationPassFail_PassFail_None PassFail_PassFail_None = Neptune.EFModels.Entities.ObservationTypeSpecificationPassFail_PassFail_None.Instance;
         public static readonly ObservationTypeSpecificationDiscreteValues_HighTargetValue_DiscreteThresholdValue DiscreteValues_HighTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_HighTargetValue_DiscreteThresholdValue.Instance;

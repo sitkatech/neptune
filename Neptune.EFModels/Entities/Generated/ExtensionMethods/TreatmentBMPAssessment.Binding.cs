@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[TreatmentBMPAssessment]
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPAssessment
+    public partial class TreatmentBMPAssessment : IHavePrimaryKey
     {
+        public int PrimaryKey => TreatmentBMPAssessmentID;
         public TreatmentBMPAssessmentType TreatmentBMPAssessmentType => TreatmentBMPAssessmentType.AllLookupDictionary[TreatmentBMPAssessmentTypeID];
     }
 }

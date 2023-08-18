@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class CustomAttributeTypePurpose
+    public abstract partial class CustomAttributeTypePurpose : IHavePrimaryKey
     {
         public static readonly CustomAttributeTypePurposePerformanceAndModelingAttributes PerformanceAndModelingAttributes = Neptune.EFModels.Entities.CustomAttributeTypePurposePerformanceAndModelingAttributes.Instance;
         public static readonly CustomAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = Neptune.EFModels.Entities.CustomAttributeTypePurposeOtherDesignAttributes.Instance;

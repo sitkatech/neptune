@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanVerifyStatus
+    public abstract partial class WaterQualityManagementPlanVerifyStatus : IHavePrimaryKey
     {
         public static readonly WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP VerifyAdequateOAndMofWQMP = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP.Instance;
         public static readonly WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired DeficienciesarePresentandFollowupisRequired = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired.Instance;

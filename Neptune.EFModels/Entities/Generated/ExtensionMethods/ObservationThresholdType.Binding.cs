@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class ObservationThresholdType
+    public abstract partial class ObservationThresholdType : IHavePrimaryKey
     {
         public static readonly ObservationThresholdTypeSpecificValue SpecificValue = Neptune.EFModels.Entities.ObservationThresholdTypeSpecificValue.Instance;
         public static readonly ObservationThresholdTypeRelativeToBenchmark RelativeToBenchmark = Neptune.EFModels.Entities.ObservationThresholdTypeRelativeToBenchmark.Instance;

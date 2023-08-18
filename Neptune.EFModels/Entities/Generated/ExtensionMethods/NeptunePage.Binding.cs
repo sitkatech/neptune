@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[NeptunePage]
 namespace Neptune.EFModels.Entities
 {
-    public partial class NeptunePage
+    public partial class NeptunePage : IHavePrimaryKey
     {
+        public int PrimaryKey => NeptunePageID;
         public NeptunePageType NeptunePageType => NeptunePageType.AllLookupDictionary[NeptunePageTypeID];
     }
 }

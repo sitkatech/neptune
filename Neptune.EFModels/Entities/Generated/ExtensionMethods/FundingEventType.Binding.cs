@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class FundingEventType
+    public abstract partial class FundingEventType : IHavePrimaryKey
     {
         public static readonly FundingEventTypePlanningAndDesign PlanningAndDesign = Neptune.EFModels.Entities.FundingEventTypePlanningAndDesign.Instance;
         public static readonly FundingEventTypeCapitalConstruction CapitalConstruction = Neptune.EFModels.Entities.FundingEventTypeCapitalConstruction.Instance;

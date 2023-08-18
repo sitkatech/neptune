@@ -4,8 +4,6 @@ namespace Neptune.EFModels.Entities
 {
     public partial class NeptuneHomePageImage : IFileResourcePhoto, IAuditableEntity
     {
-        public int PrimaryKey => NeptuneHomePageImageID;
-
         public DateTime GetCreateDate()
         {
             return FileResource.CreateDate;

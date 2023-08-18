@@ -4,8 +4,9 @@
 //  Source Table: [dbo].[MaintenanceRecord]
 namespace Neptune.EFModels.Entities
 {
-    public partial class MaintenanceRecord
+    public partial class MaintenanceRecord : IHavePrimaryKey
     {
+        public int PrimaryKey => MaintenanceRecordID;
         public MaintenanceRecordType MaintenanceRecordType => MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null;
     }
 }

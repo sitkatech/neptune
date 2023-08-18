@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class ProjectNetworkSolveHistoryStatusType
+    public abstract partial class ProjectNetworkSolveHistoryStatusType : IHavePrimaryKey
     {
         public static readonly ProjectNetworkSolveHistoryStatusTypeQueued Queued = Neptune.EFModels.Entities.ProjectNetworkSolveHistoryStatusTypeQueued.Instance;
         public static readonly ProjectNetworkSolveHistoryStatusTypeSucceeded Succeeded = Neptune.EFModels.Entities.ProjectNetworkSolveHistoryStatusTypeSucceeded.Instance;

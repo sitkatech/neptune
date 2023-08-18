@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class HydromodificationAppliesType
+    public abstract partial class HydromodificationAppliesType : IHavePrimaryKey
     {
         public static readonly HydromodificationAppliesTypeApplicable Applicable = Neptune.EFModels.Entities.HydromodificationAppliesTypeApplicable.Instance;
         public static readonly HydromodificationAppliesTypeExempt Exempt = Neptune.EFModels.Entities.HydromodificationAppliesTypeExempt.Instance;

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanModelingApproach
+    public abstract partial class WaterQualityManagementPlanModelingApproach : IHavePrimaryKey
     {
         public static readonly WaterQualityManagementPlanModelingApproachDetailed Detailed = Neptune.EFModels.Entities.WaterQualityManagementPlanModelingApproachDetailed.Instance;
         public static readonly WaterQualityManagementPlanModelingApproachSimplified Simplified = Neptune.EFModels.Entities.WaterQualityManagementPlanModelingApproachSimplified.Instance;

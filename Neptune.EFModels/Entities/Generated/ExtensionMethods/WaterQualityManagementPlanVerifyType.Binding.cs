@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanVerifyType
+    public abstract partial class WaterQualityManagementPlanVerifyType : IHavePrimaryKey
     {
         public static readonly WaterQualityManagementPlanVerifyTypeJurisdictionPerformed JurisdictionPerformed = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyTypeJurisdictionPerformed.Instance;
         public static readonly WaterQualityManagementPlanVerifyTypeSelfCertification SelfCertification = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyTypeSelfCertification.Instance;

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class StormwaterJurisdictionPublicBMPVisibilityType
+    public abstract partial class StormwaterJurisdictionPublicBMPVisibilityType : IHavePrimaryKey
     {
         public static readonly StormwaterJurisdictionPublicBMPVisibilityTypeVerifiedOnly VerifiedOnly = Neptune.EFModels.Entities.StormwaterJurisdictionPublicBMPVisibilityTypeVerifiedOnly.Instance;
         public static readonly StormwaterJurisdictionPublicBMPVisibilityTypeNone None = Neptune.EFModels.Entities.StormwaterJurisdictionPublicBMPVisibilityTypeNone.Instance;

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class MonthsOfOperation
+    public abstract partial class MonthsOfOperation : IHavePrimaryKey
     {
         public static readonly MonthsOfOperationSummer Summer = Neptune.EFModels.Entities.MonthsOfOperationSummer.Instance;
         public static readonly MonthsOfOperationWinter Winter = Neptune.EFModels.Entities.MonthsOfOperationWinter.Instance;

@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanPermitTerm
+    public abstract partial class WaterQualityManagementPlanPermitTerm : IHavePrimaryKey
     {
         public static readonly WaterQualityManagementPlanPermitTermNorthOCFirstTerm1990 NorthOCFirstTerm1990 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermNorthOCFirstTerm1990.Instance;
         public static readonly WaterQualityManagementPlanPermitTermNorthOCSecondTerm1996 NorthOCSecondTerm1996 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermNorthOCSecondTerm1996.Instance;

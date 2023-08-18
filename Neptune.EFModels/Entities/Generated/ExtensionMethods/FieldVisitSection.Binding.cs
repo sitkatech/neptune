@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class FieldVisitSection
+    public abstract partial class FieldVisitSection : IHavePrimaryKey
     {
         public static readonly FieldVisitSectionInventory Inventory = Neptune.EFModels.Entities.FieldVisitSectionInventory.Instance;
         public static readonly FieldVisitSectionAssessment Assessment = Neptune.EFModels.Entities.FieldVisitSectionAssessment.Instance;

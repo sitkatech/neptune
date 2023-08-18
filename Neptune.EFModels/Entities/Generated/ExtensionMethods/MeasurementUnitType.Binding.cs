@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class MeasurementUnitType
+    public abstract partial class MeasurementUnitType : IHavePrimaryKey
     {
         public static readonly MeasurementUnitTypeAcres Acres = Neptune.EFModels.Entities.MeasurementUnitTypeAcres.Instance;
         public static readonly MeasurementUnitTypeSquareFeet SquareFeet = Neptune.EFModels.Entities.MeasurementUnitTypeSquareFeet.Instance;

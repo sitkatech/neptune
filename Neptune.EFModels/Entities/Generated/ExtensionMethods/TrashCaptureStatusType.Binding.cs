@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class TrashCaptureStatusType
+    public abstract partial class TrashCaptureStatusType : IHavePrimaryKey
     {
         public static readonly TrashCaptureStatusTypeFull Full = Neptune.EFModels.Entities.TrashCaptureStatusTypeFull.Instance;
         public static readonly TrashCaptureStatusTypePartial Partial = Neptune.EFModels.Entities.TrashCaptureStatusTypePartial.Instance;

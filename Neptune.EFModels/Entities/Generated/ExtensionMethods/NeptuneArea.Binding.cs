@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class NeptuneArea
+    public abstract partial class NeptuneArea : IHavePrimaryKey
     {
         public static readonly NeptuneAreaTrash Trash = Neptune.EFModels.Entities.NeptuneAreaTrash.Instance;
         public static readonly NeptuneAreaOCStormwaterTools OCStormwaterTools = Neptune.EFModels.Entities.NeptuneAreaOCStormwaterTools.Instance;

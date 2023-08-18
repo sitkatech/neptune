@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class ObservationTypeCollectionMethod
+    public abstract partial class ObservationTypeCollectionMethod : IHavePrimaryKey
     {
         public static readonly ObservationTypeCollectionMethodDiscreteValue DiscreteValue = Neptune.EFModels.Entities.ObservationTypeCollectionMethodDiscreteValue.Instance;
         public static readonly ObservationTypeCollectionMethodPassFail PassFail = Neptune.EFModels.Entities.ObservationTypeCollectionMethodPassFail.Instance;

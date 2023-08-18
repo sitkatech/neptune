@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class PreliminarySourceIdentificationType
+    public abstract partial class PreliminarySourceIdentificationType : IHavePrimaryKey
     {
         public static readonly PreliminarySourceIdentificationTypeMovingVehicles MovingVehicles = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeMovingVehicles.Instance;
         public static readonly PreliminarySourceIdentificationTypeParkedCars ParkedCars = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeParkedCars.Instance;

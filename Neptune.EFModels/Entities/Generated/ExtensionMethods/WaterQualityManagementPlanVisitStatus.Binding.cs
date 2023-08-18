@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class WaterQualityManagementPlanVisitStatus
+    public abstract partial class WaterQualityManagementPlanVisitStatus : IHavePrimaryKey
     {
         public static readonly WaterQualityManagementPlanVisitStatusInitialAnnualVerification InitialAnnualVerification = Neptune.EFModels.Entities.WaterQualityManagementPlanVisitStatusInitialAnnualVerification.Instance;
         public static readonly WaterQualityManagementPlanVisitStatusFollowupVerification FollowupVerification = Neptune.EFModels.Entities.WaterQualityManagementPlanVisitStatusFollowupVerification.Instance;
@@ -119,12 +119,12 @@ namespace Neptune.EFModels.Entities
     public partial class WaterQualityManagementPlanVisitStatusInitialAnnualVerification : WaterQualityManagementPlanVisitStatus
     {
         private WaterQualityManagementPlanVisitStatusInitialAnnualVerification(int waterQualityManagementPlanVisitStatusID, string waterQualityManagementPlanVisitStatusName, string waterQualityManagementPlanVisitStatusDisplayName) : base(waterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatusName, waterQualityManagementPlanVisitStatusDisplayName) {}
-        public static readonly WaterQualityManagementPlanVisitStatusInitialAnnualVerification Instance = new WaterQualityManagementPlanVisitStatusInitialAnnualVerification(1, @"Initial Annual Verification", null);
+        public static readonly WaterQualityManagementPlanVisitStatusInitialAnnualVerification Instance = new WaterQualityManagementPlanVisitStatusInitialAnnualVerification(1, @"Initial Annual Verification", @"Initial Annual Verification");
     }
 
     public partial class WaterQualityManagementPlanVisitStatusFollowupVerification : WaterQualityManagementPlanVisitStatus
     {
         private WaterQualityManagementPlanVisitStatusFollowupVerification(int waterQualityManagementPlanVisitStatusID, string waterQualityManagementPlanVisitStatusName, string waterQualityManagementPlanVisitStatusDisplayName) : base(waterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatusName, waterQualityManagementPlanVisitStatusDisplayName) {}
-        public static readonly WaterQualityManagementPlanVisitStatusFollowupVerification Instance = new WaterQualityManagementPlanVisitStatusFollowupVerification(2, @"Follow-up Verification", null);
+        public static readonly WaterQualityManagementPlanVisitStatusFollowupVerification Instance = new WaterQualityManagementPlanVisitStatusFollowupVerification(2, @"Follow-up Verification", @"Follow-up Verification");
     }
 }

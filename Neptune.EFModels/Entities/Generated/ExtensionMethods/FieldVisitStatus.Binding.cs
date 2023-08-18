@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class FieldVisitStatus
+    public abstract partial class FieldVisitStatus : IHavePrimaryKey
     {
         public static readonly FieldVisitStatusInProgress InProgress = Neptune.EFModels.Entities.FieldVisitStatusInProgress.Instance;
         public static readonly FieldVisitStatusComplete Complete = Neptune.EFModels.Entities.FieldVisitStatusComplete.Instance;

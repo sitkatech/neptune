@@ -13,7 +13,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public abstract partial class OnlandVisualTrashAssessmentScore
+    public abstract partial class OnlandVisualTrashAssessmentScore : IHavePrimaryKey
     {
         public static readonly OnlandVisualTrashAssessmentScoreA A = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentScoreA.Instance;
         public static readonly OnlandVisualTrashAssessmentScoreB B = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentScoreB.Instance;
