@@ -95,7 +95,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
         public PartialViewResult Edit([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
-            var organization = organizationPrimaryKey.EntityObject;
+            var organization = Organizations.GetByID(_dbContext, organizationPrimaryKey);
             var viewModel = new EditViewModel(organization);
             return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
         }
@@ -105,7 +105,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, [FromForm] EditViewModel viewModel)
         {
-            var organization = organizationPrimaryKey.EntityObject;
+            var organization = Organizations.GetByIDWithChangeTracking(_dbContext, organizationPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
