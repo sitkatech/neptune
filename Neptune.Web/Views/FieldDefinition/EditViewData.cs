@@ -18,28 +18,29 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using Neptune.EFModels.Entities;
 using Neptune.Web.Controllers;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldDefinition
 {
     public class EditViewData : NeptuneViewData
     {
         public readonly string FileBrowserImageUploadUrl;
-        public readonly Models.FieldDefinitionType FieldDefinitionType;
+        public readonly FieldDefinitionType FieldDefinitionType;
         public readonly string CancelUrl;
 
-        public EditViewData(Person currentPerson, FieldDefinitionType fieldDefinitionType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditViewData(Person currentPerson, FieldDefinitionType fieldDefinitionType, LinkGenerator linkGenerator) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
         {
             EntityName = "Field Definitions";
-            EntityUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.Index());
+            EntityUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             SubEntityName = fieldDefinitionType.FieldDefinitionTypeDisplayName;
             PageTitle = "Manage";
 
             FieldDefinitionType = fieldDefinitionType;
-            FileBrowserImageUploadUrl = SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionType, null));
-            CancelUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.Index());
+            FileBrowserImageUploadUrl = ""; //todo: SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, x => x.CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionType, null));
+            CancelUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
         }
     }
 }

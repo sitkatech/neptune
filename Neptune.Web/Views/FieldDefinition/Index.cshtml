@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="FieldDefinitionDetails.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="Index.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,18 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using LtInfo.Common.DhtmlWrappers
-@using Neptune.Web.Common
-@using Neptune.Web.Controllers
-@inherits Neptune.Web.Views.Shared.FieldDefinitionDetails
-
-@if (ViewDataTyped.ShowEditLink)
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Common.DhtmlWrappers
+@inherits Neptune.Web.Views.FieldDefinition.Index
+@section JavascriptAndStylesContent
 {
-    <div class="pull-right">
-        <a href="@(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(t => t.Edit(ViewDataTyped.FieldDefinitionType)))" target="_blank">@DhtmlxGridHtmlHelpers.EditIconBootstrap</a>
-    </div>
-    <div class="clearfix"></div>
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
-<div class="fieldDefinition">
-    @ViewDataTyped.GetFieldDefinition()
+
+<p>
+    Use this page to update the definitions for fields used in this system. These definitions provide guidance or help to users who are viewing or editing information in this system. These definitions are visible to users when viewing a page or editor that lists these fields (e.g. the summary page for a project, and its popup editors).
+</p>
+
+<div class="container-fluid">
+    @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
 </div>

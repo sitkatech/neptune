@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="FieldDefinitionViewFeature.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="EditViewModel.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,12 +18,32 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using Neptune.Web.Security.Shared;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Html;
+using Neptune.Web.Common.Models;
 
-namespace Neptune.Web.Security
+namespace Neptune.Web.Views.FieldDefinition
 {
-    [SecurityFeatureDescription("View Field Definition")]
-    public class FieldDefinitionViewFeature : AnonymousUnclassifiedFeature
+    public class EditViewModel : FormViewModel
     {
+        [DisplayName("Custom Definition")]
+        public HtmlString FieldDefinitionValue { get; set; }
+
+        /// <summary>
+        /// Needed by model binder
+        /// </summary>
+        public EditViewModel()
+        {
+        }
+
+        public EditViewModel(EFModels.Entities.FieldDefinition fieldDefinition)
+        {
+            FieldDefinitionValue = new HtmlString(fieldDefinition?.FieldDefinitionValue);
+        }
+
+        public void UpdateModel(EFModels.Entities.FieldDefinition fieldDefinition)
+        {
+            fieldDefinition.FieldDefinitionValue = FieldDefinitionValue.ToString();
+        }
     }
 }

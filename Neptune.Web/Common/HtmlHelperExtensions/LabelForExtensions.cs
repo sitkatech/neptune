@@ -262,7 +262,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
             var helpIconImgTag = new TagBuilder("span");
             var backgroundClass = displayStyle == DisplayStyle.SitsOnDarkBackground ? "helpicon-white-background" : "";
             helpIconImgTag.Attributes.Add("class", $"helpicon glyphicon glyphicon-question-sign {backgroundClass}".Trim());
-            helpIconImgTag.Attributes.Add("title", string.Format("Click to get help on {0}", labelText));
+            helpIconImgTag.Attributes.Add("title", $"Click to get help on {labelText}");
             AddHelpToolTipPopupToHtmlTag(helpIconImgTag, labelText, urlToContent, popupWidth);
             if (displayStyle == DisplayStyle.AsGridHeader)
             {
@@ -275,14 +275,14 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
 
         public static void AddHelpToolTipPopupToHtmlTag(TagBuilder tagBuilder, string labelText, string urlToContent, int popupWidth)
         {
-            tagBuilder.Attributes.Add("onmouseover", string.Format("Neptune.Views.Methods.addHelpTooltipPopup(this, {0}, {1}, {2})", labelText.ToJS(), urlToContent.ToJS(), popupWidth));
+            tagBuilder.Attributes.Add("onmouseover", $"Neptune.Views.Methods.addHelpTooltipPopup(this, {labelText.ToJS()}, {urlToContent.ToJS()}, {popupWidth})");
         }
 
         public static IHtmlContent GenerateHelpLink(string linkText, string popupTitleText, string urlToContent, int popupWidth)
         {
             var helpIconImgTag = new TagBuilder("span");
             helpIconImgTag.Attributes.Add("class", "helpicon glyphicon glyphicon-question-sign helpiconGridBlue");
-            helpIconImgTag.Attributes.Add("title", string.Format("Click to get help on {0}", linkText));
+            helpIconImgTag.Attributes.Add("title", $"Click to get help on {linkText}");
             AddHelpToolTipPopupToHtmlTag(helpIconImgTag, popupTitleText, urlToContent, popupWidth);
             var labelTag = new TagBuilder("a");
             AddHelpToolTipPopupToHtmlTag(labelTag, popupTitleText, urlToContent, popupWidth);

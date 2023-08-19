@@ -18,8 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Neptune.Web.Common
 @inherits Neptune.Web.Views.FieldDefinition.Edit
+@model Neptune.Web.Views.FieldDefinition.EditViewModel
 
 @Html.ValidationSummary()
 <h3>Edit Field Definition</h3>
@@ -29,7 +29,7 @@ Source code is available upon request via <support@sitkatech.com>.
         <div class="form-group">
             @Html.LabelFor(x => x.FieldDefinitionValue, new {@class = "col-md-2 control-label"})
             <div class="col-md-10" style="max-height: 300px; overflow-y: auto;">
-                @Html.CkEditorFor(x => x.FieldDefinitionValue, CkEditorExtension.CkEditorToolbar.MinimalWithImages, true, false, ViewDataTyped.FileBrowserImageUploadUrl, 200)
+                @*@Html.CkEditorFor(x => x.FieldDefinitionValue, CkEditorExtension.CkEditorToolbar.MinimalWithImages, true, false, ViewDataTyped.FileBrowserImageUploadUrl, 200)*@
             </div>
             @Html.ValidationMessageFor(x => x.FieldDefinitionValue)
         </div>

@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="FieldDefinitionDetails.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="Edit.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.Shared
+using Neptune.Web.Common.Mvc;
+
+namespace Neptune.Web.Views.FieldDefinition
 {
-    public abstract class FieldDefinitionDetails : LtInfo.Common.Mvc.TypedWebPartialViewPage<FieldDefinitionDetailsViewData>
+    public abstract class Edit : TypedWebViewPage<EditViewData, EditViewModel>
     {
     }
 }

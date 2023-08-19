@@ -18,31 +18,29 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
+
 using Neptune.Web.Controllers;
-using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.Views;
 using Neptune.Web.Common;
+using Neptune.Web.Common.DhtmlWrappers;
 
 namespace Neptune.Web.Views.FieldDefinition
 {
-    public class FieldDefinitionGridSpec : GridSpec<Models.FieldDefinitionType>
+    public class FieldDefinitionGridSpec : GridSpec<EFModels.Entities.FieldDefinitionType>
     {
-        public FieldDefinitionGridSpec(bool hasManagePermissions)
+        public FieldDefinitionGridSpec(bool hasManagePermissions, LinkGenerator linkGenerator)
         {            
             if (hasManagePermissions)
             {
                 Add(string.Empty,
                     a =>
-                        UrlTemplate.MakeHrefString(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(t => t.Edit(a)),
+                        UrlTemplate.MakeHrefString(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(a)),
                             DhtmlxGridHtmlHelpers.EditIconBootstrap.ToString(),
                             new Dictionary<string, string> {{"target", "_blank"}}),
                     30);
             }
             Add("Label", a => a.FieldDefinitionTypeDisplayName, 200);
-            Add("Has Custom Field Definition?", a => a.HasCustomFieldDefinition().ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Custom Definition", a => a.HasCustomFieldDefinition() ? a.GetFieldDefinitionData().FieldDefinitionValueHtmlString.ToString() : string.Empty, 0);
+            //Add("Has Custom Field Definition?", a => a.HasCustomFieldDefinition().ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            //Add("Custom Definition", a => a.HasCustomFieldDefinition() ? a.GetFieldDefinitionData().FieldDefinitionValueHtmlString.ToString() : string.Empty, 0);
         }
     }
 }

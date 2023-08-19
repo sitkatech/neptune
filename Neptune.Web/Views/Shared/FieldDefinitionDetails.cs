@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditViewModel.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="FieldDefinitionDetails.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,32 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.ComponentModel;
-using System.Web;
-using LtInfo.Common.Models;
-
-namespace Neptune.Web.Views.FieldDefinition
+namespace Neptune.Web.Views.Shared
 {
-    public class EditViewModel : FormViewModel
+    public abstract class FieldDefinitionDetails : Common.Mvc.TypedWebPartialViewPage<FieldDefinitionDetailsViewData>
     {
-        [DisplayName("Custom Definition")]
-        public HtmlString FieldDefinitionValue { get; set; }
-
-        /// <summary>
-        /// Needed by model binder
-        /// </summary>
-        public EditViewModel()
-        {
-        }
-
-        public EditViewModel(Models.FieldDefinition fieldDefinition)
-        {
-            FieldDefinitionValue = fieldDefinition?.FieldDefinitionValueHtmlString;
-        }
-
-        public void UpdateModel(Models.FieldDefinition fieldDefinition)
-        {
-            fieldDefinition.FieldDefinitionValueHtmlString = FieldDefinitionValue;
-        }
     }
 }

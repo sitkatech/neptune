@@ -18,30 +18,36 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Web;
+using Microsoft.AspNetCore.Html;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Shared
 {
     public class FieldDefinitionDetailsViewData : NeptuneUserControlViewData
     {
-        public readonly Models.FieldDefinitionType FieldDefinitionType;
-        private readonly Models.FieldDefinition _fieldDefinition;
+        public readonly FieldDefinitionType FieldDefinitionType;
+        private readonly EFModels.Entities.FieldDefinition _fieldDefinition;
         public readonly bool ShowEditLink;
 
-        public FieldDefinitionDetailsViewData(Models.FieldDefinitionType fieldDefinitionType, Models.FieldDefinition fieldDefinition, bool showEditLink)
+        public FieldDefinitionDetailsViewData(FieldDefinitionType fieldDefinitionType, EFModels.Entities.FieldDefinition fieldDefinition, bool showEditLink, LinkGenerator linkGenerator)
         {
             FieldDefinitionType = fieldDefinitionType;
             _fieldDefinition = fieldDefinition;
             ShowEditLink = showEditLink;
+            EditUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(fieldDefinitionType));
         }
+
+        public string? EditUrl { get; }
 
         public HtmlString GetFieldDefinition()
         {
-            if (_fieldDefinition != null && _fieldDefinition.FieldDefinitionValueHtmlString != null)
+            if (_fieldDefinition != null && !string.IsNullOrEmpty(_fieldDefinition.FieldDefinitionValue))
             {
-               return _fieldDefinition.FieldDefinitionValueHtmlString;
+               return new HtmlString(_fieldDefinition.FieldDefinitionValue);
             }
-            return new HtmlString(string.Format("{0} not yet defined.", FieldDefinitionType.GetFieldDefinitionLabel()));
+            return new HtmlString($"{FieldDefinitionType.GetFieldDefinitionLabel()} not yet defined.");
         }
 
         public string GetFieldDefinitionLabel()
