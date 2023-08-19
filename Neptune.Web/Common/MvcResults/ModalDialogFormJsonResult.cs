@@ -39,9 +39,9 @@ namespace Neptune.Web.Common.MvcResults
 
         public class ModalDialogFormJsonData
         {
-            public readonly bool Success;
-            public readonly string? RedirectUrl;
-            public readonly string? OnSuccessJavascriptFunctionToRun;
+            public bool Success { get; }
+            public string? RedirectUrl { get; }
+            public string? OnSuccessJavascriptFunctionToRun { get; }
 
             public ModalDialogFormJsonData(bool success, string? redirectUrl, string? onSuccessJavascriptFunctionToRun)
             {

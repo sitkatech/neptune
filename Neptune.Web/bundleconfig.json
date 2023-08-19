@@ -4,5 +4,11 @@
     "inputFiles": [
       "wwwroot/ScriptsCustom/Maps/NeptuneMaps.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/ModalDialogForm.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/ModalDialogForm.js"
+    ]
   }
 ]
