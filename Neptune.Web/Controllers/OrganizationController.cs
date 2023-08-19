@@ -117,8 +117,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel, bool isInKeystone, Person currentPrimaryContactPerson)
         {
-            var organizationTypesAsSelectListItems = _dbContext.OrganizationTypes
-                .OrderBy(x => x.OrganizationTypeName)
+            var organizationTypesAsSelectListItems = OrganizationTypes.List(_dbContext)
                 .ToSelectListWithEmptyFirstRow(x => x.OrganizationTypeID.ToString(CultureInfo.InvariantCulture),
                     x => x.OrganizationTypeName);
             var activePeople = People.ListActive(_dbContext).ToList();

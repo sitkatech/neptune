@@ -1,5 +1,6 @@
 ﻿using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
@@ -73,7 +74,7 @@ namespace Neptune.EFModels.Entities
 
         public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(NeptuneDbContext dbContext)
         {
-            var persons = GetImpl(dbContext)
+            var persons = GetImpl(dbContext).AsNoTracking()
                 .Where(x => x.IsActive && (x.RoleID == (int)RoleEnum.Admin || x.RoleID == (int)RoleEnum.SitkaAdmin) && x.ReceiveSupportEmails)
                 .Select(x => x.Email)
                 .AsEnumerable();
@@ -88,55 +89,54 @@ namespace Neptune.EFModels.Entities
 
         public static IQueryable<Person> ListActive(NeptuneDbContext dbContext)
         {
-            return GetImpl(dbContext).Where(x => x.IsActive)
+            return GetImpl(dbContext).AsNoTracking().Where(x => x.IsActive)
                 .OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
         }
 
         public static Person GetByID(NeptuneDbContext dbContext, int personID)
         {
-            return GetImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
+            var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonID == personID);
+            Check.RequireNotNull(person, $"Person with ID {personID} not found!");
+            return person;
         }
 
         public static PersonDto GetByIDAsDto(NeptuneDbContext dbContext, int personID)
         {
-            var person = GetImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
-            return person?.AsDto();
+            var person = GetByID(dbContext, personID);
+            return person.AsDto();
         }
 
         public static PersonDto GetByEmailAsDto(NeptuneDbContext dbContext, string email)
         {
-            var person = GetImpl(dbContext).SingleOrDefault(x => x.Email == email);
+            var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.Email == email);
             return person?.AsDto();
         }
 
         public static Person? GetByGuid(NeptuneDbContext dbContext, Guid personGuid)
         {
-            return GetImpl(dbContext)
-                .SingleOrDefault(x => x.PersonGuid == personGuid);
+            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
         public static PersonDto GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
-            var person = GetImpl(dbContext).Include(x => x.StormwaterJurisdictionPeople)
-                .SingleOrDefault(x => x.PersonGuid == personGuid);
-
+            var person = GetByGuid(dbContext, personGuid);
             return person?.AsDto();
         }
 
         public static List<int> ListStormwaterJurisdictionIDsByPersonID(NeptuneDbContext dbContext, int personID)
         {
-            var personDto = GetByIDAsDto(dbContext, personID);
-            return ListStormwaterJurisdictionIDsByPersonDto(dbContext, personDto);
+            var person = GetByID(dbContext, personID);
+            return ListStormwaterJurisdictionIDsByPersonDto(dbContext, person);
         }
 
-        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, PersonDto person)
+        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, Person person)
         {
             if (person.Role.RoleID == (int)RoleEnum.Admin || person.Role.RoleID == (int)RoleEnum.SitkaAdmin)
             {
-                return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
+                return dbContext.StormwaterJurisdictions.AsNoTracking().Select(x => x.StormwaterJurisdictionID).ToList();
             }
 
-            return dbContext.StormwaterJurisdictionPeople
+            return dbContext.StormwaterJurisdictionPeople.AsNoTracking()
                 .Where(x => x.PersonID == person.PersonID)
                 .Select(x => x.StormwaterJurisdictionID)
                 .ToList();
@@ -145,8 +145,9 @@ namespace Neptune.EFModels.Entities
         private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.People
-                .Include(x => x.Organization).ThenInclude(x => x.OrganizationType)
-                .AsNoTracking();
+                .Include(x => x.Organization)
+                .ThenInclude(x => x.OrganizationType);
+//                .Include(x => x.StormwaterJurisdictionPeople);
         }
 
         public static List<Person> ListWithRole(NeptuneDbContext dbContext, int roleID)

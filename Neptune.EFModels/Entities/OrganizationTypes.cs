@@ -18,20 +18,26 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Linq;
 
-namespace Neptune.Web.Models
+using Microsoft.EntityFrameworkCore;
+
+namespace Neptune.EFModels.Entities
 {
-    public static partial class DatabaseContextExtensions
+    public static class OrganizationTypes
     {
-        public static OrganizationType GetDefaultOrganizationType(this IQueryable<OrganizationType> organizationTypes)
+        public static OrganizationType GetDefaultOrganizationType(NeptuneDbContext dbContext)
         {
-            var defaultOrganizationType = organizationTypes.SingleOrDefault(x => x.IsDefaultOrganizationType);
+            var defaultOrganizationType = dbContext.OrganizationTypes.AsNoTracking().SingleOrDefault(x => x.IsDefaultOrganizationType);
             if (defaultOrganizationType == null)
             {
-                defaultOrganizationType = organizationTypes.OrderBy(x => x.OrganizationTypeID).First();
+                defaultOrganizationType = dbContext.OrganizationTypes.AsNoTracking().OrderBy(x => x.OrganizationTypeID).First();
             }
             return defaultOrganizationType;
+        }
+
+        public static List<OrganizationType> List(NeptuneDbContext dbContext)
+        {
+            return dbContext.OrganizationTypes.AsNoTracking().OrderBy(x => x.OrganizationTypeName).ToList();
         }
     }
 }

@@ -12,7 +12,8 @@ public static class Organizations
             .Include(x => x.LogoFileResource)
             .Include(x => x.FundingSources)
             .Include(x => x.People)
-            .Include(x => x.PrimaryContactPerson);
+            .Include(x => x.PrimaryContactPerson)
+            .ThenInclude(x => x.Organization).ThenInclude(x => x.OrganizationType);
     }
 
     public static Organization GetByIDWithChangeTracking(NeptuneDbContext dbContext, int organizationID)
