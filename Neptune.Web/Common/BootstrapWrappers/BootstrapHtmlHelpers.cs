@@ -25,23 +25,23 @@ namespace Neptune.Web.Common.BootstrapWrappers
 {
     public static class BootstrapHtmlHelpers
     {
-        public static HtmlString MakeGlyphIcon(string glyphIconName)
+        public static IHtmlContent MakeGlyphIcon(string glyphIconName)
         {
             return new HtmlString($"<span class=\"glyphicon {glyphIconName}\"></span>");
         }
 
-        public static HtmlString MakeGlyphIconWithHiddenText(string glyphIconName, string text)
+        public static IHtmlContent MakeGlyphIconWithHiddenText(string glyphIconName, string text)
         {
             return new HtmlString($"<span class=\"glyphicon {glyphIconName}\"></span><span style='display:none'>{text}</span>");
         }
 
-        public static HtmlString MakeGlyphIcon(string glyphIconName, string title)
+        public static IHtmlContent MakeGlyphIcon(string glyphIconName, string title)
         {
             return new HtmlString($"<span title=\"{title}\" class=\"glyphicon {glyphIconName}\"></span>");
         }
 
         //TODO: This is fragile when quotes or apostrophes are passed in to any of the string parameters.
-        public static HtmlString MakeModalDialogAlertButton(string alertText, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses)
+        public static IHtmlContent MakeModalDialogAlertButton(string alertText, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses)
         {
             if (cssClasses == null)
                 cssClasses = new List<string>();
@@ -50,7 +50,7 @@ namespace Neptune.Web.Common.BootstrapWrappers
             return MakeModalDialogAlertLink(alertText, alertTitle, closeButtonText, linkText, cssClasses);
         }
 
-        public static HtmlString MakeModalDialogAlertLink(string alertText, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses)
+        public static IHtmlContent MakeModalDialogAlertLink(string alertText, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses)
         {
             return
                 new HtmlString(string.Format("<a href=\"javascript:void(0)\" class=\"{0}\" onclick=\"createBootstrapAlert({1}, {2}, {3})\">{4}</a>",
@@ -61,7 +61,7 @@ namespace Neptune.Web.Common.BootstrapWrappers
                     linkText.ToHTMLFormattedString()));
         }
 
-        public static HtmlString MakeModalDialogAlertLinkFromUrl(string url, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses, string onJavascriptReadyFunction)
+        public static IHtmlContent MakeModalDialogAlertLinkFromUrl(string url, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses, string onJavascriptReadyFunction)
         {
             var javascripReadyFunctionAsParameter = !string.IsNullOrWhiteSpace(onJavascriptReadyFunction) ? $"function() {{{onJavascriptReadyFunction}();}}"
                 : "null";

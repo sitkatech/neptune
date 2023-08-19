@@ -73,7 +73,7 @@ namespace Neptune.EFModels.Entities
 
         public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(NeptuneDbContext dbContext)
         {
-            var persons = GetPersonImpl(dbContext)
+            var persons = GetImpl(dbContext)
                 .Where(x => x.IsActive && (x.RoleID == (int)RoleEnum.Admin || x.RoleID == (int)RoleEnum.SitkaAdmin) && x.ReceiveSupportEmails)
                 .Select(x => x.Email)
                 .AsEnumerable();
@@ -88,36 +88,36 @@ namespace Neptune.EFModels.Entities
 
         public static IQueryable<Person> ListActive(NeptuneDbContext dbContext)
         {
-            return GetPersonImpl(dbContext).Where(x => x.IsActive)
+            return GetImpl(dbContext).Where(x => x.IsActive)
                 .OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
         }
 
         public static Person GetByID(NeptuneDbContext dbContext, int personID)
         {
-            return GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
+            return GetImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
         }
 
         public static PersonDto GetByIDAsDto(NeptuneDbContext dbContext, int personID)
         {
-            var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
+            var person = GetImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
             return person?.AsDto();
         }
 
         public static PersonDto GetByEmailAsDto(NeptuneDbContext dbContext, string email)
         {
-            var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.Email == email);
+            var person = GetImpl(dbContext).SingleOrDefault(x => x.Email == email);
             return person?.AsDto();
         }
 
-        public static Person? GetByPersonGuid(NeptuneDbContext dbContext, Guid personGuid)
+        public static Person? GetByGuid(NeptuneDbContext dbContext, Guid personGuid)
         {
-            return GetPersonImpl(dbContext)
+            return GetImpl(dbContext)
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
-        public static PersonDto GetByPersonGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
+        public static PersonDto GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
-            var person = GetPersonImpl(dbContext).Include(x => x.StormwaterJurisdictionPeople)
+            var person = GetImpl(dbContext).Include(x => x.StormwaterJurisdictionPeople)
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
 
             return person?.AsDto();
@@ -142,14 +142,14 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        private static IQueryable<Person> GetPersonImpl(NeptuneDbContext dbContext)
+        private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.People
                 .Include(x => x.Organization).ThenInclude(x => x.OrganizationType)
                 .AsNoTracking();
         }
 
-        public static List<Person> GetPeopleWithRole(NeptuneDbContext dbContext, int roleID)
+        public static List<Person> ListWithRole(NeptuneDbContext dbContext, int roleID)
         {
             return ListActive(dbContext).Where(x => x.RoleID == roleID).ToList();
         }

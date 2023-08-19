@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.Role
         public IndexGridSpec(LinkGenerator linkGenerator)
         {
             Add("Role", a => UrlTemplate.MakeHrefString(
-                new SitkaRoute<RoleController>(x => x.Detail(a.RoleID), linkGenerator).BuildUrlFromExpression(), a.RoleDisplayName), 200, DhtmlxGridColumnFilterType.Html);
+                SitkaRoute<RoleController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(a.RoleID)), a.RoleDisplayName), 200, DhtmlxGridColumnFilterType.Html);
             Add("Count", a => a.PeopleWithRoleCount, 50);
         }
     }

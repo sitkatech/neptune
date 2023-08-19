@@ -35,21 +35,23 @@ namespace Neptune.Web.Views.Organization
         public string EditOrganizationUrl { get; }
         public string NewFundingSourceUrl { get; }
         public string ManageFundingSourcesUrl { get; }
+        public string? OrganizationLogoUrl { get; }
 
         public DetailViewData(Person currentPerson, EFModels.Entities.Organization organization, LinkGenerator linkGenerator) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
         {
             Organization = organization;
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = organization.GetDisplayName();
-            UserHasOrganizationManagePermissions = false; //todo: new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
+            UserHasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
             UserHasCreateFundingSourcePermissions = false;//todo: new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);
             if (UserHasOrganizationManagePermissions)
             {
-                EntityUrl = "";//todo:SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Index());
+                EntityUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
             }
-            EditOrganizationUrl = "";//todo:SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Edit(organization));
+            EditOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, c => c.Edit(organization));
             NewFundingSourceUrl = "";//todo: SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.New());
             ManageFundingSourcesUrl = "";//todo: SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
+            OrganizationLogoUrl = organization.LogoFileResource == null ? string.Empty : SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, x => x.DisplayResource(organization.LogoFileResource.FileResourceGUID.ToString()));
         }
     }
 }

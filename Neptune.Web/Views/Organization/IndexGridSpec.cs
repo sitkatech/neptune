@@ -26,22 +26,24 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
 using Neptune.Web.Common.HtmlHelperExtensions;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Organization
 {
     public class IndexGridSpec : GridSpec<EFModels.Entities.Organization>
     {
-        public IndexGridSpec(Person currentPerson, bool hasDeletePermissions)
+        public IndexGridSpec(Person currentPerson, bool hasDeletePermissions, LinkGenerator linkGenerator)
         {
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             var userViewFeature = new UserViewFeature();
-            //todo:
-            //if (hasDeletePermissions)
-            //{
-            //    Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
-            //}
-            Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.OrganizationName), 400, DhtmlxGridColumnFilterType.Html);
+            if (hasDeletePermissions)
+            {
+                var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, t => t.DeleteOrganization(UrlTemplate.Parameter1Int)));
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.OrganizationID), true, true/*!x.HasDependentObjects()*/), 30, DhtmlxGridColumnFilterType.None);
+            }
+            Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.OrganizationID), a.OrganizationName), 400, DhtmlxGridColumnFilterType.Html);
             Add("Short Name", a => a.OrganizationShortName, 100);
-            Add(FieldDefinitionType.OrganizationType.ToGridHeaderString(), a => a.OrganizationType?.OrganizationTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinitionType.OrganizationType.ToGridHeaderString(), a => a.OrganizationType.OrganizationTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.PrimaryContact.ToGridHeaderString(), a => /*userViewFeature.HasPermission(currentPerson, a.PrimaryContactPerson).HasPermission ? a.GetPrimaryContactPersonAsUrl() : */new HtmlString(a.GetPrimaryContactPersonAsString()), 120);
             Add("# of Users", a => a.People.Count, 90);
             Add("Is Active", a => a.IsActive.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);

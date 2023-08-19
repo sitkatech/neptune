@@ -13,7 +13,7 @@ public static class UserContext
         if (claimsPrincipal.Claims.Any())
         {
             var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
-            person = People.GetByPersonGuid(dbContext, userGuid);
+            person = People.GetByGuid(dbContext, userGuid);
         }
 
         return person ?? PersonModelExtensions.GetAnonymousSitkaUser();
@@ -28,7 +28,7 @@ public static class UserContext
         }
 
         var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
-        var keystoneUser = People.GetByPersonGuidAsDto(dbContext, userGuid);
+        var keystoneUser = People.GetByGuidAsDto(dbContext, userGuid);
 
         return keystoneUser;
     }

@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Globalization;
 using LtInfo.Common.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
@@ -42,6 +41,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [OrganizationManageFeature]
         public ViewResult Index()
         {
@@ -50,12 +50,13 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         [OrganizationManageFeature]
         public GridJsonNetJObjectResult<Organization> IndexGridJsonData()
         {
             var hasDeleteOrganizationPermission = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
-            var gridSpec = new IndexGridSpec(CurrentPerson, hasDeleteOrganizationPermission);
-            var organizations = _dbContext.Organizations.AsNoTracking().ToList().OrderBy(x => x.GetDisplayName()).ToList();
+            var gridSpec = new IndexGridSpec(CurrentPerson, hasDeleteOrganizationPermission, _linkGenerator);
+            var organizations = Organizations.List(_dbContext);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Organization>(organizations, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -70,7 +71,6 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [OrganizationManageFeature]
-        [Route("{organizationID}")]
         public async Task<IActionResult> New(EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -90,20 +90,20 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        [HttpGet]
+        [HttpGet("{organizationPrimaryKey}")]
         [OrganizationManageFeature]
-        [Route("{organizationID}")]
-        public PartialViewResult Edit(OrganizationPrimaryKey organizationPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
+        public PartialViewResult Edit([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
             var organization = organizationPrimaryKey.EntityObject;
             var viewModel = new EditViewModel(organization);
             return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
         }
 
-        [HttpPost]
+        [HttpPost("{organizationPrimaryKey}")]
         [OrganizationManageFeature]
-        [Route("{organizationID}")]
-        public async Task<IActionResult> Edit(OrganizationPrimaryKey organizationPrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
+        public async Task<IActionResult> Edit([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, [FromForm] EditViewModel viewModel)
         {
             var organization = organizationPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -134,20 +134,20 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
+        [HttpGet("{organizationPrimaryKey}")]
         [OrganizationViewFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
-        [Route("{organizationID}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
         public ViewResult Detail([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
-            var organization = organizationPrimaryKey.EntityObject;
+            var organization = Organizations.GetByID(_dbContext, organizationPrimaryKey);
             var viewData = new DetailViewData(CurrentPerson, organization, _linkGenerator);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{organizationPrimaryKey}")]
         [OrganizationManageFeature]
-        [Route("{organizationID}")]
-        public PartialViewResult DeleteOrganization(OrganizationPrimaryKey organizationPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
+        public PartialViewResult DeleteOrganization([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
             var organization = organizationPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(organization.OrganizationID);
@@ -160,16 +160,16 @@ namespace Neptune.Web.Controllers
             var confirmMessage = canDelete
                 ? $"Are you sure you want to delete this {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} '{organization.OrganizationName}'?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", UrlTemplate.MakeHrefString(
-                    new SitkaRoute<OrganizationController>(x => x.Detail(organization), _linkGenerator).BuildUrlFromExpression(), "here").ToString());
+                    SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(organization)), "here").ToString());
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{organizationID}")]
         [OrganizationManageFeature]
-        [Route("{organizationID}")]
-        public async Task<IActionResult> DeleteOrganization(OrganizationPrimaryKey organizationPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
+        public async Task<IActionResult> DeleteOrganization([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, [FromForm] ConfirmDialogFormViewModel viewModel)
         {
             var organization = organizationPrimaryKey.EntityObject;
             if (!ModelState.IsValid)

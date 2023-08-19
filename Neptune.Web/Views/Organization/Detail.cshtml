@@ -23,11 +23,12 @@
 @using Neptune.Web.Common.BootstrapWrappers
 @using Neptune.Web.Common.HtmlHelperExtensions
 @using Neptune.Web.Common.ModalDialog
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.Organization.Detail
 @section JavascriptAndStylesContent
 {
-    @*@{ DhtmlxGridIncludes.RenderPartialView(Html); }
-    @{ MapJavascriptIncludes.RenderPartialView(Html); }*@
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
     <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
     <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
 }
@@ -37,7 +38,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="alert alert-info">@ViewDataTyped.Organization.GetDisplayName() is a @Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction). @*<a href="@ViewDataTyped.Organization.StormwaterJurisdiction.GetDetailUrl()">View the Stormwater Jurisdiction Page</a>*@ to see stormwater assets and assessments.</div>
-        </div>                               
+        </div>
     </div>
 }
 
@@ -45,18 +46,18 @@
     <div class="col-sm-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditOrganizationUrl, string.Format("Edit {0} - {1}", FieldDefinitionType.Organization.GetFieldDefinitionLabel(), ViewDataTyped.Organization.GetDisplayName()), ViewDataTyped.UserHasOrganizationManagePermissions) Basics
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditOrganizationUrl, $"Edit {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} - {ViewDataTyped.Organization.GetDisplayName()}", true) Basics
             </div>
             <div class="panel-body">
                 <div class="row">
-                    @*TODO: @if (ViewDataTyped.Organization.LogoFileResource != null)
+                    @if (ViewDataTyped.Organization.LogoFileResource != null)
                     {
                         <div class="col-xs-1">
                             <div style="text-align: center;">
-                                <img src="@ViewDataTyped.Organization.LogoFileResource.GetFileResourceUrl()" style="max-width: 100px; max-height: 200px; margin-left: auto; margin-right: auto;" />
+                                <img src="@ViewDataTyped.OrganizationLogoUrl" style="max-width: 100px; max-height: 200px; margin-left: auto; margin-right: auto;" />
                             </div>
                         </div>
-                    }*@
+                    }
 
                     <div class="@(ViewDataTyped.Organization.LogoFileResource != null ? "col-xs-11" : "col-xs-12")">
                         <div class="row">
@@ -69,7 +70,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-6 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinitionType.OrganizationType)</div>
-                            <div class="col-xs-6">@(ViewDataTyped.Organization.OrganizationType != null ? ViewDataTyped.Organization.OrganizationType.OrganizationTypeName : string.Empty)</div>
+                            <div class="col-xs-6">@ViewDataTyped.Organization.OrganizationType.OrganizationTypeName</div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinitionType.PrimaryContact)</div>

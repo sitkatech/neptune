@@ -47,13 +47,13 @@ namespace Neptune.Web.Views.Shared
             CurrentPerson = currentPerson;
             _linkGenerator = linkGenerator;
 
-            HomeUrl = new SitkaRoute<HomeController>(hc => hc.Index(), linkGenerator).BuildUrlFromExpression();
+            HomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, hc => hc.Index());
 
             LogInUrl = logInUrl;
             LogOutUrl = logOutUrl;
             RequestSupportUrl = requestSupportUrl;
 
-            AboutUrl = new SitkaRoute<HomeController>(hc => hc.About(), linkGenerator).BuildUrlFromExpression();
+            AboutUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, hc => hc.About());
             TopLevelNeptuneMenus = MakeNeptuneHelpMenu(currentPerson);
 
             NeptuneAreas = NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName);

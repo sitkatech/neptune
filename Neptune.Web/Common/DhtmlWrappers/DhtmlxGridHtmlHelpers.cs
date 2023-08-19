@@ -35,11 +35,11 @@ namespace Neptune.Web.Common.DhtmlWrappers
     /// </summary>
     public static class DhtmlxGridHtmlHelpers
     {
-        public static readonly HtmlString PlusIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus-sign gi-1x blue");
-        public static readonly HtmlString UndoIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-regular undo gi-1x blue");
-        public static readonly HtmlString EditIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit gi-1x blue");
-        public static readonly HtmlString DeleteIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash gi-1x blue");
-        public static readonly HtmlString OkCircleIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle gi-1x blue", "Yes");
+        public static readonly IHtmlContent PlusIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus-sign gi-1x blue");
+        public static readonly IHtmlContent UndoIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-regular undo gi-1x blue");
+        public static readonly IHtmlContent EditIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit gi-1x blue");
+        public static readonly IHtmlContent DeleteIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash gi-1x blue");
+        public static readonly IHtmlContent OkCircleIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle gi-1x blue", "Yes");
 
 
         public const string EditIcon = "<img src=\"/Content/img/bg-edit-single.png\" />";
@@ -49,8 +49,8 @@ namespace Neptune.Web.Common.DhtmlWrappers
         public const string Skin = "mm";
         public const int SkinRowHeight = 30;
 
-        public static readonly HtmlString PlusIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus-sign gi-1x blue");
-        public static readonly HtmlString FactSheetIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search gi-1x blue");
+        public static readonly IHtmlContent PlusIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus-sign gi-1x blue");
+        public static readonly IHtmlContent FactSheetIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search gi-1x blue");
         public static readonly string ExcelDownloadWithFooterUrl = $"/Home/ExportGridToExcel/{0}/true";
         public static readonly string ExcelDownloadWithoutFooterUrl = $"/Home/ExportGridToExcel/{0}/false";
         //public static readonly UrlTemplate<string> ExcelDownloadWithFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, true)));
@@ -318,7 +318,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                 $"function() {{ return Sitka.{gridName}.getValuesFromCheckedGridRows({bulkTagModalDialogForm.CheckboxColumnIndex}, '{bulkTagModalDialogForm.ValueColumnName}', '{bulkTagModalDialogForm.ReturnListName}'); }}";
 
             return
-                ModalDialogFormHelper.ModalDialogFormLink($"{tagIconHtml}{bulkTagModalDialogForm.DialogLinkText}",
+                ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{tagIconHtml}{bulkTagModalDialogForm.DialogLinkText}"),
                     bulkTagModalDialogForm.DialogUrl,
                     bulkTagModalDialogForm.DialogTitle,
                     ModalDialogFormHelper.DefaultDialogWidth,
@@ -341,7 +341,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                 $"function() {{ return Sitka.{gridName}.getValuesFromCheckedGridRows({bulkDeleteModalDialogForm.CheckboxColumnIndex}, '{bulkDeleteModalDialogForm.ValueColumnName}', '{bulkDeleteModalDialogForm.ReturnListName}'); }}";
 
             return
-                ModalDialogFormHelper.ModalDialogFormLink($"{deleteIconHtml}{bulkDeleteModalDialogForm.DialogLinkText}",
+                ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{deleteIconHtml}{bulkDeleteModalDialogForm.DialogLinkText}"),
                     bulkDeleteModalDialogForm.DialogUrl,
                     bulkDeleteModalDialogForm.DialogTitle,
                     ModalDialogFormHelper.DefaultDialogWidth,
@@ -414,7 +414,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
             }
             else if (createPopupForm != null)
             {
-                createUrlHtml = MakeModalDialogLink($"{PlusIconBootstrap} {createString}",
+                createUrlHtml = MakeModalDialogLink(new HtmlString($"{PlusIconBootstrap} {createString}"),
                     createPopupForm.ContentUrl,
                     createPopupForm.DialogWidth,
                     createPopupForm.DialogTitle,
@@ -622,7 +622,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// If insufficient permissions, returns empty string
         /// </summary>
-        public static IHtmlContent MakeModalDialogLink(string linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, bool hasPermission, string saveButtonText, string cancelButtonText, List<string> extraCssClasses, string onJavascriptReadyFunction, string postData)
+        public static IHtmlContent MakeModalDialogLink(IHtmlContent linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, bool hasPermission, string saveButtonText, string cancelButtonText, List<string> extraCssClasses, string onJavascriptReadyFunction, string postData)
         {
             if (hasPermission)
             {
@@ -634,7 +634,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static IHtmlContent MakeModalDialogLink(string linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
+        public static IHtmlContent MakeModalDialogLink(IHtmlContent linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
         {
             return MakeModalDialogLink(linkHtml, dialogContentUrl, dialogWidth, dialogTitle, true, "Save", "Cancel", new List<string>(), onJavascriptReadyFunction, null);
         }
@@ -644,7 +644,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// </summary>
         public static IHtmlContent MakeEditIconAsModalDialogLink(ModalDialogForm modalDialogForm)
         {
-            return MakeModalDialogLink($"{EditIcon}<span style=\"display:none\">Edit</span>", modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle, modalDialogForm.OnJavascriptReadyFunction);
+            return MakeModalDialogLink(new HtmlString($"{EditIcon}<span style=\"display:none\">Edit</span>"), modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle, modalDialogForm.OnJavascriptReadyFunction);
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// </summary>
         public static IHtmlContent MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
         {
-            return MakeModalDialogLink($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>", modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle, modalDialogForm.OnJavascriptReadyFunction);
+            return MakeModalDialogLink(new HtmlString($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>"), modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle, modalDialogForm.OnJavascriptReadyFunction);
         }
 
         /// <summary>
@@ -661,7 +661,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         public static IHtmlContent MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm, bool userCanEdit)
         {
             return userCanEdit
-                ? MakeModalDialogLink($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>",
+                ? MakeModalDialogLink(new HtmlString($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>"),
                     modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle,
                     modalDialogForm.OnJavascriptReadyFunction)
                 : new HtmlString(string.Empty);
@@ -672,10 +672,10 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// </summary>
         public static IHtmlContent MakeLtInfoEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
         {
-            string linkText = $"{EditIconBootstrap}<span style=\"display:none\">Edit</span>";
-            List<string> extraCssClasses = new List<string>();
+            var linkText = $"{EditIconBootstrap}<span style=\"display:none\">Edit</span>";
+            var extraCssClasses = new List<string>();
             return ModalDialogFormHelper.ModalDialogFormLink(null,
-                linkText,
+                new HtmlString(linkText),
                 modalDialogForm.ContentUrl,
                 modalDialogForm.DialogTitle,
                 modalDialogForm.DialogWidth,

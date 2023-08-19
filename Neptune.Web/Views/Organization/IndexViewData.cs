@@ -20,7 +20,10 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.Organization
 {
@@ -40,8 +43,8 @@ namespace Neptune.Web.Views.Organization
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = "All Organizations";
 
-            var hasOrganizationManagePermissions = false; //todo:new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
-            GridSpec = new IndexGridSpec(currentPerson, hasOrganizationManagePermissions)
+            var hasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
+            GridSpec = new IndexGridSpec(currentPerson, hasOrganizationManagePermissions, linkGenerator)
             {
                 ObjectNameSingular = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()}",
@@ -52,10 +55,10 @@ namespace Neptune.Web.Views.Organization
             GridDataUrl = _linkGenerator.GetPathByAction("IndexGridJsonData", "Organization");
 
             PullOrganizationFromKeystoneUrl = ""; //todo: SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.PullOrganizationFromKeystone());
-            UserIsSitkaAdmin = false; //todo:new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
-            UserCanAddOrganization = false; //todo:new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
+            UserIsSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
+            UserCanAddOrganization = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
 
-            NewOrganizationUrl = ""; //todo:SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.New());
+            NewOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, t => t.New());
         }
     }
 }

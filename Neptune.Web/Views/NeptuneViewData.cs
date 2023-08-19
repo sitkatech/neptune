@@ -64,14 +64,14 @@ namespace Neptune.Web.Views
             _linkGenerator = linkGenerator;
 
             CurrentPerson = currentPerson;
-            NeptuneHomeUrl = new SitkaRoute<HomeController>(c => c.Index(), linkGenerator).BuildUrlFromExpression();
+            NeptuneHomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
 
             LogInUrl = "";// todo: NeptuneHelpers.GenerateLogInUrlWithReturnUrl();
             LogOutUrl = "";// todo: NeptuneHelpers.GenerateLogOutUrlWithReturnUrl();
 
             RequestSupportUrl = "";// todo: SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.Support());
 
-            LegalUrl = new SitkaRoute<HomeController>(c => c.Legal(), linkGenerator).BuildUrlFromExpression();
+            LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Legal());
 
             MakeNeptuneMenu(currentPerson);
             NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, linkGenerator);

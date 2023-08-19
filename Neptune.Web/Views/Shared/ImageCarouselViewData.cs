@@ -35,8 +35,7 @@ namespace Neptune.Web.Views.Shared
         {
             CarouselImages = carouselImages.ToList();
             Height = height;
-            DisplayFileResourceUrl = new UrlTemplate<string>(new SitkaRoute<FileResourceController>(t => t.DisplayResource(UrlTemplate.Parameter1String),
-                linkGenerator).BuildUrlFromExpression());
+            DisplayFileResourceUrl = new UrlTemplate<string>(SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, t => t.DisplayResource(UrlTemplate.Parameter1String)));
         }
     }
 }

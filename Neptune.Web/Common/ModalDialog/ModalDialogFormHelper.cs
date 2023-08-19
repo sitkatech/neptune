@@ -54,6 +54,44 @@ namespace Neptune.Web.Common.ModalDialog
             string postData)
         {
             return ModalDialogFormLink(null,
+                new HtmlString(linkText),
+                dialogContentUrl,
+                dialogTitle,
+                dialogWidth,
+                SaveButtonID,
+                saveButtonText,
+                cancelButtonText,
+                extraCssClasses,
+                onJavascriptReadyFunction,
+                postData,
+                null,
+                null);
+        }
+
+        /// <summary>
+        ///  Creates a link that will open a jQuery UI dialog form.
+        /// </summary>
+        /// <param name="linkText">The inner text of the anchor element</param>
+        /// <param name="dialogContentUrl">The url that will return the content to be loaded into the dialog window</param>
+        /// <param name="dialogTitle">The title to be displayed in the dialog window</param>
+        /// <param name="dialogWidth">width in pixels of dialog</param>
+        /// <param name="saveButtonText">Text for the save button</param>
+        /// <param name="cancelButtonText">Text for the cancel button</param>
+        /// <param name="extraCssClasses">Any extra css classes for the button</param>
+        /// <param name="onJavascriptReadyFunction">Optional javascript function to run when dialog is loaded</param>
+        /// <param name="postData">Optional; if provided, will switch the dialog load to a POST from a GET</param>
+        /// <returns></returns>
+        public static IHtmlContent ModalDialogFormLink(IHtmlContent linkText,
+            string dialogContentUrl,
+            string dialogTitle,
+            int? dialogWidth,
+            string saveButtonText,
+            string cancelButtonText,
+            List<string> extraCssClasses,
+            string onJavascriptReadyFunction,
+            string postData)
+        {
+            return ModalDialogFormLink(null,
                 linkText,
                 dialogContentUrl,
                 dialogTitle,
@@ -86,7 +124,7 @@ namespace Neptune.Web.Common.ModalDialog
         /// <param name="optionalDialogFormID"></param>
         /// <returns></returns>
         public static IHtmlContent ModalDialogFormLink(string linkID,
-            string linkText,
+            IHtmlContent linkText,
             string dialogContentUrl,
             string dialogTitle,
             int? dialogWidth,
@@ -122,7 +160,7 @@ namespace Neptune.Web.Common.ModalDialog
         /// <param name="hoverText"></param>
         /// <returns></returns>
         public static IHtmlContent ModalDialogFormLink(string linkID,
-            string linkText,
+            IHtmlContent linkText,
             string dialogContentUrl,
             string dialogTitle,
             int? dialogWidth,
@@ -136,7 +174,7 @@ namespace Neptune.Web.Common.ModalDialog
             string hoverText)
         {
             var builder = new TagBuilder("a");
-            builder.InnerHtml.Append(linkText);
+            builder.InnerHtml.AppendHtml(linkText);
             if (!string.IsNullOrWhiteSpace(linkID))
             {
                 builder.Attributes.Add("id", linkID);
@@ -185,19 +223,19 @@ namespace Neptune.Web.Common.ModalDialog
 
         public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, List<string> extraCssClasses, bool hasPermission)
         {
-            return hasPermission ? ModalDialogFormLink(linkText, dialogUrl, dialogTitle, DefaultDialogWidth, "Save", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
+            return hasPermission ? ModalDialogFormLink(new HtmlString(linkText), dialogUrl, dialogTitle, DefaultDialogWidth, "Save", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
         }
 
         public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, int dialogWidth, bool hasPermission, string dialogFormID)
         {
             return hasPermission
-                ? ModalDialogFormLink(null, linkText, dialogUrl, dialogTitle, dialogWidth, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, dialogFormID, null)
+                ? ModalDialogFormLink(null, new HtmlString(linkText), dialogUrl, dialogTitle, dialogWidth, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, dialogFormID, null)
                 : new HtmlString(string.Empty);
         }
 
         public static IHtmlContent MakeDeleteLink(string linkText, string deleteDialogUrl, List<string> extraCssClasses, bool userHasDeletePermission)
         {
-            return userHasDeletePermission ? ModalDialogFormLink(linkText, deleteDialogUrl, "Confirm Delete", 500, "Delete", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
+            return userHasDeletePermission ? ModalDialogFormLink(new HtmlString(linkText), deleteDialogUrl, "Confirm Delete", 500, "Delete", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
         }
 
         public static IHtmlContent MakeEditIconLink(string dialogUrl, string dialogTitle, bool hasPermission)
@@ -207,7 +245,7 @@ namespace Neptune.Web.Common.ModalDialog
 
         public static IHtmlContent MakeEditIconLink(string dialogUrl, string dialogTitle, int width, bool hasPermission)
         {
-            return hasPermission ? ModalDialogFormLink(null, BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), dialogUrl, dialogTitle, width, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, null) : new HtmlString(string.Empty);
+            return hasPermission ? ModalDialogFormLink(null, BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit"), dialogUrl, dialogTitle, width, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, null) : new HtmlString(string.Empty);
         }
     }
 }

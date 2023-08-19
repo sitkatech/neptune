@@ -22,6 +22,7 @@
 @using Neptune.Web.Common
 @using Neptune.Web.Common.DhtmlWrappers
 @using Neptune.Web.Common.ModalDialog
+@using Microsoft.AspNetCore.Html
 @inherits Neptune.Web.Views.User.Detail
 
 @section JavascriptAndStylesContent
@@ -44,8 +45,7 @@
 {
     @if (ViewDataTyped.UserCanManageThisPersonPermissions)
     {
-        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} User", "<span class='glyphicon glyphicon-edit''></span>", ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate"), ViewDataTyped.ActivateInactivateUrl, $"{(ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate")} this user?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
-        ;
+        @ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{"<span class='glyphicon glyphicon-edit'></span>"} {(ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate")} User"), ViewDataTyped.ActivateInactivateUrl, $"{(ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate")} this user?", 400, "Continue", "Cancel", new List<string>{ "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null);
     }
 }
 
@@ -188,11 +188,11 @@
     <div class="col-md-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @string.Format("Organizations for which {0} is a {1}", ViewDataTyped.Person.GetFullNameFirstLast(), FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel())
+                @($"Organizations for which {ViewDataTyped.Person.GetFullNameFirstLast()} is a {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()}")
                 @if (ViewDataTyped.UserIsAdmin)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.GetFullNameFirstLast(), FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)
+                        @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, $"Edit {FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()} for which {ViewDataTyped.Person.GetFullNameFirstLast()} is a {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()}", ViewDataTyped.UserCanManageThisPersonPermissions)
                     </span>
                 }
             </div>

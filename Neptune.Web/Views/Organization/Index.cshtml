@@ -22,10 +22,11 @@
 @using Neptune.Web.Common.BootstrapWrappers
 @using Neptune.Web.Common.DhtmlWrappers
 @using Neptune.Web.Common.ModalDialog
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.Organization.Index
 @section JavascriptAndStylesContent
 {
-    @*todo: @{ DhtmlxGridIncludes.RenderPartialView(Html); }*@
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 @section RightOfPageTitle
 {
@@ -33,7 +34,7 @@
     @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Organization", ViewDataTyped.NewOrganizationUrl, "Add Organization", new List<string> { "btn", "btn-neptune" }, ViewDataTyped.UserCanAddOrganization)
 }
 
-@*todo: @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }*@
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
 <div style="margin-top: 10px;">
     @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)

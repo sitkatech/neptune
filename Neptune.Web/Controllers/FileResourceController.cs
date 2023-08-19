@@ -91,13 +91,13 @@ namespace Neptune.Web.Controllers
             return File(fileStream, contentType);
         }
 
-        //[LoggedInUnclassifiedFeature]
+        [LoggedInUnclassifiedFeature]
         //[CrossAreaRoute]
-        //public ActionResult DisplayResourceByID(FileResourcePrimaryKey fileResourcePrimaryKey)
-        //{
-        //    var fileResource = fileResourcePrimaryKey.EntityObject;
-        //    return DisplayResourceImpl(fileResourcePrimaryKey.PrimaryKeyValue.ToString(), fileResource);
-        //}
+        public IActionResult DisplayResourceByID(FileResourcePrimaryKey fileResourcePrimaryKey)
+        {
+            var fileResource = fileResourcePrimaryKey.EntityObject;
+            return DisplayFile(fileResource.OriginalBaseFilename, fileResource.FileResourceData);
+        }
 
         [AnonymousUnclassifiedFeature]
         //[CrossAreaRoute]

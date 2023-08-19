@@ -18,7 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using Neptune.Web.Models;
+
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -29,7 +30,7 @@ namespace Neptune.Web.Security
     public class LoggedInUnclassifiedFeature : NeptuneFeature
     {
         public LoggedInUnclassifiedFeature()
-            : base(Role.All)
+            : base(new[] {RoleEnum.Admin, RoleEnum.SitkaAdmin, RoleEnum.JurisdictionEditor, RoleEnum.JurisdictionManager, RoleEnum.Unassigned})
         {
         }
     }

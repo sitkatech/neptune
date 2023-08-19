@@ -198,7 +198,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 usedViewData = true;
             }
 
-            var defaultValue = (allowMultiple) ? htmlHelper.GetModelStateValue(fullName, typeof(string[])) : htmlHelper.GetModelStateValue(fullName, typeof(string));
+            object defaultValue = (allowMultiple) ? htmlHelper.GetModelStateValue(fullName, typeof(string[])) : htmlHelper.GetModelStateValue(fullName, typeof(string));
 
             // If we haven't already used ViewData to get the entire list of items then we need to
             // use the ViewData-supplied value before using the parameter-supplied value.
@@ -206,11 +206,11 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
             {
                 if (!usedViewData)
                 {
-                    defaultValue = htmlHelper.ViewData.Eval(name).ToString();
+                    defaultValue = htmlHelper.ViewData.Eval(name);
                 }
                 else if (metadata != null)
                 {
-                    defaultValue = metadata.Model.ToString();
+                    defaultValue = metadata.Model;
                 }
             }
 
@@ -245,7 +245,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 }
             }
 
-            tagBuilder.InnerHtml.AppendHtml(listItemBuilder.ToString());
+            tagBuilder.InnerHtml.AppendHtml(listItemBuilder);
 
             var modelExplorer = metadata.ModelExplorer;
             var validator = htmlHelper.ViewContext.HttpContext.RequestServices.GetService<ValidationHtmlAttributeProvider>();

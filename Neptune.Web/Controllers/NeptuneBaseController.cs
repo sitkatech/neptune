@@ -25,7 +25,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Controllers
 {
-    [ApiController]
+//    [ApiController]
     [Route("[controller]/[action]", Name = "[controller]_[action]")]
     public abstract class NeptuneBaseController<T> : SitkaController
     {

@@ -93,15 +93,37 @@ namespace Neptune.Web.Common
 
         public string BuildUrlFromExpression()
         {
-            var actionParameters = Body.Method.GetParameters();
+            return BuildUrlFromExpressionImpl(_linkGenerator, Body, ActionName, ControllerName);
+        }
+
+        public static string BuildUrlFromExpression(LinkGenerator linkGenerator, Expression<Action<T>> routeExpression)
+        {
+            var controllerName = SitkaController.ControllerTypeToControllerName(typeof(T));
+            var body = GetRouteExpressionBody(routeExpression);
+
+            var actionName = body.Method.Name;
+            var attributes = body.Method.GetCustomAttributes(typeof(ActionNameAttribute), false);
+            if (attributes.Length > 0)
+            {
+                var actionNameAttr = (ActionNameAttribute)attributes[0];
+                actionName = actionNameAttr.Name;
+            }
+
+            return BuildUrlFromExpressionImpl(linkGenerator, body, actionName, controllerName);
+        }
+
+        private static string BuildUrlFromExpressionImpl(LinkGenerator linkGenerator, MethodCallExpression body,
+            string actionName, string controllerName)
+        {
+            var actionParameters = body.Method.GetParameters();
             var objectBody = new Dictionary<string, dynamic>();
             for (var i = 0; i < actionParameters.Length; i++)
             {
-                //var parameterValue = (Body.Arguments[i] as ConstantExpression)?.Value;
-                var parameterValue = GetArgumentValue(Body.Arguments[i]);
+                var parameterValue = GetArgumentValue(body.Arguments[i]);
                 objectBody.Add(actionParameters[i].Name, parameterValue);
             }
-            var relativePath = _linkGenerator.GetPathByAction(ActionName, ControllerName, objectBody);
+
+            var relativePath = linkGenerator.GetPathByAction(actionName, controllerName, objectBody);
             return relativePath;
         }
 

@@ -19,9 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Text.Json;
-using Microsoft.AspNetCore.Html;
-using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -56,8 +53,7 @@ namespace Neptune.Web.Views.Home
             JurisdictionsMapInitJson = jurisdictionsMapInitJson;
             NeptuneHomePageCarouselImages = neptuneHomePageImages;
             LaunchPadViewData = launchPadViewData;
-            DisplayFileResourceUrl = new UrlTemplate<string>(new SitkaRoute<FileResourceController>(t => t.DisplayResource(UrlTemplate.Parameter1String),
-                linkGenerator).BuildUrlFromExpression());
+            DisplayFileResourceUrl = new UrlTemplate<string>(SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, t => t.DisplayResource(UrlTemplate.Parameter1String)));
         }
     }
 }
