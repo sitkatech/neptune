@@ -66,7 +66,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
         /// Custom TextArea control that has the max chars left in another div
         /// Only public for unit testing
         /// </summary>
-        public static IHtmlContent TextAreaWithMaxLengthFor<TViewModel, TValue>(this HtmlHelper<TViewModel> html,
+        public static IHtmlContent TextAreaWithMaxLengthFor<TViewModel, TValue>(this IHtmlHelper<TViewModel> html,
             Expression<Func<TViewModel, TValue>> expression,
             TextAreaDimensions textAreaDimensions, string optionalPlaceholderText)
         {
@@ -77,7 +77,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
         /// Custom TextArea control that has the max chars left in another div
         /// Only public for unit testing
         /// </summary>
-        public static IHtmlContent TextAreaWithMaxLengthFor<TViewModel, TValue>(this HtmlHelper<TViewModel> htmlHelper,
+        public static IHtmlContent TextAreaWithMaxLengthFor<TViewModel, TValue>(this IHtmlHelper<TViewModel> htmlHelper,
             Expression<Func<TViewModel, TValue>> expression,
             TextAreaDimensions textAreaDimensions, string optionalPlaceholderText, IEnumerable<string> cssClasses)
         {

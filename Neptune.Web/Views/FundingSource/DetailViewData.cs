@@ -19,28 +19,28 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.FundingSource
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly Models.FundingSource FundingSource;
+        public readonly EFModels.Entities.FundingSource FundingSource;
         public readonly bool UserHasFundingSourceManagePermissions;
         public readonly string EditFundingSourceUrl;
 
-        public DetailViewData(Person currentPerson, Models.FundingSource fundingSource) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(Person currentPerson, EFModels.Entities.FundingSource fundingSource, LinkGenerator linkGenerator) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
         {
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();
             EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}";
-            EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
+            EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
 
-            UserHasFundingSourceManagePermissions = new FundingSourceEditFeature().HasPermission(CurrentPerson, fundingSource).HasPermission;
-            EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Edit(fundingSource));                       
+            UserHasFundingSourceManagePermissions = new FundingSourceEditFeature().HasPermissionByPerson(CurrentPerson);
+            EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Edit(fundingSource));                       
         }
     }
 }

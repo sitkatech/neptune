@@ -18,9 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.FundingSource.Edit
+@model Neptune.Web.Views.FundingSource.EditViewModel
 
 @using (Html.BeginForm())
 {

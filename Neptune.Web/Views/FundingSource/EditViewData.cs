@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="Detail.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="EditViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,23 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.EFModels.Entities;
+
 namespace Neptune.Web.Views.FundingSource
 {
-    public abstract class Detail : LtInfo.Common.Mvc.TypedWebViewPage<DetailViewData>
+    public class EditViewData : NeptuneUserControlViewData
     {
+        public readonly IEnumerable<SelectListItem> Organizations;
+        public readonly Person CurrentPerson;
+        public readonly bool AllowPersonToSetOrganization;
+
+        public EditViewData(IEnumerable<SelectListItem> organizations, Person currentPerson)
+        {
+            Organizations = organizations;
+            CurrentPerson = currentPerson;
+            AllowPersonToSetOrganization = new List<EFModels.Entities.Role> { EFModels.Entities.Role.Admin, EFModels.Entities.Role.SitkaAdmin }.Any(x => x.RoleID == currentPerson.RoleID);
+        }
     }
 }

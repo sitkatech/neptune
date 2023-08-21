@@ -44,6 +44,27 @@ public static class Organizations
 
     public static List<Organization> List(NeptuneDbContext dbContext)
     {
-        return GetImpl(dbContext).ToList().OrderBy(x => x.GetDisplayName()).ToList();
+        return GetImpl(dbContext).AsNoTracking().ToList().OrderBy(x => x.GetDisplayName()).ToList();
     }
+
+    public static List<Organization> ListActive(NeptuneDbContext dbContext)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.IsActive).ToList().OrderBy(x => x.GetDisplayName()).ToList();
+    }
+
+    public static Organization GetByGuid(NeptuneDbContext dbContext, Guid organizationGuid)
+    {
+        return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.OrganizationGuid == organizationGuid);
+    }
+
+    public static Organization GetOrganizationByOrganizationName(NeptuneDbContext dbContext, string organizationName)
+    {
+        return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.OrganizationName == organizationName);
+    }
+
+    public static Organization GetUnknownOrganization(NeptuneDbContext dbContext)
+    {
+        return GetOrganizationByOrganizationName(dbContext, Organization.OrganizationUnknown);
+    }
+
 }

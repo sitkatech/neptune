@@ -18,11 +18,12 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Neptune.Web.Security
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @using Neptune.Web.Common.BootstrapWrappers
 @using Neptune.Web.Common.HtmlHelperExtensions
 @using Neptune.Web.Common.ModalDialog
+@using Neptune.Web.Security
 @using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.Organization.Detail
 @section JavascriptAndStylesContent
@@ -99,14 +100,13 @@
                 </span>
             </div>
             <div class="panel-body">
-                @*todo:
-                    @if (ViewDataTyped.Organization.FundingSources.Any())
+                @if (ViewDataTyped.Organization.FundingSources.Any())
                 {
                     <ul>
                         @foreach (var fundingSource in ViewDataTyped.Organization.FundingSources.OrderBy(x => x.FundingSourceName))
                         {
                             <li>
-                                @fundingSource.GetDisplayNameAsUrl()
+                                @UrlTemplate.MakeHrefString(ViewDataTyped.FundingSourceUrlTemplate.ParameterReplace(fundingSource.FundingSourceID), fundingSource.GetDisplayName())
                             </li>
                         }
                     </ul>
@@ -114,7 +114,7 @@
                 else
                 {
                     <p class="systemText">No @FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized() set for this @FieldDefinitionType.Organization.GetFieldDefinitionLabel().</p>
-                }*@
+                }
             </div>
         </div>
     </div>
@@ -124,19 +124,18 @@
                 Users
             </div>
             <div class="panel-body">
-                @*todo:
-                    @if (ViewDataTyped.Organization.People.Any())
+                @if (ViewDataTyped.Organization.People.Any())
                 {
                     <ul>
                         @foreach (var person in ViewDataTyped.Organization.People.Where(x => x.IsActive).OrderBy(x => x.GetFullNameLastFirst()))
                         {
-                            if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
+                            @*todo: if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
                             {
                                 <li>
                                     @person.GetFullNameFirstLastAsUrl()
                                 </li>
                             }
-                            else
+                            else*@
                             {
                                 <li>
                                     @person.GetFullNameFirstLast()
@@ -148,7 +147,7 @@
                 else
                 {
                     <p class="sys">No Users belong to this @FieldDefinitionType.Organization.GetFieldDefinitionLabel().</p>
-                }*@
+                }
             </div>
         </div>
     </div>

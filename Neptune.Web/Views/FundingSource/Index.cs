@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="Index.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,24 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 namespace Neptune.Web.Views.FundingSource
 {
-    public class EditViewData : NeptuneUserControlViewData
+    public abstract class Index : Common.Mvc.TypedWebViewPage<IndexViewData>
     {
-        public readonly IEnumerable<SelectListItem> Organizations;
-        public readonly Models.Person CurrentPerson;
-        public readonly bool AllowPersonToSetOrganization;
-
-        public EditViewData(IEnumerable<SelectListItem> organizations, Models.Person currentPerson)
-        {
-            Organizations = organizations;
-            CurrentPerson = currentPerson;
-            AllowPersonToSetOrganization = new List<Models.Role> { Models.Role.Admin, Models.Role.SitkaAdmin }.Any(x => x.RoleID == currentPerson.RoleID);
-        }
     }
 }

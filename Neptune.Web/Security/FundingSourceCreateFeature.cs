@@ -19,14 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using Neptune.Web.Models;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("Create New Funding Source")]
     public class FundingSourceCreateFeature : NeptuneFeature
     {
-        public FundingSourceCreateFeature() : base(new List<Role> { Role.Admin, Role.SitkaAdmin }) { }
+        public FundingSourceCreateFeature() : base(new List<RoleEnum> { RoleEnum.Admin, RoleEnum.SitkaAdmin }) { }
     }
 }

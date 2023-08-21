@@ -19,24 +19,20 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.FundingSource
 {
-    public class EditViewModel : FormViewModel, IValidatableObject
+    public class EditViewModel : FormViewModel//todo:, IValidatableObject
     {
         [Required]
         public int FundingSourceID { get; set; }
 
         [Required]
-        [StringLength(Models.FundingSource.FieldLengths.FundingSourceName)]
+        //todo: [StringLength(Models.FundingSource.FieldLengths.FundingSourceName)]
         [DisplayName("Name")]
         public string FundingSourceName { get; set; }
 
@@ -47,7 +43,7 @@ namespace Neptune.Web.Views.FundingSource
         [DisplayName("Active?")]
         public bool? IsActive { get; set; }
 
-        [StringLength(Models.FundingSource.FieldLengths.FundingSourceDescription)]
+        //todo: [StringLength(Models.FundingSource.FieldLengths.FundingSourceDescription)]
         [DisplayName("Description")]
         public string FundingSourceDescription { get; set; }
 
@@ -58,7 +54,7 @@ namespace Neptune.Web.Views.FundingSource
         {
         }
 
-        public EditViewModel(Models.FundingSource fundingSource)
+        public EditViewModel(EFModels.Entities.FundingSource fundingSource)
         {
             FundingSourceID = fundingSource.FundingSourceID;
             FundingSourceName = fundingSource.FundingSourceName;
@@ -67,7 +63,7 @@ namespace Neptune.Web.Views.FundingSource
             IsActive = fundingSource.IsActive;
         }
 
-        public void UpdateModel(Models.FundingSource fundingSource, Person currentPerson)
+        public void UpdateModel(EFModels.Entities.FundingSource fundingSource, Person currentPerson)
         {
             fundingSource.FundingSourceName = FundingSourceName;
             fundingSource.FundingSourceDescription = FundingSourceDescription;
@@ -75,26 +71,27 @@ namespace Neptune.Web.Views.FundingSource
             fundingSource.IsActive = IsActive ?? false; // should never be null due to Required Validation Attribute
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = new List<ValidationResult>();
+        // todo:
+        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    var errors = new List<ValidationResult>();
 
-            var existingFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.Where(x => x.OrganizationID == OrganizationID).ToList();
-            if (!Models.FundingSource.IsFundingSourceNameUnique(existingFundingSources, FundingSourceName, FundingSourceID))
-            {
-                errors.Add(new SitkaValidationResult<EditViewModel, string>(NeptuneValidationMessages.FundingSourceNameUnique, x => x.FundingSourceName));
-            }
+        //    var existingFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.Where(x => x.OrganizationID == OrganizationID).ToList();
+        //    if (!Models.FundingSource.IsFundingSourceNameUnique(existingFundingSources, FundingSourceName, FundingSourceID))
+        //    {
+        //        errors.Add(new SitkaValidationResult<EditViewModel, string>(NeptuneValidationMessages.FundingSourceNameUnique, x => x.FundingSourceName));
+        //    }
 
-            var currentPerson = HttpRequestStorage.Person;
-            if (new List<Models.Role> {Models.Role.Admin, Models.Role.SitkaAdmin}.All(x => x.RoleID != currentPerson.RoleID) && currentPerson.OrganizationID != OrganizationID)
-            {
-                var errorMessage = $"You cannnot create a {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} for an {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} other than your own.";
-                errors.Add(new SitkaValidationResult<EditViewModel, int?>(errorMessage, x => x.OrganizationID));
-            }
+        //    var currentPerson = HttpRequestStorage.Person;
+        //    if (new List<Models.Role> {Models.Role.Admin, Models.Role.SitkaAdmin}.All(x => x.RoleID != currentPerson.RoleID) && currentPerson.OrganizationID != OrganizationID)
+        //    {
+        //        var errorMessage = $"You cannnot create a {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} for an {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} other than your own.";
+        //        errors.Add(new SitkaValidationResult<EditViewModel, int?>(errorMessage, x => x.OrganizationID));
+        //    }
 
 
 
-            return errors;
-        }
+        //    return errors;
+        //}
     }
 }

@@ -18,12 +18,11 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
-@using LtInfo.Common
-@using LtInfo.Common.HtmlHelperExtensions
-@using LtInfo.Common.ModalDialog
-@using LtInfo.Common.Views
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common
+@using Neptune.Web.Common.HtmlHelperExtensions
+@using Neptune.Web.Common.ModalDialog
 @inherits Neptune.Web.Views.FundingSource.Detail
 
 @section JavascriptAndStylesContent
@@ -36,7 +35,7 @@
     <div class="col-sm-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, string.Format("Edit {0} - {1}", FieldDefinitionType.FundingSource.GetFieldDefinitionLabel(), ViewDataTyped.FundingSource.GetDisplayName()), ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, $"Edit {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} - {ViewDataTyped.FundingSource.GetDisplayName()}", ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -87,11 +86,11 @@
                                 {
                                     <tr>
                                         <td>
-                                            @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() || fundingEventFundingSource.FundingEvent.TreatmentBMP.InventoryIsVerified)
+                                            @*todo: @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() || fundingEventFundingSource.FundingEvent.TreatmentBMP.InventoryIsVerified)
                                             {
                                                 @Html.Raw(fundingEventFundingSource.FundingEvent.TreatmentBMP.GetDisplayNameAsUrl())
                                             }
-                                            else
+                                            else*@
                                             {
                                                 @fundingEventFundingSource.FundingEvent.TreatmentBMP.TreatmentBMPName
                                             }

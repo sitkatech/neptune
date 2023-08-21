@@ -19,33 +19,38 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web;
-using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Views;
+using Microsoft.AspNetCore.Html;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Common.HtmlHelperExtensions;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.FundingSource
 {
-    public class IndexGridSpec : GridSpec<Models.FundingSource>
+    public class IndexGridSpec : GridSpec<EFModels.Entities.FundingSource>
     {
-        public IndexGridSpec(Person currentPerson)
+        public IndexGridSpec(Person currentPerson, LinkGenerator linkGenerator)
         {
+            var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator,
+                x => x.Delete(UrlTemplate.Parameter1Int)));
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator,
+                x => x.Detail(UrlTemplate.Parameter1Int)));
             var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
-            var fundingSourceEditFeature = new FundingSourceEditFeature();
-            if (fundingSourceEditFeature.HasPermissionByPerson(currentPerson))
+            var hasAdminPermissions = new FundingSourceEditFeature().HasPermissionByPerson(currentPerson);
+            if (hasAdminPermissions)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), fundingSourceEditFeature.HasPermission(currentPerson, x).HasPermission, true), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.FundingSourceID), hasAdminPermissions, true), 30, DhtmlxGridColumnFilterType.None);
             }
 
-            Add(FieldDefinitionType.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.GetDisplayName()), 320, DhtmlxGridColumnFilterType.Html);
+            Add(FieldDefinitionType.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.FundingSourceID), a.GetDisplayName()), 320, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.Organization.GetDisplayName()) : UrlTemplate.MakeHrefString(a.Organization.GetDetailUrl(), a.Organization.GetDisplayName()), 300);
-            Add(FieldDefinitionType.OrganizationType.ToGridHeaderString(), a => a.Organization.OrganizationType?.OrganizationTypeName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinitionType.OrganizationType.ToGridHeaderString(), a => a.Organization.OrganizationType.OrganizationTypeName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", a => a.FundingSourceDescription, 300);
             Add("Is Active", a => a.IsActive.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add($"# of {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}", a => a.GetAssociatedTreatmentBMPs(currentPerson).Count, 90);
+            Add($"# of {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}", a => a.GetAssociatedTreatmentBMPs().Count, 90);
         }
     }
 }

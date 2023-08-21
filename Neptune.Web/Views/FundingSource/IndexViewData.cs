@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -34,12 +35,12 @@ namespace Neptune.Web.Views.FundingSource
         public readonly string NewFundingSourceUrl;
         public readonly bool UserCanAddFundingSource;
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator)
         {
             PageTitle = $"All {FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}";
             EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}";
 
-            GridSpec = new IndexGridSpec(currentPerson)
+            GridSpec = new IndexGridSpec(currentPerson, linkGenerator)
             {
                 ObjectNameSingular = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}",
@@ -49,9 +50,9 @@ namespace Neptune.Web.Views.FundingSource
             UserCanAddFundingSource = new FundingSourceCreateFeature().HasPermissionByPerson(currentPerson);            
 
             GridName = "fundingSourcesGrid";
-            GridDataUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
+            GridDataUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, tc => tc.IndexGridJsonData());
 
-            NewFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(tc => tc.New());
+            NewFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, tc => tc.New());
         }
     }
 }
