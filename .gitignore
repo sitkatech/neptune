@@ -54,5 +54,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Common/bin/Debug/net6.0
 /docker-compose/obj/Debug
 /docker-compose/obj/Docker/*.yml
+/docker-compose/obj/Docker/**/*.cache
 /docker-compose/bin/Debug
 /docker-compose/*.env
