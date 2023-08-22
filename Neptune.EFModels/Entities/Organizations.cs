@@ -67,4 +67,10 @@ public static class Organizations
         return GetByName(dbContext, Organization.OrganizationUnknown);
     }
 
+    public static async Task Delete(NeptuneDbContext dbContext, Organization organization)
+    {
+        await dbContext.Projects.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();
+        await dbContext.FundingSources.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();
+        await dbContext.Organizations.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();
+    }
 }

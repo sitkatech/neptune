@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.Organization
             var userViewFeature = new UserViewFeature();
             if (hasDeletePermissions)
             {
-                var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, t => t.DeleteOrganization(UrlTemplate.Parameter1Int)));
+                var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, t => t.Delete(UrlTemplate.Parameter1Int)));
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.OrganizationID), true, true/*!x.HasDependentObjects()*/), 30, DhtmlxGridColumnFilterType.None);
             }
             Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.OrganizationID), a.OrganizationName), 400, DhtmlxGridColumnFilterType.Html);

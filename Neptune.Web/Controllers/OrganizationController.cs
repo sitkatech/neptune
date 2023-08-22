@@ -145,8 +145,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{organizationPrimaryKey}")]
         [OrganizationManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
-        public PartialViewResult DeleteOrganization([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
+        public PartialViewResult Delete([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
             var organization = organizationPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(organization.OrganizationID);
@@ -165,10 +165,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpPost("{organizationID}")]
+        [HttpPost("{organizationPrimaryKey}")]
         [OrganizationManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("organizationID")]
-        public async Task<IActionResult> DeleteOrganization([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, [FromForm] ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, [FromForm] ConfirmDialogFormViewModel viewModel)
         {
             var organization = organizationPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -176,8 +176,7 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteOrganization(organization, viewModel);
             }
 
-            _dbContext.Organizations.Remove(organization);
-            await _dbContext.SaveChangesAsync();
+            await Organizations.Delete(_dbContext, organization);
             return new ModalDialogFormJsonResult();
         }
 
