@@ -46,7 +46,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.OrganizationsList);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, _linkGenerator);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, _linkGenerator, HttpContext);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -139,7 +139,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
             var organization = Organizations.GetByID(_dbContext, organizationPrimaryKey);
-            var viewData = new DetailViewData(CurrentPerson, organization, _linkGenerator);
+            var viewData = new DetailViewData(CurrentPerson, organization, _linkGenerator, HttpContext);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

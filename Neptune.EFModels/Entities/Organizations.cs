@@ -57,14 +57,14 @@ public static class Organizations
         return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.OrganizationGuid == organizationGuid);
     }
 
-    public static Organization GetOrganizationByOrganizationName(NeptuneDbContext dbContext, string organizationName)
+    public static Organization GetByName(NeptuneDbContext dbContext, string organizationName)
     {
         return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.OrganizationName == organizationName);
     }
 
     public static Organization GetUnknownOrganization(NeptuneDbContext dbContext)
     {
-        return GetOrganizationByOrganizationName(dbContext, Organization.OrganizationUnknown);
+        return GetByName(dbContext, Organization.OrganizationUnknown);
     }
 
 }

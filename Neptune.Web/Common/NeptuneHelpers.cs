@@ -18,11 +18,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
+
 using System.Drawing;
-using System.Linq;
 using System.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Common
@@ -50,33 +49,25 @@ namespace Neptune.Web.Common
             "#d3ffce",
             "#070a41"
         };
-        public static string GenerateLogInUrlWithReturnUrl()
+
+        public static string GenerateLogInUrlWithReturnUrl(HttpContext httpContext, LinkGenerator linkGenerator, string canonicalHostName)
         {
-            var returnUrl = HttpContext.Current.Request.Url.AbsoluteUri;
-            return GenerateLogInUrlWithReturnUrl(returnUrl);
+            var returnUrl = httpContext.Request.GetDisplayUrl();
+            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, c => c.Login());
+            return OnErrorOrNotFoundPage(httpContext, linkGenerator, canonicalHostName, returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
         }
 
-        public static string GenerateLogInUrlWithReturnUrl(string returnUrl)
+        public static string GenerateLogOutUrl()
         {
-            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn());
-            return OnErrorOrNotFoundPage(returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
+            // LogOff is an async route so we can't use a Sitka route
+            return "/Account/LogOff";
         }
 
-        public static string GenerateLogOutUrlWithReturnUrl()
-        {
-            var logOutUrl = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOff(), NeptuneWebConfiguration.CanonicalHostNameRoot);
-
-            var returnUrl = HttpContext.Current.Request.Url.AbsoluteUri;
-
-            return OnErrorOrNotFoundPage(returnUrl) ? logOutUrl : String.Format("{0}?returnUrl={1}", logOutUrl, HttpUtility.UrlEncode(returnUrl));
-        }
-
-        private static bool OnErrorOrNotFoundPage(string url)
+        private static bool OnErrorOrNotFoundPage(HttpContext httpContext, LinkGenerator linkGenerator, string canonicalHostName, string url)
         {
             var returnUrlPathAndQuery = new Uri(url).PathAndQuery;
-            var notFoundUrlPathAndQuery = new Uri(SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.NotFound())).PathAndQuery;
-            var errorUrlPathAndQuery = new Uri(SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Error())).PathAndQuery;
-
+            var notFoundUrlPathAndQuery = new Uri(SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(linkGenerator, "https://" + canonicalHostName, x => x.NotFound())).PathAndQuery;
+            var errorUrlPathAndQuery = new Uri(SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(linkGenerator, "https://" + canonicalHostName, x => x.Error())).PathAndQuery;
             var onErrorOrNotFoundPage = returnUrlPathAndQuery.StartsWith(notFoundUrlPathAndQuery, StringComparison.InvariantCultureIgnoreCase) ||
                                         returnUrlPathAndQuery.StartsWith(errorUrlPathAndQuery, StringComparison.InvariantCultureIgnoreCase);
             return onErrorOrNotFoundPage;
@@ -112,35 +103,6 @@ namespace Neptune.Web.Common
             }
 
             return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
-        }
-
-        public static Uri PostLogonDestination(HttpRequestBase httpRequestBase)
-        {
-            return PostLogonDestinationImpl(httpRequestBase.Url, httpRequestBase.UrlReferrer);
-        }
-
-        public static Uri PostLogonDestinationImpl(Uri requestUrl, Uri requestReferrer)
-        {
-            Uri postLogonDestination;
-
-            var logonAbsolutePath = new Uri(SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn())).AbsolutePath;
-            if (logonAbsolutePath != requestUrl?.AbsolutePath)
-            {
-                postLogonDestination = requestUrl;
-            }
-            else
-            {
-                postLogonDestination = requestReferrer;
-                if (postLogonDestination == null)
-                {
-                    postLogonDestination = logonAbsolutePath != requestUrl.AbsolutePath
-                        ? requestUrl
-                        // default to prevent landing on the clean-up page
-                        : new Uri(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index()));
-                }
-            }
-
-            return postLogonDestination;
         }
 
         // see: https://stackoverflow.com/questions/6848296/how-do-i-serialize-an-object-into-query-string-format

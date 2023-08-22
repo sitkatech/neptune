@@ -53,22 +53,22 @@ namespace Neptune.Web.Views.User
             UserNotificationGridSpec userNotificationGridSpec,
             string userNotificationGridName,
             string userNotificationGridDataUrl,
-            string activateInactivateUrl, LinkGenerator linkGenerator)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
+            string activateInactivateUrl, LinkGenerator linkGenerator, HttpContext httpContext)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             Person = personToView;
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);
             EntityName = "Users";
             //TODO: This gets pulled up to root
             EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
-            IndexUrl = "";//todo:SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Index());
+            IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             JurisdictionIndexUrl = "";//todo:SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
 
             UserHasPersonViewPermissions = false;//todo:new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserCanManageThisPersonPermissions = false;//todo:new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;
-            UserCanManagePeople = false;//todo:new UserEditFeature().HasPermissionByPerson(currentPerson);
-            UserIsAdmin = false;//todo:new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            UserHasViewEverythingPermissions = false;//todo:new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+            UserCanManagePeople = new UserEditFeature().HasPermissionByPerson(currentPerson);
+            UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+            UserHasViewEverythingPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             if (UserCanManagePeople)
             {

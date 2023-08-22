@@ -19,32 +19,33 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Web.Mvc;
 using Neptune.Web.Common;
-using Neptune.Web.Security.Shared;
-using System.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.OpenID;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {
-    public class AccountController : SitkaController
+    public class AccountController : NeptuneBaseController<AccountController>
     {
-        protected override bool IsCurrentUserAnonymous()
+        public AccountController(NeptuneDbContext dbContext, ILogger<AccountController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
         {
-            return HttpRequestStorage.Person.IsAnonymousUser();
         }
 
-        protected override string LoginUrl
+        protected string LoginUrl
         {
-            get { return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot); }
+            get
+            {
+                return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(_linkGenerator, "", c => c.Login());
+            }
         }
-
-        protected override ISitkaDbContext SitkaDbContext => HttpRequestStorage.DatabaseEntities;
 
         protected string HomeUrl
         {
-            get { return SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Index()); }
+            get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()); }
         }
 
 
@@ -54,18 +55,12 @@ namespace Neptune.Web.Controllers
             return Content("Not Authorized");
         }
 
-        [LoggedInUnclassifiedFeature]
-        public ActionResult LogOn()
+        [Authorize]
+        public ActionResult Login()
         {
-            var returnUrl = Request.Cookies["NeptuneReturnURL"];
-            if (!string.IsNullOrWhiteSpace(returnUrl?.Value))
-            {
-                Response.Cookies.Add(returnUrl);
-                returnUrl.Expires = DateTime.Now.AddDays(-1d);
-
-                return Redirect(HttpUtility.UrlDecode(returnUrl.Value));
-            }
-            return Redirect(HomeUrl);
+            var rawReturnUrl = HttpContext.Request.Cookies["NeptuneReturnURL"];
+            var returnUrl = AuthenticationHelper.SanitizeReturnUrlForLogin(rawReturnUrl, HomeUrl);
+            return Redirect(returnUrl);
         }
 
         [AnonymousUnclassifiedFeature]
@@ -75,10 +70,10 @@ namespace Neptune.Web.Controllers
         }
 
         [AnonymousUnclassifiedFeature]
-        public ActionResult LogOff()
+        public async Task<IActionResult> LogOff()
         {
-            Request.GetOwinContext().Authentication.SignOut();
-            return Redirect("/");
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         [AnonymousUnclassifiedFeature]

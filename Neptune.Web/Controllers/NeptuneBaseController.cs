@@ -34,10 +34,11 @@ namespace Neptune.Web.Controllers
         protected readonly ILogger<T> _logger;
 
         protected readonly LinkGenerator _linkGenerator;
+
         //        protected readonly WebConfiguration _qanatConfiguration;
 
         protected NeptuneBaseController(NeptuneDbContext dbContext, ILogger<T> logger, LinkGenerator linkGenerator
-            //, IOptions<QanatConfiguration> qanatConfiguration
+        //, IOptions<QanatConfiguration> qanatConfiguration
         )
         {
             _dbContext = dbContext;

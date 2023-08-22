@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.User
         public IEnumerable<SelectListItem> AllOrganizations { get; }
         public string CancelUrl { get; }
 
-        public InviteViewData(Person currentPerson, List<EFModels.Entities.Organization> organizations, NeptunePage neptunePage, string cancelUrl, LinkGenerator linkGenerator) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator)
+        public InviteViewData(Person currentPerson, List<EFModels.Entities.Organization> organizations, NeptunePage neptunePage, string cancelUrl, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             CancelUrl = cancelUrl;
             PageTitle = "Invite User";

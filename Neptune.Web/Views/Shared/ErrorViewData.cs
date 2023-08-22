@@ -19,15 +19,16 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Shared
 {
     public class ErrorViewData : NeptuneViewData
     {
-        public ErrorViewData(Person currentPerson, LinkGenerator linkGenerator, string urlReferer)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
+        public ErrorViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
-            UrlReferer = urlReferer;
+            UrlReferer = httpContext.Request.GetReferrer();
             HtmlPageTitle = "Error Page";
             PageTitle = "Error Page";
             EntityName = "Error";

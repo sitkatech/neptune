@@ -112,6 +112,38 @@ namespace Neptune.Web.Common
             return BuildUrlFromExpressionImpl(linkGenerator, body, actionName, controllerName);
         }
 
+        public static string BuildAbsoluteUrlHttpsFromExpression(LinkGenerator linkGenerator,
+            string canonicalHostName,
+            Expression<Action<T>> routeExpression)
+        {
+            return BuildAbsoluteUrlFromExpressionImpl(linkGenerator, canonicalHostName, routeExpression, "https");
+        }
+
+        public static string BuildAbsoluteUrlFromExpression(LinkGenerator linkGenerator,
+            string canonicalHostName, Expression<Action<T>> routeExpression)
+        {
+            return BuildAbsoluteUrlFromExpressionImpl(linkGenerator, canonicalHostName, routeExpression, "http");
+        }
+
+
+        private static string BuildAbsoluteUrlFromExpressionImpl(LinkGenerator linkGenerator, string canonicalHostName,
+            Expression<Action<T>> routeExpression, string protocol)
+        {
+            var relativeUrl = BuildUrlFromExpression(linkGenerator, routeExpression);
+            return BuildAbsoluteUrlFromRelativeUrl(canonicalHostName, protocol, relativeUrl);
+        }
+
+        public static string BuildAbsoluteUrlFromRelativeUrl(string canonicalHostName, string relativeUrl)
+        {
+            return BuildAbsoluteUrlFromRelativeUrl(canonicalHostName, "http", relativeUrl);
+        }
+
+        public static string BuildAbsoluteUrlFromRelativeUrl(string canonicalHostName, string protocol, string relativeUrl)
+        {
+            return $"{protocol}://{canonicalHostName}{relativeUrl}";
+        }
+
+
         private static string BuildUrlFromExpressionImpl(LinkGenerator linkGenerator, MethodCallExpression body,
             string actionName, string controllerName)
         {

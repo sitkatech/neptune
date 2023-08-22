@@ -50,7 +50,7 @@ namespace Neptune.Web.Views
         /// <summary>
         /// Call for page without associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson, NeptuneArea neptuneArea, LinkGenerator linkGenerator) : this(currentPerson, null, neptuneArea, linkGenerator)
+        protected NeptuneViewData(Person currentPerson, NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext) : this(currentPerson, null, neptuneArea, linkGenerator, httpContext)
         {
         }
 
@@ -58,7 +58,7 @@ namespace Neptune.Web.Views
         /// Call for page with associated NeptunePage
         /// </summary>
         protected NeptuneViewData(Person currentPerson, NeptunePage neptunePage, bool isHomePage,
-            NeptuneArea neptuneArea, LinkGenerator linkGenerator)
+            NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext)
         {
             NeptunePage = neptunePage;
             _linkGenerator = linkGenerator;
@@ -66,8 +66,8 @@ namespace Neptune.Web.Views
             CurrentPerson = currentPerson;
             NeptuneHomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
 
-            LogInUrl = "";// todo: NeptuneHelpers.GenerateLogInUrlWithReturnUrl();
-            LogOutUrl = "";// todo: NeptuneHelpers.GenerateLogOutUrlWithReturnUrl();
+            LogInUrl = NeptuneHelpers.GenerateLogInUrlWithReturnUrl(httpContext, linkGenerator, "");
+            LogOutUrl = NeptuneHelpers.GenerateLogOutUrl();
 
             RequestSupportUrl = "";// todo: SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.Support());
 
@@ -79,8 +79,8 @@ namespace Neptune.Web.Views
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
 
-        protected NeptuneViewData(Person currentPerson, NeptunePage neptunePage, NeptuneArea neptuneArea, LinkGenerator linkGenerator) : this(currentPerson,
-            neptunePage, false, neptuneArea, linkGenerator)
+        protected NeptuneViewData(Person currentPerson, NeptunePage neptunePage, NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext) : this(currentPerson,
+            neptunePage, false, neptuneArea, linkGenerator, httpContext)
         {
 
         }

@@ -39,13 +39,13 @@ namespace Neptune.Web.Views.User
         public string InviteUserUrl { get; }
         public bool UserIsAdmin { get; }
 
-        public IndexViewData(Person currentPerson, LinkGenerator linkGenerator) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
+        public IndexViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             PageTitle = "All Users";
             EntityName = "Users";
             GridSpec = new IndexGridSpec(currentPerson) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
             GridName = "UserGrid";
-            GridDataUrl = _linkGenerator.GetPathByAction("IndexGridJsonData", "User");
+            GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.IndexGridJsonData());
             KeystoneUrl = "";//todo: NeptuneWebConfiguration.KeystoneUrl;
             KeystoneRegisterUserUrl = "";//todo: $"{NeptuneWebConfiguration.KeystoneRegisterUrl}?ClientID={NeptuneWebConfiguration.KeystoneOpenIDClientId}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(x => x.LogOn()))}";
 

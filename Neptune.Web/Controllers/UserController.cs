@@ -38,7 +38,7 @@ namespace Neptune.Web.Controllers
         [UserEditFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(CurrentPerson, _linkGenerator);
+            var viewData = new IndexViewData(CurrentPerson, _linkGenerator, HttpContext);
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }
 

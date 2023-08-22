@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.Organization
         public string? OrganizationLogoUrl { get; }
         public UrlTemplate<int> FundingSourceUrlTemplate { get; }
 
-        public DetailViewData(Person currentPerson, EFModels.Entities.Organization organization, LinkGenerator linkGenerator) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
+        public DetailViewData(Person currentPerson, EFModels.Entities.Organization organization, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             Organization = organization;
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();

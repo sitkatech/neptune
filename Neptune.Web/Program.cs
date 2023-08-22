@@ -1,11 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.JsonConverters;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Common.OpenID;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 
@@ -43,30 +44,45 @@ var builder = WebApplication.CreateBuilder(args);
         });
     });
 
-    services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            if (builder.Environment.IsDevelopment())
-            {
-                // NOTE: CG 3/22 - This allows the self-signed cert on Keystone to work locally.
-                options.BackchannelHttpHandler = new HttpClientHandler()
-                {
-                    ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
-                };
-                //These allow the use of the container name and the url when developing.
-                options.TokenValidationParameters.ValidateIssuer = false;
-            }
+    services.AddAuthorizationPolicies();
 
-            options.TokenValidationParameters.ValidateAudience = false;
+    JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+    services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = "Cookies";
+            options.DefaultChallengeScheme = "Keystone";
+        })
+        .AddCookie("Cookies")
+        .AddOpenIdConnect("Keystone", options =>
+        {
             options.Authority = configuration.KeystoneOpenIDUrl;
-            options.RequireHttpsMetadata = false;
-            options.SecurityTokenValidators.Clear();
-            options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler
-            {
-                MapInboundClaims = false
-            });
+            options.CallbackPath = "/Account/LogOn";  // This needs to match redirect uri in Keystone but should NOT be a real url
+            options.Scope.Add("openid");
+            options.Scope.Add("keystone");
+            options.Scope.Add("profile");
+            options.Scope.Add("offline_access");
+            options.ClientId = configuration.KeystoneOpenIDClientId;
+            options.ClientSecret = configuration.KeystoneOpenIDClientSecret;
+            //options.ResponseType = "id_token token";
+            options.ResponseType = "code";
+            options.SaveTokens = true;
             options.TokenValidationParameters.NameClaimType = "name";
             options.TokenValidationParameters.RoleClaimType = "role";
+            options.SkipUnrecognizedRequests = true;
+            options.Events = new OpenIdConnectEvents()
+            {
+                OnTokenValidated = tvc =>
+                {
+                    var dbContext = tvc.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
+
+                    if (tvc.Principal.Identity != null && tvc.Principal.Identity.IsAuthenticated) // we have a token and we can determine the person.
+                    {
+                        AuthenticationHelper.ProcessLoginFromKeystone(tvc, dbContext, configuration);
+                    }
+                    return Task.FromResult(0);
+                }
+            };
+
         });
 
     services.AddHttpContextAccessor();
@@ -91,11 +107,12 @@ var app = builder.Build();
 
     app.UseRouting();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
     app.Run();
 }

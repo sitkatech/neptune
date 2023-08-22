@@ -19,15 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Shared
 {
     public class NotFoundViewData : NeptuneViewData
     {
-        public NotFoundViewData(Person currentPerson, LinkGenerator linkGenerator, string? urlReferer)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator)
+        public NotFoundViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
-            UrlReferer = urlReferer;
+            UrlReferer = httpContext.Request.GetReferrer();
             HtmlPageTitle = "Page Not Found";
             PageTitle = "Page Not Found";
         }

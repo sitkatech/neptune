@@ -38,8 +38,8 @@ namespace Neptune.Web.Views.Organization
         public readonly bool UserIsSitkaAdmin;
         public readonly bool UserCanAddOrganization;
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator) {
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext) {
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = "All Organizations";
 

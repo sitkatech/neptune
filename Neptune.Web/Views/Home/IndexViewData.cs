@@ -42,7 +42,7 @@ namespace Neptune.Web.Views.Home
         public IndexViewData(Person currentPerson, NeptunePage neptunePageHomePage,
             NeptunePage neptunePageAdditionalInfo, NeptunePage neptunePageMapInfo,
             List<NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
-            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData, LinkGenerator linkGenerator) : base(currentPerson, neptunePageHomePage, true, NeptuneArea.OCStormwaterTools, linkGenerator)
+            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePageHomePage, true, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             PageTitle = "Orange County Stormwater Tools";
 
