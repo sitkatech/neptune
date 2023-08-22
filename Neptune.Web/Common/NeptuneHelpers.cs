@@ -53,8 +53,22 @@ namespace Neptune.Web.Common
         public static string GenerateLogInUrlWithReturnUrl(HttpContext httpContext, LinkGenerator linkGenerator, string canonicalHostName)
         {
             var returnUrl = httpContext.Request.GetDisplayUrl();
+            //var link = new Uri(linkGenerator.GetUriByAction(context, "Login", "Account", new { returnUrl }));
+            //return link.ToString();
             var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, c => c.Login());
             return OnErrorOrNotFoundPage(httpContext, linkGenerator, canonicalHostName, returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
+        }
+
+        public static string GenerateLogInUrlWithReturnUrl(HttpContext httpContext)
+        {
+            var returnUrl = httpContext.Request.GetDisplayUrl();
+            return GenerateLogInUrlWithReturnUrl(returnUrl, httpContext);
+        }
+
+        public static string GenerateLogInUrlWithReturnUrl(string returnUrl, HttpContext httpContext)
+        {
+            var linkGenerator = httpContext.RequestServices.GetService<LinkGenerator>();
+            return GenerateLogInUrlWithReturnUrl(httpContext, linkGenerator, "");
         }
 
         public static string GenerateLogOutUrl()

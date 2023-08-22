@@ -40,13 +40,10 @@ namespace Neptune.Web.Security
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = context.HttpContext.User;
-            if (!user.Identity.IsAuthenticated)
+            if (!context.HttpContext.User.Identity?.IsAuthenticated ?? false)
             {
-                // it isn't needed to set unauthorized result 
-                // as the base class already requires the user to be authenticated
-                // this also makes redirect to a login page work properly
-                // context.Result = new UnauthorizedResult();
+                var redirectToLogin = new RedirectResult(NeptuneHelpers.GenerateLogInUrlWithReturnUrl(context.HttpContext));
+                context.Result = redirectToLogin;
                 return;
             }
 
@@ -60,7 +57,7 @@ namespace Neptune.Web.Security
             var person = UserContext.GetUserFromHttpContext(dbContext, context.HttpContext);
 
             var isAuthorized = HasPermissionByPerson(person);
-                
+
             if (!isAuthorized)
             {
                 context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
