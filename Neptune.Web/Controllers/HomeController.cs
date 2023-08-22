@@ -43,7 +43,6 @@ namespace Neptune.Web.Controllers
         //}
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePageTypeHomePage = NeptunePageType.HomePage;
@@ -83,14 +82,12 @@ namespace Neptune.Web.Controllers
             return RazorView<Views.Home.Index, IndexViewData>(viewData);
         }
 
-        [AnonymousUnclassifiedFeature]
         public ViewResult Error()
         {
             var viewData = new ErrorViewData(CurrentPerson, _linkGenerator, HttpContext);
             return RazorView<Error, ErrorViewData>(viewData);
         }
 
-        [AnonymousUnclassifiedFeature]
         public ViewResult NotFound()
         {
             var viewData = new NotFoundViewData(CurrentPerson, _linkGenerator, HttpContext);
@@ -98,7 +95,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public ViewResult ViewPageContent(NeptunePageTypeEnum neptunePageTypeEnum)
         {
             var neptunePageType = NeptunePageType.ToType(neptunePageTypeEnum);
@@ -108,7 +104,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public ViewResult AboutModelingBMPPerformance()
         {
             var con = new HomeController(_dbContext, _logger, _linkGenerator) {ControllerContext = ControllerContext};
@@ -116,7 +111,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public ViewResult About()
         {
             var con = new HomeController(_dbContext, _logger, _linkGenerator) { ControllerContext = ControllerContext };
@@ -124,8 +118,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Legal")]
-        [AnonymousUnclassifiedFeature]
         public ViewResult Legal()
         {
             var con = new HomeController(_dbContext, _logger, _linkGenerator) { ControllerContext = ControllerContext };
@@ -159,7 +151,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public ViewResult Training()
         {
             var neptunePageTypeTraining = NeptunePageType.Training;

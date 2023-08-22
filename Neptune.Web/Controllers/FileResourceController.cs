@@ -34,7 +34,6 @@ namespace Neptune.Web.Controllers
         {
         }
 
-        [AnonymousUnclassifiedFeature]
         //[CrossAreaRoute]
         [HttpGet("{fileResourceGuidAsString}")]
         public IActionResult DisplayResource(string fileResourceGuidAsString)
@@ -99,7 +98,6 @@ namespace Neptune.Web.Controllers
             return DisplayFile(fileResource.OriginalBaseFilename, fileResource.FileResourceData);
         }
 
-        [AnonymousUnclassifiedFeature]
         //[CrossAreaRoute]
         public ActionResult GetFileResourceResized(string fileResourceGuidAsString, int maxWidth, int maxHeight)
         {

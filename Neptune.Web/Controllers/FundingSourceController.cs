@@ -24,7 +24,6 @@ namespace Neptune.Web.Controllers
         {
         }
 
-        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.FundingSourcesList);
@@ -32,7 +31,6 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<FundingSource> IndexGridJsonData()
         {
             var gridSpec = new IndexGridSpec(CurrentPerson, _linkGenerator);
@@ -109,7 +107,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet("{fundingSourcePrimaryKey}")]
-        [AnonymousUnclassifiedFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("fundingSourcePrimaryKey")]
         public ViewResult Detail([FromRoute] FundingSourcePrimaryKey fundingSourcePrimaryKey)
         {

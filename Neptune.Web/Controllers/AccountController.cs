@@ -49,7 +49,6 @@ namespace Neptune.Web.Controllers
         }
 
 
-        [AnonymousUnclassifiedFeature]
         public ContentResult NotAuthorized()
         {
             return Content("Not Authorized");
@@ -63,20 +62,17 @@ namespace Neptune.Web.Controllers
             return Redirect(returnUrl);
         }
 
-        [AnonymousUnclassifiedFeature]
         public ActionResult Register()
         {
             return RedirectPermanent(HomeUrl);
         }
 
-        [AnonymousUnclassifiedFeature]
         public async Task<IActionResult> LogOff()
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        [AnonymousUnclassifiedFeature]
         public ActionResult SignoutCleanup(string sid)
         {
             return Content(string.Empty);
