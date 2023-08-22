@@ -478,7 +478,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                     return boolValue.HasValue ? boolValue.ToYesNo() : string.Empty;
                 case FuncType.HtmlString:
                     var htmlStringValue = _htmlStringValueFunc(dataObject);
-                    return htmlStringValue.ToString();
+                    return htmlStringValue.ToHtmlString();
                 case FuncType.Short:
                     return _shortValueFunc(dataObject).ToString(CultureInfo.InvariantCulture);
                 case FuncType.NullableShort:
