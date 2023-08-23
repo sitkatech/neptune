@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => OnlandVisualTrashAssessmentObservationID;
 
+
+        public static class FieldLengths
+        {
+            public const int Note = 500;
+        }
     }
 }

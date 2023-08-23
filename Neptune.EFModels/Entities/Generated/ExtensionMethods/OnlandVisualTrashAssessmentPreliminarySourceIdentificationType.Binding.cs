@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeID;
         public PreliminarySourceIdentificationType PreliminarySourceIdentificationType => PreliminarySourceIdentificationType.AllLookupDictionary[PreliminarySourceIdentificationTypeID];
+
+        public static class FieldLengths
+        {
+            public const int ExplanationIfTypeIsOther = 500;
+        }
     }
 }

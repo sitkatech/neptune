@@ -8,5 +8,12 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => OrganizationID;
 
+
+        public static class FieldLengths
+        {
+            public const int OrganizationName = 200;
+            public const int OrganizationShortName = 50;
+            public const int OrganizationUrl = 200;
+        }
     }
 }

@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => DelineationStagingID;
 
+
+        public static class FieldLengths
+        {
+            public const int TreatmentBMPName = 200;
+        }
     }
 }

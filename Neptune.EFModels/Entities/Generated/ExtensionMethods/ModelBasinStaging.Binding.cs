@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => ModelBasinStagingID;
 
+
+        public static class FieldLengths
+        {
+            public const int ModelBasinState = 5;
+            public const int ModelBasinRegion = 10;
+        }
     }
 }

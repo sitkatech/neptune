@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.FundingSource
         public int FundingSourceID { get; set; }
 
         [Required]
-        //todo: [StringLength(Models.FundingSource.FieldLengths.FundingSourceName)]
+        [StringLength(EFModels.Entities.FundingSource.FieldLengths.FundingSourceName)]
         [DisplayName("Name")]
         public string FundingSourceName { get; set; }
 
@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.FundingSource
         [DisplayName("Active?")]
         public bool? IsActive { get; set; }
 
-        //todo: [StringLength(Models.FundingSource.FieldLengths.FundingSourceDescription)]
+        [StringLength(EFModels.Entities.FundingSource.FieldLengths.FundingSourceDescription)]
         [DisplayName("Description")]
         public string FundingSourceDescription { get; set; }
 

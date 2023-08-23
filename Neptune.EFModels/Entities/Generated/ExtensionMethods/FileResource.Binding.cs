@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => FileResourceID;
         public FileResourceMimeType FileResourceMimeType => FileResourceMimeType.AllLookupDictionary[FileResourceMimeTypeID];
+
+        public static class FieldLengths
+        {
+            public const int OriginalBaseFilename = 255;
+            public const int OriginalFileExtension = 255;
+        }
     }
 }

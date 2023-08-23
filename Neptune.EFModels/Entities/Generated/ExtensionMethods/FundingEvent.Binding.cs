@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => FundingEventID;
         public FundingEventType FundingEventType => FundingEventType.AllLookupDictionary[FundingEventTypeID];
+
+        public static class FieldLengths
+        {
+            public const int Description = 500;
+        }
     }
 }

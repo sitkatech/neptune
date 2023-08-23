@@ -9,5 +9,10 @@ namespace Neptune.EFModels.Entities
         public int PrimaryKey => HRUCharacteristicID;
         public HRUCharacteristicLandUseCode BaselineHRUCharacteristicLandUseCode => HRUCharacteristicLandUseCode.AllLookupDictionary[BaselineHRUCharacteristicLandUseCodeID];
         public HRUCharacteristicLandUseCode HRUCharacteristicLandUseCode => HRUCharacteristicLandUseCode.AllLookupDictionary[HRUCharacteristicLandUseCodeID];
+
+        public static class FieldLengths
+        {
+            public const int HydrologicSoilGroup = 5;
+        }
     }
 }

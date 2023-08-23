@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => ProjectLoadGeneratingUnitID;
 
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

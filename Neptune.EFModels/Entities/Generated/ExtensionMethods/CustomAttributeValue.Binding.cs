@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => CustomAttributeValueID;
 
+
+        public static class FieldLengths
+        {
+            public const int AttributeValue = 1000;
+        }
     }
 }

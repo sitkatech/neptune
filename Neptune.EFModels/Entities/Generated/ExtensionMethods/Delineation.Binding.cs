@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => DelineationID;
         public DelineationType DelineationType => DelineationType.AllLookupDictionary[DelineationTypeID];
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

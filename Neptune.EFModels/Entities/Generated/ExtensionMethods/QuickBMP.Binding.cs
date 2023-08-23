@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => QuickBMPID;
         public DryWeatherFlowOverride DryWeatherFlowOverride => DryWeatherFlowOverrideID.HasValue ? DryWeatherFlowOverride.AllLookupDictionary[DryWeatherFlowOverrideID.Value] : null;
+
+        public static class FieldLengths
+        {
+            public const int QuickBMPName = 100;
+            public const int QuickBMPNote = 200;
+        }
     }
 }

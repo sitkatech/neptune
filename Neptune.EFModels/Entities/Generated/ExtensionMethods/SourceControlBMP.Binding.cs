@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => SourceControlBMPID;
 
+
+        public static class FieldLengths
+        {
+            public const int SourceControlBMPNote = 200;
+        }
     }
 }

@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => RegionalSubbasinRevisionRequestID;
         public RegionalSubbasinRevisionRequestStatus RegionalSubbasinRevisionRequestStatus => RegionalSubbasinRevisionRequestStatus.AllLookupDictionary[RegionalSubbasinRevisionRequestStatusID];
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

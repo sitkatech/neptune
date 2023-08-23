@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => NeptunePageID;
         public NeptunePageType NeptunePageType => NeptunePageType.AllLookupDictionary[NeptunePageTypeID];
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

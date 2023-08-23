@@ -9,5 +9,11 @@ namespace Neptune.EFModels.Entities
         public int PrimaryKey => LandUseBlockID;
         public PriorityLandUseType PriorityLandUseType => PriorityLandUseTypeID.HasValue ? PriorityLandUseType.AllLookupDictionary[PriorityLandUseTypeID.Value] : null;
         public PermitType PermitType => PermitType.AllLookupDictionary[PermitTypeID];
+
+        public static class FieldLengths
+        {
+            public const int LandUseDescription = 500;
+            public const int LandUseForTGR = 80;
+        }
     }
 }

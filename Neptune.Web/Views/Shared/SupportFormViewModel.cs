@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.Shared
     {
         [Required]
         [DisplayName("Name")]
-        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonName)]
+        [StringLength(SupportRequestLog.FieldLengths.RequestPersonName)]
         public String RequestPersonName { get; set; }
 
         [Required]
@@ -38,21 +38,21 @@ namespace Neptune.Web.Views.Shared
         [DataType(DataType.EmailAddress)]
         [RegularExpression("^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$",
             ErrorMessage = "Email supplied does not appear to be formatted correctly")]
-        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonEmail)]
+        [StringLength(SupportRequestLog.FieldLengths.RequestPersonEmail)]
         public String RequestPersonEmail { get; set; }
 
         [Required]
         [DisplayName("Description")]
-        //[StringLength(SupportRequestLog.FieldLengths.RequestDescription)]
+        [StringLength(SupportRequestLog.FieldLengths.RequestDescription)]
         public string RequestDescription { get; set; }
 
         [DisplayName("Organization")]
-        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonOrganization)]
+        [StringLength(SupportRequestLog.FieldLengths.RequestPersonOrganization)]
         public string RequestPersonOrganization { get; set; }
 
         [DisplayName("Phone")]
         [DataType(DataType.PhoneNumber)]
-        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonPhone)]
+        [StringLength(SupportRequestLog.FieldLengths.RequestPersonPhone)]
         public string RequestPersonPhone { get; set; }
 
         [Required]

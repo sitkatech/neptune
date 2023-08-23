@@ -31,12 +31,12 @@ namespace Neptune.Web.Views.Organization
         public int OrganizationID { get; set; }
 
         [Required]
-        //[StringLength(Models.Organization.FieldLengths.OrganizationName)]
+        [StringLength(EFModels.Entities.Organization.FieldLengths.OrganizationName)]
         [DisplayName("Name")]
         public string OrganizationName { get; set; }
 
         [Required]
-        //[StringLength(Models.Organization.FieldLengths.OrganizationShortName)]
+        [StringLength(EFModels.Entities.Organization.FieldLengths.OrganizationShortName)]
         [DisplayName("Short Name")]
         public string OrganizationShortName { get; set; }
 

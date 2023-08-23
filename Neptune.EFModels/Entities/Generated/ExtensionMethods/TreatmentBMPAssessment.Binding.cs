@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => TreatmentBMPAssessmentID;
         public TreatmentBMPAssessmentType TreatmentBMPAssessmentType => TreatmentBMPAssessmentType.AllLookupDictionary[TreatmentBMPAssessmentTypeID];
+
+        public static class FieldLengths
+        {
+            public const int Notes = 1000;
+        }
     }
 }

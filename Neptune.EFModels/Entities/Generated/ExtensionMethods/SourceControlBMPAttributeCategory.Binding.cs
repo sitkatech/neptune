@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => SourceControlBMPAttributeCategoryID;
 
+
+        public static class FieldLengths
+        {
+            public const int SourceControlBMPAttributeCategoryShortName = 50;
+            public const int SourceControlBMPAttributeCategoryName = 100;
+        }
     }
 }
