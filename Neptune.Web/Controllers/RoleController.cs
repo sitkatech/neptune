@@ -26,6 +26,7 @@ using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {
@@ -54,11 +55,12 @@ namespace Neptune.Web.Controllers
         }
 
         [UserEditFeature]
-        [HttpGet("{roleID}")]
-        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData(int roleID)
+        [HttpGet("{rolePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("rolePrimaryKey")]
+        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData([FromRoute] RolePrimaryKey rolePrimaryKey)
         {
             var gridSpec = new PersonWithRoleGridSpec();
-            var peopleWithRole = People.ListWithRole(_dbContext, roleID);
+            var peopleWithRole = People.ListWithRole(_dbContext, rolePrimaryKey.PrimaryKeyValue);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(peopleWithRole, gridSpec);
             return gridJsonNetJObjectResult;
         }

@@ -103,7 +103,7 @@ namespace Neptune.Web.Views
 
         }
 
-        private static LtInfoMenuItem BuildDelineationMenu(Person currentPerson)
+        private LtInfoMenuItem BuildDelineationMenu(Person currentPerson)
         {
             var delineationMenu = new LtInfoMenuItem("Delineation");
 
@@ -113,7 +113,7 @@ namespace Neptune.Web.Views
             return delineationMenu;
         }
 
-        private static LtInfoMenuItem BuildBMPInventoryMenu(Person currentPerson)
+        private LtInfoMenuItem BuildBMPInventoryMenu(Person currentPerson)
         {
             var bmpMenu = new LtInfoMenuItem("BMP Inventory");
 
@@ -132,13 +132,13 @@ namespace Neptune.Web.Views
             return bmpMenu;
         }
 
-        private static LtInfoMenuItem BuildProgramInfoMenu(Person currentPerson)
+        private LtInfoMenuItem BuildProgramInfoMenu(Person currentPerson)
         {
             var programInfoMenu = new LtInfoMenuItem("Program Info");
 
             //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group1"));
             //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
-            //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(c => c.Index()), currentPerson, FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized(), "Group1"));
+            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(c => c.Index(), _linkGenerator), currentPerson, "Funding Sources", "Group1"));
 
             //if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
             //{
@@ -150,7 +150,7 @@ namespace Neptune.Web.Views
         }
 
 
-        private static LtInfoMenuItem BuildDashboardMenu(Person currentPerson)
+        private LtInfoMenuItem BuildDashboardMenu(Person currentPerson)
         {
             return new LtInfoMenuItem("Dashboard");
             //return new LtInfoMenuItem(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
@@ -162,9 +162,9 @@ namespace Neptune.Web.Views
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.ManageHomePageImages(), _linkGenerator), currentPerson, "Homepage Configuration", "Group1"));
             //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group1"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group1"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index()), currentPerson, $"{FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()}", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index(), _linkGenerator), currentPerson, "Custom Labels & Definitions", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index(), _linkGenerator), currentPerson, "Users", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index(), _linkGenerator), currentPerson, $"Organizations", "Group1"));
 
             //if (currentPerson.IsAdministrator())
             //{
