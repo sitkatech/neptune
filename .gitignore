@@ -57,3 +57,5 @@ Source/Neptune.GeoServer/data_dir/logs/
 /docker-compose/obj/Docker/**/*.cache
 /docker-compose/bin/Debug
 /docker-compose/*.env
+/.vs/Neptune/v16
+/Neptune.Database/Neptune.Database.sqlproj.user
