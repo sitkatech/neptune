@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Models;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows editing Jurisdicton Assets")]
+    [SecurityFeatureDescription("Allows editing Jurisdiction Assets")]
     public class JurisdictionEditFeature : NeptuneFeature
     {
         public JurisdictionEditFeature()
-            : base(new List<Role> { Role.JurisdictionEditor, Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin })
+            : base(new List<RoleEnum> { RoleEnum.JurisdictionEditor, RoleEnum.JurisdictionManager, RoleEnum.Admin, RoleEnum.SitkaAdmin })
         {
         }
 

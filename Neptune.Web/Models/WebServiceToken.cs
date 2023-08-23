@@ -1,8 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Neptune.Common.DesignByContract;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
@@ -104,7 +104,7 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
-        /// Returns the <see cref="Neptune.Web.Models.Person.PersonID"/> associated with this <see cref="WebServiceToken"/>.
+        /// Returns the <see cref="EFModels.Entities.Person.PersonID"/> associated with this <see cref="WebServiceToken"/>.
         /// In unit test situation using <see cref="WebServiceTokenGuidForUnitTests"/> that would be Laryea's person ID for now
         /// Might want to introduce a system person at some point.
         /// </summary>

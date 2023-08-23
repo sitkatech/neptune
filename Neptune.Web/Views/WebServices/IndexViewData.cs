@@ -1,5 +1,6 @@
 ﻿using Neptune.Web.Models;
 using System.Collections.Generic;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Views.WebServices
 {

@@ -1,14 +1,14 @@
-﻿using Neptune.Web.Common;
-using Neptune.Web.Models;
-using Neptune.Web.Views.WebServices;
-using System.Linq;
-using System.Web.Mvc;
-using Neptune.Web.Security;
+﻿using Neptune.Web.Views.WebServices;
+using Microsoft.AspNetCore.Mvc;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Controllers
 {
-    public class WebServicesController : NeptuneBaseController
+    public class WebServicesController : NeptuneBaseController<WebServicesController>
     {
+        public WebServicesController(NeptuneDbContext dbContext, ILogger<WebServicesController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        {
+        }
 
         [HttpGet]
         [JurisdictionEditFeature]
