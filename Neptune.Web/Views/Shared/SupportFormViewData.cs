@@ -18,23 +18,24 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Web.Mvc;
-using Neptune.Web.Models;
+
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.Web.Views.Shared
 {
     public class SupportFormViewData : NeptuneViewData
     {
-        public readonly List<SupportRequestTypeSimple> SupportRequestTypeSimples;
+        public readonly List<SupportRequestTypeSimpleDto> SupportRequestTypeSimples;
         public readonly string SuccessMessage;
         public readonly bool IsUserAnonymous;
         public readonly IEnumerable<SelectListItem> SupportRequestTypes;
         public string CancelUrl { get; }
 
-        public SupportFormViewData(Person currentPerson, Models.NeptunePage neptunePage, string successMessage,
+        public SupportFormViewData(Person currentPerson, NeptunePage neptunePage, string successMessage,
             bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
-            List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            List<SupportRequestTypeSimpleDto> supportRequestTypeSimples, string cancelUrl, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             EntityName = "Stormwater Tools";
             PageTitle = "Request Support";

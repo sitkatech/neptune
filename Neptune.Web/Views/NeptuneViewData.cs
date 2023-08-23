@@ -46,6 +46,7 @@ namespace Neptune.Web.Views
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
         public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
         protected readonly LinkGenerator _linkGenerator;
+        private readonly HttpContext _httpContext;
 
         /// <summary>
         /// Call for page without associated NeptunePage
@@ -62,6 +63,7 @@ namespace Neptune.Web.Views
         {
             NeptunePage = neptunePage;
             _linkGenerator = linkGenerator;
+            _httpContext = httpContext;
 
             CurrentPerson = currentPerson;
             NeptuneHomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
@@ -69,7 +71,7 @@ namespace Neptune.Web.Views
             LogInUrl = NeptuneHelpers.GenerateLogInUrlWithReturnUrl(httpContext, linkGenerator, "");
             LogOutUrl = NeptuneHelpers.GenerateLogOutUrl();
 
-            RequestSupportUrl = "";// todo: SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.Support());
+            RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(linkGenerator, c => c.Support());
 
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Legal());
 

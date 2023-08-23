@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {

@@ -20,22 +20,25 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
-using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared;
-using LtInfo.Common;
 using LtInfo.Common.Mvc;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Help;
 
 namespace Neptune.Web.Controllers
 {
-    public class HelpController : NeptuneBaseController
+    public class HelpController : NeptuneBaseController<HelpController>
     {
-        [AnonymousUnclassifiedFeature]
+        public HelpController(NeptuneDbContext dbContext, ILogger<HelpController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        {
+        }
+
         [HttpGet]
         public ViewResult Support()
         {
@@ -45,17 +48,23 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
         {
             var currentPageUrl = string.Empty;
-            if (Request.UrlReferrer != null)
+            var referrer = HttpContext.Request.GetReferrer();
+            if (referrer != null)
             {
-                currentPageUrl = Request.UrlReferrer.ToString();
+                currentPageUrl = referrer;
             }
-            else if (Request.Url != null)
+            else
             {
-                currentPageUrl = Request.Url.ToString();
+                var displayUrl = HttpContext.Request.GetDisplayUrl();
+                if (displayUrl != null)
+                {
+                    currentPageUrl = displayUrl;
+                }
             }
 
             var viewModel = new SupportFormViewModel(currentPageUrl, supportRequestTypeEnum);
-            if (!IsCurrentUserAnonymous())
+            var isAnonymousUser = CurrentPerson.IsAnonymousUser();
+            if (!isAnonymousUser)
             {
                 viewModel.RequestPersonName = CurrentPerson.GetFullNameFirstLast();
                 viewModel.RequestPersonEmail = CurrentPerson.Email;
@@ -76,27 +85,27 @@ namespace Neptune.Web.Controllers
             var supportRequestTypes =
                 allSupportRequestTypes.OrderBy(x => x.SupportRequestTypeSortOrder)
                     .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
-            var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.RequestSupport);
+            var referrer = HttpContext.Request.GetReferrer();
+            var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, CurrentPerson.IsAnonymousUser(), supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl, _linkGenerator, HttpContext);
             return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
-        [AnonymousUnclassifiedFeature]
         [HttpPost]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Support(SupportFormViewModel viewModel)
+        public async Task<IActionResult> Support(SupportFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return ViewSupportImpl(viewModel, string.Empty);
             }
-            var supportRequestLog = SupportRequestLog.Create(CurrentPerson);
+            var supportRequestLog = SupportRequestLogs.Create(CurrentPerson);
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Add(supportRequestLog);
-            supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
+            await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
+            await _dbContext.SaveChangesAsync();
+            //supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
             return Redirect(viewModel.ReturnUrl);
         }
@@ -106,17 +115,23 @@ namespace Neptune.Web.Controllers
         public ViewResult RequestOrganizationNameChange()
         {
             var currentPageUrl = string.Empty;
-            if (Request.UrlReferrer != null)
+            var referrer = HttpContext.Request.GetReferrer();
+            if (referrer != null)
             {
-                currentPageUrl = Request.UrlReferrer.ToString();
+                currentPageUrl = referrer;
             }
-            else if (Request.Url != null)
+            else
             {
-                currentPageUrl = Request.Url.ToString();
+                var displayUrl = HttpContext.Request.GetDisplayUrl();
+                if (displayUrl != null)
+                {
+                    currentPageUrl = displayUrl;
+                }
             }
 
             var viewModel = new SupportFormViewModel(currentPageUrl, SupportRequestTypeEnum.RequestOrganizationNameChange);
-            if (!IsCurrentUserAnonymous())
+            var isAnonymousUser = CurrentPerson.IsAnonymousUser();
+            if (!isAnonymousUser)
             {
                 viewModel.RequestPersonName = CurrentPerson.GetFullNameFirstLast();
                 viewModel.RequestPersonEmail = CurrentPerson.Email;
@@ -132,29 +147,28 @@ namespace Neptune.Web.Controllers
             var supportRequestTypes =
                 allSupportRequestTypes.OrderBy(x => x.SupportRequestTypeSortOrder)
                     .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
-            var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.RequestSupport);
+            var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, isAnonymousUser, supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl, _linkGenerator, HttpContext);
             return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
-        [AnonymousUnclassifiedFeature]
         [HttpPost]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RequestOrganizationNameChange(SupportFormViewModel viewModel)
+        public async Task<IActionResult> RequestOrganizationNameChange(SupportFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return ViewSupportImpl(viewModel, string.Empty);
             }
-            var supportRequestLog = SupportRequestLog.Create(CurrentPerson);
+            var supportRequestLog = SupportRequestLogs.Create(CurrentPerson);
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Add(supportRequestLog);
-            supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
+            await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
+            await _dbContext.SaveChangesAsync();
+            supportRequestLog.SendMessage(HttpContext.Connection.RemoteIpAddress.ToString(), HttpContext.Request.Headers.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
-            return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x=>x.Index()));
+            return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
         [LoggedInUnclassifiedFeature]
@@ -164,13 +178,10 @@ namespace Neptune.Web.Controllers
             return ViewSupport(SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges, string.Empty);
         }
 
-        [AnonymousUnclassifiedFeature]
-        [CrossAreaRoute]
         [HttpPost]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RequestToChangePrivileges(SupportFormViewModel viewModel)
+        public async Task<IActionResult> RequestToChangePrivileges(SupportFormViewModel viewModel)
         {
-            return Support(viewModel);
+            return await Support(viewModel);
         }
 
         [HttpGet]
@@ -178,7 +189,7 @@ namespace Neptune.Web.Controllers
         public ViewResult BulkUploadRequest()
         {
             return RazorView<BulkUploadRequest, BulkUploadRequestViewData>(
-                new BulkUploadRequestViewData(CurrentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.BulkUploadRequest)));
+                new BulkUploadRequestViewData(CurrentPerson, NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadRequest), _linkGenerator, HttpContext));
         }
     }
 }

@@ -18,15 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Web;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
-using LtInfo.Common;
-using LtInfo.Common.Models;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -34,7 +30,7 @@ namespace Neptune.Web.Views.Shared
     {
         [Required]
         [DisplayName("Name")]
-        [StringLength(SupportRequestLog.FieldLengths.RequestPersonName)]
+        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonName)]
         public String RequestPersonName { get; set; }
 
         [Required]
@@ -42,21 +38,21 @@ namespace Neptune.Web.Views.Shared
         [DataType(DataType.EmailAddress)]
         [RegularExpression("^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$",
             ErrorMessage = "Email supplied does not appear to be formatted correctly")]
-        [StringLength(SupportRequestLog.FieldLengths.RequestPersonEmail)]
+        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonEmail)]
         public String RequestPersonEmail { get; set; }
 
         [Required]
         [DisplayName("Description")]
-        [StringLength(SupportRequestLog.FieldLengths.RequestDescription)]
+        //[StringLength(SupportRequestLog.FieldLengths.RequestDescription)]
         public string RequestDescription { get; set; }
 
         [DisplayName("Organization")]
-        [StringLength(SupportRequestLog.FieldLengths.RequestPersonOrganization)]
+        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonOrganization)]
         public string RequestPersonOrganization { get; set; }
 
         [DisplayName("Phone")]
         [DataType(DataType.PhoneNumber)]
-        [StringLength(SupportRequestLog.FieldLengths.RequestPersonPhone)]
+        //[StringLength(SupportRequestLog.FieldLengths.RequestPersonPhone)]
         public string RequestPersonPhone { get; set; }
 
         [Required]
@@ -97,25 +93,26 @@ namespace Neptune.Web.Views.Shared
         {
             var errors = new List<ValidationResult>();
 
-            var httpContext = HttpContext.Current;
-            if (!httpContext.User.Identity.IsAuthenticated) // this means we are anonymous
-            {
-                var ipAddress = string.Empty;
-                if (httpContext != null)
-                {
-                    ipAddress = httpContext.Request.UserHostAddress;
-                }
-                var gRecaptchaResponse = httpContext.Request.Form["g-recaptcha-response"];
-                if (
-                    !RecaptchaValidator.IsValidResponse(gRecaptchaResponse,
-                        ipAddress,
-                        NeptuneWebConfiguration.RecaptchaPrivateKey,
-                        NeptuneWebConfiguration.RecaptchaValidatorUrl,
-                        SitkaLogger.Instance.LogDetailedErrorMessage))
-                {
-                    errors.Add(new ValidationResult("Your Captcha response is incorrect."));
-                }
-            }
+            // TODO:
+            //var httpContext = HttpContext;
+            //if (!httpContext.User.Identity.IsAuthenticated) // this means we are anonymous
+            //{
+            //    var ipAddress = string.Empty;
+            //    if (httpContext != null)
+            //    {
+            //        ipAddress = httpContext.Request.UserHostAddress;
+            //    }
+            //    var gRecaptchaResponse = httpContext.Request.Form["g-recaptcha-response"];
+            //    if (
+            //        !RecaptchaValidator.IsValidResponse(gRecaptchaResponse,
+            //            ipAddress,
+            //            NeptuneWebConfiguration.RecaptchaPrivateKey,
+            //            NeptuneWebConfiguration.RecaptchaValidatorUrl,
+            //            SitkaLogger.Instance.LogDetailedErrorMessage))
+            //    {
+            //        errors.Add(new ValidationResult("Your Captcha response is incorrect."));
+            //    }
+            //}
             return errors;
         }
     }

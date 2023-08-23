@@ -18,29 +18,25 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Linq;
 using System.Net.Mail;
-using Neptune.Web.Common;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
     public partial class SupportRequestType
     {
-        public virtual void SetEmailRecipientsOfSupportRequest(MailMessage mailMessage)
+        public virtual void SetEmailRecipientsOfSupportRequest(NeptuneDbContext dbContext, MailMessage mailMessage)
         {
-            var supportPersons = HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveSupportEmails();
+            var supportPersonEmails = People.GetEmailAddressesForAdminsThatReceiveSupportEmails(dbContext).ToList();
 
-            if (!supportPersons.Any())
+            if (!supportPersonEmails.Any())
             {
-                var defaultSupportPerson = HttpRequestStorage.DatabaseEntities.People.GetPerson(NeptuneWebConfiguration.DefaultSupportPersonID);
-                supportPersons.Add(defaultSupportPerson);
-                mailMessage.Body = string.Format("<p style=\"font-weight:bold\">Note: No users are currently configured to receive support emails. Defaulting to User: {0}</p>{1}",
-                    defaultSupportPerson.GetFullNameFirstLast(),
-                    mailMessage.Body);
+                var defaultSupportPerson = People.GetByID(dbContext, 2);
+                supportPersonEmails.Add(defaultSupportPerson.Email);
+                mailMessage.Body = $"<p style=\"font-weight:bold\">Note: No users are currently configured to receive support emails. Defaulting to User: {defaultSupportPerson}</p>{mailMessage.Body}";
             }
-            foreach (var supportPerson in supportPersons)
+            foreach (var supportPerson in supportPersonEmails)
             {
-                mailMessage.To.Add(supportPerson.Email);
+                mailMessage.To.Add(supportPerson);
             }            
         }
     }
@@ -79,9 +75,9 @@ namespace Neptune.Web.Models
 
     public partial class SupportRequestTypeRequestOrganizationNameChange
     {
-        public override void SetEmailRecipientsOfSupportRequest(MailMessage mailMessage)
+        public override void SetEmailRecipientsOfSupportRequest(NeptuneDbContext dbContext, MailMessage mailMessage)
         {
-            mailMessage.To.Add(NeptuneWebConfiguration.SitkaSupportEmail);
+            mailMessage.To.Add("support@sitkatech.com"/*todo: NeptuneWebConfiguration.SitkaSupportEmail*/);
         }
     }
     public partial class SupportRequestTypeRequestToChangeUserAccountPrivileges
