@@ -22,10 +22,9 @@ Source code is available upon request via <support@sitkatech.com>.
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common.HtmlHelperExtensions;
 using NUnit.Framework;
 
-namespace LtInfo.Common.HtmlHelperExtensions
+namespace Neptune.Web.Common.HtmlHelperExtensions
 {
     [TestFixture]
     public class LabelWithSugarForExtensionsTest

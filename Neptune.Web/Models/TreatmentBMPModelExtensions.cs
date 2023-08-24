@@ -319,11 +319,10 @@ namespace Neptune.Web.Models
         //    return dbGeometry;
         //}
 
-        //public static RegionalSubbasin GetRegionalSubbasin(this TreatmentBMP treatmentBMP)
-        //{
-        //    return HttpRequestStorage.DatabaseEntities.RegionalSubbasins.SingleOrDefault(x =>
-        //            x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
-        //}
+        public static RegionalSubbasin GetRegionalSubbasin(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
+        {
+            return dbContext.RegionalSubbasins.SingleOrDefault(x => x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
+        }
 
 
         //public static void UpdateUpstreamBMPReferencesIfNecessary(this TreatmentBMP treatmentBMP)
@@ -357,12 +356,12 @@ namespace Neptune.Web.Models
         //    }
 
         //    var updated4326Geometry =
-        //        treatmentBMP.GetCentralizedDelineationGeometry4326(HttpRequestStorage.DatabaseEntities);
+        //        treatmentBMP.GetCentralizedDelineationGeometry4326(_dbContext);
 
         //    if (updated4326Geometry == null || !updated4326Geometry.SpatialEquals(treatmentBMP.Delineation.DelineationGeometry4326))
         //    {
         //        var oldShape = treatmentBMP.Delineation.DelineationGeometry;
-        //        var newShape = treatmentBMP.GetCentralizedDelineationGeometry2771(HttpRequestStorage.DatabaseEntities);
+        //        var newShape = treatmentBMP.GetCentralizedDelineationGeometry2771(_dbContext);
         //        if (updated4326Geometry != null)
         //        {
         //            treatmentBMP.Delineation.DelineationGeometry = newShape;
@@ -372,7 +371,7 @@ namespace Neptune.Web.Models
         //        }
         //        else
         //        {
-        //            treatmentBMP.Delineation.DeleteDelineation(HttpRequestStorage.DatabaseEntities);
+        //            treatmentBMP.Delineation.DeleteDelineation(_dbContext);
         //        }
         //    }
         //}
@@ -536,13 +535,13 @@ namespace Neptune.Web.Models
         //public static void SetTreatmentBMPPointInPolygonDataByLocationPoint(this TreatmentBMP treatmentBMP,
         //    DbGeometry locationPoint)
         //{
-        //    treatmentBMP.WatershedID = HttpRequestStorage.DatabaseEntities.Watersheds
+        //    treatmentBMP.WatershedID = _dbContext.Watersheds
         //        .FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry))?.WatershedID;
-        //    treatmentBMP.ModelBasinID = HttpRequestStorage.DatabaseEntities.ModelBasins
+        //    treatmentBMP.ModelBasinID = _dbContext.ModelBasins
         //        .FirstOrDefault(x => locationPoint.Intersects(x.ModelBasinGeometry))?.ModelBasinID;
-        //    treatmentBMP.PrecipitationZoneID = HttpRequestStorage.DatabaseEntities.PrecipitationZones
+        //    treatmentBMP.PrecipitationZoneID = _dbContext.PrecipitationZones
         //        .FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry))?.PrecipitationZoneID;
-        //    treatmentBMP.RegionalSubbasinID = HttpRequestStorage.DatabaseEntities.RegionalSubbasins
+        //    treatmentBMP.RegionalSubbasinID = _dbContext.RegionalSubbasins
         //        .FirstOrDefault(x => locationPoint.Intersects(x.CatchmentGeometry))?.RegionalSubbasinID;
         //}
 
@@ -553,5 +552,41 @@ namespace Neptune.Web.Models
                 ? new HtmlString(delineationType?.DelineationTypeDisplayName)
                 : new HtmlString("<p class='systemText'>No Delineation Provided</p>");
         }
+
+        public static void MarkInventoryAsProvisionalIfNonManager(this TreatmentBMP treatmentBMP, Person person)
+        {
+            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
+            if (!isAssignedToStormwaterJurisdiction)
+            {
+                treatmentBMP.InventoryIsVerified = false;
+            }
+            treatmentBMP.InventoryLastChangedDate = DateTime.Now;
+        }
+
+        public static IEnumerable<HRUCharacteristic> GetHRUCharacteristics(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
+        {
+            if (treatmentBMP.Delineation == null)
+            {
+                return new List<HRUCharacteristic>();
+            }
+
+            if (treatmentBMP.Delineation.DelineationType == DelineationType.Centralized && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
+            {
+                var catchmentRegionalSubbasins = treatmentBMP.GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
+
+                catchmentRegionalSubbasins.Add(treatmentBMP.RegionalSubbasinID.GetValueOrDefault());
+
+                return dbContext.HRUCharacteristics.Where(x =>
+                    x.LoadGeneratingUnit.RegionalSubbasinID != null &&
+                    catchmentRegionalSubbasins.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
+            }
+
+            else
+            {
+                return dbContext.HRUCharacteristics.Where(x =>
+                    x.LoadGeneratingUnit.Delineation != null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
+            }
+        }
+
     }
 }

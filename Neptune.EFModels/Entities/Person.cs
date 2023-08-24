@@ -105,7 +105,7 @@ namespace Neptune.EFModels.Entities
         //TODO:
         //public void SetKeystoneUserClaims(IKeystoneUserClaims keystoneUserClaims)
         //{
-        //    //Organization = HttpRequestStorage.DatabaseEntities.Organizations.Where(x => x.OrganizationGuid.HasValue).SingleOrDefault(x => x.OrganizationGuid == keystoneUserClaims.OrganizationGuid);
+        //    //Organization = _dbContext.Organizations.Where(x => x.OrganizationGuid.HasValue).SingleOrDefault(x => x.OrganizationGuid == keystoneUserClaims.OrganizationGuid);
         //    Phone = keystoneUserClaims.PrimaryPhone.ToPhoneNumberString();
         //    Email = keystoneUserClaims.Email;
         //}

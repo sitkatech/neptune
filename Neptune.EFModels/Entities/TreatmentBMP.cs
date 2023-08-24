@@ -24,7 +24,7 @@ using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMP : IAuditableEntity//, IHaveHRUCharacteristics
+    public partial class TreatmentBMP : IAuditableEntity, IHaveHRUCharacteristics
     {
         public bool CanView(Person person)
         {
@@ -170,17 +170,6 @@ namespace Neptune.EFModels.Entities
             //);
         }
 
-        public void MarkInventoryAsProvisionalIfNonManager(Person person)
-        {
-            // todo:
-            //var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(StormwaterJurisdictionID);
-            //if (!isAssignedToStormwaterJurisdiction)
-            //{
-            //    InventoryIsVerified = false;
-            //}
-            //InventoryLastChangedDate = DateTime.Now;
-        }
-
         public void MarkAsVerified(Person currentPerson)
         {
             InventoryIsVerified = true;
@@ -196,32 +185,6 @@ namespace Neptune.EFModels.Entities
         public void RemoveUpstreamBMP()
         { 
             this.UpstreamBMPID = null;
-        }
-
-        public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
-        {
-            return new List<HRUCharacteristic>();
-            //if (Delineation == null)
-            //{
-            //    return new List<HRUCharacteristic>();
-            //}
-
-            //if (Delineation.DelineationType == DelineationType.Centralized && TreatmentBMPType.TreatmentBMPModelingType != null)
-            //{
-            //    var catchmentRegionalSubbasins = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities);
-
-            //    catchmentRegionalSubbasins.Add(RegionalSubbasinID.GetValueOrDefault());
-
-            //    return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-            //        x.LoadGeneratingUnit.RegionalSubbasinID != null &&
-            //        catchmentRegionalSubbasins.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
-            //}
-
-            //else
-            //{
-            //    return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-            //        x.LoadGeneratingUnit.Delineation!= null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
-            //}
         }
     }
 }

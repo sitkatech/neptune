@@ -88,8 +88,8 @@ namespace Neptune.EFModels.Entities
         //public static FileResource CreateNewFromHttpPostedFileAndSave(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
         //{
         //    var fileResource = CreateNewFromHttpPostedFile(httpPostedFileBase, currentPerson);
-        //    HttpRequestStorage.DatabaseEntities.FileResources.Add(fileResource);
-        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    _dbContext.FileResources.Add(fileResource);
+        //    _dbContext.SaveChanges();
         //    return fileResource;
         //}
 

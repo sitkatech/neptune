@@ -127,15 +127,15 @@ namespace Neptune.Web.Models
             return person.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionID);
         }
 
-        public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanViewWithContext(
+        public static List<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanViewWithContext(
             this Person person, NeptuneDbContext dbContext)
         {
             if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
             {
-                return dbContext.StormwaterJurisdictions;
+                return dbContext.StormwaterJurisdictions.ToList();
             }
 
-            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
+            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
         }
 
         public static IEnumerable<int> GetStormwaterJurisdictionIDsPersonCanViewWithContext(this Person person,
@@ -159,7 +159,7 @@ namespace Neptune.Web.Models
         }
 
         public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person,
-            List<StormwaterJurisdiction> stormwaterJurisdictionsPersonCanView, NeptuneDbContext dbContext)
+            IEnumerable<StormwaterJurisdiction> stormwaterJurisdictionsPersonCanView, NeptuneDbContext dbContext)
         {
             //These users can technically see all Jurisdictions, just potentially not the BMPs inside them
             if (person.IsAnonymousOrUnassigned())

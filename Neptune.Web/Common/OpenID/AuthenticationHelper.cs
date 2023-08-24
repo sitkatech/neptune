@@ -286,7 +286,7 @@ public static class AuthenticationHelper
     //
     //     var sendNewUserCreatedMessage = false;
     //
-    //     var person = HttpRequestStorage.DatabaseEntities.People.GetPersonByEmail(email, false);
+    //     var person = _dbContext.People.GetPersonByEmail(email, false);
     //     SitkaHttpApplication.Logger.Info($"{applicationDomain}: In {nameof(ProcessLogin)} - {(person != null ? "Found" : "Did NOT find")} by email address. [{userDetailsStringForLogging}]");
     //
     //     // If there's no Person already that corresponds to the Person who is logging in, we create Person
@@ -309,8 +309,8 @@ public static class AuthenticationHelper
     //             email,
     //             VitalSignRole.Unassigned.VitalSignRoleID,
     //             NepAtlasRole.Unassigned.NepAtlasRoleID);
-    //         HttpRequestStorage.DatabaseEntities.People.Add(person);
-    //         HttpRequestStorage.DatabaseEntities.People.Add(person);
+    //         _dbContext.People.Add(person);
+    //         _dbContext.People.Add(person);
     //         sendNewUserCreatedMessage = true;
     //     }
     //     else
@@ -328,7 +328,7 @@ public static class AuthenticationHelper
     //     // TODO: should this be update date or last activity date?
     //     person.UpdateDate = DateTime.Now;
     //
-    //     HttpRequestStorage.DatabaseEntities.SaveChanges(person);
+    //     _dbContext.SaveChanges(person);
     //
     //     if (sendNewUserCreatedMessage)
     //     {
@@ -343,9 +343,9 @@ public static class AuthenticationHelper
     // private static Organization GetOrganizationFromEmailDomain(string email)
     // {
     //     var emailDomain = email.Split('@')[1];
-    //     return HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(x =>
+    //     return _dbContext.Organizations.SingleOrDefault(x =>
     //             x.EmailDomains.Any(y => y.DomainName == emailDomain)) ??
-    //         HttpRequestStorage.DatabaseEntities.Organizations.GetUnknownOrganization();
+    //         _dbContext.Organizations.GetUnknownOrganization();
     // }
     //
     // public static void IdentitySignIn(IAuthenticationManager authenticationManager, Person person)
@@ -382,7 +382,7 @@ public static class AuthenticationHelper
     //         {
     //             // Get person from ID to return
     //             var personID = (int)HttpContext.Current.Session["PersonID"];
-    //             var person = HttpRequestStorage.DatabaseEntities.People.GetPerson(personID);
+    //             var person = _dbContext.People.GetPerson(personID);
     //             if (person != null)
     //             {
     //                 // Authenticate manually by assigning the retrieved identity to the current user 
@@ -417,14 +417,14 @@ public static class AuthenticationHelper
     //     if (claimsPrincipal.Identity.AuthenticationType == DefaultAuthenticationTypes.ApplicationCookie)
     //     {
     //         var personID = int.Parse(claimsPrincipal.Identity.Name);
-    //         person = HttpRequestStorage.DatabaseEntities.People.GetPerson(personID);
+    //         person = _dbContext.People.GetPerson(personID);
     //     }
     //     // Keystone path
     //     else
     //     {
     //         // In Keystone claims, the Person GUID is stored in a property called 'sub' 
     //         var personGuid = Guid.Parse(claimsPrincipal.FindAll(x => x.Type == "sub").First().Value);
-    //         person = HttpRequestStorage.DatabaseEntities.People.GetPersonByKeystoneGuid(personGuid);
+    //         person = _dbContext.People.GetPersonByKeystoneGuid(personGuid);
     //     }
     //     return person;
     // }

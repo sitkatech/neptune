@@ -213,23 +213,23 @@ namespace Neptune.Web.Controllers
         //        return new ModalDialogFormJsonResult();
         //    }
 
-        //    var neptuneOrganization = HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(x => x.OrganizationGuid == organizationGuid);
+        //    var neptuneOrganization = _dbContext.Organizations.SingleOrDefault(x => x.OrganizationGuid == organizationGuid);
         //    if (neptuneOrganization != null)
         //    {
         //        SetErrorForDisplay("Organization not added - it already exists in Neptune");
         //        return new ModalDialogFormJsonResult();
         //    }
 
-        //    var defaultOrganizationType = HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
+        //    var defaultOrganizationType = _dbContext.OrganizationTypes.GetDefaultOrganizationType();
         //    neptuneOrganization = new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
         //    {
         //        OrganizationGuid = keystoneOrganization.OrganizationGuid,
         //        OrganizationShortName = keystoneOrganization.ShortName,
         //        OrganizationUrl = keystoneOrganization.URL
         //    };
-        //    HttpRequestStorage.DatabaseEntities.Organizations.Add(neptuneOrganization);
+        //    _dbContext.Organizations.Add(neptuneOrganization);
 
-        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    _dbContext.SaveChanges();
 
         //    SetMessageForDisplay($"Organization {neptuneOrganization.GetDisplayNameAsUrl()} successfully added.");
 

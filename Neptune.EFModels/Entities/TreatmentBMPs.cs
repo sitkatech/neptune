@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
@@ -32,9 +33,45 @@ namespace Neptune.EFModels.Entities
 
         public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(NeptuneDbContext dbContext)
         {
-            return dbContext.TreatmentBMPs.AsNoTracking().Include(x => x.TreatmentBMPType)
-                .Where(x => x.ProjectID == null);
+            return GetImpl(dbContext).AsNoTracking().Where(x => x.ProjectID == null);
         }
-    }
 
+        private static IQueryable<TreatmentBMP> GetImpl(NeptuneDbContext dbContext)
+        {
+            return dbContext.TreatmentBMPs
+                .Include(x => x.TreatmentBMPType);
+        }
+
+        public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            var treatmentBMP = GetImpl(dbContext)
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+            return treatmentBMP;
+        }
+
+        public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            return GetByIDWithChangeTracking(dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
+        }
+
+        public static TreatmentBMP GetByID(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            var treatmentBMP = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+            return treatmentBMP;
+        }
+
+        public static TreatmentBMP GetByID(NeptuneDbContext dbContext, TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            return GetByID(dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
+        }
+
+        public static List<TreatmentBMP> List(NeptuneDbContext dbContext)
+        {
+            return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.TreatmentBMPName).ToList();
+        }
+
+    }
 }

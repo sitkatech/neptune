@@ -82,7 +82,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fieldDefinition);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Field Definition successfully saved.");
-            return RedirectToAction(new SitkaRoute<FieldDefinitionController>(x => x.Edit(fieldDefinition.FieldDefinitionTypeID), _linkGenerator));
+            return RedirectToAction(new SitkaRoute<FieldDefinitionController>(_linkGenerator, x => x.Edit(fieldDefinition.FieldDefinitionTypeID)));
         }
 
         private ViewResult ViewEdit(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)

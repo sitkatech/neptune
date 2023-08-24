@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 
@@ -38,7 +39,7 @@ namespace Neptune.Web.Controllers
         //        protected readonly WebConfiguration _qanatConfiguration;
 
         protected NeptuneBaseController(NeptuneDbContext dbContext, ILogger<T> logger, LinkGenerator linkGenerator
-        //, IOptions<QanatConfiguration> qanatConfiguration
+        //, IOptions<WebConfiguration> configuration
         )
         {
             _dbContext = dbContext;

@@ -76,14 +76,14 @@ namespace Neptune.Web.Views.FundingSource
         //{
         //    var errors = new List<ValidationResult>();
 
-        //    var existingFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.Where(x => x.OrganizationID == OrganizationID).ToList();
-        //    if (!Models.FundingSource.IsFundingSourceNameUnique(existingFundingSources, FundingSourceName, FundingSourceID))
+        //    var existingFundingSources = _dbContext.FundingSources.Where(x => x.OrganizationID == OrganizationID).ToList();
+        //    if (!EFModels.Entities.FundingSource.IsFundingSourceNameUnique(existingFundingSources, FundingSourceName, FundingSourceID))
         //    {
         //        errors.Add(new SitkaValidationResult<EditViewModel, string>(NeptuneValidationMessages.FundingSourceNameUnique, x => x.FundingSourceName));
         //    }
 
         //    var currentPerson = HttpRequestStorage.Person;
-        //    if (new List<Models.Role> {Models.Role.Admin, Models.Role.SitkaAdmin}.All(x => x.RoleID != currentPerson.RoleID) && currentPerson.OrganizationID != OrganizationID)
+        //    if (new List<EFModels.Entities.Role> {EFModels.Entities.Role.Admin, EFModels.Entities.Role.SitkaAdmin}.All(x => x.RoleID != currentPerson.RoleID) && currentPerson.OrganizationID != OrganizationID)
         //    {
         //        var errorMessage = $"You cannnot create a {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} for an {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} other than your own.";
         //        errors.Add(new SitkaValidationResult<EditViewModel, int?>(errorMessage, x => x.OrganizationID));

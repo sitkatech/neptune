@@ -116,7 +116,7 @@ namespace Neptune.Web.Views.Organization
             //var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(HttpRequestStorage.Person);
             //if (OrganizationGuid.HasValue && isSitkaAdmin)
             //{
-            //    var organization = HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(x => x.OrganizationGuid == OrganizationGuid);
+            //    var organization = _dbContext.Organizations.SingleOrDefault(x => x.OrganizationGuid == OrganizationGuid);
             //    if (organization != null && organization.OrganizationID != OrganizationID)
             //    {
             //        validationResults.Add(new SitkaValidationResult<EditViewModel, Guid?>("This Guid is already associated with an Organization", x => x.OrganizationGuid));

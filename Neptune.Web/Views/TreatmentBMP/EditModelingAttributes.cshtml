@@ -1,0 +1,382 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common.HtmlHelperExtensions
+@using Neptune.Web.Common.BootstrapWrappers
+@inherits Neptune.Web.Views.TreatmentBMP.EditModelingAttributes
+@model Neptune.Web.Views.TreatmentBMP.EditModelingAttributesViewModel
+
+@section JavascriptAndStylesContent
+{
+    <script src="@Url.Content("~/Content/autonumeric.min.js")"></script>
+
+    <script>
+        var decimal;
+        jQuery(document).ready(function () {
+            decimal = AutoNumeric.multiple('.numericAttribute', {allowDecimalPadding: false});
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="validationError">
+            @Html.ValidationSummary()
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @* this is needed to validate which modeling fields are required for a treatment bmp*@
+    @Html.HiddenFor(x => x.TreatmentBMPModelingTypeID)
+    <div class="formPage">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-horizontal">
+
+                        @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
+                            {
+                                case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.StorageVolumeBelowLowestOutletElevation)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.StorageVolumeBelowLowestOutletElevation)" aria-describedby="attributeUnit" type="text" value="@Model.StorageVolumeBelowLowestOutletElevation" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.MediaBedFootprint)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.MediaBedFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.MediaBedFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.DesignMediaFiltrationRate)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignMediaFiltrationRate)" aria-describedby="attributeUnit" type="text" value="@Model.DesignMediaFiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.UnderlyingHydrologicSoilGroupID)
+                                        </label>
+                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.UnderlyingHydrologicSoilGroupID, ViewDataTyped.UnderlyingHydrologicSoilGroups.Where(x => x.Text != "Liner").ToList(), new { @class = "form-control" })</div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+                                case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+                                case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+                                case TreatmentBMPModelingTypeEnum.PermeablePavement:
+                                case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.InfiltrationSurfaceArea)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.InfiltrationSurfaceArea)" aria-describedby="attributeUnit" type="text" value="@Model.InfiltrationSurfaceArea" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.UnderlyingInfiltrationRate)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.UnderlyingInfiltrationRate)" aria-describedby="attributeUnit" type="text" value="@Model.UnderlyingInfiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
+                                        </div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+                                case TreatmentBMPModelingTypeEnum.SandFilters:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.MediaBedFootprint)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.MediaBedFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.MediaBedFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.DesignMediaFiltrationRate)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignMediaFiltrationRate)" aria-describedby="attributeUnit" type="text" value="@Model.DesignMediaFiltrationRate" /><span class="input-group-addon" id="attributeUnit">in/hr</span></div>
+                                        </div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.WinterHarvestedWaterDemand)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WinterHarvestedWaterDemand)" aria-describedby="attributeUnit" type="text" value="@Model.WinterHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.SummerHarvestedWaterDemand)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.SummerHarvestedWaterDemand)" aria-describedby="attributeUnit" type="text" value="@Model.SummerHarvestedWaterDemand" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.ConstructedWetland:
+                                case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.PermanentPoolorWetlandVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.PermanentPoolorWetlandVolume)" aria-describedby="attributeUnit" type="text" value="@Model.PermanentPoolorWetlandVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.WaterQualityDetentionVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WaterQualityDetentionVolume)" aria-describedby="attributeUnit" type="text" value="@Model.WaterQualityDetentionVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+                                case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+                                case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TotalEffectiveBMPVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.StorageVolumeBelowLowestOutletElevation)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.StorageVolumeBelowLowestOutletElevation)" aria-describedby="attributeUnit" type="text" value="@Model.StorageVolumeBelowLowestOutletElevation" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.EffectiveFootprint)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.EffectiveFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.EffectiveFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.DrawdownTimeforWQDetentionVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DrawdownTimeforWQDetentionVolume)" aria-describedby="attributeUnit" type="text" value="@Model.DrawdownTimeforWQDetentionVolume" /><span class="input-group-addon" id="attributeUnit">hours</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.UnderlyingHydrologicSoilGroupID)
+                                        </label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownListFor(x => x.UnderlyingHydrologicSoilGroupID, ViewDataTyped.UnderlyingHydrologicSoilGroups, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.DesignDryWeatherTreatmentCapacity)
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignDryWeatherTreatmentCapacity)" aria-describedby="attributeUnit" type="text" value="@Model.DesignDryWeatherTreatmentCapacity" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.AverageTreatmentFlowrate)
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.AverageTreatmentFlowrate)" aria-describedby="attributeUnit" type="text" value="@Model.AverageTreatmentFlowrate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.MonthsOfOperationID)
+                                        </label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownListFor(x => x.MonthsOfOperationID, ViewDataTyped.MonthsOfOperation, new { @class = "form-control", style = "width:auto;" })
+                                        </div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.Drywell:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TotalEffectiveDrywellBMPVolume)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TotalEffectiveDrywellBMPVolume)" aria-describedby="attributeUnit" type="text" value="@Model.TotalEffectiveDrywellBMPVolume" /><span class="input-group-addon" id="attributeUnit">cu ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.InfiltrationDischargeRate)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.InfiltrationDischargeRate)" aria-describedby="attributeUnit" type="text" value="@Model.InfiltrationDischargeRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
+                                        </div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+                                case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+                                case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TreatmentRate)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TreatmentRate)" aria-describedby="attributeUnit" type="text" value="@Model.TreatmentRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
+                                        </label>
+                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.DesignLowFlowDiversionCapacity)
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.DesignLowFlowDiversionCapacity)" aria-describedby="attributeUnit" type="text" value="@Model.DesignLowFlowDiversionCapacity" /><span class="input-group-addon" id="attributeUnit">gpd</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.AverageDivertedFlowrate)
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.AverageDivertedFlowrate)" aria-describedby="attributeUnit" type="text" value="@Model.AverageDivertedFlowrate" /><span class="input-group-addon" id="attributeUnit">gpd</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.MonthsOfOperationID)
+                                        </label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownListFor(x => x.MonthsOfOperationID, ViewDataTyped.MonthsOfOperation, new {@class = "form-control", style="width:auto;"})
+                                        </div>
+                                    </div>
+                                    break;
+                                case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+                                case TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
+                                        </label>
+                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TreatmentRate)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.TreatmentRate)" aria-describedby="attributeUnit" type="text" value="@Model.TreatmentRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.WettedFootprint)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.WettedFootprint)" aria-describedby="attributeUnit" type="text" value="@Model.WettedFootprint" /><span class="input-group-addon" id="attributeUnit">sq ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.EffectiveRetentionDepth)
+                                            <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                                        </label>
+                                        <div class="col-sm-8"><div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.EffectiveRetentionDepth)" aria-describedby="attributeUnit" type="text" value="@Model.EffectiveRetentionDepth" /><span class="input-group-addon" id="attributeUnit">ft</span></div></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.UnderlyingHydrologicSoilGroupID)
+                                        </label>
+                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.UnderlyingHydrologicSoilGroupID, ViewDataTyped.UnderlyingHydrologicSoilGroups, new { @class = "form-control" })</div>
+                                    </div>
+                                    break;
+                            }
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">
+                                @Html.LabelWithSugarFor(x => x.DryWeatherFlowOverrideID)
+                                <sup><span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></sup>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(x => x.DryWeatherFlowOverrideID, ViewDataTyped.DryWeatherFlowOverride, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2">
+                            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-10" style="text-align: right">
+                            <button type="submit" class="btn btn-neptune">Save</button>
+                            <a href="@ViewDataTyped.SubEntityUrl" class="btn btn-neptune">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

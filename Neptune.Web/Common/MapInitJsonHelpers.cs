@@ -8,7 +8,7 @@ namespace Neptune.Web.Common
     {
         public const string CountyCityLayerName = "Jurisdictions";
 
-        public static IEnumerable<LayerGeoJson> GetJurisdictionMapLayers(NeptuneDbContext dbContext)
+        public static List<LayerGeoJson> GetJurisdictionMapLayers(NeptuneDbContext dbContext)
         {
             var layerGeoJsons = new List<LayerGeoJson>();
             var jurisdictions = dbContext.StormwaterJurisdictionGeometries.AsNoTracking()
