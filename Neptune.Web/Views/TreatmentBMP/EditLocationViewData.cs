@@ -21,16 +21,18 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditLocationViewData : Neptune.Web.Views.Shared.Location.EditLocationViewData
+    public class EditLocationViewData : Shared.Location.EditLocationViewData
     {
         public EditLocationViewData(Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, string mapFormID) : base(currentPerson, treatmentBMP, mapInitJson, mapFormID)
+            EFModels.Entities.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, string mapFormID, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, treatmentBMP, mapInitJson, mapFormID, linkGenerator, httpContext)
         {
-            
+            TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
         }
+
+        public string TreatmentBMPDetailUrl { get; }
     }
 }

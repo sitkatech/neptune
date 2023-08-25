@@ -19,19 +19,19 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Linq;
-using LtInfo.Common.Views;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
-using Newtonsoft.Json;
+using System.Text.Json;
+using Neptune.Common;
+using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPAssessmentObservationType : IAuditableEntity
     {
-        public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
-        {
-            return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
-        }
+        //public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
+        //{
+        //    return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
+        //}
 
         public string DisplayNameWithUnits()
         {
@@ -62,25 +62,24 @@ namespace Neptune.Web.Models
 
         public DiscreteObservationTypeSchema GetDiscreteObservationTypeSchema()
         {
-            return JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(
-                TreatmentBMPAssessmentObservationTypeSchema);
+            return JsonSerializer.Deserialize<DiscreteObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
         }
 
         public RateObservationTypeSchema GetRateObservationTypeSchema()
         {
-            return JsonConvert.DeserializeObject<RateObservationTypeSchema>(
+            return JsonSerializer.Deserialize<RateObservationTypeSchema>(
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 
         public PassFailObservationTypeSchema GetPassFailSchema()
         {
-            return JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(
+            return JsonSerializer.Deserialize<PassFailObservationTypeSchema>(
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 
         public PercentageObservationTypeSchema GetPercentageSchema()
         {
-            return JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(
+            return JsonSerializer.Deserialize<PercentageObservationTypeSchema>(
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 
@@ -249,7 +248,7 @@ namespace Neptune.Web.Models
                     {
                         return benchmarkValue + (thresholdValue / 100) * benchmarkValue;
                     }
-                   return benchmarkValue - (thresholdValue / 100) * benchmarkValue;
+                    return benchmarkValue - (thresholdValue / 100) * benchmarkValue;
                 default:
                    return null;
             }
@@ -258,7 +257,7 @@ namespace Neptune.Web.Models
 
         public double? GetBenchmarkValue(TreatmentBMP treatmentBMP)
         {
-            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs
                 .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
 
             return treatmentBMPBenchmarkAndThreshold?.BenchmarkValue;
@@ -266,7 +265,7 @@ namespace Neptune.Web.Models
 
         public double? GetThresholdValue(TreatmentBMP treatmentBMP)
         {
-            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs
                 .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
 
             return treatmentBMPBenchmarkAndThreshold?.ThresholdValue;

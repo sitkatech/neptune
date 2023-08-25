@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 x => x.SizingBasisTypeDisplayName.ToString(CultureInfo.InvariantCulture));
 
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             if (treatmentBMP != null)
             {

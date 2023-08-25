@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Views;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using Neptune.Common;
+using Neptune.Common.DesignByContract;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
     public partial class CustomAttributeType : IAuditableEntity
     {
@@ -20,7 +19,7 @@ namespace Neptune.Web.Models
 
         public List<string> GetOptionsSchemaAsListOfString()
         {
-            return CustomAttributeTypeOptionsSchema != null ? JsonConvert.DeserializeObject<List<string>>(CustomAttributeTypeOptionsSchema) : new List<string>();
+            return CustomAttributeTypeOptionsSchema != null ? JsonSerializer.Deserialize<List<string>>(CustomAttributeTypeOptionsSchema) : new List<string>();
         }
 
         public string DisplayNameWithUnits()
@@ -35,7 +34,7 @@ namespace Neptune.Web.Models
                 treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.CustomAttributeTypeID).Contains(CustomAttributeTypeID),
                 "The Custom Attribute Type is not valid for this Treatment BMP");
 
-            var customAttribute = treatmentBMP.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
+            var customAttribute = treatmentBMP.CustomAttributeTreatmentBMPs.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
             if (customAttribute == null)
             {
                 return false;

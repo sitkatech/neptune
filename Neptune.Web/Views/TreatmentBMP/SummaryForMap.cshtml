@@ -89,7 +89,7 @@ Source code is available upon request via <support@sitkatech.com>.
                         {
                             <div class="help-block" style="margin-top: 0;">Begin a Field Visit to update BMP information, assess or maintain the BMP</div>
                         }
-                        <a href="@ViewDataTyped.SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP))" class="btn btn-neptune">View Details</a>
+                        <a href="@ViewDataTyped.TreatmentBMPDetailUrl" class="btn btn-neptune">View Details</a>
                         @if (ViewDataTyped.UserHasFieldVisitPermissions)
                         {
                             @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.FieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)

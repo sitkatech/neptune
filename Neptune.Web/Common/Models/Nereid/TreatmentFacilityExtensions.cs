@@ -1,4 +1,5 @@
 ﻿using Neptune.EFModels.Entities;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Common.Models.Nereid;
 
@@ -8,7 +9,7 @@ public static class TreatmentFacilityExtensions
     {
         var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPID);
         var modelBasinKey = treatmentBMP.ModelBasin?.ModelBasinKey.ToString();
-        var isFullyParameterized = true;// todo: treatmentBMP.IsFullyParameterized();
+        var isFullyParameterized = treatmentBMP.IsFullyParameterized();
         double? treatmentRate = null;
         var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
 

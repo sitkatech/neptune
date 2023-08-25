@@ -147,7 +147,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
                     <span class="pull-right">
-                        <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                        <a href="@ViewDataTyped.EditUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     </span>
                 }
             </div>
@@ -166,7 +166,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         @Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMPType, "Type")
                     </label>
                     <div class="col-sm-7">
-                        @ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetDisplayNameAsUrl()
+                        <a href="@ViewDataTyped.TreatmentBMPTypeDetailUrl">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</a>
                     </div>
                 </div>
                 <div class="row">
@@ -189,7 +189,14 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Water Quality<br>Management Plan</label>
                     <div class="col-sm-7">
-                        @(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null ? ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetDisplayNameAsUrl() : new HtmlString("<em class=\"text-muted\">Has not been linked to a WQMP</em>"))
+                        @if (ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null)
+                        {
+                            <a href="@ViewDataTyped.WaterQualityManagementPlanDetailUrl">@ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName</a>
+                        }
+                        else
+                        {
+                            <em class="text-muted">Has not been linked to a WQMP</em>                            
+                        }
                     </div>
                 </div>
                 <div class="row">
@@ -561,7 +568,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     {
                         if (ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null && ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
                         {
-                            <p class="systemText">This BMP is associated with a @UrlTemplate.MakeHrefString(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetDetailUrl(), "WQMP") that is modeled using the simplified approach; this BMP will not be modeled explicitly.</p>
+                            <p class="systemText">This BMP is associated with a <a href="@ViewDataTyped.WaterQualityManagementPlanDetailUrl">WQMP</a> that is modeled using the simplified approach; this BMP will not be modeled explicitly.</p>
                         }
                         else
                         {
@@ -613,11 +620,18 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().SortByOrderThenName())
+                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName))
                                 {
                                     <tr>
                                         <td>
-                                            @(ViewDataTyped.UserIsAdmin ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
+                                            @if (ViewDataTyped.UserIsAdmin)
+                                            {
+                                                <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(treatmentBMPTypeAttributeType.CustomAttributeTypeID)">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName</a>
+                                            }
+                                            else
+                                            {
+                                                @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
+                                            }
                                             <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                         </td>
                                         <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
@@ -728,7 +742,13 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-xs-12">
                                 No delineation may be added or edited because this BMP is associated with an Upstream BMP in the network. If you would like to add a delineation, please remove the connection to the Upstream BMP.
-                                @(ViewDataTyped.MapInitJson.DelineationLayer != null ? new MvcHtmlString("<br/><br/>The Delineation displayed above is associated with Upstream BMP " + ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl()) : null)
+                                @if(ViewDataTyped.MapInitJson.DelineationLayer != null)
+                                {
+                                    <p>
+                                        The Delineation displayed above is associated with Upstream BMP
+                                        <a href="@ViewDataTyped.UpstreamBMPDetailUrl">@ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName</a>
+                                    </p>
+                                }
                             </div>
                         </div>
                     }
@@ -739,7 +759,16 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                             </label>
                             @if (ViewDataTyped.OtherTreatmentBmpsExistInSubbasin)
                             {
-                                <div class="col-xs-4" style="margin-top: 8px">@(ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? new HtmlString("Not Provided") : ViewDataTyped.TreatmentBMP.UpstreamBMP.GetDisplayNameAsUrl())</div>
+                                <div class="col-xs-4" style="margin-top: 8px">
+                                    @if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
+                                    {
+                                        <span>Not Provided</span>
+                                    }
+                                    else
+                                    {
+                                        <a href="@ViewDataTyped.UpstreamBMPDetailUrl">@ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName</a>
+                                    }
+                                </div>
                                 <div class="col-xs-3" style="margin-top: 6px">
                                     @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
                                     {
@@ -939,7 +968,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                             <td>
                                                 @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
                                                 {
-                                                    @treatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()
+                                                    <a href="@ViewDataTyped.TreatmentBMPAssessmentObservationTypeDetailUrlTemplate.ParameterReplace(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)">@treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName</a>
                                                 }
                                                 else
                                                 {

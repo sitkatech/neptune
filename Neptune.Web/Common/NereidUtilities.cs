@@ -80,57 +80,57 @@ namespace Neptune.Web.Common
         //    return graph;
         //}
 
-        //public static string RegionalSubbasinNodeID(int regionalSubbasinCatchmentID)
-        //{
-        //    return $"RSB_{regionalSubbasinCatchmentID}";
-        //}
+        public static string RegionalSubbasinNodeID(int regionalSubbasinCatchmentID)
+        {
+            return $"RSB_{regionalSubbasinCatchmentID}";
+        }
 
-        //public static string TreatmentBMPNodeID(int treatmentBMPID)
-        //{
-        //    return $"BMP_{treatmentBMPID}";
-        //}
+        public static string TreatmentBMPNodeID(int treatmentBMPID)
+        {
+            return $"BMP_{treatmentBMPID}";
+        }
 
-        //public static string WaterQualityManagementPlanNodeID(int waterQualityManagementPlanID,
-        //    int regionalSubbasinCatchmentID)
-        //{
-        //    return $"WQMP_{waterQualityManagementPlanID}_RSB_{regionalSubbasinCatchmentID}";
-        //}
+        public static string WaterQualityManagementPlanNodeID(int waterQualityManagementPlanID,
+            int regionalSubbasinCatchmentID)
+        {
+            return $"WQMP_{waterQualityManagementPlanID}_RSB_{regionalSubbasinCatchmentID}";
+        }
 
-        //public static string WaterQualityManagementPlanTreatmentNodeID(int waterQualityManagementPlanID,
-        //    int regionalSubbasinCatchmentID)
-        //{
-        //    return $"WQMP_{waterQualityManagementPlanID}_RSB_{regionalSubbasinCatchmentID}-TMNT";
-        //}
+        public static string WaterQualityManagementPlanTreatmentNodeID(int waterQualityManagementPlanID,
+            int regionalSubbasinCatchmentID)
+        {
+            return $"WQMP_{waterQualityManagementPlanID}_RSB_{regionalSubbasinCatchmentID}-TMNT";
+        }
 
-        //private static string DelineationNodeID(int delineationID)
-        //{
-        //    return $"Delineation_{delineationID}";
-        //}
+        private static string DelineationNodeID(int delineationID)
+        {
+            return $"Delineation_{delineationID}";
+        }
 
-        //public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit, List<int> projectDelineationIDs = null)
-        //{
-        //    // provisional delineations are tracked in the LGU layer, but do not contribute runoff
-        //    // to their respective BMPs in the model therefore those LGUs should fall back to their
-        //    // WQMP if exists, otherwise their RSB.
-        //    // If the associated BMP belongs to a Simple WQMP, it should not be accounted for in the modeling 
+        public static string LandSurfaceNodeID(vNereidLoadingInput loadGeneratingUnit, List<int> projectDelineationIDs = null)
+        {
+            // provisional delineations are tracked in the LGU layer, but do not contribute runoff
+            // to their respective BMPs in the model therefore those LGUs should fall back to their
+            // WQMP if exists, otherwise their RSB.
+            // If the associated BMP belongs to a Simple WQMP, it should not be accounted for in the modeling 
 
-        //    if (loadGeneratingUnit.DelineationID != null &&
-        //        (loadGeneratingUnit.DelineationIsVerified == true || (projectDelineationIDs != null && projectDelineationIDs.Contains(loadGeneratingUnit.DelineationID.Value))) &&
-        //        loadGeneratingUnit.RelationallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
-        //    {
-        //        return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
-        //    }
+            if (loadGeneratingUnit.DelineationID != null &&
+                (loadGeneratingUnit.DelineationIsVerified == true || (projectDelineationIDs != null && projectDelineationIDs.Contains(loadGeneratingUnit.DelineationID.Value))) &&
+                loadGeneratingUnit.RelationallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
+            {
+                return DelineationNodeID(loadGeneratingUnit.DelineationID.Value);
+            }
 
-        //    // Parcel Boundaries of Detailed WQMPs should not be considered
-        //    if (loadGeneratingUnit.WaterQualityManagementPlanID != null && 
-        //        loadGeneratingUnit.SpatiallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
-        //    {
-        //        return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
-        //            loadGeneratingUnit.OCSurveyCatchmentID);
-        //    }
+            // Parcel Boundaries of Detailed WQMPs should not be considered
+            if (loadGeneratingUnit.WaterQualityManagementPlanID != null &&
+                loadGeneratingUnit.SpatiallyAssociatedModelingApproach != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+            {
+                return WaterQualityManagementPlanNodeID(loadGeneratingUnit.WaterQualityManagementPlanID.Value,
+                    loadGeneratingUnit.OCSurveyCatchmentID);
+            }
 
-        //    return RegionalSubbasinNodeID(loadGeneratingUnit.OCSurveyCatchmentID);
-        //}
+            return RegionalSubbasinNodeID(loadGeneratingUnit.OCSurveyCatchmentID);
+        }
 
         //public static void MakeRSBNodesAndEdges(List<RegionalSubbasin> regionalSubbasinsInCoverage, out List<Edge> rsbEdges, out List<Node> rsbNodes)
         //{
@@ -357,7 +357,7 @@ namespace Neptune.Web.Common
         //            // we need to go downstream from this BMP until we hit an edge that flows to this RSB,
         //            // then we either point that edge at the downstream RSB, or we delete it, depending on if
         //            // the downstream RSB exists or doesn't respectively.
-                    
+
         //            // these edges are all guaranteed to exist since we ran MakeUpstreamBMPNodesAndEdges already
         //            var edgeToDownstreamNode = existingEdges.Single(x=>x.SourceID == newCentralizedBMPNodeID);
         //            while (edgeToDownstreamNode.TargetID != existingRSBNodeID)
@@ -424,7 +424,7 @@ namespace Neptune.Web.Common
         //    }
         //    return toReturn;
         //}
-        
+
         //public static NereidResult<TResp> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl, out string responseContent, HttpClient httpClient)
         //{
         //    NereidResult<TResp> responseObject = null;

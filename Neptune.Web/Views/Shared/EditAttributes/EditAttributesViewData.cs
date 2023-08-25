@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
             TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
                 .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID ==
                             customAttributeTypePurpose.CustomAttributeTypePurposeID)
-                .ToList().SortByOrderThenName().ToList();
+                .ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
         }
 
         public EditAttributesViewData(Person currentPerson, FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes, LinkGenerator linkGenerator, HttpContext httpContext) : base(
@@ -63,7 +63,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                     x.CustomAttributeType.CustomAttributeTypePurposeID !=
                     CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList().OrderBy(x =>
                     x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName)
-                .ThenByOrderThenName().ToList();
+                .ThenBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
         }
     }
 }

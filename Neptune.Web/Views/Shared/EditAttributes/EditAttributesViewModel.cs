@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         }
 
         public void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson,
-            CustomAttributeTypePurpose customAttributeTypePurpose, List<CustomAttributeType> allCustomAttributeTypes)
+            CustomAttributeTypePurpose customAttributeTypePurpose, List<CustomAttributeType> allCustomAttributeTypes, NeptuneDbContext dbContext)
         {
             var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
             var customAttributesToUpdate = new List<CustomAttribute>();
@@ -73,8 +73,8 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 }
             }
 
-            var customAttributesInDatabase = _dbContext.CustomAttributes.Local;
-            var customAttributeValuesInDatabase = _dbContext.CustomAttributeValues.Local;
+            var customAttributesInDatabase = dbContext.CustomAttributes.Local;
+            var customAttributeValuesInDatabase = dbContext.CustomAttributeValues.Local;
 
             var existingCustomAttributes = treatmentBMP.CustomAttributeTreatmentBMPs.Where(x =>
                 x.CustomAttributeType.CustomAttributeTypePurposeID ==

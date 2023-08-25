@@ -21,7 +21,11 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Models;
+using Qanat.Common.GeoSpatial;
 
 namespace Neptune.Web.Views.Shared.Location
 {
@@ -44,20 +48,19 @@ namespace Neptune.Web.Views.Shared.Location
         {
         }
 
-        public virtual void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson)
+        public virtual void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson, NeptuneDbContext dbContext)
         {
             // note that these nullables will never be null due to the Required attribute
             // this is coming FROM the browser, so it has to be reprojected to CA State Plane
-            var locationPoint4326 = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(),
-                TreatmentBMPPointY.GetValueOrDefault(), CoordinateSystemHelper.WGS_1984_SRID);
-            var locationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
+            var locationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(TreatmentBMPPointY.Value, TreatmentBMPPointX.GetValueOrDefault());
+            var locationPoint = locationPoint4326.ProjectTo2771();
             treatmentBMP.LocationPoint = locationPoint;
             treatmentBMP.LocationPoint4326 = locationPoint4326;
 
             treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary();
 
             // associate watershed, model basin, precipitation zone
-            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
 
             treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent();
         }

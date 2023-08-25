@@ -116,6 +116,13 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public ModeledPerformanceViewData ModeledPerformanceViewData { get; }
         public bool CurrentPersonIsAnonymousOrUnassigned { get; }
+        public string EditUrl { get; }
+        public string DetailUrl { get; }
+        public string TreatmentBMPTypeDetailUrl { get; }
+        public string UpstreamBMPDetailUrl { get; }
+        public string WaterQualityManagementPlanDetailUrl { get; }
+        public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
+        public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; }
 
 
         public DetailViewData(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
@@ -152,8 +159,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             //This handles an extreme edge case, but a bmp came back without a regional subbasin
             OtherTreatmentBmpsExistInSubbasin = TreatmentBMP.GetRegionalSubbasin()?.GetTreatmentBMPs().Any(x => x.TreatmentBMPID != TreatmentBMP.TreatmentBMPID) ?? false;
 
-            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditModelingAttributes(treatmentBMP));
-            EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
+            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.EditModelingAttributes(treatmentBMP));
+            EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
 
             LocationEditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.EditLocation(treatmentBMP));
             ManageTreatmentBMPImagesUrl = "";//todo SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(_linkGenerator, x => x.ManageTreatmentBMPImages(TreatmentBMP));

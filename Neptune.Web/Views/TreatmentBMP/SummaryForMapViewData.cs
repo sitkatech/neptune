@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -31,14 +32,16 @@ namespace Neptune.Web.Views.TreatmentBMP
         public EFModels.Entities.TreatmentBMPImage KeyPhoto { get; }
         public string FieldVisitUrl { get; }
         public bool UserHasFieldVisitPermissions { get; }
+        public string TreatmentBMPDetailUrl { get; }
 
         public SummaryForMapViewData(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             TreatmentBMP = treatmentBMP;
             // we don't have the concept of a keyphoto; just arbitrarily pick the first photo
             KeyPhoto = treatmentBMP.TreatmentBMPImages.FirstOrDefault();
-            FieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(TreatmentBMP));
-            UserHasFieldVisitPermissions = new FieldVisitCreateFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
+            TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
+            FieldVisitUrl = ""; //todo: SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(TreatmentBMP));
+            UserHasFieldVisitPermissions = false; //todo: new FieldVisitCreateFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
         }
     }
 }

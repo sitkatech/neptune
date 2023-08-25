@@ -77,7 +77,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.TreatmentBMP);
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
-            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView);
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView, _dbContext);
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount =
                 treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
@@ -93,7 +93,7 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit, _linkGenerator);
             var treatmentBMPs = _dbContext.vTreatmentBMPDetaileds.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailed>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
@@ -174,17 +174,17 @@ namespace Neptune.Web.Controllers
             }
 
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
-            var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
+            var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, _linkGenerator);
             var verifiedUnverifiedUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
             var entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
 
             var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(treatmentBMP, CurrentPerson, _linkGenerator, HttpContext);
+            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(entityWithHRUCharacteristics,
+                entityWithHRUCharacteristics.GetHRUCharacteristics(_dbContext).ToList());
             var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData,
-                verifiedUnverifiedUrl,
-                new HRUCharacteristicsViewData(entityWithHRUCharacteristics,
-                    entityWithHRUCharacteristics.GetHRUCharacteristics().ToList()), mapServiceUrl, modeledBMPPerformanceViewData);
+                verifiedUnverifiedUrl,hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, _linkGenerator, HttpContext);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -214,8 +214,8 @@ namespace Neptune.Web.Controllers
                 TrashCaptureStatusTypeID = viewModel.TrashCaptureStatusTypeID.GetValueOrDefault(),
                 SizingBasisTypeID = viewModel.SizingBasisTypeID.GetValueOrDefault()
             };
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
-            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint);
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, _dbContext);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint, _dbContext);
             await _dbContext.TreatmentBMPs.AddAsync(treatmentBMP);
             await _dbContext.SaveChangesAsync();
 
@@ -232,7 +232,7 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var organizations = Organizations.List(_dbContext);
-            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
+            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
             var boundingBox = treatmentBMP?.LocationPoint != null
                 ? new BoundingBoxDto(treatmentBMP.LocationPoint4326)
                 : BoundingBox.GetBoundingBox(stormwaterJurisdictions);
@@ -259,7 +259,7 @@ namespace Neptune.Web.Controllers
 
             var viewData = new NewViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
                 organizations, editLocationViewData, waterQualityManagementPlans, TreatmentBMPLifespanType.All,
-                TrashCaptureStatusType.All, SizingBasisType.All);
+                TrashCaptureStatusType.All, SizingBasisType.All, _linkGenerator, HttpContext);
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
@@ -285,7 +285,7 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, _dbContext);
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay("Treatment BMP successfully saved.");
@@ -374,7 +374,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditUpstreamBMP(TreatmentBMP treatmentBMP, EditUpstreamBMPViewModel viewModel)
         {
-            var treatmentBMPs = treatmentBMP.GetRegionalSubbasin(_dbContext).GetTreatmentBMPs()
+            var treatmentBMPs = treatmentBMP.GetRegionalSubbasin(_dbContext).GetTreatmentBMPs(_dbContext)
                 .Where(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID);
 
             var treatmentBMPSelectList = treatmentBMPs.ToSelectListWithDisabledEmptyFirstRow(
@@ -659,7 +659,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult SummaryForMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewData = new SummaryForMapViewData(CurrentPerson, treatmentBMP);
+            var viewData = new SummaryForMapViewData(CurrentPerson, treatmentBMP, _linkGenerator, HttpContext);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
@@ -686,8 +686,8 @@ namespace Neptune.Web.Controllers
             {
                 var reprojectedLocationPoint = bmp.LocationPoint4326;
                 var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), reprojectedLocationPoint,
-                    reprojectedLocationPoint.YCoordinate.GetValueOrDefault(),
-                    reprojectedLocationPoint.XCoordinate.GetValueOrDefault(),
+                    reprojectedLocationPoint.Coordinate.Y,
+                    reprojectedLocationPoint.Coordinate.X,
                     bmp.TreatmentBMPID); // X/YCoordinate will never be null
                 var listItem = new ListItem(bmp.TreatmentBMPName,
                     JsonConvert.SerializeObject(treatmentBMPMapSummaryData));
@@ -724,7 +724,7 @@ namespace Neptune.Web.Controllers
             }
 
             var allCustomAttributeTypes = _dbContext.CustomAttributeTypes.ToList();
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes);
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes, _dbContext);
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Custom Attributes successfully saved.");
@@ -814,7 +814,10 @@ namespace Neptune.Web.Controllers
             var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
             if (treatmentBMPModelingAttribute == null)
             {
-                treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute(treatmentBMP);
+                treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute()
+                {
+                    TreatmentBMP = treatmentBMP
+                };
                 _dbContext.TreatmentBMPModelingAttributes.Add(treatmentBMPModelingAttribute);
             }
             viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
@@ -834,7 +837,7 @@ namespace Neptune.Web.Controllers
             var underlyingHydrologicSoilGroups = UnderlyingHydrologicSoilGroup.All.OrderBy(x => x.UnderlyingHydrologicSoilGroupID);
             var monthsOfOperation = MonthsOfOperation.All;
             var dryWeatherFlowOverride = DryWeatherFlowOverride.All;
-            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation, dryWeatherFlowOverride);
+            var viewData = new EditModelingAttributesViewData(CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation, dryWeatherFlowOverride, _linkGenerator, HttpContext);
             return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditModelingAttributesViewModel>(viewData, viewModel);
         }
 
@@ -851,7 +854,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditLocation(TreatmentBMP treatmentBMP, EditLocationViewModel viewModel)
         {
             var mapFormID = "treatmentBMPEditLocation";
-            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
+            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
             var stormwaterJurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
             var boundingBox = treatmentBMP.LocationPoint != null
                 ? new BoundingBoxDto(treatmentBMP.LocationPoint4326)
@@ -864,7 +867,7 @@ namespace Neptune.Web.Controllers
                     AllowFullScreen = false
                 };
 
-            var viewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
+            var viewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID, _linkGenerator, HttpContext);
 
             return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);
         }
@@ -883,8 +886,8 @@ namespace Neptune.Web.Controllers
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
-            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint);
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, _dbContext);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint, _dbContext);
 
             await _dbContext.SaveChangesAsync();
 
@@ -917,8 +920,8 @@ namespace Neptune.Web.Controllers
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
-            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint);
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, _dbContext);
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint, _dbContext);
 
             await _dbContext.SaveChangesAsync();
 
@@ -1120,7 +1123,7 @@ namespace Neptune.Web.Controllers
 
             var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count} records updated!";
             SetMessageForDisplay(message);
-            return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
+            return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
@@ -1129,7 +1132,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPModelResultSimple = new ModeledPerformanceResultSimple(treatmentBMP);
-            return Json(treatmentBMPModelResultSimple, JsonRequestBehavior.AllowGet);
+            return Json(treatmentBMPModelResultSimple);
         }
 
         private ViewResult ViewUploadBMPs(UploadTreatmentBMPsViewModel viewModel, List<string> errorList)

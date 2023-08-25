@@ -93,9 +93,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             TrashCaptureEffectiveness = treatmentBMP.TrashCaptureEffectiveness;
         }
 
-        public override void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson)
+        public override void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson, NeptuneDbContext dbContext)
         {
-            base.UpdateModel(treatmentBMP, currentPerson);
+            base.UpdateModel(treatmentBMP, currentPerson, dbContext);
 
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
             treatmentBMP.Notes = Notes;
@@ -109,17 +109,21 @@ namespace Neptune.Web.Views.TreatmentBMP
                 treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
                 treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
 
-                var treatmentBmpType = _dbContext.TreatmentBMPTypes.Single(x =>
+                var treatmentBmpType = dbContext.TreatmentBMPTypes.Single(x =>
                     x.TreatmentBMPTypeID == TreatmentBMPTypeID);
                 foreach (var a in treatmentBmpType.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold() && x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue))
                 {
                     var treatmentBmpBenchmarkAndThreshold =
-                        new EFModels.Entities.TreatmentBMPBenchmarkAndThreshold(treatmentBMP,
-                            a, treatmentBmpType,
-                            a.TreatmentBMPAssessmentObservationType,
-                            a.DefaultBenchmarkValue ?? 0,
-                            a.DefaultThresholdValue ?? 0);
-                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(treatmentBmpBenchmarkAndThreshold);
+                        new TreatmentBMPBenchmarkAndThreshold()
+                        {
+                            TreatmentBMP = treatmentBMP,
+                            TreatmentBMPTypeAssessmentObservationType = a,
+                            TreatmentBMPType = treatmentBmpType,
+                            TreatmentBMPAssessmentObservationType = a.TreatmentBMPAssessmentObservationType,
+                            BenchmarkValue = a.DefaultBenchmarkValue ?? 0,
+                            ThresholdValue = a.DefaultThresholdValue ?? 0
+                        };
+                    treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs.Add(treatmentBmpBenchmarkAndThreshold);
                 }
             }
 
@@ -130,9 +134,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
             else
             {
-                var stormwaterJurisdiction =
-                    _dbContext.StormwaterJurisdictions.GetStormwaterJurisdiction(treatmentBMP
-                        .StormwaterJurisdictionID);
+                var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(dbContext, treatmentBMP.StormwaterJurisdictionID);
                 treatmentBMP.OwnerOrganizationID = stormwaterJurisdiction.OrganizationID;
             }
 

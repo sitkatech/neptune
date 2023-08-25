@@ -33,8 +33,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public EditLocationViewModel(EFModels.Entities.TreatmentBMP treatmentBMP)
         {
-            TreatmentBMPPointY = treatmentBMP.LocationPoint4326.YCoordinate;
-            TreatmentBMPPointX = treatmentBMP.LocationPoint4326.XCoordinate;
+            TreatmentBMPPointY = treatmentBMP.LocationPoint4326.Coordinate.Y;
+            TreatmentBMPPointX = treatmentBMP.LocationPoint4326.Coordinate.X;
         }
     }
 }

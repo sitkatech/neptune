@@ -27,6 +27,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
 using Neptune.Web.Common.HtmlHelperExtensions;
+using Microsoft.AspNetCore.Routing;
 
 
 namespace Neptune.Web.Views.TreatmentBMP
@@ -35,8 +36,12 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public TreatmentBMPGridSpec(Person currentPerson, bool showDelete, bool showEdit, LinkGenerator linkGenerator)
         {
+            var organizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
+            var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(UrlTemplate.Parameter1Int)));
             if (showDelete)
             {
+                var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, t => t.Delete(UrlTemplate.Parameter1Int)));
                 BulkDeleteModalDialogForm = new BulkDeleteModalDialogForm(
                         SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.BulkDeleteTreatmentBMPs(null)),
                         "Delete Checked BMPs",
@@ -48,19 +53,19 @@ namespace Neptune.Web.Views.TreatmentBMP
                 Add(string.Empty, x =>
                 {
                     var userHasDeletePermission = currentPerson.IsManagerOrAdmin() && currentPerson.IsAssignedToStormwaterJurisdiction(x.StormwaterJurisdictionID);
-                    return DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(TreatmentBMPModelExtensions.DeleteUrlTemplate.ParameterReplace(x.TreatmentBMPID),
+                    return DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.TreatmentBMPID),
                             userHasDeletePermission, userHasDeletePermission);
                 }, 30, DhtmlxGridColumnFilterType.None);
             }
             if (showEdit)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(TreatmentBMPModelExtensions.EditUrlTemplate.ParameterReplace(x.TreatmentBMPID), currentPerson.IsAssignedToStormwaterJurisdiction(x.StormwaterJurisdictionID)), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(editUrlTemplate.ParameterReplace(x.TreatmentBMPID), currentPerson.IsAssignedToStormwaterJurisdiction(x.StormwaterJurisdictionID)), 30, DhtmlxGridColumnFilterType.None);
             }
 
-            Add(string.Empty, x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-            Add(FieldDefinitionType.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
+            Add(string.Empty, x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.TreatmentBMPID), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
+            Add(FieldDefinitionType.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170);
-            Add("Owner Organization", x => UrlTemplate.MakeHrefString(OrganizationModelExtensions.DetailUrlTemplate.ParameterReplace(x.OwnerOrganizationID), x.OwnerOrganizationName), 170);
+            Add("Owner Organization", x => UrlTemplate.MakeHrefString(organizationDetailUrlTemplate.ParameterReplace(x.OwnerOrganizationID), x.OwnerOrganizationName), 170);
             Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Year Built", x => x.YearBuilt,100, DhtmlxGridColumnFormatType.Date);
             Add("Notes", x => x.Notes, 195);
@@ -83,7 +88,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
     public class TreatmentBMPAssessmentSummaryGridSpec : GridSpec<EFModels.Entities.TreatmentBMPAssessmentSummary>
     {
-        public TreatmentBMPAssessmentSummaryGridSpec()
+        public TreatmentBMPAssessmentSummaryGridSpec(LinkGenerator linkGenerator)
         {
             Add(FieldDefinitionType.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetDetailUrl(), x.AssessmentSummary.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.AssessmentSummary.GetJurisdictionSummaryUrl(), x.AssessmentSummary.StormwaterJurisdictionName), 170);
@@ -97,13 +102,14 @@ namespace Neptune.Web.Views.TreatmentBMP
 
     public class ViewTreatmentBMPModelingAttributesGridSpec : GridSpec<EFModels.Entities.vViewTreatmentBMPModelingAttribute>
     {
-        public ViewTreatmentBMPModelingAttributesGridSpec()
+        public ViewTreatmentBMPModelingAttributesGridSpec(LinkGenerator linkGenerator)
         {
-            Add(FieldDefinitionType.TreatmentBMP.ToGridHeaderString("BMP Name"), x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.PrimaryKey), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
+            Add(FieldDefinitionType.TreatmentBMP.ToGridHeaderString("BMP Name"), x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.PrimaryKey), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => (new TreatmentBMPPrimaryKey(x.PrimaryKey)).EntityObject.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
             Add(FieldDefinitionType.DelineationType.ToGridHeaderString("Delineation Type"), x=>x.DelineationType, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("DelineationStatus", x=>x.DelineationStatus, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(EFModels.Entities.TreatmentBMPTypeModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPTypeName), 100, DhtmlxGridColumnFilterType.Text);
+            Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(TreatmentBMPTypeModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPTypeName), 100, DhtmlxGridColumnFilterType.Text);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170);
             Add(FieldDefinitionType.Watershed.ToGridHeaderString("Watershed"), x => x.WatershedName, 170);
             Add(FieldDefinitionType.DesignStormwaterDepth.ToGridHeaderString("Design Stormwater Depth (in)"), x => x.DesignStormwaterDepthInInches, 100, DhtmlxGridColumnFormatType.Decimal);
