@@ -161,10 +161,10 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPViewFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult Detail([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var mapServiceUrl = "";//todo: NeptuneWebConfiguration.ParcelMapServiceUrl;
             var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint4326, _dbContext);
             mapInitJson.Layers.Add(
@@ -422,7 +422,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult Edit([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -432,7 +432,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -479,7 +479,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult EditUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -490,7 +490,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ActionResult EditUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditUpstreamBMPViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -512,7 +512,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> RemoveUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -545,7 +545,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult VerifyInventory([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -555,7 +555,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> VerifyInventory([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             ConfirmDialogFormViewModel viewModel)
         {
@@ -590,7 +590,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult ConvertTreatmentBMPType([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -600,7 +600,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> ConvertTreatmentBMPType([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             ConvertTreatmentBMPTypeViewModel viewModel)
         {
@@ -678,7 +678,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPDeleteFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult Delete([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -688,7 +688,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPDeleteFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> Delete([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -857,7 +857,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult EditAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey)
         {
@@ -869,7 +869,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> EditAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey,
             EditAttributesViewModel viewModel)
@@ -936,7 +936,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult EditModelingAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -959,7 +959,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> EditModelingAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             EditModelingAttributesViewModel viewModel)
         {
@@ -1001,7 +1001,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult EditLocation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -1035,7 +1035,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> EditLocation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditLocationViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -1061,7 +1061,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ContentResult EditLocationFromDelineationMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             return Content("");
@@ -1069,7 +1069,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<JsonResult> EditLocationFromDelineationMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditLocationViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -1174,7 +1174,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ContentResult MapPopup([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -1288,7 +1288,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
-        [ValidateEntityExistsAndPopulateParameterFilter("{treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public JsonResult GetModelResults([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;

@@ -39,7 +39,8 @@ namespace Neptune.EFModels.Entities
         private static IQueryable<TreatmentBMP> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.TreatmentBMPs
-                .Include(x => x.TreatmentBMPType);
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization);
         }
 
         public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
