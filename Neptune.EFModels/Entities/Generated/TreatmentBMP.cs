@@ -179,4 +179,9 @@ public partial class TreatmentBMP
     [ForeignKey("WatershedID")]
     [InverseProperty("TreatmentBMPs")]
     public virtual Watershed? Watershed { get; set; }
+
+    public void DeleteFull(NeptuneDbContext dbContext)
+    {
+        throw new NotImplementedException();
+    }
 }

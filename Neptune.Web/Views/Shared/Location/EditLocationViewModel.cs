@@ -21,11 +21,9 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
-using Qanat.Common.GeoSpatial;
 
 namespace Neptune.Web.Views.Shared.Location
 {
@@ -57,12 +55,12 @@ namespace Neptune.Web.Views.Shared.Location
             treatmentBMP.LocationPoint = locationPoint;
             treatmentBMP.LocationPoint4326 = locationPoint4326;
 
-            treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary();
+            treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary(dbContext);
 
             // associate watershed, model basin, precipitation zone
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
 
-            treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent();
+            treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent(dbContext);
         }
     }
 }

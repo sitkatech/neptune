@@ -77,6 +77,15 @@ public static class GeoJsonSerializer
         return featureCollection.Where(x => boundingBox.Intersects(x.Geometry)).ToList();
     }
 
+    public static JsonSerializerOptions CreateGeoJSONSerializerOptions()
+    {
+        var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(2);
+        var scale = Math.Pow(10, 3);
+        var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
+        jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
+        return jsonSerializerOptions;
+    }
+
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int coordinateSystemID, int coordinatePrecision, int numberOfSignificantDigits)
     {
         var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(numberOfSignificantDigits);

@@ -1,4 +1,6 @@
-namespace Neptune.Web.Models
+using Neptune.Web.Models;
+
+namespace Neptune.EFModels.Entities
 {
     public partial class FundingEvent : IAuditableEntity
     {

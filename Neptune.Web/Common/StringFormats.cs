@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
+using Neptune.Common;
 
 namespace Neptune.Web.Common
 {

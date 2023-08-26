@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
     public partial class CustomAttributeDataType
     {
@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
     {
         public override bool ValueIsCorrectDataType(string customAttributeValue)
         {
-            return int.TryParse(customAttributeValue, out var _);
+            return int.TryParse(customAttributeValue, out _);
         }
 
         public override string ValueParsedForDataType(string customAttributeValue)
@@ -46,8 +46,8 @@ namespace Neptune.Web.Models
             {
                 return customAttributeValue;
             }
-            int _;
-            if (int.TryParse(customAttributeValue, out _))
+
+            if (int.TryParse(customAttributeValue, out var @_))
             {
                 return _.ToString();
             }
@@ -71,7 +71,7 @@ namespace Neptune.Web.Models
     {
         public override bool ValueIsCorrectDataType(string customAttributeValue)
         {
-            return decimal.TryParse(customAttributeValue, out var _);
+            return decimal.TryParse(customAttributeValue, out _);
         }
 
         public override string ValueParsedForDataType(string customAttributeValue)
@@ -80,8 +80,8 @@ namespace Neptune.Web.Models
             {
                 return customAttributeValue;
             }
-            decimal _;
-            if (decimal.TryParse(customAttributeValue, out _))
+
+            if (decimal.TryParse(customAttributeValue, out var @_))
             {
                 return _.ToString();
             }
@@ -104,7 +104,7 @@ namespace Neptune.Web.Models
     {
         public override bool ValueIsCorrectDataType(string customAttributeValue)
         {
-            return System.DateTime.TryParse(customAttributeValue, out var _);
+            return System.DateTime.TryParse(customAttributeValue, out _);
         }
 
         public override string ValueParsedForDataType(string customAttributeValue)
@@ -113,8 +113,8 @@ namespace Neptune.Web.Models
             {
                 return customAttributeValue;
             }
-            DateTime _;
-            if (System.DateTime.TryParse(customAttributeValue, out _))
+
+            if (System.DateTime.TryParse(customAttributeValue, out var @_))
             {
                 return _.ToString();
             }

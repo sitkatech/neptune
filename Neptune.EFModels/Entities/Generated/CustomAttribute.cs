@@ -43,4 +43,9 @@ public partial class CustomAttribute
     public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; } = null!;
 
     public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeTypeNavigation { get; set; } = null!;
+
+    public void DeleteFull(NeptuneDbContext dbContext)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -135,7 +135,7 @@ if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationError
 if (ViewDataTyped.OpenRevisionRequest != null)
 {
     <div class="alert alert-info">
-        There is an open <a href="@ViewDataTyped.OpenRevisionRequest.GetDetailUrl()">Regional Subbasin Revision Request</a> relating to this BMP.
+        There is an open <a href="@ViewDataTyped.OpenRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.
     </div>
 }
 }
@@ -798,7 +798,8 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     Drainage Area Land Uses
                 </div>
                 <div class="panel-body">
-                    @if ((ViewDataTyped.TreatmentBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.Delineation != null && ViewDataTyped.TreatmentBMP.Delineation.IsVerified) || (ViewDataTyped.TreatmentBMP.UpstreamBMPID != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.GetHRUCharacteristics().Any() && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified))
+                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && (
+                        ViewDataTyped.TreatmentBMP.Delineation is {IsVerified: true } || ViewDataTyped.TreatmentBMP.UpstreamBMP is {Delineation.IsVerified: true }))
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                     }
@@ -887,8 +888,8 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                         <h4>@fundingEvent.GetDisplayName()</h4>
                                     </div>
                                     <div class="col-sm-3 text-right">
-                                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), fundingEvent.GetEditUrl(), "Edit Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                                        @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), fundingEvent.GetDeleteUrl(), new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.FundingEventEditUrlTemplate.ParameterReplace(fundingEvent.FundingEventID), "Edit Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                                        @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), ViewDataTyped.FundingEventDeleteUrlTemplate.ParameterReplace(fundingEvent.FundingEventID), new List<string>(), ViewDataTyped.CurrentPersonCanManage)
                                     </div>
                                 </div>
                                 <p>@fundingEvent.Description</p>
@@ -905,7 +906,9 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                                 @foreach (var fundingEventFundingSource in fundingEvent.FundingEventFundingSources.OrderBy(x => x.FundingSource.GetDisplayName()))
                                                 {
                                                     <tr>
-                                                        <td>@Html.Raw(fundingEventFundingSource.FundingSource.GetDisplayNameAsUrl())</td>
+                                                        <td>
+                                                            <a href="@ViewDataTyped.FundingSourceDetailUrlTemplate.ParameterReplace(fundingEventFundingSource.FundingSourceID)">@fundingEventFundingSource.FundingSource.FundingSourceName</a>
+                                                        </td>
                                                         <th class="text-right">@fundingEventFundingSource.GetAmountIfSpecified()</th>
                                                     </tr>
                                                 }
@@ -1007,8 +1010,8 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                     if (ViewDataTyped.CurrentPersonCanManage)
                                     {
                                         <span>
-                                            @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", treatmentBMPDocument.GetEditTreatmentBMPDocumentUrl(), "Edit Treatment BMP Document", new List<string>(), true)
-                                            @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", treatmentBMPDocument.GetDeleteTreatmentBMPDocumentUrl(), new List<string>(), true)
+                                            @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", ViewDataTyped.TreatmentBMPDocumentEditUrlTemplate.ParameterReplace(treatmentBMPDocument.TreatmentBMPDocumentID), "Edit Treatment BMP Document", new List<string>(), true)
+                                            @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", ViewDataTyped.TreatmentBMPDocumentDeleteUrlTemplate.ParameterReplace(treatmentBMPDocument.TreatmentBMPDocumentID), new List<string>(), true)
                                         </span>
                                     }
 

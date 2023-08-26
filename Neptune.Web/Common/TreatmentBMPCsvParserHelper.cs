@@ -1,38 +1,39 @@
-﻿using LtInfo.Common;
-using LtInfo.Common.Models;
-using Microsoft.VisualBasic.FileIO;
-using Neptune.Web.Models;
+﻿using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
-using System.IO;
-using System.Linq;
 using System.Reflection;
+using Neptune.Common.GeoSpatial;
+using Neptune.EFModels;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
+using NetTopologySuite.Geometries;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Common
 {
     public static class TreatmentBMPCsvParserHelper
     {
-        public static List<TreatmentBMP> CSVUpload(Stream fileStream, TreatmentBMPType treatmentBMPType,
+        public static List<TreatmentBMP> CSVUpload(NeptuneDbContext dbContext, Stream fileStream, TreatmentBMPType treatmentBMPType,
             out List<string> errorList, out List<CustomAttribute> customAttributes,
             out List<CustomAttributeValue> customAttributeValues,
             out List<TreatmentBMPModelingAttribute> modelingAttributes)
         {
             var streamReader = new StreamReader(fileStream);
             var parser = new TextFieldParser(streamReader);
-            return ParseBmpRowsFromCsv(parser, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, treatmentBMPType);
+            return ParseBmpRowsFromCsv(dbContext, parser, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, treatmentBMPType);
         }
 
-        public static List<TreatmentBMP> CSVUpload(string fileStream, int treatmentBMPTypeID, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes)
+        public static List<TreatmentBMP> CSVUpload(NeptuneDbContext dbContext, string fileStream, int treatmentBMPTypeID, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes)
         {
             var stringReader = new StringReader(fileStream);
             var parser = new TextFieldParser(stringReader);
-            var treatmentBMPType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.GetTreatmentBMPType(treatmentBMPTypeID);
-            return ParseBmpRowsFromCsv(parser, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, treatmentBMPType);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(dbContext, treatmentBMPTypeID);
+            return ParseBmpRowsFromCsv(dbContext, parser, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, treatmentBMPType);
         }
 
-        public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes, TreatmentBMPType treatmentBMPType)
+        public static List<TreatmentBMP> ParseBmpRowsFromCsv(NeptuneDbContext dbContext, TextFieldParser parser,
+            out List<string> errorList, out List<CustomAttribute> customAttributes,
+            out List<CustomAttributeValue> customAttributeValues,
+            out List<TreatmentBMPModelingAttribute> modelingAttributes, TreatmentBMPType treatmentBMPType)
         {
             parser.SetDelimiters(",");
             errorList = new List<string>();
@@ -65,14 +66,14 @@ namespace Neptune.Web.Common
 
             // if the fields don't match throw an exception
             var rowCount = 1;
-            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
+            var organizations = dbContext.Organizations.ToList();
+            var stormwaterJurisdictions = dbContext.StormwaterJurisdictions.ToList();
             var treatmentBMPNamesInCsv = new List<string>();
             while (!parser.EndOfData)
             {
                 var currentRow = parser.ReadFields();
 
-                var currentTreatmentBMP = ParseRequiredAndOptionalFieldAndCreateBMP(currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPType, organizations, stormwaterJurisdictions, treatmentBMPNamesInCsv);
+                var currentTreatmentBMP = ParseRequiredAndOptionalFieldAndCreateBMP(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPType, organizations, stormwaterJurisdictions, treatmentBMPNamesInCsv);
                 if (currentTreatmentBMP != null)
                 {
                     treatmentBMPsToUpload.Add(currentTreatmentBMP);
@@ -85,7 +86,7 @@ namespace Neptune.Web.Common
                         errorList.AddRange(currentErrorList);
                     }
 
-                    customAttributes.AddRange(ParseCustomAttributes(currentTreatmentBMP, treatmentBMPType, currentRow, fieldsDict,
+                    customAttributes.AddRange(ParseCustomAttributes(dbContext, currentTreatmentBMP, treatmentBMPType, currentRow, fieldsDict,
                         customAttributeTypes, rowCount, out currentErrorList,
                         out var currentCustomAttributeValues));
                     customAttributeValues.AddRange(currentCustomAttributeValues);
@@ -98,7 +99,8 @@ namespace Neptune.Web.Common
             return treatmentBMPsToUpload;
         }
 
-        private static TreatmentBMP ParseRequiredAndOptionalFieldAndCreateBMP(string[] row,
+        private static TreatmentBMP ParseRequiredAndOptionalFieldAndCreateBMP(NeptuneDbContext dbContext,
+            string[] row,
             Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList,
             TreatmentBMPType treatmentBMPType, List<Organization> organizations,
             List<StormwaterJurisdiction> stormwaterJurisdictions, List<string> treatmentBMPNamesInCsv)
@@ -124,7 +126,7 @@ namespace Neptune.Web.Common
                 treatmentBMPNamesInCsv.Add(treatmentBMPName);
             }
 
-            var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.SingleOrDefault(x =>
+            var treatmentBMP = dbContext.TreatmentBMPs.SingleOrDefault(x =>
                 x.TreatmentBMPName == treatmentBMPName &&
                 x.StormwaterJurisdictionID == stormwaterJurisdictionID.Value);
             if (treatmentBMP != null)
@@ -138,9 +140,13 @@ namespace Neptune.Web.Common
             }
             else
             {
-                treatmentBMP = new TreatmentBMP(treatmentBMPName, treatmentBMPType.TreatmentBMPTypeID,
-                    stormwaterJurisdictionID.Value, default(int), false,
-                    default(int), default(int));
+                treatmentBMP = new TreatmentBMP()
+                {
+                    TreatmentBMPName = treatmentBMPName,
+                    TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID,
+                    StormwaterJurisdictionID = stormwaterJurisdictionID.Value, 
+                    InventoryIsVerified = false
+                };
             }
 
             var isNew = !ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID);
@@ -151,10 +157,10 @@ namespace Neptune.Web.Common
             if (locationPoint4326 != null)
             {
                 treatmentBMP.LocationPoint4326 = locationPoint4326;
-                var locationPoint = CoordinateSystemHelper.ProjectWebMercatorToCaliforniaStatePlaneVI(locationPoint4326);
+                var locationPoint = locationPoint4326.ProjectTo2771();
                 treatmentBMP.LocationPoint = locationPoint;
 
-                treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint);
+                treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
             }
 
             var ownerOrganizationID = FindLookupValue(row, fieldsDict, "Owner", rowNumber, errorList, organizations,
@@ -360,7 +366,7 @@ namespace Neptune.Web.Common
             return null;
         }
 
-        private static DbGeometry ParseLocation(string treatmentBMPLatitude, string treatmentBMPLongitude, int rowNumber, List<string> errorList, bool isNew)
+        private static Geometry ParseLocation(string treatmentBMPLatitude, string treatmentBMPLongitude, int rowNumber, List<string> errorList, bool isNew)
         {
             var locationErrorList = new List<string>();
             if (string.IsNullOrWhiteSpace(treatmentBMPLatitude) || string.IsNullOrWhiteSpace(treatmentBMPLongitude))
@@ -398,10 +404,10 @@ namespace Neptune.Web.Common
                 return null;
             }
 
-            return DbGeometry.FromText($"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", CoordinateSystemHelper.WGS_1984_SRID);
+            return GeometryHelper.CreateLocationPoint4326FromLatLong(double.Parse(treatmentBMPLatitude), double.Parse(treatmentBMPLongitude));
         }
 
-        private static List<CustomAttribute> ParseCustomAttributes(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType,
+        private static List<CustomAttribute> ParseCustomAttributes(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType,
             string[] currentRow, Dictionary<string, int> fieldsDict,
             List<CustomAttributeType> customAttributeTypes, int rowNumber, out List<string> currentErrorList,
             out List<CustomAttributeValue> customAttributeValues)
@@ -414,11 +420,15 @@ namespace Neptune.Web.Common
             {
                 var treatmentBMPTypeCustomAttributeType = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID);
                 var customAttribute =
-                    treatmentBMP.CustomAttributes.SingleOrDefault(x =>
+                    treatmentBMP.CustomAttributeTreatmentBMPs.SingleOrDefault(x =>
                         x.TreatmentBMPTypeCustomAttributeTypeID == treatmentBMPTypeCustomAttributeType
-                            .TreatmentBMPTypeCustomAttributeTypeID) ?? new CustomAttribute(treatmentBMP,
-                        treatmentBMPTypeCustomAttributeType, treatmentBMPTypeCustomAttributeType.TreatmentBMPType,
-                        treatmentBMPTypeCustomAttributeType.CustomAttributeType);
+                            .TreatmentBMPTypeCustomAttributeTypeID) ?? new CustomAttribute()
+                    {
+                        TreatmentBMP = treatmentBMP,
+                        TreatmentBMPTypeCustomAttributeType = treatmentBMPTypeCustomAttributeType,
+                        TreatmentBMPType = treatmentBMPTypeCustomAttributeType.TreatmentBMPType,
+                        CustomAttributeType = treatmentBMPTypeCustomAttributeType.CustomAttributeType
+                    };
                 if (fieldsDict.ContainsKey(customAttributeType.CustomAttributeTypeName))
                 {
                     var value = currentRow[fieldsDict[customAttributeType.CustomAttributeTypeName]];
@@ -436,7 +446,8 @@ namespace Neptune.Web.Common
                         //Don't do anything with an empty value if we're updating, but add it if we're new
                         if (isNew)
                         {
-                            customAttributeValues.Add(new CustomAttributeValue(customAttribute.CustomAttributeID, value));
+                            customAttributeValues.Add(new CustomAttributeValue
+                                { CustomAttributeID = customAttribute.CustomAttributeID, AttributeValue = value });
                         }
                     }
                     else if (!ValidateCustomAttributeValueEntry(
@@ -454,20 +465,20 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        HttpRequestStorage.DatabaseEntities.CustomAttributeValues.RemoveRange(customAttribute
+                        dbContext.CustomAttributeValues.RemoveRange(customAttribute
                             .CustomAttributeValues);
                         customAttribute.CustomAttributeValues.Clear();
 
                         if (customAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
                         {
                             var attributeValues = value.Split(new[] {','}).Select(x => x.Trim()).Select(x =>
-                                new CustomAttributeValue(customAttribute.CustomAttributeID, x));
+                                new CustomAttributeValue { CustomAttributeID = customAttribute.CustomAttributeID, AttributeValue = x });
                             customAttributeValues.AddRange(attributeValues);
                         }
                         else
                         {
-                            customAttributeValues.Add(
-                                new CustomAttributeValue(customAttribute.CustomAttributeID, value));
+                            customAttributeValues.Add(new CustomAttributeValue
+                                { CustomAttributeID = customAttribute.CustomAttributeID, AttributeValue = value });
                         }
                     }
                 }
@@ -524,9 +535,10 @@ namespace Neptune.Web.Common
             List<string> availableModelingAttributesForType, int rowCount, out List<string> currentErrorList)
         {
             currentErrorList = new List<string>();
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttribute ??
-                                                new TreatmentBMPModelingAttribute(treatmentBMP)
+            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP ??
+                                                new TreatmentBMPModelingAttribute()
                                                 {
+                                                    TreatmentBMP = treatmentBMP,
                                                     RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID
                                                 };
             foreach (var attribute in availableModelingAttributesForType)

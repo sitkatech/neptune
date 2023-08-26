@@ -20,16 +20,15 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.TreatmentBMP
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @using Neptune.Web.Common.BootstrapWrappers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.Web.Common
 @inherits FindABMP
 
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMP/TreatmentBMPMapController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/TreatmentBMPMapController.js")"></script>
     <script type="text/javascript">
         // <![CDATA[
         angular.module("NeptuneApp")
@@ -38,7 +37,7 @@
                     return {
                         AngularModel: null,
                         AngularViewData:
-                            @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                            @Html.Raw(ViewDataTyped.ViewDataForAngular.ToHtmlString())
                     };
                 });
 

@@ -45,4 +45,9 @@ public partial class FieldVisit
 
     [InverseProperty("FieldVisit")]
     public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentFieldVisits { get; set; } = new List<TreatmentBMPAssessment>();
+
+    public void DeleteFull(NeptuneDbContext dbContext)
+    {
+        throw new NotImplementedException();
+    }
 }

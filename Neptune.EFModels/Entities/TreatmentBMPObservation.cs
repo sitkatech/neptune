@@ -19,20 +19,24 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Globalization;
+using System.Text.Json;
+using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Models;
+
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPObservation //: IAuditableEntity
+    public partial class TreatmentBMPObservation : IAuditableEntity
     {
-        // todo:
-        //public DiscreteObservationSchema GetDiscreteObservationData()
-        //{
-        //    return JsonConvert.DeserializeObject<DiscreteObservationSchema>(ObservationData);
-        //}
+        public DiscreteObservationSchema GetDiscreteObservationData()
+        {
+            return JsonSerializer.Deserialize<DiscreteObservationSchema>(ObservationData);
+        }
 
-        //public PassFailObservationSchema GetPassFailObservationData()
-        //{
-        //    return JsonConvert.DeserializeObject<PassFailObservationSchema>(ObservationData);
-        //}
+        public PassFailObservationSchema GetPassFailObservationData()
+        {
+            return JsonSerializer.Deserialize<PassFailObservationSchema>(ObservationData);
+        }
 
         public bool IsComplete()
         {
@@ -58,17 +62,15 @@ namespace Neptune.EFModels.Entities
 
         public string FormattedObservationValueWithoutUnits(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return string.Empty;
-            //todo:
-            //var observationTypeCollectionMethod = treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
-            //var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData).GetValueOrDefault();
+            var observationTypeCollectionMethod = treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData).GetValueOrDefault();
 
-            //if (observationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail)
-            //{
-            //    return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
-            //}
+            if (observationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail)
+            {
+                return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
+            }
 
-            //return $"{observationValue.ToString(CultureInfo.InvariantCulture)}";
+            return $"{observationValue.ToString(CultureInfo.InvariantCulture)}";
         }
 
         public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

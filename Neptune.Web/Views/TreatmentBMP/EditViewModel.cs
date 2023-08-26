@@ -170,21 +170,22 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var treatmentBmPsWithSameName =
-                _dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPName == TreatmentBMPName);
-            if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
-            {
-                yield return new SitkaValidationResult<EditViewModel, string>("A BMP with this name already exists.",
-                    x => x.TreatmentBMPName);
-            }
+            return new List<ValidationResult>();
+            //todo:
+            //var treatmentBmPsWithSameName = _dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPName == TreatmentBMPName);
+            //if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
+            //{
+            //    yield return new SitkaValidationResult<EditViewModel, string>("A BMP with this name already exists.",
+            //        x => x.TreatmentBMPName);
+            //}
 
-            if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
-                !TreatmentBMPLifespanEndDate.HasValue)
-            {
-                yield return new SitkaValidationResult<EditViewModel, DateTime?>(
-                    "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
-                    x => x.TreatmentBMPLifespanEndDate);
-            }
+            //if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
+            //    !TreatmentBMPLifespanEndDate.HasValue)
+            //{
+            //    yield return new SitkaValidationResult<EditViewModel, DateTime?>(
+            //        "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
+            //        x => x.TreatmentBMPLifespanEndDate);
+            //}
         }
     }
 }

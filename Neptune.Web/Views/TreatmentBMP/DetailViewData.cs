@@ -118,16 +118,24 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool CurrentPersonIsAnonymousOrUnassigned { get; }
         public string EditUrl { get; }
         public string DetailUrl { get; }
+        public UrlTemplate<int> DetailUrlTemplate { get; }
+        public UrlTemplate<int> FundingEventEditUrlTemplate { get; }
+        public UrlTemplate<int> FundingEventDeleteUrlTemplate { get; }
+        public UrlTemplate<int> FundingSourceDetailUrlTemplate { get; }
+        public UrlTemplate<int> TreatmentBMPDocumentEditUrlTemplate { get; }
+        public UrlTemplate<int> TreatmentBMPDocumentDeleteUrlTemplate { get; }
         public string TreatmentBMPTypeDetailUrl { get; }
         public string UpstreamBMPDetailUrl { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
+        public UrlTemplate<int> WaterQualityManagementPlanDetailUrlTemplate { get; }
         public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; }
+        public string OpenRevisionRequestDetailUrl { get; }
 
 
         public DetailViewData(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
-            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl, ModeledPerformanceViewData modeledPerformanceViewData, LinkGenerator linkGenerator, HttpContext httpContext)
+            string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl, ModeledPerformanceViewData modeledPerformanceViewData, LinkGenerator linkGenerator, HttpContext httpContext, bool otherTreatmentBmpsExistInSubbasin, bool hasMissingModelingAttributes)
             : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             TreatmentBMP = treatmentBMP;
@@ -136,7 +144,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.FindABMP());
             MapInitJson = mapInitJson;
             ImageCarouselViewData = imageCarouselViewData;
-            AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(_linkGenerator, x => x.Instructions(treatmentBMP.TreatmentBMPID));
+            AddBenchmarkAndThresholdUrl = "";//todo: SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(_linkGenerator, x => x.Instructions(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
@@ -145,6 +153,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
+
+            DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            DetailUrl = DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
+            WaterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int))); //todo: flip to WQMPController
+            WaterQualityManagementPlanDetailUrl = WaterQualityManagementPlanDetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
 
             /* todo
             FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson, true);
@@ -157,7 +170,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewFundingSourcesUrl = "";//todo SitkaRoute<FundingEventController>.BuildUrlFromExpression(_linkGenerator, x => x.NewFundingEvent(treatmentBMP));
 
             //This handles an extreme edge case, but a bmp came back without a regional subbasin
-            OtherTreatmentBmpsExistInSubbasin = TreatmentBMP.GetRegionalSubbasin()?.GetTreatmentBMPs().Any(x => x.TreatmentBMPID != TreatmentBMP.TreatmentBMPID) ?? false;
+            OtherTreatmentBmpsExistInSubbasin = otherTreatmentBmpsExistInSubbasin;
 
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.EditModelingAttributes(treatmentBMP));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
@@ -180,9 +193,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             TrashCaptureEffectiveness = TreatmentBMP.TrashCaptureEffectiveness == null ? "Not Provided" : TreatmentBMP.TrashCaptureEffectiveness + "%";
 
-            DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
+            DelineationMapUrl = "";//todo: treatmentBMP.GetDelineationMapUrl();
 
-            ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP);
+            ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes);
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.ConvertTreatmentBMPType(treatmentBMP));
             
@@ -246,14 +259,13 @@ namespace Neptune.Web.Views.TreatmentBMP
             {
                 delineationErrors.Add(new HtmlString("It is overlapping with the following Treatment BMP(s): " +
                                                      string.Join(", ",
-                                                         treatmentBMP.Delineation.DelineationOverlapDelineations.Select(x =>
-                                                             x.OverlappingDelineation.TreatmentBMP.GetDisplayNameAsUrl()))));
+                                                         treatmentBMP.Delineation.DelineationOverlapDelineations.Select(x => UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(x.OverlappingDelineation.TreatmentBMPID),x.OverlappingDelineation.TreatmentBMP.TreatmentBMPName)))));
             }
 
             return delineationErrors;
         }
 
-        private List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.TreatmentBMP treatmentBmp)
+        private List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.TreatmentBMP treatmentBmp, bool hasMissingModelingAttributes)
         {
             var parameterizationErrors = new List<HtmlString>();
 
@@ -268,17 +280,15 @@ namespace Neptune.Web.Views.TreatmentBMP
                     linkToDelineationMapOrNot));
             }
 
-            var hasWQMP = treatmentBmp.WaterQualityManagementPlan != null;
-            if (hasWQMP && treatmentBmp.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+            if (treatmentBmp.WaterQualityManagementPlan != null && treatmentBmp.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
             {
-                var modelMissingAttributes = new HtmlString($"This BMP is associated with a {UrlTemplate.MakeHrefString(treatmentBmp.WaterQualityManagementPlan.GetDetailUrl(), "WQMP")} that is modeled using the simplified approach; this BMP will not be modeled explicitly.");
+                var modelMissingAttributes = new HtmlString($"This BMP is associated with a {UrlTemplate.MakeHrefString(WaterQualityManagementPlanDetailUrlTemplate.ParameterReplace(treatmentBmp.WaterQualityManagementPlan.WaterQualityManagementPlanID), "WQMP")} that is modeled using the simplified approach; this BMP will not be modeled explicitly.");
                 parameterizationErrors.Add(modelMissingAttributes);
             }
             else
             {
                 var modelMissingAttributes = new HtmlString("This Treatment BMP record is missing fields required to calculate model results. Please provide required Modeling Parameters below.");
 
-                var hasMissingModelingAttributes = HasMissingModelingAttributes();
                 if (hasMissingModelingAttributes)
                 {
                     parameterizationErrors.Add(modelMissingAttributes);
@@ -288,155 +298,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             return parameterizationErrors;
         }
 
-        private bool HasMissingModelingAttributes()
-        {
-            var bmpTypeIsAnalyzed =
-                _dbContext.TreatmentBMPTypes.SingleOrDefault(x =>
-                    x.TreatmentBMPTypeID == TreatmentBMP.TreatmentBMPTypeID)?.IsAnalyzedInModelingModule ?? false;
-            if (!bmpTypeIsAnalyzed)
-            {
-                return false;
-            }
-            var bmpModelingType = TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum;
-            var bmpModelingAttributes = TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-            if (bmpModelingAttributes != null)
-            {
-                if (bmpModelingType ==
-                    TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain && (
-                        !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                        (bmpModelingAttributes.RoutingConfigurationID ==
-                         (int) RoutingConfigurationEnum.Offline &&
-                         !bmpModelingAttributes.DiversionRate.HasValue) ||
-                        !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                        !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                        !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                        !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue))
-                {
-                    return true;
-                }
-
-                if ((bmpModelingType == TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.InfiltrationBasin ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.InfiltrationTrench ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.PermeablePavement ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.UndergroundInfiltration) &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                     !bmpModelingAttributes.InfiltrationSurfaceArea.HasValue ||
-                     !bmpModelingAttributes.UnderlyingInfiltrationRate.HasValue))
-                {
-                    return true;
-                }
-
-                if ((bmpModelingType ==
-                     TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.SandFilters) &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                     !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                     !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue))
-                {
-                    return true;
-                }
-
-                if (bmpModelingType == TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                     !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
-                     !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue))
-                {
-                    return true;
-                }
-
-                if ((bmpModelingType == TreatmentBMPModelingTypeEnum.ConstructedWetland ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.WetDetentionBasin) &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
-                     !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue))
-                {
-                    return true;
-                }
-
-                if ((bmpModelingType == TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.FlowDurationControlBasin ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.FlowDurationControlTank) &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                     !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                     !bmpModelingAttributes.EffectiveFootprint.HasValue ||
-                     !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue))
-                {
-                    return true;
-                }
-
-                if (bmpModelingType == TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems &&
-                    (!bmpModelingAttributes.DesignDryWeatherTreatmentCapacity.HasValue &&
-                     !bmpModelingAttributes.AverageTreatmentFlowrate.HasValue))
-                {
-                    return true;
-                }
-
-                if (bmpModelingType == TreatmentBMPModelingTypeEnum.Drywell &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.TotalEffectiveDrywellBMPVolume.HasValue ||
-                     !bmpModelingAttributes.InfiltrationDischargeRate.HasValue))
-                {
-                    return true;
-                }
-
-                if ((bmpModelingType == TreatmentBMPModelingTypeEnum.HydrodynamicSeparator ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl) &&
-                    !bmpModelingAttributes.TreatmentRate.HasValue)
-                {
-                    return true;
-                }
-
-                if (bmpModelingType == TreatmentBMPModelingTypeEnum.LowFlowDiversions &&
-                    (!bmpModelingAttributes.DesignLowFlowDiversionCapacity.HasValue &&
-                     !bmpModelingAttributes.AverageDivertedFlowrate.HasValue))
-                {
-                    return true;
-                }
-
-                if ((bmpModelingType == TreatmentBMPModelingTypeEnum.VegetatedFilterStrip ||
-                     bmpModelingType == TreatmentBMPModelingTypeEnum.VegetatedSwale) &&
-                    (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                     (bmpModelingAttributes.RoutingConfigurationID ==
-                      (int) RoutingConfigurationEnum.Offline &&
-                      !bmpModelingAttributes.DiversionRate.HasValue) ||
-                     !bmpModelingAttributes.TreatmentRate.HasValue ||
-                     !bmpModelingAttributes.WettedFootprint.HasValue ||
-                     !bmpModelingAttributes.EffectiveRetentionDepth.HasValue))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                return true;
-            }
-
-            return false;
-        }
 
         public string DisplayModelingAttributeValue(Func<TreatmentBMPModelingAttribute, double?> modelAttributeValueFunc, string units)
         {

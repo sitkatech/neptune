@@ -19,9 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.EFModels;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -29,14 +27,14 @@ namespace Neptune.Web.Views.Shared
     {
         public Person CurrentPerson { get; }
         public string GalleryName { get; }
-        public IEnumerable<IFileResourcePhoto> GalleryImages { get; }
+        public IEnumerable<NeptuneHomePageImage> GalleryImages { get; }
         public string AddNewPhotoUrl { get; }
         public bool UserCanAddPhotos { get; }
         public bool IsGalleryMode { get; }
-        public Func<IFileResourcePhoto, object> SortFunction { get; }
+        public Func<NeptuneHomePageImage, object> SortFunction { get; }
         public string ImageEntityName { get; }
 
-        public ImageGalleryViewData(Person currentPerson, string galleryName, IEnumerable<IFileResourcePhoto> galleryImages, bool canAddPhotos, string addNewPhotoUrl, bool isGalleryMode, Func<IFileResourcePhoto, object> sortFunction, string imageEntityName)
+        public ImageGalleryViewData(Person currentPerson, string galleryName, IEnumerable<NeptuneHomePageImage> galleryImages, bool canAddPhotos, string addNewPhotoUrl, bool isGalleryMode, Func<NeptuneHomePageImage, object> sortFunction, string imageEntityName)
         {
             CurrentPerson = currentPerson;
             GalleryImages = galleryImages.ToList();

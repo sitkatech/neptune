@@ -23,6 +23,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
@@ -73,8 +75,8 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 }
             }
 
-            var customAttributesInDatabase = dbContext.CustomAttributes.Local;
-            var customAttributeValuesInDatabase = dbContext.CustomAttributeValues.Local;
+            var customAttributesInDatabase = dbContext.CustomAttributes;
+            var customAttributeValuesInDatabase = dbContext.CustomAttributeValues;
 
             var existingCustomAttributes = treatmentBMP.CustomAttributeTreatmentBMPs.Where(x =>
                 x.CustomAttributeType.CustomAttributeTypePurposeID ==
@@ -96,7 +98,8 @@ namespace Neptune.Web.Views.Shared.EditAttributes
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes);
+            return new List<ValidationResult>();
+            // todo: return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes);
         }
     }
 }

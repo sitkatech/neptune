@@ -18,10 +18,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Neptune.Web.Common
 @using Neptune.Web.Common.DhtmlWrappers
 @using Neptune.Web.Common.ModalDialog
 @using Microsoft.AspNetCore.Html
+@using Neptune.Common
 @inherits Neptune.Web.Views.Shared.ImageGallery
 
 <style>
@@ -94,7 +94,7 @@ Source code is available upon request via <support@sitkatech.com>.
     {
         <div class="pull-right">
             <span style="display: inline-block; vertical-align: top">
-                @ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"<span class='glyphicon glyphicon-plus-sign' style='margin-right: 3px'></span>Add {ViewDataTyped.ImageEntityName}"), ViewDataTyped.AddNewPhotoUrl, string.Format("Add New {0}", ViewDataTyped.ImageEntityName), 700, "Upload", "Cancel", new List<string> { "AddPhotoButtonClass", "btn", "btn-neptune" }, null, null)
+                @ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"<span class='glyphicon glyphicon-plus-sign' style='margin-right: 3px'></span>Add {ViewDataTyped.ImageEntityName}"), ViewDataTyped.AddNewPhotoUrl, $"Add New {ViewDataTyped.ImageEntityName}", 700, "Upload", "Cancel", new List<string> { "AddPhotoButtonClass", "btn", "btn-neptune" }, null, null)
             </span>
         </div>
     }

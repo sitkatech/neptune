@@ -6,9 +6,9 @@ namespace Neptune.Web.Common;
 
 public static class MapInitJsonExtensions
 {
-    public static HtmlString ToHtmlString(this MapInitJson mapInitJson)
+    public static HtmlString ToHtmlString(this object classToSerialize)
     {
-        var value = JsonSerializer.SerializeToDocument(mapInitJson, GeoJsonSerializer.CreateGeoJSONSerializerOptions(4326, 3, 2)).RootElement.GetRawText();
+        var value = JsonSerializer.SerializeToDocument(classToSerialize, GeoJsonSerializer.CreateGeoJSONSerializerOptions()).RootElement.GetRawText();
         return new HtmlString(value);
     }
 }

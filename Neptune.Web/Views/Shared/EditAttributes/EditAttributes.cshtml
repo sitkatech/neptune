@@ -53,13 +53,13 @@
                     @foreach (var attributeTypeGroup in attributeTypesGroupedByPurpose)
                     {
                         <h4>@attributeTypeGroup.Key.CustomAttributeTypePurposeDisplayName</h4>
-                        foreach (var attribute in attributeTypeGroup)
+                        foreach (var treatmentBMPTypeCustomAttributeType in attributeTypeGroup)
                         {
-                            var currentMetadata = Model.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == attribute.CustomAttributeTypeID);
+                            var currentMetadata = Model.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">
-                                    @attribute.CustomAttributeType.CustomAttributeTypeName
-                                    @if (attribute.CustomAttributeType.IsRequired)
+                                    @treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeName
+                                    @if (treatmentBMPTypeCustomAttributeType.CustomAttributeType.IsRequired)
                                     {
                                         <span><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup></span>
                                     }
@@ -67,9 +67,9 @@
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeCustomAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID" />
-                                            <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@attribute.CustomAttributeTypeID" />
-                                            @if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
+                                            <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeCustomAttributeTypeID" value="@treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID" />
+                                            <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID" />
+                                            @if (treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
                                             {
                                                 <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true">
                                                     <input type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" class="form-control" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" />
@@ -78,25 +78,25 @@
                                                     </div>
                                                 </div>
                                             }
-                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Integer || attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Decimal)
+                                            else if (treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Integer || treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Decimal)
                                             {
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <div class="input-group">
                                                             <input class="form-control numericAttribute" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any() ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit" />
-                                                            <span class="input-group-addon" id="attributeUnit">@(attribute.CustomAttributeType.MeasurementUnitType != null ? attribute.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
+                                                            <span class="input-group-addon" id="attributeUnit">@(treatmentBMPTypeCustomAttributeType.CustomAttributeType.MeasurementUnitType != null ? treatmentBMPTypeCustomAttributeType.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             }
-                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.PickFromList)
+                                            else if (treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.PickFromList)
                                             {
                                                 <div class="row">
                                                     <div class="col-sm-12">
 
                                                         <select class="form-control" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]">
                                                             <option value=""></option>
-                                                            @foreach (var option in attribute.CustomAttributeType.GetOptionsSchemaAsListOfString())
+                                                            @foreach (var option in treatmentBMPTypeCustomAttributeType.CustomAttributeType.GetOptionsSchemaAsListOfString())
                                                             {
                                                                 <option value="@option" selected="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any() && currentMetadata.CustomAttributeValues[0] == option)">@option</option>
                                                             }
@@ -104,14 +104,14 @@
                                                     </div>
                                                 </div>
                                             }
-                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
+                                            else if (treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
                                             {
                                                 <div class="row">
                                                     <div class="col-sm-12">
 
-                                                        @for (var j = 0; j < attribute.CustomAttributeType.GetOptionsSchemaAsListOfString().Count; j++)
+                                                        @for (var j = 0; j < treatmentBMPTypeCustomAttributeType.CustomAttributeType.GetOptionsSchemaAsListOfString().Count; j++)
                                                         {
-                                                            var option = attribute.CustomAttributeType.GetOptionsSchemaAsListOfString()[j];
+                                                            var option = treatmentBMPTypeCustomAttributeType.CustomAttributeType.GetOptionsSchemaAsListOfString()[j];
 
                                                             <input type="checkbox"
                                                                    id="@string.Format("multiselect_{0}{1}", option, i)"
@@ -124,14 +124,14 @@
                                                     </div>
                                                 </div>
                                             }
-                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.String) {
+                                            else if (treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.String) {
                                                 <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any() ? currentMetadata.CustomAttributeValues[0] : null)" />
                                             }
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <p style="margin-top: 5px;" class="systemText">@attribute.CustomAttributeType.CustomAttributeTypeDescription</p>
+                                            <p style="margin-top: 5px;" class="systemText">@treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDescription</p>
                                         </div>
                                     </div>
                                 </div>

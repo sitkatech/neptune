@@ -19,12 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
     public static class TreatmentBMPAssessmentObservationTypeHelper
     {

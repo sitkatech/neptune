@@ -32,12 +32,6 @@ namespace Neptune.Web.Models
 {
     public static class TreatmentBMPModelExtensions
     {
-        //public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int), NeptuneWebConfiguration.CanonicalHostNameRoot));
-        //public static string GetDetailUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    if (treatmentBMP == null) { return ""; }
-        //    return DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
         //public static string GetDetailUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
         //{
         //    if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
@@ -67,23 +61,11 @@ namespace Neptune.Web.Models
         //        .OwnerOrganizationID);
         //}
 
-        //public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
-        //public static string GetEditUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return EditUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
-
-        //public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
-        //public static string GetDeleteUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return DeleteUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
-
         //public static readonly UrlTemplate<int> MapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
-        //public static string GetMapSummaryUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return MapSummaryUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
+        public static string GetMapSummaryUrl(this TreatmentBMP treatmentBMP)
+        {
+            return "";//todo: MapSummaryUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
+        }
 
         //public static readonly UrlTemplate<int> TrashMapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<Areas.Trash.Controllers.TreatmentBMPController>.BuildUrlFromExpression(t => t.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
         //public static string GetTrashMapAssetUrl(this TreatmentBMP treatmentBMP)
@@ -327,7 +309,7 @@ namespace Neptune.Web.Models
         public static void UpdateUpstreamBMPReferencesIfNecessary(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
         {
             //If this BMP has an Upstream BMP, after the location change, can that Upstream BMP still fulfill its duty?
-            if (treatmentBMP.UpstreamBMPID != null && !treatmentBMP.GetRegionalSubbasin().GetTreatmentBMPs(dbContext).Contains(treatmentBMP.UpstreamBMP))
+            if (treatmentBMP.UpstreamBMPID != null && !treatmentBMP.GetRegionalSubbasin(dbContext).GetTreatmentBMPs(dbContext).Contains(treatmentBMP.UpstreamBMP))
             {
                 //Do we need to check ahead of time and warn them this will happen?
                 //Do we need to return a message indicating that this has changed?

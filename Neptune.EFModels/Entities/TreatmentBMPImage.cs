@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
+﻿using Neptune.Web.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPImage : IFileResourcePhoto, IAuditableEntity
     {
@@ -20,11 +17,6 @@ namespace Neptune.Web.Models
         public DateTime GetCreateDate()
         {
             return FileResource.CreateDate;
-        }
-
-        public string GetDeleteUrl()
-        {
-            return SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
         }
 
         public bool IsKeyPhoto()
@@ -52,18 +44,9 @@ namespace Neptune.Web.Models
             return FileResource.FileResourceUrlScaledThumbnail(maxHeight);
         }
 
-        public string GetEditUrl()
+        public List<string> GetAdditionalCssClasses()
         {
-            return SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
-        }
-
-        public List<string> AdditionalCssClasses { get; set; } = new List<string>();
-        private object _orderBy;
-
-        public object OrderBy
-        {
-            get { return _orderBy ?? GetCaptionOnFullView(); }
-            set { _orderBy = value; }
+            return new List<string>();
         }
     }
 }

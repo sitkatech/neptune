@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Web.Common;
 using Microsoft.AspNetCore.Html;
+using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Controllers;
 
@@ -132,10 +133,12 @@ namespace Neptune.Web.Models
         {
             if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
             {
-                return dbContext.StormwaterJurisdictions.ToList();
+                return StormwaterJurisdictions.List(dbContext);
             }
-
-            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
+            //todo: anonymous user can see more jurisdictions?
+            var stormwaterJurisdictionIDsForPerson = person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdictionID).ToList();
+            return StormwaterJurisdictions.List(dbContext).Where(x =>
+                stormwaterJurisdictionIDsForPerson.Contains(x.StormwaterJurisdictionID)).ToList();
         }
 
         public static IEnumerable<int> GetStormwaterJurisdictionIDsPersonCanViewWithContext(this Person person,

@@ -19,7 +19,6 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Common.ModalDialog
-@using Neptune.Web.Controllers
 @inherits Neptune.Web.Views.TreatmentBMP.BulkDeleteTreatmentBMPs
 @model Neptune.Web.Views.TreatmentBMP.BulkDeleteTreatmentBMPsViewModel
 
@@ -40,7 +39,7 @@
 }
 else
 {
-    using (Html.BeginForm<TreatmentBMPController>(x => x.BulkDeleteTreatmentBMPsModal(null)))
+    using (Html.BeginForm())
     {
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
             <div style="margin: 5px 0">Delete @Model.TreatmentBMPIDList.Count @ViewDataTyped.TreatmentBMPLabel?</div>

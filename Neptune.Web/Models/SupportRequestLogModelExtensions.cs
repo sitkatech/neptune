@@ -1,6 +1,7 @@
 ﻿using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using System.Net.Mail;
+using Neptune.Common;
 
 namespace Neptune.Web.Models;
 

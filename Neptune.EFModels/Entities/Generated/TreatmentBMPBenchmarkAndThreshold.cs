@@ -44,4 +44,9 @@ public partial class TreatmentBMPBenchmarkAndThreshold
     [ForeignKey("TreatmentBMPTypeAssessmentObservationTypeID")]
     [InverseProperty("TreatmentBMPBenchmarkAndThresholdTreatmentBMPTypeAssessmentObservationTypes")]
     public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; } = null!;
+
+    public void DeleteFull(NeptuneDbContext dbContext)
+    {
+        throw new NotImplementedException();
+    }
 }

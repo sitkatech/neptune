@@ -30,30 +30,32 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (_dbContext.TreatmentBMPs.Any(x=>x.UpstreamBMPID == UpstreamBMPID))
-                yield return new ValidationResult("The BMP is already set as the Upstream BMP for another BMP");
+            return new List<ValidationResult>();
+            //todo:
+            //if (_dbContext.TreatmentBMPs.Any(x=>x.UpstreamBMPID == UpstreamBMPID))
+            //    yield return new ValidationResult("The BMP is already set as the Upstream BMP for another BMP");
 
-            if (IsClosedLoop())
-                yield return new ValidationResult("The choice of Upstream BMP would create a closed loop.");
+            //if (IsClosedLoop())
+            //    yield return new ValidationResult("The choice of Upstream BMP would create a closed loop.");
         }
 
-        private bool IsClosedLoop()
-        {
-            var upstreamBMPChoice = _dbContext.TreatmentBMPs.Find(UpstreamBMPID);
+        //private bool IsClosedLoop()
+        //{
+        //    var upstreamBMPChoice = _dbContext.TreatmentBMPs.Find(UpstreamBMPID);
 
-            var nextUpstream = upstreamBMPChoice.UpstreamBMP;
+        //    var nextUpstream = upstreamBMPChoice.UpstreamBMP;
 
-            while (nextUpstream != null)
-            {
-                if (nextUpstream.UpstreamBMPID == UpstreamBMPID)
-                {
-                    return true;
-                }
+        //    while (nextUpstream != null)
+        //    {
+        //        if (nextUpstream.UpstreamBMPID == UpstreamBMPID)
+        //        {
+        //            return true;
+        //        }
 
-                nextUpstream = nextUpstream.UpstreamBMP;
-            }
+        //        nextUpstream = nextUpstream.UpstreamBMP;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }

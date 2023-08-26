@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
 using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Models
 {
-    public class ModeledPerformanceResultSimple
+    //TODO: Use vLoadReductingResult
+    public class ModeledPerformanceResultDto
     {
         public double EffectiveAreaAcres { get; set; }
         public double DesignStormDepth85thPercentile { get; set; }
@@ -110,20 +109,20 @@ namespace Neptune.Web.Models
         public bool IsSimplifiedWQMPResult { get; set; }
         public bool IsResultSetEmpty { get; set; }
 
-        public ModeledPerformanceResultSimple(List<TreatmentBMP> treatmentBMPs)
+        public ModeledPerformanceResultDto(NeptuneDbContext dbContext, List<TreatmentBMP> treatmentBMPs)
         {
-            var nereidResults = ExtractResults(treatmentBMPs, out var lastDeltaQueue);
+            var nereidResults = ExtractResults(dbContext, treatmentBMPs, out var lastDeltaQueue);
 
             SetDatesAndScalarValues(nereidResults, lastDeltaQueue);
         }
 
-        private static List<NereidResult> ExtractResults(List<TreatmentBMP> treatmentBMP, out DateTime? lastDeltaQueue)
+        private static List<NereidResult> ExtractResults(NeptuneDbContext dbContext, List<TreatmentBMP> treatmentBMP, out DateTime? lastDeltaQueue)
         {
-            var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x => x.TreatmentBMPID != null && !x.IsBaselineCondition)
+            var nereidResults = dbContext.NereidResults.AsNoTracking().Where(x => x.TreatmentBMPID != null && !x.IsBaselineCondition)
                 .ToList().Where(x =>
                     treatmentBMP.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID.GetValueOrDefault())).ToList();
 
-            lastDeltaQueue = HttpRequestStorage.DatabaseEntities.DirtyModelNodes
+            lastDeltaQueue = dbContext.DirtyModelNodes.AsNoTracking()
                 .Where(x => x.TreatmentBMPID != null).ToList().OrderByDescending(x => x.CreateDate)
                 .FirstOrDefault(x =>
                     treatmentBMP.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID.GetValueOrDefault()))
@@ -297,29 +296,29 @@ namespace Neptune.Web.Models
             TotalTZnInflow = DryWeatherTZnInflow + WetWeatherTZnInflow;
         }
 
-        public ModeledPerformanceResultSimple(WaterQualityManagementPlan waterQualityManagementPlan)
+        public ModeledPerformanceResultDto(NeptuneDbContext dbContext, WaterQualityManagementPlan waterQualityManagementPlan)
         {
             IsWQMPResult = true;
             if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                 WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
                 IsSimplifiedWQMPResult = false;
-                var nereidResults = ExtractResults(waterQualityManagementPlan.TreatmentBMPs.ToList().Where(x=>x.Delineation?.IsVerified ?? false).ToList(), out var lastDeltaQueue);
+                var nereidResults = ExtractResults(dbContext, waterQualityManagementPlan.TreatmentBMPs.ToList().Where(x=>x.Delineation?.IsVerified ?? false).ToList(), out var lastDeltaQueue);
                 SetDatesAndScalarValues(nereidResults, lastDeltaQueue);
             }
             else
             {
                 IsSimplifiedWQMPResult = true;
-                var nereidResults = HttpRequestStorage.DatabaseEntities.NereidResults.Where(x =>
+                var nereidResults = dbContext.NereidResults.AsNoTracking().Where(x =>
                     x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID && !x.IsBaselineCondition);
-                var lastDeltaQueue = HttpRequestStorage.DatabaseEntities.DirtyModelNodes.FirstOrDefault(x =>
+                var lastDeltaQueue = dbContext.DirtyModelNodes.AsNoTracking().FirstOrDefault(x =>
                     x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID)?.CreateDate;
                     SetDatesAndScalarValues(nereidResults.ToList(), lastDeltaQueue);
             }
 
         }
 
-        public ModeledPerformanceResultSimple(TreatmentBMP treatmentBMP): this(new List<TreatmentBMP>{treatmentBMP})
+        public ModeledPerformanceResultDto(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP): this(dbContext, new List<TreatmentBMP>{treatmentBMP})
         {
             
         }

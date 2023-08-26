@@ -37,7 +37,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetFileResourceUrl()
         {
-            return "";//todo FileResourceByGuidUrlTemplate.ParameterReplace(GetFileResourceGUIDAsString());
+            return $"/FileResource/DisplayResource/{GetFileResourceGUIDAsString()}";
         }
 
         public string FileResourceUrlScaledThumbnail(int maxHeight)

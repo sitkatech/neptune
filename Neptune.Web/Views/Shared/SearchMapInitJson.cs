@@ -29,6 +29,14 @@ namespace Neptune.Web.Views.Shared
         public LayerGeoJson SearchableLayerGeoJson { get; set;  }
         public LayerGeoJson JurisdictionLayerGeoJson { get; set; }
 
+        /// <summary>
+        /// Needed by serializer
+        /// </summary>
+        public SearchMapInitJson()
+        {
+
+        }
+
         public SearchMapInitJson(string mapDivID, List<LayerGeoJson> layers, LayerGeoJson searchableLayerGeoJson)
             : base(mapDivID, DefaultZoomLevel, layers, new BoundingBoxDto())
         {

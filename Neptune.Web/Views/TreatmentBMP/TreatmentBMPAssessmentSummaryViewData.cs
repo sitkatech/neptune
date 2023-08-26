@@ -11,12 +11,12 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string GridName { get; }
         public TreatmentBMPAssessmentSummaryGridSpec GridSpec { get; }
 
-        public TreatmentBMPAssessmentSummaryViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public TreatmentBMPAssessmentSummaryViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             
             PageTitle = "Recent Treatment BMP Assessments";
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            GridSpec = new TreatmentBMPAssessmentSummaryGridSpec() { ObjectNameSingular = "Recent Treatment BMP Assessment", ObjectNamePlural = "Recent Treatment BMP Assessments", SaveFiltersInCookie = true };
+            GridSpec = new TreatmentBMPAssessmentSummaryGridSpec(linkGenerator) { ObjectNameSingular = "Recent Treatment BMP Assessment", ObjectNamePlural = "Recent Treatment BMP Assessments", SaveFiltersInCookie = true };
             GridName = "treatmentBMPsGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator , j => j.TreatmentBMPAssessmentSummaryGridJsonData());
         }

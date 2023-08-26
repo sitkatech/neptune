@@ -25,6 +25,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -41,8 +42,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasEditPermissions { get; set; }
 
 
-        public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, EFModels.Entities.NeptunePage neptunePage,
-            List<EFModels.Entities.TreatmentBMP> treatmentBMPs, List<TreatmentBMPTypeSimpleDto> treatmentBMPTypeSimples, List<StormwaterJurisdictionSimpleDto> jurisdictions, LinkGenerator linkGenerator, HttpContext httpContext)
+        public FindABMPViewData(Person currentPerson, SearchMapInitJson mapInitJson, EFModels.Entities.NeptunePage neptunePage,
+            List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos, List<TreatmentBMPTypeDisplayDto> treatmentBMPTypeDisplayDtos, List<StormwaterJurisdictionDisplayDto> jurisdictions, LinkGenerator linkGenerator, HttpContext httpContext)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             PageTitle = "Find a BMP";
@@ -53,27 +54,27 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl, treatmentBMPTypeSimples, jurisdictions);
+            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPDisplayDtos, FindTreatmentBMPByNameUrl, treatmentBMPTypeDisplayDtos, jurisdictions);
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
         }
     }
 
     public class ViewDataForAngular
     {
-        public MapInitJson MapInitJson { get; }
-        public List<TreatmentBMPSimpleDto> TreatmentBMPs { get; }
+        public SearchMapInitJson MapInitJson { get; }
+        public List<TreatmentBMPDisplayDto> TreatmentBMPs { get; }
         public string FindTreatmentBMPByNameUrl { get; }
-        public List<TreatmentBMPTypeSimpleDto> TreatmentBMPTypes { get; }
-        public List<StormwaterJurisdictionSimpleDto> Jurisdictions { get; set; }
+        public List<TreatmentBMPTypeDisplayDto> TreatmentBMPTypes { get; }
+        public List<StormwaterJurisdictionDisplayDto> Jurisdictions { get; set; }
 
 
-        public ViewDataForAngular(MapInitJson mapInitJson, List<EFModels.Entities.TreatmentBMP> treatmentBMPs,
-            string findTreatmentBMPByNameUrl, List<TreatmentBMPTypeSimpleDto> treatmentBMPTypeSimples, List<StormwaterJurisdictionSimpleDto> jurisdictions)
+        public ViewDataForAngular(SearchMapInitJson mapInitJson, List<TreatmentBMPDisplayDto> treatmentBMPs,
+            string findTreatmentBMPByNameUrl, List<TreatmentBMPTypeDisplayDto> treatmentBMPTypes, List<StormwaterJurisdictionDisplayDto> jurisdictions)
         {
             MapInitJson = mapInitJson;
-            TreatmentBMPs = treatmentBMPs.Select(x=> x.AsSimpleDto()).ToList();
+            TreatmentBMPs = treatmentBMPs;
             FindTreatmentBMPByNameUrl = findTreatmentBMPByNameUrl;
-            TreatmentBMPTypes = treatmentBMPTypeSimples;
+            TreatmentBMPTypes = treatmentBMPTypes;
             Jurisdictions = jurisdictions;
         }
 
