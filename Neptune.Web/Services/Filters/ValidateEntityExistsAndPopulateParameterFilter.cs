@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Neptune.EFModels.Entities;
-using System.Net;
 
 namespace Neptune.Web.Services.Filters
 {
@@ -12,6 +11,7 @@ namespace Neptune.Web.Services.Filters
         public ValidateEntityExistsAndPopulateParameterFilter(params string[] primaryKeyStringInRoute) : base(typeof(ValidateStructureExistsAndPopulateParameterImpl))
         {
             Arguments = new object[] { primaryKeyStringInRoute };
+            Order = -1; // this ensures that this filter will execute first, since the feature with context ones need the primarykeyobject set
         }
 
         private class ValidateStructureExistsAndPopulateParameterImpl : ActionFilterAttribute, IAsyncActionFilter
