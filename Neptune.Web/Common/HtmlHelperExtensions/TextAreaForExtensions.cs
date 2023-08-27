@@ -150,7 +150,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
 
                 var maxCharsDivTag = new TagBuilder("div");
                 maxCharsDivTag.Attributes.Add("id", charactersRemainingElementName);
-                var charactersRemaining = maxLength.Value - value.Length;
+                var charactersRemaining = maxLength.Value - (value?? "").Length;
                 var charLimitStyle = (charactersRemaining <= lowCharacterCountWarning) ? "color:red;" : "color:#666666;";
                 maxCharsDivTag.Attributes.Add("style", $"text-align:right;{charLimitStyle}");
                 maxCharsDivTag.Attributes.Add("class", "charactersRemainingText");
@@ -163,7 +163,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
 
                 var writer = new StringWriter();
                 var builder = new HtmlContentBuilder();
-                builder.AppendFormat("{0}{1}{2}", textAreaDivTag, clearBothDiv);
+                builder.AppendFormat("{0}{1}", textAreaDivTag, clearBothDiv);
                 builder.WriteTo(writer, HtmlEncoder.Default);
 
                 var htmlString = writer.ToString();
